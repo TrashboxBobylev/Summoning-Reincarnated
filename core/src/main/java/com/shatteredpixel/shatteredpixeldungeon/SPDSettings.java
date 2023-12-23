@@ -355,7 +355,7 @@ public class SPDSettings extends GameSettings {
 	public static Languages language() {
 		String code = getString(KEY_LANG, null);
 		if (code == null){
-			return Languages.matchLocale(Locale.getDefault());
+			return Languages.matchLocale(Locale.ENGLISH);
 		} else {
 			return Languages.matchCode(code);
 		}

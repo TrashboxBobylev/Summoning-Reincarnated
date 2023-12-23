@@ -171,6 +171,11 @@ public class WndSettings extends WndTabbed {
 			}
 
 			@Override
+			protected void onClick() {
+				//do nothing
+			}
+
+			@Override
 			protected void createChildren() {
 				super.createChildren();
 				switch(Messages.lang().status()){
@@ -181,6 +186,7 @@ public class WndSettings extends WndTabbed {
 						icon.hardlight(1.5f, 0.75f, 0f);
 						break;
 				}
+				icon.hardlight(0x1a1a1a);
 			}
 
 		};
