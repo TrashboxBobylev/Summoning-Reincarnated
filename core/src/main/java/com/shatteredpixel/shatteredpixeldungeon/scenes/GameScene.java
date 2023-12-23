@@ -136,6 +136,7 @@ import com.watabou.utils.Point;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 import com.watabou.utils.RectF;
+import com.zrp200.scrollofdebug.ScrollOfDebug;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -206,6 +207,26 @@ public class GameScene extends PixelScene {
 		if (Dungeon.hero == null || Dungeon.level == null){
 			ShatteredPixelDungeon.switchNoFade(TitleScene.class);
 			return;
+		}
+
+		ScrollOfDebug debug = Dungeon.hero.belongings.getItem(ScrollOfDebug.class);
+		// by default only added in "indev" builds.
+		boolean supported = SPDSettings.betas();
+		if(supported) {
+			if(debug == null) {
+				debug = new ScrollOfDebug();
+				if(!debug.collect()) Dungeon.hero.belongings.backpack.items.add(debug);
+			}
+			if(!Dungeon.quickslot.contains(debug)) {
+				for(int slot = 0; slot < Dungeon.quickslot.SIZE; slot++) if(Dungeon.quickslot.getItem(slot) == null) {
+					Dungeon.quickslot.setSlot(slot, debug);
+					break;
+				}
+			}
+		} else if(debug != null) {
+			// attempt to remove scroll of debug automatically.
+			debug.detachAll(Dungeon.hero.belongings.backpack);
+			Dungeon.quickslot.clearItem(debug);
 		}
 
 		Dungeon.level.playLevelMusic();
