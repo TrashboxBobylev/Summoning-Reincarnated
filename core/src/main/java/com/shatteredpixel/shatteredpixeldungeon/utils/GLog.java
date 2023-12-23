@@ -41,6 +41,8 @@ public class GLog {
 	public static void newLine(){
 		update.dispatch( NEW_LINE );
 	}
+
+	public static void info( String text, Object... args ){ i(text, args);}
 	
 	public static void i( String text, Object... args ) {
 		
@@ -55,16 +57,20 @@ public class GLog {
 	public static void p( String text, Object... args ) {
 		i( POSITIVE + text, args );
 	}
+	public static void positive( String text, Object... args ){ p(text, args);}
 	
 	public static void n( String text, Object... args ) {
 		i( NEGATIVE + text, args );
 	}
+	public static void negative( String text, Object... args ){ n(text, args);}
 	
 	public static void w( String text, Object... args ) {
 		i( WARNING + text, args );
 	}
+	public static void warning( String text, Object... args ){ w(text, args);}
 	
 	public static void h( String text, Object... args ) {
 		i( HIGHLIGHT + text, args );
 	}
+	public static void highlight( String text, Object... args ){ h(text, args);}
 }

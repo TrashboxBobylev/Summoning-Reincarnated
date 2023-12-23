@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.NaturesPower;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScoutArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -281,9 +282,50 @@ public class SpiritBow extends Weapon {
 	public boolean isUpgradable() {
 		return false;
 	}
-	
+
+	public static boolean superShot = false;
+
 	public SpiritArrow knockArrow(){
+		if (superShot){
+			return new SuperShot();
+		}
 		return new SpiritArrow();
+	}
+
+	public class SuperShot extends SpiritArrow{
+		{
+			hitSound = Assets.Sounds.HIT_STRONG;
+		}
+
+		@Override
+		public int image() {
+			return ItemSpriteSheet.SUPER_SHOT;
+		}
+
+		@Override
+		public int damageRoll(Char owner) {
+			int damage = 0;
+			for (int i = 0; i < 2; i++) {
+				int dmg = SpiritBow.this.damageRoll(owner);
+				if (dmg > damage) damage = dmg;
+			}
+
+			int distance = Dungeon.level.distance(owner.pos, targetPos) - 1;
+			float multiplier = Math.min(5f, 1.35f * (float)Math.pow(1.2f, distance));
+			damage = Math.round(damage * multiplier);
+			return damage;
+		}
+
+		@Override
+		public float delayFactor(Char user) {
+			return SpiritBow.this.delayFactor(user) * 2f;
+		}
+
+		@Override
+		public void onThrow(int cell) {
+			superShot = false;
+			super.onThrow(cell);
+		}
 	}
 	
 	public class SpiritArrow extends MissileWeapon {

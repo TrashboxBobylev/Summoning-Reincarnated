@@ -47,6 +47,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScoutArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
@@ -204,10 +205,12 @@ public enum HeroClass {
 	private static void initHuntress( Hero hero ) {
 
 		(hero.belongings.weapon = new Gloves()).identify();
+		(hero.belongings.armor = new ScoutArmor()).identify();
 		SpiritBow bow = new SpiritBow();
 		bow.identify().collect();
 
 		Dungeon.quickslot.setSlot(0, bow);
+		Dungeon.quickslot.setSlot(1, hero.belongings.armor);
 
 		new PotionOfMindVision().identify();
 		new ScrollOfLullaby().identify();
