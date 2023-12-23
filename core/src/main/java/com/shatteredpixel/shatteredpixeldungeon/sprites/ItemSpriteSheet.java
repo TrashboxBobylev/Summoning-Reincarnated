@@ -181,7 +181,9 @@ public class ItemSpriteSheet {
 	public static final int NOISEMAKER      = BOMBS+9;
 	public static final int ARCANE_BOMB     = BOMBS+10;
 	public static final int SHRAPNEL_BOMB   = BOMBS+11;
-	
+	public static final int WEB_BOMB        = BOMBS+12;
+	public static final int SUPPLY_BOMB        = BOMBS+13;
+
 	static{
 		assignItemRect(BOMB,            10, 13);
 		assignItemRect(DBL_BOMB,        14, 13);
@@ -189,12 +191,14 @@ public class ItemSpriteSheet {
 		assignItemRect(FROST_BOMB,      13, 12);
 		assignItemRect(REGROWTH_BOMB,   13, 12);
 		assignItemRect(FLASHBANG,       13, 12);
-		assignItemRect(SHOCK_BOMB,      10, 13);
-		assignItemRect(HOLY_BOMB,       10, 13);
+		assignItemRect(SHOCK_BOMB,      9, 15);
+		assignItemRect(HOLY_BOMB,       10, 14);
 		assignItemRect(WOOLY_BOMB,      10, 13);
-		assignItemRect(NOISEMAKER,      10, 13);
+		assignItemRect(NOISEMAKER,      9, 15);
 		assignItemRect(ARCANE_BOMB,     10, 13);
 		assignItemRect(SHRAPNEL_BOMB,   10, 13);
+		assignItemRect(WEB_BOMB,   14, 15);
+		assignItemRect(SUPPLY_BOMB,      9, 15);
 	}
 
 	private static final int SUMM_WEAPONS  =                                xy(1, 6);
