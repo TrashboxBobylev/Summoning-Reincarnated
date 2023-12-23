@@ -201,7 +201,7 @@ public class ItemSpriteSheet {
 		assignItemRect(SUPPLY_BOMB,      9, 15);
 	}
 
-	private static final int SUMM_WEAPONS  =                                xy(1, 6);
+	private static final int SUMM_WEAPONS  =                                xy(9, 6);
 	public static final int STONE_HAMMER = SUMM_WEAPONS+0;
 	public static final int A_STABBER    = SUMM_WEAPONS+1;
 	public static final int PIKE         = SUMM_WEAPONS+2;
