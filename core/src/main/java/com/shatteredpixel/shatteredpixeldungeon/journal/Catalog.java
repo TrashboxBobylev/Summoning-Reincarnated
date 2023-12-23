@@ -24,6 +24,10 @@ package com.shatteredpixel.shatteredpixeldungeon.journal;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Jjango;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Pike;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Stabber;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.StoneHammer;
 import com.watabou.utils.Bundle;
 
 import java.util.ArrayList;
@@ -73,6 +77,10 @@ public enum Catalog {
 		for (Class weapon : Generator.Category.WEP_T5.classes){
 			WEAPONS.seen.put( weapon, false);
 		}
+		WEAPONS.seen.put(StoneHammer.class, false);
+		WEAPONS.seen.put(Pike.class, false);
+		WEAPONS.seen.put(Stabber.class, false);
+		WEAPONS.seen.put(Jjango.class, false);
 
 		for (Class armor : Generator.Category.ARMOR.classes){
 			ARMOR.seen.put( armor, false);

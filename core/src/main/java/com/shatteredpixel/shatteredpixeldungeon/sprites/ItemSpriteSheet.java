@@ -197,6 +197,21 @@ public class ItemSpriteSheet {
 		assignItemRect(SHRAPNEL_BOMB,   10, 13);
 	}
 
+	private static final int SUMM_WEAPONS  =                                xy(1, 6);
+	public static final int STONE_HAMMER = SUMM_WEAPONS+0;
+	public static final int A_STABBER    = SUMM_WEAPONS+1;
+	public static final int PIKE         = SUMM_WEAPONS+2;
+	public static final int STABBER      = SUMM_WEAPONS+3;
+	public static final int JJANGO       = SUMM_WEAPONS+4;
+
+	static {
+		assignItemRect(STONE_HAMMER, 16, 16);
+		assignItemRect(A_STABBER, 12, 13);
+		assignItemRect(PIKE, 16, 16);
+		assignItemRect(STABBER, 12, 13);
+		assignItemRect(JJANGO, 15, 16);
+	}
+
 	
 	                                                                                    //16 free slots
 

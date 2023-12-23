@@ -50,7 +50,13 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMappi
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Alchemize;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Jjango;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Pike;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Stabber;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.StoneHammer;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -185,6 +191,8 @@ public class ShopRoom extends SpecialRoom {
 		w.level(0);
 		w.identify(false);
 		itemsToSpawn.add(w);
+
+		if (Random.Float() < 0.6) itemsToSpawn.add(ChooseShopWeapon());
 		
 		itemsToSpawn.add( TippedDart.randomTipped(2) );
 
@@ -326,6 +334,29 @@ public class ShopRoom extends SpecialRoom {
 
 		return bestBag;
 
+	}
+
+	protected static Weapon ChooseShopWeapon(){
+		MeleeWeapon wepToReplace = Generator.randomWeapon();
+		MeleeWeapon shopWeapon;
+		switch (wepToReplace.tier){
+			case 2:
+				shopWeapon = new StoneHammer(); break;
+			case 3:
+				shopWeapon = new Pike(); break;
+			case 4:
+				shopWeapon = new Stabber(); break;
+			case 5:
+				shopWeapon = new Jjango(); break;
+			default:
+				shopWeapon = new WornShortsword(); break;
+		}
+		if (!wepToReplace.hasCurseEnchant()) shopWeapon.enchantment = wepToReplace.enchantment;
+		shopWeapon.augment = wepToReplace.augment;
+		shopWeapon.cursed = false;
+		shopWeapon.identify();
+		shopWeapon.level(wepToReplace.level());
+		return shopWeapon;
 	}
 
 }
