@@ -154,7 +154,7 @@ public enum Icons {
 				icon.frame( icon.texture.uvRectBySize( 119, 0, 16, 16 ) );
 				break;
 			case BOBYLEV:
-				icon.frame( icon.texture.uvRectBySize( 192, 96, 28, 19 ) );
+				icon.frame( icon.texture.uvRectBySize( 192, 96, 30, 19 ) );
 				break;
 
 			case STAIRS:
