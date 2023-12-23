@@ -40,7 +40,6 @@ import com.watabou.utils.Random;
 public class StoneHammer extends MeleeWeapon {
     {
         image = ItemSpriteSheet.STONE_HAMMER;
-
         tier = 2;
         DLY = 3.2f;
         ACC = 0.7f;

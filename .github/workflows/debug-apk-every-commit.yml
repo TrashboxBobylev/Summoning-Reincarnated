@@ -66,6 +66,3 @@ jobs:
       - name: Remove signing key
         run: rm android/build/outputs/apk/release/signingKey.jks
 
-      - name: Remove output.json
-        run: rm android/build/outputs/apk/release/output.json
-
