@@ -84,11 +84,11 @@ public class Stabber extends MeleeWeapon {
         return super.damageRoll(owner);
     }
 
-    @Override
-    public int warriorAttack(int damage, Char enemy) {
-        //steal satiety
-        Hunger.adjustHunger((damage * 8f / enemy.HT * 1f));
-        SpellSprite.show(enemy, SpellSprite.FOOD);
-        return super.warriorAttack(damage, enemy);
-    }
+//    @Override
+//    public int warriorAttack(int damage, Char enemy) {
+//        //steal satiety
+//        Hunger.adjustHunger((damage * 8f / enemy.HT * 1f));
+//        SpellSprite.show(enemy, SpellSprite.FOOD);
+//        return super.warriorAttack(damage, enemy);
+//    }
 }
