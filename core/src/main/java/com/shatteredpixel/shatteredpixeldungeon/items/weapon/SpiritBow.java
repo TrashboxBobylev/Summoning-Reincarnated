@@ -337,6 +337,18 @@ public class SpiritBow extends Weapon {
 		}
 
 		@Override
+		public int image() {
+			switch (SpiritBow.this.augment){
+				case DAMAGE:
+					return ItemSpriteSheet.SPIRIT_BLAST;
+				case SPEED:
+					return ItemSpriteSheet.SPIRIT_DART;
+				default:
+					return ItemSpriteSheet.SPIRIT_ARROW;
+			}
+		}
+
+		@Override
 		public Emitter emitter() {
 			if (Dungeon.hero.buff(NaturesPower.naturesPowerTracker.class) != null && !sniperSpecial){
 				Emitter e = new Emitter();

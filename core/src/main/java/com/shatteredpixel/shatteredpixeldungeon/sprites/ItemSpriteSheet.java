@@ -89,6 +89,7 @@ public class ItemSpriteSheet {
 	public static final int SPIRIT_ARROW    = UNCOLLECTIBLE+6;
 	public static final int SPIRIT_BLAST    = UNCOLLECTIBLE+7;
 	public static final int SUPER_SHOT      = UNCOLLECTIBLE+10;
+	public static final int SPIRIT_DART     = UNCOLLECTIBLE+11;
 	
 	public static final int TENGU_BOMB      = UNCOLLECTIBLE+8;
 	public static final int TENGU_SHOCKER   = UNCOLLECTIBLE+9;
@@ -103,6 +104,7 @@ public class ItemSpriteSheet {
 		assignItemRect(SANDBAG,     10, 10);
 		assignItemRect(SPIRIT_ARROW,11, 11);
 		assignItemRect(SPIRIT_BLAST, 15, 15);
+		assignItemRect(SPIRIT_DART, 9, 9);
 		
 		assignItemRect(TENGU_BOMB,      10, 10);
 		assignItemRect(TENGU_SHOCKER,   10, 10);
