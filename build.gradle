@@ -1,22 +1,31 @@
 buildscript {
     repositories {
+        maven { url 'https://jitpack.io'}
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
         google()
         mavenCentral()
     }
     dependencies {
         //the R8 version bundled with AGP 8.1.0+ causes crashes on very old Android versions
         classpath 'com.android.tools.build:gradle:8.0.2'
+        classpath "com.palantir.gradle.gitversion:gradle-git-version:0.12.3"
     }
 }
 
 allprojects {
 
+    apply plugin: "com.palantir.git-version"
+
+    def details = versionDetails()
+
     ext {
-        appName = 'Shattered Pixel Dungeon'
-        appPackageName = 'com.shatteredpixel.shatteredpixeldungeon'
+        appName = 'Summoning PD Reincarnated'
+        appPackageName = 'com.trashboxbobylev.resummoningpixeldungeon'
 
         appVersionCode = 754
-        appVersionName = '2.2.1'
+        appVersionName = 'ReInc-0.1.0-' + details.gitHash.substring(0, 7)
 
         appJavaCompatibility = JavaVersion.VERSION_1_8
 
@@ -31,6 +40,7 @@ allprojects {
     version = appVersionName
 
     repositories {
+        maven { url 'https://jitpack.io'}
         google()
         mavenCentral()
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
