@@ -27,7 +27,9 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SmokeParticle;
@@ -73,6 +75,9 @@ public class Bomb extends Item {
 	}
 
 	public Fuse fuse;
+	public int fuseDelay = 1;
+	public Class<? extends Buff> fuseTriggerClass = null;
+	public boolean harmless = false;
 
 	//FIXME using a static variable for this is kinda gross, should be a better way
 	private static boolean lightingFuse = false;
@@ -85,7 +90,7 @@ public class Bomb extends Item {
 	}
 	
 	public boolean explodesDestructively(){
-		return true;
+		return !harmless;
 	}
 
 	@Override
@@ -113,8 +118,10 @@ public class Bomb extends Item {
 
 	@Override
 	protected void onThrow( int cell ) {
-		if (!Dungeon.level.pit[ cell ] && lightingFuse) {
-			Actor.addDelayed(fuse = createFuse().ignite(this), 2);
+		if (!Dungeon.level.pit[ cell ] && (lightingFuse || curUser == null)) {
+			Actor.addDelayed(fuse = createFuse().ignite(this), fuseDelay);
+			if (fuseTriggerClass != null)
+				((FuseBuff)(Buff.affect(Dungeon.hero, fuseTriggerClass))).set(cell);
 		}
 		if (Actor.findChar( cell ) != null && !(Actor.findChar( cell ) instanceof Hero) ){
 			ArrayList<Integer> candidates = new ArrayList<>();
@@ -135,6 +142,33 @@ public class Bomb extends Item {
 		}
 		return super.doPickUp(hero, pos);
 	}
+
+	public static int damageRoll(){
+		//sewers: 8-22
+		//prison: 24-47
+		//caves: 40-72
+		//city: 56-97
+		//halls: 72-122
+		return Random.NormalIntRange(minDamage(), maxDamage());
+	}
+
+	public static int maxDamage() {
+		int baseDamage = 22 + (Dungeon.chapterNumber()) * 25;
+//		if (Dungeon.hero.pointsInTalent(Talent.NUCLEAR_RAGE) > 1)
+//			baseDamage *= 1.05f + 0.1f * (Dungeon.hero.pointsInTalent(Talent.NUCLEAR_RAGE)-1);
+		return baseDamage;
+	}
+
+	public static int minDamage() {
+		int baseDamage = 8 + (Dungeon.chapterNumber())*16;
+//		if (Dungeon.hero.pointsInTalent(Talent.NUCLEAR_RAGE) > 0)
+//			baseDamage *= 1.05f + 0.1f * (Dungeon.hero.pointsInTalent(Talent.NUCLEAR_RAGE));
+		return baseDamage;
+	}
+
+//	public static float nuclearBoost(){
+//		return Math.max(1f, (85 + 15 * Dungeon.hero.pointsInTalent(Talent.NUCLEAR_RAGE)) / 100f);
+//	}
 
 	public void explode(int cell){
 		//We're blowing up, so no need for a fuse anymore.
@@ -183,7 +217,7 @@ public class Bomb extends Item {
 					continue;
 				}
 
-				int dmg = Random.NormalIntRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth()*2);
+				int dmg = Bomb.damageRoll();
 
 				//those not at the center of the blast take less damage
 				if (ch.pos != cell){
@@ -192,7 +226,7 @@ public class Bomb extends Item {
 
 				dmg -= ch.drRoll();
 
-				if (dmg > 0) {
+				if (dmg > 0 && !harmless) {
 					ch.damage(dmg, this);
 				}
 				
@@ -220,12 +254,27 @@ public class Bomb extends Item {
 	public boolean isIdentified() {
 		return true;
 	}
+
+	private Class<? extends Bomb>[] enhancedBombs = new Class[] {
+			Firebomb.class,
+			FrostBomb.class,
+//			SupplyBomb.class,
+			RegrowthBomb.class,
+			WoollyBomb.class,
+			HolyBomb.class,
+//			Webbomb.class,
+			Flashbang.class,
+			Noisemaker.class,
+			ShockBomb.class
+	};
 	
 	@Override
 	public Item random() {
-		switch(Random.Int( 4 )){
-			case 0:
+		switch(Random.Int( 15 )){
+			case 0: case 1: case 2: case 3: case 4:
 				return new DoubleBomb();
+			case 14:
+				return Reflection.newInstance(Random.element(enhancedBombs));
 			default:
 				return this;
 		}
@@ -240,13 +289,17 @@ public class Bomb extends Item {
 	public int value() {
 		return 20 * quantity;
 	}
-	
+
 	@Override
 	public String desc() {
-		if (fuse == null)
-			return super.desc()+ "\n\n" + Messages.get(this, "desc_fuse");
-		else
-			return super.desc() + "\n\n" + Messages.get(this, "desc_burning");
+		String desc_fuse = Messages.get(this, "desc",
+				Math.round(minDamage()*0.8), Math.round(maxDamage()*0.8))+ "\n\n" + Messages.get(this, "desc_fuse");
+		if (fuse != null){
+			desc_fuse = Messages.get(this, "desc",
+					Math.round(minDamage()*0.8), Math.round(maxDamage()*0.8)) + "\n\n" + Messages.get(this, "desc_burning");
+		}
+
+		return desc_fuse;
 	}
 
 	private static final String FUSE = "fuse";
@@ -266,6 +319,10 @@ public class Bomb extends Item {
 
 	//used to track the death from friendly magic badge
 	public static class MagicalBomb extends Bomb{};
+
+	public interface FuseBuff {
+		void set(int cell);
+	}
 
 	public static class Fuse extends Actor{
 

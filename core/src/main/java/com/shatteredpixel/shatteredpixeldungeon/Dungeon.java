@@ -440,6 +440,14 @@ public class Dungeon {
 		}
 	}
 
+	public static int chapterSize(){
+		return 5;
+	}
+
+	public static int chapterNumber(){
+		return Math.max(scalingDepth() / chapterSize(), 0);
+	}
+
 	public static boolean interfloorTeleportAllowed(){
 		if (Dungeon.level.locked || (Dungeon.hero != null && Dungeon.hero.belongings.getItem(Amulet.class) != null)){
 			return false;
