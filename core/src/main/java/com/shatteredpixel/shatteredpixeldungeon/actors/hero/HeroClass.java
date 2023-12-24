@@ -292,23 +292,25 @@ public enum HeroClass {
 		}
 	}
 	
-	public boolean isUnlocked(){
-		//always unlock on debug builds
-		if (DeviceCompat.isDebug()) return true;
-
-		switch (this){
-			case WARRIOR: default:
-				return true;
-			case MAGE:
-				return Badges.isUnlocked(Badges.Badge.UNLOCK_MAGE);
-			case ROGUE:
-				return Badges.isUnlocked(Badges.Badge.UNLOCK_ROGUE);
-			case HUNTRESS:
-				return Badges.isUnlocked(Badges.Badge.UNLOCK_HUNTRESS);
-			case DUELIST:
-				return Badges.isUnlocked(Badges.Badge.UNLOCK_DUELIST);
-		}
+	public boolean isUnlocked() {
+		return true;
 	}
+//		//always unlock on debug builds
+//		if (DeviceCompat.isDebug()) return true;
+//
+//		switch (this){
+//			case WARRIOR: default:
+//				return true;
+//			case MAGE:
+//				return Badges.isUnlocked(Badges.Badge.UNLOCK_MAGE);
+//			case ROGUE:
+//				return Badges.isUnlocked(Badges.Badge.UNLOCK_ROGUE);
+//			case HUNTRESS:
+//				return Badges.isUnlocked(Badges.Badge.UNLOCK_HUNTRESS);
+//			case DUELIST:
+//				return Badges.isUnlocked(Badges.Badge.UNLOCK_DUELIST);
+//		}
+//	}
 	
 	public String unlockMsg() {
 		return shortDesc() + "\n\n" + Messages.get(HeroClass.class, name()+"_unlock");
