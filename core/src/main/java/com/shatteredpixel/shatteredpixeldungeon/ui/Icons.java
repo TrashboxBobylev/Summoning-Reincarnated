@@ -412,6 +412,8 @@ public enum Icons {
 				return get( Icons.HUNTRESS );
 			case DUELIST:
 				return get( Icons.DUELIST );
+			case ADVENTURER:
+				return get( Icons.BACKPACK_LRG );
 			default:
 				return null;
 		}

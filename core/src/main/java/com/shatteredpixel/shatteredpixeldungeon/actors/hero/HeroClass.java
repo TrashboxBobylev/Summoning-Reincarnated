@@ -48,7 +48,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScoutArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.SyntheticArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
@@ -64,12 +68,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Rapier;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnive2;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpike;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingStone;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -81,7 +82,8 @@ public enum HeroClass {
 	MAGE( HeroSubClass.BATTLEMAGE, HeroSubClass.WARLOCK ),
 	ROGUE( HeroSubClass.ASSASSIN, HeroSubClass.FREERUNNER ),
 	HUNTRESS( HeroSubClass.SNIPER, HeroSubClass.WARDEN ),
-	DUELIST( HeroSubClass.CHAMPION, HeroSubClass.MONK );
+	DUELIST( HeroSubClass.CHAMPION, HeroSubClass.MONK ),
+	ADVENTURER();
 
 	private HeroSubClass[] subClasses;
 
@@ -127,6 +129,10 @@ public enum HeroClass {
 
 			case DUELIST:
 				initDuelist( hero );
+				break;
+
+			case ADVENTURER:
+				initAdventurer( hero );
 				break;
 		}
 
@@ -231,6 +237,25 @@ public enum HeroClass {
 		new ScrollOfMirrorImage().identify();
 	}
 
+	private static void initAdventurer( Hero hero ) {
+		hero.HP = hero.HT = 30;
+		hero.STR = 12;
+
+		(hero.belongings.armor = new SyntheticArmor()).identify();
+
+		(hero.belongings.weapon = new Dagger2()).identify();
+
+		ThrowingKnive2 knives = new ThrowingKnive2();
+		knives.quantity(2).collect();
+		Dungeon.quickslot.setSlot(0, knives);
+		new PotionBandolier().collect();
+		Dungeon.LimitedDrops.POTION_BANDOLIER.drop();
+		new ScrollHolder().collect();
+		Dungeon.LimitedDrops.SCROLL_HOLDER.drop();
+		new MagicalHolster().collect();
+		Dungeon.LimitedDrops.MAGICAL_HOLSTER.drop();
+	}
+
 	public String title() {
 		return Messages.get(HeroClass.class, name());
 	}
@@ -274,6 +299,8 @@ public enum HeroClass {
 				return Assets.Sprites.HUNTRESS;
 			case DUELIST:
 				return Assets.Sprites.DUELIST;
+			case ADVENTURER:
+				return Assets.Sprites.ADVENTURER;
 		}
 	}
 
@@ -289,6 +316,8 @@ public enum HeroClass {
 				return Assets.Splashes.HUNTRESS;
 			case DUELIST:
 				return Assets.Splashes.DUELIST;
+			case ADVENTURER:
+				return Assets.Splashes.ADVENTURER;
 		}
 	}
 	

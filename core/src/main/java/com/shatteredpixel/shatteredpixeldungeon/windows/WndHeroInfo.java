@@ -200,6 +200,14 @@ public class WndHeroInfo extends WndTabbed {
 							new ItemSprite(ItemSpriteSheet.THROWING_SPIKE),
 							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
 					break;
+				case ADVENTURER:
+					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.SOMETHING),
+							new ItemSprite(ItemSpriteSheet.CHEST),
+							new ItemSprite(ItemSpriteSheet.ARMOR_ROGUE),
+							new Image(Assets.Interfaces.BUFFS_LARGE, 208, 32, 16, 16),
+							Icons.get(Icons.BACKPACK_LRG),
+							new ItemSprite(ItemSpriteSheet.MASTERY)};
+					break;
 			}
 			for (Image im : icons) {
 				add(im);
