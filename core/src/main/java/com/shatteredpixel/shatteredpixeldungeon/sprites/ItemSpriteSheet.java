@@ -491,6 +491,12 @@ public class ItemSpriteSheet {
 
 	                                                                                    //16 free slots
 
+	private static final int SUMM_MISCS     =                               xy(1, 18);
+	public static final int ROPES           = SUMM_MISCS+0;
+	static {
+		assignItemRect(ROPES, 16, 16);
+	}
+
 	private static final int SCROLLS        =                               xy(1, 19);  //16 slots
 	public static final int SCROLL_KAUNAN   = SCROLLS+0;
 	public static final int SCROLL_SOWILO   = SCROLLS+1;
