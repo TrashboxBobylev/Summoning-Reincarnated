@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
@@ -168,7 +169,7 @@ public enum Talent {
 	//adventurer T2
 	UPGRADING_MEAL(260), ENERGY_SCROLL(261), DUNGEON_OF_DOOM(262), RUDE_STRIKE(263), MONEY_IS_IMPORTANT(264),
 	//adventurer T3
-	AFFECTED_BY_LUCK(265, 3), UNIQUE_ATTENTION(266, 3), SLICE_OF_POWER(267, 3), MEAL_OF_POWER(268, 3), RUN_OF_POWER(269, 3);
+	AFFECTED_BY_LUCK(265, 3), UNIQUE_ATTENTION(266, 3), SLICE_OF_POWER(267, 3), MEAL_OF_POWER(268, 3);
 
 	public static class ImprovisedProjectileCooldown extends FlavourBuff{
 		public int icon() { return BuffIndicator.TIME; }
@@ -180,6 +181,21 @@ public enum Talent {
 	public static class WandPreservationCounter extends CounterBuff{{revivePersists = true;}};
 	public static class EmpoweredStrikeTracker extends FlavourBuff{};
 	public static class RudeStrikeCounter extends CounterBuff{{revivePersists = true;}}
+	public static class UniqueAttentionTracker extends Buff {{revivePersists = true;}
+
+		@Override
+		public boolean act() {
+			for (Buff b : target.buffs()) {
+				if (b instanceof Artifact.ArtifactBuff) {
+					if (!((Artifact.ArtifactBuff) b).isCursed()) {
+						((Artifact.ArtifactBuff) b).charge((Hero) target, ((Hero) target).pointsInTalent(UNIQUE_ATTENTION)*0.2f);
+					}
+				}
+			}
+			spend(TICK);
+			return true;
+		}
+	};
 	public static class ProtectiveShadowsTracker extends Buff {
 		float barrierInc = 0.5f;
 
@@ -398,6 +414,9 @@ public enum Talent {
 		//for metamorphosis
 		if (talent == IRON_WILL && hero.heroClass != HeroClass.WARRIOR){
 			Buff.affect(hero, BrokenSeal.WarriorShield.class);
+		}
+		if (talent == UNIQUE_ATTENTION){
+			Buff.affect(hero, UniqueAttentionTracker.class);
 		}
 
 		if (talent == VETERANS_INTUITION && hero.pointsInTalent(VETERANS_INTUITION) == 2){
@@ -860,6 +879,9 @@ public enum Talent {
 				break;
 			case DUELIST:
 				Collections.addAll(tierTalents, PRECISE_ASSAULT, DEADLY_FOLLOWUP);
+				break;
+			case ADVENTURER:
+				Collections.addAll(tierTalents, AFFECTED_BY_LUCK, UNIQUE_ATTENTION, SLICE_OF_POWER, MEAL_OF_POWER);
 				break;
 		}
 		for (Talent talent : tierTalents){

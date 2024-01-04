@@ -88,11 +88,19 @@ abstract public class Weapon extends KindOfWeapon {
 		}
 
 		public int damageFactor(int dmg){
-			return Math.round(dmg * damageFactor);
+			float factor = damageFactor;
+			if (factor != 1.0f){
+				factor *= 1f + Dungeon.hero.pointsInTalent(Talent.SLICE_OF_POWER)/3f;
+			}
+			return Math.round(dmg * factor);
 		}
 
 		public float delayFactor(float dly){
-			return dly * delayFactor;
+			float factor = delayFactor;
+			if (factor != 1.0f){
+				factor /= 1f + Dungeon.hero.pointsInTalent(Talent.SLICE_OF_POWER)/3f;
+			}
+			return dly * factor;
 		}
 	}
 	

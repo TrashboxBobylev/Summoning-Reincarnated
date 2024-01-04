@@ -392,6 +392,10 @@ public abstract class RegularLevel extends Level {
 				break;
 			}
 
+			if (type == Heap.Type.CHEST && toDrop.isUpgradable() && Random.Float() < 0.25f * Dungeon.hero.pointsInTalent(Talent.AFFECTED_BY_LUCK)){
+				toDrop.upgrade();
+			}
+
 			if ((toDrop instanceof Artifact && Random.Int(2) == 0) ||
 					(toDrop.isUpgradable() && Random.Int(4 - toDrop.level()) == 0)){
 
