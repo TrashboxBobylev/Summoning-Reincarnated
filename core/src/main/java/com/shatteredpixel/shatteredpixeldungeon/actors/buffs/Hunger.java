@@ -24,7 +24,9 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.Guidebook;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
@@ -64,61 +66,59 @@ public class Hunger extends Buff implements Hero.Doom {
 	@Override
 	public boolean act() {
 
-		if (Dungeon.level.locked
-				|| target.buff(WellFed.class) != null
-				|| SPDSettings.intro()
-				|| target.buff(ScrollOfChallenge.ChallengeArena.class) != null){
-			spend(STEP);
-			return true;
-		}
-
-		if (target.isAlive() && target instanceof Hero) {
-
-			Hero hero = (Hero)target;
-
-			if (isStarving()) {
-
-				partialDamage += STEP * target.HT/1000f;
-
-				if (partialDamage > 1){
-					target.damage( (int)partialDamage, this);
-					partialDamage -= (int)partialDamage;
-				}
-				
-			} else {
-
-				float newLevel = level + STEP;
-				if (newLevel >= STARVING) {
-
-					GLog.n( Messages.get(this, "onstarving") );
-					hero.resting = false;
-					hero.damage( 1, this );
-
-					hero.interrupt();
-
-				} else if (newLevel >= HUNGRY && level < HUNGRY) {
-
-					GLog.w( Messages.get(this, "onhungry") );
-
-					if (!Document.ADVENTURERS_GUIDE.isPageRead(Document.GUIDE_FOOD)){
-						GLog.p(Messages.get(Guidebook.class, "hint"));
-						GameScene.flashForDocument(Document.ADVENTURERS_GUIDE, Document.GUIDE_FOOD);
-					}
-
-				}
-				level = newLevel;
-
-			}
-			
-			spend( target.buff( Shadows.class ) == null ? STEP : STEP * 1.5f );
-
-		} else {
+		if (!target.isAlive()) {
 
 			diactivate();
 
 		}
+		spend(TICK);
 
 		return true;
+	}
+
+	public static void adjustHunger(float energy ) {
+		Hunger hunger = Buff.affect(Dungeon.hero, Hunger.class);
+		Char target = hunger.target;
+		if (Dungeon.level.locked
+				|| target.buff(WellFed.class) != null
+				|| SPDSettings.intro()
+				|| target.buff(ScrollOfChallenge.ChallengeArena.class) != null){
+			return;
+		}
+//		if (Dungeon.hero.heroClass == HeroClass.WARRIOR && energy != -50 && energy < 0) energy *= 0.75f;
+//		if (Dungeon.isChallenged(Conducts.Conduct.KING)) energy *= 3;
+		hunger.level = Math.max(hunger.level - energy, 0);
+		switchHungerLevel(energy, hunger, target);
+		BuffIndicator.refreshHero();
+	}
+
+	private static void switchHungerLevel(float energy, Hunger hunger, Char target) {
+		if (hunger.level + 1 > HUNGRY && !hunger.isHungry()){
+			GLog.warning(Messages.get(hunger, "onhungry"));
+			if (!Document.ADVENTURERS_GUIDE.isPageRead(Document.GUIDE_FOOD)){
+				GLog.p(Messages.get(Guidebook.class, "hint"));
+				GameScene.flashForDocument(Document.ADVENTURERS_GUIDE, Document.GUIDE_FOOD);
+			}
+			hunger.level = HUNGRY;
+			return;
+		}
+		if (hunger.level + 1 >= STARVING && !hunger.isStarving()){
+
+			GLog.negative(Messages.get(hunger, "onstarving"));
+			Dungeon.hero.resting = false;
+			Dungeon.hero.damage(1, hunger);
+			Dungeon.hero.interrupt();
+			hunger.level = STARVING;
+			return;
+		}
+		if (hunger.isStarving()){
+			hunger.level = STARVING;
+			hunger.partialDamage += Math.abs(energy) * target.HT/800f;
+			if (hunger.partialDamage > 1){
+				target.damage( (int)Math.abs(hunger.partialDamage), new Hunger());
+				hunger.partialDamage -= (int)hunger.partialDamage;
+			}
+		}
 	}
 
 	public void satisfy( float energy ) {
@@ -164,6 +164,10 @@ public class Hunger extends Buff implements Hero.Doom {
 
 	public boolean isStarving() {
 		return level >= STARVING;
+	}
+
+	public boolean isHungry(){
+		return level >= HUNGRY;
 	}
 
 	public int hunger() {

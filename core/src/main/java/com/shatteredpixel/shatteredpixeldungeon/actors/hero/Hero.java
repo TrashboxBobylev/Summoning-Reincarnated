@@ -32,35 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SacrificialFire;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AdrenalineSurge;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AnkhInvulnerability;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Awareness;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Berserk;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Combo;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Drowsy;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Foresight;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HoldFast;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Levitation;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PhysicalEmpower;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Challenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.ElementalStrike;
@@ -183,7 +155,7 @@ public class Hero extends Char {
 	
 	private static final float TIME_TO_REST		    = 1f;
 	private static final float TIME_TO_SEARCH	    = 2f;
-	private static final float HUNGER_FOR_SEARCH	= 6f;
+	private static final float HUNGER_FOR_SEARCH	= 15f;
 	
 	public HeroClass heroClass = HeroClass.ROGUE;
 	public HeroSubClass subClass = HeroSubClass.NONE;
@@ -768,6 +740,7 @@ public class Hero extends Char {
 			curAction = null;
 			
 			spendAndNext( TICK );
+			Hunger.adjustHunger(-0.35f  * (buff(Shadows.class) != null ? 0.66f : 1f));
 			return false;
 		}
 		
@@ -776,6 +749,7 @@ public class Hero extends Char {
 			
 			if (resting) {
 				spendConstant( TIME_TO_REST );
+				Hunger.adjustHunger(-0.35f  * (buff(Shadows.class) != null ? 0.66f : 1f));
 				next();
 			} else {
 				ready();
@@ -880,6 +854,7 @@ public class Hero extends Char {
 
 		if (getCloser( action.dst )) {
 			canSelfTrample = false;
+			Hunger.adjustHunger(-1.33f/speed());
 			return true;
 
 		//Hero moves in place if there is grass to trample
@@ -887,6 +862,7 @@ public class Hero extends Char {
 			canSelfTrample = false;
 			Dungeon.level.pressCell(pos);
 			spendAndNext( 1 / speed() );
+			Hunger.adjustHunger(-1.33f/speed());
 			return false;
 		} else {
 			ready();
@@ -1271,6 +1247,7 @@ public class Hero extends Char {
 
 			if (Dungeon.level.activateTransition(this, transition)){
 				curAction = null;
+				Hunger.adjustHunger(-30/speed());
 			} else {
 				ready();
 			}
@@ -2141,6 +2118,8 @@ public class Hero extends Char {
 			Item.updateQuickslot();
 		}
 
+		Hunger.adjustHunger(-3.75f*attackDelay());
+
 		curAction = null;
 
 		super.onAttackComplete();
@@ -2180,6 +2159,7 @@ public class Hero extends Char {
 					GameScene.updateKeyDisplay();
 					GameScene.updateMap(doorCell);
 					spend(Key.TIME_TO_UNLOCK);
+					Hunger.adjustHunger(-3.75f);
 				}
 			}
 			
@@ -2201,6 +2181,7 @@ public class Hero extends Char {
 					GameScene.updateKeyDisplay();
 					heap.open(this);
 					spend(Key.TIME_TO_UNLOCK);
+					Hunger.adjustHunger(-3.75f);
 				}
 			}
 			

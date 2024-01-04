@@ -52,7 +52,7 @@ public class Metabolism extends Glyph {
 				
 				if (!hunger.isStarving()) {
 					
-					hunger.affectHunger( healing * -10 );
+					Hunger.adjustHunger( healing * -35 );
 					
 					defender.HP += healing;
 					defender.sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );

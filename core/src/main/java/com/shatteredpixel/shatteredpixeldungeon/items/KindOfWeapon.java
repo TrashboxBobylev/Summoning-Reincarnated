@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -130,9 +131,11 @@ abstract public class KindOfWeapon extends EquipableItem {
 					GLog.i(Messages.get(this, "swift_equip"));
 				} else {
 					hero.spendAndNext(TIME_TO_EQUIP);
+					Hunger.adjustHunger(-17);
 				}
 			} else {
 				hero.spendAndNext(TIME_TO_EQUIP);
+				Hunger.adjustHunger(-17);
 			}
 			return true;
 			
@@ -174,9 +177,11 @@ abstract public class KindOfWeapon extends EquipableItem {
 					GLog.i(Messages.get(this, "swift_equip"));
 				} else {
 					hero.spendAndNext(TIME_TO_EQUIP);
+					Hunger.adjustHunger(-17);
 				}
 			} else {
 				hero.spendAndNext(TIME_TO_EQUIP);
+				Hunger.adjustHunger(-17);
 			}
 			return true;
 
@@ -200,6 +205,7 @@ abstract public class KindOfWeapon extends EquipableItem {
 
 			if (!second){
 				hero.belongings.weapon = null;
+				Hunger.adjustHunger(-17);
 			}
 			return true;
 
@@ -207,6 +213,7 @@ abstract public class KindOfWeapon extends EquipableItem {
 
 			if (second){
 				hero.belongings.secondWep = this;
+				Hunger.adjustHunger(-17);
 			}
 			return false;
 
