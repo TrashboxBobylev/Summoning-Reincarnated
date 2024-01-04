@@ -28,6 +28,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.shatteredpixel.shatteredpixeldungeon.actors.Char.Alignment.ALLY;
+
 public class Ballistica {
 
 	//note that the path is the FULL path of the projectile, including tiles after collision.
@@ -43,12 +45,19 @@ public class Ballistica {
 	public static final int STOP_CHARS = 2;     //ballistica will stop on first char hit
 	public static final int STOP_SOLID = 4;     //ballistica will stop on solid terrain
 	public static final int IGNORE_SOFT_SOLID = 8; //ballistica will ignore soft solid terrain, such as doors and webs
+	public static final int REFLECT = 16; //ballistica will reflect instead of stopping
+	public static final int IGNORE_ALLY_CHARS = 32; //ballistica will ignore allies
 
+	public static final int FRIENDLY_PROJECTILE = STOP_TARGET	| STOP_CHARS	| STOP_SOLID | IGNORE_ALLY_CHARS;
+	public static final int FRIENDLY_MAGIC      = STOP_CHARS  | STOP_SOLID | IGNORE_ALLY_CHARS;
 	public static final int PROJECTILE =  	STOP_TARGET	| STOP_CHARS	| STOP_SOLID;
 
 	public static final int MAGIC_BOLT =    STOP_CHARS  | STOP_SOLID;
 
 	public static final int WONT_STOP =     0;
+	public static int REFLECTION;
+	public ArrayList<Integer> reflectPositions = new ArrayList<>();
+	private int reflectTimes = 0;
 
 
 	public Ballistica( int from, int to, int params ){
@@ -58,7 +67,9 @@ public class Ballistica {
 				(params & STOP_TARGET) > 0,
 				(params & STOP_CHARS) > 0,
 				(params & STOP_SOLID) > 0,
-				(params & IGNORE_SOFT_SOLID) > 0);
+				(params & IGNORE_SOFT_SOLID) > 0,
+				(params & REFLECT) > 0,
+				(params & IGNORE_ALLY_CHARS) > 0);
 
 		if (collisionPos != null) {
 			dist = path.indexOf(collisionPos);
@@ -71,7 +82,7 @@ public class Ballistica {
 		}
 	}
 
-	private void build( int from, int to, boolean stopTarget, boolean stopChars, boolean stopTerrain, boolean ignoreSoftSolid ) {
+	private void build( int from, int to, boolean stopTarget, boolean stopChars, boolean stopTerrain, boolean ignoreSoftSolid, boolean reflect, boolean ignoreAllies ) {
 		int w = Dungeon.level.width();
 
 		int x0 = from % w;
@@ -85,8 +96,8 @@ public class Ballistica {
 		int stepX = dx > 0 ? +1 : -1;
 		int stepY = dy > 0 ? +1 : -1;
 
-		dx = Math.abs( dx );
-		dy = Math.abs( dy );
+		dx = Math.abs(dx);
+		dy = Math.abs(dy);
 
 		int stepA;
 		int stepB;
@@ -112,43 +123,114 @@ public class Ballistica {
 		int cell = from;
 
 		int err = dA / 2;
-		while (Dungeon.level.insideMap(cell)) {
+		if (reflect) {
+			boolean alreadyReflected = false;
+			while (Dungeon.level.insideMap(cell)) {
+				// Wall case is treated differently by stopping one early
+				if (stopTerrain && cell != sourcePos && !Dungeon.level.passable[cell] && !Dungeon.level.avoid[cell]) {
+					int cellBeforeWall = path.get(path.size() - 1);
 
-			//if we're in solid terrain, and there's no char there, collide with the previous cell.
-			// we don't use solid here because we don't want to stop short of closed doors.
-			if (collisionPos == null
-					&& stopTerrain
-					&& cell != sourcePos
-					&& !Dungeon.level.passable[cell]
-					&& !Dungeon.level.avoid[cell]
-					&& Actor.findChar(cell) == null) {
-				collide(path.get(path.size() - 1));
-			}
+					alreadyReflected = reflect(stopTarget, stopChars, stopTerrain, ignoreSoftSolid, w, x0, y0, stepX, stepY, cell, alreadyReflected, cellBeforeWall);
+				}
 
-			path.add(cell);
+				path.add(cell);
 
-			if (collisionPos == null && stopTerrain && cell != sourcePos && Dungeon.level.solid[cell]) {
-				if (ignoreSoftSolid && (Dungeon.level.passable[cell] || Dungeon.level.avoid[cell])) {
-					//do nothing
-				} else {
-					collide(cell);
+				cell += stepA;
+
+				err += dB;
+				if (err >= dA) {
+					err = err - dA;
+					cell = cell + stepB;
 				}
 			}
-			if (collisionPos == null && cell != sourcePos && stopChars && Actor.findChar( cell ) != null) {
-				collide(cell);
-			}
-			if (collisionPos == null && cell == to && stopTarget){
-				collide(cell);
-			}
+		} else {
+			while (Dungeon.level.insideMap(cell)) {
 
-			cell += stepA;
+				//if we're in solid terrain, and there's no char there, collide with the previous cell.
+				// we don't use solid here because we don't want to stop short of closed doors.
+				if (collisionPos == null
+						&& stopTerrain
+						&& cell != sourcePos
+						&& !Dungeon.level.passable[cell]
+						&& !Dungeon.level.avoid[cell]
+						&& Actor.findChar(cell) == null) {
+					collide(path.get(path.size() - 1));
+				}
 
-			err += dB;
-			if (err >= dA) {
-				err = err - dA;
-				cell = cell + stepB;
+				path.add(cell);
+
+				if (collisionPos == null && stopTerrain && cell != sourcePos && Dungeon.level.solid[cell]) {
+					if (ignoreSoftSolid && (Dungeon.level.passable[cell] || Dungeon.level.avoid[cell])) {
+						//do nothing
+					} else {
+						collide(cell);
+					}
+				}
+				if (collisionPos == null && cell != sourcePos && stopChars && Actor.findChar(cell) != null) {
+					if (ignoreAllies && Actor.findChar(cell).alignment == ALLY){
+						if (cell == to && stopTarget) {
+							collide(cell);
+						}
+					} else {
+						collide(cell);
+					}
+				}
+				if (collisionPos == null && cell == to && stopTarget) {
+					collide(cell);
+				}
+
+				cell += stepA;
+
+				err += dB;
+				if (err >= dA) {
+					err = err - dA;
+					cell = cell + stepB;
+				}
 			}
 		}
+	}
+
+	private boolean solidForReflect(int cell){
+		return Dungeon.level.solid[cell];
+	}
+
+	private boolean reflect(boolean stopTarget, boolean stopChars, boolean stopTerrain, boolean ignoreSoftSolid, int w, int x0, int y0, int stepX, int stepY, int cell, boolean alreadyReflected, int cellBeforeWall) {
+		if (!alreadyReflected) {
+			int cellAdjacentHorizontal = cellBeforeWall + stepX;
+			int cellAdjacentVertical = cellBeforeWall + stepY * w;
+			int cellAdjacentHorizontal2 = cellBeforeWall - stepX;
+			int cellAdjacentVertical2 = cellBeforeWall - stepY * w;
+			if (solidForReflect(cellAdjacentVertical) && solidForReflect(cellAdjacentHorizontal)) {
+				// found a corner?
+				collide(cellBeforeWall);
+			} else if (!solidForReflect(cellAdjacentVertical) && !solidForReflect(cellAdjacentHorizontal)) {
+				// both sides open? how did we get this case?
+				collide(cellBeforeWall);
+			} else {
+				// actual reflection
+				int destinationX, destinationY;
+				if (!solidForReflect(cellAdjacentVertical)) {
+					// bounce against vertical wall, keep x
+					destinationX = x0;
+					destinationY = y0 + stepY * Math.abs(y0 - cell / w) * 2;
+					if (destinationY == y0){
+						collide(cellBeforeWall);
+						return true;
+					}
+				} else {
+					// bounce against horizontal wall, keep y
+					destinationY = y0;
+					destinationX = x0 + stepX * Math.abs(x0 - cell % w) * 2;
+					if (destinationX == x0){
+						collide(cellBeforeWall);
+						return true;
+					}
+				}
+				reflectPositions.add(cellBeforeWall);
+				build(cellBeforeWall, destinationX + destinationY * w, stopTarget, stopChars, stopTerrain, ignoreSoftSolid, ++reflectTimes < REFLECTION, false);
+			}
+		}
+		return true;
 	}
 
 	//we only want to record the first position collision occurs at.
