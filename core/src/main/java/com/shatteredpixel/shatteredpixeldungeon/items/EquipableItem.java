@@ -166,11 +166,13 @@ public abstract class EquipableItem extends Item {
 
 	@Override
 	public void storeInBundle( Bundle bundle ) {
+		super.storeInBundle(bundle);
 		bundle.put(EQUIPPED_BEFORE, equippedBefore);
 	}
 
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
+		super.restoreFromBundle(bundle);
 		equippedBefore = bundle.getBoolean(EQUIPPED_BEFORE);
 	}
 }
