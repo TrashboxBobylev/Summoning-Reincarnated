@@ -27,8 +27,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
+import com.watabou.noosa.Camera;
 import com.watabou.utils.BArray;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PathFinder;
@@ -37,43 +39,61 @@ import com.watabou.utils.Random;
 import java.util.ArrayList;
 
 public class HolyBomb extends Bomb.MagicalBomb {
-	
+
 	{
 		image = ItemSpriteSheet.HOLY_BOMB;
+		fuseDelay = 0;
 	}
-	
+
+	@Override
+	public boolean explodesDestructively() {
+		return false;
+	}
+
 	@Override
 	public void explode(int cell) {
 		super.explode(cell);
-		
+
 		if (Dungeon.level.heroFOV[cell]) {
 			new Flare(10, 64).show(Dungeon.hero.sprite.parent, DungeonTilemap.tileCenterToWorld(cell), 2f);
 		}
-		
+
+		Camera.main.shake( 4, 0.175f );
+
 		ArrayList<Char> affected = new ArrayList<>();
-		
-		PathFinder.buildDistanceMap( cell, BArray.not( Dungeon.level.solid, null ), 2 );
-		for (int i = 0; i < PathFinder.distance.length; i++) {
-			if (PathFinder.distance[i] < Integer.MAX_VALUE) {
-				Char ch = Actor.findChar(i);
-				if (ch != null) {
-					affected.add(ch);
-					
-				}
+
+		int[] area = new int[]{-Dungeon.level.width(), -1, +1, +Dungeon.level.width()};
+		for (int i : area) {
+			Char ch = Actor.findChar(cell + i);
+			if (ch != null) {
+				affected.add(ch);
 			}
 		}
-		
+
 		for (Char ch : affected){
+			int damage = Math.round(damageRoll() * 0.8f);
 			if (ch.properties().contains(Char.Property.UNDEAD) || ch.properties().contains(Char.Property.DEMONIC)){
 				ch.sprite.emitter().start( ShadowParticle.UP, 0.05f, 10 );
-				
-				//bomb deals an additional 50% damage to unholy enemies in a 5x5 range
-				int damage = Math.round(Random.NormalIntRange( Dungeon.scalingDepth()+5, 10 + Dungeon.scalingDepth() * 2 ) * 0.5f);
-				ch.damage(damage, this);
+
+				//bomb deals an additional 20% damage to unholy enemies in a 5x5 range
+				damage *= 1.2f;
 			}
+			ch.damage(damage, this);
 		}
-		
+
 		Sample.INSTANCE.play( Assets.Sounds.READ );
+	}
+
+	@Override
+	public String desc() {
+		String desc_fuse = Messages.get(this, "desc",
+				Math.round(minDamage()*0.64), Math.round(maxDamage()*0.64))+ "\n\n" + Messages.get(this, "desc_fuse");
+		if (fuse != null){
+			desc_fuse = Messages.get(this, "desc",
+					Math.round(minDamage()*0.64), Math.round(maxDamage()*0.64)) + "\n\n" + Messages.get(this, "desc_burning");
+		}
+
+		return desc_fuse;
 	}
 	
 	@Override

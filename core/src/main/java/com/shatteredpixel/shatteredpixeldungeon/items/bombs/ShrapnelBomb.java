@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Point;
 import com.watabou.utils.Random;
@@ -43,17 +44,17 @@ public class ShrapnelBomb extends Bomb {
 	public boolean explodesDestructively() {
 		return false;
 	}
-	
+
 	@Override
 	public void explode(int cell) {
 		super.explode(cell);
-		
+
 		boolean[] FOV = new boolean[Dungeon.level.length()];
 		Point c = Dungeon.level.cellToPoint(cell);
 		ShadowCaster.castShadow(c.x, c.y, FOV, Dungeon.level.losBlocking, 8);
-		
+
 		ArrayList<Char> affected = new ArrayList<>();
-		
+
 		for (int i = 0; i < FOV.length; i++) {
 			if (FOV[i]) {
 				if (Dungeon.level.heroFOV[i] && !Dungeon.level.solid[i]) {
@@ -65,10 +66,10 @@ public class ShrapnelBomb extends Bomb {
 				}
 			}
 		}
-		
+
 		for (Char ch : affected){
 			//regular bomb damage, which falls off at a rate of 5% per tile of distance
-			int damage = Math.round(Random.NormalIntRange( Dungeon.scalingDepth()+5, 10 + Dungeon.scalingDepth() * 2 ));
+			int damage = Math.round(damageRoll()*2);
 			damage = Math.round(damage * (1f - .05f*Dungeon.level.distance(cell, ch.pos)));
 			damage -= ch.drRoll();
 			ch.damage(damage, this);
@@ -82,5 +83,17 @@ public class ShrapnelBomb extends Bomb {
 	public int value() {
 		//prices of ingredients
 		return quantity * (20 + 50);
+	}
+
+	@Override
+	public String desc() {
+		String desc_fuse = Messages.get(this, "desc",
+				Math.round(minDamage()*1.6), Math.round(maxDamage()*1.6))+ "\n\n" + Messages.get(this, "desc_fuse");
+		if (fuse != null){
+			desc_fuse = Messages.get(this, "desc",
+					Math.round(minDamage()*1.6), Math.round(maxDamage()*1.6)) + "\n\n" + Messages.get(this, "desc_burning");
+		}
+
+		return desc_fuse;
 	}
 }

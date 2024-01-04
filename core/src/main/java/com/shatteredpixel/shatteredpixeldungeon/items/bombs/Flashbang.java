@@ -27,6 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -44,13 +45,19 @@ public class Flashbang extends Bomb {
 		Level l = Dungeon.level;
 		for (Char ch : Actor.chars()){
 			if (ch.fieldOfView != null && ch.fieldOfView[cell]){
-				int power = 16 - 4*l.distance(ch.pos, cell);
+				int power = 25 - 8*l.distance(ch.pos, cell);
+				/*power *= Bomb.nuclearBoost();*/
 				if (power > 0){
-					Buff.prolong(ch, Blindness.class, power);
-					Buff.prolong(ch, Cripple.class, power);
-					if (ch == Dungeon.hero){
-						GameScene.flash(0x80FFFFFF);
+					if (ch instanceof Mob/* && !(ch instanceof ExplodingTNT)*/){
+						Buff.prolong(ch, Blindness.class, power);
+						Buff.prolong(ch, Cripple.class, power);
+						((Mob) ch).enemy = null;
+						((Mob) ch).enemySeen = false;
+						((Mob) ch).state = ((Mob) ch).WANDERING;
 					}
+				}
+				if (ch == Dungeon.hero){
+					GameScene.flash(0x80FFFFFF);
 				}
 			}
 		}

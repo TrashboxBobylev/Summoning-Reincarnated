@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.FireKeeper;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -34,23 +35,25 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PathFinder;
 
 public class Firebomb extends Bomb {
-	
+
 	{
 		image = ItemSpriteSheet.FIRE_BOMB;
+		harmless = true;
+		fuseDelay = 0;
 	}
-	
+
 	@Override
 	public void explode(int cell) {
 		super.explode(cell);
-		
+
 		PathFinder.buildDistanceMap( cell, BArray.not( Dungeon.level.solid, null ), 2 );
 		for (int i = 0; i < PathFinder.distance.length; i++) {
 			if (PathFinder.distance[i] < Integer.MAX_VALUE) {
 				if (Dungeon.level.pit[i])
-					GameScene.add(Blob.seed(i, 2, Fire.class));
+					GameScene.add(Blob.seed(i, Math.round(2/**Bomb.nuclearBoost()*/), FireKeeper.class));
 				else
-					GameScene.add(Blob.seed(i, 10, Fire.class));
-				CellEmitter.get(i).burst(FlameParticle.FACTORY, 5);
+					GameScene.add(Blob.seed(i, Math.round(8/**Bomb.nuclearBoost()*/), FireKeeper.class));
+				CellEmitter.get(i).burst(FlameParticle.FACTORY, 8);
 			}
 		}
 		Sample.INSTANCE.play(Assets.Sounds.BURNING);

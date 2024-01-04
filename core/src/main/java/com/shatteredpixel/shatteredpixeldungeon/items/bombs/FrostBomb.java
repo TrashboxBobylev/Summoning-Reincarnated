@@ -27,29 +27,50 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Freezing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.BArray;
 import com.watabou.utils.PathFinder;
+import com.watabou.utils.Point;
+
+import java.util.ArrayList;
 
 public class FrostBomb extends Bomb {
 	
 	{
 		image = ItemSpriteSheet.FROST_BOMB;
+		harmless = true;
+		fuseDelay = 0;
 	}
 	
 	@Override
 	public void explode(int cell) {
 		super.explode(cell);
-		PathFinder.buildDistanceMap( cell, BArray.not( Dungeon.level.solid, null ), 2 );
-		for (int i = 0; i < PathFinder.distance.length; i++) {
-			if (PathFinder.distance[i] < Integer.MAX_VALUE) {
-				GameScene.add(Blob.seed(i, 10, Freezing.class));
+		GameScene.flash(0xFFA5F1FF);
+		boolean[] FOV = new boolean[Dungeon.level.length()];
+		Point c = Dungeon.level.cellToPoint(cell);
+		ShadowCaster.castShadow(c.x, c.y, FOV, Dungeon.level.losBlocking, Dungeon.level.viewDistance);
+
+		ArrayList<Char> affected = new ArrayList<>();
+
+		for (int i = 0; i < FOV.length; i++) {
+			if (FOV[i]) {
 				Char ch = Actor.findChar(i);
 				if (ch != null){
-					Buff.affect(ch, Frost.class, 2f);
+					affected.add(ch);
 				}
+			}
+		}
+
+		for (Char ch : affected){
+			if (ch != null && ch != Dungeon.hero) {
+				Buff.affect(ch, Frost.class, 15f/**Bomb.nuclearBoost()*/);
+			} else if (ch instanceof Hero) {
+				Buff.affect(ch, Chill.class, 9f/**Bomb.nuclearBoost()*/);
 			}
 		}
 	}

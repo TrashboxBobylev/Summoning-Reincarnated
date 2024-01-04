@@ -42,10 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibili
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImage;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.*;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -80,7 +77,7 @@ public class Bomb extends Item {
 	public boolean harmless = false;
 
 	//FIXME using a static variable for this is kinda gross, should be a better way
-	private static boolean lightingFuse = false;
+	protected static boolean lightingFuse = false;
 
 	private static final String AC_LIGHTTHROW = "LIGHTTHROW";
 
@@ -414,6 +411,8 @@ public class Bomb extends Item {
 			
 			validIngredients.put(GooBlob.class,                 ArcaneBomb.class);
 			validIngredients.put(MetalShard.class,              ShrapnelBomb.class);
+
+			validIngredients.put(ScrollOfTerror.class,       Webbomb.class);
 		}
 		
 		private static final HashMap<Class<?extends Bomb>, Integer> bombCosts = new HashMap<>();
@@ -421,14 +420,15 @@ public class Bomb extends Item {
 			bombCosts.put(FrostBomb.class,      0);
 			bombCosts.put(WoollyBomb.class,     0);
 			
-			bombCosts.put(Firebomb.class,       1);
-			bombCosts.put(Noisemaker.class,     1);
+			bombCosts.put(Firebomb.class,       2);
+			bombCosts.put(Noisemaker.class,     4);
 			
 			bombCosts.put(Flashbang.class,      2);
-			bombCosts.put(ShockBomb.class,      2);
+			bombCosts.put(ShockBomb.class,      4);
 
 			bombCosts.put(RegrowthBomb.class,   3);
 			bombCosts.put(HolyBomb.class,       3);
+			bombCosts.put(Webbomb.class,        3);
 			
 			bombCosts.put(ArcaneBomb.class,     6);
 			bombCosts.put(ShrapnelBomb.class,   6);
@@ -469,6 +469,7 @@ public class Bomb extends Item {
 				i.quantity(i.quantity()-1);
 				if (validIngredients.containsKey(i.getClass())){
 					result = Reflection.newInstance(validIngredients.get(i.getClass()));
+					if (result instanceof HolyBomb) result.quantity(2);
 				}
 			}
 			
@@ -479,7 +480,9 @@ public class Bomb extends Item {
 		public Item sampleOutput(ArrayList<Item> ingredients) {
 			for (Item i : ingredients){
 				if (validIngredients.containsKey(i.getClass())){
-					return Reflection.newInstance(validIngredients.get(i.getClass()));
+					Bomb bomb = Reflection.newInstance(validIngredients.get(i.getClass()));
+					if (bomb instanceof HolyBomb) bomb.quantity(2);
+					return bomb;
 				}
 			}
 			return null;
