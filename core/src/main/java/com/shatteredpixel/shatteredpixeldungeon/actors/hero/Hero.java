@@ -70,11 +70,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snake;
-import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
-import com.shatteredpixel.shatteredpixeldungeon.effects.CheckedCell;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
-import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
+import com.shatteredpixel.shatteredpixeldungeon.effects.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
@@ -121,6 +117,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfDisintegration;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -140,6 +137,8 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
@@ -2080,12 +2079,44 @@ public class Hero extends Char {
 			super.onAttackComplete();
 			return;
 		}
+
+		boolean hit;
 		
 		AttackIndicator.target(enemy);
 		boolean wasEnemy = enemy.alignment == Alignment.ENEMY
 				|| (enemy instanceof Mimic && enemy.alignment == Alignment.NEUTRAL);
+		if (wasEnemy && hasTalent(Talent.RUDE_STRIKE) && !enemy.isInvulnerable(getClass()) && Buff.count(this, Talent.RudeStrikeCounter.class, 1).count() >= 9 - pointsInTalent(Talent.RUDE_STRIKE)*2){
+			hit = true;
+			buff(Talent.RudeStrikeCounter.class).detach();
+			Ballistica aim = new Ballistica(pos, enemy.pos, Ballistica.WONT_STOP);
+			Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC, 2f, 0.8f);
+			Sample.INSTANCE.play(Assets.Sounds.BLAST, 0.66f);
 
-		boolean hit = attack( enemy );
+			ConeAOE cone = new ConeAOE(aim,
+					Math.min(aim.dist, 2),
+					180,
+					Ballistica.STOP_SOLID | Ballistica.STOP_TARGET);
+			for (Ballistica ray : cone.outerRays){
+				((MagicMissile)sprite.parent.recycle( MagicMissile.class )).reset(
+						MagicMissile.WARD_CONE,
+						sprite,
+						ray.path.get(ray.dist),
+						null
+				);
+				((MagicMissile)sprite.parent.recycle( MagicMissile.class )).reset(
+						MagicMissile.PURPLE_CONE,
+						sprite,
+						ray.path.get(ray.dist),
+						null
+				);
+			}
+
+			enemy.damage(damageRoll()*2, new WandOfDisintegration());
+			GameScene.shake(1.25f, 0.5f);
+			enemy.sprite.emitter().burst(MagicMissile.WardParticle.UP, 8);
+		} else {
+			hit = attack( enemy );
+		}
 		
 		Invisibility.dispel();
 		spend( attackDelay() );

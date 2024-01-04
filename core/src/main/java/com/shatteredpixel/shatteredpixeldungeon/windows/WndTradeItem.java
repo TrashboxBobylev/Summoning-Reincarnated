@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
@@ -204,12 +205,15 @@ public class WndTradeItem extends WndInfoItem {
 
 		//selling items in the sell interface doesn't spend time
 		hero.spend(-hero.cooldown());
+		int value = item.value();
+		if (hero.pointsInTalent(Talent.MONEY_IS_IMPORTANT) == 2)
+			value = Math.round(value*1.4f);
 
-		new Gold( item.value() ).doPickUp( hero );
+		new Gold( value ).doPickUp( hero );
 
 		if (shop != null){
 			shop.buybackItems.add(item);
-			while (shop.buybackItems.size() > Shopkeeper.MAX_BUYBACK_HISTORY){
+			while (shop.buybackItems.size() > (hero.hasTalent(Talent.MONEY_IS_IMPORTANT) ? Integer.MAX_VALUE : Shopkeeper.MAX_BUYBACK_HISTORY)){
 				shop.buybackItems.remove(0);
 			}
 		}
@@ -232,11 +236,15 @@ public class WndTradeItem extends WndInfoItem {
 			//selling items in the sell interface doesn't spend time
 			hero.spend(-hero.cooldown());
 
-			new Gold( item.value() ).doPickUp( hero );
+			int value = item.value();
+			if (hero.pointsInTalent(Talent.MONEY_IS_IMPORTANT) == 2)
+				value = Math.round(value*1.4f);
+
+			new Gold( value ).doPickUp( hero );
 
 			if (shop != null){
 				shop.buybackItems.add(item);
-				while (shop.buybackItems.size() > Shopkeeper.MAX_BUYBACK_HISTORY){
+				while (shop.buybackItems.size() > (hero.hasTalent(Talent.MONEY_IS_IMPORTANT) ? Integer.MAX_VALUE : Shopkeeper.MAX_BUYBACK_HISTORY)){
 					shop.buybackItems.remove(0);
 				}
 			}

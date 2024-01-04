@@ -83,7 +83,7 @@ public enum HeroClass {
 	ROGUE( HeroSubClass.ASSASSIN, HeroSubClass.FREERUNNER ),
 	HUNTRESS( HeroSubClass.SNIPER, HeroSubClass.WARDEN ),
 	DUELIST( HeroSubClass.CHAMPION, HeroSubClass.MONK ),
-	ADVENTURER();
+	ADVENTURER(HeroSubClass.NONE);
 
 	private HeroSubClass[] subClasses;
 

@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Bundle;
 
 import java.util.ArrayList;
 
@@ -159,4 +160,17 @@ public abstract class EquipableItem extends Item {
 	}
 
 	public void activate( Char ch ){}
+
+	public boolean equippedBefore = false;
+	private static final String EQUIPPED_BEFORE       = "equippedBefore";
+
+	@Override
+	public void storeInBundle( Bundle bundle ) {
+		bundle.put(EQUIPPED_BEFORE, equippedBefore);
+	}
+
+	@Override
+	public void restoreFromBundle( Bundle bundle ) {
+		equippedBefore = bundle.getBoolean(EQUIPPED_BEFORE);
+	}
 }

@@ -117,8 +117,8 @@ public abstract class RegularLevel extends Level {
 		initRooms.add( roomExit = new ExitRoom());
 
 		//force max standard rooms and multiple by 1.5x for large levels
-		int standards = standardRooms(feeling == Feeling.LARGE);
-		if (feeling == Feeling.LARGE){
+		int standards = standardRooms(isLarge());
+		if (isLarge()){
 			standards = (int)Math.ceil(standards * 1.5f);
 		}
 		for (int i = 0; i < standards; i++) {
@@ -134,8 +134,8 @@ public abstract class RegularLevel extends Level {
 			initRooms.add(new ShopRoom());
 
 		//force max special rooms and add one more for large levels
-		int specials = specialRooms(feeling == Feeling.LARGE);
-		if (feeling == Feeling.LARGE){
+		int specials = specialRooms(isLarge());
+		if (isLarge()){
 			specials++;
 		}
 		SpecialRoom.initForFloor();
@@ -154,7 +154,11 @@ public abstract class RegularLevel extends Level {
 		
 		return initRooms;
 	}
-	
+
+	private boolean isLarge() {
+        return feeling == Feeling.LARGE || Dungeon.hero.hasTalent(Talent.DUNGEON_OF_DOOM);
+	}
+
 	protected int standardRooms(boolean forceMax){
 		return 0;
 	}
@@ -200,7 +204,7 @@ public abstract class RegularLevel extends Level {
 		}
 
 		int mobs = 3 + Dungeon.depth % 5 + Random.Int(3);
-		if (feeling == Feeling.LARGE){
+		if (isLarge()){
 			mobs = (int)Math.ceil(mobs * 1.33f);
 		}
 		return mobs;
@@ -345,7 +349,7 @@ public abstract class RegularLevel extends Level {
 		// drops 3/4/5 items 60%/30%/10% of the time
 		int nItems = 3 + Random.chances(new float[]{6, 3, 1});
 
-		if (feeling == Feeling.LARGE){
+		if (isLarge()){
 			nItems += 2;
 		}
 
@@ -355,6 +359,9 @@ public abstract class RegularLevel extends Level {
 
 			Item toDrop = Generator.random();
 			if (toDrop == null) continue;
+			if (Dungeon.hero.pointsInTalent(Talent.DUNGEON_OF_DOOM) > 1 && toDrop.isUpgradable() && Random.Int(3) == 0){
+				toDrop.upgrade();
+			}
 
 			int cell = randomDropCell();
 			if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {
@@ -428,7 +435,7 @@ public abstract class RegularLevel extends Level {
 				}
 				drop( new Torch(), cell );
 				//add a second torch to help with the larger floor
-				if (feeling == Feeling.LARGE){
+				if (isLarge()){
 					cell = randomDropCell();
 					if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {
 						map[cell] = Terrain.GRASS;

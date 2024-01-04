@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.BlobImmunity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
@@ -77,6 +78,9 @@ public class Shopkeeper extends NPC {
 
 		if (turnsSinceHarmed >= 0){
 			turnsSinceHarmed ++;
+			if (turnsSinceHarmed >= 5 && Dungeon.hero.pointsInTalent(Talent.MONEY_IS_IMPORTANT) == 2){
+				turnsSinceHarmed = -1;
+			}
 		}
 
 		sprite.turnTo( pos, Dungeon.hero.pos );
@@ -243,8 +247,11 @@ public class Shopkeeper extends NPC {
 						} else if (index > 1){
 							GLog.i(Messages.get(Shopkeeper.this, "buyback"));
 							Item returned = buybackItems.remove(index-2);
-							Dungeon.gold -= returned.value();
-							Statistics.goldCollected -= returned.value();
+							int value = returned.value();
+							if (Dungeon.hero.pointsInTalent(Talent.MONEY_IS_IMPORTANT) == 2)
+								value = Math.round(value*1.4f);
+							Dungeon.gold -= value;
+							Statistics.goldCollected -= value;
 							if (!returned.doPickUp(Dungeon.hero)){
 								Dungeon.level.drop(returned, Dungeon.hero.pos);
 							}
@@ -254,7 +261,10 @@ public class Shopkeeper extends NPC {
 					@Override
 					protected boolean enabled(int index) {
 						if (index > 1){
-							return Dungeon.gold >= buybackItems.get(index-2).value();
+							int value = buybackItems.get(index-2).value();
+							if (Dungeon.hero.pointsInTalent(Talent.MONEY_IS_IMPORTANT) == 2)
+								value = Math.round(value*1.4f);
+							return Dungeon.gold >= value;
 						} else {
 							return super.enabled(index);
 						}

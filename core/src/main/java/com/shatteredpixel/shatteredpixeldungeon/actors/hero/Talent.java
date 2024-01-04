@@ -27,21 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CounterBuff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.EnhancedRings;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PhysicalEmpower;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RevealedArea;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ScrollEmpower;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.WandEmpower;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -50,6 +36,8 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
+import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
+import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
@@ -173,7 +161,14 @@ public enum Talent {
 	//universal T4
 	HEROIC_ENERGY(26, 4), //See icon() and title() for special logic for this one
 	//Ratmogrify T4
-	RATSISTANCE(215, 4), RATLOMACY(216, 4), RATFORCEMENTS(217, 4);
+	RATSISTANCE(215, 4), RATLOMACY(216, 4), RATFORCEMENTS(217, 4),
+
+	//adventurer T1
+	DECENT_MEAL(256), ULTIMATE_INTUITION(257), PRECISE_STRIKE(258), PREPARED_TO_DEFEND(259),
+	//adventurer T2
+	UPGRADING_MEAL(260), ENERGY_SCROLL(261), DUNGEON_OF_DOOM(262), RUDE_STRIKE(263), MONEY_IS_IMPORTANT(264),
+	//adventurer T3
+	AFFECTED_BY_LUCK(265, 3), UNIQUE_ATTENTION(266, 3), SLICE_OF_POWER(267, 3), MEAL_OF_POWER(268, 3), RUN_OF_POWER(269, 3);
 
 	public static class ImprovisedProjectileCooldown extends FlavourBuff{
 		public int icon() { return BuffIndicator.TIME; }
@@ -184,6 +179,7 @@ public enum Talent {
 	public static class StrikingWaveTracker extends FlavourBuff{};
 	public static class WandPreservationCounter extends CounterBuff{{revivePersists = true;}};
 	public static class EmpoweredStrikeTracker extends FlavourBuff{};
+	public static class RudeStrikeCounter extends CounterBuff{{revivePersists = true;}}
 	public static class ProtectiveShadowsTracker extends Buff {
 		float barrierInc = 0.5f;
 
@@ -456,6 +452,14 @@ public enum Talent {
 				Dungeon.level.drop(toGive, hero.pos).sprite.drop();
 			}
 		}
+
+		if (talent == ULTIMATE_INTUITION){
+			for (Item item: hero.belongings){
+				if (!item.isIdentified()){
+					item.identify();
+				}
+			}
+		}
 	}
 
 	public static class CachedRationsDropped extends CounterBuff{{revivePersists = true;}};
@@ -473,6 +477,10 @@ public enum Talent {
 				hero.HP = Math.min(hero.HP + 1 + hero.pointsInTalent(HEARTY_MEAL), hero.HT);
 				hero.sprite.emitter().burst(Speck.factory(Speck.HEALING), hero.pointsInTalent(HEARTY_MEAL));
 			}
+		}
+		if (hero.hasTalent(DECENT_MEAL)){
+			//2/3 shielding given
+			Buff.affect(hero, Barrier.class).setShield(1 + hero.pointsInTalent(DECENT_MEAL));
 		}
 		if (hero.hasTalent(IRON_STOMACH)){
 			if (hero.cooldown() > 0) {
@@ -506,6 +514,10 @@ public enum Talent {
 		if (hero.hasTalent(STRENGTHENING_MEAL)){
 			//3 bonus physical damage for next 2/3 attacks
 			Buff.affect( hero, PhysicalEmpower.class).set(3, 1 + hero.pointsInTalent(STRENGTHENING_MEAL));
+		}
+		if (hero.hasTalent(UPGRADING_MEAL)){
+			//+1 effective tier for next 3/5 attacks
+			Buff.affect( hero, TieringEmpower.class).set(1 + hero.pointsInTalent(UPGRADING_MEAL)*2);
 		}
 		if (hero.hasTalent(FOCUSED_MEAL)){
 			if (hero.heroClass == HeroClass.DUELIST){
@@ -650,6 +662,12 @@ public enum Talent {
 		if (hero.pointsInTalent(ADVENTURERS_INTUITION) == 2 && item instanceof Weapon){
 			item.identify();
 		}
+		if (item instanceof EquipableItem) {
+			if (!((EquipableItem) item).equippedBefore && hero.hasTalent(PREPARED_TO_DEFEND)){
+				Buff.affect(hero, Barrier.class).setShield(2 + hero.pointsInTalent(DECENT_MEAL)*2);
+			}
+			((EquipableItem) item).equippedBefore = true;
+		}
 	}
 
 	public static void onItemCollected( Hero hero, Item item ){
@@ -681,6 +699,14 @@ public enum Talent {
 				&& enemy.buff(SuckerPunchTracker.class) == null){
 			dmg += Random.IntRange(hero.pointsInTalent(Talent.SUCKER_PUNCH) , 2);
 			Buff.affect(enemy, SuckerPunchTracker.class);
+		}
+		if (hero.hasTalent(Talent.PRECISE_STRIKE)
+				&& enemy.buff(PreciseStrikeTracker.class) == null){
+			dmg += enemy.drRoll();
+			if (hero.pointsInTalent(PRECISE_STRIKE) > 1 && enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)){
+				enemy.HP = enemy.HT = Math.max(0, enemy.HT - 2);
+			}
+			Buff.affect(enemy, PreciseStrikeTracker.class);
 		}
 
 		if (hero.hasTalent(Talent.FOLLOWUP_STRIKE) && enemy.isAlive() && enemy.alignment == Char.Alignment.ENEMY) {
@@ -723,6 +749,7 @@ public enum Talent {
 	}
 
 	public static class SuckerPunchTracker extends Buff{};
+	public static class PreciseStrikeTracker extends Buff{};
 	public static class FollowupStrikeTracker extends FlavourBuff{
 		public int object;
 		{ type = Buff.buffType.POSITIVE; }
@@ -776,6 +803,9 @@ public enum Talent {
 			case DUELIST:
 				Collections.addAll(tierTalents, STRENGTHENING_MEAL, ADVENTURERS_INTUITION, PATIENT_STRIKE, AGGRESSIVE_BARRIER);
 				break;
+			case ADVENTURER:
+				Collections.addAll(tierTalents, DECENT_MEAL, ULTIMATE_INTUITION, PRECISE_STRIKE, PREPARED_TO_DEFEND);
+				break;
 		}
 		for (Talent talent : tierTalents){
 			if (replacements.containsKey(talent)){
@@ -801,6 +831,9 @@ public enum Talent {
 				break;
 			case DUELIST:
 				Collections.addAll(tierTalents, FOCUSED_MEAL, LIQUID_AGILITY, WEAPON_RECHARGING, LETHAL_HASTE, SWIFT_EQUIP);
+				break;
+			case ADVENTURER:
+				Collections.addAll(tierTalents, UPGRADING_MEAL, ENERGY_SCROLL, DUNGEON_OF_DOOM, RUDE_STRIKE, MONEY_IS_IMPORTANT);
 				break;
 		}
 		for (Talent talent : tierTalents){
