@@ -62,6 +62,8 @@ public class MenuPane extends Component {
 
 	private BitmapText version;
 
+	private Image conduct;
+
 	private DangerIndicator danger;
 
 	public static final int WIDTH = 32;
@@ -138,6 +140,11 @@ public class MenuPane extends Component {
 		version.alpha( 0.5f );
 		add(version);
 
+		if (Dungeon.conducts.isConductedAtAll()){
+			conduct = new Image(Assets.Interfaces.SUBCLASS_ICONS, (Dungeon.conduct().icon - 1) * 16, 16, 16, 16);
+			add( conduct );
+		}
+
 		danger = new DangerIndicator();
 		add( danger );
 
@@ -186,6 +193,11 @@ public class MenuPane extends Component {
 		version.x = x + WIDTH - version.width();
 		version.y = y + bg.height() + (3 - version.baseLine());
 		PixelScene.align(version);
+
+		if (conduct != null){
+			conduct.x = x + conduct.width();
+			conduct.y = btnJournal.height() + version.height() + 3;
+		}
 
 		danger.setPos( x + WIDTH - danger.width(), y + bg.height + 3 );
 	}

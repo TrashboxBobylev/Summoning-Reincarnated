@@ -209,6 +209,8 @@ public class SPDSettings extends GameSettings {
 	public static final String KEY_CUSTOM_SEED	= "custom_seed";
 	public static final String KEY_LAST_DAILY	= "last_daily";
 	public static final String KEY_INTRO		= "intro";
+	public static final String KEY_ONE_CONDUCT  = "one_conduct";
+	public static final String KEY_CONDUCTS  	= "conducts";
 
 	public static final String KEY_SUPPORT_NAGGED= "support_nagged";
 	
@@ -250,6 +252,20 @@ public class SPDSettings extends GameSettings {
 
 	public static long lastDaily() {
 		return getLong( KEY_LAST_DAILY, 0);
+	}
+
+	public static void conducts( Conducts.ConductStorage value ) {
+		put( KEY_CONDUCTS, value);
+	}
+
+	public static Conducts.ConductStorage conducts() {
+		return getBundlable(KEY_CONDUCTS, new Conducts.ConductStorage());
+	}
+
+	public static boolean oneConduct() {return getBoolean(KEY_ONE_CONDUCT, true);}
+
+	public static void oneConduct(boolean value){
+		put(KEY_ONE_CONDUCT, value);
 	}
 
 	public static void supportNagged( boolean value ) {

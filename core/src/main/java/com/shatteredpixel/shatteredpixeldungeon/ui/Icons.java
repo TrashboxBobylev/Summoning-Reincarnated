@@ -62,6 +62,8 @@ public enum Icons {
 	STATS,
 	CHALLENGE_OFF,
 	CHALLENGE_ON,
+	CONDUCTS_OFF,
+	CONDUCTS_ON,
 	RENAME_OFF,
 	RENAME_ON,
 	SEED,
@@ -214,6 +216,12 @@ public enum Icons {
 				break;
 			case CHALLENGE_ON:
 				icon.frame( icon.texture.uvRectBySize( 160, 32, 15, 12 ) );
+				break;
+			case CONDUCTS_OFF:
+				icon.frame( icon.texture.uvRectBySize( 144, 64, 15, 11 ) );
+				break;
+			case CONDUCTS_ON:
+				icon.frame( icon.texture.uvRectBySize( 128, 64, 15, 11 ) );
 				break;
 			case RENAME_OFF:
 				icon.frame( icon.texture.uvRectBySize( 176, 32, 15, 14 ) );

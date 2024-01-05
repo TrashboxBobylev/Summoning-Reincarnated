@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.noosa.Game;
+import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Music;
 
 import java.io.IOException;
@@ -101,6 +102,25 @@ public class WndGame extends Window {
 				}
 			} );
 			curBtn.icon(Icons.get(Icons.RANKINGS));
+		}
+
+		if (Dungeon.conducts.isConductedAtAll()) {
+			addButton( curBtn = new RedButton( Dungeon.conducts.oneConduct() ?
+					Dungeon.conduct().toString() : Messages.get(WndConducts.class, "title"), 7 ) {
+				@Override
+				protected void onClick() {
+					hide();
+					if (!Dungeon.conducts.oneConduct()) {
+						ShatteredPixelDungeon.scene().addToFront(new WndConducts(Dungeon.conducts, false));
+					} else
+						GameScene.show( new WndTitledMessage(new Image(Assets.Interfaces.SUBCLASS_ICONS, (Dungeon.conduct().icon-1)*16, 16, 16, 16),
+								Dungeon.conduct().toString(),
+								Dungeon.conduct().desc()) );
+				}
+			} );
+			curBtn.icon(Dungeon.conducts.oneConduct() ?
+					new Image(Assets.Interfaces.SUBCLASS_ICONS, (Dungeon.conduct().icon-1)*16, 16, 16, 16) :
+					Icons.get(Icons.CONDUCTS_ON));
 		}
 
 		// Main menu

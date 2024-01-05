@@ -222,10 +222,12 @@ public enum Rankings {
 		Statistics.chalMultiplier = (float)Math.pow(1.25, Challenges.activeChallenges());
 		Statistics.chalMultiplier = Math.round(Statistics.chalMultiplier*20f)/20f;
 
+		Statistics.condMultiplier = Dungeon.conducts.scoreMod();
+
 		Statistics.totalScore = Statistics.progressScore + Statistics.treasureScore + Statistics.exploreScore
 					+ Statistics.totalBossScore + Statistics.totalQuestScore;
 
-		Statistics.totalScore *= Statistics.winMultiplier * Statistics.chalMultiplier;
+		Statistics.totalScore *= Statistics.winMultiplier * Statistics.chalMultiplier * Statistics.condMultiplier;
 
 		return Statistics.totalScore;
 	}
@@ -300,6 +302,7 @@ public enum Rankings {
 		
 		//save challenges
 		rec.gameData.put( CHALLENGES, Dungeon.challenges );
+		Dungeon.conducts.storeInBundle(rec.gameData);
 
 		rec.gameData.put( GAME_VERSION, Dungeon.initialVersion );
 
@@ -336,6 +339,9 @@ public enum Rankings {
 		Statistics.restoreFromBundle(data.getBundle(STATS));
 		
 		Dungeon.challenges = data.getInt(CHALLENGES);
+
+		Dungeon.conducts = new Conducts.ConductStorage();
+		Dungeon.conducts.restoreFromBundle(rec.gameData);
 
 		Dungeon.initialVersion = data.getInt(GAME_VERSION);
 

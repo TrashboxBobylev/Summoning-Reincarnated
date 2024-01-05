@@ -179,6 +179,14 @@ public class Dungeon {
 
 	}
 
+	public static Conducts.ConductStorage conducts = new Conducts.ConductStorage();
+
+	public static Conducts.Conduct conduct() {
+		if (conducts.isConductedAtAll())
+			return conducts.getFirst();
+		return null;
+	}
+
 	public static int challenges;
 	public static int mobsToChampion;
 
@@ -215,6 +223,7 @@ public class Dungeon {
 	public static void init() {
 
 		initialVersion = version = Game.versionCode;
+		conducts = new Conducts.ConductStorage(SPDSettings.conducts());
 		challenges = SPDSettings.challenges();
 		mobsToChampion = -1;
 
@@ -284,6 +293,10 @@ public class Dungeon {
 
 	public static boolean isChallenged( int mask ) {
 		return (challenges & mask) != 0;
+	}
+
+	public static boolean isChallenged( Conducts.Conduct mask ) {
+		return conducts.isConducted(mask);
 	}
 
 	public static boolean levelHasBeenGenerated(int depth, int branch){
@@ -591,6 +604,7 @@ public class Dungeon {
 			bundle.put( DAILY, daily );
 			bundle.put( DAILY_REPLAY, dailyReplay );
 			bundle.put( CHALLENGES, challenges );
+			conducts.storeInBundle(bundle);
 			bundle.put( MOBS_TO_CHAMPION, mobsToChampion );
 			bundle.put( HERO, hero );
 			bundle.put( DEPTH, depth );
@@ -704,6 +718,7 @@ public class Dungeon {
 		Toolbar.swappedQuickslots = false;
 
 		Dungeon.challenges = bundle.getInt( CHALLENGES );
+		conducts.restoreFromBundle(bundle);
 		Dungeon.mobsToChampion = bundle.getInt( MOBS_TO_CHAMPION );
 		
 		Dungeon.level = null;
@@ -829,6 +844,7 @@ public class Dungeon {
 		info.depth = bundle.getInt( DEPTH );
 		info.version = bundle.getInt( VERSION );
 		info.challenges = bundle.getInt( CHALLENGES );
+		info.conducts.restoreFromBundle(bundle);
 		info.seed = bundle.getLong( SEED );
 		info.customSeed = bundle.getString( CUSTOM_SEED );
 		info.daily = bundle.getBoolean( DAILY );

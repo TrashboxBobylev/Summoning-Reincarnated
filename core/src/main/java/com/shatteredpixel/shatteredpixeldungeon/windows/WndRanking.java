@@ -21,15 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.QuickSlot;
-import com.shatteredpixel.shatteredpixeldungeon.Rankings;
-import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
-import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -110,7 +102,7 @@ public class WndRanking extends WndTabbed {
 			Group[] pages =
 					{new StatsTab(), new TalentsTab(), new ItemsTab(), new BadgesTab(), null};
 
-			if (Dungeon.challenges != 0) pages[4] = new ChallengesTab();
+			if (Dungeon.challenges != 0 || Dungeon.conducts.isConductedAtAll()) pages[4] = new ChallengesTab();
 
 			for (int i = 0; i < pages.length; i++) {
 
@@ -418,6 +410,25 @@ public class WndRanking extends WndTabbed {
 			camera = WndRanking.this.camera;
 
 			float pos = 0;
+
+			if (Dungeon.conducts.isConductedAtAll()){
+				RedButton btnConducts = new RedButton( Messages.get(WndConducts.class, "title") ) {
+					@Override
+					protected void onClick() {
+						if (Dungeon.conducts.oneConduct()){
+							Game.scene().add( new WndTitledMessage(new Image(Assets.Interfaces.SUBCLASS_ICONS, (Dungeon.conduct().icon-1)*16, 16, 16, 16),
+									Dungeon.conduct().toString(),
+									Dungeon.conduct().desc()));
+						} else
+							ShatteredPixelDungeon.scene().addToFront(new WndConducts(Dungeon.conducts, false));
+					}
+				};
+				float btnW = btnConducts.reqWidth() + 2;
+				btnConducts.setRect( 0, pos, Math.max(btnW, WIDTH) , btnConducts.reqHeight() + 2 );
+				add( btnConducts );
+
+				pos = btnConducts.bottom();
+			}
 
 			for (int i=0; i < Challenges.NAME_IDS.length; i++) {
 

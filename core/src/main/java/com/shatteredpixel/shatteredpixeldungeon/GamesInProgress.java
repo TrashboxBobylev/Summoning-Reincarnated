@@ -105,6 +105,7 @@ public class GamesInProgress {
 				Bundle bundle = FileUtils.bundleFromFile(gameFile(slot));
 				info = new Info();
 				info.slot = slot;
+				info.conducts = new Conducts.ConductStorage();
 				Dungeon.preview(info, bundle);
 				
 				//saves from before v1.2.3 are not supported
@@ -131,6 +132,7 @@ public class GamesInProgress {
 		
 		info.depth = Dungeon.depth;
 		info.challenges = Dungeon.challenges;
+		info.conducts = Dungeon.conducts;
 
 		info.seed = Dungeon.seed;
 		info.customSeed = Dungeon.customSeedText;
@@ -168,6 +170,7 @@ public class GamesInProgress {
 		public int depth;
 		public int version;
 		public int challenges;
+		public Conducts.ConductStorage conducts;
 
 		public long seed;
 		public String customSeed;

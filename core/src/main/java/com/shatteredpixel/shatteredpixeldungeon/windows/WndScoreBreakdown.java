@@ -80,6 +80,9 @@ public class WndScoreBreakdown extends Window {
 		if (Statistics.chalMultiplier > 1) {
 			pos = statSlot(this, Messages.get(this, "challenge_multiplier"), Statistics.chalMultiplier + "x", pos, false);
 		}
+		if (Statistics.condMultiplier > 1) {
+			pos = statSlot(this, Messages.get(this, "conducts_multiplier"), Statistics.condMultiplier + "x", pos, false);
+		}
 		pos = statSlot(this, Messages.get(this, "total"), num.format(Statistics.totalScore), pos, false);
 
 		if (Dungeon.initialVersion <= ShatteredPixelDungeon.v1_2_3){

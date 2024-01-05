@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
@@ -38,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.watabou.noosa.Game;
+import com.watabou.noosa.Image;
 
 import java.util.Locale;
 
@@ -67,7 +69,7 @@ public class WndGameInProgress extends Window {
 		title.setRect( 0, 0, WIDTH, 0 );
 		add(title);
 		
-		if (info.challenges > 0) GAP -= 2;
+		if (info.challenges > 0 || (info.conducts != null && info.conducts.isConductedAtAll())) GAP -= 2;
 		
 		pos = title.bottom() + GAP;
 		
@@ -84,6 +86,28 @@ public class WndGameInProgress extends Window {
 			add( btnChallenges );
 			
 			pos = btnChallenges.bottom() + GAP;
+		}
+
+		if (info.conducts != null && info.conducts.isConductedAtAll()) {
+			RedButton btnConducts = new RedButton( Messages.get(WndConducts.class, "title") ) {
+				@Override
+				protected void onClick() {
+					if (info.conducts.oneConduct()){
+						Game.scene().add( new WndTitledMessage(
+								new Image(Assets.Interfaces.SUBCLASS_ICONS, (info.conducts.getFirst().icon-1)*16, 16, 16, 16),
+								info.conducts.getFirst().toString(),
+								info.conducts.getFirst().desc())
+						);
+					} else
+						ShatteredPixelDungeon.scene().addToFront(new WndConducts(info.conducts, false));
+				}
+			};
+			btnConducts.icon(Icons.get(Icons.CONDUCTS_ON));
+			float btnW = btnConducts.reqWidth() + 2;
+			btnConducts.setRect( (WIDTH - btnW)/2, pos, btnW , 18 );
+			add( btnConducts );
+
+			pos = btnConducts.bottom() + GAP;
 		}
 		
 		pos += GAP;
