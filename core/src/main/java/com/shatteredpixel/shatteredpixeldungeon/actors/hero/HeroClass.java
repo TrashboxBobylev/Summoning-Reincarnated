@@ -21,12 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.QuickSlot;
-import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Challenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.ElementalStrike;
@@ -113,29 +108,54 @@ public enum HeroClass {
 
 		new ScrollOfIdentify().identify();
 
+		if (Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)){
+			MagesStaff staff;
+			staff = new MagesStaff(new WandOfMagicMissile());
+			(hero.belongings.weapon = staff).identify();
+			hero.belongings.weapon.activate(hero);
+			(hero.belongings.armor = new ScoutArmor()).identify();
+			SpiritBow bow = new SpiritBow();
+			bow.identify().collect();
+			Dungeon.quickslot.setSlot(0, bow);
+			Dungeon.quickslot.setSlot(1, hero.belongings.armor);
+			Dungeon.quickslot.setSlot(2, staff);
+			if (hero.belongings.armor != null){
+				hero.belongings.armor.affixSeal(new BrokenSeal());
+			}
+			CloakOfShadows cloak = new CloakOfShadows();
+			(hero.belongings.artifact = cloak).identify();
+			hero.belongings.artifact.activate( hero );
+			Dungeon.quickslot.setSlot(3, cloak);
+			new PotionBandolier().collect();
+			Dungeon.LimitedDrops.POTION_BANDOLIER.drop();
+			new ScrollHolder().collect();
+			Dungeon.LimitedDrops.SCROLL_HOLDER.drop();
+			new MagicalHolster().collect();
+			Dungeon.LimitedDrops.MAGICAL_HOLSTER.drop();
+		}
 		switch (this) {
 			case WARRIOR:
-				initWarrior( hero );
+				initWarrior(hero);
 				break;
 
 			case MAGE:
-				initMage( hero );
+				initMage(hero);
 				break;
 
 			case ROGUE:
-				initRogue( hero );
+				initRogue(hero);
 				break;
 
 			case HUNTRESS:
-				initHuntress( hero );
+				initHuntress(hero);
 				break;
 
 			case DUELIST:
-				initDuelist( hero );
+				initDuelist(hero);
 				break;
 
 			case ADVENTURER:
-				initAdventurer( hero );
+				initAdventurer(hero);
 				break;
 		}
 
@@ -147,6 +167,8 @@ public enum HeroClass {
 				}
 			}
 		}
+
+		if (Dungeon.isChallenged(Conducts.Conduct.WRAITH)) hero.HP = hero.HT = 1;
 
 	}
 
@@ -167,13 +189,15 @@ public enum HeroClass {
 	}
 
 	private static void initWarrior( Hero hero ) {
-		(hero.belongings.weapon = new WornShortsword()).identify();
-		ThrowingStone stones = new ThrowingStone();
-		stones.quantity(3).collect();
-		Dungeon.quickslot.setSlot(0, stones);
+		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
+			(hero.belongings.weapon = new WornShortsword()).identify();
+			ThrowingStone stones = new ThrowingStone();
+			stones.quantity(3).collect();
+			Dungeon.quickslot.setSlot(0, stones);
 
-		if (hero.belongings.armor != null){
-			hero.belongings.armor.affixSeal(new BrokenSeal());
+			if (hero.belongings.armor != null) {
+				hero.belongings.armor.affixSeal(new BrokenSeal());
+			}
 		}
 
 		new PotionOfHealing().identify();
@@ -181,60 +205,68 @@ public enum HeroClass {
 	}
 
 	private static void initMage( Hero hero ) {
-		MagesStaff staff;
+		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
+			MagesStaff staff;
 
-		staff = new MagesStaff(new WandOfMagicMissile());
+			staff = new MagesStaff(new WandOfMagicMissile());
 
-		(hero.belongings.weapon = staff).identify();
-		hero.belongings.weapon.activate(hero);
+			(hero.belongings.weapon = staff).identify();
+			hero.belongings.weapon.activate(hero);
 
-		Dungeon.quickslot.setSlot(0, staff);
+			Dungeon.quickslot.setSlot(0, staff);
+		}
 
 		new ScrollOfUpgrade().identify();
 		new PotionOfLiquidFlame().identify();
 	}
 
 	private static void initRogue( Hero hero ) {
-		(hero.belongings.weapon = new Dagger()).identify();
+		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
+			(hero.belongings.weapon = new Dagger()).identify();
 
-		CloakOfShadows cloak = new CloakOfShadows();
-		(hero.belongings.artifact = cloak).identify();
-		hero.belongings.artifact.activate( hero );
+			CloakOfShadows cloak = new CloakOfShadows();
+			(hero.belongings.artifact = cloak).identify();
+			hero.belongings.artifact.activate(hero);
 
-		ThrowingKnife knives = new ThrowingKnife();
-		knives.quantity(3).collect();
+			ThrowingKnife knives = new ThrowingKnife();
+			knives.quantity(3).collect();
 
-		Dungeon.quickslot.setSlot(0, cloak);
-		Dungeon.quickslot.setSlot(1, knives);
+			Dungeon.quickslot.setSlot(0, cloak);
+			Dungeon.quickslot.setSlot(1, knives);
+		}
 
 		new ScrollOfMagicMapping().identify();
 		new PotionOfInvisibility().identify();
 	}
 
 	private static void initHuntress( Hero hero ) {
+		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
 
-		(hero.belongings.weapon = new Gloves()).identify();
-		(hero.belongings.armor = new ScoutArmor()).identify();
-		SpiritBow bow = new SpiritBow();
-		bow.identify().collect();
+			(hero.belongings.weapon = new Gloves()).identify();
+			(hero.belongings.armor = new ScoutArmor()).identify();
+			SpiritBow bow = new SpiritBow();
+			bow.identify().collect();
 
-		Dungeon.quickslot.setSlot(0, bow);
-		Dungeon.quickslot.setSlot(1, hero.belongings.armor);
+			Dungeon.quickslot.setSlot(0, bow);
+			Dungeon.quickslot.setSlot(1, hero.belongings.armor);
+		}
 
 		new PotionOfMindVision().identify();
 		new ScrollOfLullaby().identify();
 	}
 
 	private static void initDuelist( Hero hero ) {
+		if (Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
 
-		(hero.belongings.weapon = new Rapier()).identify();
-		hero.belongings.weapon.activate(hero);
+			(hero.belongings.weapon = new Rapier()).identify();
+			hero.belongings.weapon.activate(hero);
 
-		ThrowingSpike spikes = new ThrowingSpike();
-		spikes.quantity(2).collect();
+			ThrowingSpike spikes = new ThrowingSpike();
+			spikes.quantity(2).collect();
 
-		Dungeon.quickslot.setSlot(0, hero.belongings.weapon);
-		Dungeon.quickslot.setSlot(1, spikes);
+			Dungeon.quickslot.setSlot(0, hero.belongings.weapon);
+			Dungeon.quickslot.setSlot(1, spikes);
+		}
 
 		new PotionOfStrength().identify();
 		new ScrollOfMirrorImage().identify();
@@ -244,19 +276,22 @@ public enum HeroClass {
 		hero.HP = hero.HT = 30;
 		hero.STR = 12;
 
-		(hero.belongings.armor = new SyntheticArmor()).identify();
+		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
 
-		(hero.belongings.weapon = new Dagger2()).identify();
+			(hero.belongings.armor = new SyntheticArmor()).identify();
 
-		ThrowingKnive2 knives = new ThrowingKnive2();
-		knives.quantity(2).collect();
-		Dungeon.quickslot.setSlot(0, knives);
-		new PotionBandolier().collect();
-		Dungeon.LimitedDrops.POTION_BANDOLIER.drop();
-		new ScrollHolder().collect();
-		Dungeon.LimitedDrops.SCROLL_HOLDER.drop();
-		new MagicalHolster().collect();
-		Dungeon.LimitedDrops.MAGICAL_HOLSTER.drop();
+			(hero.belongings.weapon = new Dagger2()).identify();
+
+			ThrowingKnive2 knives = new ThrowingKnive2();
+			knives.quantity(2).collect();
+			Dungeon.quickslot.setSlot(0, knives);
+			new PotionBandolier().collect();
+			Dungeon.LimitedDrops.POTION_BANDOLIER.drop();
+			new ScrollHolder().collect();
+			Dungeon.LimitedDrops.SCROLL_HOLDER.drop();
+			new MagicalHolster().collect();
+			Dungeon.LimitedDrops.MAGICAL_HOLSTER.drop();
+		}
 	}
 
 	public String title() {

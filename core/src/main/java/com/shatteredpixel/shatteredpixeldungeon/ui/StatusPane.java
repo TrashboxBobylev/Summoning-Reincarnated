@@ -21,10 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CircleArc;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -254,6 +251,10 @@ public class StatusPane extends Component {
 			avatar.tint(1, 1, 0, (float)Math.abs(Math.cos(talentBlink*FLASH_RATE))/2f);
 		} else {
 			avatar.resetColor();
+			if (Dungeon.conducts.isConductedAtAll() && Dungeon.isChallenged(Conducts.Conduct.WRAITH)){
+				avatar.alpha(0.5f);
+				avatar.hardlight(0x000000);
+			}
 		}
 
 		hp.scale.x = Math.max( 0, (health-shield)/(float)max);

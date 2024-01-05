@@ -21,11 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
@@ -708,6 +704,9 @@ public abstract class Level implements Bundlable {
 	}
 
 	public float respawnCooldown(){
+		if (Dungeon.isChallenged(Conducts.Conduct.LIMITED_MONSTERS)){
+			return Integer.MAX_VALUE-1;
+		}
 		if (Statistics.amuletObtained){
 			if (Dungeon.depth == 1){
 				//very fast spawns on floor 1! 0/2/4/6/8/10/12, etc.
@@ -1264,6 +1263,13 @@ public abstract class Level implements Bundlable {
 			if (blocking == null){
 				blocking = Dungeon.level.losBlocking;
 			}
+
+			if (Dungeon.isChallenged(Conducts.Conduct.ALLSIGHT)){
+				for (int i = 0; i < blocking.length; i++){
+					if (blocking[i])
+						blocking[i] = false;
+				}
+			}
 			
 			int viewDist = c.viewDistance;
 			if (c instanceof Hero){
@@ -1347,6 +1353,15 @@ public abstract class Level implements Bundlable {
 						for (int i : PathFinder.NEIGHBOURS9) {
 							heroMindFov[mob.pos + i] = true;
 						}
+					}
+				}
+			}
+
+			if (Dungeon.isChallenged(Conducts.Conduct.ZEN) && c == Dungeon.hero) {
+				for (Mob mob : mobs) {
+					int p = mob.pos;
+					if (!fieldOfView[p] && distance( c.pos, p) <= 5) {
+						heroMindFov[p] = true;
 					}
 				}
 			}

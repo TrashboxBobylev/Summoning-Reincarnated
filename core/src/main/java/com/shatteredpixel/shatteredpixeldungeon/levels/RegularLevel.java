@@ -21,10 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
-import com.shatteredpixel.shatteredpixeldungeon.Bones;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
@@ -110,43 +107,45 @@ public abstract class RegularLevel extends Level {
 	
 	protected ArrayList<Room> initRooms() {
 		ArrayList<Room> initRooms = new ArrayList<>();
-		initRooms.add ( roomEntrance = new EntranceRoom());
-		initRooms.add( roomExit = new ExitRoom());
+		initRooms.add(roomEntrance = new EntranceRoom());
+		initRooms.add(roomExit = new ExitRoom());
 
 		//force max standard rooms and multiple by 1.5x for large levels
 		int standards = standardRooms(isLarge());
-		if (isLarge()){
-			standards = (int)Math.ceil(standards * 1.5f);
+		if (isLarge()) {
+			standards = (int) Math.ceil(standards * 1.5f);
 		}
 		for (int i = 0; i < standards; i++) {
 			StandardRoom s;
 			do {
 				s = StandardRoom.createRoom();
-			} while (!s.setSizeCat( standards-i ));
-			i += s.sizeCat.roomValue-1;
+			} while (!s.setSizeCat(standards - i));
+			i += s.sizeCat.roomValue - 1;
 			initRooms.add(s);
 		}
-		
+
 		if (Dungeon.shopOnLevel())
 			initRooms.add(new ShopRoom());
 
-		//force max special rooms and add one more for large levels
-		int specials = specialRooms(isLarge());
-		if (isLarge()){
-			specials++;
-		}
-		SpecialRoom.initForFloor();
-		for (int i = 0; i < specials; i++) {
-			SpecialRoom s = SpecialRoom.createRoom();
-			if (s instanceof PitRoom) specials++;
-			initRooms.add(s);
-		}
-		
-		int secrets = SecretRoom.secretsForFloor(Dungeon.depth);
-		//one additional secret for secret levels
-		if (feeling == Feeling.SECRETS) secrets++;
-		for (int i = 0; i < secrets; i++) {
-			initRooms.add(SecretRoom.createRoom());
+		if (!Dungeon.isChallenged(Conducts.Conduct.NO_LOOT)){
+			//force max special rooms and add one more for large levels
+			int specials = specialRooms(isLarge());
+			if (isLarge()) {
+				specials++;
+			}
+			SpecialRoom.initForFloor();
+			for (int i = 0; i < specials; i++) {
+				SpecialRoom s = SpecialRoom.createRoom();
+				if (s instanceof PitRoom) specials++;
+				initRooms.add(s);
+			}
+
+			int secrets = SecretRoom.secretsForFloor(Dungeon.depth);
+			//one additional secret for secret levels
+			if (feeling == Feeling.SECRETS) secrets++;
+			for (int i = 0; i < secrets; i++) {
+				initRooms.add(SecretRoom.createRoom());
+			}
 		}
 		
 		return initRooms;
@@ -204,6 +203,7 @@ public abstract class RegularLevel extends Level {
 		if (isLarge()){
 			mobs = (int)Math.ceil(mobs * 1.33f);
 		}
+		if (Dungeon.isChallenged(Conducts.Conduct.LIMITED_MONSTERS)) mobs = (int)Math.ceil(mobs * 0.75f);
 		return mobs;
 	}
 	
@@ -351,6 +351,10 @@ public abstract class RegularLevel extends Level {
 		}
 
 		if (Dungeon.hero.heroClass == HeroClass.ADVENTURER) nItems *= 2;
+		if (Dungeon.isChallenged(Conducts.Conduct.NO_LOOT)){
+			nItems = 1;
+			if (Dungeon.hero.heroClass == HeroClass.ADVENTURER) nItems = 2;
+		}
 		
 		for (int i=0; i < nItems; i++) {
 

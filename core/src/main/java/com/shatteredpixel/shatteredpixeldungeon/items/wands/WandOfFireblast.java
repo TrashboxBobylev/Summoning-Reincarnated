@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.wands;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -108,7 +109,7 @@ public class WandOfFireblast extends DamageWand {
 			}
 
 			Char ch = Actor.findChar( cell );
-			if (ch != null) {
+			if (ch != null && !(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))) {
 				affectedChars.add(ch);
 			}
 		}

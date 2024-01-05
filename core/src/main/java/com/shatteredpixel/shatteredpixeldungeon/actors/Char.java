@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
@@ -381,6 +382,10 @@ public abstract class Char extends Actor {
 					enemy.buff(Viscosity.ViscosityTracker.class).detach();
 				}
 
+				if (Dungeon.isChallenged(Conducts.Conduct.KING) && alignment == Alignment.ALLY && this != Dungeon.hero){
+					effectiveDamage *= 1.5f;
+				}
+
 				//vulnerable specifically applies after armor reductions
 				if (enemy.buff(Vulnerable.class) != null) {
 					effectiveDamage *= 1.33f;
@@ -478,6 +483,9 @@ public abstract class Char extends Actor {
 		}
 	}
 
+	public int attackRolls(){ return 1;}
+	public int defenseRolls(){ return 1;}
+
 	public static int INFINITE_ACCURACY = 1_000_000;
 	public static int INFINITE_EVASION = 1_000_000;
 
@@ -512,7 +520,13 @@ public abstract class Char extends Actor {
 			return true;
 		}
 
-		float acuRoll = Random.Float( acuStat );
+		float acuRoll = 0;
+		for (int i = 0; i < attacker.attackRolls(); i++) {
+			float roll = Random.Float(acuStat);
+			if (roll > acuRoll){
+				acuRoll = roll;
+			}
+		}
 		if (attacker.buff(Bless.class) != null) acuRoll *= 1.25f;
 		if (attacker.buff(  Hex.class) != null) acuRoll *= 0.8f;
 		if (attacker.buff( Daze.class) != null) acuRoll *= 0.5f;
@@ -521,8 +535,14 @@ public abstract class Char extends Actor {
 			acuRoll *= buff.evasionAndAccuracyFactor();
 		}
 		acuRoll *= AscensionChallenge.statModifier(attacker);
-		
-		float defRoll = Random.Float( defStat );
+
+		float defRoll = 0;
+		for (int i = 0; i < defender.defenseRolls(); i++) {
+			float roll = Random.Float(defStat);
+			if (roll > defRoll){
+				defRoll = roll;
+			}
+		}
 		if (defender.buff(Bless.class) != null) defRoll *= 1.25f;
 		if (defender.buff(  Hex.class) != null) defRoll *= 0.8f;
 		if (defender.buff( Daze.class) != null) defRoll *= 0.5f;
@@ -646,6 +666,10 @@ public abstract class Char extends Actor {
 					}
 				}
 			}
+		}
+
+		if (src instanceof Hunger && Dungeon.isChallenged(Conducts.Conduct.WRAITH)){
+			dmg = 0;
 		}
 
 		Terror t = buff(Terror.class);

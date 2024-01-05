@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -269,6 +270,7 @@ public class ElementalBlast extends ArmorAbility {
 							int damage = Math.round(Random.NormalIntRange(15, 25)
 									* effectMulti
 									* damageFactors.get(finalWandCls));
+							if (Dungeon.isChallenged(Conducts.Conduct.PACIFIST)) damage = 0;
 
 							if (mob != null && damage > 0 && mob.alignment != Char.Alignment.ALLY){
 								mob.damage(damage, Reflection.newInstance(finalWandCls));

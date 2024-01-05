@@ -21,10 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.wands;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DwarfKing;
@@ -74,23 +71,25 @@ public class WandOfLightning extends DamageWand {
 		if (Dungeon.level.water[bolt.collisionPos]) multiplier = 1f;
 
 		for (Char ch : affected){
-			if (ch == Dungeon.hero) PixelScene.shake( 2, 0.3f );
-			ch.sprite.centerEmitter().burst( SparkParticle.FACTORY, 3 );
-			ch.sprite.flash();
+			if (!(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))) {
+				if (ch == Dungeon.hero) PixelScene.shake(2, 0.3f);
+				ch.sprite.centerEmitter().burst(SparkParticle.FACTORY, 3);
+				ch.sprite.flash();
 
-			if (ch != curUser && ch.alignment == curUser.alignment && ch.pos != bolt.collisionPos){
-				continue;
-			}
-			wandProc(ch, chargesPerCast());
-			if (ch == curUser && ch.isAlive()) {
-				ch.damage(Math.round(damageRoll() * multiplier * 0.5f), this);
-				if (!curUser.isAlive()) {
-					Badges.validateDeathFromFriendlyMagic();
-					Dungeon.fail( this );
-					GLog.n(Messages.get(this, "ondeath"));
+				if (ch != curUser && ch.alignment == curUser.alignment && ch.pos != bolt.collisionPos) {
+					continue;
 				}
-			} else {
-				ch.damage(Math.round(damageRoll() * multiplier), this);
+				wandProc(ch, chargesPerCast());
+				if (ch == curUser && ch.isAlive()) {
+					ch.damage(Math.round(damageRoll() * multiplier * 0.5f), this);
+					if (!curUser.isAlive()) {
+						Badges.validateDeathFromFriendlyMagic();
+						Dungeon.fail(this);
+						GLog.n(Messages.get(this, "ondeath"));
+					}
+				} else {
+					ch.damage(Math.round(damageRoll() * multiplier), this);
+				}
 			}
 		}
 	}

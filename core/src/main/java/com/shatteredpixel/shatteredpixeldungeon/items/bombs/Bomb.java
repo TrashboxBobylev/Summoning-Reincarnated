@@ -21,10 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.bombs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
+import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -217,6 +214,8 @@ public class Bomb extends Item {
 				}
 
 				int dmg = Bomb.damageRoll();
+				if (ch instanceof Hero && Dungeon.isChallenged(Conducts.Conduct.EXPLOSIONS))
+					dmg /= 2;
 
 				//those not at the center of the blast take less damage
 				if (ch.pos != cell){
@@ -225,7 +224,7 @@ public class Bomb extends Item {
 
 				dmg -= ch.drRoll();
 
-				if (dmg > 0 && !harmless) {
+				if (dmg > 0 && !harmless && ((Dungeon.isChallenged(Conducts.Conduct.PACIFIST)))) {
 					ch.damage(dmg, this);
 				}
 				
@@ -269,6 +268,20 @@ public class Bomb extends Item {
 	
 	@Override
 	public Item random() {
+		if (Dungeon.isChallenged(Conducts.Conduct.EXPLOSIONS)) {
+			switch (Random.Int(15)) {
+				case 0:
+				case 4:
+				case 5:
+					return this;
+				case 1:
+				case 2:
+				case 3:
+					return new DoubleBomb();
+				default:
+					return Reflection.newInstance(Random.element(enhancedBombs));
+			}
+		}
 		switch(Random.Int( 15 )){
 			case 0: case 1: case 2: case 3: case 4:
 				return new DoubleBomb();

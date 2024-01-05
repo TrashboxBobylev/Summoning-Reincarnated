@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.wands;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -110,12 +111,14 @@ public class WandOfLivingEarth extends DamageWand {
 
 			//if the collision pos is occupied (likely will be), then spawn the guardian in the
 			//adjacent cell which is closes to the user of the wand.
-			if (ch != null){
+			if (ch != null) {
 
-				ch.sprite.centerEmitter().burst(MagicMissile.EarthParticle.BURST, 5 + buffedLvl()/2);
+				ch.sprite.centerEmitter().burst(MagicMissile.EarthParticle.BURST, 5 + buffedLvl() / 2);
 
-				wandProc(ch, chargesPerCast());
-				ch.damage(damage, this);
+				if (!(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))){
+					wandProc(ch, chargesPerCast());
+					ch.damage(damage, this);
+				}
 
 				int closest = -1;
 				boolean[] passable = Dungeon.level.passable;

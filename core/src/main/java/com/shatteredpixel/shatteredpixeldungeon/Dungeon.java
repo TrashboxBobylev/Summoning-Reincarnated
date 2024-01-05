@@ -512,6 +512,8 @@ public class Dungeon {
 		
 		Light light = hero.buff( Light.class );
 		hero.viewDistance = light == null ? level.viewDistance : Math.max( Light.DISTANCE, level.viewDistance );
+		if (Dungeon.isChallenged(Conducts.Conduct.ZEN))
+			hero.viewDistance = 1;
 		
 		hero.curAction = hero.lastAction = null;
 
