@@ -198,7 +198,6 @@ public class WelcomeScene extends PixelScene {
 				message += "\n";
 				message += "\n" + Messages.get(this, "patch_balance");
 				message += "\n" + Messages.get(this, "patch_bugfixes");
-				message += "\n" + Messages.get(this, "patch_translations");
 
 			}
 		} else {
