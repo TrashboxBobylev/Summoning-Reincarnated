@@ -394,7 +394,6 @@ public class Generator {
 			//see Generator.randomArmor
 			ARMOR.classes = new Class<?>[]{
 					ClothArmor.class,
-					ScoutArmor.class,
 					LeatherArmor.class,
 					MailArmor.class,
 					ScaleArmor.class,
@@ -405,7 +404,7 @@ public class Generator {
 					HuntressArmor.class,
 					DuelistArmor.class
 			};
-			ARMOR.probs = new float[]{ 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0 };
+			ARMOR.probs = new float[]{ 1, 1, 1, 1, 1, 0, 0, 0, 0, 0 };
 			
 			//see Generator.randomMissile
 			MISSILE.classes = new Class<?>[]{};
