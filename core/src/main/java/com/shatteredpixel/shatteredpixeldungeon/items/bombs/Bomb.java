@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SmokeParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfFrost;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
@@ -43,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlam
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPassage;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -398,7 +400,7 @@ public class Bomb extends Item {
 		public static final LinkedHashMap<Class<?extends Item>, Class<?extends Bomb>> validIngredients = new LinkedHashMap<>();
 		static {
 			validIngredients.put(PotionOfFrost.class,           FrostBomb.class);
-			validIngredients.put(ScrollOfMirrorImage.class,     WoollyBomb.class);
+			validIngredients.put(ScrollOfPassage.class,         WoollyBomb.class);
 			
 			validIngredients.put(PotionOfLiquidFlame.class,     Firebomb.class);
 			validIngredients.put(ScrollOfRage.class,            Noisemaker.class);
@@ -413,12 +415,13 @@ public class Bomb extends Item {
 			validIngredients.put(MetalShard.class,              ShrapnelBomb.class);
 
 			validIngredients.put(ScrollOfTerror.class,       Webbomb.class);
+			validIngredients.put(Food.class,                 SupplyBomb.class);
 		}
 		
 		private static final HashMap<Class<?extends Bomb>, Integer> bombCosts = new HashMap<>();
 		static {
 			bombCosts.put(FrostBomb.class,      0);
-			bombCosts.put(WoollyBomb.class,     0);
+			bombCosts.put(WoollyBomb.class,     3);
 			
 			bombCosts.put(Firebomb.class,       2);
 			bombCosts.put(Noisemaker.class,     4);
@@ -429,6 +432,7 @@ public class Bomb extends Item {
 			bombCosts.put(RegrowthBomb.class,   3);
 			bombCosts.put(HolyBomb.class,       3);
 			bombCosts.put(Webbomb.class,        3);
+			bombCosts.put(SupplyBomb.class,     1);
 			
 			bombCosts.put(ArcaneBomb.class,     6);
 			bombCosts.put(ShrapnelBomb.class,   6);
