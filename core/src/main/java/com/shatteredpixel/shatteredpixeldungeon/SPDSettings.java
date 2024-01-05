@@ -273,7 +273,7 @@ public class SPDSettings extends GameSettings {
 	}
 
 	public static boolean supportNagged() {
-		return getBoolean(KEY_SUPPORT_NAGGED, false);
+		return getBoolean(KEY_SUPPORT_NAGGED, true);
 	}
 
 	//Input
