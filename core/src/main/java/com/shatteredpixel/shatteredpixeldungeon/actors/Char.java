@@ -897,20 +897,24 @@ public abstract class Char extends Actor {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static <T> boolean areRelated(Object effect, Class<T> filter){
+		if (filter.isInterface()){
+			Class[] interfaces = effect.getClass().getInterfaces();
+			for (Class clazz : interfaces){
+				if (clazz.isAssignableFrom(filter)){
+					return true;
+				}
+			}
+		} else return filter.isAssignableFrom(effect.getClass());
+		return false;
+	}
+
+	@SuppressWarnings("unchecked")
 	//returns an instance of the specific buff class, if it exists. Not just assignable
 	public synchronized <T> T buff( Class<T> c ) {
 		for (Buff b : buffs) {
-			if (c.isAssignableFrom(b.getClass())) {
+			if (areRelated(b, c))
 				return (T)b;
-			}
-			if (c.isInterface()){
-				Class[] interfaces = b.getClass().getInterfaces();
-				for (Class clazz : interfaces){
-					if (clazz.isAssignableFrom(c)){
-						return (T)b;
-					}
-				}
-			}
 		}
 		return null;
 	}
@@ -1063,7 +1067,7 @@ public abstract class Char extends Actor {
 		
 		float result = 1f;
 		for (Class c : resists){
-			if (c.isAssignableFrom(effect)){
+			if (areRelated(c, effect)){
 				result *= 0.5f;
 			}
 		}
@@ -1082,7 +1086,7 @@ public abstract class Char extends Actor {
 		}
 		
 		for (Class c : immunes){
-			if (c.isAssignableFrom(effect)){
+			if (areRelated(c, effect)){
 				return true;
 			}
 		}
