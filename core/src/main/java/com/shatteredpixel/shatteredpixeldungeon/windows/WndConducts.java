@@ -71,7 +71,7 @@ public class WndConducts extends Window {
                         String title = Messages.titleCase(Messages.get(Conducts.class, allConducts.get(index).name()));
                         ShatteredPixelDungeon.scene().add(
                                 new WndTitledMessage(
-                                        new Image(Assets.Interfaces.SUBCLASS_ICONS, (allConducts.get(index).ordinal() - 1) * 16, 16, 16, 16),
+                                        new Image(Assets.Interfaces.SUBCLASS_ICONS, (allConducts.get(index).icon - 1) * 16, 16, 16, 16),
                                         title, message)
                         );
 
