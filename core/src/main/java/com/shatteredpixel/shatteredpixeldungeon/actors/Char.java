@@ -898,10 +898,18 @@ public abstract class Char extends Actor {
 
 	@SuppressWarnings("unchecked")
 	//returns an instance of the specific buff class, if it exists. Not just assignable
-	public synchronized  <T extends Buff> T buff( Class<T> c ) {
+	public synchronized <T> T buff( Class<T> c ) {
 		for (Buff b : buffs) {
-			if (b.getClass() == c) {
+			if (c.isAssignableFrom(b.getClass())) {
 				return (T)b;
+			}
+			if (c.isInterface()){
+				Class[] interfaces = b.getClass().getInterfaces();
+				for (Class clazz : interfaces){
+					if (clazz.isAssignableFrom(c)){
+						return (T)b;
+					}
+				}
 			}
 		}
 		return null;
