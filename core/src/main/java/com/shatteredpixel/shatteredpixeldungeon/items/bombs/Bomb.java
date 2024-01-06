@@ -134,7 +134,7 @@ public class Bomb extends Item {
 	public boolean doPickUp(Hero hero, int pos) {
 		if (fuse != null) {
 			GLog.w( Messages.get(this, "snuff_fuse") );
-			fuse = null;
+			return false;
 		}
 		return super.doPickUp(hero, pos);
 	}
@@ -256,11 +256,11 @@ public class Bomb extends Item {
 	private Class<? extends Bomb>[] enhancedBombs = new Class[] {
 			Firebomb.class,
 			FrostBomb.class,
-//			SupplyBomb.class,
+			SupplyBomb.class,
 			RegrowthBomb.class,
 			WoollyBomb.class,
 			HolyBomb.class,
-//			Webbomb.class,
+			Webbomb.class,
 			Flashbang.class,
 			Noisemaker.class,
 			ShockBomb.class
