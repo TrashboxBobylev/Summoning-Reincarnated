@@ -68,21 +68,24 @@ public class Ropes extends Item {
 
                 final Ballistica chain = new Ballistica(curUser.pos, target, Ballistica.FRIENDLY_PROJECTILE);
 
+                boolean success;
                 if (Actor.findChar( chain.collisionPos ) != null){
-                    chainEnemy( chain, curUser, Actor.findChar( chain.collisionPos ));
+                    success = chainEnemy( chain, curUser, Actor.findChar( chain.collisionPos ));
                 } else if (Dungeon.level.heaps.get( chain.collisionPos ) != null) {
-                    chainItem( chain, curUser, Dungeon.level.heaps.get( chain.collisionPos ) );
+                    success = chainItem( chain, curUser, Dungeon.level.heaps.get( chain.collisionPos ) );
                 } else if (Dungeon.level.traps.get( chain.collisionPos ) != null) {
-                    chainTrap( chain, curUser, Dungeon.level.traps.get( chain.collisionPos ) );
+                    success = chainTrap( chain, curUser, Dungeon.level.traps.get( chain.collisionPos ) );
                 }
                 else {
-                    chainLocation( chain, curUser );
+                    success = chainLocation( chain, curUser );
                 }
-                throwSound();
-                detach( curUser.belongings.backpack );
-                updateQuickslot();
+                if (success) {
+                    throwSound();
+                    detach(curUser.belongings.backpack);
+                    updateQuickslot();
 
-                Sample.INSTANCE.play( Assets.Sounds.MISS );
+                    Sample.INSTANCE.play(Assets.Sounds.MISS);
+                }
 
             }
 
@@ -95,11 +98,11 @@ public class Ropes extends Item {
     };
 
     //pulls an enemy to a position along the chain's path, as close to the hero as possible
-    private void chainEnemy( Ballistica chain, final Hero hero, final Char enemy ){
+    private boolean chainEnemy( Ballistica chain, final Hero hero, final Char enemy ){
 
         if (enemy.properties().contains(Char.Property.IMMOVABLE)) {
             GLog.warning( Messages.get(EtherealChains.class, "cant_pull") );
-            return;
+            return false;
         }
 
         int bestPos = -1;
@@ -115,7 +118,7 @@ public class Ropes extends Item {
 
         if (bestPos == -1) {
             GLog.i(Messages.get(EtherealChains.class, "does_nothing"));
-            return;
+            return false;
         }
 
         final int pulledPos = bestPos;
@@ -134,21 +137,22 @@ public class Ropes extends Item {
                 hero.spendAndNext(1f);
             }
         }, Effects.get(Effects.Type.ROPE)));
+        return true;
     }
 
     //pulls the hero along the chain to the collisionPos, if possible.
-    private void chainLocation( Ballistica chain, final Hero hero ){
+    private boolean chainLocation( Ballistica chain, final Hero hero ){
 
         //don't pull if rooted
         if (hero.rooted){
             GLog.warning( Messages.get(EtherealChains.class, "rooted") );
-            return;
+            return false;
         }
 
         //don't pull if the collision spot is in a wall
         if (Dungeon.level.solid[chain.collisionPos]){
             GLog.i( Messages.get(EtherealChains.class, "inside_wall"));
-            return;
+            return false;
         }
 
         final int newHeroPos = chain.collisionPos;
@@ -167,16 +171,17 @@ public class Ropes extends Item {
                 GameScene.updateFog();
             }
         }, Effects.get(Effects.Type.ROPE)));
+        return true;
     }
 
     //get an item at position of
-    private void chainItem( Ballistica chain, final Hero hero, Heap heap ){
+    private boolean chainItem( Ballistica chain, final Hero hero, Heap heap ){
 
         final int newHeroPos = chain.collisionPos;
 
         if (heap.type != Heap.Type.HEAP){
             GLog.i( Messages.get(Ropes.class, "locked_item"));
-            return;
+            return false;
         }
 
         hero.busy();
@@ -221,10 +226,11 @@ public class Ropes extends Item {
                 }
             }
         }, Effects.get(Effects.Type.ROPE)));
+        return true;
     }
 
     //activate the trap at position
-    private void chainTrap( Ballistica chain, final Hero hero, Trap trap ){
+    private boolean chainTrap( Ballistica chain, final Hero hero, Trap trap ){
         hero.busy();
         hero.sprite.parent.add(new Chains(hero.sprite.center(), DungeonTilemap.raisedTileCenterToWorld(chain.collisionPos), new Callback() {
             public void call() {
@@ -232,6 +238,7 @@ public class Ropes extends Item {
                 hero.spendAndNext(1f);
             }
         }, Effects.get(Effects.Type.ROPE)));
+        return true;
     }
 
     @Override
