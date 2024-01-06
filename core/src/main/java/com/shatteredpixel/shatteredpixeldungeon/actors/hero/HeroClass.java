@@ -256,7 +256,7 @@ public enum HeroClass {
 	}
 
 	private static void initDuelist( Hero hero ) {
-		if (Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
+		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
 
 			(hero.belongings.weapon = new Rapier()).identify();
 			hero.belongings.weapon.activate(hero);
