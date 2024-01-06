@@ -224,7 +224,7 @@ public class Bomb extends Item {
 
 				dmg -= ch.drRoll();
 
-				if (dmg > 0 && !harmless && ((Dungeon.isChallenged(Conducts.Conduct.PACIFIST)))) {
+				if (dmg > 0 && !harmless && !((Dungeon.isChallenged(Conducts.Conduct.PACIFIST)))) {
 					ch.damage(dmg, this);
 				}
 				
