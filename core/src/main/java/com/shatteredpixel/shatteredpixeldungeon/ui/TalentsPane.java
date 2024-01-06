@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.ui;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
@@ -71,7 +72,7 @@ public class TalentsPane extends ScrollPane {
 					&& Dungeon.hero.lvl+1 >= Talent.tierLevelThresholds[tiersAvailable+1]){
 				tiersAvailable++;
 			}
-			if (tiersAvailable > 2 && Dungeon.hero.subClass == HeroSubClass.NONE){
+			if (tiersAvailable > 2 && Dungeon.hero.subClass == HeroSubClass.NONE && Dungeon.hero.heroClass != HeroClass.ADVENTURER){
 				tiersAvailable = 2;
 			} else if (tiersAvailable > 3 && Dungeon.hero.armorAbility == null){
 				tiersAvailable = 3;

@@ -683,7 +683,7 @@ public enum Talent {
 		}
 		if (item instanceof EquipableItem) {
 			if (!((EquipableItem) item).equippedBefore && hero.hasTalent(PREPARED_TO_DEFEND)){
-				Buff.affect(hero, Barrier.class).setShield(2 + hero.pointsInTalent(DECENT_MEAL)*2);
+				Buff.affect(hero, Barrier.class).setShield(2 + hero.pointsInTalent(PREPARED_TO_DEFEND)*2);
 			}
 			((EquipableItem) item).equippedBefore = true;
 		}

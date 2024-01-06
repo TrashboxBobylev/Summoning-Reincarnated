@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.Guidebook;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
@@ -88,6 +89,7 @@ public class Hunger extends Buff implements Hero.Doom {
 		}
 //		if (Dungeon.hero.heroClass == HeroClass.WARRIOR && energy != -50 && energy < 0) energy *= 0.75f;
 		if (Dungeon.isChallenged(Conducts.Conduct.KING)) energy *= 3;
+		if (Dungeon.hero.hasTalent(Talent.MEAL_OF_POWER)) energy *= 1f - 0.2f * Dungeon.hero.pointsInTalent(Talent.MEAL_OF_POWER);
 		hunger.level = Math.max(hunger.level - energy, 0);
 		switchHungerLevel(energy, hunger, target);
 		BuffIndicator.refreshHero();
