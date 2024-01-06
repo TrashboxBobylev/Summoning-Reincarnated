@@ -13,7 +13,7 @@ public class Conducts {
     public enum Conduct {
         NULL,
 //        NO_ARMOR(1.2f),
-        PACIFIST(2.5f),
+        PACIFIST(2.5f, 2),
         CRIPPLED(1.75f, 3),
         NO_MAGIC(1.5f, 4),
         ZEN(2f, 5),
