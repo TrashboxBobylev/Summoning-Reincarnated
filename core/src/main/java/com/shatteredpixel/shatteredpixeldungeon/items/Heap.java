@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Wraith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
@@ -327,8 +328,11 @@ public class Heap implements Bundlable {
 				items.remove(item);
 				((Potion) item).shatter(pos);
 				frozen = true;
-			} else if (item instanceof Bomb && ((Bomb) item).fuse != null){
-				frozen = frozen || ((Bomb) item).fuse.freeze();
+			} else if (item instanceof Bomb){
+				((Bomb) item).fuse = null;
+				if (((Bomb) item).fuseTriggerClass != null)
+					Buff.detach(Dungeon.hero, ((Bomb) item).fuseTriggerClass);
+				frozen = true;
 			}
 		}
 		
