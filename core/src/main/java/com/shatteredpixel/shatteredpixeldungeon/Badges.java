@@ -55,6 +55,7 @@ public class Badges {
 		MASTERY_ROGUE,
 		MASTERY_HUNTRESS,
 		MASTERY_DUELIST,
+		MASTERY_ADVENTURER,
 		FOUND_RATMOGRIFY,
 
 		//bronze
@@ -848,6 +849,8 @@ public class Badges {
 			case DUELIST:
 				badge = Badge.MASTERY_DUELIST;
 				break;
+			case ADVENTURER:
+				badge = Badge.MASTERY_ADVENTURER;
 		}
 		
 		unlock(badge);
