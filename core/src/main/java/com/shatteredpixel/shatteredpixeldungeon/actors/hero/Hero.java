@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SacrificialFire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.TalentBooster;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Challenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.ElementalStrike;
@@ -356,11 +357,13 @@ public class Hero extends Char {
 				|| (tier == 3 && (subClass == HeroSubClass.NONE && heroClass != HeroClass.ADVENTURER))
 				|| (tier == 4 && armorAbility == null)) {
 			return 0;
-		} else if (buff(PotionOfDivineInspiration.DivineInspirationTracker.class) != null
-					&& buff(PotionOfDivineInspiration.DivineInspirationTracker.class).isBoosted(tier)) {
-			return 2;
 		} else {
-			return 0;
+			int points = 0;
+			for (TalentBooster boost: genericBuffs(TalentBooster.class)){
+				if (boost.isBoosted(tier))
+					points += boost.boostPoints(tier);
+			}
+			return points;
 		}
 	}
 	

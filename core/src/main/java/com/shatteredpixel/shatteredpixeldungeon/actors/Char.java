@@ -944,6 +944,17 @@ public abstract class Char extends Actor {
 		return filtered;
 	}
 
+	//more chill version
+	public synchronized <T> HashSet<T> genericBuffs(Class<T> c ) {
+		HashSet<T> filtered = new HashSet<>();
+		for (Buff b : buffs) {
+			if (areRelated( b.getClass(), c )) {
+				filtered.add( (T)b );
+			}
+		}
+		return filtered;
+	}
+
 	@SuppressWarnings("unchecked")
 	public static boolean areRelated(Class effect, Class filter){
 		if (filter.isInterface()){

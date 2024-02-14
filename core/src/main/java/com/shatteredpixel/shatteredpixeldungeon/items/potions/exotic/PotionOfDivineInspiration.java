@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.TalentBooster;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
@@ -151,7 +152,7 @@ public class PotionOfDivineInspiration extends ExoticPotion {
 
 	}
 
-	public static class DivineInspirationTracker extends Buff {
+	public static class DivineInspirationTracker extends Buff implements TalentBooster {
 
 		{
 			type = buffType.POSITIVE;
@@ -180,6 +181,11 @@ public class PotionOfDivineInspiration extends ExoticPotion {
 
 		public boolean isBoosted( int tier ){
 			return boostedTiers[tier];
+		}
+
+		@Override
+		public int boostPoints(int tier) {
+			return 2;
 		}
 
 	}
