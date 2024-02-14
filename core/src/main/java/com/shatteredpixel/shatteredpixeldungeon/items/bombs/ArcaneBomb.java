@@ -46,7 +46,7 @@ import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
-public class ArcaneBomb extends Bomb.MagicalBomb {
+public class ArcaneBomb extends Bomb.ConjuredBomb {
 
 	{
 		image = ItemSpriteSheet.ARCANE_BOMB;
