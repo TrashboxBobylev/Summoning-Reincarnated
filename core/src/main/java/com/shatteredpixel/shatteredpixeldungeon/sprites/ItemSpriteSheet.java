@@ -147,11 +147,11 @@ public class ItemSpriteSheet {
 	public static final int AMULET          = MISC_CONSUMABLE +13;
 	public static final int MASTERY         = MISC_CONSUMABLE +14;
 	public static final int KIT             = MISC_CONSUMABLE +15;
-	public static final int SEAL_SHARD      = MISC_CONSUMABLE +30;
-	public static final int BROKEN_STAFF    = MISC_CONSUMABLE +31;
-	public static final int CLOAK_SCRAP     = MISC_CONSUMABLE +32;
-	public static final int BOW_FRAGMENT    = MISC_CONSUMABLE +33;
-	public static final int BROKEN_HILT     = MISC_CONSUMABLE +34;
+	public static final int SEAL_SHARD      = MISC_CONSUMABLE +32;
+	public static final int BROKEN_STAFF    = MISC_CONSUMABLE +33;
+	public static final int CLOAK_SCRAP     = MISC_CONSUMABLE +34;
+	public static final int BOW_FRAGMENT    = MISC_CONSUMABLE +35;
+	public static final int BROKEN_HILT     = MISC_CONSUMABLE +36;
 
 	static{
 		assignItemRect(ANKH,            10, 16);
