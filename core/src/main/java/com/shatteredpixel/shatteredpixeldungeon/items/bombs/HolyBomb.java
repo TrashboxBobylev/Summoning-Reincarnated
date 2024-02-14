@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,11 +78,13 @@ public class HolyBomb extends Bomb.MagicalBomb {
 				//bomb deals an additional 20% damage to unholy enemies in a 5x5 range
 				damage *= 1.2f;
 			}
-			ch.damage(damage, this);
+			ch.damage(damage, new HolyDamage());
 		}
 
 		Sample.INSTANCE.play( Assets.Sounds.READ );
 	}
+
+	public static class HolyDamage{}
 
 	@Override
 	public String desc() {
@@ -95,7 +97,7 @@ public class HolyBomb extends Bomb.MagicalBomb {
 
 		return desc_fuse;
 	}
-	
+
 	@Override
 	public int value() {
 		//prices of ingredients

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -120,7 +120,7 @@ public abstract class RegularLevel extends Level {
 			do {
 				s = StandardRoom.createRoom();
 			} while (!s.setSizeCat(standards - i));
-			i += s.sizeCat.roomValue - 1;
+			i += s.sizeFactor() - 1;
 			initRooms.add(s);
 		}
 
@@ -215,7 +215,7 @@ public abstract class RegularLevel extends Level {
 		ArrayList<Room> stdRooms = new ArrayList<>();
 		for (Room room : rooms) {
 			if (room instanceof StandardRoom && room != roomEntrance) {
-				for (int i = 0; i < ((StandardRoom) room).sizeCat.roomValue; i++) {
+				for (int i = 0; i < ((StandardRoom) room).mobSpawnWeight(); i++) {
 					stdRooms.add(room);
 				}
 			}
@@ -355,7 +355,7 @@ public abstract class RegularLevel extends Level {
 			nItems = 1;
 			if (Dungeon.hero.heroClass == HeroClass.ADVENTURER) nItems = 2;
 		}
-		
+
 		for (int i=0; i < nItems; i++) {
 
 			Item toDrop = Generator.random();
@@ -454,14 +454,16 @@ public abstract class RegularLevel extends Level {
 		Random.popGenerator();
 
 		Random.pushGenerator( Random.Long() );
-			Item item = Bones.get();
-			if (item != null) {
+			ArrayList<Item> bonesItems = Bones.get();
+			if (bonesItems != null) {
 				int cell = randomDropCell();
 				if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {
 					map[cell] = Terrain.GRASS;
 					losBlocking[cell] = false;
 				}
-				drop( item, cell ).setHauntedIfCursed().type = Heap.Type.REMAINS;
+				for (Item i : bonesItems) {
+					drop(i, cell).setHauntedIfCursed().type = Heap.Type.REMAINS;
+				}
 			}
 		Random.popGenerator();
 
@@ -474,7 +476,7 @@ public abstract class RegularLevel extends Level {
 				for (int i=1; i <= petalsNeeded; i++) {
 					//the player may miss a single petal and still max their rose.
 					if (rose.droppedPetals < 11) {
-						item = new DriedRose.Petal();
+						Item item = new DriedRose.Petal();
 						int cell = randomDropCell();
 						drop( item, cell ).type = Heap.Type.HEAP;
 						if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {

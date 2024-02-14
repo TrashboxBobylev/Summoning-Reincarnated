@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2023 Evan Debenham
+ * Copyright (C) 2014-2024 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -90,11 +90,10 @@ public class ItemSpriteSheet {
 	public static final int SPIRIT_BLAST    = UNCOLLECTIBLE+7;
 	public static final int SUPER_SHOT      = UNCOLLECTIBLE+10;
 	public static final int SPIRIT_DART     = UNCOLLECTIBLE+11;
-	
+
 	public static final int TENGU_BOMB      = UNCOLLECTIBLE+8;
 	public static final int TENGU_SHOCKER   = UNCOLLECTIBLE+9;
-
-
+	public static final int GEO_BOULDER     = UNCOLLECTIBLE+12;
 	static{
 		assignItemRect(GOLD,        15, 13);
 		assignItemRect(ENERGY,      16, 16);
@@ -105,9 +104,10 @@ public class ItemSpriteSheet {
 		assignItemRect(SPIRIT_ARROW,11, 11);
 		assignItemRect(SPIRIT_BLAST, 15, 15);
 		assignItemRect(SPIRIT_DART, 9, 9);
-		
+
 		assignItemRect(TENGU_BOMB,      10, 10);
 		assignItemRect(TENGU_SHOCKER,   10, 10);
+		assignItemRect(GEO_BOULDER,     16, 14);
 	}
 
 	private static final int CONTAINERS     =                               xy(1, 3);   //16 slots
@@ -130,7 +130,7 @@ public class ItemSpriteSheet {
 		assignItemRect(EBONY_CHEST,     16, 14);
 	}
 
-	private static final int MISC_CONSUMABLE =                              xy(1, 4);   //16 slots
+	private static final int MISC_CONSUMABLE =                              xy(1, 4);   //32 slots
 	public static final int ANKH            = MISC_CONSUMABLE +0;
 	public static final int STYLUS          = MISC_CONSUMABLE +1;
 	public static final int SEAL            = MISC_CONSUMABLE +2;
@@ -147,6 +147,12 @@ public class ItemSpriteSheet {
 	public static final int AMULET          = MISC_CONSUMABLE +13;
 	public static final int MASTERY         = MISC_CONSUMABLE +14;
 	public static final int KIT             = MISC_CONSUMABLE +15;
+	public static final int SEAL_SHARD      = MISC_CONSUMABLE +30;
+	public static final int BROKEN_STAFF    = MISC_CONSUMABLE +31;
+	public static final int CLOAK_SCRAP     = MISC_CONSUMABLE +32;
+	public static final int BOW_FRAGMENT    = MISC_CONSUMABLE +33;
+	public static final int BROKEN_HILT     = MISC_CONSUMABLE +34;
+
 	static{
 		assignItemRect(ANKH,            10, 16);
 		assignItemRect(STYLUS,          12, 13);
@@ -166,6 +172,12 @@ public class ItemSpriteSheet {
 		assignItemRect(AMULET,          16, 16);
 		assignItemRect(MASTERY,         13, 16);
 		assignItemRect(KIT,             16, 15);
+
+		assignItemRect(SEAL_SHARD,      11, 11);
+		assignItemRect(BROKEN_STAFF,    14, 10);
+		assignItemRect(CLOAK_SCRAP,      9,  9);
+		assignItemRect(BOW_FRAGMENT,    12,  9);
+		assignItemRect(BROKEN_HILT,      9,  9);
 	}
 	
 	private static final int BOMBS          =                               xy(1, 5);   //16 slots
@@ -215,9 +227,6 @@ public class ItemSpriteSheet {
 		assignItemRect(STABBER, 12, 13);
 		assignItemRect(JJANGO, 15, 16);
 	}
-
-	
-	                                                                                    //16 free slots
 
 	private static final int WEP_TIER1      =                               xy(1, 7);   //8 slots
 	public static final int WORN_SHORTSWORD = WEP_TIER1+0;
@@ -327,7 +336,7 @@ public class ItemSpriteSheet {
 	public static final int THROWING_HAMMER = MISSILE_WEP+14;
 	public static final int FORCE_CUBE      = MISSILE_WEP+15;
 	public static final int LIGHT_KNIFE     = MISSILE_WEP+29;
-	
+
 	static{
 		assignItemRect(SPIRIT_BOW,      16, 16);
 		
@@ -679,13 +688,11 @@ public class ItemSpriteSheet {
 	public static final int CARPACCIO   = FOOD+4;
 	public static final int RATION      = FOOD+5;
 	public static final int PASTY       = FOOD+6;
-	public static final int PUMPKIN_PIE = FOOD+7;
-	public static final int CANDY_CANE  = FOOD+8;
-	public static final int MEAT_PIE    = FOOD+9;
-	public static final int BLANDFRUIT  = FOOD+10;
-	public static final int BLAND_CHUNKS= FOOD+11;
-	public static final int BERRY =       FOOD+12;
-	public static final int PHANTOM_MEAT= FOOD+13;
+	public static final int MEAT_PIE    = FOOD+7;
+	public static final int BLANDFRUIT  = FOOD+8;
+	public static final int BLAND_CHUNKS= FOOD+9;
+	public static final int BERRY       = FOOD+10;
+	public static final int PHANTOM_MEAT= FOOD+11;
 	static{
 		assignItemRect(MEAT,        15, 11);
 		assignItemRect(STEAK,       15, 11);
@@ -694,8 +701,6 @@ public class ItemSpriteSheet {
 		assignItemRect(CARPACCIO,   15, 11);
 		assignItemRect(RATION,      16, 12);
 		assignItemRect(PASTY,       16, 11);
-		assignItemRect(PUMPKIN_PIE, 16, 12);
-		assignItemRect(CANDY_CANE,  13, 16);
 		assignItemRect(MEAT_PIE,    16, 12);
 		assignItemRect(BLANDFRUIT,  9,  12);
 		assignItemRect(BLAND_CHUNKS,14, 6);
@@ -703,7 +708,31 @@ public class ItemSpriteSheet {
 		assignItemRect(PHANTOM_MEAT,15, 11);
 	}
 
-	private static final int QUEST  =                                       xy(1, 29);  //32 slots
+	private static final int HOLIDAY_FOOD   =                               xy(1, 29);  //16 slots
+	public static final int STEAMED_FISH    = HOLIDAY_FOOD+0;
+	public static final int FISH_LEFTOVER   = HOLIDAY_FOOD+1;
+	public static final int CHOC_AMULET     = HOLIDAY_FOOD+2;
+	public static final int EASTER_EGG      = HOLIDAY_FOOD+3;
+	public static final int RAINBOW_POTION  = HOLIDAY_FOOD+4;
+	public static final int SHATTERED_CAKE  = HOLIDAY_FOOD+5;
+	public static final int PUMPKIN_PIE     = HOLIDAY_FOOD+6;
+	public static final int VANILLA_CAKE    = HOLIDAY_FOOD+7;
+	public static final int CANDY_CANE      = HOLIDAY_FOOD+8;
+	public static final int SPARKLING_POTION= HOLIDAY_FOOD+9;
+	static{
+		assignItemRect(STEAMED_FISH,    16, 12);
+		assignItemRect(FISH_LEFTOVER,   16, 12);
+		assignItemRect(CHOC_AMULET,     16, 16);
+		assignItemRect(EASTER_EGG,      12, 14);
+		assignItemRect(RAINBOW_POTION,  12, 14);
+		assignItemRect(SHATTERED_CAKE,  15, 11);
+		assignItemRect(PUMPKIN_PIE,     16, 12);
+		assignItemRect(VANILLA_CAKE,    15, 11);
+		assignItemRect(CANDY_CANE,      13, 16);
+		assignItemRect(SPARKLING_POTION,12, 14);
+	}
+
+	private static final int QUEST  =                                       xy(1, 30);  //16 slots
 	public static final int SKULL   = QUEST+0;
 	public static final int DUST    = QUEST+1;
 	public static final int CANDLE  = QUEST+2;
