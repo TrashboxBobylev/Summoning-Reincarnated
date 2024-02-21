@@ -730,6 +730,15 @@ public abstract class Mob extends Char {
 		return enemy == ch;
 	}
 
+	public boolean following(Char follow) {
+		if (alignment == follow.alignment) {
+			Char targetChar = Actor.findChar(this.target);
+			return targetChar == follow;
+		}
+		return false;
+
+	}
+
 	@Override
 	public void damage( int dmg, Object src ) {
 

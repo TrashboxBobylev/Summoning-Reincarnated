@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.ElementalStrike;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfArcana;
@@ -392,6 +393,28 @@ abstract public class Weapon extends KindOfWeapon {
 		
 			
 		public abstract int proc( Weapon weapon, Char attacker, Char defender, int damage );
+
+		public int proc(Minion attacker, Char defender, int damage) {
+			Weapon wp = new Weapon() {
+				@Override
+				public int STRReq(int lvl) {
+					return 8;
+				}
+
+				@Override
+				public int min(int lvl) {
+					return 0;
+				}
+
+				@Override
+				public int max(int lvl) {
+					return 0;
+				}
+			};
+			wp.enchant(attacker.enchantment);
+			wp.level(2);
+			return proc(wp, attacker, defender, damage);
+		}
 
 		protected float procChanceMultiplier( Char attacker ){
 			return genericProcChanceMultiplier( attacker );
