@@ -31,10 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Feint;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.DirectableAlly;
-import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
-import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Surprise;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Wound;
+import com.shatteredpixel.shatteredpixeldungeon.effects.*;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -47,10 +44,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.CursedWand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Lucky;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
+import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -59,15 +58,10 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.Bundle;
-import com.watabou.utils.PathFinder;
+import com.watabou.utils.*;
 import com.watabou.utils.Random;
-import com.watabou.utils.Reflection;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
+import java.util.*;
 
 public abstract class Mob extends Char {
 
@@ -98,6 +92,9 @@ public abstract class Mob extends Char {
 	public boolean enemySeen;
 	protected boolean alerted = false;
 
+	public boolean hordeSpawned = false;
+	public int hordeHead = -1;
+
 	protected static final float TIME_TO_WAKE_UP = 1f;
 
 	protected boolean firstAdded = true;
@@ -117,6 +114,8 @@ public abstract class Mob extends Char {
 	private static final String MAX_LVL	= "max_lvl";
 
 	private static final String ENEMY_ID	= "enemy_id";
+	private static final String HORDE_HEAD = "hordeHead";
+	private static final String HORDE_SPAWNED = "hordeSpawned";
 	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -141,6 +140,9 @@ public abstract class Mob extends Char {
 		if (enemy != null) {
 			bundle.put(ENEMY_ID, enemy.id() );
 		}
+
+		bundle.put( HORDE_HEAD, hordeHead);
+		bundle.put( HORDE_SPAWNED, hordeSpawned);
 	}
 	
 	@Override
@@ -171,6 +173,9 @@ public abstract class Mob extends Char {
 			enemyID = bundle.getInt(ENEMY_ID);
 		}
 
+		hordeHead = bundle.getInt(HORDE_HEAD);
+		hordeSpawned = bundle.getBoolean(HORDE_SPAWNED);
+
 		//no need to actually save this, must be false
 		firstAdded = false;
 	}
@@ -191,6 +196,8 @@ public abstract class Mob extends Char {
 		
 		boolean justAlerted = alerted;
 		alerted = false;
+
+		hordeSpawnAttempt();
 		
 		if (justAlerted){
 			sprite.showAlert();
@@ -226,11 +233,91 @@ public abstract class Mob extends Char {
 
 		return state.act( enemyInFOV, justAlerted );
 	}
+
+	private boolean hordeException() {
+		return EXP > 0 &&
+				!(this instanceof Ghoul) && !(this instanceof Slime) &&
+				!(this instanceof Necromancer.NecroSkeleton) &&
+				!(this instanceof RipperDemon) &&
+				!Dungeon.isChallenged(Conducts.Conduct.LIMITED_MONSTERS);
+	}
+
+	public void doWithHordeHead(MoblikeCallback action){
+		if (hordeHead != -1 && Actor.findById(hordeHead) != null){
+			Mob hordeHead = (Mob) Actor.findById(Mob.this.hordeHead);
+			if (hordeHead.isAlive()){
+				action.call(hordeHead);
+			}
+		}
+	}
+
+	public boolean hasHordeHead(){
+		if (hordeHead != -1 && Actor.findById(hordeHead) != null){
+			Mob hordeHead = (Mob) Actor.findById(Mob.this.hordeHead);
+			return hordeHead.isAlive();
+		}
+		return false;
+	}
+
+	public void doWithHordeMinions(MoblikeCallback action){
+		for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
+			if (mob.hordeHead == id()){
+				action.call(mob);
+			}
+		}
+	}
+
+	public void hordeSpawnAttempt(){
+		if (!hordeSpawned && hordeException() && Random.Int(7) == 0 && !Dungeon.bossLevel() && alignment == Alignment.ENEMY){
+
+			int hordeSize = Math.min(3, Random.IntRange(1, Dungeon.depth / 8));
+			for (int i = 0; i < hordeSize; i++) {
+
+				ArrayList<Integer> candidates = new ArrayList<>();
+				for (int n : PathFinder.NEIGHBOURS8) {
+					if (Dungeon.level.map[pos+n] != Terrain.DOOR
+							&& Dungeon.level.map[pos+n] != Terrain.SECRET_DOOR
+							&& Dungeon.level.passable[pos+n]
+							&& Actor.findChar(pos + n) == null) {
+						candidates.add(pos + n);
+					}
+				}
+
+				if (!candidates.isEmpty()) {
+					Mob child = Dungeon.level.createMob();
+					child.hordeHead = this.id();
+					child.hordeSpawned = true;
+					if (state != SLEEPING) {
+						child.state = child.WANDERING;
+					}
+					child.HP = child.HT = child.HT/2;
+
+					child.pos = Random.element(candidates);
+
+					Dungeon.level.occupyCell(child);
+
+					GameScene.add(child);
+					if (sprite.visible) {
+						Actor.addDelayed(new Pushing(child, pos, child.pos), -1);
+					}
+				}
+			}
+			if (!properties.contains(Property.BOSS)) HP = HT = HT*2;
+		}
+		hordeSpawned = true;
+	}
 	
 	//FIXME this is sort of a band-aid correction for allies needing more intelligent behaviour
 	protected boolean intelligentAlly = false;
 	
 	protected Char chooseEnemy() {
+
+		if (hordeHead != -1 && Actor.findById(hordeHead) != null){
+			Mob hordeHead = (Mob) Actor.findById(this.hordeHead);
+			if (hordeHead.isAlive()){
+				return hordeHead.enemy;
+			}
+		}
 
 		Dread dread = buff( Dread.class );
 		if (dread != null) {
@@ -597,6 +684,7 @@ public abstract class Mob extends Char {
 		if (Dungeon.hero.buff(TimekeepersHourglass.timeFreeze.class) != null
 				|| Dungeon.hero.buff(Swiftthistle.TimeBubble.class) != null)
 			sprite.add( CharSprite.State.PARALYSED );
+		doWithHordeHead((head) -> sprite.add(CharSprite.State.SHRUNK));
 	}
 	
 	public float attackDelay() {
@@ -718,6 +806,7 @@ public abstract class Mob extends Char {
 		if (state != PASSIVE){
 			state = HUNTING;
 		}
+		doWithHordeHead((head) -> enemy = head.enemy);
 	}
 
 	public void clearEnemy(){
@@ -748,6 +837,16 @@ public abstract class Mob extends Char {
 			}
 			if (state != HUNTING && !(src instanceof Corruption)) {
 				alerted = true;
+				doWithHordeMinions((minion) -> {
+					minion.state = state;
+					minion.alerted = true;
+				});
+			}
+			if (hordeHead != -1 && Actor.findById(hordeHead) != null){
+				Mob hordeHead = (Mob) Actor.findById(this.hordeHead);
+				if (hordeHead.isAlive() && !(src instanceof Grim)){
+					dmg /= 2;
+				}
 			}
 		}
 		
@@ -789,6 +888,7 @@ public abstract class Mob extends Char {
 						exp == 0 && maxLvl > 0 && EXP > 0 && Dungeon.hero.lvl < Hero.MAX_LEVEL){
 					exp = Math.round(10 * spawningWeight());
 				}
+				if (hordeHead != -1) exp = 0;
 
 				if (exp > 0) {
 					Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(exp), FloatingText.EXPERIENCE);
@@ -834,6 +934,12 @@ public abstract class Mob extends Char {
 		}
 
 		boolean soulMarked = buff(SoulMark.class) != null;
+
+		doWithHordeMinions((minion) -> {
+			minion.state = minion.HUNTING;
+			minion.enemy = enemy;
+			minion.alerted = true;
+		});
 
 		super.die( cause );
 
@@ -937,6 +1043,9 @@ public abstract class Mob extends Char {
 
 	//how many mobs this one should count as when determining spawning totals
 	public float spawningWeight(){
+		if (hasHordeHead())
+			return 0;
+
 		return 1;
 	}
 	
@@ -952,6 +1061,7 @@ public abstract class Mob extends Char {
 			state = WANDERING;
 		}
 		target = cell;
+		doWithHordeMinions((minion) -> beckon(cell));
 	}
 	
 	public String description() {
@@ -963,6 +1073,10 @@ public abstract class Mob extends Char {
 
 		for (Buff b : buffs(ChampionEnemy.class)){
 			desc += "\n\n_" + Messages.titleCase(b.name()) + "_\n" + b.desc();
+		}
+
+		if (hasHordeHead()){
+			desc += "\n\n" + Messages.get(Mob.class, "horde");
 		}
 
 		return desc;
@@ -1074,6 +1188,8 @@ public abstract class Mob extends Char {
 			alerted = true;
 			state = HUNTING;
 			target = enemy.pos;
+
+			doWithHordeMinions((minion) -> beckon(target));
 			
 			if (alignment == Alignment.ENEMY && Dungeon.isChallenged( Challenges.SWARM_INTELLIGENCE )) {
 				for (Mob mob : Dungeon.level.mobs) {
@@ -1104,6 +1220,8 @@ public abstract class Mob extends Char {
 		}
 
 		protected int randomDestination(){
+			if (hasHordeHead())
+				return ((Mob)Actor.findById(hordeHead)).target;
 			return Dungeon.level.randomDestination( Mob.this );
 		}
 		
