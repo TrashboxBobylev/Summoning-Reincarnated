@@ -83,6 +83,11 @@ public class Minion extends Mob {
 
     public void onLeaving(){}
 
+    @Override
+    public float targetPriority() {
+        return 3.0f;
+    }
+
     public class TargetBuff extends FlavourBuff {
 
     }

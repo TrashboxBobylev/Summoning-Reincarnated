@@ -1153,6 +1153,10 @@ public abstract class Char extends Actor {
 		return buff(Challenge.SpectatorFreeze.class) != null;
 	}
 
+	public float targetPriority(){
+		return 1.0f;
+	}
+
 	protected HashSet<Property> properties = new HashSet<>();
 
 	public HashSet<Property> properties() {

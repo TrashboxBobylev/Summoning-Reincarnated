@@ -655,6 +655,11 @@ public class Hero extends Char {
 		return super.canSurpriseAttack();
 	}
 
+	@Override
+	public float targetPriority() {
+		return 2.0f;
+	}
+
 	public boolean canAttack(Char enemy){
 		if (Dungeon.isChallenged(Conducts.Conduct.PACIFIST) && belongings.weapon() != null) return false;
 

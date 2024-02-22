@@ -206,6 +206,11 @@ public class Feint extends ArmorAbility {
 		}
 
 		@Override
+		public float targetPriority() {
+			return Dungeon.hero.targetPriority()*2;
+		}
+
+		@Override
 		public boolean add( Buff buff ) {
 			return false;
 		}

@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Feint;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.DirectableAlly;
 import com.shatteredpixel.shatteredpixeldungeon.effects.*;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
@@ -309,6 +310,46 @@ public abstract class Mob extends Char {
 	
 	//FIXME this is sort of a band-aid correction for allies needing more intelligent behaviour
 	protected boolean intelligentAlly = false;
+
+	public boolean canSee(int pos){
+		return fieldOfView[pos];
+	}
+
+	public ArrayList<Class<? extends Char>> ignoreList(){
+		ArrayList<Class<? extends Char>> ignored = new ArrayList<>();
+//		ignored.add(SoulFlame.class); not implemented yet
+		return ignored;
+	}
+
+	public boolean canBeIgnored(Char ch){
+		ArrayList<Class<? extends Char>> ignored = ignoreList();
+		for (Class<? extends Char> clazz : ignored){
+			if (ch.getClass().isAssignableFrom(clazz)) return true;
+		}
+		return false;
+	}
+
+	protected Char chooseClosest(HashSet<Char> enemies){
+		//go after the closest potential enemy, preferring enemies that can be reached/attacked, and the hero if two are equidistant
+		PathFinder.buildDistanceMap(pos, Dungeon.findPassable(this, Dungeon.level.passable, fieldOfView, true));
+		Char closest = null;
+
+		for (Char curr : enemies){
+			if (closest == null){
+				closest = curr;
+			} else if (canAttack(closest) && !canAttack(curr)){
+				continue;
+			} else if ((canAttack(curr) && !canAttack(closest))
+					|| (PathFinder.distance[curr.pos] < PathFinder.distance[closest.pos])){
+				closest = curr;
+			} else if ( closest.targetPriority() <= curr.targetPriority() &&
+					(PathFinder.distance[curr.pos] == PathFinder.distance[closest.pos]) || (canAttack(curr) && canAttack(closest))){
+				closest = curr;
+			}
+		}
+
+		return closest;
+	}
 	
 	protected Char chooseEnemy() {
 
@@ -342,7 +383,7 @@ public abstract class Mob extends Char {
 				return enemy;
 			}
 			for (Char ch : Actor.chars()) {
-				if (ch != this && fieldOfView[ch.pos] &&
+				if (ch != this && canSee(ch.pos) &&
 						ch.buff(StoneOfAggression.Aggression.class) != null) {
 					state = HUNTING;
 					return ch;
@@ -383,7 +424,7 @@ public abstract class Mob extends Char {
 				//try to find an enemy mob to attack first.
 				for (Mob mob : Dungeon.level.mobs)
 					if (mob.alignment == Alignment.ENEMY && mob != this
-							&& fieldOfView[mob.pos] && mob.invisible <= 0) {
+							&& canSee(mob.pos) && mob.invisible <= 0 && !canBeIgnored(mob)) {
 						enemies.add(mob);
 					}
 				
@@ -391,13 +432,13 @@ public abstract class Mob extends Char {
 					//try to find ally mobs to attack second.
 					for (Mob mob : Dungeon.level.mobs)
 						if (mob.alignment == Alignment.ALLY && mob != this
-								&& fieldOfView[mob.pos] && mob.invisible <= 0) {
+								&& canSee(mob.pos) && mob.invisible <= 0 && !canBeIgnored(mob)) {
 							enemies.add(mob);
 						}
 					
 					if (enemies.isEmpty()) {
 						//try to find the hero third
-						if (fieldOfView[Dungeon.hero.pos] && Dungeon.hero.invisible <= 0) {
+						if (canSee(Dungeon.hero.pos) && Dungeon.hero.invisible <= 0) {
 							enemies.add(Dungeon.hero);
 						}
 					}
@@ -407,7 +448,7 @@ public abstract class Mob extends Char {
 			} else if ( alignment == Alignment.ALLY ) {
 				//look for hostile mobs to attack
 				for (Mob mob : Dungeon.level.mobs)
-					if (mob.alignment == Alignment.ENEMY && fieldOfView[mob.pos]
+					if (mob.alignment == Alignment.ENEMY && canSee(mob.pos)
 							&& mob.invisible <= 0 && !mob.isInvulnerable(getClass()))
 						//do not target passive mobs
 						//intelligent allies also don't target mobs which are wandering or asleep
@@ -420,11 +461,11 @@ public abstract class Mob extends Char {
 			} else if (alignment == Alignment.ENEMY) {
 				//look for ally mobs to attack
 				for (Mob mob : Dungeon.level.mobs)
-					if (mob.alignment == Alignment.ALLY && fieldOfView[mob.pos] && mob.invisible <= 0)
+					if (mob.alignment == Alignment.ALLY && canSee(mob.pos) && mob.invisible <= 0)
 						enemies.add(mob);
 
 				//and look for the hero
-				if (fieldOfView[Dungeon.hero.pos] && Dungeon.hero.invisible <= 0) {
+				if (canSee(Dungeon.hero.pos) && Dungeon.hero.invisible <= 0) {
 					enemies.add(Dungeon.hero);
 				}
 				
@@ -443,34 +484,7 @@ public abstract class Mob extends Char {
 			if (enemies.isEmpty()){
 				return null;
 			} else {
-				//go after the closest potential enemy, preferring enemies that can be reached/attacked, and the hero if two are equidistant
-				PathFinder.buildDistanceMap(pos, Dungeon.findPassable(this, Dungeon.level.passable, fieldOfView, true));
-				Char closest = null;
-
-				for (Char curr : enemies){
-					if (closest == null){
-						closest = curr;
-					} else if (canAttack(closest) && !canAttack(curr)){
-						continue;
-					} else if ((canAttack(curr) && !canAttack(closest))
-							|| (PathFinder.distance[curr.pos] < PathFinder.distance[closest.pos])){
-						closest = curr;
-					} else if ( curr == Dungeon.hero &&
-							(PathFinder.distance[curr.pos] == PathFinder.distance[closest.pos]) || (canAttack(curr) && canAttack(closest))){
-						closest = curr;
-					}
-				}
-				//if we were going to target the hero, but an afterimage exists, target that instead
-				if (closest == Dungeon.hero){
-					for (Char ch : enemies){
-						if (ch instanceof Feint.AfterImage){
-							closest = ch;
-							break;
-						}
-					}
-				}
-
-				return closest;
+				return chooseClosest(enemies);
 			}
 
 		} else
