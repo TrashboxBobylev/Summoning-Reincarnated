@@ -507,7 +507,7 @@ public class ItemSpriteSheet {
 	public static final int RUNIC_SHOT      = SUMM_MISCS+1;
 	static {
 		assignItemRect(ROPES, 16, 16);
-		assignItemRect(RUNIC_SHOT, 14, 14);
+		assignItemRect(RUNIC_SHOT, 13, 13);
 	}
 
 	private static final int SCROLLS        =                               xy(1, 19);  //16 slots
