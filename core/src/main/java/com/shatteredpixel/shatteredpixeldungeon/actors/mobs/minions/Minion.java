@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -44,6 +45,39 @@ public class Minion extends Mob {
     public Weapon.Augment augment = Weapon.Augment.NONE;
     public int rank;
     public int attunement;
+    public BehaviorType behaviorType;
+
+    private static final String RANK	= "rank";
+    private static final String ATTUNEMENT = "attunement";
+    private static final String ENCHANTMENT	= "enchantment";
+    private static final String AUGMENT = "augment";
+    private static final String BEHAVIOR_TYPE = "behaviorType";
+
+    @Override
+    public void storeInBundle(Bundle bundle) {
+        super.storeInBundle(bundle);
+
+        bundle.put(RANK, rank);
+        bundle.put(ATTUNEMENT, attunement);
+
+        bundle.put(ENCHANTMENT, enchantment);
+        bundle.put(AUGMENT, augment);
+
+        bundle.put(BEHAVIOR_TYPE, behaviorType);
+    }
+
+    @Override
+    public void restoreFromBundle(Bundle bundle) {
+        super.restoreFromBundle(bundle);
+
+        rank = bundle.getInt(RANK);
+        attunement = bundle.getInt(ATTUNEMENT);
+
+        enchantment = (Weapon.Enchantment) bundle.get(ENCHANTMENT);
+        augment = bundle.getEnum(AUGMENT, Weapon.Augment.class);
+
+        behaviorType = bundle.getEnum(BEHAVIOR_TYPE, BehaviorType.class);
+    }
 
     @Override
     public int attackProc(Char enemy, int damage) {
@@ -86,6 +120,10 @@ public class Minion extends Mob {
     @Override
     public float targetPriority() {
         return 3.0f;
+    }
+
+    public enum BehaviorType {
+        REACTIVE, PROTECTIVE, AGGRESSIVE, PASSIVE
     }
 
     public class TargetBuff extends FlavourBuff {
