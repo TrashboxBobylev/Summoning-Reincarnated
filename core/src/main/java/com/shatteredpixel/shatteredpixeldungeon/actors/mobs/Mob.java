@@ -340,10 +340,7 @@ public abstract class Mob extends Char {
 			} else if (canAttack(closest) && !canAttack(curr)){
 				continue;
 			} else if ((canAttack(curr) && !canAttack(closest))
-					|| (PathFinder.distance[curr.pos] < PathFinder.distance[closest.pos])){
-				closest = curr;
-			} else if ( closest.targetPriority() <= curr.targetPriority() &&
-					(PathFinder.distance[curr.pos] == PathFinder.distance[closest.pos]) || (canAttack(curr) && canAttack(closest))){
+					|| ((PathFinder.distance[curr.pos] / curr.targetPriority()) < (PathFinder.distance[closest.pos] / closest.targetPriority()))){
 				closest = curr;
 			}
 		}
