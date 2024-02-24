@@ -449,8 +449,10 @@ public abstract class Mob extends Char {
 							&& mob.invisible <= 0 && !mob.isInvulnerable(getClass()))
 						//do not target passive mobs
 						//intelligent allies also don't target mobs which are wandering or asleep
+						//unless they are aggressive minions
 						if (mob.state != mob.PASSIVE &&
-								(!intelligentAlly || (mob.state != mob.SLEEPING && mob.state != mob.WANDERING))) {
+								(!intelligentAlly || (mob.state != mob.SLEEPING && mob.state != mob.WANDERING)
+										|| !(this instanceof Minion && ((Minion) this).behaviorType == Minion.BehaviorType.AGGRESSIVE))) {
 							enemies.add(mob);
 						}
 				
@@ -458,8 +460,11 @@ public abstract class Mob extends Char {
 			} else if (alignment == Alignment.ENEMY) {
 				//look for ally mobs to attack
 				for (Mob mob : Dungeon.level.mobs)
-					if (mob.alignment == Alignment.ALLY && canSee(mob.pos) && mob.invisible <= 0)
-						enemies.add(mob);
+					if (mob.alignment == Alignment.ALLY && canSee(mob.pos) && mob.invisible <= 0) {
+						//we are neutral to minions, unless they are attacking everything
+						if (!(mob instanceof Minion) || (((Minion) mob).behaviorType == Minion.BehaviorType.AGGRESSIVE) || buff(Minion.TargetBuff.class) != null)
+							enemies.add(mob);
+					}
 
 				//and look for the hero
 				if (canSee(Dungeon.hero.pos) && Dungeon.hero.invisible <= 0) {

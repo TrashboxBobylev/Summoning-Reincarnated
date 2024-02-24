@@ -79,6 +79,32 @@ public class Minion extends Mob {
         behaviorType = bundle.getEnum(BEHAVIOR_TYPE, BehaviorType.class);
     }
 
+    public int independenceRange(){
+        return 8;
+    }
+
+    @Override
+    public Char chooseEnemy() {
+        if (behaviorType == BehaviorType.PASSIVE)
+            return null;
+
+        Char enemy = super.chooseEnemy();
+
+        int targetPos = Dungeon.hero.pos;
+        int distance = independenceRange();
+
+        //will never attack something far from their target
+        if (enemy != null
+                && Dungeon.level.mobs.contains(enemy)
+                && (Dungeon.level.distance(enemy.pos, targetPos) <= distance)
+                && (invisible == 0)
+                && (behaviorType.buffType == null || enemy.buff(behaviorType.buffType) != null)){
+            return enemy;
+        }
+
+        return null;
+    }
+
     @Override
     public int attackProc(Char enemy, int damage) {
         if (enchantment != null && buff(MagicImmune.class) == null) {
@@ -123,12 +149,23 @@ public class Minion extends Mob {
     }
 
     public enum BehaviorType {
-        REACTIVE, PROTECTIVE, AGGRESSIVE, PASSIVE
+        REACTIVE(ReactiveTargeting.class), PROTECTIVE(ProtectiveTargeting.class), AGGRESSIVE, PASSIVE;
+
+        public final Class<? extends TargetBuff> buffType;
+
+        BehaviorType(){
+            buffType = null;
+        }
+
+        BehaviorType(Class<? extends TargetBuff> type){
+            buffType = type;
+        }
     }
 
-    public class TargetBuff extends FlavourBuff {
+    public interface TargetBuff {};
 
-    }
+    public static class ReactiveTargeting extends FlavourBuff implements TargetBuff {};
+    public static class ProtectiveTargeting extends FlavourBuff implements TargetBuff {};
 
     public class Wandering extends Mob.Wandering implements AiState{
 

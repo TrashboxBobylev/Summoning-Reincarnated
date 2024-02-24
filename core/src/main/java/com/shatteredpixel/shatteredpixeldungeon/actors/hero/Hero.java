@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snake;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
@@ -1375,6 +1376,8 @@ public class Hero extends Char {
 		if (wep != null) damage = wep.proc( this, enemy, damage );
 
 		damage = Talent.onAttackProc( this, enemy, damage );
+
+		Buff.affect(enemy, Minion.ReactiveTargeting.class, 10f);
 		
 		switch (subClass) {
 		case SNIPER:
@@ -1419,6 +1422,10 @@ public class Hero extends Char {
 		if (rockArmor != null) {
 			damage = rockArmor.absorb(damage);
 		}
+
+		//we will have to do with that for now
+		//will need to port sourced magical attacks from summoning to implement the full idea
+		Buff.affect(enemy, Minion.ProtectiveTargeting.class, 10f);
 		
 		return super.defenseProc( enemy, damage );
 	}
