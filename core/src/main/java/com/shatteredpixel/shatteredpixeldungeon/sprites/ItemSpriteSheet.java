@@ -411,7 +411,41 @@ public class ItemSpriteSheet {
 		assignItemRect(ARMOR_ADVENTURER, 14, 13);
 	}
 
-	                                                                                    //16 free slots
+	private static final int STAFFS         =                               xy(1, 13);//15 free slots
+	public static final int FROGGIT_STAFF     = STAFFS+0;
+	public static final int GREY_RAT_STAFF = STAFFS+1;
+	public static final int GNOLL_HUNTER_STAFF = STAFFS+2;
+	public static final int WOOLY_STAFF     = STAFFS+3;
+	public static final int SKELETON_STAFF     = STAFFS+4;
+	public static final int SLIME_STAFF     = STAFFS+5;
+	public static final int CHICKEN_STAFF     = STAFFS+6;
+	public static final int MAGIC_MISSILE_STAFF     = STAFFS+7;
+	public static final int WIZARD_STAFF     = STAFFS+8;
+	public static final int ROBO_STAFF     = STAFFS+9;
+	public static final int ROSE_STAFF     = STAFFS+10;
+	public static final int FROST_ELEMENTAL_STAFF     = STAFFS+11;
+	public static final int GOO_STAFF = STAFFS+12;
+	public static final int GASTER_STAFF = STAFFS+13;
+	public static final int IMP_STAFF = STAFFS+14;
+	public static final int HACATU_STAFF = STAFFS+15;
+	static {
+		assignItemRect(FROGGIT_STAFF, 14, 14);
+		assignItemRect(GREY_RAT_STAFF, 16, 16);
+		assignItemRect(GNOLL_HUNTER_STAFF, 16, 16);
+		assignItemRect(WOOLY_STAFF, 16, 16);
+		assignItemRect(SKELETON_STAFF, 15, 15);
+		assignItemRect(FROST_ELEMENTAL_STAFF, 15, 15);
+		assignItemRect(SLIME_STAFF, 16, 16);
+		assignItemRect(CHICKEN_STAFF, 16, 16);
+		assignItemRect(MAGIC_MISSILE_STAFF, 14, 14);
+		assignItemRect(WIZARD_STAFF, 16, 16);
+		assignItemRect(ROBO_STAFF, 16, 16);
+		assignItemRect(ROSE_STAFF, 14, 14);
+		assignItemRect(GOO_STAFF, 16, 16);
+		assignItemRect(GASTER_STAFF, 16, 16);
+		assignItemRect(IMP_STAFF, 16, 16);
+		assignItemRect(HACATU_STAFF, 14, 16);
+	}
 
 	private static final int WANDS              =                           xy(1, 14);  //16 slots
 	public static final int WAND_MAGIC_MISSILE  = WANDS+0;
@@ -427,6 +461,9 @@ public class ItemSpriteSheet {
 	public static final int WAND_WARDING        = WANDS+10;
 	public static final int WAND_REGROWTH       = WANDS+11;
 	public static final int WAND_TRANSFUSION    = WANDS+12;
+	public static final int WAND_CONJURATION    = WANDS+13;
+	public static final int WAND_CRYSTAL        = WANDS+14;
+	public static final int WAND_STARS          = WANDS+15;
 	static {
 		for (int i = WANDS; i < WANDS+16; i++)
 			assignItemRect(i, 14, 14);
