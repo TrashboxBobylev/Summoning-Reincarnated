@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
@@ -45,6 +46,8 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndRankInfo;
+import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundlable;
@@ -67,6 +70,7 @@ public class Item implements Bundlable {
 	
 	public static final String AC_DROP		= "DROP";
 	public static final String AC_THROW		= "THROW";
+	public static final String AC_TIERINFO  = "TIERINFO";
 	
 	protected String defaultAction;
 	public boolean usesTargeting;
@@ -107,6 +111,9 @@ public class Item implements Bundlable {
 		ArrayList<String> actions = new ArrayList<>();
 		actions.add( AC_DROP );
 		actions.add( AC_THROW );
+		if (this instanceof Rankable){
+			actions.add( AC_TIERINFO );
+		}
 		return actions;
 	}
 
@@ -169,6 +176,8 @@ public class Item implements Bundlable {
 				doThrow(hero);
 			}
 			
+		} else if (action.equals(AC_TIERINFO)) {
+			ShatteredPixelDungeon.runOnRenderThread(() -> Game.scene().addToFront(new WndRankInfo(Item.this)));
 		}
 	}
 

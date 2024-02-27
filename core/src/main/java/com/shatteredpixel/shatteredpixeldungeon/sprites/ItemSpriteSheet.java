@@ -692,6 +692,7 @@ public class ItemSpriteSheet {
 	public static final int WILD_ENERGY     = SPELLS+3;
 	public static final int RETURN_BEACON   = SPELLS+4;
 	public static final int SUMMON_ELE      = SPELLS+5;
+	public static final int RANK_MANAGER    = SPELLS+6;
 	
 	public static final int AQUA_BLAST      = SPELLS+7;
 	public static final int FEATHER_FALL    = SPELLS+8;
@@ -708,6 +709,7 @@ public class ItemSpriteSheet {
 		assignItemRect(WILD_ENERGY,      8, 16);
 		assignItemRect(RETURN_BEACON,    8, 16);
 		assignItemRect(SUMMON_ELE,       8, 16);
+		assignItemRect(RANK_MANAGER,     8, 16);
 		
 		assignItemRect(AQUA_BLAST,      11, 11);
 		assignItemRect(FEATHER_FALL,    11, 11);

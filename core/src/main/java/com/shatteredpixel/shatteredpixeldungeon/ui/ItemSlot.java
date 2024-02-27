@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
@@ -38,6 +39,8 @@ import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Rect;
 
+import java.util.Collections;
+
 public class ItemSlot extends Button {
 
 	public static final int DEGRADED	= 0xFF4444;
@@ -47,6 +50,9 @@ public class ItemSlot extends Button {
 	public static final int ENHANCED	= 0x3399FF;
 	public static final int MASTERED	= 0xFFFF44;
 	public static final int CURSE_INFUSED	= 0x8800FF;
+	public static final int RANK1      = 0xFF7B00;
+	public static final int RANK2      = 0x57AEFF;
+	public static final int RANK3      = 0x2FED2F;
 	
 	private static final float ENABLED	= 1.0f;
 	private static final float DISABLED	= 0.3f;
@@ -270,29 +276,37 @@ public class ItemSlot extends Button {
 
 		}
 
-		int trueLvl = item.visiblyUpgraded();
-		int buffedLvl = item.buffedVisiblyUpgraded();
+		if (item instanceof Rankable){
+			level.text(Rankable.getRankString(((Rankable) item).rank()));
+			if (item.isIdentified())
+				level.hardlight(Rankable.getRankColor(((Rankable) item).rank()));
+			else
+				level.hardlight(Rankable.getRankColor(1));
+		} else {
+			int trueLvl = item.visiblyUpgraded();
+			int buffedLvl = item.buffedVisiblyUpgraded();
 
-		if (trueLvl != 0 || buffedLvl != 0) {
-			level.text( Messages.format( TXT_LEVEL, buffedLvl ) );
-			level.measure();
-			if (trueLvl == buffedLvl || buffedLvl <= 0) {
-				if (buffedLvl > 0){
-					if ((item instanceof Weapon && ((Weapon) item).curseInfusionBonus)
-						|| (item instanceof Armor && ((Armor) item).curseInfusionBonus)
-							|| (item instanceof Wand && ((Wand) item).curseInfusionBonus)){
-						level.hardlight(CURSE_INFUSED);
+			if (trueLvl != 0 || buffedLvl != 0) {
+				level.text(Messages.format(TXT_LEVEL, buffedLvl));
+				level.measure();
+				if (trueLvl == buffedLvl || buffedLvl <= 0) {
+					if (buffedLvl > 0) {
+						if ((item instanceof Weapon && ((Weapon) item).curseInfusionBonus)
+								|| (item instanceof Armor && ((Armor) item).curseInfusionBonus)
+								|| (item instanceof Wand && ((Wand) item).curseInfusionBonus)) {
+							level.hardlight(CURSE_INFUSED);
+						} else {
+							level.hardlight(UPGRADED);
+						}
 					} else {
-						level.hardlight(UPGRADED);
+						level.hardlight(DEGRADED);
 					}
 				} else {
-					level.hardlight( DEGRADED );
+					level.hardlight(buffedLvl > trueLvl ? ENHANCED : WARNING);
 				}
 			} else {
-				level.hardlight(buffedLvl > trueLvl ? ENHANCED : WARNING);
+				level.text(null);
 			}
-		} else {
-			level.text( null );
 		}
 
 		layout();
