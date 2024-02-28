@@ -261,9 +261,11 @@ public abstract class Mob extends Char {
 	}
 
 	public void doWithHordeMinions(MoblikeCallback action){
-		for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
-			if (mob.hordeHead == id()){
-				action.call(mob);
+		if (hordeHead == -1) {
+			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+				if (mob.id() != id() && mob.hordeHead == id()) {
+					action.call(mob);
+				}
 			}
 		}
 	}
@@ -1077,7 +1079,6 @@ public abstract class Mob extends Char {
 			state = WANDERING;
 		}
 		target = cell;
-		doWithHordeMinions((minion) -> beckon(cell));
 	}
 	
 	public String description() {
