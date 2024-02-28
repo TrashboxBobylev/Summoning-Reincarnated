@@ -160,17 +160,12 @@ public class RankManager extends Spell {
 
                     @Override
                     public ItemSprite.Glowing glowing() {
-                        return new ItemSprite.Glowing(Rankable.getRankColor(Rankable.getRankColor(index+1)));
+                        return new ItemSprite.Glowing(Rankable.getRankColor(index+1));
                     }
                 });
             }
 
             rankedItem = null;
-        }
-
-        @Override
-        protected boolean enabled(int index) {
-            return !(((Rankable)rankedItem).rank() - 1 == index);
         }
 
         @Override
