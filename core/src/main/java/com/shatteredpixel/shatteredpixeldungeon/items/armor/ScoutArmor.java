@@ -2,7 +2,6 @@ package com.shatteredpixel.shatteredpixeldungeon.items.armor;
 
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -15,6 +14,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Image;
+import com.watabou.utils.Bundle;
 
 import java.util.ArrayList;
 
@@ -48,7 +48,23 @@ public class ScoutArmor extends Armor {
     public static class ScoutCooldown extends FlavourBuff {
         public int icon() { return BuffIndicator.TIME; }
         public void tintIcon(Image icon) { icon.hardlight(0x2e92a7); }
-        public float iconFadePercent() { return Math.max(0, 1 - (visualcooldown() / 25)); }
+        public float iconFadePercent() { return Math.max(0, 1 - (visualcooldown() / maxDuration)); }
+
+        public float maxDuration;
+
+        public void set(float duration) {maxDuration = duration;}
+
+        @Override
+        public void storeInBundle(Bundle bundle) {
+            super.storeInBundle(bundle);
+            bundle.put("duration", maxDuration);
+        }
+
+        @Override
+        public void restoreFromBundle(Bundle bundle) {
+            super.restoreFromBundle(bundle);
+            maxDuration = bundle.getInt("duration");
+        }
     };
 
     @Override
@@ -129,10 +145,8 @@ public class ScoutArmor extends Armor {
                 SpiritBow.superShot = true;
                 bow.knockArrow().cast(curUser, target);
                 float duration = 25f;
-//                switch (level()){
-//                    case 1: duration = 13.3f; break;
-//                }
-                Buff.affect(curUser, ScoutCooldown.class, duration);
+                duration *= bow.speedMod(bow.rank());
+                Buff.affect(curUser, ScoutCooldown.class, duration).set(duration);
             }
         }
         @Override

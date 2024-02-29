@@ -297,7 +297,7 @@ public class SpiritBow extends Weapon implements Rankable {
 		return damage;
 	}
 
-	protected float speedMod(int rank){
+	public float speedMod(int rank){
 		switch (rank){
 			case 1: default:
 				return 1f;
