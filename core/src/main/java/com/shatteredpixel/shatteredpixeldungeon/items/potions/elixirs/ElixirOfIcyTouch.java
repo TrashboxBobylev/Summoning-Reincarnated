@@ -21,13 +21,20 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blizzard;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostImbue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SnowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfSnapFreeze;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.PathFinder;
 
 public class ElixirOfIcyTouch extends Elixir {
 	
@@ -39,6 +46,26 @@ public class ElixirOfIcyTouch extends Elixir {
 	public void apply(Hero hero) {
 		Buff.affect(hero, FrostImbue.class, FrostImbue.DURATION);
 		hero.sprite.emitter().burst(SnowParticle.FACTORY, 5);
+	}
+
+	@Override
+	public void shatter(int cell) {
+		splash( cell );
+		if (Dungeon.level.heroFOV[cell]) {
+			Sample.INSTANCE.play( Assets.Sounds.SHATTER );
+			Sample.INSTANCE.play( Assets.Sounds.GAS );
+		}
+
+		int centerVolume = 120;
+		for (int i : PathFinder.NEIGHBOURS8){
+			if (!Dungeon.level.solid[cell+i]){
+				GameScene.add( Blob.seed( cell+i, 120, Blizzard.class ) );
+			} else {
+				centerVolume += 120;
+			}
+		}
+
+		GameScene.add( Blob.seed( cell, centerVolume, Blizzard.class ) );
 	}
 	
 	@Override
