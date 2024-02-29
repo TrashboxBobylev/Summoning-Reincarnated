@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.journal.GuidePage;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.RegionLorePage;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.Key;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.RankManager;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.builders.Builder;
@@ -420,6 +421,7 @@ public abstract class RegularLevel extends Level {
 		}
 
 		if (Random.Int(10) < 2) itemsToSpawn.add(new Ropes().quantity(Random.Int(1, 3)));
+		if (Dungeon.depth % 2 == 0) itemsToSpawn.add(new RankManager());
 
 		for (Item item : itemsToSpawn) {
 			int cell = randomDropCell();
