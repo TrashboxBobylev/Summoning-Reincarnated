@@ -106,7 +106,7 @@ abstract public class Weapon extends KindOfWeapon {
 	}
 	
 	public Augment augment = Augment.NONE;
-	protected int rank;
+	protected int rank = 1;
 	
 	private static final int USES_TO_ID = 20;
 	private float usesLeftToID = USES_TO_ID;

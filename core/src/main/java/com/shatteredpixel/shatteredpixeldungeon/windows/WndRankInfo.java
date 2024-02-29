@@ -53,7 +53,7 @@ public class WndRankInfo extends Window {
         color = Rankable.getRankColor(rank);
 
         IconTitle titlebar = new IconTitle( item );
-        titlebar.label(Messages.get(this, "rank", rank));
+        titlebar.label(Messages.get(this, "rank", Rankable.getRankString(rank), Messages.titleCase(item.trueName())));
         titlebar.color( color );
 
         final RenderedTextBlock[] txtInfo = {PixelScene.renderTextBlock(getTierInfo(item), 6)};
@@ -98,6 +98,7 @@ public class WndRankInfo extends Window {
         int color = TITLE_COLOR;
         color = Rankable.getRankColor(rank);
         titlebar.color( color );
+        titlebar.label(Messages.get(this, "rank", Rankable.getRankString(rank), Messages.titleCase(item.trueName())));
         layoutFields(titlebar, txtInfo[0]);
         btnForward.setRect(0, txtInfo[0].bottom() + GAP,  width / 2 - 15, 16 );
         btnBack.setRect(width - width / 2 + 15, txtInfo[0].bottom() + GAP, width / 2 - 15, 16 );

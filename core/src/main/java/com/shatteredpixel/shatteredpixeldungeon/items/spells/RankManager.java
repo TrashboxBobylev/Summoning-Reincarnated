@@ -163,6 +163,7 @@ public class RankManager extends Spell {
                         return new ItemSprite.Glowing(Rankable.getRankColor(index+1));
                     }
                 });
+                updateQuickslot();
             }
 
             rankedItem = null;

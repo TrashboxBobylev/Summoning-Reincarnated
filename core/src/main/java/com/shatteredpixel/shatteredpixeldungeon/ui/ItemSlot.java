@@ -278,6 +278,7 @@ public class ItemSlot extends Button {
 
 		if (item instanceof Rankable){
 			level.text(Rankable.getRankString(((Rankable) item).rank()));
+			level.measure();
 			if (item.isIdentified())
 				level.hardlight(Rankable.getRankColor(((Rankable) item).rank()));
 			else
