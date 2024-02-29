@@ -858,6 +858,7 @@ public abstract class Mob extends Char {
 				doWithHordeMinions((minion) -> {
 					minion.state = state;
 					minion.alerted = true;
+					minion.target = target;
 				});
 			}
 			if (hordeHead != -1 && Actor.findById(hordeHead) != null){
@@ -957,6 +958,7 @@ public abstract class Mob extends Char {
 			minion.state = minion.HUNTING;
 			minion.enemy = enemy;
 			minion.alerted = true;
+			minion.target = target;
 		});
 
 		super.die( cause );
@@ -1167,6 +1169,7 @@ public abstract class Mob extends Char {
 				state = WANDERING;
 				target = Dungeon.level.randomDestination( Mob.this );
 			}
+			doWithHordeMinions((minion) -> minion.target = target);
 
 			if (alignment == Alignment.ENEMY && Dungeon.isChallenged(Challenges.SWARM_INTELLIGENCE)) {
 				for (Mob mob : Dungeon.level.mobs) {
@@ -1230,6 +1233,7 @@ public abstract class Mob extends Char {
 				return moveSprite( oldPos, pos );
 			} else {
 				target = randomDestination();
+				doWithHordeMinions((minion) -> minion.target = target);
 				spend( TICK );
 			}
 			
