@@ -27,15 +27,24 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RevealedArea;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.NaturesPower;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpectralBlades;
+import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScoutArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Shuriken;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Blindweed;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Firebloom;
@@ -48,6 +57,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Callback;
@@ -55,8 +65,9 @@ import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
-public class SpiritBow extends Weapon {
+public class SpiritBow extends Weapon implements Rankable {
 	
 	public static final String AC_SHOOT		= "SHOOT";
 	
@@ -147,7 +158,11 @@ public class SpiritBow extends Weapon {
 		if (STRReq() > Dungeon.hero.STR()) {
 			info += " " + Messages.get(Weapon.class, "too_heavy");
 		} else if (Dungeon.hero.STR() > STRReq()){
-			info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
+			int strBoost = Dungeon.hero.STR() - STRReq();
+			if (rank() == 3){
+				strBoost *= 2;
+			}
+			info += " " + Messages.get(Weapon.class, "excess_str", strBoost);
 		}
 		
 		switch (augment) {
@@ -180,7 +195,17 @@ public class SpiritBow extends Weapon {
 		
 		return info;
 	}
-	
+
+	@Override
+	public int rank() {
+		return rank;
+	}
+
+	@Override
+	public void rank(int rank) {
+		this.rank = rank;
+	}
+
 	@Override
 	public int STRReq(int lvl) {
 		return STRReq(1, lvl); //tier 1
@@ -188,17 +213,45 @@ public class SpiritBow extends Weapon {
 	
 	@Override
 	public int min(int lvl) {
+		return minRanked(rank());
+	}
+
+	private int minRanked(int rank) {
 		int dmg = 1 + Dungeon.hero.lvl/5
 				+ RingOfSharpshooting.levelDamageBonus(Dungeon.hero)
 				+ (curseInfusionBonus ? 1 + Dungeon.hero.lvl/30 : 0);
+		switch (rank){
+			case 2:
+				dmg = 1 + Dungeon.hero.lvl/8
+						+ (int)(RingOfSharpshooting.levelDamageBonus(Dungeon.hero)*0.75f)
+						+ (curseInfusionBonus ? 1 + Dungeon.hero.lvl/40 : 0); break;
+			case 3:
+				dmg = 4 + (int)(Dungeon.hero.lvl/1.25f)
+						+ 4*RingOfSharpshooting.levelDamageBonus(Dungeon.hero)
+						+ (curseInfusionBonus ? 4 + (int)(Dungeon.hero.lvl/7.5f) : 0); break;
+		}
 		return Math.max(0, dmg);
 	}
-	
+
 	@Override
 	public int max(int lvl) {
+		return maxRanked(rank());
+	}
+
+	private int maxRanked(int rank) {
 		int dmg = 6 + (int)(Dungeon.hero.lvl/2.5f)
 				+ 2*RingOfSharpshooting.levelDamageBonus(Dungeon.hero)
 				+ (curseInfusionBonus ? 2 + Dungeon.hero.lvl/15 : 0);
+		switch (rank){
+			case 2:
+				dmg = 5 + (int)(Dungeon.hero.lvl/3.75f
+						+ (1.5f*RingOfSharpshooting.levelDamageBonus(Dungeon.hero))
+						+ (curseInfusionBonus ? 1.5f + Dungeon.hero.lvl/24 : 0)); break;
+			case 3:
+				dmg = 13 + (int)(Dungeon.hero.lvl/1.2f)
+                        + 4 * RingOfSharpshooting.levelDamageBonus(Dungeon.hero)
+                        + (curseInfusionBonus ? 4 + Dungeon.hero.lvl / 7 : 0); break;
+		}
 		return Math.max(0, dmg);
 	}
 
@@ -215,6 +268,7 @@ public class SpiritBow extends Weapon {
 		
 		if (owner instanceof Hero) {
 			int exStr = ((Hero)owner).STR() - STRReq();
+			if (rank() == 3) exStr *= 2;
 			if (exStr > 0) {
 				damage += Random.IntRange( 0, exStr );
 			}
@@ -242,21 +296,32 @@ public class SpiritBow extends Weapon {
 		
 		return damage;
 	}
+
+	protected float speedMod(int rank){
+		switch (rank){
+			case 1: default:
+				return 1f;
+			case 3:
+				return 0.4f;
+		}
+	}
 	
 	@Override
 	protected float baseDelay(Char owner) {
+		float delay;
 		if (sniperSpecial){
 			switch (augment){
 				case NONE: default:
-					return 0f;
+					delay = 0f; break;
 				case SPEED:
-					return 1f;
+					delay = 1f; break;
 				case DAMAGE:
-					return 2f;
+					delay = 2f; break;
 			}
-		} else{
-			return super.baseDelay(owner);
+		} else {
+			delay = super.baseDelay(owner);
 		}
+		return delay / speedMod(rank());
 	}
 
 	@Override
@@ -285,6 +350,15 @@ public class SpiritBow extends Weapon {
 	@Override
 	public boolean isUpgradable() {
 		return false;
+	}
+
+	@Override
+	public String getRankMessage(int rank){
+		return Messages.get(this, "rank" + rank,
+				minRanked(rank),
+				maxRanked(rank),
+				Math.round(speedMod(rank)*100)
+		);
 	}
 
 	public static boolean superShot = false;
@@ -360,6 +434,12 @@ public class SpiritBow extends Weapon {
 				e.fillTarget = false;
 				e.pour(LeafParticle.GENERAL, 0.01f);
 				return e;
+			} else if (rank() == 3){
+				Emitter e = new Emitter();
+				e.pos(5, 5);
+				e.fillTarget = false;
+				e.pour(MagicMissile.MagicParticle.FACTORY, 0.004f);
+				return e;
 			} else {
 				return super.emitter();
 			}
@@ -390,7 +470,11 @@ public class SpiritBow extends Weapon {
 			if (sniperSpecial && SpiritBow.this.augment == Augment.DAMAGE){
 				return Float.POSITIVE_INFINITY;
 			} else {
-				return super.accuracyFactor(owner, target);
+				float multiplier = 1f;
+				if (rank() == 3){
+					multiplier = 1.25f;
+				}
+				return super.accuracyFactor(owner, target)*multiplier;
 			}
 		}
 		
@@ -529,7 +613,78 @@ public class SpiritBow extends Weapon {
 		@Override
 		public void onSelect( Integer target ) {
 			if (target != null) {
-				knockArrow().cast(curUser, target);
+				if (rank() == 2){
+					Ballistica b = new Ballistica(curUser.pos, target, Ballistica.WONT_STOP);
+					final HashSet<Char> targets = new HashSet<>();
+					Char enemy = SpectralBlades.findChar(b, curUser, 0, targets);
+
+					if (enemy == null || !curUser.fieldOfView[enemy.pos]){
+						knockArrow().cast(curUser, target);
+						return;
+					}
+
+					targets.add(enemy);
+
+					ConeAOE cone = new ConeAOE(b, 50);
+					for (Ballistica ray : cone.rays){
+						Char toAdd = SpectralBlades.findChar(ray, curUser, 0, targets);
+						if (toAdd != null && curUser.fieldOfView[toAdd.pos]){
+							targets.add(toAdd);
+						}
+					}
+					while (targets.size() > 3){
+						Char furthest = null;
+						for (Char ch : targets){
+							if (furthest == null){
+								furthest = ch;
+							} else if (Dungeon.level.trueDistance(enemy.pos, ch.pos) >
+									Dungeon.level.trueDistance(enemy.pos, furthest.pos)){
+								furthest = ch;
+							}
+						}
+						targets.remove(furthest);
+					}
+
+					MissileWeapon proto = knockArrow();
+
+					final HashSet<Callback> callbacks = new HashSet<>();
+					final float delay = castDelay(curUser, enemy.pos);
+					Hunger.adjustHunger(-3*delay);
+
+					for (Char ch : targets) {
+						Callback callback = new Callback() {
+							@Override
+							public void call() {
+								curUser.shoot(ch, proto);
+								callbacks.remove( this );
+								if (callbacks.isEmpty()) {
+									Invisibility.dispel();
+									if (curUser.buff(Talent.LethalMomentumTracker.class) != null){
+										curUser.buff(Talent.LethalMomentumTracker.class).detach();
+										curUser.next();
+									} else {
+										curUser.spendAndNext(delay);
+									}
+								}
+							}
+						};
+
+						MissileSprite m = ((MissileSprite)curUser.sprite.parent.recycle( MissileSprite.class ));
+						m.reset( curUser.sprite, ch.pos, proto, callback );
+						m.hardlight(0.6f, 1f, 1f);
+						m.alpha(0.8f);
+						proto.throwSound();
+
+						callbacks.add( callback );
+					}
+
+					QuickSlotButton.target(enemy);
+
+					curUser.sprite.zap( enemy.pos );
+					curUser.busy();
+				} else {
+					knockArrow().cast(curUser, target);
+				}
 			}
 		}
 		@Override

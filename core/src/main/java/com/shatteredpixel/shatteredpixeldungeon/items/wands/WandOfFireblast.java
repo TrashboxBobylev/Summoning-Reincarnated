@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage.WildMagic;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazing;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -158,7 +159,7 @@ public class WandOfFireblast extends DamageWand {
 
 	private static class FireBlastOnHit extends Blazing {
 		@Override
-		protected float procChanceMultiplier(Char attacker) {
+		protected float procChanceMultiplier(Weapon wep, Char attacker) {
 			return Wand.procChanceMultiplier(attacker);
 		}
 	}

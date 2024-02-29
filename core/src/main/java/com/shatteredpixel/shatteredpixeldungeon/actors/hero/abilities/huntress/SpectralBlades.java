@@ -140,7 +140,7 @@ public class SpectralBlades extends ArmorAbility {
 		hero.busy();
 	}
 
-	private Char findChar(Ballistica path, Hero hero, int wallPenetration, HashSet<Char> existingTargets){
+	public static Char findChar(Ballistica path, Hero hero, int wallPenetration, HashSet<Char> existingTargets){
 		for (int cell : path.path){
 			Char ch = Actor.findChar(cell);
 			if (ch != null){

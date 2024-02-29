@@ -106,6 +106,7 @@ abstract public class Weapon extends KindOfWeapon {
 	}
 	
 	public Augment augment = Augment.NONE;
+	protected int rank;
 	
 	private static final int USES_TO_ID = 20;
 	private float usesLeftToID = USES_TO_ID;
@@ -152,6 +153,7 @@ abstract public class Weapon extends KindOfWeapon {
 	private static final String CURSE_INFUSION_BONUS = "curse_infusion_bonus";
 	private static final String MASTERY_POTION_BONUS = "mastery_potion_bonus";
 	private static final String AUGMENT	        = "augment";
+	private static final String RANK            = "rank";
 
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -163,6 +165,7 @@ abstract public class Weapon extends KindOfWeapon {
 		bundle.put( CURSE_INFUSION_BONUS, curseInfusionBonus );
 		bundle.put( MASTERY_POTION_BONUS, masteryPotionBonus );
 		bundle.put( AUGMENT, augment );
+		bundle.put( RANK, rank );
 	}
 	
 	@Override
@@ -176,6 +179,7 @@ abstract public class Weapon extends KindOfWeapon {
 		masteryPotionBonus = bundle.getBoolean( MASTERY_POTION_BONUS );
 
 		augment = bundle.getEnum(AUGMENT, Augment.class);
+		rank = bundle.getInt(RANK);
 	}
 	
 	@Override
@@ -240,7 +244,7 @@ abstract public class Weapon extends KindOfWeapon {
 			}
 		}
 		if (hasEnchant(Projecting.class, owner)){
-			return reach + Math.round(enchantment.procChanceMultiplier(owner));
+			return reach + Math.round(enchantment.procChanceMultiplier(this, owner));
 		} else {
 			return reach;
 		}
@@ -416,8 +420,12 @@ abstract public class Weapon extends KindOfWeapon {
 			return proc(wp, attacker, defender, damage);
 		}
 
-		protected float procChanceMultiplier( Char attacker ){
-			return genericProcChanceMultiplier( attacker );
+		protected float procChanceMultiplier(Weapon wep, Char attacker ){
+			float multiplier = genericProcChanceMultiplier(attacker);
+			if (wep instanceof SpiritBow && ((SpiritBow) wep).rank() == 3){
+				multiplier *= 2;
+			}
+			return multiplier;
 		}
 
 		public static float genericProcChanceMultiplier( Char attacker ){
