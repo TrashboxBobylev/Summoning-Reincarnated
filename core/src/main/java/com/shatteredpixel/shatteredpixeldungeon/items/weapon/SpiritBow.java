@@ -625,7 +625,7 @@ public class SpiritBow extends Weapon implements Rankable {
 
 					targets.add(enemy);
 
-					ConeAOE cone = new ConeAOE(b, 50);
+					ConeAOE cone = new ConeAOE(b, 65);
 					for (Ballistica ray : cone.rays){
 						Char toAdd = SpectralBlades.findChar(ray, curUser, 0, targets);
 						if (toAdd != null && curUser.fieldOfView[toAdd.pos]){
