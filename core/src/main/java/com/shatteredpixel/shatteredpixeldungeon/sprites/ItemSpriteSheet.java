@@ -878,7 +878,12 @@ public class ItemSpriteSheet {
 			assignIconRect( RING_WEALTH,        7, 6 );
 		}
 
-		                                                                                //16 free slots
+		private static final int BEHAVIORS =                                 xy(1, 2);
+
+		public static final int BEHAVIOR_REACT  = BEHAVIORS+0;
+		public static final int BEHAVIOR_DEFEND = BEHAVIORS+1;
+		public static final int BEHAVIOR_ATTACK = BEHAVIORS+2;
+		public static final int BEHAVIOR_PASSIVE= BEHAVIORS+3;
 
 		private static final int SCROLLS        =                            xy(1, 3);  //16 slots
 		public static final int SCROLL_UPGRADE  = SCROLLS+0;
