@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.ui;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.items.AttunementItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
@@ -53,6 +54,9 @@ public class ItemSlot extends Button {
 	public static final int RANK1      = 0xFF7B00;
 	public static final int RANK2      = 0x57AEFF;
 	public static final int RANK3      = 0x2FED2F;
+	public static final int DEGRADED_ATU	= 0x9C3B8D;
+	public static final int WARNING_ATU		= 0x3239A1;
+	public static final int NORMAL_ATU		= 0x2E4CE6;
 	
 	private static final float ENABLED	= 1.0f;
 	private static final float DISABLED	= 0.3f;
@@ -68,6 +72,9 @@ public class ItemSlot extends Button {
 	
 	private static final String TXT_STRENGTH	= ":%d";
 	private static final String TXT_TYPICAL_STR	= "%d?";
+
+	private static final String TXT_ATTUNEMENT	= "#%d";
+	private static final String TXT_TYPICAL_ATU	= "%d?";
 
 	private static final String TXT_LEVEL	= "%+d";
 
@@ -147,8 +154,13 @@ public class ItemSlot extends Button {
 		}
 		
 		if (extra != null) {
-			extra.x = x + (width - extra.width()) - margin.right;
-			extra.y = y + margin.top;
+			if (itemIcon != null){
+				extra.x = x + margin.left;
+				extra.y = y + (height - extra.baseLine() - 1) - margin.bottom;
+			} else {
+				extra.x = x + (width - extra.width()) - margin.right;
+				extra.y = y + margin.top;
+			}
 			PixelScene.align(extra);
 
 			if ((status.width() + extra.width()) > width){
@@ -267,6 +279,23 @@ public class ItemSlot extends Button {
 				int str = item instanceof Weapon ? ((Weapon)item).STRReq(0) : ((Armor)item).STRReq(0);
 				extra.text( Messages.format( TXT_TYPICAL_STR, str ) );
 				extra.hardlight( WARNING );
+			}
+			extra.measure();
+
+		} else if (item instanceof AttunementItem) {
+
+			if (item.levelKnown){
+				int atu = ((AttunementItem) item).ATUReq();
+				extra.text( Messages.format( TXT_ATTUNEMENT, atu ) );
+				if (atu > Dungeon.hero.ATU()) {
+					extra.hardlight( DEGRADED_ATU );
+				} else {
+					extra.hardlight( NORMAL_ATU );
+				}
+			} else {
+				int atu = ((AttunementItem) item).ATUReq(0);
+				extra.text( Messages.format( TXT_TYPICAL_ATU, atu ) );
+				extra.hardlight( WARNING_ATU );
 			}
 			extra.measure();
 
