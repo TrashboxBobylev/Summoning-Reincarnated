@@ -494,6 +494,10 @@ public class Item implements Bundlable {
 	public int image() {
 		return image;
 	}
+
+	public int icon() {
+		return icon;
+	}
 	
 	public ItemSprite.Glowing glowing() {
 		return null;
