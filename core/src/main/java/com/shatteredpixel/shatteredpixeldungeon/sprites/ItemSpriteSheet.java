@@ -885,6 +885,12 @@ public class ItemSpriteSheet {
 		public static final int BEHAVIOR_ATTACK = BEHAVIORS+2;
 		public static final int BEHAVIOR_PASSIVE= BEHAVIORS+3;
 
+		static {
+			for (int i = BEHAVIORS; i < BEHAVIORS+16; i++){
+				assignIconRect(i, 5, 5);
+			}
+		}
+
 		private static final int SCROLLS        =                            xy(1, 3);  //16 slots
 		public static final int SCROLL_UPGRADE  = SCROLLS+0;
 		public static final int SCROLL_IDENTIFY = SCROLLS+1;
