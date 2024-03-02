@@ -282,7 +282,12 @@ public class ItemSlot extends Button {
 			}
 			extra.measure();
 
-		} else if (item instanceof AttunementItem) {
+		} else {
+
+			extra.text( null );
+
+		}
+		if (item instanceof AttunementItem) {
 
 			if (item.levelKnown){
 				int atu = ((AttunementItem) item).ATUReq();
@@ -298,10 +303,6 @@ public class ItemSlot extends Button {
 				extra.hardlight( WARNING_ATU );
 			}
 			extra.measure();
-
-		} else {
-
-			extra.text( null );
 
 		}
 
