@@ -464,7 +464,7 @@ public abstract class Mob extends Char {
 				for (Mob mob : Dungeon.level.mobs)
 					if (mob.alignment == Alignment.ALLY && canSee(mob.pos) && mob.invisible <= 0) {
 						//we are neutral to minions, unless they are attacking everything
-						if (!(mob instanceof Minion) || (((Minion) mob).behaviorType == Minion.BehaviorType.AGGRESSIVE) || buff(Minion.TargetBuff.class) != null)
+						if (!(mob instanceof Minion) || (((Minion) mob).behaviorType == Minion.BehaviorType.AGGRESSIVE) || buff(((Minion) mob).behaviorType.buffType) != null)
 							enemies.add(mob);
 					}
 
