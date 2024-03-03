@@ -22,12 +22,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.items;
+package com.shatteredpixel.shatteredpixeldungeon.items.staffs;
 
-import com.watabou.utils.Bundle;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Froggit;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
-public interface AttunementItem {
-    public int ATUReq();
+public class FroggitStaff extends Staff {
+    {
+        image = ItemSpriteSheet.FROGGIT_STAFF;
+        minionType = Froggit.class;
+        tier = 1;
+        table = new BalanceTable(
+                15, 3, 8,
+                20, 4, 9,
+                25, 6, 11);
 
-    public int ATUReq(int lvl);
+        unique = true;
+    }
 }

@@ -22,12 +22,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.items;
+package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions;
 
-import com.watabou.utils.Bundle;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.FroggitSprite;
 
-public interface AttunementItem {
-    public int ATUReq();
-
-    public int ATUReq(int lvl);
+public class Froggit extends Minion {
+    {
+        spriteClass = FroggitSprite.class;
+    }
 }

@@ -24,11 +24,19 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScaleArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
@@ -38,18 +46,28 @@ public class Minion extends Mob {
         alignment = Alignment.ALLY;
         intelligentAlly = true;
 
+        actPriority = MOB_PRIO + 1;
+
+        WANDERING = new Wandering();
+        state = WANDERING;
+
         immunities.add(AllyBuff.class);
     }
 
+    public int minDamage = 0;
+    public int maxDamage = 0;
     public Weapon.Enchantment enchantment;
     public Weapon.Augment augment = Weapon.Augment.NONE;
     public int rank;
     public int attunement;
     public BehaviorType behaviorType;
+    private Staff staff = null;
 
     private static final String RANK	= "rank";
     private static final String ATTUNEMENT = "attunement";
     private static final String ENCHANTMENT	= "enchantment";
+    private static final String MIN_DAMAGE = "minDamage";
+    private static final String MAX_DAMAGE = "maxDamage";
     private static final String AUGMENT = "augment";
     private static final String BEHAVIOR_TYPE = "behaviorType";
 
@@ -59,6 +77,9 @@ public class Minion extends Mob {
 
         bundle.put(RANK, rank);
         bundle.put(ATTUNEMENT, attunement);
+
+        bundle.put(MIN_DAMAGE, minDamage);
+        bundle.put(MAX_DAMAGE, maxDamage);
 
         bundle.put(ENCHANTMENT, enchantment);
         bundle.put(AUGMENT, augment);
@@ -73,10 +94,70 @@ public class Minion extends Mob {
         rank = bundle.getInt(RANK);
         attunement = bundle.getInt(ATTUNEMENT);
 
+        minDamage = bundle.getInt(MIN_DAMAGE);
+        maxDamage = bundle.getInt(MAX_DAMAGE);
+
         enchantment = (Weapon.Enchantment) bundle.get(ENCHANTMENT);
         augment = bundle.getEnum(AUGMENT, Weapon.Augment.class);
 
         behaviorType = bundle.getEnum(BEHAVIOR_TYPE, BehaviorType.class);
+    }
+
+    Minion(){} //for inheriting
+
+    public void init(Staff staff){
+        this.staff = staff;
+        updateStaff();
+        HP = HT;
+    }
+
+    private void updateStaff(){
+        if (staff == null){
+            for (Staff neededStaff: Dungeon.hero.belongings.getAllItems(Staff.class)){
+                if (neededStaff.getMinionID() == id()){
+                    staff = neededStaff;
+                }
+            }
+        }
+
+        defenseSkill = (Dungeon.hero.lvl+4);
+        if (staff == null) return;
+        HT = staff.hp(rank);
+        HP = Math.min(HP, HT);
+    }
+
+    @Override
+    protected boolean act() {
+        updateStaff();
+        if (staff == null
+                || !Dungeon.hero.belongings.contains(staff)
+                || Dungeon.hero.buff(MagicImmune.class) != null){
+            damage(1, new DriedRose.GhostHero.NoRoseDamage());
+        }
+
+        if (!isAlive()) {
+            return true;
+        }
+        return super.act();
+    }
+
+    public void setMaxHP(int hp){
+        HP = HT = hp;
+    }
+
+    public void setAttunement(int atu){
+        attunement = atu;
+    }
+
+    public void setDamage(int min, int max){
+        minDamage = min;
+        maxDamage = max;
+    }
+
+    @Override
+    public int damageRoll() {
+        int i = Random.NormalIntRange(minDamage, maxDamage);
+        return augment.damageFactor(i);
     }
 
     public int independenceRange(){
@@ -106,6 +187,20 @@ public class Minion extends Mob {
     }
 
     @Override
+    public int attackSkill(Char target) {
+
+        int encumbrance = attunement - Dungeon.hero.ATU();
+
+        float accuracy = 1;
+
+        if (encumbrance > 0){
+            accuracy /= Math.pow(1.5f, encumbrance);
+        }
+
+        return (int) (Dungeon.hero.attackSkill(target) * accuracy);
+    }
+
+    @Override
     public int attackProc(Char enemy, int damage) {
         if (enchantment != null && buff(MagicImmune.class) == null) {
             damage = enchantment.proc(  this, enemy, damage );
@@ -120,8 +215,24 @@ public class Minion extends Mob {
     }
 
     @Override
+    public int defenseSkill(Char enemy) {
+        return Math.round(Dungeon.hero.defenseSkill(enemy) / augment.delayFactor(1f));
+    }
+
+    @Override
     public String name() {
         return enchantment != null ? enchantment.name( super.name() ) : super.name();
+    }
+
+    @Override
+    public String description() {
+        String d = super.description();
+        float empowering = 1f;
+//        if (Dungeon.hero.buff(Attunement.class) != null) empowering = Attunement.empowering();
+        return String.format("%s\n\n%s\n\n%s", d, Messages.get(Minion.class, "stats",
+                augment.damageFactor(Math.round(minDamage * empowering)),
+                augment.damageFactor(Math.round(maxDamage * empowering)),
+                HP, HT), Messages.get(Minion.class, "behavior_" + Messages.lowerCase(behaviorType.toString())));
     }
 
     public static Char whatToFollow(Char follower, Char start) {
@@ -141,6 +252,24 @@ public class Minion extends Mob {
         return toFollow;
     }
 
+    @Override
+    public void damage(int dmg, Object src) {
+        super.damage(dmg, src);
+        Item.updateQuickslot();
+    }
+
+    @Override
+    public float speed() {
+        return 1f / augment.delayFactor(Dungeon.hero.speed());
+    }
+
+    @Override
+    public void die(Object cause) {
+        sprite.emitter().burst(MagicMissile.WhiteParticle.FACTORY, 15);
+        Item.updateQuickslot();
+        super.die(cause);
+    }
+
     public void onLeaving(){}
 
     @Override
@@ -149,16 +278,22 @@ public class Minion extends Mob {
     }
 
     public enum BehaviorType {
-        REACTIVE(ReactiveTargeting.class), PROTECTIVE(ProtectiveTargeting.class), AGGRESSIVE, PASSIVE;
+        REACTIVE(ItemSpriteSheet.Icons.BEHAVIOR_REACT, ReactiveTargeting.class),
+        PROTECTIVE(ItemSpriteSheet.Icons.BEHAVIOR_DEFEND, ProtectiveTargeting.class),
+        AGGRESSIVE(ItemSpriteSheet.Icons.BEHAVIOR_ATTACK),
+        PASSIVE(ItemSpriteSheet.Icons.BEHAVIOR_PASSIVE);
 
         public final Class<? extends TargetBuff> buffType;
+        public int icon;
 
-        BehaviorType(){
+        BehaviorType(int icon){
             buffType = null;
+            this.icon = icon;
         }
 
-        BehaviorType(Class<? extends TargetBuff> type){
+        BehaviorType(int icon, Class<? extends TargetBuff> type){
             buffType = type;
+            this.icon = icon;
         }
     }
 
