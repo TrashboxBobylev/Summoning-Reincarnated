@@ -27,10 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.staffs;
 import com.shatteredpixel.shatteredpixeldungeon.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -44,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.Guidebook;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -459,6 +457,25 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
             if (curCharges < 1 && (minion == null || !minion.isAlive()))
                 recharge();
 
+            if (minion != null && minion.isAlive() && minion.behaviorType == Minion.BehaviorType.PASSIVE && target.buff(MagicImmune.class) == null){
+                if (minion.HP < minion.HT && Regeneration.regenOn()) {
+                    partialCharge += ((float) minion.HT / getChargeTurns());
+                    updateQuickslot();
+
+                    if (partialCharge > 1) {
+                        minion.HP++;
+                        partialCharge--;
+                        updateQuickslot();
+                    }
+                } else {
+                    partialCharge = 0;
+                }
+
+                spend( TICK );
+
+                return true;
+            }
+
             while (partialCharge >= 1 && curCharges < 1) {
                 partialCharge--;
                 curCharges++;
@@ -477,8 +494,7 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
 
             float mod = 1f;
 
-            LockedFloor lock = target.buff(LockedFloor.class);
-            if (lock == null || lock.regenOn())
+            if (Regeneration.regenOn())
                 partialCharge += (1f / getChargeTurns()) * mod;
             updateQuickslot();
 
