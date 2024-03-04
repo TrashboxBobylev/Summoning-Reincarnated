@@ -69,6 +69,7 @@ public class Speck extends Image {
 	public static final int INFERNO     = 118;
 	public static final int BLIZZARD    = 119;
 	public static final int HEALGAS     = 120;
+	public static final int HONEY       = 121;
 	
 	private static final int SIZE = 7;
 	
@@ -137,6 +138,7 @@ public class Speck extends Image {
 		case BLIZZARD:
 		case INFERNO:
 		case HEALGAS:
+		case HONEY:
 			frame( film.get( STEAM ) );
 			break;
 		case CALM:
@@ -365,6 +367,13 @@ public class Speck extends Image {
 			angle = Random.Float( 360 );
 			lifespan = Random.Float( 1f, 4f );
 			break;
+
+		case HONEY:
+			hardlight(0xF1E30F);
+			angularSpeed = 30;
+			angle = Random.Float( 360 );
+			lifespan = Random.Float( 3f, 8f );
+			break;
 			
 		case SMOKE:
 			hardlight( 0x000000 );
@@ -487,6 +496,7 @@ public class Speck extends Image {
 			case INFERNO:
 			case DUST:
 			case HEALGAS:
+			case HONEY:
 				am = (float)Math.sqrt( (p < 0.5f ? p : 1 - p) * 0.5f );
 				scale.set( 1 + p );
 				break;

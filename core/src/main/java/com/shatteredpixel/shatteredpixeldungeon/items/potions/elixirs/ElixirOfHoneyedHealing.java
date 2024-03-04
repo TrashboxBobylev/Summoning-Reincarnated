@@ -25,6 +25,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.HoneyGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -32,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bee;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
 
@@ -55,11 +58,12 @@ public class ElixirOfHoneyedHealing extends Elixir {
 		if (Dungeon.level.heroFOV[cell]) {
 			Sample.INSTANCE.play( Assets.Sounds.SHATTER );
 		}
+
+		GameScene.add( Blob.seed( cell, 240, HoneyGas.class ) );
 		
 		Char ch = Actor.findChar(cell);
 		if (ch != null){
 			PotionOfHealing.cure(ch);
-			PotionOfHealing.heal(ch);
 			if (ch instanceof Bee && ch.alignment != curUser.alignment){
 				ch.alignment = Char.Alignment.ALLY;
 				((Bee)ch).setPotInfo(-1, null);
