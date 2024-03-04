@@ -331,23 +331,28 @@ public abstract class Mob extends Char {
 		return false;
 	}
 
-	protected Char chooseClosest(HashSet<Char> enemies){
+	protected float modifyPriority(float priority){
+		return priority;
+	}
+
+	protected Char chooseClosest(HashMap<Char, Float> enemies){
 		//go after the closest potential enemy, preferring enemies that can be reached/attacked, and the hero if two are equidistant
 		PathFinder.buildDistanceMap(pos, Dungeon.findPassable(this, Dungeon.level.passable, fieldOfView, true));
-		Char closest = null;
 
-		for (Char curr : enemies){
-			if (closest == null){
-				closest = curr;
-			} else if (canAttack(closest) && !canAttack(curr)){
-				continue;
-			} else if ((canAttack(curr) && !canAttack(closest))
-					|| ((PathFinder.distance[curr.pos] / curr.targetPriority()) < (PathFinder.distance[closest.pos] / closest.targetPriority()))){
-				closest = curr;
-			}
+		for (Char ch : enemies.keySet()){
+			float priority = (float)PathFinder.distance[ch.pos];
+			if (canAttack(ch)) priority += 6.0f;
+			enemies.put(ch, modifyPriority(priority) * enemies.get(ch));
 		}
 
-		return closest;
+		float max = Collections.max(enemies.values());
+
+		for (Char ch: enemies.keySet()){
+			if (Float.compare(enemies.get(ch), max) < 0)
+				enemies.remove(ch);
+		}
+
+        return Random.element(enemies.keySet());
 	}
 	
 	protected Char chooseEnemy() {
@@ -416,7 +421,7 @@ public abstract class Mob extends Char {
 
 		if ( newEnemy ) {
 
-			HashSet<Char> enemies = new HashSet<>();
+			HashMap<Char, Float> enemies = new HashMap<>();
 
 			//if we are amoked...
 			if ( buff(Amok.class) != null) {
@@ -424,7 +429,7 @@ public abstract class Mob extends Char {
 				for (Mob mob : Dungeon.level.mobs)
 					if (mob.alignment == Alignment.ENEMY && mob != this
 							&& canSee(mob.pos) && mob.invisible <= 0 && !canBeIgnored(mob)) {
-						enemies.add(mob);
+						enemies.put(mob, mob.targetPriority());
 					}
 				
 				if (enemies.isEmpty()) {
@@ -432,13 +437,13 @@ public abstract class Mob extends Char {
 					for (Mob mob : Dungeon.level.mobs)
 						if (mob.alignment == Alignment.ALLY && mob != this
 								&& canSee(mob.pos) && mob.invisible <= 0 && !canBeIgnored(mob)) {
-							enemies.add(mob);
+							enemies.put(mob, mob.targetPriority());
 						}
 					
 					if (enemies.isEmpty()) {
 						//try to find the hero third
 						if (canSee(Dungeon.hero.pos) && Dungeon.hero.invisible <= 0) {
-							enemies.add(Dungeon.hero);
+							enemies.put(Dungeon.hero, Dungeon.hero.targetPriority());
 						}
 					}
 				}
@@ -455,7 +460,7 @@ public abstract class Mob extends Char {
 						if (mob.state != mob.PASSIVE &&
 								(!intelligentAlly || (mob.state != mob.SLEEPING && mob.state != mob.WANDERING)
 										|| !(this instanceof Minion && ((Minion) this).behaviorType == Minion.BehaviorType.AGGRESSIVE))) {
-							enemies.add(mob);
+							enemies.put(mob, mob.targetPriority());
 						}
 				
 			//if we are an enemy...
@@ -465,12 +470,12 @@ public abstract class Mob extends Char {
 					if (mob.alignment == Alignment.ALLY && canSee(mob.pos) && mob.invisible <= 0) {
 						//we are neutral to minions, unless they are attacking everything
 						if (!(mob instanceof Minion) || (((Minion) mob).behaviorType == Minion.BehaviorType.AGGRESSIVE) || buff(((Minion) mob).behaviorType.buffType) != null)
-							enemies.add(mob);
+							enemies.put(mob, mob.targetPriority());
 					}
 
 				//and look for the hero
 				if (canSee(Dungeon.hero.pos) && Dungeon.hero.invisible <= 0) {
-					enemies.add(Dungeon.hero);
+					enemies.put(Dungeon.hero, Dungeon.hero.targetPriority());
 				}
 				
 			}
@@ -479,7 +484,7 @@ public abstract class Mob extends Char {
 			Charm charm = buff( Charm.class );
 			if (charm != null){
 				Char source = (Char)Actor.findById( charm.object );
-				if (source != null && enemies.contains(source) && enemies.size() > 1){
+				if (source != null && enemies.containsKey(source) && enemies.size() > 1){
 					enemies.remove(source);
 				}
 			}
