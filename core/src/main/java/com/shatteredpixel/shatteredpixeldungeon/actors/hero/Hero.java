@@ -899,7 +899,7 @@ public class Hero extends Char {
 
 		if (getCloser( action.dst )) {
 			canSelfTrample = false;
-			Hunger.adjustHunger(-1.33f/speed());
+			Hunger.adjustHunger(-1.25f/speed());
 			return true;
 
 		//Hero moves in place if there is grass to trample
@@ -907,7 +907,7 @@ public class Hero extends Char {
 			canSelfTrample = false;
 			Dungeon.level.pressCell(pos);
 			spendAndNext( 1 / speed() );
-			Hunger.adjustHunger(-1.33f/speed());
+			Hunger.adjustHunger(-1.25f/speed());
 			return false;
 		} else {
 			ready();
@@ -1301,7 +1301,7 @@ public class Hero extends Char {
 
 			if (Dungeon.level.activateTransition(this, transition)){
 				curAction = null;
-				Hunger.adjustHunger(-30/speed());
+				Hunger.adjustHunger(-25/speed());
 			} else {
 				ready();
 			}
@@ -2178,7 +2178,7 @@ public class Hero extends Char {
 			Item.updateQuickslot();
 		}
 
-		Hunger.adjustHunger(-3.75f*attackDelay());
+		Hunger.adjustHunger(-3f*attackDelay());
 
 		curAction = null;
 
@@ -2219,7 +2219,7 @@ public class Hero extends Char {
 					GameScene.updateKeyDisplay();
 					GameScene.updateMap(doorCell);
 					spend(Key.TIME_TO_UNLOCK);
-					Hunger.adjustHunger(-3.75f);
+					Hunger.adjustHunger(-5f);
 				}
 			}
 			
@@ -2241,7 +2241,7 @@ public class Hero extends Char {
 					GameScene.updateKeyDisplay();
 					heap.open(this);
 					spend(Key.TIME_TO_UNLOCK);
-					Hunger.adjustHunger(-3.75f);
+					Hunger.adjustHunger(-5f);
 				}
 			}
 			

@@ -649,7 +649,7 @@ public class SpiritBow extends Weapon implements Rankable {
 
 					final HashSet<Callback> callbacks = new HashSet<>();
 					final float delay = castDelay(curUser, enemy.pos);
-					Hunger.adjustHunger(-3*delay);
+					Hunger.adjustHunger(-2.5f*delay);
 
 					for (Char ch : targets) {
 						Callback callback = new Callback() {

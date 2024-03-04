@@ -132,11 +132,11 @@ abstract public class KindOfWeapon extends EquipableItem {
 					GLog.i(Messages.get(this, "swift_equip"));
 				} else {
 					hero.spendAndNext(TIME_TO_EQUIP);
-					Hunger.adjustHunger(-17);
+					Hunger.adjustHunger(-15);
 				}
 			} else {
 				hero.spendAndNext(TIME_TO_EQUIP);
-				Hunger.adjustHunger(-17);
+				Hunger.adjustHunger(-15);
 			}
 			return true;
 			
@@ -178,11 +178,11 @@ abstract public class KindOfWeapon extends EquipableItem {
 					GLog.i(Messages.get(this, "swift_equip"));
 				} else {
 					hero.spendAndNext(TIME_TO_EQUIP);
-					Hunger.adjustHunger(-17);
+					Hunger.adjustHunger(-15);
 				}
 			} else {
 				hero.spendAndNext(TIME_TO_EQUIP);
-				Hunger.adjustHunger(-17);
+				Hunger.adjustHunger(-15);
 			}
 			return true;
 
@@ -206,7 +206,7 @@ abstract public class KindOfWeapon extends EquipableItem {
 
 			if (!second){
 				hero.belongings.weapon = null;
-				Hunger.adjustHunger(-17);
+				Hunger.adjustHunger(-15);
 			}
 			return true;
 
@@ -214,7 +214,7 @@ abstract public class KindOfWeapon extends EquipableItem {
 
 			if (second){
 				hero.belongings.secondWep = this;
-				Hunger.adjustHunger(-17);
+				Hunger.adjustHunger(-15);
 			}
 			return false;
 

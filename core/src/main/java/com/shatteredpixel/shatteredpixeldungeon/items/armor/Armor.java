@@ -220,7 +220,7 @@ public class Armor extends EquipableItem {
 			activate(hero);
 			Talent.onItemEquipped(hero, this);
 			hero.spendAndNext( time2equip( hero ) );
-			Hunger.adjustHunger(-17);
+			Hunger.adjustHunger(-15);
 			return true;
 			
 		} else {
@@ -270,7 +270,7 @@ public class Armor extends EquipableItem {
 
 			BrokenSeal.WarriorShield sealBuff = hero.buff(BrokenSeal.WarriorShield.class);
 			if (sealBuff != null) sealBuff.setArmor(null);
-			Hunger.adjustHunger(-17);
+			Hunger.adjustHunger(-15);
 
 			return true;
 
