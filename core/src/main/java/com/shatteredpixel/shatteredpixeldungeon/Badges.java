@@ -82,6 +82,7 @@ public class Badges {
 		DEATH_FROM_FALLING          ( 20 ),
 		GAMES_PLAYED_1              ( 21, true ),
 		HIGH_SCORE_1                ( 22 ),
+		ATTUNEMENT_ATTAINED_1       ( 23 ),
 
 		//silver
 		NO_MONSTERS_SLAIN           ( 32 ),
@@ -116,6 +117,8 @@ public class Badges {
 		BOSS_SLAIN_1_ALL_CLASSES    ( 55, true ),
 		GAMES_PLAYED_2              ( 56, true ),
 		HIGH_SCORE_2                ( 57 ),
+		ATTUNEMENT_ATTAINED_2       ( 58 ),
+		ATTUNEMENT_ATTAINED_3       ( 59 ),
 
 		//gold
 		PIRANHAS                    ( 64 ),
@@ -145,6 +148,8 @@ public class Badges {
 		BOSS_CHALLENGE_2            ( 84 ),
 		GAMES_PLAYED_3              ( 85, true ),
 		HIGH_SCORE_3                ( 86 ),
+		ATTUNEMENT_ATTAINED_4       ( 87 ),
+		ATTUNEMENT_ATTAINED_5       ( 88 ),
 
 		//platinum
 		ITEM_LEVEL_5                ( 96 ),
@@ -439,6 +444,37 @@ public class Badges {
 			local.add( badge );
 		}
 		
+		displayBadge( badge );
+	}
+
+	public static void validateAttunementAttained() {
+		Badge badge = null;
+
+		if (!local.contains( Badge.ATTUNEMENT_ATTAINED_1 ) && Dungeon.hero.ATU >= 2) {
+			badge = Badge.ATTUNEMENT_ATTAINED_1;
+			local.add( badge );
+		}
+		if (!local.contains( Badge.ATTUNEMENT_ATTAINED_2 ) && Dungeon.hero.ATU >= 3) {
+			if (badge != null) unlock(badge);
+			badge = Badge.ATTUNEMENT_ATTAINED_2;
+			local.add( badge );
+		}
+		if (!local.contains( Badge.ATTUNEMENT_ATTAINED_3 ) && Dungeon.hero.ATU >= 4) {
+			if (badge != null) unlock(badge);
+			badge = Badge.ATTUNEMENT_ATTAINED_3;
+			local.add( badge );
+		}
+		if (!local.contains( Badge.ATTUNEMENT_ATTAINED_4 ) && Dungeon.hero.ATU >= 5) {
+			if (badge != null) unlock(badge);
+			badge = Badge.ATTUNEMENT_ATTAINED_4;
+			local.add( badge );
+		}
+		if (!local.contains( Badge.ATTUNEMENT_ATTAINED_5 ) && Dungeon.hero.ATU >= 6) {
+			if (badge != null) unlock(badge);
+			badge = Badge.ATTUNEMENT_ATTAINED_5;
+			local.add( badge );
+		}
+
 		displayBadge( badge );
 	}
 	
@@ -1113,6 +1149,7 @@ public class Badges {
 			{Badge.ITEM_LEVEL_1, Badge.ITEM_LEVEL_2, Badge.ITEM_LEVEL_3, Badge.ITEM_LEVEL_4, Badge.ITEM_LEVEL_5},
 			{Badge.LEVEL_REACHED_1, Badge.LEVEL_REACHED_2, Badge.LEVEL_REACHED_3, Badge.LEVEL_REACHED_4, Badge.LEVEL_REACHED_5},
 			{Badge.STRENGTH_ATTAINED_1, Badge.STRENGTH_ATTAINED_2, Badge.STRENGTH_ATTAINED_3, Badge.STRENGTH_ATTAINED_4, Badge.STRENGTH_ATTAINED_5},
+			{Badge.ATTUNEMENT_ATTAINED_1, Badge.ATTUNEMENT_ATTAINED_2, Badge.ATTUNEMENT_ATTAINED_3, Badge.ATTUNEMENT_ATTAINED_4, Badge.ATTUNEMENT_ATTAINED_5},
 			{Badge.FOOD_EATEN_1, Badge.FOOD_EATEN_2, Badge.FOOD_EATEN_3, Badge.FOOD_EATEN_4, Badge.FOOD_EATEN_5},
 			{Badge.ITEMS_CRAFTED_1, Badge.ITEMS_CRAFTED_2, Badge.ITEMS_CRAFTED_3, Badge.ITEMS_CRAFTED_4, Badge.ITEMS_CRAFTED_5},
 			{Badge.BOSS_SLAIN_1, Badge.BOSS_SLAIN_2, Badge.BOSS_SLAIN_3, Badge.BOSS_SLAIN_4},

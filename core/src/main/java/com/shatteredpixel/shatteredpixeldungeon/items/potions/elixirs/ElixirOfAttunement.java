@@ -53,7 +53,7 @@ public class ElixirOfAttunement extends Elixir {
 
 		GLog.p( Messages.get(this, "msg", hero.ATU()) );
 
-//		Badges.validateStrengthAttained();
+		Badges.validateAttunementAttained();
 //		Badges.validateDuelistUnlock();
 	}
 	
