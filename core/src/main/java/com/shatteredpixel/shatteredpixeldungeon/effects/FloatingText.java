@@ -72,6 +72,7 @@ public class FloatingText extends RenderedTextBlock {
 	public static int SHIELDING = 19;
 	public static int EXPERIENCE= 20;
 	public static int STRENGTH  = 21;
+	public static int ATTUNEMENT= 22;
 
 	//currency icons
 	public static int GOLD      = 23;

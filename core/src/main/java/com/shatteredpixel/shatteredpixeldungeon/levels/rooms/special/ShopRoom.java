@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SmallRation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfAttunement;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
@@ -244,6 +245,8 @@ public class ShopRoom extends SpecialRoom {
 		itemsToSpawn.add( new Alchemize().quantity(Random.IntRange(2, 3)));
 
 		itemsToSpawn.add (new Ropes().quantity(Random.Int(3, 10)));
+
+		itemsToSpawn.add( new ElixirOfAttunement());
 
 		Bag bag = ChooseBag(Dungeon.hero.belongings);
 		if (bag != null) {
