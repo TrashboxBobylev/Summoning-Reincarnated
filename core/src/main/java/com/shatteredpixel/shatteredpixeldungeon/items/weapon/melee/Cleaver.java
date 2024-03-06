@@ -56,7 +56,7 @@ public class Cleaver extends MeleeWeapon {
     @Override
     public int proc(Char attacker, Char defender, int damage) {
         if (defender.HP >= defender.HT) {
-            attacker.sprite.emitter().burst( Speck.factory( Speck.STAR), 8 );
+            defender.sprite.emitter().burst( Speck.factory( Speck.STAR), 8 );
             damage *= 2;
         }
         return super.proc(attacker, defender, damage);
