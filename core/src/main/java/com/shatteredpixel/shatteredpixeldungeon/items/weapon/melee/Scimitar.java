@@ -26,8 +26,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.watabou.utils.Bundle;
 
 public class Scimitar extends MeleeWeapon {
 
@@ -41,9 +44,26 @@ public class Scimitar extends MeleeWeapon {
 	}
 
 	@Override
+	public int min(int lvl) {
+		return tier + lvl/2;
+	}
+
+	@Override
 	public int max(int lvl) {
-		return  4*(tier+1) +    //16 base, down from 20
-				lvl*(tier+1);   //scaling unchanged
+		return  5*(tier) +    //15 base, down from 20
+				lvl*(tier);   //+3 instead of +4
+	}
+
+	@Override
+	public int proc(Char attacker, Char defender, int damage) {
+		if (++strikes == 3) {
+			damage *= 2;
+			defender.sprite.showStatus(CharSprite.WARNING, "crit!");
+			defender.sprite.emitter().burst( Speck.factory( Speck.STAR), 8 );
+			strikes = 0;
+		}
+
+		return super.proc(attacker, defender, damage);
 	}
 
 	@Override
@@ -76,6 +96,20 @@ public class Scimitar extends MeleeWeapon {
 		public float iconFadePercent() {
 			return Math.max(0, (5 - visualcooldown()) / 5);
 		}
+	}
+
+	public int strikes;
+
+	@Override
+	public void storeInBundle(Bundle bundle) {
+		super.storeInBundle(bundle);
+		bundle.put("strikes", strikes);
+	}
+
+	@Override
+	public void restoreFromBundle(Bundle bundle) {
+		super.restoreFromBundle(bundle);
+		strikes = bundle.getInt("strikes");
 	}
 
 }
