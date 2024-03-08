@@ -180,11 +180,21 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
         return tier;
     }
 
+    @Override
+    public int level() {
+        return Math.max(0, (Dungeon.hero == null ? 0 : Dungeon.hero.ATU()) - ATUReq());
+    }
+
+    @Override
+    public int visiblyUpgraded() {
+        return 0;
+    }
+
     public int hp(int lvl){
         switch (lvl) {
-            case 1: return table.hp1;
-            case 2: return table.hp2;
-            case 3: return table.hp3;
+            case 1: return table.hp1 + table.hpInc1 * level();
+            case 2: return table.hp2 + table.hpInc1 * level();
+            case 3: return table.hp3 + table.hpInc1 * level();
         }
         return 0;
     }
@@ -196,9 +206,9 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
     public int minionMin(int lvl) {
         int dmg = 0;
         switch (lvl) {
-            case 1: dmg = table.min1; break;
-            case 2: dmg = table.min2; break;
-            case 3: dmg = table.min3; break;
+            case 1: dmg = table.min1 + table.minInc1 * level(); break;
+            case 2: dmg = table.min2 + table.minInc2 * level(); break;
+            case 3: dmg = table.min3 + table.minInc3 * level(); break;
         }
         if (Dungeon.isChallenged(Conducts.Conduct.PACIFIST)) dmg /= 3;
         return dmg;
@@ -211,9 +221,9 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
     public int minionMax(int lvl) {
         int dmg = 0;
         switch (lvl) {
-            case 1: dmg = table.max1; break;
-            case 2: dmg = table.max2; break;
-            case 3: dmg = table.max3; break;
+            case 1: dmg = table.max1 + table.maxInc1 * level(); break;
+            case 2: dmg = table.max2 + table.maxInc2 * level(); break;
+            case 3: dmg = table.max3 + table.maxInc3 * level(); break;
         }
         if (Dungeon.isChallenged(Conducts.Conduct.PACIFIST)) dmg /= 3;
         return dmg;
@@ -521,16 +531,24 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
     }
 
     public static class BalanceTable {
-        int min1; int min2; int min3;
-        int max1; int max2; int max3;
-        int hp1; int hp2; int hp3;
+        int min1; int min2; int min3; int minInc1; int minInc2; int minInc3;
+        int max1; int max2; int max3; int maxInc1; int maxInc2; int maxInc3;
+        int hp1; int hp2; int hp3; int hpInc1; int hpInc2; int hpInc3;
+
+        BalanceTable(int hp1, int hpInc1, int min1, int minInc1, int max1, int maxInc1,
+                     int hp2, int hpInc2, int min2, int minInc2, int max2, int maxInc2,
+                     int hp3, int hpInc3, int min3, int minInc3, int max3, int maxInc3){
+            this.hp1 = hp1; this.hpInc1 = hpInc1; this.min1 = min1; this.max1 = max1; this.minInc1 = minInc1; this.maxInc1 = maxInc1;
+            this.hp2 = hp2; this.hpInc2 = hpInc2; this.min2 = min2; this.max2 = max2; this.minInc2 = minInc2; this.maxInc2 = maxInc2;
+            this.hp3 = hp3; this.hpInc3 = hpInc3; this.min3 = min3; this.max3 = max3; this.minInc3 = minInc3; this.maxInc3 = maxInc3;
+        }
 
         BalanceTable(int hp1, int min1, int max1,
-                                int hp2, int min2, int max2,
-                                int hp3, int min3, int max3){
-            this.hp1 = hp1; this.min1 = min1; this.max1 = max1;
-            this.hp2 = hp2; this.min2 = min2; this.max2 = max2;
-            this.hp3 = hp3; this.min3 = min3; this.max3 = max3;
+                     int hp2, int min2, int max2,
+                     int hp3, int min3, int max3){
+            this.hp1 = hp1; this.hpInc1 = hp1 / 3; this.min1 = min1; this.max1 = max1; this.minInc1 = min1 / 3; this.maxInc1 = max1 / 3;
+            this.hp2 = hp2; this.hpInc2 = hp2 / 3; this.min2 = min2; this.max2 = max2; this.minInc2 = min2 / 3; this.maxInc2 = max2 / 3;
+            this.hp3 = hp3; this.hpInc3 = hp3 / 3; this.min3 = min3; this.max3 = max3; this.minInc3 = min3 / 3; this.maxInc3 = max3 / 3;
         }
     }
 }
