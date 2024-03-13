@@ -29,6 +29,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.GrayRat;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.Guidebook;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
@@ -90,6 +93,14 @@ public class Hunger extends Buff implements Hero.Doom {
 //		if (Dungeon.hero.heroClass == HeroClass.WARRIOR && energy != -50 && energy < 0) energy *= 0.75f;
 		if (Dungeon.isChallenged(Conducts.Conduct.KING)) energy *= 3;
 		if (Dungeon.hero.hasTalent(Talent.MEAL_OF_POWER)) energy *= 1f - 0.2f * Dungeon.hero.pointsInTalent(Talent.MEAL_OF_POWER);
+
+		float ratMod = 1.0f;
+		for (Mob mob: Dungeon.level.mobs){
+			if (mob instanceof GrayRat && ((GrayRat) mob).rank == 2 && ((GrayRat) mob).behaviorType == Minion.BehaviorType.PASSIVE){
+				ratMod += 1.25f;
+			}
+		}
+		energy *= 1f / ratMod;
 		hunger.level = Math.max(hunger.level - energy, 0);
 		switchHungerLevel(energy, hunger, target);
 		BuffIndicator.refreshHero();
