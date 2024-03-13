@@ -393,7 +393,7 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
         } else {
             info += "\n\n" + Messages.get(Staff.class, "stats_unknown", tier, ATUReq(0), minionMin(0), minionMax(0), hp(0));
             if (ATUReq(0) > Dungeon.hero.ATU()) {
-                info += " " + Messages.get(AttunementItem.class, "probably_too_heavy");
+                info += "\n\n" + Messages.get(AttunementItem.class, "probably_too_heavy");
             }
         }
 
