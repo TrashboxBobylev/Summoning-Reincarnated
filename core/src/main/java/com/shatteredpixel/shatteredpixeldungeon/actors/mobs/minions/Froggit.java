@@ -29,5 +29,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.FroggitSprite;
 public class Froggit extends Minion {
     {
         spriteClass = FroggitSprite.class;
+        maxDefense = 1;
     }
 }
