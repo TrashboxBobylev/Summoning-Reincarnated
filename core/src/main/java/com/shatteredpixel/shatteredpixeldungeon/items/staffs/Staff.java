@@ -193,8 +193,8 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
     public int hp(int lvl){
         switch (lvl) {
             case 1: return table.hp1 + table.hpInc1 * level();
-            case 2: return table.hp2 + table.hpInc1 * level();
-            case 3: return table.hp3 + table.hpInc1 * level();
+            case 2: return table.hp2 + table.hpInc2 * level();
+            case 3: return table.hp3 + table.hpInc3 * level();
         }
         return 0;
     }
