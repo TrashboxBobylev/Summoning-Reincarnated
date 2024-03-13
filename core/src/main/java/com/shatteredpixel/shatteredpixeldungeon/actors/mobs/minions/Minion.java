@@ -62,6 +62,8 @@ public class Minion extends Mob {
     public int attunement;
     public BehaviorType behaviorType;
     private Staff staff = null;
+    public int minDefense;
+    public int maxDefense;
 
     private static final String RANK	= "rank";
     private static final String ATTUNEMENT = "attunement";
@@ -70,6 +72,8 @@ public class Minion extends Mob {
     private static final String MAX_DAMAGE = "maxDamage";
     private static final String AUGMENT = "augment";
     private static final String BEHAVIOR_TYPE = "behaviorType";
+    private static final String MIN_DEFENSE = "minDefense";
+    private static final String MAX_DEFENSE = "maxDefense";
 
     @Override
     public void storeInBundle(Bundle bundle) {
@@ -80,6 +84,9 @@ public class Minion extends Mob {
 
         bundle.put(MIN_DAMAGE, minDamage);
         bundle.put(MAX_DAMAGE, maxDamage);
+
+        bundle.put(MIN_DEFENSE, minDefense);
+        bundle.put(MAX_DEFENSE, maxDefense);
 
         bundle.put(ENCHANTMENT, enchantment);
         bundle.put(AUGMENT, augment);
@@ -96,6 +103,9 @@ public class Minion extends Mob {
 
         minDamage = bundle.getInt(MIN_DAMAGE);
         maxDamage = bundle.getInt(MAX_DAMAGE);
+
+        minDefense = bundle.getInt(MIN_DEFENSE);
+        maxDefense = bundle.getInt(MAX_DEFENSE);
 
         enchantment = (Weapon.Enchantment) bundle.get(ENCHANTMENT);
         augment = bundle.getEnum(AUGMENT, Weapon.Augment.class);
@@ -158,6 +168,13 @@ public class Minion extends Mob {
     public int damageRoll() {
         int i = Random.NormalIntRange(minDamage, maxDamage);
         return augment.damageFactor(i);
+    }
+
+    @Override
+    public int drRoll() {
+        int dr = Random.NormalIntRange(minDefense, maxDefense);
+
+        return super.drRoll() + dr;
     }
 
     public int independenceRange(){
