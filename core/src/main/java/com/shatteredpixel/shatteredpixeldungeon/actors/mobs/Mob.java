@@ -336,10 +336,11 @@ public abstract class Mob extends Char {
 	}
 
 	protected Char chooseClosest(HashMap<Char, Float> enemies){
+		ArrayList<Char> enemyList = new ArrayList<>(enemies.keySet());
 		//go after the closest potential enemy, preferring enemies that can be reached/attacked, and the hero if two are equidistant
 		PathFinder.buildDistanceMap(pos, Dungeon.findPassable(this, Dungeon.level.passable, fieldOfView, true));
 
-		for (Char ch : enemies.keySet()){
+		for (Char ch : enemyList){
 			float priority = (float)PathFinder.distance[ch.pos];
 			if (canAttack(ch)) priority += 6.0f;
 			enemies.put(ch, modifyPriority(priority) * enemies.get(ch));
@@ -347,12 +348,12 @@ public abstract class Mob extends Char {
 
 		float max = Collections.max(enemies.values());
 
-		for (Char ch: enemies.keySet()){
+		for (Char ch: enemyList){
 			if (Float.compare(enemies.get(ch), max) < 0)
 				enemies.remove(ch);
 		}
 
-        return Random.element(enemies.keySet());
+        return Random.element(enemyList);
 	}
 	
 	protected Char chooseEnemy() {
