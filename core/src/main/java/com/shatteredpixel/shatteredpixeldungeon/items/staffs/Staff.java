@@ -374,6 +374,11 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
         return chargeTurns;
     }
 
+    // same as charging, unless minion heals faster than staff charges up
+    public int getRegenerationTurns() {
+        return chargeTurns;
+    }
+
     @Override
     public String info() {
         String info = desc();
@@ -469,7 +474,7 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
 
             if (minion != null && minion.isAlive() && minion.behaviorType == Minion.BehaviorType.PASSIVE && target.buff(MagicImmune.class) == null){
                 if (minion.HP < minion.HT && Regeneration.regenOn()) {
-                    partialCharge += ((float) minion.HT / getChargeTurns());
+                    partialCharge += ((float) minion.HT / getRegenerationTurns());
                     updateQuickslot();
 
                     if (partialCharge > 1) {
