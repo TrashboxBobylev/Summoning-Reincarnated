@@ -435,6 +435,7 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
     private static final String CUR_CHARGES = "cur_changes";
     private static final String PARTIAL_CHARGE = "partial_change";
     private static final String MINION_ID = "minionID";
+    private static final String RANK = "rank";
 
 
     @Override
@@ -443,6 +444,7 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
         bundle.put(CUR_CHARGES, curCharges);
         bundle.put(PARTIAL_CHARGE, partialCharge);
         bundle.put(MINION_ID, minionID);
+        bundle.put(RANK, rank);
     }
 
     @Override
@@ -451,6 +453,7 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
         curCharges = bundle.getInt(CUR_CHARGES);
         partialCharge = bundle.getFloat(PARTIAL_CHARGE);
         minionID = bundle.getInt(MINION_ID);
+        rank = bundle.getInt(RANK);
     }
 
     public class Charger extends Buff {
