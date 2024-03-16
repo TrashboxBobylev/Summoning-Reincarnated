@@ -37,8 +37,24 @@ public class SheepStaff extends Staff {
         chargeTurns = 575;
         table = new BalanceTable(
                 55, 14, 0, 0, 1, 1,
-                45, 12, 0, 0, 0, 0,
-                65, 16, 0, 0, 2, 1);
+                45, 12, 0, 0, 1, 1,
+                93, 24, 0, 0, 1, 1);
+    }
+
+    @Override
+    public int getChargeTurns() {
+        if (rank() == 3){
+            return Math.round(super.getChargeTurns()*1.5f);
+        }
+        return super.getChargeTurns();
+    }
+
+    @Override
+    public int getRegenerationTurns() {
+        if (rank() == 3){
+            return Math.round(super.getRegenerationTurns()*1.5f);
+        }
+        return super.getRegenerationTurns();
     }
 
     @Override
@@ -51,7 +67,7 @@ public class SheepStaff extends Staff {
         switch (rank()){
             case 1: minion.minDefense = 2; minion.maxDefense = 6; break;
             case 2: minion.minDefense = 1; minion.maxDefense = 4; break;
-            case 3: minion.minDefense = 3; minion.maxDefense = 8; break;
+            case 3: minion.minDefense = 0; minion.maxDefense = 0; break;
         }
     }
 }
