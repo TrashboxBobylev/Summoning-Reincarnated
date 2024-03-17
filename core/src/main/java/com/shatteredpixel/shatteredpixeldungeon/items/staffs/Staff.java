@@ -66,8 +66,8 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
         defaultAction = AC_SUMMON;
     }
 
-    private Minion minion = null;
-    private int minionID = 0;
+    protected Minion minion = null;
+    protected int minionID = 0;
 
     public int getMinionID(){
         return minionID;
@@ -132,6 +132,10 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
 
     public Minion.BehaviorType defaultBehaviorType(){
         return Minion.BehaviorType.REACTIVE;
+    }
+
+    public Minion.BehaviorType[] availableBehaviorTypes(){
+        return Minion.BehaviorType.values();
     }
 
     private void updateOnMinion() {
@@ -285,7 +289,7 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
                         GLog.warning(Messages.get(Staff.class, "fizzles"));
                     }
                 } else {
-                    Minion.BehaviorType[] behaviorTypes = Minion.BehaviorType.values();
+                    Minion.BehaviorType[] behaviorTypes = availableBehaviorTypes();
                     int nextTypeID = minion.behaviorType.ordinal()+1;
                     nextTypeID = nextTypeID > behaviorTypes.length-1 ? 0 : nextTypeID;
                     minion.behaviorType = behaviorTypes[nextTypeID];
