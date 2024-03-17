@@ -293,7 +293,7 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
                     int nextTypeID = minion.behaviorType.ordinal()+1;
                     nextTypeID = nextTypeID > behaviorTypes.length-1 ? 0 : nextTypeID;
                     minion.behaviorType = behaviorTypes[nextTypeID];
-                    GLog.highlight( Messages.get(Staff.class, "behavior_switch", minion.name(), minion.behaviorType.name()) );
+                    GLog.highlight( Messages.get(this, "behavior_switch", minion.name(), minion.behaviorType.name()) );
                     minion.sprite.emitter().burst(MagicMissile.MagicParticle.FACTORY, 8);
                     curUser.spendAndNext(Actor.TICK);
                     Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
@@ -390,7 +390,7 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
         if (isIdentified()) {
             float robeBonus = 1f;
 //            if (Dungeon.hero.buff(Attunement.class) != null) robeBonus = Attunement.empowering();
-            info += "\n\n" + Messages.get(Staff.class, "stats_known",
+            info += "\n\n" + Messages.get(this, "stats_known",
                     tier,
                     ATUReq(),
                     augment.damageFactor(Math.round(minionMin()*robeBonus)),
@@ -400,7 +400,7 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
                 info += " " + Messages.get(Staff.class, "too_heavy_uh");
             }
         } else {
-            info += "\n\n" + Messages.get(Staff.class, "stats_unknown", tier, ATUReq(0), minionMin(0), minionMax(0), hp(0));
+            info += "\n\n" + Messages.get(this, "stats_unknown", tier, ATUReq(0), minionMin(0), minionMax(0), hp(0));
             if (ATUReq(0) > Dungeon.hero.ATU()) {
                 info += "\n\n" + Messages.get(AttunementItem.class, "probably_too_heavy");
             }
@@ -410,7 +410,7 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
         if (!statsInfo.equals("")) info += "\n\n" + statsInfo;
 
         if (minion != null && minion.isAlive())
-            info += "\n\n" + Messages.get(Staff.class, "behavior", minion.behaviorType.name());
+            info += "\n\n" + Messages.get(this, "behavior", minion.behaviorType.name());
 
         switch (augment) {
             case SPEED:

@@ -113,7 +113,7 @@ public class Minion extends Mob {
         behaviorType = bundle.getEnum(BEHAVIOR_TYPE, BehaviorType.class);
     }
 
-    Minion(){} //for inheriting
+    public Minion(){} //for inheriting
 
     public void init(Staff staff){
         this.staff = staff;
@@ -130,8 +130,12 @@ public class Minion extends Mob {
             }
         }
 
-        defenseSkill = (Dungeon.hero.lvl+4);
         if (staff == null) return;
+        updateStats();
+    }
+
+    public void updateStats() {
+        defenseSkill = (Dungeon.hero.lvl+4);
         HT = staff.hp(rank);
         HP = Math.min(HP, HT);
     }
