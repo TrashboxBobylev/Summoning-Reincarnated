@@ -247,8 +247,6 @@ public class ShopRoom extends SpecialRoom {
 
 		itemsToSpawn.add (new Ropes().quantity(Random.Int(3, 10)));
 
-		itemsToSpawn.add( new ElixirOfAttunement());
-
 		Bag bag = ChooseBag(Dungeon.hero.belongings);
 		if (bag != null) {
 			itemsToSpawn.add(bag);

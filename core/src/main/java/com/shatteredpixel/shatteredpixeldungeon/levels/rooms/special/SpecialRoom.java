@@ -131,9 +131,12 @@ public abstract class SpecialRoom extends Room {
 	public static void initForFloor(){
 		floorSpecials = (ArrayList<Class<?extends Room>>) runSpecials.clone();
 		
-		//laboratory rooms spawn at set intervals every chapter
+		//laboratory and attunement rooms spawn at set intervals every chapter
 		if (Dungeon.depth%5 == (Dungeon.seed%3 + 2)){
 			floorSpecials.add(0, LaboratoryRoom.class);
+		}
+		if (Dungeon.depth%5 == (Dungeon.seed%2 + 3)){
+			floorSpecials.add(0, AttunementPotRoom.class);
 		}
 	}
 	
@@ -166,6 +169,11 @@ public abstract class SpecialRoom extends Room {
 			useType(LaboratoryRoom.class);
 			return new LaboratoryRoom();
 		
+		} else if (floorSpecials.contains(AttunementPotRoom.class)) {
+
+			useType(AttunementPotRoom.class);
+			return new AttunementPotRoom();
+
 		} else {
 			
 			if (Dungeon.bossLevel(Dungeon.depth + 1)){
