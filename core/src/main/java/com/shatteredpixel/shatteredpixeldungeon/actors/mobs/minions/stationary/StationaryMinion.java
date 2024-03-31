@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.stationary;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.StationaryStaff;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
@@ -68,6 +69,8 @@ public class StationaryMinion extends Minion {
                     protected void onSelect(int index) {
                         if (index == 0) {
                             die(null);
+                            StationaryStaff.DecayTracker resource = buff(StationaryStaff.DecayTracker.class);
+
                         }
                     }
                 });

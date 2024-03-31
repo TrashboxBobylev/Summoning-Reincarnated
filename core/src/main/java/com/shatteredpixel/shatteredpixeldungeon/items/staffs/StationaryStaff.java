@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -38,8 +39,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
 import java.lang.reflect.InvocationTargetException;
@@ -201,5 +204,75 @@ public class StationaryStaff extends Staff {
             }
         } else GLog.warning( Messages.get(Wand.class, "fizzles") );
         return true;
+    }
+
+    public static class DecayTracker extends Buff {
+
+        private int decay; private int maxDecay;
+
+        @Override
+        public int icon() {
+            return BuffIndicator.DECAY;
+        }
+
+        public void init(int decay, int maxDecay){
+            this.decay = decay;
+            this.maxDecay = maxDecay;
+        }
+
+        public void use(){
+            modify(-1);
+        }
+
+        public void use(int amount){
+            modify(-amount);
+        }
+
+        public void heal(){
+            modify(1);
+        }
+
+        public void heal(int amount){
+            modify(amount);
+        }
+
+        public void modify(int amount){
+            decay = Math.min(decay + amount, maxDecay);
+            if (decay <= 0){
+                detach();
+            }
+        }
+
+        @Override
+        public float iconFadePercent() {
+            return Math.max(0, (float)(maxDecay - decay) / ((float)decay));
+        }
+
+        @Override
+        public String iconTextDisplay() {
+            return Messages.format("%d/%d", decay, maxDecay);
+        }
+
+        @Override
+        public String desc() {
+            return Messages.get(this, "desc", decay, maxDecay);
+        }
+
+        private static final String DECAY = "decay";
+        private static final String MAX_DECAY = "maxDecay";
+
+        @Override
+        public void storeInBundle(Bundle bundle) {
+            super.storeInBundle(bundle);
+            bundle.put(DECAY, decay);
+            bundle.put(MAX_DECAY, maxDecay);
+        }
+
+        @Override
+        public void restoreFromBundle(Bundle bundle) {
+            super.restoreFromBundle(bundle);
+            decay = bundle.getInt(DECAY);
+            maxDecay = bundle.getInt(MAX_DECAY);
+        }
     }
 }
