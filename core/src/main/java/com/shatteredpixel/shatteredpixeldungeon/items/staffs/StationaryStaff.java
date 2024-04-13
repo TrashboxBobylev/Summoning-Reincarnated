@@ -164,6 +164,10 @@ public class StationaryStaff extends Staff {
         }
 
         if ( curCharges >= 0 || (minion != null && minion.isAlive() && target != minion.pos)){
+            if (minion != null && minion.buff(DecayTracker.class).amount() > 0) {
+                GLog.warning(Messages.get(StationaryStaff.class, "cannot_move"));
+                return false;
+            }
             return true;
         } else {
             GLog.warning(Messages.get(Wand.class, "fizzles"));
