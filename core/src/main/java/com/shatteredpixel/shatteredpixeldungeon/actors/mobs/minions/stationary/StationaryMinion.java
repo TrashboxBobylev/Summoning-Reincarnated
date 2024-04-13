@@ -55,6 +55,12 @@ public class StationaryMinion extends Minion {
         return false;
     }
 
+    public void useResource(int amount){
+        StationaryStaff.DecayTracker resource = buff(StationaryStaff.DecayTracker.class);
+        resource.use(amount);
+        if (resource.amount() <= 0)
+            die(null);
+    }
 
     @Override
     public boolean interact(Char ch) {
@@ -69,8 +75,6 @@ public class StationaryMinion extends Minion {
                     protected void onSelect(int index) {
                         if (index == 0) {
                             die(null);
-                            StationaryStaff.DecayTracker resource = buff(StationaryStaff.DecayTracker.class);
-
                         }
                     }
                 });

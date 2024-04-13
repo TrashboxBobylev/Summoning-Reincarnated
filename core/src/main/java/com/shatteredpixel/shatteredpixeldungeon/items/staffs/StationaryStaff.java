@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.stationary.StationaryMinion;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -53,6 +54,10 @@ public class StationaryStaff extends Staff {
     //because of precise strategy, I need to rewrite some of Staff methods to allow exact placing
     {
         chargeTurns = 550;
+    }
+
+    public int maxActions(){
+        return 1;
     }
 
     public static final String AC_PLACE = "PLACE";
@@ -196,11 +201,14 @@ public class StationaryStaff extends Staff {
             minion.enchantment = enchantment;
             minion.augment = augment;
             minion.rank = rank();
+            StationaryStaff.DecayTracker resource = Buff.affect(minion, StationaryStaff.DecayTracker.class);
             if (firstSummon) {
                 minion.behaviorType = defaultBehaviorType();
                 minion.setMaxHP(hp(rank()));
+                resource.init(maxActions(), maxActions());
             } else {
                 minion.HT = hp(rank());
+                ((StationaryMinion)minion).useResource(1);
             }
         } else GLog.warning( Messages.get(Wand.class, "fizzles") );
         return true;
@@ -218,6 +226,10 @@ public class StationaryStaff extends Staff {
         public void init(int decay, int maxDecay){
             this.decay = decay;
             this.maxDecay = maxDecay;
+        }
+
+        public int amount(){
+            return decay;
         }
 
         public void use(){
