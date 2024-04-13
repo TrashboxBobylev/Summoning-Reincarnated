@@ -94,6 +94,16 @@ public class StationaryStaff extends Staff {
     }
 
     @Override
+    protected String generalRankMessage(int rank) {
+        return Messages.get(this, "rank" + rank,
+                hp(rank),
+                minionMin(rank),
+                minionMax(rank),
+                maxActions()
+        );
+    }
+
+    @Override
     public Minion.BehaviorType defaultBehaviorType() {
         return Minion.BehaviorType.AGGRESSIVE;
     }

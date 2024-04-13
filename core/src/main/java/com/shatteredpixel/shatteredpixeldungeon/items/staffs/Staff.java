@@ -235,14 +235,18 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
 
     @Override
     public String getRankMessage(int rank){
-        String rankMessage = Messages.get(this, "rank" + rank,
+        String rankMessage = generalRankMessage(rank);
+        if (!minionDescription(rank).equals(Messages.NO_TEXT_FOUND))
+            rankMessage += "\n\n" + minionDescription(rank);
+        return rankMessage;
+    }
+
+    protected String generalRankMessage(int rank) {
+        return Messages.get(this, "rank" + rank,
                 hp(rank),
                 minionMin(rank),
                 minionMax(rank)
         );
-        if (!minionDescription(rank).equals(Messages.NO_TEXT_FOUND))
-            rankMessage += "\n\n" + minionDescription(rank);
-        return rankMessage;
     }
 
     public String minionDescription(int rank){
