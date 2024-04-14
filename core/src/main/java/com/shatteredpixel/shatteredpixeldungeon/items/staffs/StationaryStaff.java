@@ -61,6 +61,7 @@ public class StationaryStaff extends Staff {
     }
 
     public static final String AC_PLACE = "PLACE";
+    public static final String AC_SUMMON = "SAMMON";
 
     @Override
     public void execute(Hero hero, String action) {
@@ -174,7 +175,7 @@ public class StationaryStaff extends Staff {
         }
 
         if ( curCharges >= 0 || (minion != null && minion.isAlive() && target != minion.pos)){
-            if (minion != null && minion.buff(DecayTracker.class).amount() > 0) {
+            if (minion != null && minion.buff(DecayTracker.class).amount() <= 1) {
                 GLog.warning(Messages.get(StationaryStaff.class, "cannot_move"));
                 return false;
             }
