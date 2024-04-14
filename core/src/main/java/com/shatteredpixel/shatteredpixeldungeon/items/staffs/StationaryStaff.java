@@ -56,7 +56,7 @@ public class StationaryStaff extends Staff {
         chargeTurns = 550;
     }
 
-    public int maxActions(){
+    public int maxActions(int rank){
         return 1;
     }
 
@@ -100,7 +100,7 @@ public class StationaryStaff extends Staff {
                 hp(rank),
                 minionMin(rank),
                 minionMax(rank),
-                maxActions()
+                maxActions(rank)
         );
     }
 
@@ -220,7 +220,7 @@ public class StationaryStaff extends Staff {
             if (firstSummon) {
                 minion.behaviorType = defaultBehaviorType();
                 minion.setMaxHP(hp(rank()));
-                resource.init(maxActions(), maxActions());
+                resource.init(maxActions(rank()), maxActions(rank()));
             } else {
                 minion.HT = hp(rank());
                 ((StationaryMinion)minion).useResource(1);
