@@ -126,8 +126,12 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
             }
             return super.status();
         } else {
-            return ((minion.HP*100) / minion.HT) + "%";
+            return currentMinionStatus();
         }
+    }
+
+    public String currentMinionStatus(){
+        return ((minion.HP*100) / minion.HT) + "%";
     }
 
     public Minion.BehaviorType defaultBehaviorType(){

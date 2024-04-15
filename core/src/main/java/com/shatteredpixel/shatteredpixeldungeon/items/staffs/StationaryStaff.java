@@ -105,6 +105,16 @@ public class StationaryStaff extends Staff {
     }
 
     @Override
+    public String currentMinionStatus() {
+        DecayTracker resource = minion.buff(DecayTracker.class);
+        if (resource == null)
+            return super.currentMinionStatus();
+        else {
+            return Messages.format("%d/%d", resource.decay, resource.maxDecay);
+        }
+    }
+
+    @Override
     public Minion.BehaviorType defaultBehaviorType() {
         return Minion.BehaviorType.AGGRESSIVE;
     }
