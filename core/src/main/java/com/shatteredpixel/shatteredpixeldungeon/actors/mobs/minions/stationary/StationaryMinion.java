@@ -37,7 +37,7 @@ public class StationaryMinion extends Minion {
     {
         properties.add(Property.IMMOVABLE);
 
-        viewDistance = 6;
+        viewDistance = 8;
         state = WANDERING;
     }
 
