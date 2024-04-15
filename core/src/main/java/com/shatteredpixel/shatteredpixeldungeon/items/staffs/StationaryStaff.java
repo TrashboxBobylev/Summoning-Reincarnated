@@ -174,8 +174,8 @@ public class StationaryStaff extends Staff {
             return false;
         }
 
-        if ( curCharges >= 0 || (minion != null && minion.isAlive() && target != minion.pos)){
-            if (minion != null && minion.buff(DecayTracker.class).amount() <= 1) {
+        if ( curCharges > 0 || (minion != null && minion.isAlive() && target != minion.pos)){
+            if (minion != null && minion.isAlive() && minion.buff(DecayTracker.class).amount() <= 1) {
                 GLog.warning(Messages.get(StationaryStaff.class, "cannot_move"));
                 return false;
             }
@@ -199,7 +199,7 @@ public class StationaryStaff extends Staff {
         //if hero do not have enough strength, summoning might fail
         if (strength == 1 || Random.Float() < 1 / (float) (strength * 2)) {
             boolean firstSummon = false;
-            if (minion == null){
+            if (minion == null || !minion.isAlive()){
                 firstSummon = true;
                 minion = minionType.getDeclaredConstructor().newInstance();
                 minionID = minion.id();
