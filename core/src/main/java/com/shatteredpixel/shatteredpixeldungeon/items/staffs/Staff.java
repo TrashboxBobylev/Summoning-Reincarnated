@@ -298,7 +298,10 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
                     }
                 } else {
                     Minion.BehaviorType[] behaviorTypes = availableBehaviorTypes();
-                    int nextTypeID = minion.behaviorType.ordinal()+1;
+                    int nextTypeID = 0;
+                    for (int i = 0; i < behaviorTypes.length; i++)
+                        if (behaviorTypes[i].ordinal() == minion.behaviorType.ordinal())
+                            nextTypeID = i+1;
                     nextTypeID = nextTypeID > behaviorTypes.length-1 ? 0 : nextTypeID;
                     minion.behaviorType = behaviorTypes[nextTypeID];
                     GLog.highlight( Messages.get(this, "behavior_switch", minion.name(), minion.behaviorType.name()) );
