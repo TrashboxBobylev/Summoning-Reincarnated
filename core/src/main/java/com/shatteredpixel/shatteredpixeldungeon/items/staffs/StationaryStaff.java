@@ -282,7 +282,7 @@ public class StationaryStaff extends Staff {
 
         @Override
         public float iconFadePercent() {
-            return Math.max(0, (float)(maxDecay - decay) / ((float)decay));
+            return Math.max(0, (float)(decay) / ((float)maxDecay));
         }
 
         @Override
