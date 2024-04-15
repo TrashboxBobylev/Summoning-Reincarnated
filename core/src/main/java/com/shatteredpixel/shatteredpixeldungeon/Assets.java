@@ -334,5 +334,6 @@ public class Assets {
 		public static final String FUNGAL_CORE      = "sprites/fungal_core.png";
 
 		public static final String FROGGIT          = "sprites/froggit.png";
+		public static final String MAGIC_MISSILE    = "sprites/magic_missile.png";
 	}
 }
