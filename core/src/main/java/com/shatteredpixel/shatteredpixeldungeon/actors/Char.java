@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Ch
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.DeathMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.GnollHunter;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
@@ -100,7 +101,7 @@ public abstract class Char extends Actor {
 	public int HT;
 	public int HP;
 	
-	protected float baseSpeed	= 1;
+	public float baseSpeed	= 1;
 	protected PathFinder.Path path;
 
 	public int paralysed	    = 0;
@@ -328,6 +329,9 @@ public abstract class Char extends Actor {
 					Buff.prolong(h, MonkEnergy.MonkAbility.JustHitTracker.class, 4f);
 				}
 			}
+
+			if (this instanceof GnollHunter && ((GnollHunter) this).rank == 3 && this.buff(GnollHunter.GnollSnipingCooldown.class) == null)
+				dr /= 2;
 
 			//we use a float here briefly so that we don't have to constantly round while
 			// potentially applying various multiplier effects

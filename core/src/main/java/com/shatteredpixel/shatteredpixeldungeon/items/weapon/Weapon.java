@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.ElementalStrike;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.GnollHunter;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
@@ -424,6 +425,10 @@ abstract public class Weapon extends KindOfWeapon {
 			float multiplier = genericProcChanceMultiplier(attacker);
 			if (wep instanceof SpiritBow && ((SpiritBow) wep).rank() == 3){
 				multiplier *= 2;
+			}
+			if (attacker instanceof GnollHunter && ((GnollHunter) attacker).rank == 2){
+				if (!(this instanceof Grim))
+					multiplier += 0.5f;
 			}
 			return multiplier;
 		}

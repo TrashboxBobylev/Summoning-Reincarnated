@@ -172,10 +172,13 @@ public enum Talent {
 	AFFECTED_BY_LUCK(265, 3), UNIQUE_ATTENTION(266, 3), SLICE_OF_POWER(267, 3), MEAL_OF_POWER(268, 3);
 
 	public static abstract class Cooldown extends FlavourBuff {
-		public static <T extends Cooldown> void affectHero(Class<T> cls) {
+		public static <T extends Cooldown> void affectChar(Char ch, Class<T> cls) {
 			if(cls == Cooldown.class) return;
-			T buff = Buff.affect(Dungeon.hero, cls);
+			T buff = Buff.affect(ch, cls);
 			buff.spend( buff.duration() );
+		}
+		public static <T extends Cooldown> void affectHero(Class<T> cls){
+			affectChar(Dungeon.hero, cls);
 		}
 		public abstract float duration();
 		public float iconFadePercent() { return Math.max(0, visualcooldown() / duration()); }
