@@ -171,6 +171,17 @@ public enum Talent {
 	//adventurer T3
 	AFFECTED_BY_LUCK(265, 3), UNIQUE_ATTENTION(266, 3), SLICE_OF_POWER(267, 3), MEAL_OF_POWER(268, 3);
 
+	public static abstract class Cooldown extends FlavourBuff {
+		public static <T extends Cooldown> void affectHero(Class<T> cls) {
+			if(cls == Cooldown.class) return;
+			T buff = Buff.affect(Dungeon.hero, cls);
+			buff.spend( buff.duration() );
+		}
+		public abstract float duration();
+		public float iconFadePercent() { return Math.max(0, visualcooldown() / duration()); }
+		public String toString() { return Messages.get(this, "name"); }
+		public String desc() { return Messages.get(this, "desc", dispTurns(visualcooldown())); }
+	}
 	public static class ImprovisedProjectileCooldown extends FlavourBuff{
 		public int icon() { return BuffIndicator.TIME; }
 		public void tintIcon(Image icon) { icon.hardlight(0.15f, 0.2f, 0.5f); }
