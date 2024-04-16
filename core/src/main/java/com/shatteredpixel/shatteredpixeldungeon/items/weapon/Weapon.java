@@ -427,7 +427,9 @@ abstract public class Weapon extends KindOfWeapon {
 				multiplier *= 2;
 			}
 			if (attacker instanceof GnollHunter && ((GnollHunter) attacker).rank == 2){
-				if (!(this instanceof Grim))
+				if (this instanceof Unstable)
+					multiplier += 0.25f;
+				else if (!(this instanceof Grim))
 					multiplier += 0.5f;
 			}
 			return multiplier;
