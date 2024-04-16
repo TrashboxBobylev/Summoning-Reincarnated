@@ -48,7 +48,7 @@ public class Flashbang extends Bomb {
 				int power = 25 - 8*l.distance(ch.pos, cell);
 				/*power *= Bomb.nuclearBoost();*/
 				if (power > 0){
-					if (ch instanceof Mob/* && !(ch instanceof ExplodingTNT)*/){
+					if (ch instanceof Mob && !ch.properties().contains(Char.Property.IMMOVABLE)/* && !(ch instanceof ExplodingTNT)*/){
 						Buff.prolong(ch, Blindness.class, power);
 						Buff.prolong(ch, Cripple.class, power);
 						((Mob) ch).enemy = null;
