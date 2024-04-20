@@ -48,6 +48,7 @@ public class CrystalWisp extends Mob{
 		flying = true;
 
 		properties.add(Property.INORGANIC);
+		properties.add(Property.RANGED);
 	}
 
 	public CrystalWisp(){

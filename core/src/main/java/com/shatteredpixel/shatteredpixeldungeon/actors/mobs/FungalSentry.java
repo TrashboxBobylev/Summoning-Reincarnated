@@ -44,6 +44,7 @@ public class FungalSentry extends Mob {
 
 		properties.add(Property.IMMOVABLE);
 		properties.add(Property.MINIBOSS);
+		properties.add(Property.RANGED);
 	}
 
 	@Override

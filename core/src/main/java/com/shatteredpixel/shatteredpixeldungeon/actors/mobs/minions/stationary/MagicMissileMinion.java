@@ -40,6 +40,7 @@ import com.watabou.utils.PointF;
 public class MagicMissileMinion extends StationaryMinion {
     {
         spriteClass = MagicMissileSprite.class;
+        properties.add(Property.RANGED);
     }
 
     @Override

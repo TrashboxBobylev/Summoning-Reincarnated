@@ -57,6 +57,7 @@ public class GnollTrickster extends Gnoll {
 		lootChance = 1f;
 
 		properties.add(Property.MINIBOSS);
+		properties.add(Property.RANGED);
 	}
 
 	private int combo = 0;

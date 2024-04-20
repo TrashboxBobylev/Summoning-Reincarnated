@@ -52,6 +52,7 @@ public class Scorpio extends Mob {
 		lootChance = 0.5f;
 
 		properties.add(Property.DEMONIC);
+		properties.add(Property.RANGED);
 	}
 	
 	@Override

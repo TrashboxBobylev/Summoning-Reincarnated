@@ -52,7 +52,7 @@ public class GnollHunter extends Minion {
         maxDefense = 4;
 //        independenceRange = 12;
 
-//        properties.add(Property.RANGED);
+        properties.add(Property.RANGED);
 //        properties.add(Property.IGNORE_ARMOR);
 //        properties.add(Property.ANIMAL);
     }
