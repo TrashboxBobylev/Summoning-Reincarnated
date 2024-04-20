@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snake;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Wizard;
 import com.shatteredpixel.shatteredpixeldungeon.effects.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
@@ -237,6 +238,11 @@ public class Hero extends Char {
 
 	public int ATU() {
 		int attunementBonus = 0;
+		for (Mob ch: Dungeon.level.mobs.toArray( new Mob[0] )){
+			if (ch instanceof Wizard && ((Wizard) ch).rank == 3 && ((Wizard) ch).behaviorType == Minion.BehaviorType.AGGRESSIVE){
+				attunementBonus += 1;
+			}
+		}
 
 		return ATU + attunementBonus;
 	}
