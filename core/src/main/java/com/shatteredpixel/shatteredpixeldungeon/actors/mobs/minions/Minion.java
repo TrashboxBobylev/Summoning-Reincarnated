@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScaleArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
@@ -259,7 +260,7 @@ public class Minion extends Mob {
         return String.format("%s\n\n%s\n\n%s", d, Messages.get(Minion.class, "stats",
                 augment.damageFactor(Math.round(minDamage * empowering)),
                 augment.damageFactor(Math.round(maxDamage * empowering)),
-                HP, HT), Messages.get(Minion.class, "behavior_" + Messages.lowerCase(behaviorType.toString())));
+                HP, HT, Messages.titleCase(Messages.get(Rankable.class, "rank" + (rank)))), Messages.get(Minion.class, "behavior_" + Messages.lowerCase(behaviorType.toString())));
     }
 
     public static Char whatToFollow(Char follower, Char start) {
