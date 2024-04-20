@@ -138,6 +138,12 @@ public class Minion extends Mob {
         defenseSkill = (Dungeon.hero.lvl+4);
         HT = staff.hp(rank);
         HP = Math.min(HP, HT);
+        setDamage(
+                staff.minionMin(),
+                staff.minionMax());
+        enchantment = staff.enchantment;
+        augment = staff.augment;
+        rank = staff.rank();
     }
 
     @Override
