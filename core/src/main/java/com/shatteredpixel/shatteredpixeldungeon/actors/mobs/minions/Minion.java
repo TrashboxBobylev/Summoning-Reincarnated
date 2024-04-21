@@ -136,7 +136,7 @@ public class Minion extends Mob {
     }
 
     public void updateStats() {
-        defenseSkill = (Dungeon.hero.lvl+4);
+        defenseSkill = Math.round((Dungeon.hero.lvl+4)*evasionModifier());
         HT = staff.hp(rank);
         HP = Math.min(HP, HT);
         setDamage(
@@ -179,6 +179,10 @@ public class Minion extends Mob {
     public int damageRoll() {
         int i = Random.NormalIntRange(minDamage, maxDamage);
         return augment.damageFactor(i);
+    }
+
+    public float evasionModifier(){
+        return 1f;
     }
 
     @Override
