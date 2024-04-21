@@ -391,7 +391,7 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
 
     // same as charging, unless minion heals faster than staff charges up
     public int getRegenerationTurns() {
-        return chargeTurns;
+        return getChargeTurns();
     }
 
     @Override

@@ -50,14 +50,6 @@ public class SheepStaff extends Staff {
     }
 
     @Override
-    public int getRegenerationTurns() {
-        if (rank() == 3){
-            return Math.round(super.getRegenerationTurns()*1.5f);
-        }
-        return super.getRegenerationTurns();
-    }
-
-    @Override
     public Minion.BehaviorType defaultBehaviorType() {
         return Minion.BehaviorType.AGGRESSIVE;
     }
