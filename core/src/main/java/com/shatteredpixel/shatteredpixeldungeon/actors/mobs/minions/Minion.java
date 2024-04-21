@@ -313,7 +313,7 @@ public class Minion extends Mob {
         REACTIVE(ItemSpriteSheet.Icons.BEHAVIOR_REACT, ReactiveTargeting.class),
         PROTECTIVE(ItemSpriteSheet.Icons.BEHAVIOR_DEFEND, ProtectiveTargeting.class),
         AGGRESSIVE(ItemSpriteSheet.Icons.BEHAVIOR_ATTACK),
-        PASSIVE(ItemSpriteSheet.Icons.BEHAVIOR_PASSIVE);
+        PASSIVE(ItemSpriteSheet.Icons.BEHAVIOR_PASSIVE, PassiveTargeting.class);
 
         public final Class<? extends TargetBuff> buffType;
         public int icon;
@@ -333,6 +333,8 @@ public class Minion extends Mob {
 
     public static class ReactiveTargeting extends FlavourBuff implements TargetBuff {};
     public static class ProtectiveTargeting extends FlavourBuff implements TargetBuff {};
+    //never actually inflicted, but seals the crash with enemy choosing
+    public static class PassiveTargeting extends FlavourBuff implements TargetBuff {};
 
     public class Wandering extends Mob.Wandering implements AiState{
 
