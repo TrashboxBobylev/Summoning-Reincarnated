@@ -21,7 +21,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs;
 
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArcaneArmor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfEarthenArmor;
@@ -37,6 +39,13 @@ public class ElixirOfArcaneArmor extends Elixir {
 	@Override
 	public void apply(Hero hero) {
 		Buff.affect(hero, ArcaneArmor.class).set(5 + hero.lvl/2, 80);
+	}
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (ch.alignment == Char.Alignment.ALLY){
+			Buff.affect(ch, ArcaneArmor.class).set(3 + ch.HT / 5, 45);
+		}
 	}
 	
 	@Override

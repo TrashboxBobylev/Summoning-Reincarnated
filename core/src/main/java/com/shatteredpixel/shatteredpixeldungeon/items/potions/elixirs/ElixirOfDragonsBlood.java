@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Inferno;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -30,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FireImbue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfDragonsBreath;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -69,7 +71,20 @@ public class ElixirOfDragonsBlood extends Elixir {
 
 		GameScene.add( Blob.seed( cell, centerVolume, Inferno.class ) );
 	}
-	
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (ch.alignment == Char.Alignment.ENEMY){
+			new PotionOfLiquidFlame().gooMinionAttack(ch);
+		} else if (ch.alignment == Char.Alignment.ALLY) {
+			Buff.affect(ch, FireImbue.class).set(FireImbue.DURATION/4);
+			if (Dungeon.level.heroFOV[ch.pos]) {
+				Sample.INSTANCE.play(Assets.Sounds.BURNING);
+				ch.sprite.emitter().burst(FlameParticle.FACTORY, 6);
+			}
+		}
+	}
+
 	@Override
 	protected int splashColor() {
 		return 0xFFFF002A;

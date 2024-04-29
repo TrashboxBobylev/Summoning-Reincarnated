@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
@@ -51,7 +52,14 @@ public class ElixirOfAquaticRejuvenation extends Elixir {
 			Buff.affect(hero, AquaHealing.class).set(Math.round(hero.HT * 1.5f));
 		}
 	}
-	
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (ch.alignment == Char.Alignment.ALLY){
+			Buff.affect(ch, AquaHealing.class).set(Math.round(ch.HT * 0.75f));
+		}
+	}
+
 	@Override
 	public int value() {
 		//prices of ingredients

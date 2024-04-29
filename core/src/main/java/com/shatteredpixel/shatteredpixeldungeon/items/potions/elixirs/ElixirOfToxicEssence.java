@@ -21,13 +21,20 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FireImbue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ToxicImbue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PoisonParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.noosa.audio.Sample;
 
 public class ElixirOfToxicEssence extends Elixir {
 	
@@ -44,6 +51,18 @@ public class ElixirOfToxicEssence extends Elixir {
 	@Override
 	protected int splashColor() {
 		return 0xFF00B34A;
+	}
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (ch.alignment == Char.Alignment.ENEMY){
+			new PotionOfToxicGas().gooMinionAttack(ch);
+		} else if (ch.alignment == Char.Alignment.ALLY) {
+			Buff.affect(ch, ToxicImbue.class).set(ToxicImbue.DURATION/4);
+			if (Dungeon.level.heroFOV[ch.pos]) {
+				ch.sprite.emitter().burst(PoisonParticle.SPLASH, 6);
+			}
+		}
 	}
 	
 	@Override
