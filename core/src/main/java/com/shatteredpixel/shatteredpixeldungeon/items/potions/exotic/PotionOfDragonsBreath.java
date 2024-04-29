@@ -28,12 +28,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -47,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -72,7 +72,21 @@ public class PotionOfDragonsBreath extends ExoticPotion {
 
 		GameScene.selectCell(targeter);
 	}
-	
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (!ch.isImmune(Burning.class) && ch.alignment == Char.Alignment.ENEMY){
+			int damage = Random.NormalIntRange( 3, Math.round(6 + Dungeon.scalingDepth()*1.33f));
+			Buff.detach( ch, Chill.class);
+			Buff.affect( ch, Roots.class, 3f);
+			ch.damage(Math.round(damage), new Burning());
+			GameScene.add(Blob.seed(ch.pos, 2, Fire.class));
+			if (Dungeon.level.heroFOV[ch.pos]){
+				ch.sprite.centerEmitter().burst( FlameParticle.FACTORY, 8);
+			}
+		}
+	}
+
 	private CellSelector.Listener targeter = new CellSelector.Listener() {
 
 		private boolean showingWindow = false;

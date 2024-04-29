@@ -21,6 +21,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic;
 
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Adrenaline;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Stamina;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -40,5 +42,11 @@ public class PotionOfStamina extends ExoticPotion {
 		Buff.affect(hero, Stamina.class, Stamina.DURATION);
 		SpellSprite.show(hero, SpellSprite.HASTE, 0.5f, 1, 0.5f);
 	}
-	
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (ch.alignment == Char.Alignment.ALLY){
+			Buff.affect(ch, Adrenaline.class, 5f);
+		}
+	}
 }

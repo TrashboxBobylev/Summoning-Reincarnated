@@ -22,10 +22,13 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -62,6 +65,18 @@ public class PotionOfMastery extends ExoticPotion {
 		}
 
 		GameScene.selectItem(itemSelector);
+	}
+
+	@Override
+	public int gooInfuseUses() {
+		return 18;
+	}
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (ch.alignment == Char.Alignment.ENEMY){
+			ch.damage(Bomb.damageRoll(), Dungeon.hero);
+		}
 	}
 
 	protected WndBag.ItemSelector itemSelector = new WndBag.ItemSelector() {

@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic;
 
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -37,5 +38,11 @@ public class PotionOfEarthenArmor extends ExoticPotion {
 		
 		Barkskin.conditionallyAppend( hero, 2 + hero.lvl/3, 50 );
 	}
-	
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (ch.alignment == Char.Alignment.ALLY){
+			Barkskin.conditionallyAppend(ch, ch.HT / 4, 25);
+		}
+	}
 }

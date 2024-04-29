@@ -23,12 +23,16 @@ package com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StormCloud;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
 
 public class PotionOfStormClouds extends ExoticPotion {
 	
@@ -57,5 +61,28 @@ public class PotionOfStormClouds extends ExoticPotion {
 		}
 		
 		GameScene.add( Blob.seed( cell, centerVolume, StormCloud.class ) );
+	}
+
+	@Override
+	public int gooInfuseUses() {
+		return 2;
+	}
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		for (int dir: PathFinder.NEIGHBOURS9){
+			if (Random.Int(3) == 0){
+				Fire fire = (Fire) Dungeon.level.blobs.get(Fire.class);
+				Dungeon.level.setCellToWater(true, ch.pos + dir);
+				if (fire != null){
+					fire.clear(ch.pos + dir);
+				}
+
+				if (!ch.isImmune(getClass())
+						&& Char.hasProp(ch, Char.Property.FIERY)){
+					ch.damage(Dungeon.scalingDepth()/5, this);
+				}
+			}
+		}
 	}
 }

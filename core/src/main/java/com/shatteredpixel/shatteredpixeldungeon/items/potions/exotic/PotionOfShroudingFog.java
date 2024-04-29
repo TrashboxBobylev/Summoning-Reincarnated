@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SmokeScreen;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -58,5 +59,14 @@ public class PotionOfShroudingFog extends ExoticPotion {
 
 		GameScene.add( Blob.seed( cell, centerVolume, SmokeScreen.class ) );
 	}
-	
+
+	@Override
+	public int gooInfuseUses() {
+		return 2;
+	}
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		GameScene.add( Blob.seed( ch.pos, 120, SmokeScreen.class ) );
+	}
 }

@@ -50,7 +50,13 @@ public class PotionOfCleansing extends ExoticPotion {
 		cleanse( hero );
 		new Flare( 6, 32 ).color(0xFF4CD2, true).show( curUser.sprite, 2f );
 	}
-	
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (ch.alignment == Char.Alignment.ALLY)
+			cleanse(ch);
+	}
+
 	@Override
 	public void shatter(int cell) {
 		if (Actor.findChar(cell) == null){

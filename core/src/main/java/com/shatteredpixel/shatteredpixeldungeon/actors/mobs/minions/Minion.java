@@ -291,6 +291,11 @@ public class Minion extends Mob {
     }
 
     @Override
+    public boolean isInvulnerable(Class effect) {
+        return super.isInvulnerable(effect) || buff(AnkhInvulnerability.class) != null;
+    }
+
+    @Override
     public float speed() {
         return 1f / augment.delayFactor(Dungeon.hero.speed());
     }

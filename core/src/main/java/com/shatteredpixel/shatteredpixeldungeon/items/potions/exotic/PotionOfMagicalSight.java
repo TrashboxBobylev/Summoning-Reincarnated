@@ -22,10 +22,15 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class PotionOfMagicalSight extends ExoticPotion {
@@ -42,5 +47,18 @@ public class PotionOfMagicalSight extends ExoticPotion {
 		Dungeon.observe();
 		
 	}
-	
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (ch.alignment == Char.Alignment.ENEMY && !ch.properties().contains(Char.Property.IMMOVABLE)){
+			Buff.prolong(ch, Blindness.class, 6);
+			Buff.prolong(ch, Cripple.class, 6);
+			((Mob) ch).enemy = null;
+			((Mob) ch).enemySeen = false;
+			((Mob) ch).state = ((Mob) ch).WANDERING;
+			if (Dungeon.level.heroFOV[ch.pos]){
+				GameScene.flash(0x80FFFFFF);
+			}
+		}
+	}
 }

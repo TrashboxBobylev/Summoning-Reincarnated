@@ -23,6 +23,8 @@ package com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AnkhInvulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.TalentBooster;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -150,6 +152,18 @@ public class PotionOfDivineInspiration extends ExoticPotion {
 			}
 		});
 
+	}
+
+	@Override
+	public int gooInfuseUses() {
+		return 6;
+	}
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (ch.alignment == Char.Alignment.ALLY){
+			Buff.affect(ch, AnkhInvulnerability.class, 3f);
+		}
 	}
 
 	public static class DivineInspirationTracker extends Buff implements TalentBooster {

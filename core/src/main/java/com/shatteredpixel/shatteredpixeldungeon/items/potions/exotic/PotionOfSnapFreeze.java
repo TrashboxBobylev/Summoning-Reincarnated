@@ -26,8 +26,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Freezing;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PathFinder;
@@ -59,6 +59,20 @@ public class PotionOfSnapFreeze extends ExoticPotion {
 				}
 				
 			}
+		}
+	}
+
+	@Override
+	public int gooInfuseUses() {
+		return 1;
+	}
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (ch.alignment == Char.Alignment.ENEMY){
+			GameScene.flash(0x99A5F1FF);
+			Buff.affect(ch, Frost.class, 15f);
+			Buff.affect(ch, Slow.class, 15f);
 		}
 	}
 }
