@@ -61,7 +61,21 @@ public class CausticBrew extends Brew {
 			}
 		}
 	}
-	
+
+	@Override
+	public int gooInfuseUses() {
+		return 2;
+	}
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		Splash.at( ch.pos, 0x000000, 5);
+
+		if (ch.alignment == Char.Alignment.ENEMY){
+			Buff.affect(ch, Ooze.class).set( Ooze.DURATION );
+		}
+	}
+
 	@Override
 	public int value() {
 		//prices of ingredients
