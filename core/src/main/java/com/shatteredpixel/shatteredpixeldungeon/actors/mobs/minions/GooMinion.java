@@ -43,12 +43,15 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GooMinionSprite;
+import com.watabou.noosa.Game;
 import com.watabou.utils.BArray;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class GooMinion extends Minion {
     {
@@ -64,7 +67,7 @@ public class GooMinion extends Minion {
     private int pumpedUp = 0;
     private boolean pumping = false;
 
-    public Class infusedPotion = null;
+    public Class<? extends Potion> infusedPotion = null;
     public int potionUses = 0;
     public int potionColor = 0x000000;
 
@@ -173,9 +176,18 @@ public class GooMinion extends Minion {
                 CellEmitter.get(i).burst(ElmoParticle.FACTORY, 10);
 
                 Char ch = Actor.findChar(i);
-                if (ch != null && ch.alignment == Alignment.ENEMY) {
-                    if (rank != 2)
-                        ch.damage(Random.NormalIntRange(min, max), Dungeon.hero);
+                if (ch != null) {
+                    if (rank != 2) {
+                        if (ch.alignment == Alignment.ENEMY)
+                            ch.damage(Random.NormalIntRange(min, max), Dungeon.hero);
+                    }
+                    else {
+                        try {
+                            infusedPotion.getDeclaredConstructor().newInstance().gooMinionAttack(ch);
+                        } catch (Exception e) {
+                            Game.reportException(e);
+                        }
+                    }
                 }
             }
         }
@@ -268,7 +280,7 @@ public class GooMinion extends Minion {
 
         pumpedUp = bundle.getInt( PUMPEDUP );
         pumping = bundle.getBoolean(PUMPING);
-        infusedPotion = bundle.getClass(POTION);
+        infusedPotion = (Class<? extends Potion>) bundle.getClass(POTION);
         potionUses = bundle.getInt(POTION_USES);
         potionColor = bundle.getInt(POTION_COLOR);
     }

@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCor
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfShroudingFog;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfSnapFreeze;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfStormClouds;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.GooStaff;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -338,6 +339,10 @@ public class Potion extends Item {
 		}
 	}
 
+	public void gooMinionAttack(Char ch){
+
+	}
+
 	@Override
 	public void cast( final Hero user, int dst ) {
 			super.cast(user, dst);
@@ -379,7 +384,19 @@ public class Potion extends Item {
 	public String info() {
 		return isKnown() ? desc() : Messages.get(this, "unknown_desc");
 	}
-	
+
+	@Override
+	public String desc() {
+		String desc = super.desc();
+		for (Item item: Dungeon.hero.belongings){
+			if (item instanceof GooStaff && ((GooStaff) item).rank() == 2){
+				desc += "\n\n" + Messages.get(this,"goo_minion_effect");
+				break;
+			}
+		}
+		return desc;
+	}
+
 	@Override
 	public boolean isIdentified() {
 		return isKnown();
