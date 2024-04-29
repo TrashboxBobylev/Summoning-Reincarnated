@@ -212,6 +212,18 @@ public class GooMinion extends Minion {
     }
 
     @Override
+    public String description() {
+        if (rank == 2 && infusedPotion != null){
+            return super.description() + "\n\n" +
+                    Messages.get(this, "potion_desc",
+                            Reflection.newInstance(infusedPotion).name(),
+                            potionUses,
+                            Messages.get(infusedPotion, "goo_minion_effect"));
+        }
+        return super.description();
+    }
+
+    @Override
     public boolean attack( Char enemy, float dmgMulti, float dmgBonus, float accMulti ) {
         if (pumping && pumpedUp != 0) return false;
         boolean result = super.attack(enemy, dmgMulti, dmgBonus, accMulti);
