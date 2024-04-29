@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.GooMinion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -60,6 +61,7 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Stormvine;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Sungrass;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.GooMinionSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -301,7 +303,21 @@ public class Potion extends Item {
 		} else  {
 
 			Dungeon.level.pressCell( cell );
-			shatter( cell );
+			Char ch = Actor.findChar(cell);
+			if (ch instanceof GooMinion && ((GooMinion) ch).rank == 2){
+				((GooMinion) ch).infusedPotion = getClass();
+				((GooMinion) ch).potionUses = gooInfuseUses();
+				((GooMinion) ch).potionColor = splashColor();
+				if (Dungeon.level.heroFOV[cell]) {
+					Splash.at(ch.sprite.center(), splashColor(), 15);
+					((GooMinionSprite)ch.sprite).spray(((GooMinion) ch).potionColor);
+					GLog.i( Messages.get(GooMinion.class, "potion_infuse", name()) );
+					Sample.INSTANCE.play( Assets.Sounds.SHATTER );
+					Sample.INSTANCE.play( Assets.Sounds.CHARGEUP );
+                }
+			} else {
+				shatter(cell);
+			}
 
 			if (!anonymous){
 				Talent.onPotionUsed(curUser, cell, talentFactor);
@@ -387,7 +403,7 @@ public class Potion extends Item {
 	}
 	
 	protected int splashColor(){
-		return anonymous ? 0x00AAFF : ItemSprite.pick( image, 5, 9 );
+		return anonymous ? 0x00AAFF : (ItemSprite.pick( image, 5, 9 ) >> 0x8);
 	}
 	
 	protected void splash( int cell ) {
@@ -419,6 +435,10 @@ public class Potion extends Item {
 	@Override
 	public int energyVal() {
 		return 6 * quantity;
+	}
+
+	public int gooInfuseUses(){
+		return 3;
 	}
 
 	public static class PlaceHolder extends Potion {
