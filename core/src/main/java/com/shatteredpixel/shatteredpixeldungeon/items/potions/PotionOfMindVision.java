@@ -22,11 +22,14 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Fadeleaf;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
@@ -49,7 +52,15 @@ public class PotionOfMindVision extends Potion {
 			GLog.i( Messages.get(this, "see_none") );
 		}
 	}
-	
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (ch.alignment == Char.Alignment.ENEMY && !ch.properties().contains(Char.Property.IMMOVABLE)){
+			ScrollOfTeleportation.teleportChar(ch, Fadeleaf.class);
+			ch.HP = Math.min(ch.HT, ch.HP + ch.HT / 3);
+		}
+	}
+
 	@Override
 	public int value() {
 		return isKnown() ? 30 * quantity : super.value();

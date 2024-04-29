@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.BlobImmunity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -96,7 +97,16 @@ public class PotionOfPurity extends Potion {
 		SpellSprite.show(hero, SpellSprite.PURITY);
 		identify();
 	}
-	
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (ch.alignment == Char.Alignment.ALLY){
+			Buff.prolong( ch, BlobImmunity.class, BlobImmunity.DURATION / 2 );
+			if (Dungeon.level.heroFOV[ch.pos])
+				SpellSprite.show(ch, SpellSprite.PURITY);
+		}
+	}
+
 	@Override
 	public int value() {
 		return isKnown() ? 40 * quantity : super.value();

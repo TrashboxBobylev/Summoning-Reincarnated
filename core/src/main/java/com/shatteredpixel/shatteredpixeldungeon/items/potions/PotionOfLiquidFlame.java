@@ -23,12 +23,18 @@ package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
 
 public class PotionOfLiquidFlame extends Potion {
 
@@ -55,7 +61,20 @@ public class PotionOfLiquidFlame extends Potion {
 			}
 		}
 	}
-	
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (!ch.isImmune(Burning.class) && ch.alignment == Char.Alignment.ENEMY){
+			int damage = Random.NormalIntRange( 1, 3 + Dungeon.scalingDepth()/4 );
+			float modifier = 2f + 3f*(((float) ch.HP) / ch.HT);
+			Buff.detach( ch, Chill.class);
+			ch.damage(Math.round(damage*modifier), new Burning());
+			if (Dungeon.level.heroFOV[ch.pos]){
+				ch.sprite.centerEmitter().burst( FlameParticle.FACTORY, Math.round(5*modifier));
+			}
+		}
+	}
+
 	@Override
 	public int value() {
 		return isKnown() ? 30 * quantity : super.value();

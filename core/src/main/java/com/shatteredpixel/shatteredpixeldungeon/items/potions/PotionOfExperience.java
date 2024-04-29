@@ -21,6 +21,10 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
@@ -44,7 +48,22 @@ public class PotionOfExperience extends Potion {
 		hero.earnExp( hero.maxExp(), getClass() );
 		new Flare( 6, 32 ).color(0xFFFF00, true).show( curUser.sprite, 2f );
 	}
-	
+
+	@Override
+	public int gooInfuseUses() {
+		return 4;
+	}
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (ch.alignment == Char.Alignment.ALLY){
+			Buff.prolong(ch, Bless.class, Bless.DURATION/2);
+			if (Dungeon.level.heroFOV[ch.pos]){
+				new Flare(6, 32).color(0xFFFF00, true).show(ch.sprite, 2f);
+			}
+		}
+	}
+
 	@Override
 	public int value() {
 		return isKnown() ? 50 * quantity : super.value();

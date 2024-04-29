@@ -21,7 +21,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
@@ -43,7 +45,13 @@ public class PotionOfHaste extends Potion {
 		Buff.prolong( hero, Haste.class, Haste.DURATION);
 		SpellSprite.show(hero, SpellSprite.HASTE, 1, 1, 0);
 	}
-	
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (ch.alignment == Char.Alignment.ENEMY)
+			Buff.prolong(ch, Cripple.class, Cripple.DURATION/2f);
+	}
+
 	@Override
 	public int value() {
 		return isKnown() ? 40 * quantity : super.value();

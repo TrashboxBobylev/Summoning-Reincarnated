@@ -22,6 +22,8 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -50,6 +52,24 @@ public class PotionOfStrength extends Potion {
 		
 		Badges.validateStrengthAttained();
 		Badges.validateDuelistUnlock();
+	}
+
+	@Override
+	public int gooInfuseUses() {
+		return 12;
+	}
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		if (ch.alignment == Char.Alignment.ENEMY){
+			Buff.affect(ch, Weakness.class, 7f);
+			Buff.affect(ch, Vulnerable.class, 7f);
+			Buff.affect(ch, Hex.class, 7f);
+		} else if (ch.alignment == Char.Alignment.ALLY){
+			Buff.affect(ch, Adrenaline.class, 4f);
+			ch.HP = Math.min(ch.HT, ch.HP + ch.HT / 3);
+			ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(ch.HT / 3), FloatingText.HEALING);
+		}
 	}
 
 	@Override
