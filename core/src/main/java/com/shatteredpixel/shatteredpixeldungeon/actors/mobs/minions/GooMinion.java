@@ -44,12 +44,9 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GooMinionSprite;
 import com.watabou.noosa.Game;
-import com.watabou.utils.BArray;
+import com.watabou.utils.*;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.Bundle;
-import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -182,11 +179,9 @@ public class GooMinion extends Minion {
                             ch.damage(Random.NormalIntRange(min, max), Dungeon.hero);
                     }
                     else {
-                        try {
-                            infusedPotion.getDeclaredConstructor().newInstance().gooMinionAttack(ch);
-                        } catch (Exception e) {
-                            Game.reportException(e);
-                        }
+                        Potion potion = Reflection.newInstance(infusedPotion);
+                        if (potion != null)
+                            potion.gooMinionAttack(ch);
                     }
                 }
             }
