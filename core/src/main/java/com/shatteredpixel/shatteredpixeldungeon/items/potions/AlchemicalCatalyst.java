@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
@@ -75,7 +76,13 @@ public class AlchemicalCatalyst extends Potion {
 		curItem = p;
 		p.shatter(cell);
 	}
-	
+
+	@Override
+	public void gooMinionAttack(Char ch) {
+		Potion p = Reflection.newInstance(Random.chances(potionChances));
+		p.gooMinionAttack(ch);
+	}
+
 	@Override
 	public boolean isKnown() {
 		return true;
