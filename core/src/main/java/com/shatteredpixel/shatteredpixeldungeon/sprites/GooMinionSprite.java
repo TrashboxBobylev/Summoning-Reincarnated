@@ -92,7 +92,8 @@ public class GooMinionSprite extends MobSprite {
 
 	public void spray(int color){
 		spray.on = color != 0x000000;
-		spray.pour( GooInfuseParticle.initWithColor(color), 0.04f );
+		if (color != 0x000000)
+			spray.pour( GooInfuseParticle.initWithColor(color), 0.04f );
 	}
 
 	@Override
