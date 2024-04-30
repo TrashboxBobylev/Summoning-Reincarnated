@@ -211,6 +211,7 @@ public class Minion extends Mob {
                 && Dungeon.level.mobs.contains(enemy)
                 && (Dungeon.level.distance(enemy.pos, targetPos) <= distance)
                 && (invisible == 0)
+                && (!canBeIgnored(enemy))
                 && (behaviorType.buffType == null || enemy.buff(behaviorType.buffType) != null)){
             return enemy;
         }
