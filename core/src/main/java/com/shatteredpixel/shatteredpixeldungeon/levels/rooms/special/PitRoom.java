@@ -67,7 +67,7 @@ public class PitRoom extends SpecialRoom {
 		
 		Item mainLoot = null;
 		do {
-			switch (Random.Int(3)){
+			switch (Random.Int(4)){
 				case 0:
 					mainLoot = Generator.random(Generator.Category.RING);
 					break;
@@ -78,6 +78,9 @@ public class PitRoom extends SpecialRoom {
 					mainLoot = Generator.random(Random.oneOf(
 							Generator.Category.WEAPON,
 							Generator.Category.ARMOR));
+					break;
+				case 3:
+					mainLoot = Generator.random(Generator.Category.STAFF);
 					break;
 			}
 		} while ( mainLoot == null || Challenges.isItemBlocked(mainLoot));

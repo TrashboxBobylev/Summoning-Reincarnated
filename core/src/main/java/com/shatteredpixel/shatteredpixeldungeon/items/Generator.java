@@ -77,6 +77,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportat
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTerror;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
@@ -160,6 +161,13 @@ public class Generator {
 		MIS_T3  ( 0, 0, MissileWeapon.class ),
 		MIS_T4  ( 0, 0, MissileWeapon.class ),
 		MIS_T5  ( 0, 0, MissileWeapon.class ),
+
+		STAFF( 1, 1, Staff.class ),
+		STAFF_T1  ( 0, 0, Staff.class ),
+		STAFF_T2  ( 0, 0, Staff.class ),
+		STAFF_T3  ( 0, 0, Staff.class ),
+		STAFF_T4  ( 0, 0, Staff.class ),
+		STAFF_T5  ( 0, 0, Staff.class ),
 		
 		WAND	( 1, 1, Wand.class ),
 		RING	( 1, 0, Ring.class ),
@@ -429,6 +437,44 @@ public class Generator {
 			};
 			MIS_T5.defaultProbs = new float[]{ 3, 3, 3 };
 			MIS_T5.probs = MIS_T5.defaultProbs.clone();
+
+			//see Generator.randomStaff
+			STAFF.classes = new Class<?>[]{};
+			STAFF.probs = new float[]{};
+
+			STAFF_T1.classes = new Class<?>[]{
+					FroggitStaff.class
+			};
+			STAFF_T1.defaultProbs = new float[]{ 1 };
+			STAFF_T1.probs = STAFF_T1.defaultProbs.clone();
+
+			STAFF_T2.classes = new Class<?>[]{
+					GrayRatStaff.class,
+					SheepStaff.class
+			};
+			STAFF_T2.defaultProbs = new float[]{ 3, 3 };
+			STAFF_T2.probs = STAFF_T2.defaultProbs.clone();
+
+			STAFF_T3.classes = new Class<?>[]{
+					GnollHunterStaff.class,
+					MagicMissileStaff.class
+			};
+			STAFF_T3.defaultProbs = new float[]{ 3, 3 };
+			STAFF_T3.probs = STAFF_T3.defaultProbs.clone();
+
+			STAFF_T4.classes = new Class<?>[]{
+					WizardStaff.class,
+					RoboStaff.class
+			};
+			STAFF_T4.defaultProbs = new float[]{ 3, 3 };
+			STAFF_T4.probs = STAFF_T4.defaultProbs.clone();
+
+			STAFF_T5.classes = new Class<?>[]{
+					GooStaff.class,
+					BlasterStaff.class
+			};
+			STAFF_T5.defaultProbs = new float[]{ 3, 3 };
+			STAFF_T5.probs = STAFF_T5.defaultProbs.clone();
 			
 			FOOD.classes = new Class<?>[]{
 					Food.class,
@@ -569,6 +615,8 @@ public class Generator {
 				return randomWeapon();
 			case MISSILE:
 				return randomMissile();
+			case STAFF:
+				return randomStaff();
 			case ARTIFACT:
 				Item item = randomArtifact();
 				//if we're out of artifacts, return a ring instead.
@@ -602,6 +650,8 @@ public class Generator {
 			return randomWeapon(true);
 		} else if (cat == Category.MISSILE){
 			return randomMissile(true);
+		} else if (cat == Category.STAFF){
+			return randomStaff(true);
 		} else if (cat.defaultProbs == null || cat == Category.ARTIFACT) {
 			return random(cat);
 		} else if (cat.defaultProbsTotal != null){
@@ -690,6 +740,39 @@ public class Generator {
 			w = (MissileWeapon)randomUsingDefaults(misTiers[Random.chances(floorSetTierProbs[floorSet])]);
 		} else {
 			w = (MissileWeapon)random(misTiers[Random.chances(floorSetTierProbs[floorSet])]);
+		}
+		return w;
+	}
+
+	public static final Category[] staffTiers = new Category[]{
+			Category.STAFF_T1,
+			Category.STAFF_T2,
+			Category.STAFF_T3,
+			Category.STAFF_T4,
+			Category.STAFF_T5
+	};
+
+	public static Staff randomStaff(){
+		return randomStaff(Dungeon.depth / 5);
+	}
+
+	public static Staff randomStaff(int floorSet) {
+		return randomStaff(floorSet, false);
+	}
+
+	public static Staff randomStaff(boolean useDefaults) {
+		return randomStaff(Dungeon.depth / 5, useDefaults);
+	}
+
+	public static Staff randomStaff(int floorSet, boolean useDefaults) {
+
+		floorSet = (int)GameMath.gate(0, floorSet, floorSetTierProbs.length-1);
+
+		Staff w;
+		if (useDefaults){
+			w = (Staff) randomUsingDefaults(wepTiers[Random.chances(floorSetTierProbs[floorSet])]);
+		} else {
+			w = (Staff) random(wepTiers[Random.chances(floorSetTierProbs[floorSet])]);
 		}
 		return w;
 	}

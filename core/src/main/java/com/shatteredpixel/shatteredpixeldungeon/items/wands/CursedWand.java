@@ -367,7 +367,7 @@ public class CursedWand {
 				Item reward;
 				do {
 					reward = Generator.randomUsingDefaults(Random.oneOf(Generator.Category.WEAPON, Generator.Category.ARMOR,
-							Generator.Category.RING, Generator.Category.WAND));
+							Generator.Category.RING, Generator.Category.WAND, Generator.Category.STAFF));
 				} while (reward.level() < 1);
 				//play vfx/sfx manually as mimic isn't in the scene yet
 				Sample.INSTANCE.play(Assets.Sounds.MIMIC, 1, 0.85f);
@@ -430,7 +430,7 @@ public class CursedWand {
 				Item result;
 				do {
 					result = Generator.randomUsingDefaults(Random.oneOf(Generator.Category.WEAPON, Generator.Category.ARMOR,
-							Generator.Category.RING, Generator.Category.ARTIFACT));
+							Generator.Category.RING, Generator.Category.ARTIFACT, Generator.Category.STAFF));
 				} while (result.cursed);
 				if (result.isUpgradable()) result.upgrade();
 				result.cursed = result.cursedKnown = true;
