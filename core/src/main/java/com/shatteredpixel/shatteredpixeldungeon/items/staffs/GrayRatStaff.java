@@ -42,7 +42,7 @@ public class GrayRatStaff extends Staff {
     }
 
     @Override
-    public void customizeMinion(Minion minion) {
+    public void onSummoningMinion(Minion minion) {
         if (rank() == 3){
             Buff.affect(minion, Adrenaline.class, 7.5f);
         }

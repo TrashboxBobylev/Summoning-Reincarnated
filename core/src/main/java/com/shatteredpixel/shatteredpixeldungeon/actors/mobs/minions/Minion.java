@@ -145,6 +145,7 @@ public class Minion extends Mob {
         enchantment = staff.enchantment;
         augment = staff.augment;
         rank = staff.rank();
+        staff.customizeMinion(this);
     }
 
     @Override

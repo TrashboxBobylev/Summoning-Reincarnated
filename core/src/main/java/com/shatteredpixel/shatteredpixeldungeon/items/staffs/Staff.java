@@ -358,12 +358,13 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
 //                GameScene.flashForDocument(GUIDE_SUMMONING);
 //            }
             minion.setAttunement(ATUReq());
-            this.customizeMinion(minion);
+            this.onSummoningMinion(minion);
             minion.enchantment = enchantment;
             minion.augment = augment;
             minion.rank = rank();
             minion.behaviorType = defaultBehaviorType();
             minion.setMaxHP(hp(rank()));
+            this.customizeMinion(minion);
         } else GLog.warning( Messages.get(Staff.class, "fizzles") );
         staffUsed();
     }
@@ -381,6 +382,7 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
         curUser.spendAndNext( 1f );
     }
 
+    public void onSummoningMinion(Minion minion){ }
     public void customizeMinion(Minion minion){ }
 
     protected int chargeTurns = 400;
