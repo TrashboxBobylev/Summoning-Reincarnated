@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.Deat
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.GnollHunter;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.stationary.GasterBlaster;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
@@ -660,6 +661,10 @@ public abstract class Char extends Actor {
 			return;
 		}
 
+		if (buff(GasterBlaster.Karma.class) != null){
+			dmg *= 1.15f;
+		}
+
 		for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
 			dmg = (int) Math.ceil(dmg * buff.damageTakenFactor());
 		}
@@ -688,23 +693,25 @@ public abstract class Char extends Actor {
 			dmg = 0;
 		}
 
-		Terror t = buff(Terror.class);
-		if (t != null){
-			t.recover();
-		}
-		Dread d = buff(Dread.class);
-		if (d != null){
-			d.recover();
-		}
-		Charm c = buff(Charm.class);
-		if (c != null){
-			c.recover(src);
-		}
-		if (this.buff(Frost.class) != null){
-			Buff.detach( this, Frost.class );
-		}
-		if (this.buff(MagicalSleep.class) != null){
-			Buff.detach(this, MagicalSleep.class);
+		if (!(src instanceof GasterBlaster.Karma)) {
+			Terror t = buff(Terror.class);
+			if (t != null) {
+				t.recover();
+			}
+			Dread d = buff(Dread.class);
+			if (d != null) {
+				d.recover();
+			}
+			Charm c = buff(Charm.class);
+			if (c != null) {
+				c.recover(src);
+			}
+			if (this.buff(Frost.class) != null) {
+				Buff.detach(this, Frost.class);
+			}
+			if (this.buff(MagicalSleep.class) != null) {
+				Buff.detach(this, MagicalSleep.class);
+			}
 		}
 		if (this.buff(Doom.class) != null && !isImmune(Doom.class)){
 			dmg *= 1.67f;
@@ -721,7 +728,7 @@ public abstract class Char extends Actor {
 		}
 		
 		//TODO improve this when I have proper damage source logic
-		if (AntiMagic.RESISTS.contains(src.getClass()) && buff(ArcaneArmor.class) != null){
+		if (AntiMagic.RESISTS.contains(src.getClass()) && buff(ArcaneArmor.class) != null && !(src instanceof GasterBlaster.Karma)){
 			dmg -= Random.NormalIntRange(0, buff(ArcaneArmor.class).level());
 			if (dmg < 0) dmg = 0;
 		}
@@ -745,7 +752,7 @@ public abstract class Char extends Actor {
 			return;
 		}
 		
-		if (buff( Paralysis.class ) != null) {
+		if (buff( Paralysis.class ) != null && !(src instanceof GasterBlaster.Karma)) {
 			buff( Paralysis.class ).processDamage(dmg);
 		}
 
@@ -820,6 +827,7 @@ public abstract class Char extends Actor {
 			if (src instanceof Viscosity.DeferedDamage)                 icon = FloatingText.DEFERRED;
 			if (src instanceof Corruption)                              icon = FloatingText.CORRUPTION;
 			if (src instanceof AscensionChallenge)                      icon = FloatingText.AMULET;
+			if (src instanceof GasterBlaster.Karma)                     icon = FloatingText.KARMA;
 
 			sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(dmg + shielded), icon);
 		}
