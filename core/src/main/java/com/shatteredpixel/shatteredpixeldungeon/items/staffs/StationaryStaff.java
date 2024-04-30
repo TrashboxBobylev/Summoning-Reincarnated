@@ -80,6 +80,8 @@ public class StationaryStaff extends Staff {
     @Override
     public ArrayList<String> actions(Hero hero) {
         ArrayList<String> actions = super.actions(hero);
+        actions.remove(Staff.AC_SUMMON);
+        actions.add(AC_SUMMON);
         if (minion != null && minion.isAlive()){
             actions.add( AC_PLACE );
         }
