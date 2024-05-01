@@ -4,7 +4,7 @@ name: Upload thing when pushing something (Stable Reincarnated)
 on:
   push:
     branches:
-      - "**"
+      - "!master"
     tags:
       - "ReInc-v0.*"
 
