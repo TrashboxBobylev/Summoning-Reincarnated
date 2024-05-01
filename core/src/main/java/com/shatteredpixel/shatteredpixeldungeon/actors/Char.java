@@ -828,6 +828,7 @@ public abstract class Char extends Actor {
 			if (src instanceof Corruption)                              icon = FloatingText.CORRUPTION;
 			if (src instanceof AscensionChallenge)                      icon = FloatingText.AMULET;
 			if (src instanceof GasterBlaster.Karma)                     icon = FloatingText.KARMA;
+			if (src instanceof FrostBurn)								icon = FloatingText.FROSTBURN;
 
 			sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(dmg + shielded), icon);
 		}
@@ -929,6 +930,8 @@ public abstract class Char extends Actor {
 			//slowed and chilled do not stack
 		} else if (buff( Chill.class ) != null) {
 			timeScale *= buff( Chill.class ).speedFactor();
+		} else if (buff(FrostBurn.class) != null){
+			timeScale *= buff( FrostBurn.class ).speedFactor();
 		}
 		if (buff( Speed.class ) != null) {
 			timeScale *= 2.0f;

@@ -207,8 +207,12 @@ public class Heap implements Bundlable {
 			sprite.view(this).place( pos );
 		}
 	}
+
+	public void burn(){
+		burn(false);
+	}
 	
-	public void burn() {
+	public void burn(boolean isFrozen) {
 
 		if (type != Type.HEAP) {
 			return;
@@ -224,10 +228,14 @@ public class Heap implements Bundlable {
 			} else if (item instanceof Dewdrop) {
 				items.remove( item );
 				evaporated = true;
-			} else if (item instanceof MysteryMeat || item instanceof FrozenCarpaccio) {
-				replace( item, ChargrilledMeat.cook( item.quantity ) );
+			} else if (item instanceof MysteryMeat || (item instanceof FrozenCarpaccio && !isFrozen)) {
+				if (isFrozen){
+					replace( item, FrozenCarpaccio.cook((MysteryMeat) item) );
+				} else {
+					replace(item, ChargrilledMeat.cook(item.quantity));
+				}
 				burnt = true;
-			} else if (item instanceof Bomb && !(item instanceof ShockBomb)) {
+			}else if (item instanceof Bomb && !(item instanceof ShockBomb)) {
 				items.remove( item );
 				((Bomb) item).explode( pos );
 				if (((Bomb) item).explodesDestructively()) {

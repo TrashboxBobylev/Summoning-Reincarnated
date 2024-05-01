@@ -27,10 +27,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
@@ -49,11 +46,11 @@ public class WandOfFrost extends DamageWand {
 	}
 
 	public int min(int lvl){
-		return 2+lvl;
+		return 1+lvl;
 	}
 
 	public int max(int lvl){
-		return 8+5*lvl;
+		return 6+4*lvl;
 	}
 
 	@Override
@@ -101,9 +98,9 @@ public class WandOfFrost extends DamageWand {
 
 			if (ch.isAlive()) {
 				if (Dungeon.level.water[ch.pos])
-					Buff.affect(ch, Chill.class, 4 + buffedLvl());
+					Buff.affect(ch, FrostBurn.class).reignite(ch, 4 + buffedLvl());
 				else
-					Buff.affect(ch, Chill.class, 2 + buffedLvl());
+					Buff.affect(ch, FrostBurn.class).reignite(ch, 2 + buffedLvl());
 			}
 			}
 		} else {

@@ -67,6 +67,7 @@ public class FloatingText extends RenderedTextBlock {
 	public static int CORRUPTION= 16;
 	public static int AMULET    = 17;
 	public static int KARMA     = 25;
+	public static int FROSTBURN = 26;
 
 	//positive icons
 	public static int HEALING   = 18;

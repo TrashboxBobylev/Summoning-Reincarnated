@@ -48,6 +48,7 @@ public class Speck extends Image {
 	public static final int BUBBLE      = 12;
 	public static final int STEAM       = 13;
 	public static final int COIN        = 14;
+	public static final int SNOWFLAKE 	= 16;
 	
 	public static final int DISCOVER    = 101;
 	public static final int EVOKE       = 102;
@@ -70,6 +71,7 @@ public class Speck extends Image {
 	public static final int BLIZZARD    = 119;
 	public static final int HEALGAS     = 120;
 	public static final int HONEY       = 121;
+	public static final int FROSTBURN 	= 125;
 	
 	private static final int SIZE = 7;
 	
@@ -143,6 +145,9 @@ public class Speck extends Image {
 			break;
 		case CALM:
 			frame( film.get( SCREAM ) );
+			break;
+		case FROSTBURN:
+			frame( film.get( SNOWFLAKE ) );
 			break;
 		default:
 			frame( film.get( type ) );
@@ -374,6 +379,15 @@ public class Speck extends Image {
 			angle = Random.Float( 360 );
 			lifespan = Random.Float( 3f, 8f );
 			break;
+
+		case FROSTBURN:
+			hardlight( 0x3780ff );
+			angularSpeed = 15;
+			angle = Random.Float( 180 );
+			lifespan = Random.Float( 0.11f, 0.33f );
+			acc.set( 0, -95 );
+			speed.set(0);
+			break;
 			
 		case SMOKE:
 			hardlight( 0x000000 );
@@ -508,7 +522,12 @@ public class Speck extends Image {
 				am = (float)Math.sqrt( (p < 0.5f ? p : 1 - p) );
 				scale.set( 1 + p );
 				break;
-				
+
+			case FROSTBURN:
+				am = (float)Math.sqrt( (p < 0.5f ? p : 1 - p) * 0.5f );
+				scale.set( 1 + p/2 );
+				break;
+
 			case JET:
 				am = (p < 0.5f ? p : 1 - p) * 2;
 				scale.set( p * 1.5f );

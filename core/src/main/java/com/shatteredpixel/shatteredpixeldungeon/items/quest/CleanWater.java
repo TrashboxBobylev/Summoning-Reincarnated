@@ -142,6 +142,7 @@ public class CleanWater extends Item {
         if (ch != null) {
             Buff.detach(ch, Burning.class);
             Buff.detach(ch, Ooze.class);
+            Buff.detach(ch, FrostBurn.class);
             Splash.at( ch.sprite.center(), color, 5 );
         } else {
             Splash.at( cell, color, 5 );
