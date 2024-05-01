@@ -6,7 +6,7 @@ on:
     branches:
       - "master"
     tags-ignore:
-      - "v*"
+      - "v0.*"
 
 jobs:
   build:

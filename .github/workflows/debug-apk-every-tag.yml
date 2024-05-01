@@ -6,7 +6,7 @@ on:
     branches:
       - "master"
     tags:
-      - "v*"
+      - "v0.*"
 
 jobs:
   build:
@@ -26,7 +26,7 @@ jobs:
         id: vars
         shell: bash
         run: |
-          echo "version="Reincarnated-0.3.0" >> $GITHUB_ENV
+          echo "version="Reincarnated-0.3.0"" >> $GITHUB_ENV
           echo "Reincarnated-0.3.0" > version
 
       # 2
