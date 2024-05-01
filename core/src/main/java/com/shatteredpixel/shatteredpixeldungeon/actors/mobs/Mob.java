@@ -1400,6 +1400,11 @@ public abstract class Mob extends Char {
 				level.mobs.remove( mob );
 				heldAllies.add(mob);
 				
+			//preserve minions no matter where they are
+			} if (mob instanceof Minion) {
+				level.mobs.remove( mob );
+				heldAllies.add(mob);
+
 			//preserve intelligent allies if they are near the hero
 			} else if (mob.alignment == Alignment.ALLY
 					&& mob.intelligentAlly
