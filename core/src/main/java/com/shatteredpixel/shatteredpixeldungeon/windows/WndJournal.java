@@ -441,7 +441,7 @@ public class WndJournal extends WndTabbed {
 	private static class CatalogTab extends Component{
 		
 		private RedButton[] itemButtons;
-		private static final int NUM_BUTTONS = 7;
+		private static final int NUM_BUTTONS = 8;
 		
 		private static int currentItemIdx   = 0;
 		
@@ -451,10 +451,11 @@ public class WndJournal extends WndTabbed {
 		private static final int WAND_IDX   = 2;
 		private static final int RING_IDX   = 3;
 		private static final int ARTIF_IDX  = 4;
-		private static final int POTION_IDX = 5;
-		private static final int SCROLL_IDX = 6;
+		private static final int STAFF_IDX  = 5;
+		private static final int POTION_IDX = 6;
+		private static final int SCROLL_IDX = 7;
 		
-		private static final int spriteIndexes[] = {1, 2, 4, 5, 6, 9, 11};
+		private static final int spriteIndexes[] = {1, 2, 4, 5, 6, 0, 9, 11};
 
 		private ScrollingListPane list;
 		
@@ -470,7 +471,10 @@ public class WndJournal extends WndTabbed {
 						updateList();
 					}
 				};
-				itemButtons[i].icon(new ItemSprite(ItemSpriteSheet.SOMETHING + spriteIndexes[i], null));
+				int image = ItemSpriteSheet.SOMETHING + spriteIndexes[i];
+				if (i == STAFF_IDX)
+					image = ItemSpriteSheet.STAFF_PLACEHOLDER;
+				itemButtons[i].icon(new ItemSprite(image, null));
 				add( itemButtons[i] );
 			}
 
@@ -520,6 +524,9 @@ public class WndJournal extends WndTabbed {
 			} else if (currentItemIdx == WAND_IDX){
 				itemClasses = new ArrayList<>(Catalog.WANDS.items());
 				for (Class<? extends Item> cls : itemClasses) known.put(cls, true);
+			} else if (currentItemIdx == STAFF_IDX){
+				itemClasses = new ArrayList<>(Catalog.STAFFS.items());
+				for (Class<? extends Item> cls : itemClasses) known.put(cls, true);
 			} else if (currentItemIdx == RING_IDX){
 				itemClasses = new ArrayList<>(Catalog.RINGS.items());
 				for (Class<? extends Item> cls : itemClasses) known.put(cls, Ring.getKnown().contains(cls));
@@ -564,8 +571,11 @@ public class WndJournal extends WndTabbed {
 						((Scroll) item).anonymize();
 					}
 				}
+				int image = ItemSpriteSheet.SOMETHING + spriteIndexes[currentItemIdx];
+				if (currentItemIdx == STAFF_IDX)
+					image = ItemSpriteSheet.STAFF_PLACEHOLDER;
 				ScrollingListPane.ListItem listItem = new ScrollingListPane.ListItem(
-						(itemIDed && itemSeen) ? new ItemSprite(item) : new ItemSprite( ItemSpriteSheet.SOMETHING + spriteIndexes[currentItemIdx]),
+						(itemIDed && itemSeen) ? new ItemSprite(item) : new ItemSprite(image),
 						null,
 						itemSeen ? Messages.titleCase(item.trueName()) : "???"
 				){

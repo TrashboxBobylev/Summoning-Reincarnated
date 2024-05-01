@@ -545,10 +545,12 @@ public class ItemSpriteSheet {
 	public static final int ROPES           = SUMM_MISCS+0;
 	public static final int RUNIC_SHOT      = SUMM_MISCS+1;
 	public static final int CLEAN_WATER     = SUMM_MISCS+2;
+	public static final int STAFF_PLACEHOLDER= SUMM_MISCS+3;
 	static {
 		assignItemRect(ROPES, 16, 16);
 		assignItemRect(RUNIC_SHOT, 13, 13);
 		assignItemRect(CLEAN_WATER, 10, 14);
+		assignItemRect(STAFF_PLACEHOLDER, 14, 14);
 	}
 
 	private static final int SCROLLS        =                               xy(1, 19);  //16 slots

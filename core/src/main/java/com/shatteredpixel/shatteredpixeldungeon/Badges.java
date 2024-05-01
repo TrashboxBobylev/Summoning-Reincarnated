@@ -159,6 +159,7 @@ public class Badges {
 		ALL_WEAPONS_IDENTIFIED      ( 100 ),
 		ALL_ARMOR_IDENTIFIED        ( 101 ),
 		ALL_WANDS_IDENTIFIED        ( 102 ),
+		ALL_STAFFS_IDENTIFIED       ( 112 ),
 		ALL_ITEMS_IDENTIFIED        ( 103, true ),
 		VICTORY_WARRIOR,
 		VICTORY_MAGE,

@@ -44,7 +44,8 @@ public enum Catalog {
 	RINGS,
 	ARTIFACTS,
 	POTIONS,
-	SCROLLS;
+	SCROLLS,
+	STAFFS;
 	
 	private LinkedHashMap<Class<? extends Item>, Boolean> seen = new LinkedHashMap<>();
 	
@@ -106,6 +107,22 @@ public enum Catalog {
 			SCROLLS.seen.put( scroll, false);
 		}
 
+//		for (Class weapon : Generator.Category.STAFF_T1.classes){
+//			STAFFS.seen.put( weapon, false);
+//		}
+		for (Class weapon : Generator.Category.STAFF_T2.classes){
+			STAFFS.seen.put( weapon, false);
+		}
+		for (Class weapon : Generator.Category.STAFF_T3.classes){
+			STAFFS.seen.put( weapon, false);
+		}
+		for (Class weapon : Generator.Category.STAFF_T4.classes){
+			STAFFS.seen.put( weapon, false);
+		}
+		for (Class weapon : Generator.Category.STAFF_T5.classes){
+			STAFFS.seen.put( weapon, false);
+		}
+
 	}
 	
 	public static LinkedHashMap<Catalog, Badges.Badge> catalogBadges = new LinkedHashMap<>();
@@ -113,6 +130,7 @@ public enum Catalog {
 		catalogBadges.put(WEAPONS, Badges.Badge.ALL_WEAPONS_IDENTIFIED);
 		catalogBadges.put(ARMOR, Badges.Badge.ALL_ARMOR_IDENTIFIED);
 		catalogBadges.put(WANDS, Badges.Badge.ALL_WANDS_IDENTIFIED);
+		catalogBadges.put(STAFFS, Badges.Badge.ALL_STAFFS_IDENTIFIED);
 		catalogBadges.put(RINGS, Badges.Badge.ALL_RINGS_IDENTIFIED);
 		catalogBadges.put(ARTIFACTS, Badges.Badge.ALL_ARTIFACTS_IDENTIFIED);
 		catalogBadges.put(POTIONS, Badges.Badge.ALL_POTIONS_IDENTIFIED);
