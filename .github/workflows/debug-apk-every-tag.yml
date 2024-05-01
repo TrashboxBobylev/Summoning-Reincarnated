@@ -1,0 +1,79 @@
+## 1
+name: Upload thing when pushing something (Stable Reincarnated)
+
+on:
+  push:
+    branches:
+      - "master"
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Set up JDK environment to 8
+        uses: actions/setup-java@v1.4.3
+        with:
+          java-version: 17
+
+      # 1
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create dynamic version number
+        id: vars
+        shell: bash
+        run: |
+          echo "version="Reincarnated-0.3.0" >> $GITHUB_ENV
+          echo "Reincarnated-0.3.0" > version
+
+      # 2
+      - name: Generate Release APK
+        run: ./gradlew android:assembleRelease
+      - name: Generate Release JAR
+        run: ./gradlew desktop:release
+      # 3
+      - name: Get Build Tool Version
+        shell: bash
+        run: |
+          BUILD_TOOL_VERSION=$(ls /usr/local/lib/android/sdk/build-tools/ | tail -n 1)
+          echo "BUILD_TOOL_VERSION=$BUILD_TOOL_VERSION" >> $GITHUB_ENV
+          echo Last build tool version is: $BUILD_TOOL_VERSION
+
+      - name: Sign APK
+        uses: r0adkll/sign-android-release@v1
+        # ID used to access action output
+        id: sign_app
+        with:
+          releaseDirectory: android/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
+
+      - name: Rename APK
+        run: mv android/build/outputs/apk/release/android-release-unsigned-signed.apk android/build/outputs/apk/release/android-release.apk
+
+      - name: Upload as Release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: false
+          title: "${{ env.version }}"
+          files: |
+              android/build/outputs/apk/release/android-release.apk
+              desktop/build/libs/*.jar
+      - name: Remove unsigned apk
+        run: rm android/build/outputs/apk/release/android-release-unsigned.apk
+
+      - name: Remove unsigned apk
+        run: rm android/build/outputs/apk/release/android-release-unsigned-aligned.apk
+
+      - name: Remove signing key
+        run: rm android/build/outputs/apk/release/signingKey.jks
+
