@@ -5,8 +5,6 @@ on:
   push:
     branches:
       - "**"
-    tags:
-      - "!ReInc-v0.*"
 
 jobs:
   build:
