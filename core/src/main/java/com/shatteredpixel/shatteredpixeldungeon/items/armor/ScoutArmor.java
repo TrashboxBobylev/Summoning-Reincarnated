@@ -145,7 +145,7 @@ public class ScoutArmor extends Armor {
                 SpiritBow.superShot = true;
                 bow.knockArrow().cast(curUser, target);
                 float duration = 25f;
-                duration *= bow.speedMod(bow.rank());
+                duration /= bow.speedMod(bow.rank());
                 Buff.affect(curUser, ScoutCooldown.class, duration).set(duration);
             }
         }
