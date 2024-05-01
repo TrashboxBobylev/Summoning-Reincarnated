@@ -3,6 +3,8 @@ name: Upload thing when pushing something (Stable Reincarnated)
 
 on:
   push:
+    branches:
+      - "**"
     tags:
       - "**"
 
