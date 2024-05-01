@@ -770,9 +770,9 @@ public class Generator {
 
 		Staff w;
 		if (useDefaults){
-			w = (Staff) randomUsingDefaults(wepTiers[Random.chances(floorSetTierProbs[floorSet])]);
+			w = (Staff) randomUsingDefaults(staffTiers[Random.chances(floorSetTierProbs[floorSet])]);
 		} else {
-			w = (Staff) random(wepTiers[Random.chances(floorSetTierProbs[floorSet])]);
+			w = (Staff) random(staffTiers[Random.chances(floorSetTierProbs[floorSet])]);
 		}
 		return w;
 	}
