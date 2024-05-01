@@ -1946,7 +1946,7 @@ public class Hero extends Char {
 			interrupt();
 
 			if (ankh.isBlessed()) {
-				this.HP = HT / 4;
+				this.HP = Math.max(1, HT / 4);
 
 				PotionOfHealing.cure(this);
 				Buff.prolong(this, AnkhInvulnerability.class, AnkhInvulnerability.DURATION);
