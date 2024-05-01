@@ -23,12 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
-import com.shatteredpixel.shatteredpixeldungeon.ui.Archs;
-import com.shatteredpixel.shatteredpixeldungeon.ui.ExitButton;
-import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
-import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
-import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
-import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
+import com.shatteredpixel.shatteredpixeldungeon.ui.*;
 import com.watabou.input.PointerEvent;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.ColorBlock;
@@ -62,6 +57,91 @@ public class AboutScene extends PixelScene {
 		Component content = list.content();
 		content.clear();
 
+		CreditsBlock tb = new CreditsBlock(true, ItemSlot.RANK2,
+				"Summoning PD: Reincarnated",
+				Icons.BOBYLEV.get(),
+				"Developed by: _Trashbox Bobylev_\nThe remaster of original Summoning PD\nBased on ShatteredPD's open source",
+				"reddit.com/u/TrashboxBobylev",
+				"https://reddit.com/u/TrashboxBobylev");
+		tb.setRect((w - fullWidth)/2f, 6, 120, 0);
+		content.add(tb);
+
+		CreditsBlock zachary = new CreditsBlock(false, 0xE8D906,
+				"Wiki, Testing and Proofreading:",
+				Icons.ZACHARY.get(),
+				"Zackary4536",
+				"Click for Fandom page",
+				"https://pixeldungeon.fandom.com/wiki/User:Togekissy");
+		zachary.setSize(colWidth/2f, 0);
+		if (landscape()){
+			zachary.setPos(tb.right()-10, tb.top() + (tb.height() - tb.height())/2f);
+		} else {
+			zachary.setPos(w/2f - colWidth/2f, tb.bottom()+5);
+		}
+		content.add(zachary);
+
+		CreditsBlock omicronrg = new CreditsBlock(false, ItemSlot.ENHANCED,
+				"Support and Testing:",
+				Icons.OMICRONRG.get(),
+				"Daniel Ømicrónrg Rodriguez",
+				"sites.google.com/view/omicronrg9",
+				"https://sites.google.com/view/omicronrg9");
+		omicronrg.setRect(zachary.right()+13, zachary.top(), colWidth/2f, 0);
+		content.add(omicronrg);
+
+		CreditsBlock krauzxe = new CreditsBlock(false, 0xFF8C44,
+				"Former Sprite Artist:",
+				Icons.KRAUZXE.get(),
+				"Krauzxe##1119",
+				null,
+				null);
+		krauzxe.setSize(colWidth/2f, 0);
+		if (landscape()){
+			krauzxe.setPos(zachary.left()+zachary.width()/2, omicronrg.bottom()+8);
+		} else {
+			krauzxe.setPos(tb.left()+tb.width()/4, omicronrg.bottom()+7);
+		}
+		content.add(krauzxe);
+
+		CreditsBlock lolman = new CreditsBlock(false, 0xC6C6C6,
+				"Support and Ideas:",
+				Icons.LOLMAN.get(),
+				"Gammalolman#1119",
+				"reddit.com/u/Hyperlolman",
+				"https://www.reddit.com/user/Hyperlolman");
+		lolman.setSize(colWidth/2f, 0);
+		if (landscape()){
+			lolman.setPos(tb.right(), krauzxe.bottom()+8);
+		} else {
+			lolman.setPos(tb.left()-5, krauzxe.bottom()+8);
+		}
+		content.add(lolman);
+
+		CreditsBlock marshall = new CreditsBlock(false, ItemSlot.WARNING,
+				"Conjurer's sprites:",
+				Icons.MARSHALL.get(),
+				"MarshalldotEXE",
+				"Click for Youtube channel",
+				"https://www.youtube.com/channel/UCEhheHlAmqkGMqULoDAIMOQ");
+		marshall.setRect(lolman.right()+10, lolman.top(), colWidth/2f, 0);
+		content.add(marshall);
+
+		CreditsBlock guys = new CreditsBlock(false, Window.TITLE_COLOR,
+				"The rest of credits:",
+				Icons.INFO.get(),
+				"RavenWolf#4290 - Advanced sprites\n" +
+						"Zrp200#0484, Kohru#4813 - Code spinnets\n"+
+						"smujames#5300, NeoSlav#5320 and rest of community - ideas and support",
+				"Pixel Dungeon's Discord link",
+				"https://discord.gg/KBfMN8X");
+		guys.setSize(colWidth, 4);
+		if (landscape()){
+			guys.setPos(tb.left(), krauzxe.bottom()+10);
+		} else {
+			guys.setPos(tb.left(), marshall.bottom()+10);
+		}
+		content.add(guys);
+
 		//*** Shattered Pixel Dungeon Credits ***
 
 		String shpxLink = "https://ShatteredPixel.com";
@@ -76,12 +156,16 @@ public class AboutScene extends PixelScene {
 				"Developed by: _Evan Debenham_\nBased on Pixel Dungeon's open source",
 				"ShatteredPixel.com",
 				shpxLink);
+		shpx.setRect((w - fullWidth)/2f, 6, 120, 0);
+		content.add(shpx);
 		if (landscape()){
-			shpx.setRect((w - fullWidth)/2f - 6, 10, 120, 0);
+			shpx.setRect(tb.left(), guys.bottom() + 24, colWidth, 0);
 		} else {
-			shpx.setRect((w - fullWidth)/2f, 6, 120, 0);
+			shpx.setRect(tb.left(), guys.bottom() + 16, colWidth, 0);
 		}
 		content.add(shpx);
+
+		addLine(shpx.top() - 8, content);
 
 		CreditsBlock alex = new CreditsBlock(false, Window.SHPX_COLOR,
 				"Hero Art & Design:",

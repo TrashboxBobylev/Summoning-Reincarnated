@@ -121,7 +121,13 @@ public enum Icons {
 	KRISTJAN,
 	CUBE_CODE,
 	PURIGRO,
-	ARCNOR;
+	ARCNOR,
+
+	ZACHARY,
+	OMICRONRG,
+	KRAUZXE,
+	LOLMAN,
+	MARSHALL;
 
 	public Image get() {
 		return get( this );
@@ -387,6 +393,26 @@ public enum Icons {
 				break;
 			case CUBE_CODE:
 				icon.frame( icon.texture.uvRectBySize( 160, 96, 27, 30 ) );
+				icon.scale.set(PixelScene.align(0.49f));
+				break;
+			case ZACHARY:
+				icon.frame( icon.texture.uvRectBySize( 0, 128, 32, 32 ) );
+				icon.scale.set(PixelScene.align(0.49f));
+				break;
+			case OMICRONRG:
+				icon.frame( icon.texture.uvRectBySize( 32, 128, 32, 32 ) );
+				icon.scale.set(PixelScene.align(0.49f));
+				break;
+			case KRAUZXE:
+				icon.frame( icon.texture.uvRectBySize( 64, 128, 32, 32 ) );
+				icon.scale.set(PixelScene.align(0.49f));
+				break;
+			case LOLMAN:
+				icon.frame( icon.texture.uvRectBySize( 96, 128, 32, 32 ) );
+				icon.scale.set(PixelScene.align(0.49f));
+				break;
+			case MARSHALL:
+				icon.frame( icon.texture.uvRectBySize( 128, 128, 32, 32 ) );
 				icon.scale.set(PixelScene.align(0.49f));
 				break;
 
