@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - "master"
-    tags-ignore:
+    tags:
       - "!ReInc-v0.*"
 
 jobs:
