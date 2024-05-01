@@ -32,10 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Ch
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.ElementalStrike;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.NaturesPower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snake;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.*;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Wizard;
 import com.shatteredpixel.shatteredpixeldungeon.effects.*;
@@ -1762,8 +1759,17 @@ public class Hero extends Char {
 				&& !Dungeon.level.locked
 				&& !Dungeon.level.plants.containsKey(cell)
 				&& (Dungeon.depth < 26 || Dungeon.level.getTransition(cell).type == LevelTransition.Type.REGULAR_ENTRANCE) ) {
+			boolean canDo = true;
+			if (Dungeon.level.getTransition(cell).type == LevelTransition.Type.REGULAR_EXIT &&
+					(Dungeon.depth > Dungeon.chapterSize()*4) && (Dungeon.depth < Dungeon.chapterSize()*5)) {
+				for (Mob mob: Dungeon.level.mobs){
+					if (mob instanceof AttunementConstruct)
+						canDo = false;
+				}
+			}
 
-			curAction = new HeroAction.LvlTransition( cell );
+			if (canDo) curAction = new HeroAction.LvlTransition( cell );
+			else GLog.warning(Messages.get(Level.class, "attunement_seal"));
 			
 		}  else {
 			

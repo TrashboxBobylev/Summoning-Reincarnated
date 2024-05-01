@@ -338,5 +338,6 @@ public class Assets {
 		public static final String WIZARD           = "sprites/wizard.png";
 		public static final String DM150            = "sprites/dm150.png";
 		public static final String BLASTER          = "sprites/blaster.png";
+		public static final String ATU_CONSTRUCT    = "sprites/attunement_construct.png";
 	}
 }

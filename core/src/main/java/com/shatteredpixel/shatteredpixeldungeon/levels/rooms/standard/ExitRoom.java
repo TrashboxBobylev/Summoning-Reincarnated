@@ -21,12 +21,15 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.AttunementConstruct;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.watabou.utils.Point;
+import com.watabou.utils.Random;
 
 public class ExitRoom extends StandardRoom {
 	
@@ -52,6 +55,17 @@ public class ExitRoom extends StandardRoom {
 		int exit = level.pointToCell(random( 2 ));
 		Painter.set( level, exit, Terrain.EXIT );
 		level.transitions.add(new LevelTransition(level, exit, LevelTransition.Type.REGULAR_EXIT));
+
+		if (Dungeon.depth > Dungeon.chapterSize() * 4) {
+			for (int i = 0; i < Random.IntRange(1, 4); i++) {
+				AttunementConstruct npc = new AttunementConstruct();
+				do {
+					npc.pos = level.pointToCell(random());
+				} while (level.map[npc.pos] != Terrain.EMPTY || level.findMob(npc.pos) != null || npc.pos == level.exit);
+				npc.state = npc.SLEEPING;
+				level.mobs.add(npc);
+			}
+		}
 	}
 	
 	@Override
