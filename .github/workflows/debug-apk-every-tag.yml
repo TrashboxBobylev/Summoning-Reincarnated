@@ -3,10 +3,8 @@ name: Upload thing when pushing something (Stable Reincarnated)
 
 on:
   push:
-    branches:
-      - "master"
     tags:
-      - "v0.*"
+      - "ReInc-v0.*"
 
 jobs:
   build:
@@ -62,6 +60,7 @@ jobs:
         uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
           prerelease: false
           title: "${{ env.version }}"
           files: |

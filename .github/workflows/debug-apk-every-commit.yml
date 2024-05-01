@@ -4,9 +4,9 @@ name: Upload thing when pushing something (Reincarnated)
 on:
   push:
     branches:
-      - "master"
-    tags-ignore:
-      - "v0.*"
+      - "**"
+    tags:
+      - "!ReInc-v0.*"
 
 jobs:
   build:
