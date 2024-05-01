@@ -41,6 +41,7 @@ public class MagicMissileMinion extends StationaryMinion {
     {
         spriteClass = MagicMissileSprite.class;
         properties.add(Property.RANGED);
+        maxDefense = 12;
     }
 
     @Override
