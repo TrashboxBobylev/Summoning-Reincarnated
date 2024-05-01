@@ -54,6 +54,10 @@ public class Robo extends Minion{
         return super.attackDelay() * mod;
     }
 
+    public float evasionModifier(){
+        return 0.6f;
+    }
+
     @Override
     public int defenseProc(Char enemy, int damage) {
         attemptToHeal(2 + damage / 5);
