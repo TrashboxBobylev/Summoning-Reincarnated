@@ -131,7 +131,7 @@ public class HeavyBoomerang extends MissileWeapon {
 													Dungeon.level.drop(boomerang, returnPos).sprite.drop();
 												}
 												
-											} else if (returnTarget != null){
+											} else if (returnTarget != null && returnTarget.alignment != Char.Alignment.ALLY){
 												boomerang.circleBackhit = true;
 												if (((Hero)target).shoot( returnTarget, boomerang )) {
 													boomerang.decrementDurability();
