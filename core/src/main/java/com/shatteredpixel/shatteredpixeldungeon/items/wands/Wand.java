@@ -89,7 +89,7 @@ public abstract class Wand extends Item {
 	private float usesLeftToID = USES_TO_ID;
 	private float availableUsesToID = USES_TO_ID/2f;
 
-	protected int collisionProperties = Ballistica.MAGIC_BOLT;
+	protected int collisionProperties = Ballistica.FRIENDLY_MAGIC;
 	
 	{
 		defaultAction = AC_ZAP;
