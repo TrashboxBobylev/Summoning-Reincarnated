@@ -343,7 +343,7 @@ public abstract class Mob extends Char {
 
 		for (Char ch : enemyList){
 			float priority = (float)PathFinder.distance[ch.pos];
-			if (canAttack(ch)) priority += 6.0f;
+			if (canAttack(ch)) priority *= 2.0f;
 			enemies.put(ch, modifyPriority(priority) * enemies.get(ch));
 		}
 
@@ -397,6 +397,8 @@ public abstract class Mob extends Char {
 			}
 		}
 
+		HashMap<Char, Float> enemies = lookForEnemies();
+
 		//find a new enemy if..
 		boolean newEnemy = false;
 		//we have no enemy, or the current one is dead/missing
@@ -408,6 +410,13 @@ public abstract class Mob extends Char {
 		//We are charmed and current enemy is what charmed us
 		} else if (buff(Charm.class) != null && buff(Charm.class).object == enemy.id()) {
 			newEnemy = true;
+		} else {
+			for (Map.Entry<Char, Float> enemy: enemies.entrySet()) {
+				if (enemy.getKey() != this.enemy &&
+						enemy.getValue() >
+								(enemies.containsKey(this.enemy) ? enemies.get(this.enemy) : this.enemy.targetPriority()))
+					newEnemy = true;
+			}
 		}
 
 		//additionally, if we are an ally, find a new enemy if...
@@ -422,75 +431,6 @@ public abstract class Mob extends Char {
 		}
 
 		if ( newEnemy ) {
-
-			HashMap<Char, Float> enemies = new HashMap<>();
-
-			//if we are amoked...
-			if ( buff(Amok.class) != null) {
-				//try to find an enemy mob to attack first.
-				for (Mob mob : Dungeon.level.mobs)
-					if (mob.alignment == Alignment.ENEMY && mob != this
-							&& canSee(mob.pos) && mob.invisible <= 0 && !canBeIgnored(mob)) {
-						enemies.put(mob, mob.targetPriority());
-					}
-				
-				if (enemies.isEmpty()) {
-					//try to find ally mobs to attack second.
-					for (Mob mob : Dungeon.level.mobs)
-						if (mob.alignment == Alignment.ALLY && mob != this
-								&& canSee(mob.pos) && mob.invisible <= 0 && !canBeIgnored(mob)) {
-							enemies.put(mob, mob.targetPriority());
-						}
-					
-					if (enemies.isEmpty()) {
-						//try to find the hero third
-						if (canSee(Dungeon.hero.pos) && Dungeon.hero.invisible <= 0) {
-							enemies.put(Dungeon.hero, Dungeon.hero.targetPriority());
-						}
-					}
-				}
-				
-			//if we are an ally...
-			} else if ( alignment == Alignment.ALLY ) {
-				//look for hostile mobs to attack
-				for (Mob mob : Dungeon.level.mobs)
-					if (mob.alignment == Alignment.ENEMY && canSee(mob.pos)
-							&& mob.invisible <= 0 && !mob.isInvulnerable(getClass()))
-						//do not target passive mobs
-						//intelligent allies also don't target mobs which are wandering or asleep
-						//unless they are aggressive minions
-						if (mob.state != mob.PASSIVE &&
-								(!intelligentAlly || (mob.state != mob.SLEEPING && mob.state != mob.WANDERING)
-										|| !(this instanceof Minion && ((Minion) this).behaviorType == Minion.BehaviorType.AGGRESSIVE))) {
-							enemies.put(mob, mob.targetPriority());
-						}
-				
-			//if we are an enemy...
-			} else if (alignment == Alignment.ENEMY) {
-				//look for ally mobs to attack
-				for (Mob mob : Dungeon.level.mobs)
-					if (mob.alignment == Alignment.ALLY && canSee(mob.pos) && mob.invisible <= 0) {
-						//we are neutral to minions, unless they are attacking everything
-						if (!(mob instanceof Minion) || (((Minion) mob).behaviorType == Minion.BehaviorType.AGGRESSIVE) || buff(((Minion) mob).behaviorType.buffType) != null)
-							enemies.put(mob, mob.targetPriority());
-					}
-
-				//and look for the hero
-				if (canSee(Dungeon.hero.pos) && Dungeon.hero.invisible <= 0) {
-					enemies.put(Dungeon.hero, Dungeon.hero.targetPriority());
-				}
-				
-			}
-
-			//do not target anything that's charming us
-			Charm charm = buff( Charm.class );
-			if (charm != null){
-				Char source = (Char)Actor.findById( charm.object );
-				if (source != null && enemies.containsKey(source) && enemies.size() > 1){
-					enemies.remove(source);
-				}
-			}
-
 			//neutral characters in particular do not choose enemies.
 			if (enemies.isEmpty()){
 				return null;
@@ -501,7 +441,87 @@ public abstract class Mob extends Char {
 		} else
 			return enemy;
 	}
-	
+
+	private HashMap<Char, Float> lookForEnemies() {
+		HashMap<Char, Float> enemies = new HashMap<>();
+
+		//if we are amoked...
+		if ( buff(Amok.class) != null) {
+			//try to find an enemy mob to attack first.
+			for (Mob mob : Dungeon.level.mobs)
+				if (mob.alignment == Alignment.ENEMY && mob != this
+						&& canSee(mob.pos) && mob.invisible <= 0 && !canBeIgnored(mob)) {
+					enemies.put(mob, mob.targetPriority());
+				}
+
+			if (enemies.isEmpty()) {
+				//try to find ally mobs to attack second.
+				for (Mob mob : Dungeon.level.mobs)
+					if (mob.alignment == Alignment.ALLY && mob != this
+							&& canSee(mob.pos) && mob.invisible <= 0 && !canBeIgnored(mob)) {
+						enemies.put(mob, mob.targetPriority());
+					}
+
+				if (enemies.isEmpty()) {
+					//try to find the hero third
+					if (canSee(Dungeon.hero.pos) && Dungeon.hero.invisible <= 0) {
+						enemies.put(Dungeon.hero, Dungeon.hero.targetPriority());
+					}
+				}
+			}
+
+		//if we are an ally...
+		} else if ( alignment == Alignment.ALLY ) {
+			//look for hostile mobs to attack
+			for (Mob mob : Dungeon.level.mobs)
+				if (mob.alignment == Alignment.ENEMY && canSee(mob.pos)
+						&& mob.invisible <= 0 && !mob.isInvulnerable(getClass()))
+					//do not target passive mobs
+					//intelligent allies also don't target mobs which are wandering or asleep
+					//unless they are aggressive minions
+					if (mob.state != mob.PASSIVE &&
+							(!intelligentAlly || (mob.state != mob.SLEEPING && mob.state != mob.WANDERING)
+									|| !(this instanceof Minion && ((Minion) this).behaviorType == Minion.BehaviorType.AGGRESSIVE))) {
+						enemies.put(mob, mob.targetPriority());
+					}
+
+		//if we are an enemy...
+		} else if (alignment == Alignment.ENEMY) {
+			//look for ally mobs to attack
+			for (Mob mob : Dungeon.level.mobs)
+				if (mob.alignment == Alignment.ALLY && canSee(mob.pos) && mob.invisible <= 0) {
+					//we are neutral to minions, unless they are attacking everything or we have to pass through them
+					if (mob instanceof Minion){
+						if (buff(((Minion) mob).behaviorType.buffType) != null){
+							enemies.put(mob, mob.targetPriority());
+						} else if (((Minion) mob).behaviorType == Minion.BehaviorType.AGGRESSIVE){
+							enemies.put(mob, mob.targetPriority());
+						} else {
+							enemies.put(mob, mob.targetPriority()/100f);
+						}
+					} else {
+						enemies.put(mob, mob.targetPriority());
+					}
+				}
+
+			//and look for the hero
+			if (canSee(Dungeon.hero.pos) && Dungeon.hero.invisible <= 0) {
+				enemies.put(Dungeon.hero, Dungeon.hero.targetPriority());
+			}
+
+		}
+
+		//do not target anything that's charming us
+		Charm charm = buff( Charm.class );
+		if (charm != null){
+			Char source = (Char)Actor.findById( charm.object );
+			if (source != null && enemies.containsKey(source) && enemies.size() > 1){
+				enemies.remove(source);
+			}
+		}
+		return enemies;
+	}
+
 	@Override
 	public boolean add( Buff buff ) {
 		if (super.add( buff )) {
