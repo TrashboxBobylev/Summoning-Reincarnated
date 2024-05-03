@@ -240,6 +240,7 @@ public abstract class Mob extends Char {
 				!(this instanceof Ghoul) && !(this instanceof Slime) &&
 				!(this instanceof Necromancer.NecroSkeleton) &&
 				!(this instanceof RipperDemon) &&
+				!(this instanceof Swarm) &&
 				!Dungeon.isChallenged(Conducts.Conduct.LIMITED_MONSTERS);
 	}
 
