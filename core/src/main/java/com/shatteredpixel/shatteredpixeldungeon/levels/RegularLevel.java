@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.journal.RegionLorePage;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.Key;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.RankManager;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.builders.Builder;
@@ -392,7 +393,7 @@ public abstract class RegularLevel extends Level {
 				break;
 			}
 
-			if (type == Heap.Type.CHEST && toDrop.isUpgradable() && Random.Float() < 0.25f * Dungeon.hero.pointsInTalent(Talent.AFFECTED_BY_LUCK)){
+			if (type == Heap.Type.CHEST && (toDrop.isUpgradable() && !(toDrop instanceof MissileWeapon)) && Random.Float() < 0.25f * Dungeon.hero.pointsInTalent(Talent.AFFECTED_BY_LUCK)){
 				toDrop.upgrade();
 			}
 
