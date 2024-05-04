@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -81,11 +82,11 @@ public class StudyRoom extends StandardRoom {
 		Item prize = (Random.Int(2) == 0) ? level.findPrizeItem() : null;
 		
 		if (prize != null) {
-			level.drop(prize, (center.x + center.y * level.width()));
+			level.drop(Challenges.process(prize), (center.x + center.y * level.width()));
 		} else {
-			level.drop(Generator.random( Random.oneOf(
+			level.drop(Challenges.process(Generator.random( Random.oneOf(
 					Generator.Category.POTION,
-					Generator.Category.SCROLL)), (center.x + center.y * level.width()));
+					Generator.Category.SCROLL))), (center.x + center.y * level.width()));
 		}
 	}
 }

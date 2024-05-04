@@ -188,4 +188,9 @@ public class RankManager extends Spell {
         }
 
     }
+
+    @Override
+    public boolean isFaceProtected() {
+        return true;
+    }
 }

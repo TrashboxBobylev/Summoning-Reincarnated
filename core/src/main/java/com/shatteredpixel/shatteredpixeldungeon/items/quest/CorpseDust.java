@@ -68,6 +68,11 @@ public class CorpseDust extends Item {
 	}
 
 	@Override
+	public boolean isFaceProtected() {
+		return true;
+	}
+
+	@Override
 	public boolean doPickUp(Hero hero, int pos) {
 		if (super.doPickUp(hero, pos)){
 			GLog.n( Messages.get( this, "chill") );

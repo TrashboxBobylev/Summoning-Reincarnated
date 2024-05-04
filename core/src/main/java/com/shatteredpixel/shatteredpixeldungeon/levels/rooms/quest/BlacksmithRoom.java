@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
@@ -67,11 +68,11 @@ public class BlacksmithRoom extends StandardRoom {
 				pos = level.pointToCell(random());
 			} while (level.map[pos] != Terrain.EMPTY_SP);
 			level.drop(
-				Generator.random( Random.oneOf(
+				Challenges.process(Generator.random( Random.oneOf(
 					Generator.Category.ARMOR,
 					Generator.Category.WEAPON,
 					Generator.Category.MISSILE
-				) ), pos );
+				) )), pos );
 		}
 		
 		Blacksmith npc = new Blacksmith();

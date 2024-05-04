@@ -90,6 +90,6 @@ public class CryptRoom extends SpecialRoom {
 		}
 		prize.cursed = prize.cursedKnown = true;
 		
-		return prize;
+		return Challenges.process(prize);
 	}
 }

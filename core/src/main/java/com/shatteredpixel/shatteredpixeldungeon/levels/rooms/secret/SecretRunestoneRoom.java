@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
@@ -68,17 +69,17 @@ public class SecretRunestoneRoom extends SecretRoom {
 		do{
 			dropPos = level.pointToCell(random());
 		} while (level.map[dropPos] != Terrain.EMPTY);
-		level.drop( Generator.randomUsingDefaults(Generator.Category.STONE), dropPos);
+		level.drop( Challenges.process(Generator.randomUsingDefaults(Generator.Category.STONE)), dropPos);
 		
 		do{
 			dropPos = level.pointToCell(random());
 		} while (level.map[dropPos] != Terrain.EMPTY || level.heaps.get(dropPos) != null);
-		level.drop( Generator.randomUsingDefaults(Generator.Category.STONE), dropPos);
+		level.drop( Challenges.process(Generator.randomUsingDefaults(Generator.Category.STONE)), dropPos);
 		
 		do{
 			dropPos = level.pointToCell(random());
 		} while (level.map[dropPos] != Terrain.EMPTY_SP);
-		level.drop( new StoneOfEnchantment(), dropPos);
+		level.drop( Challenges.process(new StoneOfEnchantment()), dropPos);
 		
 		entrance.set(Door.Type.HIDDEN);
 	}

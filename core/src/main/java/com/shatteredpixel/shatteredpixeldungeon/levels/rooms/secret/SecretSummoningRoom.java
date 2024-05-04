@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -49,7 +50,7 @@ public class SecretSummoningRoom extends SecretRoom {
 		Painter.fill(level, this, 1, Terrain.SECRET_TRAP);
 		
 		Point center = center();
-		level.drop(Generator.random(), level.pointToCell(center)).setHauntedIfCursed().type = Heap.Type.SKELETON;
+		level.drop(Challenges.process(Generator.random()), level.pointToCell(center)).setHauntedIfCursed().type = Heap.Type.SKELETON;
 		
 		for (Point p : getPoints()){
 			int cell = level.pointToCell(p);

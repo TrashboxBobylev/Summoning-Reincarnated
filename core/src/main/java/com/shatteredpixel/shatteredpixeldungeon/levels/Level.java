@@ -773,13 +773,24 @@ public abstract class Level implements Bundlable {
 			return null;
 
 		if (match == null){
-			Item item = Random.element(itemsToSpawn);
+			Item item;
+			int tries = 0;
+			do {
+				if (++tries > 10){
+					return null;
+				}
+				item = Random.element(itemsToSpawn);
+				if (Dungeon.depth >= Dungeon.chapterSize())
+					break;
+			} while (!Dungeon.isChallenged(Conducts.Conduct.FACE) || (item.isFaceProtected()));
 			itemsToSpawn.remove(item);
 			return item;
 		}
 
 		for (Item item : itemsToSpawn){
-			if (match.isInstance(item)){
+			if (match.isInstance(item) &&
+					(!Dungeon.isChallenged(Conducts.Conduct.FACE)
+							|| !(item.isFaceProtected()) || Dungeon.depth >= Dungeon.chapterSize())){
 				itemsToSpawn.remove( item );
 				return item;
 			}

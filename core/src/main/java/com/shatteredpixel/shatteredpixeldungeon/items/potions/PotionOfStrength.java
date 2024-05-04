@@ -81,4 +81,9 @@ public class PotionOfStrength extends Potion {
 	public int energyVal() {
 		return isKnown() ? 8 * quantity : super.energyVal();
 	}
+
+	@Override
+	public boolean isFaceProtected() {
+		return true;
+	}
 }

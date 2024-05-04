@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
@@ -139,7 +140,7 @@ public class ArmoredStatue extends Statue {
 	@Override
 	public void die( Object cause ) {
 		armor.identify(false);
-		Dungeon.level.drop( armor, pos ).sprite.drop();
+		Dungeon.level.drop( Challenges.process(armor), pos ).sprite.drop();
 		super.die( cause );
 	}
 

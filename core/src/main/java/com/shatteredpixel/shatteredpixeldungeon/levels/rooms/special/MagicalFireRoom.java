@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -103,10 +104,10 @@ public class MagicalFireRoom extends SpecialRoom {
 				pos = level.pointToCell(behindFire.random(0));
 			} while (level.heaps.get(pos) != null);
 			if (honeyPot){
-				level.drop( new Honeypot(), pos);
+				level.drop( Challenges.process(new Honeypot()), pos);
 				honeyPot = false;
 			} else
-				level.drop( prize( level ), pos );
+				level.drop( Challenges.process(prize( level )), pos );
 		}
 
 		level.addItemToSpawn(new PotionOfFrost());

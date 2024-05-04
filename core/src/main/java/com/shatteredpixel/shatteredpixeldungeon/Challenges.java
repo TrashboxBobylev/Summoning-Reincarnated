@@ -22,6 +22,8 @@
 package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
+import com.shatteredpixel.shatteredpixeldungeon.items.FacelessThing;
+import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 
@@ -62,6 +64,20 @@ public class Challenges {
 			if ((Dungeon.challenges & ch) != 0) chCount++;
 		}
 		return chCount;
+	}
+
+	public static Item process( Item item){
+		if (Dungeon.isChallenged(Conducts.Conduct.FACE)){
+			if (item.value() > 0 || !item.unique){
+				if (item.energyVal() > 0){
+					return FacelessThing.init(item);
+				} else {
+					return new Gold().quantity(item.value());
+				}
+			}
+		}
+
+		return item;
 	}
 
 	public static boolean isItemBlocked( Item item ){

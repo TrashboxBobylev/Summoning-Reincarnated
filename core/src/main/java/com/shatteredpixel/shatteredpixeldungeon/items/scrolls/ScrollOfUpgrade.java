@@ -55,6 +55,11 @@ public class ScrollOfUpgrade extends InventoryScroll {
 	}
 
 	@Override
+	public boolean isFaceProtected() {
+		return true;
+	}
+
+	@Override
 	protected void onItemSelected( Item item ) {
 
 		upgrade( curUser );

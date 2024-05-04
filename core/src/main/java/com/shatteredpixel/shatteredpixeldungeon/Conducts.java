@@ -33,6 +33,7 @@ public class Conducts {
         ALLSIGHT(1.4f, 20),
         NO_LOOT(2f, 21),
         LIMITED_MONSTERS(1.5f, 22),
+        FACE(2.25f, 25)
 //        HUGE(1.75f),
 //        DEBUG_SCROLL(-1f){
 //            @Override

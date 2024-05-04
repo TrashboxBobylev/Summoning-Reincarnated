@@ -401,16 +401,16 @@ public abstract class RegularLevel extends Level {
 					(toDrop.isUpgradable() && Random.Int(4 - toDrop.level()) == 0)){
 
 				if (Dungeon.depth > 1 && Random.Int(10) == 0 && findMob(cell) == null){
-					mobs.add(Mimic.spawnAt(cell, GoldenMimic.class, toDrop));
+					mobs.add(Mimic.spawnAt(cell, GoldenMimic.class, Challenges.process(toDrop)));
 				} else {
-					Heap dropped = drop(toDrop, cell);
+					Heap dropped = drop(Challenges.process(toDrop), cell);
 					if (heaps.get(cell) == dropped) {
 						dropped.type = Heap.Type.LOCKED_CHEST;
 						addItemToSpawn(new GoldenKey(Dungeon.depth));
 					}
 				}
 			} else {
-				Heap dropped = drop( toDrop, cell );
+				Heap dropped = drop( Challenges.process(toDrop), cell );
 				dropped.type = type;
 				if (type == Heap.Type.SKELETON){
 					dropped.setHauntedIfCursed();
@@ -424,7 +424,7 @@ public abstract class RegularLevel extends Level {
 
 		for (Item item : itemsToSpawn) {
 			int cell = randomDropCell();
-			drop( item, cell ).type = Heap.Type.HEAP;
+			drop( Challenges.process(item), cell ).type = Heap.Type.HEAP;
 			if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {
 				map[cell] = Terrain.GRASS;
 				losBlocking[cell] = false;
@@ -441,7 +441,7 @@ public abstract class RegularLevel extends Level {
 					map[cell] = Terrain.GRASS;
 					losBlocking[cell] = false;
 				}
-				drop( new Torch(), cell );
+				drop( Challenges.process(new Torch()), cell );
 				//add a second torch to help with the larger floor
 				if (isLarge()){
 					cell = randomDropCell();
@@ -449,7 +449,7 @@ public abstract class RegularLevel extends Level {
 						map[cell] = Terrain.GRASS;
 						losBlocking[cell] = false;
 					}
-					drop( new Torch(), cell );
+					drop( Challenges.process(new Torch()), cell );
 				}
 			}
 		Random.popGenerator();
@@ -463,7 +463,7 @@ public abstract class RegularLevel extends Level {
 					losBlocking[cell] = false;
 				}
 				for (Item i : bonesItems) {
-					drop(i, cell).setHauntedIfCursed().type = Heap.Type.REMAINS;
+					drop(Challenges.process(i), cell).setHauntedIfCursed().type = Heap.Type.REMAINS;
 				}
 			}
 		Random.popGenerator();
@@ -511,7 +511,7 @@ public abstract class RegularLevel extends Level {
 							map[cell] = Terrain.GRASS;
 							losBlocking[cell] = false;
 						}
-						drop(new SmallRation(), cell).type = Heap.Type.CHEST;
+						drop(Challenges.process(new SmallRation()), cell).type = Heap.Type.CHEST;
 						dropped.countUp(1);
 					}
 				}

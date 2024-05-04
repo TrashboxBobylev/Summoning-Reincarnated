@@ -689,4 +689,8 @@ public class Item implements Bundlable {
 			return Messages.get(Item.class, "prompt");
 		}
 	};
+
+	public boolean isFaceProtected(){
+		return false;
+	}
 }

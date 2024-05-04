@@ -92,6 +92,11 @@ public class CeremonialCandle extends Item {
 		return false;
 	}
 
+	@Override
+	public boolean isFaceProtected() {
+		return true;
+	}
+
 	public boolean aflame = false;
 
 	public static String AFLAME = "aflame";

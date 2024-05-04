@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.plants;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Blandfruit;
@@ -33,7 +34,7 @@ public class BlandfruitBush extends Plant {
 
 	@Override
 	public void activate( Char ch ) {
-		Dungeon.level.drop( new Blandfruit(), pos ).sprite.drop();
+		Dungeon.level.drop( Challenges.process(new Blandfruit()), pos ).sprite.drop();
 	}
 
 	//seed is never dropped

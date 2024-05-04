@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.features;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -106,7 +107,7 @@ public class HighGrass {
 
 						if (droppingBerry) {
 							dropped.countUp(1);
-							level.drop(new Berry(), pos).sprite.drop();
+							level.drop(Challenges.process(new Berry()), pos).sprite.drop();
 						}
 					}
 
@@ -123,7 +124,7 @@ public class HighGrass {
 			if (naturalismLevel >= 0) {
 				// Seed, scales from 1/25 to 1/9
 				if (Random.Int(25 - (naturalismLevel * 4)) == 0) {
-					level.drop(Generator.random(Generator.Category.SEED), pos).sprite.drop();
+					level.drop(Challenges.process(Generator.random(Generator.Category.SEED)), pos).sprite.drop();
 				}
 				
 				// Dew, scales from 1/6 to 1/4

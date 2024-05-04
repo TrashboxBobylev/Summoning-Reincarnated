@@ -58,8 +58,8 @@ public class CrystalVaultRoom extends SpecialRoom {
 		Random.shuffle(prizeClasses);
 		
 		Item i1, i2;
-		i1 = prize();
-		i2 = prize();
+		i1 = Challenges.process(prize());
+		i2 = Challenges.process(prize());
 
 		int i1Pos, i2Pos;
 		int doorPos = level.pointToCell(entrance());

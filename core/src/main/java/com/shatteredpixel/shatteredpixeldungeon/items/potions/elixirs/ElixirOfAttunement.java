@@ -61,4 +61,9 @@ public class ElixirOfAttunement extends Elixir {
 	public int value() {
 		return quantity * 50;
 	}
+
+	@Override
+	public boolean isFaceProtected() {
+		return true;
+	}
 }

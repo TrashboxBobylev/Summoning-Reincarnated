@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -56,7 +57,7 @@ public class LibraryRoom extends SpecialRoom {
 				item = Random.Int(2) == 0 ? new ScrollOfIdentify() : new ScrollOfRemoveCurse();
 			else
 				item = prize( level );
-			level.drop( item, pos );
+			level.drop( Challenges.process(item), pos );
 		}
 		
 		entrance.set( Door.Type.LOCKED );
