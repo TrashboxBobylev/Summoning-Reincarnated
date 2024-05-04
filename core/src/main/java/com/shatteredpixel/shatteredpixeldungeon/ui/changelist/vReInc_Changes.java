@@ -1,6 +1,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.ui.changelist;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ropes;
 import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
@@ -35,7 +36,35 @@ public class vReInc_Changes {
     }
 
     public static void add_v0_3_0_Changes( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("vReInc-0.3.0", true, "");
+        ChangeInfo changes = new ChangeInfo("vReInc-0.3.1", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBYLEV), "Developer Commentary",
+                "_-_ Released May 5st, 2024\n" +
+                        "_-_ 4 days after Reincarnated 0.3.1"));
+
+        changes.addButton( new ChangeButton( new Image(Assets.Interfaces.SUBCLASS_ICONS, (Conducts.Conduct.FACE.icon - 1) * 16, 16, 16, 16), "Curse of Faced",
+                "Implemented popular face challenge as _Curse of Faced_ conduct.\n\n" +
+                        "_-_ Thanks @tiresdonexits and other face players for telling me most of details.\n" +
+                        "_-_ The bugs can still be there."));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+                "_-_ Staffs can now generate in shops\n" +
+                        "_-_ Missile weapons and most of wands can now go through allies\n" +
+                        "_-_ Added conduct icons into save file buttons\n" +
+                        "_-_ Swarms can no longer spawn hordes\n" +
+                        "_-_ Heavy boomerang no longer hurts allies on returning\n" +
+                        "_-_ Refactored target priority to allow enemies to attack minions, if they block the path to better target\n" +
+                        "_-_ Removed the update notes scene (for now)"));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "Fixed the following bugs:\n" +
+                        "_-_ Frostburn and frost fire not being visible\n" +
+                        "_-_ Adventurer having no shopkeeper line and therefore showing there !!!NO TEXT FOUND!!!\n" +
+                        "_-_ Affected by Luck talent upgrading thrown weapons"));
+
+        changes = new ChangeInfo("vReInc-0.3.0", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
