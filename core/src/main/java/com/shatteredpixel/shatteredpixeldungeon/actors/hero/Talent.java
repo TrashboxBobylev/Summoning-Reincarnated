@@ -738,7 +738,7 @@ public enum Talent {
 				&& enemy.buff(PreciseStrikeTracker.class) == null){
 			dmg += enemy.drRoll();
 			if (hero.pointsInTalent(PRECISE_STRIKE) > 1 && enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)){
-				enemy.HP = enemy.HT = Math.max(0, enemy.HT - 2);
+				enemy.HT = Math.max(1, enemy.HT - 2);
 			}
 			Buff.affect(enemy, PreciseStrikeTracker.class);
 		}
