@@ -24,8 +24,6 @@ package com.watabou.utils;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.watabou.noosa.Game;
 
-import java.util.HashSet;
-
 //wrapper for libGDX reflection
 public class Reflection {
 	
@@ -61,29 +59,6 @@ public class Reflection {
 	
 	public static Class forNameUnhandled( String name ) throws Exception {
 		return ClassReflection.forName( name );
-	}
-
-	public static HashSet<Class> getAllInterfaces(Class cl){
-		if (cl == null) return new HashSet<>();
-
-		HashSet<Class> interfaces = new HashSet<>();
-		getAllInterfaces(cl, interfaces);
-
-		return interfaces;
-	}
-
-	private static void getAllInterfaces(Class cl, HashSet<Class> interfacesFound){
-		while (cl != null){
-			Class[] interfaces = ClassReflection.getInterfaces(cl);
-
-			for (final Class<?> i : interfaces) {
-				if (interfacesFound.add(i)) {
-					getAllInterfaces(i, interfacesFound);
-				}
-			}
-
-			cl = cl.getSuperclass();
-		}
 	}
 	
 }
