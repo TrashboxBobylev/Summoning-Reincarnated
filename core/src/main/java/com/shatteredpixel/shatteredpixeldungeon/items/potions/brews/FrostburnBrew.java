@@ -73,15 +73,15 @@ public class FrostburnBrew extends Brew {
 	public void gooMinionAttack(Char ch) {
 		if (!ch.isImmune(Burning.class) && ch.alignment == Char.Alignment.ENEMY){
 			int damage = Random.NormalIntRange( 1, 3 + Dungeon.scalingDepth()/4 );
-			float modifier = 1.5f + 3f*(((float) ch.HP) / ch.HT);
+			float modifier = 3f + 5f*(((float) ch.HP) / ch.HT);
 			Buff.detach( ch, Chill.class);
 			ch.damage(Math.round(damage*modifier), new FrostBurn());
 			if (Dungeon.level.water[ch.pos])
-				Buff.affect(ch, Chill.class, 10);
+				Buff.affect(ch, Chill.class, 15);
 			else
-				Buff.affect(ch, Chill.class, 6);
+				Buff.affect(ch, Chill.class, 9);
 			if (Dungeon.level.heroFOV[ch.pos]){
-				ch.sprite.centerEmitter().burst( Speck.factory( Speck.FROSTBURN, true ), Math.round(5*modifier));
+				ch.sprite.centerEmitter().burst( Speck.factory( Speck.FROSTBURN, true ), Math.round(8*modifier));
 			}
 		}
 	}

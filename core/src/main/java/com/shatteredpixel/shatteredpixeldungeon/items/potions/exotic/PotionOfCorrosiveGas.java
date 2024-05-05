@@ -65,7 +65,7 @@ public class PotionOfCorrosiveGas extends ExoticPotion {
 	@Override
 	public void gooMinionAttack(Char ch) {
 		if (ch.alignment == Char.Alignment.ENEMY){
-			Buff.affect(ch, Corrosion.class).set(3f, 2 + Dungeon.scalingDepth()/5);
+			Buff.affect(ch, Corrosion.class).set(4f, 4 + Dungeon.scalingDepth()/3);
 		}
 	}
 }

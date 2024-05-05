@@ -55,7 +55,7 @@ public class PotionOfToxicGas extends Potion {
 	@Override
 	public void gooMinionAttack(Char ch) {
 		if (ch.alignment == Char.Alignment.ENEMY)
-			Buff.affect(ch, Poison.class).set(3 + Dungeon.scalingDepth() / 2);
+			Buff.affect(ch, Poison.class).set(5 + Dungeon.scalingDepth() / 1.5f);
 	}
 
 	@Override

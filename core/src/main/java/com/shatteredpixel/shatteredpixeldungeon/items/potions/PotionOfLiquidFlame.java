@@ -66,11 +66,11 @@ public class PotionOfLiquidFlame extends Potion {
 	public void gooMinionAttack(Char ch) {
 		if (!ch.isImmune(Burning.class) && ch.alignment == Char.Alignment.ENEMY){
 			int damage = Random.NormalIntRange( 1, 3 + Dungeon.scalingDepth()/4 );
-			float modifier = 2f + 3f*(((float) ch.HP) / ch.HT);
+			float modifier = 4f + 6f*(((float) ch.HP) / ch.HT);
 			Buff.detach( ch, Chill.class);
 			ch.damage(Math.round(damage*modifier), new Burning());
 			if (Dungeon.level.heroFOV[ch.pos]){
-				ch.sprite.centerEmitter().burst( FlameParticle.FACTORY, Math.round(5*modifier));
+				ch.sprite.centerEmitter().burst( FlameParticle.FACTORY, Math.round(8*modifier));
 			}
 		}
 	}
