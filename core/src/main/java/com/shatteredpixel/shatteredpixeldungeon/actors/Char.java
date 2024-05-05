@@ -87,11 +87,9 @@ import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+import org.apache.commons.lang3.ClassUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 public abstract class Char extends Actor {
 	
@@ -970,7 +968,7 @@ public abstract class Char extends Actor {
 	@SuppressWarnings("unchecked")
 	public static boolean areRelated(Class effect, Class filter){
 		if (filter.isInterface()){
-			Class[] interfaces = effect.getInterfaces();
+			List<Class<?>> interfaces = ClassUtils.getAllInterfaces(effect);
 			for (Class clazz : interfaces){
 				if (clazz.isAssignableFrom(filter)){
 					return true;
