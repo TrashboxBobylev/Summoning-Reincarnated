@@ -142,6 +142,19 @@ public class AboutScene extends PixelScene {
 		}
 		content.add(guys);
 
+		Image libIcon = Icons.CONDUCTS_ON.get();
+		libIcon.hardlight(0x989898);
+
+		CreditsBlock libs = new CreditsBlock(false, Window.WHITE,
+				"Libraries used:",
+				libIcon,
+				"Apache Common Lang, by Apache Software Foundation",
+				"commons.apache.org",
+				"https://commons.apache.org");
+		libs.setSize(colWidth, 4);
+		libs.setPos(tb.left(), guys.bottom()+10);
+		content.add(libs);
+
 		//*** Shattered Pixel Dungeon Credits ***
 
 		String shpxLink = "https://ShatteredPixel.com";
@@ -159,9 +172,9 @@ public class AboutScene extends PixelScene {
 		shpx.setRect((w - fullWidth)/2f, 6, 120, 0);
 		content.add(shpx);
 		if (landscape()){
-			shpx.setRect(tb.left(), guys.bottom() + 24, colWidth, 0);
+			shpx.setRect(tb.left(), libs.bottom() + 24, colWidth, 0);
 		} else {
-			shpx.setRect(tb.left(), guys.bottom() + 16, colWidth, 0);
+			shpx.setRect(tb.left(), libs.bottom() + 16, colWidth, 0);
 		}
 		content.add(shpx);
 

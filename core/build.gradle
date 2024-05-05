@@ -6,4 +6,5 @@ sourceCompatibility = targetCompatibility = appJavaCompatibility
 dependencies {
     api project(':SPD-classes')
     implementation project(':services')
+    implementation 'org.apache.commons:commons-lang3:3.14.0'
 }
