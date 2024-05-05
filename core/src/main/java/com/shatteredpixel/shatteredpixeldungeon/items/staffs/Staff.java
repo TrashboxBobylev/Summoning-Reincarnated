@@ -45,6 +45,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponEnchantable;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -59,7 +60,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public abstract class Staff extends Item implements AttunementItem, Rankable {
+public abstract class Staff extends Item implements AttunementItem, Rankable, WeaponEnchantable {
 
     {
         stackable = false;
@@ -452,6 +453,41 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
         }
 
         return info;
+    }
+
+    @Override
+    public String name() {
+        return enchantment != null && (cursedKnown || !enchantment.curse()) ? enchantment.name( super.name() ) : super.name();
+    }
+
+    @Override
+    public Item random() {
+        //20% chance to have rank II or rank III
+        if (Random.Int(5) == 0){
+            rank(2 + Random.Int(2));
+        }
+
+        //25% chance to be cursed
+        //10% chance to be enchanted
+        float effectRoll = Random.Float();
+        if (effectRoll < 0.25f) {
+            enchant(Weapon.Enchantment.randomCurse());
+            cursed = true;
+        } else if (effectRoll >= 0.9f){
+            enchant();
+        }
+
+        return this;
+    }
+
+    @Override
+    public Weapon.Enchantment getEnchantment() {
+        return enchantment;
+    }
+
+    @Override
+    public void setEnchantment(Weapon.Enchantment enchantment) {
+        this.enchantment = enchantment;
     }
 
     private static final String CUR_CHARGES = "cur_changes";
