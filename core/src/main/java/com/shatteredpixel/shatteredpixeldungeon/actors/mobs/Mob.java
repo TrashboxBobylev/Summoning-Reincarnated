@@ -492,9 +492,9 @@ public abstract class Mob extends Char {
 				if (mob.alignment == Alignment.ALLY && canSee(mob.pos) && mob.invisible <= 0) {
 					//we are neutral to minions, unless they are attacking everything or we have to pass through them
 					if (mob instanceof Minion){
-						if (buff(((Minion) mob).behaviorType.buffType) != null){
+						if (((Minion) mob).behaviorType == Minion.BehaviorType.AGGRESSIVE){
 							enemies.put(mob, mob.targetPriority());
-						} else if (((Minion) mob).behaviorType == Minion.BehaviorType.AGGRESSIVE){
+						} else if (buff(((Minion) mob).behaviorType.buffType) != null){
 							enemies.put(mob, mob.targetPriority());
 						} else {
 							enemies.put(mob, mob.targetPriority()/100f);
