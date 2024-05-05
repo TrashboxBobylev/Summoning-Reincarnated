@@ -1138,7 +1138,7 @@ public abstract class Char extends Actor {
 		
 		float result = 1f;
 		for (Class c : resists){
-			if (areRelated(c, effect)){
+			if (areRelated(effect, c)){
 				result *= 0.5f;
 			}
 		}
@@ -1157,7 +1157,7 @@ public abstract class Char extends Actor {
 		}
 		
 		for (Class c : immunes){
-			if (areRelated(c, effect)){
+			if (areRelated(effect, c)){
 				return true;
 			}
 		}
