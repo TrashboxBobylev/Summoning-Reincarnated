@@ -173,7 +173,7 @@ public class GooMinion extends Minion {
                 CellEmitter.get(i).burst(ElmoParticle.FACTORY, 10);
 
                 Char ch = Actor.findChar(i);
-                if (ch != null && ch != Dungeon.hero) {
+                if (ch != null) {
                     if (rank != 2) {
                         if (ch.alignment == Alignment.ENEMY)
                             ch.damage(Random.NormalIntRange(min, max), Dungeon.hero);
