@@ -70,7 +70,7 @@ import com.watabou.utils.Reflection;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-abstract public class Weapon extends KindOfWeapon {
+abstract public class Weapon extends KindOfWeapon implements WeaponEnchantable {
 
 	public float    ACC = 1f;	// Accuracy modifier
 	public float	DLY	= 1f;	// Speed modifier
@@ -339,33 +339,21 @@ abstract public class Weapon extends KindOfWeapon {
 
 		return this;
 	}
-	
-	public Weapon enchant( Enchantment ench ) {
+
+	@Override
+	public Enchantment getEnchantment() {
+		return enchantment;
+	}
+
+	@Override
+	public void setEnchantment(Enchantment enchantment) {
+		this.enchantment = enchantment;
+	}
+
+	@Override
+	public WeaponEnchantable enchant(Enchantment ench ) {
 		if (ench == null || !ench.curse()) curseInfusionBonus = false;
-		enchantment = ench;
-		updateQuickslot();
-		return this;
-	}
-
-	public Weapon enchant() {
-
-		Class<? extends Enchantment> oldEnchantment = enchantment != null ? enchantment.getClass() : null;
-		Enchantment ench = Enchantment.random( oldEnchantment );
-
-		return enchant( ench );
-	}
-
-	public boolean hasEnchant(Class<?extends Enchantment> type, Char owner) {
-		return enchantment != null && enchantment.getClass() == type && owner.buff(MagicImmune.class) == null;
-	}
-	
-	//these are not used to process specific enchant effects, so magic immune doesn't affect them
-	public boolean hasGoodEnchant(){
-		return enchantment != null && !enchantment.curse();
-	}
-
-	public boolean hasCurseEnchant(){
-		return enchantment != null && enchantment.curse();
+		return WeaponEnchantable.super.enchant(ench);
 	}
 
 	@Override

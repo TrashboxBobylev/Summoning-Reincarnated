@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponEnchantable;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MimicSprite;
@@ -89,8 +90,8 @@ public class GoldenMimic extends Mimic {
 			if (i instanceof EquipableItem || i instanceof Wand){
 				i.cursed = false;
 				i.cursedKnown = true;
-				if (i instanceof Weapon && ((Weapon) i).hasCurseEnchant()){
-					((Weapon) i).enchant(null);
+				if (i instanceof WeaponEnchantable && ((WeaponEnchantable) i).hasCurseEnchant()){
+					((WeaponEnchantable) i).enchant(null);
 				}
 				if (i instanceof Armor && ((Armor) i).hasCurseGlyph()){
 					((Armor) i).inscribe(null);

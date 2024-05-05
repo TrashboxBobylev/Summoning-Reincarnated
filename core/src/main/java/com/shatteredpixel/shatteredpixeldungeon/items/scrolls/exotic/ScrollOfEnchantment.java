@@ -28,9 +28,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.InventoryScroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponEnchantable;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -68,7 +70,7 @@ public class ScrollOfEnchantment extends ExoticScroll {
 	}
 
 	public static boolean enchantable( Item item ){
-		return (item instanceof MeleeWeapon || item instanceof SpiritBow || item instanceof Armor);
+		return (item instanceof MeleeWeapon || item instanceof SpiritBow || item instanceof Armor || item instanceof Staff);
 	}
 
 	private void confirmCancelation() {
@@ -113,7 +115,7 @@ public class ScrollOfEnchantment extends ExoticScroll {
 		@Override
 		public void onSelect(final Item item) {
 			
-			if (item instanceof Weapon){
+			if (item instanceof WeaponEnchantable){
 				if (!identifiedByUse) {
 					curItem.detach(curUser.belongings.backpack);
 				}
@@ -150,7 +152,7 @@ public class ScrollOfEnchantment extends ExoticScroll {
 
 	public static class WndEnchantSelect extends WndOptions {
 
-		private static Weapon wep;
+		private static WeaponEnchantable wep;
 		private static Weapon.Enchantment[] enchantments;
 
 		//used in PixelScene.restoreWindows
@@ -158,7 +160,7 @@ public class ScrollOfEnchantment extends ExoticScroll {
 			this(wep, enchantments[0], enchantments[1], enchantments[2]);
 		}
 
-		public WndEnchantSelect(Weapon wep, Weapon.Enchantment ench1,
+		public WndEnchantSelect(WeaponEnchantable wep, Weapon.Enchantment ench1,
 		                           Weapon.Enchantment ench2, Weapon.Enchantment ench3){
 			super(new ItemSprite(new ScrollOfEnchantment()),
 					Messages.titleCase(new ScrollOfEnchantment().name()),
@@ -184,7 +186,7 @@ public class ScrollOfEnchantment extends ExoticScroll {
 				((ScrollOfEnchantment)curItem).readAnimation();
 
 				Sample.INSTANCE.play( Assets.Sounds.READ );
-				Enchanting.show(curUser, wep);
+				Enchanting.show(curUser, (Item) wep);
 			}
 
 			wep = null;

@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnc
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponEnchantable;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -47,7 +48,7 @@ public class EnchantParchment extends InventorySpell {
     @Override
     protected boolean usableOnItem(Item item) {
         if (glyph == null && enchantment == null){
-            return ((item instanceof Armor && ((Armor) item).glyph != null) || (item instanceof Weapon && ((Weapon) item).enchantment != null) && (!(item instanceof Wand) || Dungeon.hero.heroClass == HeroClass.MAGE));
+            return ((item instanceof Armor && ((Armor) item).glyph != null) || (item instanceof WeaponEnchantable && ((WeaponEnchantable) item).getEnchantment() != null) && (!(item instanceof Wand) || Dungeon.hero.heroClass == HeroClass.MAGE));
         }
         else if (glyph != null){
             return item instanceof Armor;
@@ -93,14 +94,14 @@ public class EnchantParchment extends InventorySpell {
                 glyph = null;
             }
         }
-        if (item instanceof Weapon){
+        if (item instanceof WeaponEnchantable){
             if (enchantment == null) {
-                enchantment = ((Weapon) item).enchantment;
-                ((Weapon) item).enchant(null);
+                enchantment = ((WeaponEnchantable) item).getEnchantment();
+                ((WeaponEnchantable) item).enchant(null);
                 GLog.warning(Messages.get(EnchantParchment.class, "ench_obtained", enchantment.name()));
                 curItem.collect();
             } else {
-                ((Weapon) item).enchant(enchantment);
+                ((WeaponEnchantable) item).enchant(enchantment);
                 GLog.positive(Messages.get(EnchantParchment.class, "ench_used", enchantment.name()));
                 glyph = null;
             }

@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfDisintegration
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponEnchantable;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -395,7 +396,7 @@ public class MagesStaff extends MeleeWeapon {
 	}
 	
 	@Override
-	public Weapon enchant(Enchantment ench) {
+	public WeaponEnchantable enchant(Enchantment ench) {
 		if (curseInfusionBonus && (ench == null || !ench.curse())){
 			curseInfusionBonus = false;
 			updateWand(false);

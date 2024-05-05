@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponEnchantable;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -85,8 +86,8 @@ public class ScrollOfRemoveCurse extends InventoryScroll {
 			return true;
 		} if ((item instanceof EquipableItem || item instanceof Wand) && ((!item.isIdentified() && !item.cursedKnown) || item.cursed)){
 			return true;
-		} else if (item instanceof Weapon){
-			return ((Weapon)item).hasCurseEnchant();
+		} else if (item instanceof WeaponEnchantable){
+			return ((WeaponEnchantable)item).hasCurseEnchant();
 		} else if (item instanceof Armor){
 			return ((Armor)item).hasCurseGlyph();
 		} else {
@@ -123,8 +124,8 @@ public class ScrollOfRemoveCurse extends InventoryScroll {
 					item.cursed = false;
 				}
 			}
-			if (item instanceof Weapon){
-				Weapon w = (Weapon) item;
+			if (item instanceof WeaponEnchantable){
+				WeaponEnchantable w = (WeaponEnchantable) item;
 				if (w.hasCurseEnchant()){
 					w.enchant(null);
 					procced = true;
