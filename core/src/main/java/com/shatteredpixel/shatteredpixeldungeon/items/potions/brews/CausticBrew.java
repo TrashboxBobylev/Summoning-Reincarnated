@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.BArray;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 
 public class CausticBrew extends Brew {
@@ -73,6 +74,7 @@ public class CausticBrew extends Brew {
 
 		if (ch.alignment == Char.Alignment.ENEMY){
 			Buff.affect(ch, Ooze.class).set( Ooze.DURATION );
+			ch.damage((int) GameMath.gate(20, ch.HT / 2f, 50), new Ooze());
 		}
 	}
 
