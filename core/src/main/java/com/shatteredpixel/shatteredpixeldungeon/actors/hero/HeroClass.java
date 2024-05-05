@@ -107,6 +107,10 @@ public enum HeroClass {
 		waterskin.collect();
 
 		new ScrollOfIdentify().identify();
+		if (Dungeon.isChallenged(Conducts.Conduct.FACE)){
+			new ScrollOfUpgrade().identify();
+			new PotionOfStrength().identify();
+		}
 
 		if (Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)){
 			MagesStaff staff;
