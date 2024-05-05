@@ -481,6 +481,21 @@ public abstract class Staff extends Item implements AttunementItem, Rankable, We
     }
 
     @Override
+    public int value() {
+        int price = 30 * (tier-1);
+        if (hasGoodEnchant()) {
+            price *= 1.5;
+        }
+        if (cursedKnown && (cursed || hasCurseEnchant())) {
+            price /= 2;
+        }
+        if (price < 1) {
+            price = 1;
+        }
+        return price;
+    }
+
+    @Override
     public Weapon.Enchantment getEnchantment() {
         return enchantment;
     }
