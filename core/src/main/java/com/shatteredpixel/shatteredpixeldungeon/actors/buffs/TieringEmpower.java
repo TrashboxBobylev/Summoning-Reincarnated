@@ -19,11 +19,6 @@ public class TieringEmpower extends Buff {
     }
 
     @Override
-    public void tintIcon(Image icon) {
-        icon.hardlight(0, 0f, 0);
-    }
-
-    @Override
     public float iconFadePercent() {
         float max = 1 + Dungeon.hero.pointsInTalent(Talent.UPGRADING_MEAL)*2;
         return Math.max(0, (max-left) / max);

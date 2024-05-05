@@ -593,6 +593,15 @@ public class Hero extends Char {
 		if (!RingOfForce.fightingUnarmed(this)) {
 			dmg = wep.damageRoll( this );
 
+			TieringEmpower emp = buff(TieringEmpower.class);
+			if (emp != null){
+				emp.left--;
+				if (emp.left <= 0) {
+					emp.detach();
+				}
+				Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG, 0.75f, 1.2f);
+			}
+
 			if (!(wep instanceof MissileWeapon)) dmg += RingOfForce.armedDamageBonus(this);
 		} else {
 			dmg = RingOfForce.damageRoll(this);

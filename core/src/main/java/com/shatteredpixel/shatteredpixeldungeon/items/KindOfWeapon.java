@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TieringEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -224,11 +225,16 @@ abstract public class KindOfWeapon extends EquipableItem {
 	public int min(){
 		int min = min(buffedLvl());
 		if (Dungeon.isChallenged(Conducts.Conduct.KING)) min += 3;
+		if (Dungeon.hero != null && Dungeon.hero.buff(TieringEmpower.class) != null)
+			min = Math.round(min * 1.25f);
 		return min;
 	}
 
 	public int max(){
-		return max(buffedLvl());
+		int max = max(buffedLvl());
+		if (Dungeon.hero != null && Dungeon.hero.buff(TieringEmpower.class) != null)
+			max = Math.round(max * 1.25f);
+		return max;
 	}
 
 	abstract public int min(int lvl);
