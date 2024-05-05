@@ -54,6 +54,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.CursingTrap;
@@ -368,6 +369,8 @@ public class CursedWand {
 				do {
 					reward = Generator.randomUsingDefaults(Random.oneOf(Generator.Category.WEAPON, Generator.Category.ARMOR,
 							Generator.Category.RING, Generator.Category.WAND, Generator.Category.STAFF));
+					if (reward instanceof Staff)
+						break;
 				} while (reward.level() < 1);
 				//play vfx/sfx manually as mimic isn't in the scene yet
 				Sample.INSTANCE.play(Assets.Sounds.MIMIC, 1, 0.85f);
