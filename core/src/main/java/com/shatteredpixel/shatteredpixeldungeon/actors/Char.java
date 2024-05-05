@@ -82,11 +82,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.BArray;
-import com.watabou.utils.Bundlable;
-import com.watabou.utils.Bundle;
-import com.watabou.utils.PathFinder;
-import com.watabou.utils.Random;
+import com.watabou.utils.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -970,7 +966,7 @@ public abstract class Char extends Actor {
 	@SuppressWarnings("unchecked")
 	public static boolean areRelated(Class effect, Class filter){
 		if (filter.isInterface()){
-			Class[] interfaces = effect.getInterfaces();
+			HashSet<Class> interfaces = Reflection.getAllInterfaces(effect);
 			for (Class clazz : interfaces){
 				if (clazz.isAssignableFrom(filter)){
 					return true;
