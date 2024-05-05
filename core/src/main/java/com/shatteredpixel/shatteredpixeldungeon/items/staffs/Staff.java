@@ -198,6 +198,11 @@ public abstract class Staff extends Item implements AttunementItem, Rankable {
         return 0;
     }
 
+    @Override
+    public boolean isUpgradable() {
+        return false;
+    }
+
     public int hp(int lvl){
         switch (lvl) {
             case 1: return table.hp1 + table.hpInc1 * level();
