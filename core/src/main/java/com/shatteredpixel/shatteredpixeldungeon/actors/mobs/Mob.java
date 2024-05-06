@@ -262,7 +262,7 @@ public abstract class Mob extends Char {
 	public void doWithHordeMinions(MoblikeCallback action){
 		if (hordeHead == -1) {
 			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
-				if (mob.id() != id() && mob.hordeHead != -1 && mob.hordeHead == id()) {
+				if (mob.id() != id() && mob.hordeHead == id()) {
 					action.call(mob);
 				}
 			}
@@ -843,7 +843,12 @@ public abstract class Mob extends Char {
 		if (state != PASSIVE){
 			state = HUNTING;
 		}
-		doWithHordeHead((head) -> enemy = head.enemy);
+		doWithHordeMinions((minion) -> {
+			minion.enemy = ch;
+			if (minion.state != PASSIVE){
+				minion.state = HUNTING;
+			}
+		});
 	}
 
 	public void clearEnemy(){
@@ -977,7 +982,7 @@ public abstract class Mob extends Char {
 			minion.state = minion.HUNTING;
 			minion.enemy = enemy;
 			minion.alerted = true;
-			minion.target = target;
+			minion.beckon(target);
 		});
 
 		super.die( cause );
@@ -1188,7 +1193,7 @@ public abstract class Mob extends Char {
 				state = WANDERING;
 				target = Dungeon.level.randomDestination( Mob.this );
 			}
-			doWithHordeMinions((minion) -> minion.target = target);
+			doWithHordeMinions((minion) -> minion.beckon(target));
 
 			if (alignment == Alignment.ENEMY && Dungeon.isChallenged(Challenges.SWARM_INTELLIGENCE)) {
 				for (Mob mob : Dungeon.level.mobs) {
@@ -1228,7 +1233,7 @@ public abstract class Mob extends Char {
 			state = HUNTING;
 			target = enemy.pos;
 
-			doWithHordeMinions((minion) -> beckon(target));
+			doWithHordeMinions((minion) -> minion.beckon(target));
 			
 			if (alignment == Alignment.ENEMY && Dungeon.isChallenged( Challenges.SWARM_INTELLIGENCE )) {
 				for (Mob mob : Dungeon.level.mobs) {
@@ -1252,7 +1257,7 @@ public abstract class Mob extends Char {
 				return moveSprite( oldPos, pos );
 			} else {
 				target = randomDestination();
-				doWithHordeMinions((minion) -> minion.target = target);
+				doWithHordeMinions((minion) -> minion.beckon(target));
 				spend( TICK );
 			}
 			
