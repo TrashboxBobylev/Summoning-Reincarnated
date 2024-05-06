@@ -197,8 +197,6 @@ public abstract class Mob extends Char {
 		
 		boolean justAlerted = alerted;
 		alerted = false;
-
-		hordeSpawnAttempt();
 		
 		if (justAlerted){
 			sprite.showAlert();
@@ -235,7 +233,7 @@ public abstract class Mob extends Char {
 		return state.act( enemyInFOV, justAlerted );
 	}
 
-	private boolean hordeException() {
+	public boolean hordeException() {
 		return EXP > 0 &&
 				!(this instanceof Ghoul) && !(this instanceof Slime) &&
 				!(this instanceof Necromancer.NecroSkeleton) &&
@@ -271,24 +269,24 @@ public abstract class Mob extends Char {
 		}
 	}
 
-	public void hordeSpawnAttempt(){
-		if (!hordeSpawned && hordeException() && Random.Int(7) == 0 && !Dungeon.bossLevel() && alignment == Alignment.ENEMY){
+	public void hordeSpawnAttempt(Level level){
+		if (!hordeSpawned && hordeException() && Random.Int(5) == 0 && !Dungeon.bossLevel() && alignment == Alignment.ENEMY){
 
 			int hordeSize = Math.min(3, Random.IntRange(1, Dungeon.depth / 8));
 			for (int i = 0; i < hordeSize; i++) {
 
 				ArrayList<Integer> candidates = new ArrayList<>();
 				for (int n : PathFinder.NEIGHBOURS8) {
-					if (Dungeon.level.map[pos+n] != Terrain.DOOR
-							&& Dungeon.level.map[pos+n] != Terrain.SECRET_DOOR
-							&& Dungeon.level.passable[pos+n]
+					if (level.map[pos+n] != Terrain.DOOR
+							&& level.map[pos+n] != Terrain.SECRET_DOOR
+							&& level.passable[pos+n]
 							&& Actor.findChar(pos + n) == null) {
 						candidates.add(pos + n);
 					}
 				}
 
 				if (!candidates.isEmpty()) {
-					Mob child = Dungeon.level.createMob();
+					Mob child = level.createMob();
 					child.hordeHead = this.id();
 					child.hordeSpawned = true;
 					if (state != SLEEPING) {
@@ -297,13 +295,7 @@ public abstract class Mob extends Char {
 					child.HP = child.HT = child.HT/2;
 
 					child.pos = Random.element(candidates);
-
-					Dungeon.level.occupyCell(child);
-
-					GameScene.add(child);
-					if (sprite.visible) {
-						Actor.addDelayed(new Pushing(child, pos, child.pos), -1);
-					}
+					level.mobs.add(child);
 				}
 			}
 			if (!properties.contains(Property.BOSS)) HP = HT = HT*2;
