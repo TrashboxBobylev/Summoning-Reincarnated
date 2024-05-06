@@ -296,6 +296,9 @@ public abstract class Mob extends Char {
 
 					child.pos = Random.element(candidates);
 					level.mobs.add(child);
+					if (Dungeon.level != null){
+						GameScene.add(child);
+					}
 				}
 			}
 			if (!properties.contains(Property.BOSS)) HP = HT = HT*2;
