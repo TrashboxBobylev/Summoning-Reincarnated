@@ -1269,7 +1269,7 @@ public abstract class Mob extends Char {
 
 		protected int randomDestination(){
 			if (hasHordeHead())
-				return ((Mob)Actor.findById(hordeHead)).target;
+				return ((Mob)Actor.findById(hordeHead)).pos;
 			return Dungeon.level.randomDestination( Mob.this );
 		}
 		
