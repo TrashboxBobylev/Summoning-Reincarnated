@@ -36,13 +36,62 @@ public class vReInc_Changes {
     }
 
     public static void add_v0_3_0_Changes( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("vReInc-0.3.1", true, "");
+        ChangeInfo changes = new ChangeInfo("vReInc-0.3.0", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBYLEV), "Developer Commentary",
-                "_-_ Released May 5st, 2024\n" +
-                        "_-_ 4 days after Reincarnated 0.3.1"));
+                "_-_ Released May 1st, 2024\n" +
+                        "_-_ 116 days after Reincarnated 0.2.0\n\n" +
+                        "It's been a long wait, isn't it? The 3 months long development hell was surely something for mental state and other stuff... " +
+                        "But at least the main course of action, minions, are finally here!"));
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered Ports",
+                "Implemented Shattered v2.3.2 changes."));
+
+        changes = new ChangeInfo("v0.3.2", false, null);
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(HeroSprite.avatar(HeroClass.ADVENTURER, 6), HeroClass.ADVENTURER.title(),
+                "_-_ _Precise Strike_ +2 no longer heals enemies and sets max HP of enemies beyond 1 HP.\n\n" +
+                        "_-_ _Empowering Meal_ now actually works as effect.\n\n" +
+                        "_-_ Reduced _Slice of Power_'s boost by half, decreasing DPS boost from 4x to 2x."));
+
+        changes.addButton(new ChangeButton(new ItemSprite(new GooStaff()), "Hammer of Acid II Buffs",
+                "_-_ Now is able to affect hero.\n\n" +
+                        "_-_ Increased _Liquid Flame_ effect's damage by _100%_\n\n" +
+                        "_-_ Increased _Frostburn Brew_ effect's damage by _78%_ and chill duration by _50%_\n\n" +
+                        "_-_ Increased _Toxic Gas_ effect's initial poison by _42%_\n\n" +
+                        "_-_ Increased _Corrosive Gas_ effect's initial duration by _33%_ and initial damage by _78%_\n\n" +
+                        "_-_ _Mind Vision_ effect now heals for _20%_ instead of _33%_ and now applies the same effects of paralysis and forgetfulness as Phase Shift\n\n" +
+                        "_-_ _Caustic Brew_ effect now damages enemies for 50% of their max health, with min damage of 20 and max damage of 50"));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.STAFF_PLACEHOLDER), "Staffs in General",
+                "_-_ Now have actual gold price.\n\n" +
+                        "_-_ Now can have random ranks and be enchanted and cursed.\n\n" +
+                        "_-_ Now can spawn in crystal chests, mimics and as Ring of Wealth rewards.\n\n" +
+                        "_-_ Can no longer be upgraded."));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+                "_-_ Scrolls of Upgrade and Potions of Strength are now identified by default in face challenge\n" +
+                        "_-_ Healing Dart now has the same accuracy in point-blank and at range\n" +
+                        "_-_ Tweaked hordes:\n" +
+                        "   _*_ Increased the chance to spawn from _14%_ to _20%_\n" +
+                        "   _*_ Now spawn on level generation instead of first act\n" +
+                        "   _*_ Refactored some of relationship between horde heads and horde members to make it more stable\n" +
+                        "   _*_ Wandering horde minions now follow their head directly instead of following head's destination"));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "Fixed the following bugs:\n" +
+                        "_-_ Effect type relation not working, which lead to resistances and immunities also not working\n" +
+                        "_-_ Crashes from minions attempting to retarget or attack\n" +
+                        "_-_ Affected by Luck talent upgrading thrown weapons\n" +
+                        "_-_ Bizarre horde-related things"));
+
+        changes = new ChangeInfo("v0.3.1", false, null);
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
 
         changes.addButton( new ChangeButton( new Image(Assets.Interfaces.SUBCLASS_ICONS, (Conducts.Conduct.FACE.icon - 1) * 16, 16, 16, 16), "Curse of Faced",
                 "Implemented popular face challenge as _Curse of Faced_ conduct.\n\n" +
@@ -63,19 +112,6 @@ public class vReInc_Changes {
                         "_-_ Frostburn and frost fire not being visible\n" +
                         "_-_ Adventurer having no shopkeeper line and therefore showing there !!!NO TEXT FOUND!!!\n" +
                         "_-_ Affected by Luck talent upgrading thrown weapons"));
-
-        changes = new ChangeInfo("vReInc-0.3.0", true, "");
-        changes.hardlight(Window.TITLE_COLOR);
-        changeInfos.add(changes);
-
-        changes.addButton( new ChangeButton(Icons.get(Icons.BOBYLEV), "Developer Commentary",
-                "_-_ Released May 1st, 2024\n" +
-                        "_-_ 116 days after Reincarnated 0.2.0\n\n" +
-                        "It's been a long wait, isn't it? The 3 months long development hell was surely something for mental state and other stuff... " +
-                        "But at least the main course of action, minions, are finally here!"));
-
-        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered Ports",
-                "Implemented Shattered v2.3.2 changes."));
 
         changes = new ChangeInfo("Minions Overhaul", false,
                 "Only 8 staffs have been implemented into the game, more will come with future updates.");
