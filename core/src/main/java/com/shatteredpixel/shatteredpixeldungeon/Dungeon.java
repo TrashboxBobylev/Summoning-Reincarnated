@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RevealedArea;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpiritHawk;
@@ -1016,6 +1017,29 @@ public class Dungeon {
 	public static final int PATHBLOCK_NOT_ALLIES = 4;
 	public static final int PATHBLOCK_NORMAL = PATHBLOCK_CHARS | PATHBLOCK_TIGHTNESS;
 
+	public static boolean isSafeToSwap(Char ch1, Char ch2){
+		if (!Dungeon.level.passable[ch1.pos] && !ch2.flying){
+			return false;
+		}
+
+		//can't swap into a space without room
+		if (ch1.properties().contains(Char.Property.LARGE) && !Dungeon.level.openSpace[ch2.pos]
+				|| ch2.properties().contains(Char.Property.LARGE) && !Dungeon.level.openSpace[ch1.pos]){
+			return false;
+		}
+
+		//can't swap or ally warp if either char is immovable
+		if (Char.hasProp(ch1, Char.Property.IMMOVABLE) || Char.hasProp(ch2, Char.Property.IMMOVABLE)){
+			return false;
+		}
+
+		if (ch1.rooted || ch2.rooted || ch1.buff(Vertigo.class) != null || ch2.buff(Vertigo.class) != null){
+			return false;
+		}
+
+		return true;
+	}
+
 	public static boolean[] findPassable(Char ch, boolean[] pass, boolean[] vis, int flags){
 		setupPassable();
 		if (ch.flying || ch.buff( Amok.class ) != null) {
@@ -1033,7 +1057,7 @@ public class Dungeon {
 		if (((flags & PATHBLOCK_CHARS) != 0)) {
 			for (Char c : Actor.chars()) {
 				if (vis[c.pos]) {
-					if (c.alignment != ch.alignment || ((flags & PATHBLOCK_NOT_ALLIES) == 0))
+					if (c.alignment != ch.alignment || ((flags & PATHBLOCK_NOT_ALLIES) == 0 || !isSafeToSwap(ch, c)))
 						passable[c.pos] = false;
 				}
 			}
@@ -1051,7 +1075,9 @@ public class Dungeon {
 	public static int findStep(Char ch, int to, boolean[] pass, boolean[] visible, int flags ) {
 
 		if (Dungeon.level.adjacent( ch.pos, to )) {
-			return Actor.findChar( to ) == null && pass[to] ? to : -1;
+			Char entity = Actor.findChar(to);
+			return (entity == null || entity.alignment != ch.alignment || ((flags & PATHBLOCK_NOT_ALLIES) == 0) || isSafeToSwap(ch, entity))
+					&& pass[to] ? to : -1;
 		}
 
 		return PathFinder.getStep( ch.pos, to, findPassable(ch, pass, visible, flags) );

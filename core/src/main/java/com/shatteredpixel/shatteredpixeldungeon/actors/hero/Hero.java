@@ -1634,7 +1634,7 @@ public class Hero extends Char {
 			else if (path.getLast() != target)
 				newPath = true;
 			else {
-				if (!Dungeon.level.passable[path.get(0)] || Actor.findChar(path.get(0)) != null) {
+				if (!Dungeon.level.passable[path.get(0)] || (Actor.findChar(path.get(0)) != null && Actor.findChar(path.get(0)).alignment != alignment)) {
 					newPath = true;
 				}
 			}
@@ -1650,7 +1650,7 @@ public class Hero extends Char {
 					passable[i] = p[i] && (v[i] || m[i]);
 				}
 
-				PathFinder.Path newpath = Dungeon.findPath(this, target, passable, fieldOfView, Dungeon.PATHBLOCK_NORMAL);
+				PathFinder.Path newpath = Dungeon.findPath(this, target, passable, fieldOfView, Dungeon.PATHBLOCK_NORMAL | Dungeon.PATHBLOCK_NOT_ALLIES);
 				if (newpath != null && path != null && newpath.size() > 2*path.size()){
 					path = null;
 				} else {
@@ -1684,9 +1684,25 @@ public class Hero extends Char {
 			if (subClass == HeroSubClass.FREERUNNER){
 				Buff.affect(this, Momentum.class).gainStack();
 			}
-			
-			sprite.move(pos, step);
-			move(step);
+
+			if (Actor.findChar(step) != null){
+				Char entity = Actor.findChar(step);
+				int oldPos = pos;
+				int newPos = entity.pos;
+
+				entity.pos = oldPos;
+				moveSprite( oldPos, newPos );
+				move( newPos );
+
+				entity.pos = newPos;
+				entity.sprite.move( newPos, oldPos );
+				entity.move( oldPos );
+
+				entity.spend(delay);
+			} else {
+				sprite.move(pos, step);
+				move(step);
+			}
 
 			spend( delay );
 			justMoved = true;
