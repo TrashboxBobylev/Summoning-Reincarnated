@@ -334,7 +334,7 @@ public abstract class Mob extends Char {
 	protected Char chooseClosest(HashMap<Char, Float> enemies){
 		ArrayList<Char> enemyList = new ArrayList<>(enemies.keySet());
 		//go after the closest potential enemy, preferring enemies that can be reached/attacked, and the hero if two are equidistant
-		PathFinder.buildDistanceMap(pos, Dungeon.findPassable(this, Dungeon.level.passable, fieldOfView, true));
+		PathFinder.buildDistanceMap(pos, Dungeon.findPassable(this, Dungeon.level.passable, fieldOfView, Dungeon.PATHBLOCK_NORMAL));
 
 		for (Char ch : enemyList){
 			float priority = (float)PathFinder.distance[ch.pos];
@@ -671,13 +671,13 @@ public abstract class Mob extends Char {
 			//generate a new path
 			if (newPath) {
 				//If we aren't hunting, always take a full path
-				PathFinder.Path full = Dungeon.findPath(this, target, Dungeon.level.passable, fieldOfView, true);
+				PathFinder.Path full = Dungeon.findPath(this, target, Dungeon.level.passable, fieldOfView, Dungeon.PATHBLOCK_NORMAL);
 				if (state != HUNTING){
 					path = full;
 				} else {
 					//otherwise, check if other characters are forcing us to take a very slow route
 					// and don't try to go around them yet in response, basically assume their blockage is temporary
-					PathFinder.Path ignoreChars = Dungeon.findPath(this, target, Dungeon.level.passable, fieldOfView, false);
+					PathFinder.Path ignoreChars = Dungeon.findPath(this, target, Dungeon.level.passable, fieldOfView, Dungeon.PATHBLOCK_NOTHING);
 					if (ignoreChars != null && (full == null || full.size() > 2*ignoreChars.size())){
 						//check if first cell of shorter path is valid. If it is, use new shorter path. Otherwise do nothing and wait.
 						path = ignoreChars;

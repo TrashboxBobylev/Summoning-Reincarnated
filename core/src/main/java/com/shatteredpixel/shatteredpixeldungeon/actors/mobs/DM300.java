@@ -178,13 +178,13 @@ public class DM300 extends Mob {
 				if (Dungeon.level.adjacent(pos, Dungeon.hero.pos)){
 					canReach = true;
 				} else {
-					canReach = (Dungeon.findStep(this, Dungeon.hero.pos, Dungeon.level.openSpace, fieldOfView, true) != -1);
+					canReach = (Dungeon.findStep(this, Dungeon.hero.pos, Dungeon.level.openSpace, fieldOfView, Dungeon.PATHBLOCK_NORMAL) != -1);
 				}
 			} else {
 				if (Dungeon.level.adjacent(pos, enemy.pos)){
 					canReach = true;
 				} else {
-					canReach = (Dungeon.findStep(this, enemy.pos, Dungeon.level.openSpace, fieldOfView, true) != -1);
+					canReach = (Dungeon.findStep(this, enemy.pos, Dungeon.level.openSpace, fieldOfView, Dungeon.PATHBLOCK_NORMAL) != -1);
 				}
 			}
 

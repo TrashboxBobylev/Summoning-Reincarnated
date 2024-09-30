@@ -1009,11 +1009,14 @@ public class Dungeon {
 			BArray.setFalse(passable);
 	}
 
-	public static boolean[] findPassable(Char ch, boolean[] pass, boolean[] vis, boolean chars){
-		return findPassable(ch, pass, vis, chars, chars);
-	}
+	//passability flags
+	public static final int PATHBLOCK_NOTHING = 0;
+	public static final int PATHBLOCK_CHARS = 1;
+	public static final int PATHBLOCK_TIGHTNESS = 2;
+	public static final int PATHBLOCK_NOT_ALLIES = 4;
+	public static final int PATHBLOCK_NORMAL = PATHBLOCK_CHARS | PATHBLOCK_TIGHTNESS;
 
-	public static boolean[] findPassable(Char ch, boolean[] pass, boolean[] vis, boolean chars, boolean considerLarge){
+	public static boolean[] findPassable(Char ch, boolean[] pass, boolean[] vis, int flags){
 		setupPassable();
 		if (ch.flying || ch.buff( Amok.class ) != null) {
 			BArray.or( pass, Dungeon.level.avoid, passable );
@@ -1021,16 +1024,17 @@ public class Dungeon {
 			System.arraycopy( pass, 0, passable, 0, Dungeon.level.length() );
 		}
 
-		if (considerLarge && Char.hasProp(ch, Char.Property.LARGE)){
+		if (((flags & PATHBLOCK_TIGHTNESS) != 0) && Char.hasProp(ch, Char.Property.LARGE)){
 			BArray.and( passable, Dungeon.level.openSpace, passable );
 		}
 
 		ch.modifyPassable(passable);
 
-		if (chars) {
+		if (((flags & PATHBLOCK_CHARS) != 0)) {
 			for (Char c : Actor.chars()) {
 				if (vis[c.pos]) {
-					passable[c.pos] = false;
+					if (c.alignment != ch.alignment || ((flags & PATHBLOCK_NOT_ALLIES) == 0))
+						passable[c.pos] = false;
 				}
 			}
 		}
@@ -1038,24 +1042,24 @@ public class Dungeon {
 		return passable;
 	}
 
-	public static PathFinder.Path findPath(Char ch, int to, boolean[] pass, boolean[] vis, boolean chars) {
+	public static PathFinder.Path findPath(Char ch, int to, boolean[] pass, boolean[] vis, int flags) {
 
-		return PathFinder.find( ch.pos, to, findPassable(ch, pass, vis, chars) );
+		return PathFinder.find( ch.pos, to, findPassable(ch, pass, vis, flags) );
 
 	}
 	
-	public static int findStep(Char ch, int to, boolean[] pass, boolean[] visible, boolean chars ) {
+	public static int findStep(Char ch, int to, boolean[] pass, boolean[] visible, int flags ) {
 
 		if (Dungeon.level.adjacent( ch.pos, to )) {
 			return Actor.findChar( to ) == null && pass[to] ? to : -1;
 		}
 
-		return PathFinder.getStep( ch.pos, to, findPassable(ch, pass, visible, chars) );
+		return PathFinder.getStep( ch.pos, to, findPassable(ch, pass, visible, flags) );
 
 	}
 	
 	public static int flee( Char ch, int from, boolean[] pass, boolean[] visible, boolean chars ) {
-		boolean[] passable = findPassable(ch, pass, visible, false, true);
+		boolean[] passable = findPassable(ch, pass, visible, PATHBLOCK_TIGHTNESS);
 		passable[ch.pos] = true;
 
 		//only consider other chars impassable if our retreat step may collide with them

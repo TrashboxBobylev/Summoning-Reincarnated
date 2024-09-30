@@ -1650,7 +1650,7 @@ public class Hero extends Char {
 					passable[i] = p[i] && (v[i] || m[i]);
 				}
 
-				PathFinder.Path newpath = Dungeon.findPath(this, target, passable, fieldOfView, true);
+				PathFinder.Path newpath = Dungeon.findPath(this, target, passable, fieldOfView, Dungeon.PATHBLOCK_NORMAL);
 				if (newpath != null && path != null && newpath.size() > 2*path.size()){
 					path = null;
 				} else {
