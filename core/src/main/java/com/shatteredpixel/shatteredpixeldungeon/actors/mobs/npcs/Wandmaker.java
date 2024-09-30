@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
+import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.MassGraveRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.RitualSiteRoom;
@@ -64,15 +65,17 @@ public class Wandmaker extends NPC {
 
 		properties.add(Property.IMMOVABLE);
 	}
-	
+
+	@Override
+	public Notes.Landmark landmark() {
+		return Notes.Landmark.WANDMAKER;
+	}
+
 	@Override
 	protected boolean act() {
 		if (Dungeon.hero.buff(AscensionChallenge.class) != null){
 			die(null);
 			return true;
-		}
-		if (Dungeon.level.visited[pos] && Quest.wand1 != null){
-			Notes.add( Notes.Landmark.WANDMAKER );
 		}
 		return super.act();
 	}
@@ -203,7 +206,6 @@ public class Wandmaker extends NPC {
 			});
 
 			Quest.given = true;
-			Notes.add( Notes.Landmark.WANDMAKER );
 		}
 
 		return true;
@@ -296,10 +298,10 @@ public class Wandmaker extends NPC {
 				
 				Wandmaker npc = new Wandmaker();
 				boolean validPos;
-				//Do not spawn wandmaker on the entrance, a trap, or in front of a door.
+				//Do not spawn wandmaker on the entrance, in front of a door, or on bad terrain.
 				do {
 					validPos = true;
-					npc.pos = level.pointToCell(room.random());
+					npc.pos = level.pointToCell(room.random((room.width() > 6 && room.height() > 6) ? 2 : 1));
 					if (npc.pos == level.entrance()){
 						validPos = false;
 					}
@@ -308,7 +310,9 @@ public class Wandmaker extends NPC {
 							validPos = false;
 						}
 					}
-					if (level.traps.get(npc.pos) != null){
+					if (level.traps.get(npc.pos) != null
+							|| !level.passable[npc.pos]
+							|| level.map[npc.pos] == Terrain.EMPTY_SP){
 						validPos = false;
 					}
 				} while (!validPos);
@@ -339,7 +343,7 @@ public class Wandmaker extends NPC {
 		public static ArrayList<Room> spawnRoom( ArrayList<Room> rooms) {
 			questRoomSpawned = false;
 			if (!spawned && (type != 0 || (Dungeon.depth > 6 && Random.Int( 10 - Dungeon.depth ) == 0))) {
-				
+
 				// decide between 1,2, or 3 for quest type.
 				if (type == 0) type = Random.Int(3)+1;
 				

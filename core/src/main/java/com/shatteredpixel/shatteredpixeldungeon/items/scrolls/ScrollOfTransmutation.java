@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.Brew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.Elixir;
@@ -40,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.Trinket;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
@@ -75,18 +75,19 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		} else if (item instanceof MissileWeapon){
 			return item.getClass() != Dart.class;
 
-		//all regular or exotic potions. No brews, elixirs, or catalysts
+		//all regular or exotic potions. No brews or elixirs
 		} else if (item instanceof Potion){
-			return !(item instanceof Elixir || item instanceof Brew || item instanceof AlchemicalCatalyst);
+			return !(item instanceof Elixir || item instanceof Brew);
 
 		//all regular or exotic scrolls, except itself
 		} else if (item instanceof Scroll){
 			return item != this || item.quantity() > 1;
 
-		//all rings, wands, artifacts, seeds, and runestones
+		//all rings, wands, artifacts, trinkets, seeds, and runestones
 		} else {
 			return item instanceof Ring || item instanceof Wand || item instanceof Artifact
-					|| item instanceof Plant.Seed || item instanceof Runestone;
+					|| item instanceof Trinket || item instanceof Plant.Seed
+					|| item instanceof Runestone;
 		}
 	}
 	
@@ -165,16 +166,25 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		} else if (item instanceof Artifact) {
 			Artifact a = changeArtifact( (Artifact)item );
 			if (a == null){
-				//if no artifacts are left, generate a random +0 ring with shared ID/curse state
+				//if no artifacts are left, generate a random ring with shared ID/curse state
+				//artifact and ring levels are not exactly equivalent, give the ring up to +2
 				Item result = Generator.randomUsingDefaults(Generator.Category.RING);
 				result.levelKnown = item.levelKnown;
 				result.cursed = item.cursed;
 				result.cursedKnown = item.cursedKnown;
-				result.level(0);
+				if (item.visiblyUpgraded() == 10){
+					result.level(2);
+				} else if (item.visiblyUpgraded() >= 5){
+					result.level(1);
+				} else {
+					result.level(0);
+				}
 				return result;
 			} else {
 				return a;
 			}
+		} else if (item instanceof Trinket) {
+			return changeTrinket( (Trinket)item );
 		} else {
 			return null;
 		}
@@ -290,6 +300,20 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		
 		return null;
 	}
+
+	private static Trinket changeTrinket( Trinket t ){
+		Trinket n;
+		do {
+			n = (Trinket)Generator.random(Generator.Category.TRINKET);
+		} while ( Challenges.isItemBlocked(n) || n.getClass() == t.getClass());
+
+		n.level(t.trueLevel());
+		n.levelKnown = t.levelKnown;
+		n.cursedKnown = t.cursedKnown;
+		n.cursed = t.cursed;
+
+		return n;
+	}
 	
 	private static Wand changeWand( Wand w ) {
 		Wand n;
@@ -357,6 +381,6 @@ public class ScrollOfTransmutation extends InventoryScroll {
 
 	@Override
 	public int energyVal() {
-		return isKnown() ? 8 * quantity : super.energyVal();
+		return isKnown() ? 10 * quantity : super.energyVal();
 	}
 }

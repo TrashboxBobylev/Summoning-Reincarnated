@@ -64,7 +64,7 @@ public class AndroidLauncher extends AndroidApplication {
 			FreeType.initFreeType();
 			new UCEHandler.Builder(this).setUCEHEnabled(true).build();
 		} catch (Exception e){
-			AndroidMissingNativesHandler.errorMsg = e.getMessage();
+			AndroidMissingNativesHandler.error = e;
 			Intent intent = new Intent(this, AndroidMissingNativesHandler.class);
 			startActivity(intent);
 			finish();

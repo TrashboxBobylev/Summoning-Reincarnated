@@ -48,6 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetributio
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
@@ -241,12 +242,15 @@ public class DriedRose extends Artifact {
 			desc += "\n";
 
 			if (weapon != null) {
-				desc += "\n" + Messages.get(this, "desc_weapon", weapon.title());
+				desc += "\n" + Messages.get(this, "desc_weapon", Messages.titleCase(weapon.title()));
 			}
 
 			if (armor != null) {
-				desc += "\n" + Messages.get(this, "desc_armor", armor.title());
+				desc += "\n" + Messages.get(this, "desc_armor", Messages.titleCase(armor.title()));
 			}
+
+			desc += "\n" + Messages.get(this, "desc_strength", ghostStrength());
+
 		}
 		
 		return desc;
@@ -296,7 +300,11 @@ public class DriedRose extends Artifact {
 
 		if (ghost == null){
 			if (charge < chargeCap) {
-				charge += Math.round(4*amount);
+				partialCharge += 4*amount;
+				while (partialCharge >= 1f){
+					charge++;
+					partialCharge--;
+				}
 				if (charge >= chargeCap) {
 					charge = chargeCap;
 					partialCharge = 0;
@@ -399,7 +407,7 @@ public class DriedRose extends Artifact {
 					partialCharge += (ghost.HT / 500f) * RingOfEnergy.artifactChargeMultiplier(target);
 					updateQuickslot();
 					
-					if (partialCharge > 1) {
+					while (partialCharge > 1) {
 						ghost.HP++;
 						partialCharge--;
 					}
@@ -416,7 +424,7 @@ public class DriedRose extends Artifact {
 					&& Regeneration.regenOn()) {
 				//500 turns to a full charge
 				partialCharge += (1/5f * RingOfEnergy.artifactChargeMultiplier(target));
-				if (partialCharge > 1){
+				while (partialCharge > 1){
 					charge++;
 					partialCharge--;
 					if (charge == chargeCap){
@@ -477,6 +485,7 @@ public class DriedRose extends Artifact {
 
 		@Override
 		public boolean doPickUp(Hero hero, int pos) {
+			Catalog.setSeen(getClass());
 			DriedRose rose = hero.belongings.getItem( DriedRose.class );
 
 			if (rose == null){
@@ -489,6 +498,7 @@ public class DriedRose extends Artifact {
 			} else {
 
 				rose.upgrade();
+				Catalog.countUse(rose.getClass());
 				if (rose.level() == rose.levelCap) {
 					GLog.p( Messages.get(this, "maxlevel") );
 				} else

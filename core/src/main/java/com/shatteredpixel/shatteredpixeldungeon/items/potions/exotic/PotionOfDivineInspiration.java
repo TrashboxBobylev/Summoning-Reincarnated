@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.TalentBoost
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -41,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndHero;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Random;
 
 public class PotionOfDivineInspiration extends ExoticPotion {
 	
@@ -136,8 +138,11 @@ public class PotionOfDivineInspiration extends ExoticPotion {
 					new Flare( 6, 32 ).color(0xFFFF00, true).show( curUser.sprite, 2f );
 					GLog.p(Messages.get(PotionOfDivineInspiration.class, "bonus"));
 
-					if (!anonymous){
-						Talent.onPotionUsed(curUser, curUser.pos, talentFactor);
+					if (!anonymous) {
+						Catalog.countUse(PotionOfDivineInspiration.class);
+						if (Random.Float() < talentChance) {
+							Talent.onPotionUsed(curUser, curUser.pos, talentFactor);
+						}
 					}
 
 				}

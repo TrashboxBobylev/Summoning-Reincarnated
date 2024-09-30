@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -73,6 +74,7 @@ public class Food extends Item {
 		if (action.equals( AC_EAT )) {
 			
 			detach( hero.belongings.backpack );
+			Catalog.countUse(getClass());
 			
 			satisfy(hero);
 			GLog.i( Messages.get(this, "eat_msg") );
@@ -80,7 +82,7 @@ public class Food extends Item {
 			hero.sprite.operate( hero.pos );
 			hero.busy();
 			SpellSprite.show( hero, SpellSprite.FOOD );
-			Sample.INSTANCE.play( Assets.Sounds.EAT );
+			eatSFX();
 			
 			hero.spend( eatingTime() );
 
@@ -90,6 +92,10 @@ public class Food extends Item {
 			Badges.validateFoodEaten();
 			
 		}
+	}
+
+	protected void eatSFX(){
+		Sample.INSTANCE.play( Assets.Sounds.EAT );
 	}
 
 	protected float eatingTime(){

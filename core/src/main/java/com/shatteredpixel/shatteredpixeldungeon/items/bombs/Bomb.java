@@ -42,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.*;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPassage;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -265,7 +266,7 @@ public class Bomb extends Item {
 			Noisemaker.class,
 			ShockBomb.class
 	};
-	
+
 	@Override
 	public Item random() {
 		if (Dungeon.isChallenged(Conducts.Conduct.EXPLOSIONS)) {
@@ -375,6 +376,7 @@ public class Bomb extends Item {
 
 		protected void trigger(Heap heap){
 			heap.remove(bomb);
+			Catalog.countUse(bomb.getClass());
 			bomb.explode(heap.pos);
 			Actor.remove(this);
 		}
@@ -446,7 +448,7 @@ public class Bomb extends Item {
 			bombCosts.put(HolyBomb.class,       3);
 			bombCosts.put(Webbomb.class,        3);
 			bombCosts.put(SupplyBomb.class,     1);
-			
+
 			bombCosts.put(ArcaneBomb.class,     6);
 			bombCosts.put(ShrapnelBomb.class,   6);
 		}
@@ -489,7 +491,13 @@ public class Bomb extends Item {
 					if (result instanceof HolyBomb) result.quantity(2);
 				}
 			}
-			
+
+			if (result instanceof ArcaneBomb){
+				Catalog.countUse(GooBlob.class);
+			} else if (result instanceof ShrapnelBomb){
+				Catalog.countUse(MetalShard.class);
+			}
+
 			return result;
 		}
 		

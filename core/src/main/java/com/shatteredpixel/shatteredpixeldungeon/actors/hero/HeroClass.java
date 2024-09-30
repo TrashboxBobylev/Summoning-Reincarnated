@@ -69,6 +69,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKn
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnive2;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpike;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingStone;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.watabou.utils.DeviceCompat;
 
@@ -199,10 +200,11 @@ public enum HeroClass {
 			stones.quantity(3).collect();
 			Dungeon.quickslot.setSlot(0, stones);
 
-			if (hero.belongings.armor != null) {
-				hero.belongings.armor.affixSeal(new BrokenSeal());
-			}
-		}
+            if (hero.belongings.armor != null){
+                hero.belongings.armor.affixSeal(new BrokenSeal());
+                Catalog.setSeen(BrokenSeal.class); //as it's not added to the inventory
+            }
+        }
 
 		new PotionOfHealing().identify();
 		new ScrollOfRage().identify();
@@ -384,7 +386,7 @@ public enum HeroClass {
 //				return Badges.isUnlocked(Badges.Badge.UNLOCK_DUELIST);
 //		}
 //	}
-	
+
 	public String unlockMsg() {
 		return shortDesc() + "\n\n" + Messages.get(HeroClass.class, name()+"_unlock");
 	}

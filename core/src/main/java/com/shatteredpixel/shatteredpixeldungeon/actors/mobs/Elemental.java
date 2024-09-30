@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlam
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Embers;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.RatSkull;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.CursedWand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -119,6 +120,12 @@ public abstract class Elemental extends Mob {
 		}
 		
 		return super.act();
+	}
+
+	@Override
+	public void die(Object cause) {
+		flying = false;
+		super.die(cause);
 	}
 	
 	@Override
@@ -263,7 +270,10 @@ public abstract class Elemental extends Mob {
 
 		@Override
 		protected boolean act() {
-			if (targetingPos != -1){
+			//fire a charged attack instead of any other action, as long as it is possible to do so
+			if (targetingPos != -1 && state == HUNTING){
+				//account for bolt hitting walls, in case position suddenly changed
+				targetingPos = new Ballistica( pos, targetingPos, Ballistica.STOP_SOLID | Ballistica.STOP_TARGET ).collisionPos;
 				if (sprite != null && (sprite.visible || Dungeon.level.heroFOV[targetingPos])) {
 					sprite.zap( targetingPos );
 					return false;
@@ -272,6 +282,11 @@ public abstract class Elemental extends Mob {
 					return true;
 				}
 			} else {
+
+				if (state != HUNTING){
+					targetingPos = -1;
+				}
+
 				return super.act();
 			}
 		}
@@ -322,8 +337,15 @@ public abstract class Elemental extends Mob {
 
 
 			} else {
-				rangedCooldown = 1;
-				return super.doAttack(enemy);
+
+				if (sprite != null && (sprite.visible || Dungeon.level.heroFOV[targetingPos])) {
+					sprite.zap( targetingPos );
+					return false;
+				} else {
+					zap();
+					return true;
+				}
+
 			}
 		}
 
@@ -498,7 +520,7 @@ public abstract class Elemental extends Mob {
 			}
 			
 			for (Char ch : affected) {
-				ch.damage( Math.round( damage * 0.4f ), Shocking.class );
+				ch.damage( Math.round( damage * 0.4f ), new Shocking() );
 				if (ch == Dungeon.hero && !ch.isAlive()){
 					Dungeon.fail(this);
 					GLog.n( Messages.capitalize(Messages.get(Char.class, "kill", name())) );
@@ -536,17 +558,44 @@ public abstract class Elemental extends Mob {
 		
 		@Override
 		protected void meleeProc( Char enemy, int damage ) {
-			CursedWand.cursedEffect(null, this, enemy);
+			Ballistica aim = new Ballistica(pos, enemy.pos, Ballistica.STOP_TARGET);
+			//TODO shortcutting the fx seems fine for now but may cause problems with new cursed effects
+			//of course, not shortcutting it means actor ordering issues =S
+			CursedWand.randomValidEffect(null, this, aim, false).effect(null, this, aim, false);
 		}
-		
+
+		@Override
+		protected void zap() {
+			spend( 1f );
+
+			Invisibility.dispel(this);
+			Char enemy = this.enemy;
+			//skips accuracy check, always hits
+			rangedProc( enemy );
+
+			rangedCooldown = Random.NormalIntRange( 3, 5 );
+		}
+
+		@Override
+		public void onZapComplete() {
+			zap();
+			//next(); triggers after wand effect
+		}
+
 		@Override
 		protected void rangedProc( Char enemy ) {
-			CursedWand.cursedEffect(null, this, enemy);
+			CursedWand.cursedZap(null, this, new Ballistica(pos, enemy.pos, Ballistica.STOP_TARGET), new Callback() {
+				@Override
+				public void call() {
+					next();
+				}
+			});
 		}
 	}
 	
 	public static Class<? extends Elemental> random(){
-		if (Random.Int( 50 ) == 0){
+		float altChance = 1/50f * RatSkull.exoticChanceMultiplier();
+		if (Random.Float() < altChance){
 			return ChaosElemental.class;
 		}
 		

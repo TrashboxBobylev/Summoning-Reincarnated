@@ -84,25 +84,14 @@ public class ElixirOfDragonsBlood extends Elixir {
 			}
 		}
 	}
-
-	@Override
-	protected int splashColor() {
-		return 0xFFFF002A;
-	}
-	
-	@Override
-	public int value() {
-		//prices of ingredients
-		return quantity * (50 + 40);
-	}
 	
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
 		
 		{
-			inputs =  new Class[]{PotionOfDragonsBreath.class, AlchemicalCatalyst.class};
-			inQuantity = new int[]{1, 1};
+			inputs =  new Class[]{PotionOfDragonsBreath.class};
+			inQuantity = new int[]{1};
 			
-			cost = 6;
+			cost = 10;
 			
 			output = ElixirOfDragonsBlood.class;
 			outQuantity = 1;

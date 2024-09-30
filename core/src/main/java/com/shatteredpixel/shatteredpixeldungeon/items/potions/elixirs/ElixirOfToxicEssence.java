@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PoisonParticle
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCorrosiveGas;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
 
@@ -47,13 +48,8 @@ public class ElixirOfToxicEssence extends Elixir {
 		Buff.affect(hero, ToxicImbue.class).set(ToxicImbue.DURATION);
 		hero.sprite.emitter().burst(PoisonParticle.SPLASH, 10);
 	}
-	
-	@Override
-	protected int splashColor() {
-		return 0xFF00B34A;
-	}
 
-	@Override
+    @Override
 	public void gooMinionAttack(Char ch) {
 		if (ch.alignment == Char.Alignment.ENEMY){
 			new PotionOfToxicGas().gooMinionAttack(ch);
@@ -65,19 +61,13 @@ public class ElixirOfToxicEssence extends Elixir {
 		}
 	}
 	
-	@Override
-	public int value() {
-		//prices of ingredients
-		return quantity * (30 + 40);
-	}
-	
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
 		
 		{
-			inputs =  new Class[]{PotionOfToxicGas.class, AlchemicalCatalyst.class};
-			inQuantity = new int[]{1, 1};
+			inputs =  new Class[]{PotionOfCorrosiveGas.class};
+			inQuantity = new int[]{1};
 			
-			cost = 6;
+			cost = 8;
 			
 			output = ElixirOfToxicEssence.class;
 			outQuantity = 1;

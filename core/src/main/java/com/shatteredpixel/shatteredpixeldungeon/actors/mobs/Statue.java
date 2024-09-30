@@ -26,6 +26,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.RatSkull;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon.Enchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
@@ -82,14 +83,6 @@ public class Statue extends Mob {
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle( bundle );
 		weapon = (Weapon)bundle.get( WEAPON );
-	}
-	
-	@Override
-	protected boolean act() {
-		if (levelGenStatue && Dungeon.level.visited[pos]) {
-			Notes.add( Notes.Landmark.STATUE );
-		}
-		return super.act();
 	}
 	
 	@Override
@@ -160,11 +153,16 @@ public class Statue extends Mob {
 		Dungeon.level.drop( Challenges.process(weapon), pos ).sprite.drop();
 		super.die( cause );
 	}
-	
+
+	@Override
+	public Notes.Landmark landmark() {
+		return levelGenStatue ? Notes.Landmark.STATUE : null;
+	}
+
 	@Override
 	public void destroy() {
-		if (levelGenStatue) {
-			Notes.remove( Notes.Landmark.STATUE );
+		if (landmark() != null) {
+			Notes.remove( landmark() );
 		}
 		super.destroy();
 	}
@@ -176,13 +174,16 @@ public class Statue extends Mob {
 
 	@Override
 	public boolean reset() {
-		state = PASSIVE;
 		return true;
 	}
 
 	@Override
 	public String description() {
-		return Messages.get(this, "desc", weapon.name());
+		String desc = Messages.get(this, "desc");
+		if (weapon != null){
+			desc += "\n\n" + Messages.get(this, "desc_weapon", weapon.name());
+		}
+		return desc;
 	}
 	
 	{
@@ -195,7 +196,9 @@ public class Statue extends Mob {
 
 	public static Statue random( boolean useDecks ){
 		Statue statue;
-		if (Random.Int(10) == 0){
+		float altChance = 1/10f * RatSkull.exoticChanceMultiplier();
+		if (altChance > 0.1f) altChance = (altChance+0.1f)/2f; //rat skull is 1/2 as effective here
+		if (Random.Float() < altChance){
 			statue = new ArmoredStatue();
 		} else {
 			statue = new Statue();

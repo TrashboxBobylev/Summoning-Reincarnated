@@ -27,8 +27,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -37,6 +39,8 @@ import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
+
+import java.util.ArrayList;
 
 public class ElixirOfAquaticRejuvenation extends Elixir {
 	
@@ -58,12 +62,6 @@ public class ElixirOfAquaticRejuvenation extends Elixir {
 		if (ch.alignment == Char.Alignment.ALLY){
 			Buff.affect(ch, AquaHealing.class).set(Math.round(ch.HT * 0.75f));
 		}
-	}
-
-	@Override
-	public int value() {
-		//prices of ingredients
-		return quantity * (30 + 30);
 	}
 	
 	public static class AquaHealing extends Buff {
@@ -166,7 +164,12 @@ public class ElixirOfAquaticRejuvenation extends Elixir {
 			output = ElixirOfAquaticRejuvenation.class;
 			outQuantity = 1;
 		}
-		
+
+		@Override
+		public Item brew(ArrayList<Item> ingredients) {
+			Catalog.countUse(GooBlob.class);
+			return super.brew(ingredients);
+		}
 	}
 	
 }

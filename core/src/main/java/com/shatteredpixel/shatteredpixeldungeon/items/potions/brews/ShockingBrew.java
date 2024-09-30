@@ -71,20 +71,14 @@ public class ShockingBrew extends Brew {
 			Buff.prolong(Dungeon.hero, Recharging.class, 5f);
 		}
 	}
-
-	@Override
-	public int value() {
-		//prices of ingredients
-		return quantity * (40 + 40);
-	}
 	
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
 		
 		{
-			inputs =  new Class[]{PotionOfParalyticGas.class, AlchemicalCatalyst.class};
-			inQuantity = new int[]{1, 1};
+			inputs =  new Class[]{PotionOfParalyticGas.class};
+			inQuantity = new int[]{1};
 			
-			cost = 6;
+			cost = 10;
 			
 			output = ShockingBrew.class;
 			outQuantity = 1;

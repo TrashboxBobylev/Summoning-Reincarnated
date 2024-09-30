@@ -81,7 +81,17 @@ public class Necromancer extends Mob {
 		}
 		return super.act();
 	}
-	
+
+	@Override
+	public void aggro(Char ch) {
+		super.aggro(ch);
+		if (mySkeleton != null && mySkeleton.isAlive()
+				&& Dungeon.level.mobs.contains(mySkeleton)
+				&& mySkeleton.alignment == alignment){
+			mySkeleton.aggro(ch);
+		}
+	}
+
 	@Override
 	public int drRoll() {
 		return super.drRoll() + Random.NormalIntRange(0, 5);
@@ -108,7 +118,7 @@ public class Necromancer extends Mob {
 			}
 		}
 		
-		if (mySkeleton != null && mySkeleton.isAlive()){
+		if (mySkeleton != null && mySkeleton.isAlive() && mySkeleton.alignment == alignment){
 			mySkeleton.die(null);
 		}
 		
@@ -300,6 +310,10 @@ public class Necromancer extends Mob {
 					
 					summoning = true;
 					sprite.zap( summoningPos );
+
+					if (Dungeon.level.heroFOV[pos] || Dungeon.level.heroFOV[summoningPos]){
+						Dungeon.hero.interrupt();
+					}
 					
 					spend( firstSummon ? TICK : 2*TICK );
 				} else {

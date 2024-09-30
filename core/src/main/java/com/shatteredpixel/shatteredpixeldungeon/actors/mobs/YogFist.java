@@ -152,9 +152,19 @@ public abstract class YogFist extends Mob {
 		int dmgTaken = preHP - HP;
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
-		if (dmgTaken > 0 && lock != null){
+		if (dmgTaken > 0 && lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
 			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmgTaken/4f);
 			else                                                    lock.addTime(dmgTaken/2f);
+		}
+	}
+
+	@Override
+	public void die(Object cause) {
+		super.die(cause);
+		for ( Char c : Actor.chars() ){
+			if (c instanceof YogDzewa){
+				((YogDzewa) c).processFistDeath();
+			}
 		}
 	}
 

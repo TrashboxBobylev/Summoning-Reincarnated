@@ -26,12 +26,14 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Blandfruit;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.StewedMeat;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.AlchemicalCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.AquaBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.UnstableBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfAquaticRejuvenation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfArcaneArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfDragonsBlood;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfFeatherFall;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfHoneyedHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfIcyTouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
@@ -81,7 +83,7 @@ public abstract class Recipe {
 		}
 		
 		@Override
-		public final boolean testIngredients(ArrayList<Item> ingredients) {
+		public boolean testIngredients(ArrayList<Item> ingredients) {
 			
 			int[] needed = inQuantity.clone();
 			
@@ -104,12 +106,12 @@ public abstract class Recipe {
 			return true;
 		}
 		
-		public final int cost(ArrayList<Item> ingredients){
+		public int cost(ArrayList<Item> ingredients){
 			return cost;
 		}
 		
 		@Override
-		public final Item brew(ArrayList<Item> ingredients) {
+		public Item brew(ArrayList<Item> ingredients) {
 			if (!testIngredients(ingredients)) return null;
 			
 			int[] needed = inQuantity.clone();
@@ -133,7 +135,7 @@ public abstract class Recipe {
 		}
 		
 		//ingredients are ignored, as output doesn't vary
-		public final Item sampleOutput(ArrayList<Item> ingredients){
+		public Item sampleOutput(ArrayList<Item> ingredients){
 			try {
 				Item result = Reflection.newInstance(output);
 				result.quantity(outQuantity);
@@ -159,40 +161,39 @@ public abstract class Recipe {
 		new ExoticPotion.PotionToExotic(),
 		new ExoticScroll.ScrollToExotic(),
 		new ArcaneResin.Recipe(),
-		new Alchemize.Recipe(),
-		new StewedMeat.oneMeat()
+		new BlizzardBrew.Recipe(),
+		new InfernalBrew.Recipe(),
+		new AquaBrew.Recipe(),
+		new ShockingBrew.Recipe(),
+		new ElixirOfDragonsBlood.Recipe(),
+		new ElixirOfIcyTouch.Recipe(),
+		new ElixirOfToxicEssence.Recipe(),
+		new ElixirOfMight.Recipe(),
+		new ElixirOfFeatherFall.Recipe(),
+		new MagicalInfusion.Recipe(),
+		new BeaconOfReturning.Recipe(),
+		new PhaseShift.Recipe(),
+		new Recycle.Recipe(),
+		new TelekineticGrab.Recipe(),
+		new SummonElemental.Recipe(),
+		new StewedMeat.oneMeat(),
+		new TrinketCatalyst.Recipe(),
+		new Trinket.UpgradeTrinket()
 	};
 	
 	private static Recipe[] twoIngredientRecipes = new Recipe[]{
 		new Blandfruit.CookFruit(),
 		new Bomb.EnhanceBomb(),
-		new AlchemicalCatalyst.Recipe(),
-		new ArcaneCatalyst.Recipe(),
+		new UnstableBrew.Recipe(),
+		new CausticBrew.Recipe(),
 		new ElixirOfArcaneArmor.Recipe(),
 		new ElixirOfAquaticRejuvenation.Recipe(),
-		new ElixirOfDragonsBlood.Recipe(),
-		new ElixirOfIcyTouch.Recipe(),
-		new ElixirOfMight.Recipe(),
 		new ElixirOfHoneyedHealing.Recipe(),
-		new ElixirOfToxicEssence.Recipe(),
-//		new BlizzardBrew.Recipe(),
-//		new InfernalBrew.Recipe(),
-		new EnchantParchment.Recipe(),
-		new EnchantParchment.AlternateRecipe(),
-		new ShockingBrew.Recipe(),
-		new CausticBrew.Recipe(),
-		new FrostburnBrew.Recipe(),
-		new AquaBlast.Recipe(),
-		new BeaconOfReturning.Recipe(),
+		new UnstableSpell.Recipe(),
+		new Alchemize.Recipe(),
 		new CurseInfusion.Recipe(),
-		new FeatherFall.Recipe(),
-		new MagicalInfusion.Recipe(),
-		new PhaseShift.Recipe(),
 		new ReclaimTrap.Recipe(),
-		new Recycle.Recipe(),
 		new WildEnergy.Recipe(),
-		new TelekineticGrab.Recipe(),
-		new SummonElemental.Recipe(),
 		new StewedMeat.twoMeat()
 	};
 	

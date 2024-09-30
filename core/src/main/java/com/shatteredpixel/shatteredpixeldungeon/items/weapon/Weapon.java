@@ -33,9 +33,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.GnollHunter;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfArcana;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfForce;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ParchmentScrap;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ShardOfOblivion;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Annoying;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Dazzling;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Displacing;
@@ -59,6 +62,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Unstab
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Vampiric;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RunicBlade;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scimitar;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -108,7 +112,7 @@ abstract public class Weapon extends KindOfWeapon implements WeaponEnchantable {
 	
 	public Augment augment = Augment.NONE;
 	protected int rank = 1;
-	
+
 	private static final int USES_TO_ID = 20;
 	private float usesLeftToID = USES_TO_ID;
 	private float availableUsesToID = USES_TO_ID/2f;
@@ -130,9 +134,16 @@ abstract public class Weapon extends KindOfWeapon implements WeaponEnchantable {
 			availableUsesToID -= uses;
 			usesLeftToID -= uses;
 			if (usesLeftToID <= 0) {
-				identify();
-				GLog.p( Messages.get(Weapon.class, "identify") );
-				Badges.validateItemLevelAquired( this );
+				if (ShardOfOblivion.passiveIDDisabled()){
+					if (usesLeftToID > -1){
+						GLog.p(Messages.get(ShardOfOblivion.class, "identify_ready"), name());
+					}
+					usesLeftToID = -1;
+				} else {
+					identify();
+					GLog.p(Messages.get(Weapon.class, "identify"));
+					Badges.validateItemLevelAquired(this);
+				}
 			}
 		}
 
@@ -189,7 +200,31 @@ abstract public class Weapon extends KindOfWeapon implements WeaponEnchantable {
 		usesLeftToID = USES_TO_ID;
 		availableUsesToID = USES_TO_ID/2f;
 	}
-	
+
+	@Override
+	public boolean collect(Bag container) {
+		if(super.collect(container)){
+			if (Dungeon.hero != null && Dungeon.hero.isAlive() && isIdentified() && enchantment != null){
+				Catalog.setSeen(enchantment.getClass());
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public Item identify(boolean byHero) {
+		if (enchantment != null && byHero && Dungeon.hero != null && Dungeon.hero.isAlive()){
+			Catalog.setSeen(enchantment.getClass());
+		}
+		return super.identify(byHero);
+	}
+
+	public boolean readyToIdentify(){
+		return !isIdentified() && usesLeftToID <= 0;
+	}
+
 	@Override
 	public float accuracyFactor(Char owner, Char target) {
 		
@@ -252,11 +287,7 @@ abstract public class Weapon extends KindOfWeapon implements WeaponEnchantable {
 	}
 
 	public int STRReq(){
-		int req = STRReq(level());
-		if (masteryPotionBonus){
-			req -= 2;
-		}
-		return req;
+		return STRReq(level());
 	}
 
 	public abstract int STRReq(int lvl);
@@ -326,16 +357,22 @@ abstract public class Weapon extends KindOfWeapon implements WeaponEnchantable {
 			}
 		}
 		level(n);
-		
-		//30% chance to be cursed
-		//10% chance to be enchanted
-		float effectRoll = Random.Float();
-		if (effectRoll < 0.3f) {
-			enchant(Enchantment.randomCurse());
-			cursed = true;
-		} else if (effectRoll >= 0.9f){
-			enchant();
-		}
+
+		//we use a separate RNG here so that variance due to things like parchment scrap
+		//does not affect levelgen
+		Random.pushGenerator(Random.Long());
+
+			//30% chance to be cursed
+			//10% chance to be enchanted
+			float effectRoll = Random.Float();
+			if (effectRoll < 0.3f * ParchmentScrap.curseChanceMultiplier()) {
+				enchant(Enchantment.randomCurse());
+				cursed = true;
+			} else if (effectRoll >= 1f - (0.1f * ParchmentScrap.enchantChanceMultiplier())){
+				enchant();
+			}
+
+		Random.popGenerator();
 
 		return this;
 	}
@@ -378,8 +415,8 @@ abstract public class Weapon extends KindOfWeapon implements WeaponEnchantable {
 				40, //6.67% each
 				10  //3.33% each
 		};
-		
-		private static final Class<?>[] curses = new Class<?>[]{
+
+		public static final Class<?>[] curses = new Class<?>[]{
 				Annoying.class, Displacing.class, Dazzling.class, Explosive.class,
 				Sacrificial.class, Wayward.class, Polarized.class, Friendly.class
 		};
@@ -431,7 +468,7 @@ abstract public class Weapon extends KindOfWeapon implements WeaponEnchantable {
 			}
 
 			if (attacker.buff(RunicBlade.RunicSlashTracker.class) != null){
-				multi += 3f;
+				multi += attacker.buff(RunicBlade.RunicSlashTracker.class).boost;
 				attacker.buff(RunicBlade.RunicSlashTracker.class).detach();
 			}
 

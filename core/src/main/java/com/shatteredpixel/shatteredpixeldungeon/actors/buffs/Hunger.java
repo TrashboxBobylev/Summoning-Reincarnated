@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.GrayRat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.Guidebook;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.SaltCube;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -110,7 +111,7 @@ public class Hunger extends Buff implements Hero.Doom {
 		if (hunger.level + 1 > HUNGRY && !hunger.isHungry()){
 			GLog.warning(Messages.get(hunger, "onhungry"));
 			if (!Document.ADVENTURERS_GUIDE.isPageRead(Document.GUIDE_FOOD)){
-				GLog.p(Messages.get(Guidebook.class, "hint"));
+
 				GameScene.flashForDocument(Document.ADVENTURERS_GUIDE, Document.GUIDE_FOOD);
 			}
 			hunger.level = HUNGRY;
