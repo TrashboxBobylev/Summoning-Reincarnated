@@ -379,7 +379,13 @@ public abstract class Mob extends Char {
 		PathFinder.buildDistanceMap(pos, Dungeon.findPassable(this, Dungeon.level.passable, fieldOfView, Dungeon.PATHBLOCK_NORMAL));
 
 		for (Char ch : enemyList){
-			float priority = (float)PathFinder.distance[ch.pos];
+			float priority = Integer.MAX_VALUE;
+			//we aren't trying to move into the target, just toward them
+			for (int i : PathFinder.NEIGHBOURS8){
+				if (PathFinder.distance[ch.pos+i] < priority){
+					priority = (float)PathFinder.distance[ch.pos+i];
+				}
+			}
 			if (canAttack(ch)) priority *= 2.0f;
 			enemies.put(ch, modifyPriority(priority) * enemies.get(ch));
 		}
@@ -446,6 +452,9 @@ public abstract class Mob extends Char {
 			newEnemy = true;
 		//We are charmed and current enemy is what charmed us
 		} else if (buff(Charm.class) != null && buff(Charm.class).object == enemy.id()) {
+			newEnemy = true;
+			//We are sleeping (rather than preferring existing target, we want to see if anything is closer
+		} else if (state == SLEEPING){
 			newEnemy = true;
 		} else {
 			for (Map.Entry<Char, Float> enemy: enemies.entrySet()) {
