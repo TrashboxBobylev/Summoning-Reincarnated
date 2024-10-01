@@ -92,12 +92,12 @@ public class ItemSpriteSheet {
 	public static final int SANDBAG         = UNCOLLECTIBLE+5;
 	public static final int SPIRIT_ARROW    = UNCOLLECTIBLE+6;
 	public static final int SPIRIT_BLAST    = UNCOLLECTIBLE+7;
-	public static final int SUPER_SHOT      = UNCOLLECTIBLE+10;
-	public static final int SPIRIT_DART     = UNCOLLECTIBLE+11;
+	public static final int SUPER_SHOT      = UNCOLLECTIBLE+11;
+	public static final int SPIRIT_DART     = UNCOLLECTIBLE+12;
 
 	public static final int TENGU_BOMB      = UNCOLLECTIBLE+8;
 	public static final int TENGU_SHOCKER   = UNCOLLECTIBLE+9;
-	public static final int GEO_BOULDER     = UNCOLLECTIBLE+12;
+	public static final int GEO_BOULDER     = UNCOLLECTIBLE+10;
 	static{
 		assignItemRect(GOLD,        15, 13);
 		assignItemRect(ENERGY,      16, 16);
@@ -151,12 +151,12 @@ public class ItemSpriteSheet {
 	public static final int AMULET          = MISC_CONSUMABLE +13;
 	public static final int MASTERY         = MISC_CONSUMABLE +14;
 	public static final int KIT             = MISC_CONSUMABLE +15;
-	public static final int SEAL_SHARD      = MISC_CONSUMABLE +32;
-	public static final int BROKEN_STAFF    = MISC_CONSUMABLE +33;
-	public static final int CLOAK_SCRAP     = MISC_CONSUMABLE +34;
-	public static final int BOW_FRAGMENT    = MISC_CONSUMABLE +35;
-	public static final int BROKEN_HILT     = MISC_CONSUMABLE +36;
-	public static final int ARMOR_REMAINS   = MISC_CONSUMABLE +37;
+	public static final int SEAL_SHARD      = MISC_CONSUMABLE +16;
+	public static final int BROKEN_STAFF    = MISC_CONSUMABLE +17;
+	public static final int CLOAK_SCRAP     = MISC_CONSUMABLE +18;
+	public static final int BOW_FRAGMENT    = MISC_CONSUMABLE +19;
+	public static final int BROKEN_HILT     = MISC_CONSUMABLE +20;
+	public static final int ARMOR_REMAINS   = MISC_CONSUMABLE +22;
 	public static final int TRINKET_CATA    = MISC_CONSUMABLE +21;
 
 	static{
@@ -202,7 +202,7 @@ public class ItemSpriteSheet {
 	public static final int ARCANE_BOMB     = BOMBS+10;
 	public static final int SHRAPNEL_BOMB   = BOMBS+11;
 	public static final int WEB_BOMB        = BOMBS+12;
-	public static final int SUPPLY_BOMB        = BOMBS+13;
+	public static final int SUPPLY_BOMB     = BOMBS+13;
 
 	static{
 		assignItemRect(BOMB,            10, 13);
@@ -211,17 +211,17 @@ public class ItemSpriteSheet {
 		assignItemRect(FROST_BOMB,      13, 12);
 		assignItemRect(REGROWTH_BOMB,   13, 12);
 		assignItemRect(FLASHBANG,       13, 12);
-		assignItemRect(SHOCK_BOMB,      9, 15);
+		assignItemRect(SHOCK_BOMB,      9,  15);
 		assignItemRect(HOLY_BOMB,       10, 14);
 		assignItemRect(WOOLY_BOMB,      10, 13);
-		assignItemRect(NOISEMAKER,      9, 15);
+		assignItemRect(NOISEMAKER,      9,  15);
 		assignItemRect(ARCANE_BOMB,     10, 13);
 		assignItemRect(SHRAPNEL_BOMB,   10, 13);
-		assignItemRect(WEB_BOMB,   14, 15);
-		assignItemRect(SUPPLY_BOMB,      9, 15);
+		assignItemRect(WEB_BOMB,        14, 15);
+		assignItemRect(SUPPLY_BOMB,     9,  15);
 	}
 
-	private static final int SUMM_WEAPONS  =                                xy(9, 6);
+	private static final int SUMM_WEAPONS  =                                xy(9, 9);
 	public static final int STONE_HAMMER = SUMM_WEAPONS+0;
 	public static final int A_STABBER    = SUMM_WEAPONS+1;
 	public static final int PIKE         = SUMM_WEAPONS+2;
@@ -579,9 +579,9 @@ public class ItemSpriteSheet {
 		assignItemRect(CHAOTIC_CENSER,  13, 15);
 	}
 
-	private static final int SUMM_MISCS     =                               xy(1, 18);
+	private static final int SUMM_MISCS     =                               xy(1, 26);
 	public static final int ROPES           = SUMM_MISCS+0;
-	public static final int RUNIC_SHOT      = SUMM_MISCS+1;
+	public static final int RUNIC_SHOT      = SPIRIT_DART+1;
 	public static final int CLEAN_WATER     = SUMM_MISCS+2;
 	public static final int STAFF_PLACEHOLDER= SUMM_MISCS+3;
 	public static final int FACELESS_ITEM   = SUMM_MISCS+4;
@@ -697,7 +697,7 @@ public class ItemSpriteSheet {
 	public static final int SEED_ICECAP         = SEEDS+4;
 	public static final int SEED_STORMVINE      = SEEDS+5;
 	public static final int SEED_SORROWMOSS     = SEEDS+6;
-	public static final int SEED_MAGEROYAL = SEEDS+7;
+	public static final int SEED_MAGEROYAL      = SEEDS+7;
 	public static final int SEED_EARTHROOT      = SEEDS+8;
 	public static final int SEED_STARFLOWER     = SEEDS+9;
 	public static final int SEED_FADELEAF       = SEEDS+10;
@@ -749,6 +749,8 @@ public class ItemSpriteSheet {
 	public static final int RECLAIM_TRAP    = SPELLS+10;
 	public static final int RETURN_BEACON   = SPELLS+11;
 	public static final int SUMMON_ELE      = SPELLS+12;
+	public static final int RANK_MANAGER    = SPELLS+14;
+	public static final int ENCHANT_TRANSFER= SPELLS+15;
 
 	static{
 		assignItemRect(WILD_ENERGY,     12, 11);
@@ -764,6 +766,8 @@ public class ItemSpriteSheet {
 		assignItemRect(RECLAIM_TRAP,     8, 16);
 		assignItemRect(RETURN_BEACON,    8, 16);
 		assignItemRect(SUMMON_ELE,       8, 16);
+
+		assignItemRect(RANK_MANAGER,     8, 16);
 		assignItemRect(ENCHANT_TRANSFER,15, 14);
 	}
 	
