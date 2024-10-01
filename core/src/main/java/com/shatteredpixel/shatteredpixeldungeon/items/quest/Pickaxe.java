@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.quest;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -182,7 +183,7 @@ public class Pickaxe extends MeleeWeapon {
 
 	@Override
 	public String defaultAction() {
-		if (Dungeon.hero.heroClass == HeroClass.DUELIST && isEquipped(Dungeon.hero)){
+		if ((Dungeon.hero.heroClass == HeroClass.DUELIST || Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) && isEquipped(Dungeon.hero)){
 			return AC_ABILITY;
 		} else if (Blacksmith.Quest.oldMiningQuest()) {
 			return AC_MINE;
