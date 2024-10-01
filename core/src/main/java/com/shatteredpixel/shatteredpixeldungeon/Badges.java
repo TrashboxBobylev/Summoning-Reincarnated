@@ -177,7 +177,7 @@ public class Badges {
 		ALL_WEAPONS_IDENTIFIED      , //still exists internally for pre-2.5 saves
 		ALL_ARMOR_IDENTIFIED        , //still exists internally for pre-2.5 saves
 		ALL_WANDS_IDENTIFIED        , //still exists internally for pre-2.5 saves
-		ALL_STAFFS_IDENTIFIED       ( 112 ),
+		ALL_STAFFS_IDENTIFIED       ,
 		ALL_ITEMS_IDENTIFIED        , //still exists internally for pre-2.5 saves
 		VICTORY_WARRIOR,
 		VICTORY_MAGE,
