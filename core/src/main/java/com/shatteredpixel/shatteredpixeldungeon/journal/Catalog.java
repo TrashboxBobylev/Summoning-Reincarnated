@@ -5,6 +5,9 @@
  * Shattered Pixel Dungeon
  * Copyright (C) 2014-2024 Evan Debenham
  *
+ * Summoning Pixel Dungeon Reincarnated
+ * Copyright (C) 2023-2025 Trashbox Bobylev
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -113,10 +116,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Jjango;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Pike;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Stabber;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.StoneHammer;
 import com.watabou.utils.Bundle;
 
 import java.util.ArrayList;

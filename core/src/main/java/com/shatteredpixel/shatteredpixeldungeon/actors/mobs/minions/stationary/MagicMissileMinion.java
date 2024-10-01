@@ -2,11 +2,11 @@
  * Pixel Dungeon
  * Copyright (C) 2012-2015 Oleg Dolya
  *
- *  Shattered Pixel Dungeon
- *  Copyright (C) 2014-2022 Evan Debenham
+ * Shattered Pixel Dungeon
+ * Copyright (C) 2014-2024 Evan Debenham
  *
- * Summoning Pixel Dungeon
- * Copyright (C) 2019-2022 TrashboxBobylev
+ * Summoning Pixel Dungeon Reincarnated
+ * Copyright (C) 2023-2025 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,7 +26,6 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.stationary;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;

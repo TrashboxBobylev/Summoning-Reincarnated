@@ -2,11 +2,11 @@
  * Pixel Dungeon
  * Copyright (C) 2012-2015 Oleg Dolya
  *
- *  Shattered Pixel Dungeon
- *  Copyright (C) 2014-2022 Evan Debenham
+ * Shattered Pixel Dungeon
+ * Copyright (C) 2014-2024 Evan Debenham
  *
- * Summoning Pixel Dungeon
- * Copyright (C) 2019-2022 TrashboxBobylev
+ * Summoning Pixel Dungeon Reincarnated
+ * Copyright (C) 2023-2025 Trashbox Bobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -38,17 +38,16 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
-import com.shatteredpixel.shatteredpixeldungeon.items.staffs.GooStaff;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GooMinionSprite;
-import com.watabou.noosa.Game;
-import com.watabou.utils.*;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.audio.Sample;
-
-import java.lang.reflect.InvocationTargetException;
+import com.watabou.utils.BArray;
+import com.watabou.utils.Bundle;
+import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
+import com.watabou.utils.Reflection;
 
 public class GooMinion extends Minion {
     {

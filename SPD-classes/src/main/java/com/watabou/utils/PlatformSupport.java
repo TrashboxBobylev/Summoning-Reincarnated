@@ -5,6 +5,9 @@
  * Shattered Pixel Dungeon
  * Copyright (C) 2014-2024 Evan Debenham
  *
+ * Summoning Pixel Dungeon Reincarnated
+ * Copyright (C) 2023-2025 Trashbox Bobylev
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -28,10 +31,9 @@ import com.badlogic.gdx.graphics.g2d.PixmapPacker;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.watabou.input.ControllerHandler;
 import com.watabou.noosa.Game;
+import com.zrp200.scrollofdebug.PackageTrie;
 
 import java.util.HashMap;
-
-import com.zrp200.scrollofdebug.PackageTrie;
 
 public abstract class PlatformSupport {
 	public PackageTrie findClasses(String pckgname) throws ClassNotFoundException {
