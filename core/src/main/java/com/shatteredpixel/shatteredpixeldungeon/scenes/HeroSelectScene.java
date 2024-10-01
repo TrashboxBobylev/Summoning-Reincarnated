@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.StyledButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndChallenges;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndConducts;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndHeroInfo;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndMessage;
@@ -774,6 +775,32 @@ public class HeroSelectScene extends PixelScene {
 			challengeButton.icon(Icons.get(SPDSettings.challenges() > 0 ? Icons.CHALLENGE_COLOR : Icons.CHALLENGE_GREY));
 			add(challengeButton);
 			buttons.add(challengeButton);
+
+			StyledButton conductsButton = new StyledButton(Chrome.Type.BLANK, Messages.get(WndConducts.class, "title"), 6){
+				@Override
+				protected void onClick() {
+					if (!Badges.isUnlocked(Badges.Badge.VICTORY) && !DeviceCompat.isDebug()){
+						ShatteredPixelDungeon.scene().addToFront( new WndTitledMessage(
+								Icons.get(Icons.CONDUCTS_GREY),
+								Messages.get(WndConducts.class, "title"),
+								Messages.get(HeroSelectScene.class, "conducts_nowin")
+						));
+						return;
+					}
+
+					ShatteredPixelDungeon.scene().addToFront(new WndConducts(SPDSettings.conducts(), true) {
+						public void onBackPressed() {
+							super.onBackPressed();
+							icon(Icons.get(SPDSettings.conducts().isConductedAtAll()? Icons.CONDUCTS_COLOR : Icons.CONDUCTS_GREY));
+							updateOptionsColor();
+						}
+					} );
+				}
+			};
+			conductsButton.leftJustify = true;
+			conductsButton.icon(Icons.get(SPDSettings.conducts().isConductedAtAll() ? Icons.CONDUCTS_COLOR : Icons.CONDUCTS_GREY));
+			add(conductsButton);
+			buttons.add(conductsButton);
 
 			for (int i = 1; i < buttons.size(); i++){
 				ColorBlock spc = new ColorBlock(1, 1, 0xFF000000);
