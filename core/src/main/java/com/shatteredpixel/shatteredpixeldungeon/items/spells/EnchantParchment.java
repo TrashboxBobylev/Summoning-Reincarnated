@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.ArcaneResin;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
@@ -143,10 +144,10 @@ public class EnchantParchment extends InventorySpell {
     public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
 
         {
-            inputs =  new Class[]{Stylus.class, ArcaneCatalyst.class};
+            inputs =  new Class[]{Stylus.class, ArcaneResin.class};
             inQuantity = new int[]{1, 1};
 
-            cost = 7;
+            cost = 5;
 
             output = EnchantParchment.class;
             outQuantity = 1;
@@ -157,10 +158,10 @@ public class EnchantParchment extends InventorySpell {
     public static class AlternateRecipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
 
         {
-            inputs =  new Class[]{StoneOfEnchantment.class, ArcaneCatalyst.class};
+            inputs =  new Class[]{StoneOfEnchantment.class, ArcaneResin.class};
             inQuantity = new int[]{1, 1};
 
-            cost = 7;
+            cost = 5;
 
             output = EnchantParchment.class;
             outQuantity = 1;
