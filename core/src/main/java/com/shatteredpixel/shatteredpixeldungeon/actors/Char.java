@@ -767,6 +767,9 @@ public abstract class Char extends Actor {
 		if (alignment != Alignment.ALLY && this.buff(DeathMark.DeathMarkTracker.class) != null){
 			dmg *= 1.25f;
 		}
+		if (this.buff(GasterBlaster.Karma.class) != null){
+			dmg *= 1.15f;
+		}
 
 		if (buff(Sickle.HarvestBleedTracker.class) != null){
 			buff(Sickle.HarvestBleedTracker.class).detach();
