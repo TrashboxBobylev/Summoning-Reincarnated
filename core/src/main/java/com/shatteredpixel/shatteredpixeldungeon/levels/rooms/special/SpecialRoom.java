@@ -139,7 +139,8 @@ public abstract class SpecialRoom extends Room {
 			Dungeon.LimitedDrops.LAB_ROOM.count++;
 			floorSpecials.add(0, LaboratoryRoom.class);
 		}
-		if (Dungeon.depth%5 == (Dungeon.seed%2 + 3)){
+		if (Dungeon.atuRoomNeeded()){
+			Dungeon.LimitedDrops.ATU_ROOM.count++;
 			floorSpecials.add(0, AttunementPotRoom.class);
 		}
 	}

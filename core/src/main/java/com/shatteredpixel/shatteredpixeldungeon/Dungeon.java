@@ -110,7 +110,7 @@ public class Dungeon {
 		ENCH_STONE,
 		INT_STONE,
 		TRINKET_CATA,
-		LAB_ROOM, //actually a room, but logic is the same
+		LAB_ROOM, ATU_ROOM, //actually a room, but logic is the same
 
 		//Health potion sources
 		//enemies
@@ -619,6 +619,16 @@ public class Dungeon {
 			if (floorThisRegion >= 4 || (floorThisRegion == 3 && Random.Int(2) == 0)){
 				return true;
 			}
+		}
+		return false;
+	}
+
+	public static boolean atuRoomNeeded(){
+		//one attunement each floor set, in floor 2 or 3, 1/2 chance each floor
+		int region = 1+depth/5;
+		if (region > LimitedDrops.ATU_ROOM.count){
+			int floorThisRegion = depth%5;
+            return floorThisRegion == 3 || (floorThisRegion == 2 && Random.Int(2) == 0);
 		}
 		return false;
 	}
