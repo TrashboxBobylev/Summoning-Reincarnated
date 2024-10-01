@@ -8,3 +8,9 @@ dependencies {
     implementation project(':services')
     implementation 'org.apache.commons:commons-lang3:3.14.0'
 }
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}

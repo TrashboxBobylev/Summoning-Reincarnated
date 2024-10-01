@@ -1,4 +1,6 @@
-//core game code modules
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+}//core game code modules
 include ':SPD-classes'
 include ':core'
 
