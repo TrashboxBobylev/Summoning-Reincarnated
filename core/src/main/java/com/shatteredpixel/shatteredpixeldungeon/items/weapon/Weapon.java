@@ -216,14 +216,6 @@ abstract public class Weapon extends KindOfWeapon implements WeaponEnchantable {
 		}
 	}
 
-	@Override
-	public Item identify(boolean byHero) {
-		if (enchantment != null && byHero && Dungeon.hero != null && Dungeon.hero.isAlive()){
-			Catalog.setSeen(enchantment.getClass());
-		}
-		return super.identify(byHero);
-	}
-
 	public boolean readyToIdentify(){
 		return !isIdentified() && usesLeftToID <= 0;
 	}

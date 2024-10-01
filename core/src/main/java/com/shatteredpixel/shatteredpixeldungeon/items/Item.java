@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponEnchantable;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
@@ -467,6 +468,12 @@ public class Item implements Bundlable {
 		if (byHero && Dungeon.hero != null && Dungeon.hero.isAlive()){
 			Catalog.setSeen(getClass());
 			if (!isIdentified()) Talent.onItemIdentified(Dungeon.hero, this);
+		}
+		if (this instanceof WeaponEnchantable){
+			WeaponEnchantable weaponEnchantable = (WeaponEnchantable) this;
+			if (weaponEnchantable.getEnchantment() != null && byHero && Dungeon.hero != null && Dungeon.hero.isAlive()){
+				Catalog.setSeen(weaponEnchantable.getEnchantment().getClass());
+			}
 		}
 
 		levelKnown = true;
