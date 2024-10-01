@@ -112,7 +112,7 @@ public class WndGame extends Window {
 			} );
 			curBtn.icon(Dungeon.conducts.oneConduct() ?
 					new Image(Assets.Interfaces.SUBCLASS_ICONS, (Dungeon.conduct().icon-1)*16, 16, 16, 16) :
-					Icons.get(Icons.CONDUCTS_ON));
+					Icons.get(Icons.CONDUCTS_COLOR));
 		}
 
 		// Main menu

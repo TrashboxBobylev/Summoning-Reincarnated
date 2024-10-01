@@ -306,7 +306,7 @@ public class vReInc_Changes {
                 "Reimplemented Adventurer, with some placeholder-ish T1, T2 and T3 talents.\n\n" +
                         "_-_ Shopkeeper and Blacksmith quotes are not implemented yet, due to forgetfulness."));
 
-        changes.addButton( new ChangeButton(Icons.get(Icons.CONDUCTS_ON), "Conducts",
+        changes.addButton( new ChangeButton(Icons.get(Icons.CONDUCTS_COLOR), "Conducts",
                 "Reimplemented most of conducts (16 out of 24) and all their backend code.\n\n" +
                         "_-_ Some of conducts will likely never return, due to being too unfun to play and code.\n" +
                         "_-_ Some of conducts will be back, when Shattered's challenges will be deprecated."));

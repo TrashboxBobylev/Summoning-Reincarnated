@@ -102,7 +102,7 @@ public class WndGameInProgress extends Window {
 						ShatteredPixelDungeon.scene().addToFront(new WndConducts(info.conducts, false));
 				}
 			};
-			btnConducts.icon(Icons.get(Icons.CONDUCTS_ON));
+			btnConducts.icon(Icons.get(Icons.CONDUCTS_COLOR));
 			float btnW = btnConducts.reqWidth() + 2;
 			btnConducts.setRect( (WIDTH - btnW)/2, pos, btnW , 18 );
 			add( btnConducts );

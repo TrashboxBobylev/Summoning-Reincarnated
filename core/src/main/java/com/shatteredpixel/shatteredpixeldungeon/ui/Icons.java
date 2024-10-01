@@ -58,6 +58,7 @@ public enum Icons {
 	STATS,
 	CHALLENGE_GREY,
 	SCROLL_GREY,
+	CONDUCTS_GREY,
 	SEED,
 	LEFTARROW,
 	RIGHTARROW,
@@ -76,6 +77,7 @@ public enum Icons {
 	ARROW,
 	CHALLENGE_COLOR,
 	SCROLL_COLOR,
+	CONDUCTS_COLOR,
 	COPY,
 	PASTE,
 
@@ -220,6 +222,9 @@ public enum Icons {
 			case SCROLL_GREY:
 				icon.frame( icon.texture.uvRectBySize( 160, 16, 15, 14 ) );
 				break;
+			case CONDUCTS_GREY:
+				icon.frame( icon.texture.uvRectBySize( 208, 128,15, 11 ) );
+				break;
 			case SEED:
 				icon.frame( icon.texture.uvRectBySize( 176, 16, 15, 10 ) );
 				break;
@@ -268,6 +273,9 @@ public enum Icons {
 				break;
 			case SCROLL_COLOR:
 				icon.frame( icon.texture.uvRectBySize( 160, 32, 15, 14 ) );
+				break;
+			case CONDUCTS_COLOR:
+				icon.frame( icon.texture.uvRectBySize( 192, 208, 15, 11 ) );
 				break;
 			case COPY:
 				icon.frame( icon.texture.uvRectBySize( 176, 32, 13, 13 ) );

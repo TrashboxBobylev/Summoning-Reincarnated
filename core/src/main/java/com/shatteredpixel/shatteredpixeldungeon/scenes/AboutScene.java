@@ -142,7 +142,7 @@ public class AboutScene extends PixelScene {
 		}
 		content.add(guys);
 
-		Image libIcon = Icons.CONDUCTS_ON.get();
+		Image libIcon = Icons.CONDUCTS_COLOR.get();
 		libIcon.hardlight(0x989898);
 
 		CreditsBlock libs = new CreditsBlock(false, Window.WHITE,
