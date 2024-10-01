@@ -191,7 +191,7 @@ public class ItemSpriteSheet {
 		assignItemRect(TRINKET_CATA,    12, 11);
 	}
 	
-	private static final int BOMBS          =                               xy(1, 5);   //16 slots
+	private static final int BOMBS          =                               xy(1, 6);   //16 slots
 	public static final int BOMB            = BOMBS+0;
 	public static final int DBL_BOMB        = BOMBS+1;
 	public static final int FIRE_BOMB       = BOMBS+2;
@@ -583,11 +583,11 @@ public class ItemSpriteSheet {
 	}
 
 	private static final int SUMM_MISCS     =                               xy(1, 26);
-	public static final int ROPES           = SUMM_MISCS+0;
+	public static final int ROPES           = SUMM_MISCS+1;
 	public static final int RUNIC_SHOT      = SPIRIT_DART+1;
-	public static final int CLEAN_WATER     = SUMM_MISCS+2;
-	public static final int STAFF_PLACEHOLDER= SUMM_MISCS+3;
-	public static final int FACELESS_ITEM   = SUMM_MISCS+4;
+	public static final int CLEAN_WATER     = SUMM_MISCS+0;
+	public static final int STAFF_PLACEHOLDER= SUMM_MISCS+2;
+	public static final int FACELESS_ITEM   = SUMM_MISCS+3;
 	static {
 		assignItemRect(ROPES, 16, 16);
 		assignItemRect(RUNIC_SHOT, 13, 13);

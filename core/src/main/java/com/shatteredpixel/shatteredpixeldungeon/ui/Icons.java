@@ -278,7 +278,7 @@ public enum Icons {
 				icon.frame( icon.texture.uvRectBySize( 160, 32, 15, 14 ) );
 				break;
 			case CONDUCTS_COLOR:
-				icon.frame( icon.texture.uvRectBySize( 192, 208, 15, 11 ) );
+				icon.frame( icon.texture.uvRectBySize( 192, 128, 15, 11 ) );
 				break;
 			case COPY:
 				icon.frame( icon.texture.uvRectBySize( 176, 32, 13, 13 ) );
