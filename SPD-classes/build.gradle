@@ -11,3 +11,9 @@ dependencies {
     //noinspection GradleDependency , later JSON versions cause crashes on old versions of android
     implementation "org.json:json:20170516"
 }
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
