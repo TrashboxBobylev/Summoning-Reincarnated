@@ -56,7 +56,7 @@ public class WoollyBomb extends Bomb {
 		GameScene.flash(0xA09d309f);
 		boolean[] FOV = new boolean[Dungeon.level.length()];
 		Point c = Dungeon.level.cellToPoint(cell);
-		ShadowCaster.castShadow(c.x, c.y, FOV, Dungeon.level.losBlocking, Dungeon.level.viewDistance);
+		ShadowCaster.castShadow(c.x, c.y, Dungeon.level.width(), FOV, Dungeon.level.losBlocking, Dungeon.level.viewDistance);
 
 		ArrayList<Char> affected = new ArrayList<>();
 

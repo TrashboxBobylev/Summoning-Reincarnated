@@ -160,32 +160,21 @@ public abstract class EquipableItem extends Item {
 
 	public void activate( Char ch ){}
 
+	public boolean equippedBefore = false;
+	private static final String EQUIPPED_BEFORE       = "equippedBefore";
 	private static final String CUSTOM_NOTE_ID = "custom_note_id";
 
 	@Override
 	public void storeInBundle(Bundle bundle) {
 		super.storeInBundle(bundle);
+		bundle.put(EQUIPPED_BEFORE, equippedBefore);
 		if (customNoteID != -1)     bundle.put(CUSTOM_NOTE_ID, customNoteID);
 	}
 
 	@Override
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
-		if (bundle.contains(CUSTOM_NOTE_ID))    customNoteID = bundle.getInt(CUSTOM_NOTE_ID);
-	}
-
-	public boolean equippedBefore = false;
-	private static final String EQUIPPED_BEFORE       = "equippedBefore";
-
-	@Override
-	public void storeInBundle( Bundle bundle ) {
-		super.storeInBundle(bundle);
-		bundle.put(EQUIPPED_BEFORE, equippedBefore);
-	}
-
-	@Override
-	public void restoreFromBundle( Bundle bundle ) {
-		super.restoreFromBundle(bundle);
 		equippedBefore = bundle.getBoolean(EQUIPPED_BEFORE);
+		if (bundle.contains(CUSTOM_NOTE_ID))    customNoteID = bundle.getInt(CUSTOM_NOTE_ID);
 	}
 }

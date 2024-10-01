@@ -134,6 +134,7 @@ public enum Catalog {
 	GLYPHS,
 	THROWN_WEAPONS,
 	WANDS,
+	STAFFS,
 	RINGS,
 	ARTIFACTS,
 	TRINKETS,
@@ -214,6 +215,12 @@ public enum Catalog {
 
 		WANDS.addItems(Generator.Category.WAND.classes);
 
+		STAFFS.addItems(Generator.Category.STAFF_T1.classes);
+		STAFFS.addItems(Generator.Category.STAFF_T2.classes);
+		STAFFS.addItems(Generator.Category.STAFF_T3.classes);
+		STAFFS.addItems(Generator.Category.STAFF_T4.classes);
+		STAFFS.addItems(Generator.Category.STAFF_T5.classes);
+
 		RINGS.addItems(Generator.Category.RING.classes);
 
 		ARTIFACTS.addItems(Generator.Category.ARTIFACT.classes);
@@ -263,21 +270,7 @@ public enum Catalog {
 				LiquidMetal.class, ArcaneResin.class,
 				SealShard.class, BrokenStaff.class, CloakScrap.class, BowFragment.class, BrokenHilt.class);
 
-//		for (Class weapon : Generator.Category.STAFF_T1.classes){
-//			STAFFS.seen.put( weapon, false);
-//		}
-		for (Class weapon : Generator.Category.STAFF_T2.classes){
-			STAFFS.seen.put( weapon, false);
-		}
-		for (Class weapon : Generator.Category.STAFF_T3.classes){
-			STAFFS.seen.put( weapon, false);
-		}
-		for (Class weapon : Generator.Category.STAFF_T4.classes){
-			STAFFS.seen.put( weapon, false);
-		}
-		for (Class weapon : Generator.Category.STAFF_T5.classes){
-			STAFFS.seen.put( weapon, false);
-		}
+
 
 	}
 
@@ -302,6 +295,7 @@ public enum Catalog {
 		equipmentCatalogs.add(GLYPHS);
 		equipmentCatalogs.add(THROWN_WEAPONS);
 		equipmentCatalogs.add(WANDS);
+		equipmentCatalogs.add(STAFFS);
 		equipmentCatalogs.add(RINGS);
 		equipmentCatalogs.add(ARTIFACTS);
 		equipmentCatalogs.add(TRINKETS);

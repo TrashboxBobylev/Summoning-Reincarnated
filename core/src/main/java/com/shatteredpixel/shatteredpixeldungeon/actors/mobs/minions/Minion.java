@@ -294,7 +294,7 @@ public class Minion extends Mob {
 
     @Override
     public boolean isInvulnerable(Class effect) {
-        return super.isInvulnerable(effect) || buff(AnkhInvulnerability.class) != null;
+        return super.isInvulnerable(effect) || buff(Invulnerability.class) != null;
     }
 
     @Override

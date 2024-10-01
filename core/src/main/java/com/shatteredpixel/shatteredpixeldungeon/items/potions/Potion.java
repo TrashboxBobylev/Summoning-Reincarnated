@@ -403,14 +403,8 @@ public class Potion extends Item {
 		return (anonymous && (handler == null || !handler.isKnown( this ))) ? desc() : super.info();
 	}
 
-	@Override
 	public String desc() {
-		return isKnown() ? super.desc() : Messages.get(this, "unknown_desc");
-	}
-
-	@Override
-	public String desc() {
-		String desc = super.desc();
+		String desc = isKnown() ? super.desc() : Messages.get(this, "unknown_desc");
 		for (Item item: Dungeon.hero.belongings){
 			if (item instanceof GooStaff && ((GooStaff) item).rank() == 2){
 				desc += "\n\n" + Messages.get(this,"goo_minion_effect");
