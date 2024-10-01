@@ -95,7 +95,7 @@ public class Badges {
 		RESEARCHER_1                ( 22, BadgeType.JOURNAL ),
 		GAMES_PLAYED_1              ( 23, BadgeType.GLOBAL ),
 		HIGH_SCORE_1                ( 24 ),
-		ATTUNEMENT_ATTAINED_1       ( 23 ),
+		ATTUNEMENT_ATTAINED_1       ( 25 ),
 
 		//silver
 		NO_MONSTERS_SLAIN           ( 32 ),
