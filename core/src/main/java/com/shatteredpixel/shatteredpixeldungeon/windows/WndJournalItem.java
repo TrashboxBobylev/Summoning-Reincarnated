@@ -24,7 +24,15 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
+import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
+import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.WndChangesTabbed;
 import com.watabou.input.PointerEvent;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.PointerArea;
@@ -32,17 +40,60 @@ import com.watabou.noosa.PointerArea;
 public class WndJournalItem extends WndTitledMessage {
 
 	public WndJournalItem(Image icon, String title, String message ) {
-		super( icon, title, message);
+		super(icon, title, message);
+		if (blockThing()){
+			PointerArea blocker = new PointerArea(0, 0, PixelScene.uiCamera.width, PixelScene.uiCamera.height) {
+				@Override
+				protected void onClick(PointerEvent event) {
+					onBackPressed();
+				}
+			};
+			blocker.camera = PixelScene.uiCamera;
+			add(blocker);
+		}
 
-		PointerArea blocker = new PointerArea( 0, 0, PixelScene.uiCamera.width, PixelScene.uiCamera.height ) {
-			@Override
-			protected void onClick( PointerEvent event ) {
-				onBackPressed();
-			}
-		};
-		blocker.camera = PixelScene.uiCamera;
-		add(blocker);
+	}
 
+	boolean blockThing(){return true;}
+
+	public static class Ranked extends WndJournalItem {
+
+		@Override
+		boolean blockThing() {
+			return false;
+		}
+
+		public Ranked(Image icon, String title, String message, Item item) {
+			super(icon, title, message);
+
+			float y = height;
+
+			RedButton btn = new RedButton(Messages.upperCase(Messages.get(WndJournalItem.class, "ranks")), 8 ) {
+				@Override
+				protected void onClick() {
+					if (ShatteredPixelDungeon.scene() instanceof GameScene) {
+						GameScene.show(new WndChangesTabbed(
+								new ItemSprite(item),
+								Messages.titleCase(Messages.get(WndJournalItem.class, "ranks")),
+								((Rankable) item).getRankMessage(1),
+								((Rankable) item).getRankMessage(2),
+								((Rankable) item).getRankMessage(3)));
+					} else {
+						ShatteredPixelDungeon.scene().addToFront(new WndChangesTabbed(
+								new ItemSprite(item),
+								Messages.titleCase(Messages.get(WndJournalItem.class, "ranks")),
+								((Rankable) item).getRankMessage(1),
+								((Rankable) item).getRankMessage(2),
+								((Rankable) item).getRankMessage(3)));
+					}
+				}
+			};
+
+			btn.setSize( width, 16 );
+			btn.setPos( 0, height + 2);
+			add( btn );
+			resize( width, (int)btn.bottom() + 2 );
+		}
 	}
 
 }

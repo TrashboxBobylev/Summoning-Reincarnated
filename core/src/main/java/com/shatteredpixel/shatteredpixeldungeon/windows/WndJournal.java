@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Pylon;
 import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
@@ -744,6 +745,7 @@ public class WndJournal extends WndTabbed {
 			Image secondIcon = null;
 			String title = "";
 			String desc = "";
+			Class<? extends Item> rankedItem = null;
 
 			if (Item.class.isAssignableFrom(itemClass)) {
 
@@ -758,6 +760,9 @@ public class WndJournal extends WndTabbed {
 						((Scroll) item).anonymize();
 					}
 				}
+
+				if (item instanceof Rankable)
+					rankedItem = item.getClass();
 
 				sprite = new ItemSprite(item.image, seen ? item.glowing() : null);
 				if (!seen)  {
@@ -834,16 +839,26 @@ public class WndJournal extends WndTabbed {
 
 			String finalTitle = title;
 			String finalDesc = desc;
+			Class<? extends Item> finalRankedItem = rankedItem;
 			ScrollingGridPane.GridItem gridItem = new ScrollingGridPane.GridItem(sprite) {
 				@Override
 				public boolean onClick(float x, float y) {
 					if (inside(x, y)) {
 						Image sprite = new ItemSprite();
 						sprite.copy(icon);
-						if (ShatteredPixelDungeon.scene() instanceof GameScene){
-							GameScene.show(new WndJournalItem(sprite, finalTitle, finalDesc));
+						if (finalRankedItem != null){
+							Item rankedThing = Reflection.newInstance(finalRankedItem);
+							if (ShatteredPixelDungeon.scene() instanceof GameScene){
+								GameScene.show(new WndJournalItem.Ranked(sprite, finalTitle, finalDesc, rankedThing));
+							} else {
+								ShatteredPixelDungeon.scene().addToFront(new WndJournalItem.Ranked(sprite, finalTitle, finalDesc, rankedThing));
+							}
 						} else {
-							ShatteredPixelDungeon.scene().addToFront(new WndJournalItem(sprite, finalTitle, finalDesc));
+							if (ShatteredPixelDungeon.scene() instanceof GameScene) {
+								GameScene.show(new WndJournalItem(sprite, finalTitle, finalDesc));
+							} else {
+								ShatteredPixelDungeon.scene().addToFront(new WndJournalItem(sprite, finalTitle, finalDesc));
+							}
 						}
 						return true;
 					} else {
