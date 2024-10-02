@@ -408,10 +408,12 @@ public class Potion extends Item {
 
 	public String desc() {
 		String desc = isKnown() ? super.desc() : Messages.get(this, "unknown_desc");
-		for (Item item: Dungeon.hero.belongings){
-			if (item instanceof GooStaff && ((GooStaff) item).rank() == 2){
-				desc += "\n\n" + Messages.get(this,"goo_minion_effect");
-				break;
+		if (Dungeon.hero != null) {
+			for (Item item : Dungeon.hero.belongings) {
+				if (item instanceof GooStaff && ((GooStaff) item).rank() == 2) {
+					desc += "\n\n" + Messages.get(this, "goo_minion_effect");
+					break;
+				}
 			}
 		}
 		return desc;
