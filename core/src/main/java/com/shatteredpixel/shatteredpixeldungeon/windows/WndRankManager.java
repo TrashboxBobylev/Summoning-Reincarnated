@@ -151,6 +151,7 @@ public class WndRankManager extends WndTabbed {
 
         layoutTabs();
         selectedRank = ((Rankable) rankedItem).rank();
+        btnSwitch.enable(false);
         select(selectedRank-1);
     }
 
@@ -158,14 +159,7 @@ public class WndRankManager extends WndTabbed {
     public void select(Tab tab) {
         super.select(tab);
         selectedRank = tabs.indexOf(tab)+1;
-    }
-
-    @Override
-    public synchronized void update() {
-        super.update();
-        if (!btnSwitch.active && Dungeon.hero.ready){
-            btnSwitch.enable(((Rankable)rankedItem).rank() == (tabs.indexOf(selected)+1));
-        }
+        btnSwitch.enable(((Rankable)rankedItem).rank() != selectedRank);
     }
 
     @Override
