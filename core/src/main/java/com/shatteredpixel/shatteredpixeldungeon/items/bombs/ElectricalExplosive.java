@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -41,7 +42,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLightning;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
@@ -106,7 +106,7 @@ public class ElectricalExplosive extends Bomb {
 	}
 
 	public float charge = 1;
-	public int numberOfUses;
+	public int usedCharge;
 	public Charger charger;
 
 	@Override
@@ -146,12 +146,12 @@ public class ElectricalExplosive extends Bomb {
 	public float canBreak(){
 		float chance = 0;
 
-		if (numberOfUses < 10) chance = 0.01f;
-		if (numberOfUses > 10 && numberOfUses < 20) chance = 0.033f;
-		if (numberOfUses > 20 && numberOfUses < 30) chance = 0.06f;
-		if (numberOfUses > 30 && numberOfUses < 40) chance = 0.08f;
-		if (numberOfUses > 40 && numberOfUses > 50) chance = 0.12f;
-		if (numberOfUses > 50) chance = 0.24f;
+		if (usedCharge < 1000) chance = 0.01f;
+		if (usedCharge >= 1000 && usedCharge < 1500) chance = 0.033f;
+		if (usedCharge >= 1500 && usedCharge < 2000) chance = 0.06f;
+		if (usedCharge >= 2000 && usedCharge < 2500) chance = 0.08f;
+		if (usedCharge >= 2500 && usedCharge > 3000) chance = 0.12f;
+		if (usedCharge > 3000) chance = 0.24f;
 //		chance /= Bomb.nuclearBoost();
 		return chance;
 	}
@@ -162,9 +162,9 @@ public class ElectricalExplosive extends Bomb {
 
 		int dist;
 		if (Dungeon.level.water[ch.pos] && !ch.flying)
-			dist = 4;
+			dist = (int) (4 + charge / 50);
 		else
-			dist = 2;
+			dist = (int) (2 + charge / 50);
 //		dist *= Bomb.nuclearBoost();
 
 		PathFinder.buildDistanceMap( ch.pos, BArray.not( Dungeon.level.solid, null ), dist );
@@ -225,12 +225,13 @@ public class ElectricalExplosive extends Bomb {
 
 		for (Char target : affected){
 			//lightning deals less damage per-target, the more targets that are hit.
-			float multipler = 0.4f + (0.6f/affected.size());
+			float multipler = 0.66f + (0.4f/affected.size());
 			//if the main target is in water, all affected take full damage
 			if (Actor.findChar(cell) != null && Dungeon.level.water[Actor.findChar(cell).pos]) multipler = 1f;
-			int dmg = Math.round(damageRoll() * 0.6f * charge * multipler);
+			int dmg = Math.round(damageRoll() * 1.25f * charge * multipler);
 
-			target.damage(dmg, new WandOfLightning());
+			target.damage(dmg, new Electricity());
+			if (target.isAlive()) Buff.prolong(target, Paralysis.class, charge / 6);
 			if (target == Dungeon.hero) Camera.main.shake( 2, 0.3f );
 			target.sprite.centerEmitter().burst( SparkParticle.FACTORY, 3 );
 			target.sprite.flash();
@@ -241,8 +242,8 @@ public class ElectricalExplosive extends Bomb {
 			}
 		}
 
+		usedCharge += charge;
 		charge = 0;
-		numberOfUses++;
 
 		if (Random.Float() < canBreak()) {
 			for (Heap heap : Dungeon.level.heaps.valueList()) {
@@ -284,11 +285,11 @@ public class ElectricalExplosive extends Bomb {
 
 			LockedFloor lock = target.buff(LockedFloor.class);
 			if (lock == null || lock.regenOn())
-				charge += 0.02f;
+				charge += 0.015f;
 
 			for (Recharging bonus : target.buffs(Recharging.class)){
 				if (bonus != null && bonus.remainder() > 0f) {
-					charge += 0.05f * bonus.remainder();
+					charge += 0.04f * bonus.remainder();
 				}
 			}
 //			if (target instanceof Hero && ((Hero) target).pointsInTalent(Talent.SUFFERING_AWAY) > 1 &&
@@ -315,10 +316,11 @@ public class ElectricalExplosive extends Bomb {
 	@Override
 	public String desc() {
 		String desc_fuse = Messages.get(this, "desc",
-				Math.round(minDamage()*0.8* 0.6f * charge), Math.round(maxDamage()*0.8* 0.6f * charge))+ "\n\n" + Messages.get(this, "desc_fuse");
+				Math.round(minDamage()*1.25f * charge), Math.round(maxDamage()*1.25f * charge));
 		if (fuse != null){
-			desc_fuse = Messages.get(this, "desc",
-					Math.round(minDamage()*0.8* 0.6f * charge), Math.round(maxDamage()*0.8* 0.6f * charge)) + "\n\n" + Messages.get(this, "desc_burning");
+			desc_fuse += "\n\n" + Messages.get(this, "desc_burning");
+		} else {
+			desc_fuse += "\n\n" + Messages.get(this, "desc_fuse");
 		}
 		desc_fuse += "\n\n" + Messages.get(this, "counter", new DecimalFormat("#.##").format(canBreak() * 100f));
 		return desc_fuse;
@@ -373,14 +375,17 @@ public class ElectricalExplosive extends Bomb {
 	public void storeInBundle(Bundle bundle) {
 		super.storeInBundle(bundle);
 		bundle.put("charge", charge);
-		bundle.put("number_of_uses", numberOfUses);
+		bundle.put("used_charge", usedCharge);
 	}
 
 	@Override
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
 		charge = bundle.getFloat("charge");
-		numberOfUses = bundle.getInt("number_of_uses");
+		if (bundle.contains("number_of_uses"))
+			usedCharge = bundle.getInt("number_of_uses")*50;
+		else
+			usedCharge = bundle.getInt("used_charge");
 	}
 	
 	@Override

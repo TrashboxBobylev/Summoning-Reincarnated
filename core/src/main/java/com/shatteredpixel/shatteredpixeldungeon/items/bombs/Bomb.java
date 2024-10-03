@@ -275,7 +275,7 @@ public class Bomb extends Item {
 			WoollyBomb.class,
 			HolyBomb.class,
 			Webbomb.class,
-			FlashBangBomb.class,
+			ElectricalExplosive.class,
 			Noisemaker.class,
 			SmokeBomb.class
 	};
@@ -431,7 +431,7 @@ public class Bomb extends Item {
 			validIngredients.put(ScrollOfRage.class,            Noisemaker.class);
 			
 			validIngredients.put(PotionOfInvisibility.class,    SmokeBomb.class);
-			validIngredients.put(ScrollOfRecharging.class,      FlashBangBomb.class);
+			validIngredients.put(ScrollOfRecharging.class,      ElectricalExplosive.class);
 			
 			validIngredients.put(PotionOfHealing.class,         RegrowthBomb.class);
 			validIngredients.put(ScrollOfRemoveCurse.class,     HolyBomb.class);
@@ -452,7 +452,7 @@ public class Bomb extends Item {
 			bombCosts.put(Noisemaker.class,     4);
 			
 			bombCosts.put(SmokeBomb.class,      2);
-			bombCosts.put(FlashBangBomb.class,      4);
+			bombCosts.put(ElectricalExplosive.class, 4);
 
 			bombCosts.put(RegrowthBomb.class,   3);
 			bombCosts.put(HolyBomb.class,       3);
