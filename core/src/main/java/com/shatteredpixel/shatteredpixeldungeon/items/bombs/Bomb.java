@@ -33,7 +33,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SmokeParticle;
@@ -148,23 +147,31 @@ public class Bomb extends Item {
 	}
 
 	public static int damageRoll(){
-		//sewers: 8-22
-		//prison: 24-47
-		//caves: 40-72
-		//city: 56-97
-		//halls: 72-122
+		//sewers: 9-22
+		//prison: 18-45
+		//caves: 27-72
+		//city: 36-99
+		//halls: 45-126
 		return Random.NormalIntRange(minDamage(), maxDamage());
 	}
 
-	public static int maxDamage() {
-		int baseDamage = 22 + (Dungeon.chapterNumber()) * 25;
+	public static int maxDamage(){
+		return maxDamage(Dungeon.scalingDepth() == -1 ? 1 : Dungeon.scalingDepth());
+	}
+
+	public static int maxDamage(int depth) {
+		int baseDamage = 18 + Math.round(depth*4.5f);
 //		if (Dungeon.hero.pointsInTalent(Talent.NUCLEAR_RAGE) > 1)
 //			baseDamage *= 1.05f + 0.1f * (Dungeon.hero.pointsInTalent(Talent.NUCLEAR_RAGE)-1);
 		return baseDamage;
 	}
 
-	public static int minDamage() {
-		int baseDamage = 8 + (Dungeon.chapterNumber())*16;
+	public static int minDamage(){
+		return minDamage(Dungeon.scalingDepth() == -1 ? 1 : Dungeon.scalingDepth());
+	}
+
+	public static int minDamage(int depth) {
+		int baseDamage = 8 + Math.round(depth*1.5f);
 //		if (Dungeon.hero.pointsInTalent(Talent.NUCLEAR_RAGE) > 0)
 //			baseDamage *= 1.05f + 0.1f * (Dungeon.hero.pointsInTalent(Talent.NUCLEAR_RAGE));
 		return baseDamage;
@@ -268,9 +275,9 @@ public class Bomb extends Item {
 			WoollyBomb.class,
 			HolyBomb.class,
 			Webbomb.class,
-			Flashbang.class,
+			FlashBangBomb.class,
 			Noisemaker.class,
-			ShockBomb.class
+			SmokeBomb.class
 	};
 
 	@Override
@@ -311,8 +318,7 @@ public class Bomb extends Item {
 
 	@Override
 	public String desc() {
-		int depth = Dungeon.depth == -1 ? 1 : Dungeon.depth;
-		String desc = Messages.get(this, "desc", 4+depth, 12+3*depth);
+		String desc = Messages.get(this, "desc", minDamage(), maxDamage());
 		if (fuse == null)
 			return desc + "\n\n" + Messages.get(this, "desc_fuse");
 		else
