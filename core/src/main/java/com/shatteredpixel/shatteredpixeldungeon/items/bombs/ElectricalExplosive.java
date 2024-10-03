@@ -59,7 +59,7 @@ import java.util.ArrayList;
 public class ElectricalExplosive extends Bomb {
 
 	{
-		image = ItemSpriteSheet.SHOCK_BOMB;
+		image = ItemSpriteSheet.FLASHBANG;
 	}
 
 	public Fuse fuseShock;
