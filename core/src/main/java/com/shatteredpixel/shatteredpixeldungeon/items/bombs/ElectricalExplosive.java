@@ -162,9 +162,9 @@ public class ElectricalExplosive extends Bomb {
 
 		int dist;
 		if (Dungeon.level.water[ch.pos] && !ch.flying)
-			dist = (int) (4 + charge / 50);
+			dist = (int) (4 + charge / 0.5f);
 		else
-			dist = (int) (2 + charge / 50);
+			dist = (int) (2 + charge / 0.5f);
 //		dist *= Bomb.nuclearBoost();
 
 		PathFinder.buildDistanceMap( ch.pos, BArray.not( Dungeon.level.solid, null ), dist );
@@ -231,7 +231,7 @@ public class ElectricalExplosive extends Bomb {
 			int dmg = Math.round(damageRoll() * 1.25f * charge * multipler);
 
 			target.damage(dmg, new Electricity());
-			if (target.isAlive()) Buff.prolong(target, Paralysis.class, charge / 6);
+			if (target.isAlive()) Buff.prolong(target, Paralysis.class, charge / 0.06f);
 			if (target == Dungeon.hero) Camera.main.shake( 2, 0.3f );
 			target.sprite.centerEmitter().burst( SparkParticle.FACTORY, 3 );
 			target.sprite.flash();
@@ -242,7 +242,7 @@ public class ElectricalExplosive extends Bomb {
 			}
 		}
 
-		usedCharge += charge;
+		usedCharge += charge*100;
 		charge = 0;
 
 		if (Random.Float() < canBreak()) {
