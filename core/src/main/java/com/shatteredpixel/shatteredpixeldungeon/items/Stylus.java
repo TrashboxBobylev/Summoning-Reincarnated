@@ -89,7 +89,7 @@ public class Stylus extends Item {
 	
 	private void inscribe( Armor armor ) {
 
-		if (!armor.isIdentified() ){
+		if (!armor.cursedKnown){
 			GLog.w( Messages.get(this, "identify"));
 			return;
 		} else if (armor.cursed || armor.hasCurseGlyph()){

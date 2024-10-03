@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SmokeParticle;
@@ -60,6 +61,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
@@ -99,6 +101,10 @@ public class Bomb extends Item {
 		return !harmless;
 	}
 
+	protected int explosionRange(){
+		return 1;
+	}
+
 	@Override
 	public ArrayList<String> actions(Hero hero) {
 		ArrayList<String> actions = super.actions( hero );
@@ -129,15 +135,7 @@ public class Bomb extends Item {
 			if (fuseTriggerClass != null)
 				((FuseBuff)(Buff.affect(Dungeon.hero, fuseTriggerClass))).set(cell);
 		}
-		if (Actor.findChar( cell ) != null && !(Actor.findChar( cell ) instanceof Hero) ){
-			ArrayList<Integer> candidates = new ArrayList<>();
-			for (int i : PathFinder.NEIGHBOURS8)
-				if (Dungeon.level.passable[cell + i])
-					candidates.add(cell + i);
-			int newCell = candidates.isEmpty() ? cell : Random.element(candidates);
-			Dungeon.level.drop( this, newCell ).sprite.drop( cell );
-		} else
-			super.onThrow( cell );
+		super.onThrow( cell );
 	}
 
 	@Override
@@ -191,25 +189,29 @@ public class Bomb extends Item {
 			}
 			
 			boolean terrainAffected = false;
-			for (int n : PathFinder.NEIGHBOURS9) {
-				int c = cell + n;
-				if (c >= 0 && c < Dungeon.level.length()) {
-					if (Dungeon.level.heroFOV[c]) {
-						CellEmitter.get(c).burst(SmokeParticle.FACTORY, 4);
+			boolean[] explodable = new boolean[Dungeon.level.length()];
+			BArray.not( Dungeon.level.solid, explodable);
+			BArray.or( Dungeon.level.flamable, explodable, explodable);
+			PathFinder.buildDistanceMap( cell, explodable, explosionRange() );
+			for (int i = 0; i < PathFinder.distance.length; i++) {
+				if (PathFinder.distance[i] != Integer.MAX_VALUE) {
+					if (Dungeon.level.heroFOV[i]) {
+						CellEmitter.get(i).burst(SmokeParticle.FACTORY, 4);
 					}
 					
-					if (Dungeon.level.flamable[c]) {
-						Dungeon.level.destroy(c);
-						GameScene.updateMap(c);
+					if (Dungeon.level.flamable[i]) {
+						Dungeon.level.destroy(i);
+						GameScene.updateMap(i);
 						terrainAffected = true;
 					}
 					
 					//destroys items / triggers bombs caught in the blast.
-					Heap heap = Dungeon.level.heaps.get(c);
-					if (heap != null)
+					Heap heap = Dungeon.level.heaps.get(i);
+					if (heap != null) {
 						heap.explode();
-					
-					Char ch = Actor.findChar(c);
+					}
+
+					Char ch = Actor.findChar(i);
 					if (ch != null) {
 						affected.add(ch);
 					}
@@ -226,11 +228,6 @@ public class Bomb extends Item {
 				int dmg = Bomb.damageRoll();
 				if (ch instanceof Hero && Dungeon.isChallenged(Conducts.Conduct.EXPLOSIONS))
 					dmg /= 2;
-
-				//those not at the center of the blast take less damage
-				if (ch.pos != cell){
-					dmg = Math.round(dmg*0.67f);
-				}
 
 				dmg -= ch.drRoll();
 
@@ -309,19 +306,17 @@ public class Bomb extends Item {
 
 	@Override
 	public int value() {
-		return 20 * quantity;
+		return 15 * quantity;
 	}
 
 	@Override
 	public String desc() {
-		String desc_fuse = Messages.get(this, "desc",
-				Math.round(minDamage()*0.8), Math.round(maxDamage()*0.8))+ "\n\n" + Messages.get(this, "desc_fuse");
-		if (fuse != null){
-			desc_fuse = Messages.get(this, "desc",
-					Math.round(minDamage()*0.8), Math.round(maxDamage()*0.8)) + "\n\n" + Messages.get(this, "desc_burning");
-		}
-
-		return desc_fuse;
+		int depth = Dungeon.depth == -1 ? 1 : Dungeon.depth;
+		String desc = Messages.get(this, "desc", 4+depth, 12+3*depth);
+		if (fuse == null)
+			return desc + "\n\n" + Messages.get(this, "desc_fuse");
+		else
+			return desc + "\n\n" + Messages.get(this, "desc_burning");
 	}
 
 	private static final String FUSE = "fuse";
@@ -429,8 +424,8 @@ public class Bomb extends Item {
 			validIngredients.put(PotionOfLiquidFlame.class,     Firebomb.class);
 			validIngredients.put(ScrollOfRage.class,            Noisemaker.class);
 			
-			validIngredients.put(PotionOfInvisibility.class,    Flashbang.class);
-			validIngredients.put(ScrollOfRecharging.class,      ShockBomb.class);
+			validIngredients.put(PotionOfInvisibility.class,    SmokeBomb.class);
+			validIngredients.put(ScrollOfRecharging.class,      FlashBangBomb.class);
 			
 			validIngredients.put(PotionOfHealing.class,         RegrowthBomb.class);
 			validIngredients.put(ScrollOfRemoveCurse.class,     HolyBomb.class);
@@ -450,8 +445,8 @@ public class Bomb extends Item {
 			bombCosts.put(Firebomb.class,       2);
 			bombCosts.put(Noisemaker.class,     4);
 			
-			bombCosts.put(Flashbang.class,      2);
-			bombCosts.put(ShockBomb.class,      4);
+			bombCosts.put(SmokeBomb.class,      2);
+			bombCosts.put(FlashBangBomb.class,      4);
 
 			bombCosts.put(RegrowthBomb.class,   3);
 			bombCosts.put(HolyBomb.class,       3);

@@ -47,14 +47,17 @@ public class ShrapnelBomb extends Bomb {
 	public boolean explodesDestructively() {
 		return false;
 	}
-
+@Override
+	protected int explosionRange() {
+		return 8;
+	}
 	@Override
 	public void explode(int cell) {
 		super.explode(cell);
 
 		boolean[] FOV = new boolean[Dungeon.level.length()];
 		Point c = Dungeon.level.cellToPoint(cell);
-		ShadowCaster.castShadow(c.x, c.y, Dungeon.level.width(), FOV, Dungeon.level.losBlocking, 8);
+		ShadowCaster.castShadow(c.x, c.y, Dungeon.level.width(), FOV, Dungeon.level.losBlocking, explosionRange());
 		ArrayList<Char> affected = new ArrayList<>();
 
 		for (int i = 0; i < FOV.length; i++) {
@@ -71,8 +74,7 @@ public class ShrapnelBomb extends Bomb {
 
 		for (Char ch : affected){
 			//regular bomb damage, which falls off at a rate of 5% per tile of distance
-			int damage = Math.round(damageRoll()*2);
-			damage = Math.round(damage * (1f - .05f*Dungeon.level.distance(cell, ch.pos)));
+			int damage = Math.round(damageRoll());
 			damage -= ch.drRoll();
 			ch.damage(damage, this);
 			if (ch == Dungeon.hero && !ch.isAlive()) {
