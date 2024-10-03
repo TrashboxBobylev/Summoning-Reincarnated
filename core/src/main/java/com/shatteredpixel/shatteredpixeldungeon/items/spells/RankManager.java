@@ -29,13 +29,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.InventoryScroll;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndRankManager;
 
 // it is not an inventory spell code-wise, but it is usable like one;
@@ -54,27 +52,6 @@ public class RankManager extends Spell {
     @Override
     public ItemSprite.Glowing glowing() {
         return TEAL;
-    }
-
-    private void confirmCancellation() {
-        GameScene.show( new WndOptions(new ItemSprite(this),
-                Messages.titleCase(name()),
-                Messages.get(RankManager.class, "warning"),
-                Messages.get(InventoryScroll.class, "yes"),
-                Messages.get(InventoryScroll.class, "no") ) {
-            @Override
-            protected void onSelect( int index ) {
-                switch (index) {
-                    case 0:
-                        curUser.spendAndNext( 1f );
-                        break;
-                    case 1:
-                        GameScene.selectItem(itemSelector);
-                        break;
-                }
-            }
-            public void onBackPressed() {}
-        } );
     }
 
     public void reShowSelector(){
