@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.GooWarn;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Miasma;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Web;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.DoomCloud;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
@@ -74,9 +75,14 @@ public class ArcaneBomb extends Bomb.ConjuredBomb {
 		if (fuse != null){
 			ArrayList<Integer> aoe = getAreaOfEffect(cell);
 			for (int i : aoe) {
-				GameScene.add(Blob.seed(i, 9, GooWarn.class));
+				GameScene.add(Blob.seed(i, fuseDelay+1, GooWarn.class));
 			}
 		}
+	}
+
+	@Override
+	protected int explosionRange() {
+		return 5;
 	}
 
 	@Override
@@ -92,10 +98,12 @@ public class ArcaneBomb extends Bomb.ConjuredBomb {
 
 		ArrayList<Integer> aoe = getAreaOfEffect(cell);
 		if (!Dungeon.bossLevel()) {
-			Level.set(cell, Terrain.CHASM);
-			GameScene.updateMap(cell);
+			if (cell != Dungeon.level.exit() && cell != Dungeon.level.entrance()) {
+				Level.set(cell, Terrain.CHASM);
+				GameScene.updateMap(cell);
+			}
 			for (int k : PathFinder.NEIGHBOURS4){
-				if (cell + k != Dungeon.level.exit && cell + k != Dungeon.level.entrance)Level.set(cell + k, Terrain.CHASM);
+				if (cell + k != Dungeon.level.exit() && cell + k != Dungeon.level.entrance()) Level.set(cell + k, Terrain.CHASM);
 				GameScene.updateMap(cell+k);
 			}
 		}
@@ -105,12 +113,14 @@ public class ArcaneBomb extends Bomb.ConjuredBomb {
 			}
 
 			if (Dungeon.level.losBlocking[i] && !Dungeon.bossLevel()){
-				float chance = 1;
-				if (Dungeon.level.distance(cell, i) > 3) chance = 0.6f;
-				if (Dungeon.level.distance(cell, i) > 4) chance = 0.4f;
+				float chance = 1.2f - Dungeon.level.distance(cell, i)*0.2f;
 				if (Random.Float() < chance && Dungeon.level.insideMap(i)){
-					if (Dungeon.level.exit != i && Dungeon.level.entrance != i)
-						Level.set( i, Terrain.EMPTY );
+					if (Dungeon.level.exit() != i && Dungeon.level.entrance() != i)
+						Level.set( i, Terrain.EMBERS );
+					Blob web = Dungeon.level.blobs.get(Web.class);
+					if (web != null){
+						web.clear(i);
+					}
 				}
 			}
 			GameScene.updateMap( i );
@@ -123,15 +133,12 @@ public class ArcaneBomb extends Bomb.ConjuredBomb {
 				heap.explode();
 
 			GameScene.add(Blob.seed(i, Math.round(Random.NormalIntRange(100, 150)/**Bomb.nuclearBoost()*/), Miasma.class));
-
-
 		}
 
 		for (Char ch : affected){
-			// 500%/460%/420%/380%/340%/300% bomb damage based on distance, but pierces armor.
-			int damage = damageRoll()*5;
-			float multiplier = 1f - (.08f*Dungeon.level.distance(cell, ch.pos));
-			ch.damage(Math.round(damage*multiplier), this);
+			// 350% bomb damage, but pierces armor.
+			int damage = (int) (damageRoll()*3.5f);
+			ch.damage(damage, this);
 			if (ch == Dungeon.hero && !ch.isAlive()){
 				Badges.validateDeathFromFriendlyMagic();
 				Dungeon.fail(ArcaneBomb.class);
@@ -149,10 +156,12 @@ public class ArcaneBomb extends Bomb.ConjuredBomb {
 	@Override
 	public String desc() {
 		String desc_fuse = Messages.get(this, "desc",
-				Math.round(minDamage()*5), Math.round(maxDamage()*5))+ "\n\n" + Messages.get(this, "desc_fuse");
+				Math.round(minDamage()*3.5f), Math.round(maxDamage()*3.5f));
+
 		if (fuse != null){
-			desc_fuse = Messages.get(this, "desc",
-					Math.round(minDamage()*5), Math.round(maxDamage()*5)) + "\n\n" + Messages.get(this, "desc_burning");
+			desc_fuse += "\n\n" + Messages.get(this, "desc_burning");
+		} else {
+			desc_fuse += "\n\n" + Messages.get(this, "desc_fuse");
 		}
 
 		return desc_fuse;
@@ -161,6 +170,6 @@ public class ArcaneBomb extends Bomb.ConjuredBomb {
 	@Override
 	public int value() {
 		//prices of ingredients
-		return quantity * (20 + 30);
+		return quantity * (15 + 30);
 	}
 }
