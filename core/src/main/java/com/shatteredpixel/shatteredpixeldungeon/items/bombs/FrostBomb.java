@@ -29,11 +29,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.watabou.noosa.Image;
 import com.watabou.utils.Point;
 
 import java.util.ArrayList;
@@ -45,6 +47,8 @@ public class FrostBomb extends Bomb {
 		harmless = true;
 		fuseDelay = 0;
 	}
+
+	private static final float DURATION = 15;
 	
 	@Override
 	public void explode(int cell) {
@@ -66,9 +70,11 @@ public class FrostBomb extends Bomb {
 		}
 
 		for (Char ch : affected){
-			if (ch != null && ch != Dungeon.hero) {
-				Buff.affect(ch, Frost.class, 15f/**Bomb.nuclearBoost()*/);
-			} else if (ch instanceof Hero) {
+			if (ch.alignment != Char.Alignment.ALLY && !ch.isImmune(Frost.class)) {
+				Buff.affect(ch, Frost.class, DURATION/**Bomb.nuclearBoost()*/);
+				if (!ch.isImmune(Frost.class))
+					Buff.affect(ch, ResistTracker.class, ch.resist(Frost.class) * DURATION);
+			} else {
 				Buff.affect(ch, Chill.class, 9f/**Bomb.nuclearBoost()*/);
 			}
 		}
@@ -78,5 +84,21 @@ public class FrostBomb extends Bomb {
 	public int value() {
 		//prices of ingredients
 		return quantity * (20 + 30);
+	}
+
+	public static class ResistTracker extends FlavourBuff {
+		{
+			type = buffType.NEGATIVE;
+		}
+
+		@Override
+		public int icon() {
+			return BuffIndicator.FROST;
+		}
+
+		@Override
+		public void tintIcon(Image icon) {
+			icon.hardlight(0x4dcfff);
+		}
 	}
 }

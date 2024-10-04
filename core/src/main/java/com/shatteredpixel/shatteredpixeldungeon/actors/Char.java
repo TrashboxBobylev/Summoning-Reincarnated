@@ -99,6 +99,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.stationary.G
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
@@ -106,6 +107,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Potential;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.FrostBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
@@ -483,7 +485,12 @@ public abstract class Char extends Actor {
 			}
 			if (visibleFight) {
 				if (effectiveDamage > 0 || !enemy.blockSound(Random.Float(0.96f, 1.05f))) {
-					hitSound(Random.Float(0.87f, 1.15f));
+					if (enemy.buff(FrostBomb.ResistTracker.class) != null){
+						Splash.at( enemy.sprite.center(), 0xFFB2D6FF, 3 );
+						Sample.INSTANCE.play( Assets.Sounds.SHATTER, 1, 2f );
+					} else {
+						hitSound(Random.Float(0.87f, 1.15f));
+					}
 				}
 			}
 
@@ -533,7 +540,9 @@ public abstract class Char extends Actor {
 			}
 
 			if (enemy.sprite != null) {
-				enemy.sprite.bloodBurstA(sprite.center(), effectiveDamage);
+				if (enemy.buff(FrostBomb.ResistTracker.class) == null) {
+					enemy.sprite.bloodBurstA(sprite.center(), effectiveDamage);
+				}
 				enemy.sprite.flash();
 			}
 
@@ -767,7 +776,7 @@ public abstract class Char extends Actor {
 			if (c != null) {
 				c.recover(src);
 			}
-			if (this.buff(Frost.class) != null) {
+			if (this.buff(Frost.class) != null && this.buff(FrostBomb.ResistTracker.class) == null) {
 				Buff.detach(this, Frost.class);
 			}
 			if (this.buff(MagicalSleep.class) != null) {
@@ -1218,6 +1227,9 @@ public abstract class Char extends Actor {
 			if (areRelated(effect, c)){
 				result *= 0.5f;
 			}
+		}
+		if (buff(FrostBomb.ResistTracker.class) != null && effect != FrostBomb.ResistTracker.class){
+			result *= 0.5f;
 		}
 		return result * RingOfElements.resist(this, effect);
 	}
