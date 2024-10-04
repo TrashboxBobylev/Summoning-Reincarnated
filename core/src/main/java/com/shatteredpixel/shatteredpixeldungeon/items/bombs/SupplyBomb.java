@@ -28,9 +28,11 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
@@ -104,6 +106,7 @@ public class SupplyBomb extends Bomb {
                         if (true/*Dungeon.mode != Dungeon.GameMode.HELL*/) {
                             CellEmitter.get(i).burst(Speck.factory(Speck.HEALING), 1);
                             Dungeon.hero.HP = Math.min(Dungeon.hero.HP + 2, Dungeon.hero.HT);
+                            target.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(2), FloatingText.HEALING);
                         }
                         Hunger.adjustHunger(18f);
                     }
