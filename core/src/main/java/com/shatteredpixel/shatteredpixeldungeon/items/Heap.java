@@ -37,7 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
-import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ShockBomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ElectricalExplosive;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.ChargrilledMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.FrozenCarpaccio;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
@@ -237,7 +237,7 @@ public class Heap implements Bundlable {
 					replace(item, ChargrilledMeat.cook(item.quantity));
 				}
 				burnt = true;
-			}else if (item instanceof Bomb && !(item instanceof ShockBomb)) {
+			}else if (item instanceof Bomb && !(item instanceof ElectricalExplosive)) {
 				items.remove( item );
 				((Bomb) item).explode( pos );
 				if (((Bomb) item).explodesDestructively()) {
