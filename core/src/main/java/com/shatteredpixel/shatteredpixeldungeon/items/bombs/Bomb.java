@@ -455,7 +455,7 @@ public class Bomb extends Item {
 			bombCosts.put(ElectricalExplosive.class, 4);
 
 			bombCosts.put(RegrowthBomb.class,   3);
-			bombCosts.put(HolyBomb.class,       3);
+			bombCosts.put(HolyBomb.class,       8);
 			bombCosts.put(Webbomb.class,        3);
 			bombCosts.put(SupplyBomb.class,     1);
 
