@@ -40,7 +40,7 @@ public class SupplyBomb extends Bomb {
 
     {
         image = ItemSpriteSheet.SUPPLY_BOMB;
-        fuseDelay = 50;
+        fuseDelay = 25;
         harmless = true;
         fuseTriggerClass = Trigger.class;
     }
@@ -103,9 +103,9 @@ public class SupplyBomb extends Bomb {
                     if (PathFinder.distance[i] < Integer.MAX_VALUE && Dungeon.hero.pos == i) {
                         if (true/*Dungeon.mode != Dungeon.GameMode.HELL*/) {
                             CellEmitter.get(i).burst(Speck.factory(Speck.HEALING), 1);
-                            Dungeon.hero.HP = Math.min(Dungeon.hero.HP + 1, Dungeon.hero.HT);
+                            Dungeon.hero.HP = Math.min(Dungeon.hero.HP + 2, Dungeon.hero.HT);
                         }
-                        Hunger.adjustHunger(8f);
+                        Hunger.adjustHunger(18f);
                     }
                 }
 
