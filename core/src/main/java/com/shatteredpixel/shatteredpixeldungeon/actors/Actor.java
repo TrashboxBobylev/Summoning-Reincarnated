@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.EffectTarget;
 import com.watabou.noosa.Game;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
@@ -373,7 +374,7 @@ public abstract class Actor implements Bundlable {
 	
 	public static synchronized Char findChar( int pos ) {
 		for (Char ch : chars){
-			if (ch.pos == pos)
+			if (ch.pos == pos && !(ch instanceof EffectTarget))
 				return ch;
 		}
 		return null;
