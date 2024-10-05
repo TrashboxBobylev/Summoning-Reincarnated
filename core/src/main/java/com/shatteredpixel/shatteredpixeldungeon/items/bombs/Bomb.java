@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfFrost;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.UnstableBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImage;
@@ -442,7 +443,9 @@ public class Bomb extends Item {
 
 			validIngredients.put(ScrollOfTerror.class,          Webbomb.class);
 			validIngredients.put(Food.class,                    SupplyBomb.class);
+
 			validIngredients.put(ScrollOfPassage.class,         ShrinkingBomb.class);
+			validIngredients.put(UnstableBrew.class,            ChaoticBomb.class);
 		}
 		
 		private static final HashMap<Class<?extends Bomb>, Integer> bombCosts = new HashMap<>();
@@ -465,6 +468,7 @@ public class Bomb extends Item {
 			bombCosts.put(ShrapnelBomb.class,   6);
 
 			bombCosts.put(ShrinkingBomb.class,  6);
+			bombCosts.put(ChaoticBomb.class,    5);
 		}
 		
 		@Override
