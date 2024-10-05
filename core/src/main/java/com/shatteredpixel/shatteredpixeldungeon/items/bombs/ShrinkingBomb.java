@@ -42,7 +42,7 @@ import java.util.ArrayList;
 public class ShrinkingBomb extends Bomb {
 
 	{
-		image = ItemSpriteSheet.WOOLY_BOMB;
+		image = ItemSpriteSheet.SHRINK_BOMB;
 		harmless = true;
 		fuseDelay = 0;
 	}

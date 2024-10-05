@@ -46,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibili
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
@@ -425,7 +426,7 @@ public class Bomb extends Item {
 		public static final LinkedHashMap<Class<?extends Item>, Class<?extends Bomb>> validIngredients = new LinkedHashMap<>();
 		static {
 			validIngredients.put(PotionOfFrost.class,           FrostBomb.class);
-			validIngredients.put(ScrollOfPassage.class,         WoollyBomb.class);
+			validIngredients.put(ScrollOfMirrorImage.class,     WoollyBomb.class);
 			
 			validIngredients.put(PotionOfLiquidFlame.class,     Firebomb.class);
 			validIngredients.put(ScrollOfRage.class,            Noisemaker.class);
@@ -439,8 +440,9 @@ public class Bomb extends Item {
 			validIngredients.put(GooBlob.class,                 ArcaneBomb.class);
 			validIngredients.put(MetalShard.class,              ShrapnelBomb.class);
 
-			validIngredients.put(ScrollOfTerror.class,       Webbomb.class);
-			validIngredients.put(Food.class,                 SupplyBomb.class);
+			validIngredients.put(ScrollOfTerror.class,          Webbomb.class);
+			validIngredients.put(Food.class,                    SupplyBomb.class);
+			validIngredients.put(ScrollOfPassage.class,         ShrinkingBomb.class);
 		}
 		
 		private static final HashMap<Class<?extends Bomb>, Integer> bombCosts = new HashMap<>();
@@ -461,6 +463,8 @@ public class Bomb extends Item {
 
 			bombCosts.put(ArcaneBomb.class,     6);
 			bombCosts.put(ShrapnelBomb.class,   6);
+
+			bombCosts.put(ShrinkingBomb.class,  6);
 		}
 		
 		@Override
