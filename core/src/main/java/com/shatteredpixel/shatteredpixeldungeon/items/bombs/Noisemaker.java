@@ -59,11 +59,11 @@ public class Noisemaker extends Bomb {
 				Char ch = Actor.findChar(i);
 				if (ch != null) {
 					//trace a ballistica to our target (which will also extend past them
-					Ballistica trajectory = new Ballistica(ch.pos, cell, Ballistica.PROJECTILE);
+					Ballistica trajectory = new Ballistica(cell, ch.pos, Ballistica.PROJECTILE);
 					//trim it to just be the part that goes past them
 					trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size()-1), Ballistica.PROJECTILE);
 					//knock them back along that ballistica
-					WandOfBlastWave.throwChar(ch, trajectory, Math.round(3/**Bomb.nuclearBoost()*/), true, true, this);
+					WandOfBlastWave.throwChar(ch, trajectory, Math.round(4/**Bomb.nuclearBoost()*/), true, true, this);
 				}
 			}
 		}
