@@ -42,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
@@ -91,6 +92,7 @@ public class ElectricalExplosive extends Bomb {
 				if (heap.items.contains(bomb)) {
 
 					bomb.explode(heap.pos);
+					Catalog.countUse(bomb.getClass());
 
 					diactivate();
 					Actor.remove(this);

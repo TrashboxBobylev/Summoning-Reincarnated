@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.BArray;
@@ -72,6 +73,7 @@ public class SupplyBomb extends Bomb {
         public void set(int cell){
             floor = Dungeon.depth;
             this.cell = cell;
+            Catalog.countUse(SupplyBomb.class);
         }
 
         @Override
