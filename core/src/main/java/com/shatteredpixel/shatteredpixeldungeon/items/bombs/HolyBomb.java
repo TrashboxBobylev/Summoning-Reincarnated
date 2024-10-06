@@ -110,7 +110,7 @@ public class HolyBomb extends Bomb.ConjuredBomb {
 			}
 			if (ch.alignment == Char.Alignment.ALLY && !(ch instanceof Hero)){
 				Buff.affect(ch, Bless.class, 25f * multiplier);
-			} else {
+			} else if (!(ch instanceof Hero)) {
 				ch.damage(damage, new HolyDamage());
 				Buff.affect(ch, Blindness.class, 8f * multiplier);
 				if (ch.properties().contains(Char.Property.UNDEAD) || ch.properties().contains(Char.Property.DEMONIC)){
