@@ -46,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportat
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponEnchantable;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -383,6 +384,8 @@ public abstract class Staff extends Item implements AttunementItem, Rankable, We
         updateQuickslot();
 
         curUser.spendAndNext( 1f );
+
+        Catalog.countUse(getClass());
     }
 
     public void onSummoningMinion(Minion minion){ }
