@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Bundle;
@@ -153,9 +154,13 @@ public class Minion extends Mob {
     protected boolean act() {
         updateStaff();
         if (staff == null
+                || Dungeon.hero == null
                 || !Dungeon.hero.belongings.contains(staff)
                 || Dungeon.hero.buff(MagicImmune.class) != null){
             damage(1, new DriedRose.GhostHero.NoRoseDamage());
+        }
+        if (Dungeon.level.heroFOV[pos]){
+            Bestiary.setSeen(getClass());
         }
 
         if (!isAlive()) {
@@ -262,6 +267,10 @@ public class Minion extends Mob {
     @Override
     public String description() {
         String d = super.description();
+        if (Dungeon.hero == null
+                || !Dungeon.hero.belongings.contains(staff)){
+            return d;
+        }
         float empowering = 1f;
 //        if (Dungeon.hero.buff(Attunement.class) != null) empowering = Attunement.empowering();
         return String.format("%s\n\n%s\n\n%s", d, Messages.get(Minion.class, "stats",

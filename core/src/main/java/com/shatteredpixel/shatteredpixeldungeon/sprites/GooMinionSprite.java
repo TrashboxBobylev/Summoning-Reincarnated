@@ -69,9 +69,11 @@ public class GooMinionSprite extends MobSprite {
 		play(idle);
 
 		spray = centerEmitter();
-		spray.autoKill = false;
-		spray.pour( GooInfuseParticle.initWithColor(0x000000), 0.04f );
-		spray.on = false;
+		if (spray != null) {
+			spray.autoKill = false;
+			spray.pour(GooInfuseParticle.initWithColor(0x000000), 0.04f);
+			spray.on = false;
+		}
         brightness(1.25f);
 	}
 
