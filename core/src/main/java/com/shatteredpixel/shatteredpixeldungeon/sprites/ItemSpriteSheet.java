@@ -719,7 +719,7 @@ public class ItemSpriteSheet {
 	public static final int BREW_BLIZZARD   = BREWS+1;
 	public static final int BREW_SHOCKING   = BREWS+2;
 	public static final int BREW_CAUSTIC    = BREWS+3;
-	public static final int BREW_FROSTBURN	= BREWS+4;
+	public static final int BREW_FROSTBURN	= BREWS+6;
 	public static final int BREW_AQUA       = BREWS+4;
 	public static final int BREW_UNSTABLE   = BREWS+5;
 
@@ -731,7 +731,7 @@ public class ItemSpriteSheet {
 	public static final int ELIXIR_TOXIC    = ELIXIRS+4;
 	public static final int ELIXIR_ICY      = ELIXIRS+5;
 	public static final int ELIXIR_ARCANE   = ELIXIRS+6;
-	public static final int ELIXIR_ATTUNED  = ELIXIRS+7;
+	public static final int ELIXIR_ATTUNED  = ELIXIRS-1;
 	public static final int ELIXIR_FEATHER  = ELIXIRS+7;
 	static{
 		for (int i = BREWS; i < BREWS+16; i++)
