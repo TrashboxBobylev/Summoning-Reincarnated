@@ -279,7 +279,10 @@ public class Bomb extends Item {
 			Webbomb.class,
 			ElectricalExplosive.class,
 			Noisemaker.class,
-			SmokeBomb.class
+			SmokeBomb.class,
+			SupplyBomb.class,
+			ShrinkingBomb.class,
+			ChaoticBomb.class
 	};
 
 	@Override
