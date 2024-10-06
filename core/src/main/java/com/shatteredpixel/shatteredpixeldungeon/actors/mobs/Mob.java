@@ -302,16 +302,6 @@ public abstract class Mob extends Char {
 		return false;
 	}
 
-	public void doWithHordeMinions(MoblikeCallback action){
-		if (hordeHead == -1) {
-			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
-				if (mob.id() != id() && mob.hordeHead == id()) {
-					action.call(mob);
-				}
-			}
-		}
-	}
-
 	public void hordeSpawnAttempt(Level level){
 		if (!hordeSpawned && hordeException() && Random.Int(5) == 0 && !Dungeon.bossLevel() && alignment == Alignment.ENEMY){
 
@@ -900,12 +890,16 @@ public abstract class Mob extends Char {
 		if (state != PASSIVE){
 			state = HUNTING;
 		}
-		doWithHordeMinions((minion) -> {
-			minion.enemy = ch;
-			if (minion.state != PASSIVE){
-				minion.state = HUNTING;
+		if (hordeHead == -1) {
+			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+				if (mob.id() != id() && mob.hordeHead == id()) {
+                    mob.enemy = ch;
+                    if (mob.state != PASSIVE) {
+                        mob.state = HUNTING;
+                    }
+                }
 			}
-		});
+		}
 	}
 
 	public void clearEnemy(){
@@ -936,11 +930,15 @@ public abstract class Mob extends Char {
 			}
 			if (state != HUNTING && !(src instanceof Corruption)) {
 				alerted = true;
-				doWithHordeMinions((minion) -> {
-					minion.state = state;
-					minion.alerted = true;
-					minion.target = target;
-				});
+				if (hordeHead == -1) {
+					for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+						if (mob.id() != id() && mob.hordeHead == id()) {
+                            mob.state = state;
+                            mob.alerted = true;
+                            mob.target = target;
+                        }
+					}
+				}
 			}
 			if (hordeHead != -1 && Actor.findById(hordeHead) != null){
 				Mob hordeHead = (Mob) Actor.findById(this.hordeHead);
@@ -1037,12 +1035,16 @@ public abstract class Mob extends Char {
 
 		boolean soulMarked = buff(SoulMark.class) != null;
 
-		doWithHordeMinions((minion) -> {
-			minion.state = minion.HUNTING;
-			minion.enemy = enemy;
-			minion.alerted = true;
-			minion.beckon(target);
-		});
+		if (hordeHead == -1) {
+			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+				if (mob.id() != id() && mob.hordeHead == id()) {
+                    mob.state = mob.HUNTING;
+                    mob.enemy = enemy;
+                    mob.alerted = true;
+                    mob.beckon(target);
+                }
+			}
+		}
 
 		super.die( cause );
 
@@ -1285,7 +1287,13 @@ public abstract class Mob extends Char {
 				state = WANDERING;
 				target = Dungeon.level.randomDestination( Mob.this );
 			}
-			doWithHordeMinions((minion) -> minion.beckon(target));
+			if (hordeHead == -1) {
+				for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+					if (mob.id() != id() && mob.hordeHead == id()) {
+						mob.beckon(target);
+					}
+				}
+			}
 
 			if (alignment == Alignment.ENEMY && Dungeon.isChallenged(Challenges.SWARM_INTELLIGENCE)) {
 				for (Mob mob : Dungeon.level.mobs) {
@@ -1325,7 +1333,13 @@ public abstract class Mob extends Char {
 			state = HUNTING;
 			target = enemy.pos;
 
-			doWithHordeMinions((minion) -> minion.beckon(target));
+			if (hordeHead == -1) {
+				for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+					if (mob.id() != id() && mob.hordeHead == id()) {
+						mob.beckon(target);
+					}
+				}
+			}
 
 			if (alignment == Alignment.ENEMY && Dungeon.isChallenged( Challenges.SWARM_INTELLIGENCE )) {
 				for (Mob mob : Dungeon.level.mobs) {
@@ -1349,7 +1363,13 @@ public abstract class Mob extends Char {
 				return moveSprite( oldPos, pos );
 			} else {
 				target = randomDestination();
-				doWithHordeMinions((minion) -> minion.beckon(target));
+				if (hordeHead == -1) {
+					for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+						if (mob.id() != id() && mob.hordeHead == id()) {
+							mob.beckon(target);
+						}
+					}
+				}
 				spend( TICK );
 			}
 			
