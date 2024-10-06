@@ -26,8 +26,11 @@ package com.shatteredpixel.shatteredpixeldungeon.items.bombs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Web;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.WebParticle;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -55,6 +58,10 @@ public class Webbomb extends Bomb {
                     GameScene.add(Blob.seed(i, Math.round(5/**Bomb.nuclearBoost()*/), Web.class));
                 else
                     GameScene.add(Blob.seed(i, Math.round(30/**Bomb.nuclearBoost()*/), Web.class));
+                if (Actor.findChar(i) != null){
+                    //66% of poison dart's damage
+                    Buff.affect(Actor.findChar(i), Poison.class).extend(5 + Math.round(Dungeon.scalingDepth()*0.4356f));
+                }
                 CellEmitter.get(i).burst(WebParticle.FACTORY, 3);
             }
         }
