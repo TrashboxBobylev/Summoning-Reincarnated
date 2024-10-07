@@ -47,7 +47,7 @@ jobs:
         # ID used to access action output
         id: sign_app
         with:
-          releaseDirectory: android/build/outputs/apk/debug
+          releaseDirectory: android/build/outputs/apk/release
           signingKeyBase64: ${{ secrets.SIGNING_KEY }}
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
@@ -56,7 +56,7 @@ jobs:
           BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
 
       - name: Rename APK
-        run: mv android/build/outputs/apk/debug/android-debug-unsigned-signed.apk android/build/outputs/apk/debug/android-debug.apk
+        run: mv android/build/outputs/apk/release/android-release-unsigned-signed.apk android/build/outputs/apk/release/android-release.apk
 
       - name: Upload as Pre-release
         uses: "marvinpinto/action-automatic-releases@latest"
@@ -66,8 +66,13 @@ jobs:
           prerelease: true
           title: "${{ env.version }}"
           files: |
-              android/build/outputs/apk/debug/android-debug.apk
+              android/build/outputs/apk/release/android-release.apk
               desktop/build/libs/*.jar
+      - name: Remove unsigned apk
+        run: rm android/build/outputs/apk/release/android-release-unsigned.apk
+
+      - name: Remove unsigned apk
+        run: rm android/build/outputs/apk/release/android-release-unsigned-aligned.apk
 
       - name: Remove signing key
         run: rm android/build/outputs/apk/release/signingKey.jks
