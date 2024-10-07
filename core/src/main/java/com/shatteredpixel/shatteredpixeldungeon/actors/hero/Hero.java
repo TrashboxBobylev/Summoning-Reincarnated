@@ -231,6 +231,8 @@ public class Hero extends Char {
 	public int STR;
 	public int ATU;
 
+	public int mana;
+
 	public float awareness;
 	
 	public int lvl = 1;
@@ -311,6 +313,10 @@ public class Hero extends Char {
 		return ATU + attunementBonus;
 	}
 
+	public int maxMana(){
+		return (Dungeon.hero.lvl + 3)*5;
+	}
+
 	private static final String CLASS       = "class";
 	private static final String SUBCLASS    = "subClass";
 	private static final String ABILITY     = "armorAbility";
@@ -322,6 +328,7 @@ public class Hero extends Char {
 	private static final String LEVEL		= "lvl";
 	private static final String EXPERIENCE	= "exp";
 	private static final String HTBOOST     = "htboost";
+	private static final String MANA	    = "mana";
 	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -343,6 +350,8 @@ public class Hero extends Char {
 		bundle.put( EXPERIENCE, exp );
 		
 		bundle.put( HTBOOST, HTBoost );
+
+		bundle.put( MANA, mana );
 
 		belongings.storeInBundle( bundle );
 	}
@@ -367,6 +376,7 @@ public class Hero extends Char {
 		
 		STR = bundle.getInt( STRENGTH );
 		ATU = bundle.getInt(ATTUNEMENT);
+		mana = bundle.getInt( MANA );
 
 		belongings.restoreFromBundle( bundle );
 	}

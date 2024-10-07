@@ -70,6 +70,7 @@ public class MenuPane extends Component {
 	private Image conduct;
 
 	private DangerIndicator danger;
+	private ManaIndicator mana;
 
 	public static final int WIDTH = 32;
 
@@ -154,6 +155,9 @@ public class MenuPane extends Component {
 		danger = new DangerIndicator();
 		add( danger );
 
+		mana = new ManaIndicator();
+		add( mana );
+
 		add( pickedUp = new Toolbar.PickedUpItem());
 	}
 
@@ -206,6 +210,8 @@ public class MenuPane extends Component {
 		}
 
 		danger.setPos( x + WIDTH - danger.width(), y + bg.height + 3 );
+		mana.setPos(x + WIDTH - mana.width(),
+				y + (challengeIcon != null ? challengeIcon.y : danger.centerY() + danger.height()/2) + 3);
 	}
 
 	public void pickup(Item item, int cell) {
