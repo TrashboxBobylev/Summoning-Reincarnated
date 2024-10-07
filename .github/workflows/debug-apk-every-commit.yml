@@ -56,7 +56,7 @@ jobs:
           BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
 
       - name: Rename APK
-        run: mv android/build/outputs/apk/debug/android-debug-unsigned-signed.apk android/build/outputs/apk/debug/android-debug.apk
+        run: mv android/build/outputs/apk/debug/android-debug-signed.apk android/build/outputs/apk/debug/android-debug.apk
 
       - name: Upload as Pre-release
         uses: "marvinpinto/action-automatic-releases@latest"
