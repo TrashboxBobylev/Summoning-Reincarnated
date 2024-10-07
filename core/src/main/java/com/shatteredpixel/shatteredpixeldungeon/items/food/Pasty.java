@@ -50,7 +50,8 @@ public class Pasty extends Food {
 	{
 		reset();
 
-		energy = Hunger.STARVING;
+		energy = Hunger.HUNGRY;
+		regen = 25;
 
 		bones = true;
 	}

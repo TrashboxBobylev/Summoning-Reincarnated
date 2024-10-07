@@ -38,7 +38,7 @@ public class PhantomMeat extends Food {
 
 	{
 		image = ItemSpriteSheet.PHANTOM_MEAT;
-		energy = Hunger.STARVING;
+		energy = Hunger.STARVING/2f;
 	}
 
 	@Override

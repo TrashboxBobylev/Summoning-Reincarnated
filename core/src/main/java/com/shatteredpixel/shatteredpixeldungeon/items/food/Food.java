@@ -30,6 +30,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FoodDebuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FoodRegen;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -51,7 +53,8 @@ public class Food extends Item {
 	
 	public static final String AC_EAT	= "EAT";
 	
-	public float energy = Hunger.HUNGRY;
+	public float energy = Hunger.STARVING/2f;
+	public int regen = 0;
 	
 	{
 		stackable = true;
@@ -127,6 +130,21 @@ public class Food extends Item {
 		}
 
 		Buff.affect(hero, Hunger.class).satisfy(foodVal);
+
+		if (regen > 0) Buff.affect(hero, FoodRegen.class).fullHP = regen;
+		if (regen < 0) Buff.affect(hero, FoodDebuff.class).fullHP = -regen;
+	}
+
+	@Override
+	public String desc() {
+		String desc = super.desc();
+		if (regen != 0) {
+			desc += Messages.get(Food.class, "stats", Math.round(energy / 10), regen);
+		} else {
+			desc += Messages.get(Food.class, "stats_regular", Math.round(energy / 10));
+		}
+
+		return desc;
 	}
 	
 	@Override

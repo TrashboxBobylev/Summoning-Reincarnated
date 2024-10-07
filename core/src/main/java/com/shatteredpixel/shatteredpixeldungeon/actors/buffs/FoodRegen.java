@@ -2,11 +2,11 @@
  * Pixel Dungeon
  * Copyright (C) 2012-2015 Oleg Dolya
  *
- * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ *  Shattered Pixel Dungeon
+ *  Copyright (C) 2014-2022 Evan Debenham
  *
- * Summoning Pixel Dungeon Reincarnated
- * Copyright (C) 2023-2025 Trashbox Bobylev
+ * Summoning Pixel Dungeon
+ * Copyright (C) 2019-2022 TrashboxBobylev
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,91 +24,91 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
-import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.SaltCube;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.utils.Bundle;
 
-public class WellFed extends Buff {
-
+public class FoodRegen extends Buff {
+	
 	{
 		type = buffType.POSITIVE;
 		announced = true;
+		actPriority = HERO_PRIO - 1;
 	}
-	
+
+	//food regen always lasts 50 turns
 	int left;
+	public int fullHP;
+	public int initialHP;
+    float partialHP;
 	
 	@Override
 	public boolean act() {
-		left --;
-		if (left < 0){
+		left++;
+		if (left > 50){
 			detach();
-			if (target instanceof Hero) {
-				((Hero) target).resting = false;
-			}
 			return true;
-		} else if (left % 18 == 0 && target.HP < target.HT){
-			target.HP += 1;
-			target.sprite.showStatusWithIcon(CharSprite.POSITIVE, "1", FloatingText.HEALING);
-
-			if (target.HP == target.HT && target instanceof Hero) {
-				((Hero) target).resting = false;
+		} else {
+			partialHP += fullHP / 50f;
+			while (partialHP > 1){
+				target.HP = Math.min(target.HP + 1, target.HT);
+				partialHP--;
+				target.sprite.showStatusWithIcon(CharSprite.POSITIVE, "1", FloatingText.HEALING);
 			}
 		}
-
-		//salt cube does slow this buff down, but doesn't lessen the bonus health
-		spend(TICK / SaltCube.hungerGainMultiplier());
+		
+		spend(TICK);
 		return true;
 	}
-	
-	public void reset(){
-		//heals one HP every 18 turns for 1000 turns
-		//55 HP healed in total
-		left = (int)Hunger.STARVING;
-		if (Dungeon.isChallenged(Challenges.NO_FOOD)){
-			//150 turns if on diet is enabled
-			left /= 3;
-		}
+
+	public void set(int health){
+		initialHP = fullHP = health;
 	}
 	
 	@Override
 	public int icon() {
-		return BuffIndicator.WELL_FED;
-	}
-
-	@Override
-	public float iconFadePercent() {
-		return Math.max(0, (Hunger.STARVING - left) / Hunger.STARVING);
-	}
-
-	@Override
-	public String iconTextDisplay() {
-		int visualLeft = (int)(left / SaltCube.hungerGainMultiplier());
-		return Integer.toString(visualLeft+1);
+		return BuffIndicator.FOOD_REGEN;
 	}
 	
 	@Override
 	public String desc() {
-		int visualLeft = (int)(left / SaltCube.hungerGainMultiplier());
-		return Messages.get(this, "desc", visualLeft + 1);
+		return Messages.get(this, "desc", initialHP, 51 - left);
 	}
-	
+
+	@Override
+	public float iconFadePercent() {
+		return 1 - (left / 50f);
+	}
+
+	@Override
+	public String iconTextDisplay() {
+		return Integer.toString(fullHP);
+	}
+
 	private static final String LEFT = "left";
+	private static final String HP = "hp";
+	private static final String FULLHP = "fullHP";
 	
 	@Override
 	public void storeInBundle(Bundle bundle) {
 		super.storeInBundle(bundle);
 		bundle.put(LEFT, left);
+		bundle.put(FULLHP, fullHP);
 	}
 	
 	@Override
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
 		left = bundle.getInt(LEFT);
+		fullHP = bundle.getInt(FULLHP);
+		//if bundle includes negative leftHP, turn into debuff
+		if (bundle.contains(HP)){
+			if (bundle.getInt(HP) < 0){
+				detach();
+				Buff.affect(target, FoodDebuff.class).fullHP = -bundle.getInt(HP);
+			}
+		}
 	}
 }

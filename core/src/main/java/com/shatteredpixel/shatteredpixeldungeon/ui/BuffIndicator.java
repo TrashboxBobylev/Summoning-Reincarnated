@@ -129,6 +129,8 @@ public class BuffIndicator extends Component {
 	public static final int KARMA       = 74;
 	public static final int ERADICATION = 75;
 	public static final int FROSTBURN   = 76;
+	public static final int FOOD_REGEN  = 77;
+	public static final int FOOD_DEBUFF = 78;
 
 	public static final int SIZE_SMALL  = 7;
 	public static final int SIZE_LARGE  = 16;

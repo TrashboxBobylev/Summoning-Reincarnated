@@ -1023,7 +1023,7 @@ public class Hero extends Char {
 
 		if (getCloser( action.dst )) {
 			canSelfTrample = false;
-			Hunger.adjustHunger(-1.25f/speed());
+			Hunger.adjustHunger(-1.33f/speed());
 			return true;
 
 		//Hero moves in place if there is grass to trample
@@ -1031,7 +1031,7 @@ public class Hero extends Char {
 			canSelfTrample = false;
 			Dungeon.level.pressCell(pos);
 			spendAndNext( 1 / speed() );
-			Hunger.adjustHunger(-1.25f/speed());
+			Hunger.adjustHunger(-1.33f/speed());
 			return false;
 		} else {
 			ready();
@@ -1425,7 +1425,7 @@ public class Hero extends Char {
 
 			if (Dungeon.level.activateTransition(this, transition)){
 				curAction = null;
-				Hunger.adjustHunger(-25/speed());
+				Hunger.adjustHunger(-30/speed());
 			} else {
 				ready();
 			}
@@ -2373,7 +2373,7 @@ public class Hero extends Char {
 			Buff.affect( this, Sai.ComboStrikeTracker.class).addHit();
 		}
 
-        Hunger.adjustHunger(-3f*attackDelay());
+        Hunger.adjustHunger(-2.5f*attackDelay());
 
         curAction = null;
 

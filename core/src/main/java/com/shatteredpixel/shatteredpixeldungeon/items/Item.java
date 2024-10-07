@@ -135,7 +135,7 @@ public class Item implements Bundlable {
 			
 			GameScene.pickUp( this, pos );
 			Sample.INSTANCE.play( Assets.Sounds.ITEM );
-			Hunger.adjustHunger(-1.75f);
+			Hunger.adjustHunger(-2f);
 			hero.spendAndNext( TIME_TO_PICK_UP );
 			return true;
 			
@@ -659,7 +659,7 @@ public class Item implements Bundlable {
 		QuickSlotButton.target(enemy);
 		
 		final float delay = castDelay(user, dst);
-		Hunger.adjustHunger(-2.5f*delay);
+		Hunger.adjustHunger(-3f*delay);
 
 		if (enemy != null) {
 			((MissileSprite) user.sprite.parent.recycle(MissileSprite.class)).
