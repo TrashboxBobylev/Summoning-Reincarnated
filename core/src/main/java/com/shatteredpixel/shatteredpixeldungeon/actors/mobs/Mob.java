@@ -902,8 +902,8 @@ public abstract class Mob extends Char {
 		}
 		doWithHordeMinions((minion) -> {
 			minion.enemy = ch;
-			if (minion.state != PASSIVE){
-				minion.state = HUNTING;
+			if (minion.state != minion.PASSIVE){
+				minion.state = minion.HUNTING;
 			}
 		});
 	}
@@ -937,7 +937,13 @@ public abstract class Mob extends Char {
 			if (state != HUNTING && !(src instanceof Corruption)) {
 				alerted = true;
 				doWithHordeMinions((minion) -> {
-					minion.state = state;
+					if (state == HUNTING){
+						minion.state = minion.HUNTING;
+					} else if (state == WANDERING){
+						minion.state = minion.WANDERING;
+					} else if (state == FLEEING){
+						minion.state = minion.FLEEING;
+					}
 					minion.alerted = true;
 					minion.target = target;
 				});
