@@ -81,8 +81,6 @@ public class Regeneration extends Buff {
 			ChaliceOfBlood.chaliceRegen regenBuff = Dungeon.hero.buff( ChaliceOfBlood.chaliceRegen.class);
 
 			float delay = REGENERATION_DELAY;
-			if (Dungeon.isChallenged(Conducts.Conduct.KING) && target instanceof Hero) delay /= 2.5f;
-			if (target instanceof Mob) delay /= 3;
 			if (regenBuff != null && target.buff(MagicImmune.class) == null) {
 				if (regenBuff.isCursed()) {
 					delay *= 1.5f;
@@ -92,6 +90,8 @@ public class Regeneration extends Buff {
 					delay /= RingOfEnergy.artifactChargeMultiplier(target);
 				}
 			}
+			if (Dungeon.isChallenged(Conducts.Conduct.KING) && target instanceof Hero) delay /= 2.5f;
+			if (target instanceof Mob) delay /= 3;
 			delay /= SaltCube.healthRegenMultiplier();
 			spend( delay );
 			
