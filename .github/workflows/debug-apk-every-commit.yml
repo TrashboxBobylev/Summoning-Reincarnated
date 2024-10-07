@@ -31,7 +31,7 @@ jobs:
 
       # 2
       - name: Generate Release APK
-        run: ./gradlew android:assembleDebug
+        run: ./gradlew android:assembleRelease
       - name: Generate Release JAR
         run: ./gradlew desktop:release
       # 3
