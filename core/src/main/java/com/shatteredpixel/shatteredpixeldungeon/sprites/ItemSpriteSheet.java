@@ -411,6 +411,7 @@ public class ItemSpriteSheet {
 	public static final int ARMOR_DUELIST   = ARMOR+9;
 	public static final int ARMOR_SCOUT     = ARMOR+10;
 	public static final int ARMOR_ADVENTURER = ARMOR+11;
+	public static final int ARMOR_CONJURER  = ARMOR+12;
 	static{
 		assignItemRect(ARMOR_CLOTH,     15, 12);
 		assignItemRect(ARMOR_LEATHER,   14, 13);
@@ -424,6 +425,7 @@ public class ItemSpriteSheet {
 		assignItemRect(ARMOR_DUELIST,   12, 13);
 		assignItemRect(ARMOR_SCOUT,  13, 15);
 		assignItemRect(ARMOR_ADVENTURER, 14, 13);
+		assignItemRect(ARMOR_CONJURER,  15, 15);
 	}
 
 	private static final int STAFFS         =                               xy(1, 13);//15 free slots
@@ -860,6 +862,7 @@ public class ItemSpriteSheet {
 	public static final int BANDOLIER   = BAGS+4;
 	public static final int HOLSTER     = BAGS+5;
 	public static final int VIAL        = BAGS+6;
+	public static final int BOOK        = BAGS+7;
 	static{
 		assignItemRect(WATERSKIN,   16, 14);
 		assignItemRect(BACKPACK,    16, 16);
@@ -868,6 +871,7 @@ public class ItemSpriteSheet {
 		assignItemRect(BANDOLIER,   15, 16);
 		assignItemRect(HOLSTER,     15, 16);
 		assignItemRect(VIAL,        12, 12);
+		assignItemRect(BOOK,        13, 16);
 	}
 
 	private static final int DOCUMENTS  =                                   xy(1, 32);  //16 slots

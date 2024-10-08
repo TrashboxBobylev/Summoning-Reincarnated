@@ -93,7 +93,8 @@ public enum HeroClass {
 	ROGUE( HeroSubClass.ASSASSIN, HeroSubClass.FREERUNNER ),
 	HUNTRESS( HeroSubClass.SNIPER, HeroSubClass.WARDEN ),
 	DUELIST( HeroSubClass.CHAMPION, HeroSubClass.MONK ),
-	ADVENTURER(HeroSubClass.NONE);
+	ADVENTURER(HeroSubClass.NONE),
+	CONJURER(HeroSubClass.NONE);
 
 	private HeroSubClass[] subClasses;
 
@@ -341,7 +342,7 @@ public enum HeroClass {
 				return new ArmorAbility[]{new SpectralBlades(), new NaturesPower(), new SpiritHawk()};
 			case DUELIST:
 				return new ArmorAbility[]{new Challenge(), new ElementalStrike(), new Feint()};
-			case ADVENTURER:
+			case ADVENTURER: case CONJURER:
 				return new ArmorAbility[]{};
 		}
 	}
@@ -360,6 +361,8 @@ public enum HeroClass {
 				return Assets.Sprites.DUELIST;
 			case ADVENTURER:
 				return Assets.Sprites.ADVENTURER;
+			case CONJURER:
+				return Assets.Sprites.CONJURER;
 		}
 	}
 
@@ -377,6 +380,8 @@ public enum HeroClass {
 				return Assets.Splashes.DUELIST;
 			case ADVENTURER:
 				return Assets.Splashes.ADVENTURER;
+			case CONJURER:
+				return Assets.Splashes.CONJURER;
 		}
 	}
 	
