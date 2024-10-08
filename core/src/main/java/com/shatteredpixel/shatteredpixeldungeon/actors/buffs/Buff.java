@@ -62,6 +62,12 @@ public class Buff extends Actor {
 	public HashSet<Class> immunities() {
 		return new HashSet<>(immunities);
 	}
+
+	protected HashSet<Char.Property> properties = new HashSet<>();
+
+	public HashSet<Char.Property> properties() {
+		return new HashSet<>(properties);
+	}
 	
 	public boolean attachTo( Char target ) {
 
