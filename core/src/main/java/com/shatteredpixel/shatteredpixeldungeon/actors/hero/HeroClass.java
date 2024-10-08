@@ -192,6 +192,10 @@ public enum HeroClass {
 			case ADVENTURER:
 				initAdventurer(hero);
 				break;
+
+			case CONJURER:
+				initConjurer(hero);
+				break;
 		}
 
 		if (SPDSettings.quickslotWaterskin()) {
