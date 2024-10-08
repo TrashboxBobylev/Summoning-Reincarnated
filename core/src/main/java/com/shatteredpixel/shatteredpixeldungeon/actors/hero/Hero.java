@@ -119,6 +119,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.Key;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.Field;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.Necro;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.Shocker;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.Wave;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
@@ -144,6 +148,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cleaver;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Flail;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Knife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Quarterstaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RoundShield;
@@ -525,6 +530,23 @@ public class Hero extends Char {
 		if (hit && (heroClass == HeroClass.DUELIST || Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) && wasEnemy){
 			Buff.affect( this, Sai.ComboStrikeTracker.class).addHit();
 		}
+
+		return hit;
+	}
+
+	//same, but with knife
+	//I am lazy to implement interfaces
+	public boolean shoot(Char enemy, Knife knife) {
+
+		//temporarily set the hero's weapon to the missile weapon being used
+		KindOfWeapon equipped = belongings.weapon;
+		belongings.weapon = knife;
+		knife.ranged = true;
+		boolean hit = false;
+		if (enemy.alignment != Alignment.ALLY)
+			hit = attack( enemy );
+		Invisibility.dispel();
+		belongings.weapon = equipped;
 
 		return hit;
 	}
@@ -2050,6 +2072,14 @@ public class Hero extends Char {
 				updateHT( true );
 				attackSkill++;
 				defenseSkill++;
+
+				if (heroClass == HeroClass.CONJURER) {
+					if (lvl == 5) new com.shatteredpixel.shatteredpixeldungeon.items.magic.Barrier().identify().collectWithAnnouncing();
+					if (lvl == 7) new Wave().identify().collectWithAnnouncing();
+					if (lvl == 9) new Shocker().identify().collectWithAnnouncing();
+					if (lvl == 11) new Necro().identify().collectWithAnnouncing();
+					if (lvl == 15) new Field().identify().collectWithAnnouncing();
+				}
 
 			} else {
 				Buff.prolong(this, Bless.class, Bless.DURATION);

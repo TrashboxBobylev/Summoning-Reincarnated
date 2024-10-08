@@ -27,9 +27,11 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chungus;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.ArmoredShielding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -39,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
@@ -185,6 +188,7 @@ public class Minion extends Mob {
     @Override
     public int damageRoll() {
         int i = Random.NormalIntRange(minDamage, maxDamage);
+        if (buff(Chungus.class) != null) i*=1.4f;
         return augment.damageFactor(i);
     }
 
@@ -200,6 +204,8 @@ public class Minion extends Mob {
     }
 
     public int independenceRange(){
+        if (buff(ArmoredShielding.class) != null)
+            return 1000000;
         return 8;
     }
 
@@ -272,11 +278,22 @@ public class Minion extends Mob {
             return d;
         }
         float empowering = 1f;
+        if (buff(Chungus.class) != null) empowering *= 1.4f;
 //        if (Dungeon.hero.buff(Attunement.class) != null) empowering = Attunement.empowering();
         return String.format("%s\n\n%s\n\n%s", d, Messages.get(Minion.class, "stats",
                 augment.damageFactor(Math.round(minDamage * empowering)),
                 augment.damageFactor(Math.round(maxDamage * empowering)),
                 HP, HT, Messages.titleCase(Messages.get(Rankable.class, "rank" + (rank)))), Messages.get(Minion.class, "behavior_" + Messages.lowerCase(behaviorType.toString())));
+    }
+
+    @Override
+    public void updateSpriteState() {
+        super.updateSpriteState();
+        if (buff(ArmoredShielding.class) != null){
+            sprite.add(CharSprite.State.SHIELDED);
+        } else {
+            sprite.remove(CharSprite.State.SHIELDED);
+        }
     }
 
     public static Char whatToFollow(Char follower, Char start) {
@@ -294,6 +311,18 @@ public class Minion extends Mob {
             }
         }
         return toFollow;
+    }
+
+    @Override
+    protected boolean getCloser(int target) {
+        if (buff(ArmoredShielding.class) != null) return false;
+        return super.getCloser(target);
+    }
+
+    @Override
+    protected boolean getFurther(int target) {
+        if (buff(ArmoredShielding.class) != null) return false;
+        return super.getFurther(target);
     }
 
     @Override

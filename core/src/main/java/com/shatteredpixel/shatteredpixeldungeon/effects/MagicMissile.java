@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BloodParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.CorrosionParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FrostfireParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PoisonParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
@@ -76,6 +77,10 @@ public class MagicMissile extends Emitter {
 	public static final int ELMO            = 14;
 	public static final int POISON          = 15;
 	public static final int FROGGERS        = 16;
+
+	public static final int CRYSTAL         = 24;
+	public static final int CRYSTAL_SHARDS  = 25;
+	public static final int STAR            = 26;
 
 	public static final int MAGIC_MISS_CONE = 100;
 	public static final int FROST_CONE      = 101;
@@ -204,6 +209,18 @@ public class MagicMissile extends Emitter {
 			case FROGGERS:
 				size( 5 );
 				pour( WhiteParticle.FACTORY, 0.005f );
+				break;
+			case CRYSTAL:
+				size (9);
+				pour(CrystalParticle.FACTORY, 0.01f);
+				break;
+			case CRYSTAL_SHARDS:
+				size (6);
+				pour(CrystalParticle.SHARD, 0.01f);
+				break;
+			case STAR:
+				size( 4 );
+				pour( FrostfireParticle.FACTORY, 0.01f );
 				break;
 
 			case MAGIC_MISS_CONE:
@@ -651,6 +668,116 @@ public class MagicMissile extends Emitter {
 			super.update();
 			
 			am = 1 - left / lifespan;
+		}
+	}
+
+	public static class ConcentratedParticle extends PixelParticle {
+
+		public static final Emitter.Factory FACTORY = new Factory() {
+			@Override
+			public void emit( Emitter emitter, int index, float x, float y ) {
+				((ConcentratedParticle)emitter.recycle( ConcentratedParticle.class )).reset( x, y );
+			}
+			@Override
+			public boolean lightMode() {
+				return true;
+			}
+		};
+
+		public ConcentratedParticle() {
+			super();
+
+			color( 0x88CCFF );
+			lifespan = 3f;
+
+			speed.set( Random.Float( -0.03f, +0.03f ), Random.Float( -4, +4 ) );
+		}
+
+		public void reset( float x, float y ) {
+			revive();
+
+			this.x = x;
+			this.y = y;
+
+			left = lifespan;
+		}
+
+		public void resetAttract( float x, float y) {
+			revive();
+
+			//size = 8;
+			left = lifespan;
+
+			speed.polar( Random.Float( PointF.PI2 ), Random.Float( 16, 32 ) );
+			this.x = x - speed.x * lifespan;
+			this.y = y - speed.y * lifespan;
+		}
+
+		@Override
+		public void update() {
+			super.update();
+			// alpha: 1 -> 0; size: 1 -> 4
+			size( 8 );
+			am = left * 0.75f / lifespan;
+		}
+	}
+
+	public static class CrystalParticle extends PixelParticle.Shrinking {
+
+		public static final Emitter.Factory FACTORY = new Factory() {
+			@Override
+			public void emit( Emitter emitter, int index, float x, float y ) {
+				((WardParticle)emitter.recycle( WardParticle.class )).reset( x, y );
+			}
+			@Override
+			public boolean lightMode() {
+				return true;
+			}
+		};
+
+		static Integer[] colors = {0xFFe380e3, 0xFF9485c9};
+
+		public static final Emitter.Factory SHARD = new Factory() {
+			@Override
+			public void emit( Emitter emitter, int index, float x, float y ) {
+				((WardParticle)emitter.recycle( WardParticle.class )).resetUp( x, y );
+			}
+			@Override
+			public boolean lightMode() {
+				return true;
+			}
+		};
+
+		public CrystalParticle() {
+			super();
+
+			lifespan = 0.6f;
+
+			color( Random.element(colors) );
+		}
+
+		public void reset( float x, float y ) {
+			revive();
+
+			this.x = x;
+			this.y = y;
+			color( Random.element(colors) );
+
+			left = lifespan;
+			size = 12;
+		}
+
+		public void resetUp( float x, float y){
+			reset(x, y);
+
+			size = 8;
+		}
+
+		@Override
+		public void update() {
+			super.update();
+
+			am = Random.Float();
 		}
 	}
 }

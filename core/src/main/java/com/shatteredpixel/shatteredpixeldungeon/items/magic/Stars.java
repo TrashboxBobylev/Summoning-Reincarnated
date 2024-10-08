@@ -35,9 +35,9 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
-import com.shatteredpixel.shatteredpixeldungeon.utils.BArray;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
+import com.watabou.utils.BArray;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.PointF;
@@ -161,7 +161,7 @@ public class Stars extends ConjurerSpell {
             Emitter e = new Emitter();
             e.pos(6, 6);
             e.fillTarget = false;
-            e.pour(MagicMissile.YogParticle.FACTORY, 0.03f);
+            e.pour(MagicMissile.ConcentratedParticle.FACTORY, 0.03f);
             return e;
         }
     };

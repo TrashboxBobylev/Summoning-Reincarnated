@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
-import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -39,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
+import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
@@ -80,12 +80,19 @@ public class Wave extends ConjurerSpell {
                 Ballistica trajectory = new Ballistica(Dungeon.hero.pos, ch.pos, Ballistica.STOP_TARGET);
                 //trim it to just be the part that goes past them
                 trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size() - 1), Ballistica.FRIENDLY_PROJECTILE);
-                WandOfBlastWave.throwChar(ch, trajectory, 3);
+                WandOfBlastWave.throwChar(ch, trajectory, 3, true, true, this);
             } else if (ch.alignment == Char.Alignment.ALLY){
-                ArrayList<Integer> points = Level.getSpawningPoints(Dungeon.hero.pos);
-                if (!points.isEmpty()){
-                    ch.pos = Random.element(points);
-                    ScrollOfTeleportation.appear(ch, ch.pos);
+                ArrayList<Integer> respawnPoints = new ArrayList<Integer>();
+
+                for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
+                    int p = Dungeon.hero.pos + PathFinder.NEIGHBOURS8[i];
+                    if (Actor.findChar(p) == null && Dungeon.level.passable[p] && Dungeon.hero.pos != p) {
+                        respawnPoints.add(p);
+                    }
+                }
+                if (!respawnPoints.isEmpty()){
+                    ch.pos = Random.element(respawnPoints);
+                    ScrollOfTeleportation.teleportToLocation(ch, ch.pos);
                 }
             }
         }

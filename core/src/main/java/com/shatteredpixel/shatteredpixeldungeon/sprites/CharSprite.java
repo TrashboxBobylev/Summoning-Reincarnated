@@ -31,7 +31,9 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.DarkBlock;
 import com.shatteredpixel.shatteredpixeldungeon.effects.EmoIcon;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.effects.HolyAura;
 import com.shatteredpixel.shatteredpixeldungeon.effects.IceBlock;
+import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
@@ -85,7 +87,8 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	protected float shadowOffset    = 0.25f;
 
 	public enum State {
-		BURNING, LEVITATING, INVISIBLE, PARALYSED, FROZEN, ILLUMINATED, CHILLED, DARKENED, MARKED, HEALING, SHIELDED, HEARTS, SHRUNK, FROSTBURNING
+		BURNING, LEVITATING, INVISIBLE, PARALYSED, FROZEN, ILLUMINATED, CHILLED, DARKENED, MARKED, HEALING, SHIELDED, HEARTS,
+		SHRUNK, FROSTBURNING, SPIRIT, ENLARGED, AURA
 	}
 	private int stunStates = 0;
 	
@@ -107,6 +110,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	protected Emitter healing;
 	protected Emitter hearts;
 	protected Emitter frostburning;
+	protected Emitter spirit;
 	
 	protected IceBlock iceBlock;
 	protected DarkBlock darkBlock;
@@ -114,6 +118,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	protected ShieldHalo shield;
 	protected AlphaTweener invisible;
 	protected Flare aura;
+	protected HolyAura holyAura;
 	
 	protected EmoIcon emo;
 	protected CharHealthIndicator health;
@@ -421,12 +426,26 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 				scale.x = 0.75f;
 				scale.y = 0.75f;
 				break;
+			case ENLARGED:
+				scale.x = 1.5f;
+				scale.y = 1.5f;
+				break;
 			case FROSTBURNING:
 				frostburning = emitter();
 				frostburning.pour(Speck.factory( Speck.FROSTBURN, true ), 0.02f );
 				if (visible) {
 					Sample.INSTANCE.play( Assets.Sounds.BURNING );
 				}
+				break;
+			case SPIRIT:
+				spirit = emitter();
+				spirit.pour(MagicMissile.ForceParticle.FACTORY, 0.06f );
+				if (visible) {
+					Sample.INSTANCE.play( Assets.Sounds.BURNING );
+				}
+				break;
+			case AURA:
+				GameScene.effect( holyAura = new HolyAura( this ));
 				break;
 		}
 	}
@@ -501,7 +520,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 					hearts = null;
 				}
 				break;
-			case SHRUNK:
+			case SHRUNK: case ENLARGED:
 				scale.x = 1f;
 				scale.y = 1f;
 				break;
@@ -509,6 +528,17 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 				if (frostburning != null) {
 					frostburning.on = false;
 					frostburning = null;
+				}
+				break;
+			case SPIRIT:
+				if (spirit != null) {
+					spirit.on = false;
+					spirit = null;
+				}
+				break;
+			case AURA:
+				if (holyAura != null){
+					holyAura.putOut();
 				}
 				break;
 		}

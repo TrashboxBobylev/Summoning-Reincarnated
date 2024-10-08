@@ -27,7 +27,6 @@ package com.shatteredpixel.shatteredpixeldungeon.items.magic;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -39,10 +38,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.audio.Sample;
@@ -61,25 +58,26 @@ public class Zap extends ConjurerSpell {
             if (ch instanceof Minion){
                 ch.die( curUser );
                 if (level() == 1){
-                    Dungeon.hero.mana = Math.min(Dungeon.hero.mana + 24, Dungeon.hero.maxMana);
+                    Dungeon.hero.mana = Math.min(Dungeon.hero.mana + 24, Dungeon.hero.maxMana());
                 } else if (level() == 2){
                     try {
-                        Minion minion = (Minion) ch.getClass().newInstance();
-                        GameScene.add(minion);
-                        ScrollOfTeleportation.appear(minion, ch.pos);
-                        minion.setDamage(
-                                ((Minion) ch).minDamage * 3 / 2,
-                                ((Minion) ch).maxDamage * 3 / 2);
-                        Statistics.summonedMinions++;
-                        minion.strength = ((Minion) ch).strength;
-                        minion.enchantment = ((Minion) ch).enchantment;
-                        minion.lvl = ((Minion) ch).lvl;
-                        minion.minionClass = ((Minion) ch).minionClass;
-                        minion.attunement = ((Minion) ch).attunement;
-
-                        //if we have upgraded robe, increase hp
-                        float robeBonus = 1f;
-                        minion.setMaxHP((int) (ch.HT * 0.4f * robeBonus));
+                        //FIXME with "minion to staff" philosophy in reincarnated, zap III needs a different effect
+//                        Minion minion = (Minion) ch.getClass().newInstance();
+//                        GameScene.add(minion);
+//                        ScrollOfTeleportation.appear(minion, ch.pos);
+//                        minion.setDamage(
+//                                ((Minion) ch).minDamage * 3 / 2,
+//                                ((Minion) ch).maxDamage * 3 / 2);
+//                        Statistics.summonedMinions++;
+//                        minion.strength = ((Minion) ch).strength;
+//                        minion.enchantment = ((Minion) ch).enchantment;
+//                        minion.lvl = ((Minion) ch).lvl;
+//                        minion.minionClass = ((Minion) ch).minionClass;
+//                        minion.attunement = ((Minion) ch).attunement;
+//
+//                        //if we have upgraded robe, increase hp
+//                        float robeBonus = 1f;
+//                        minion.setMaxHP((int) (ch.HT * 0.4f * robeBonus));
                     } catch (Exception eee){
                         ShatteredPixelDungeon.reportException(eee);
                     }

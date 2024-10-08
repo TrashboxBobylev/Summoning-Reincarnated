@@ -51,6 +51,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
+import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndRankInfo;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
@@ -286,6 +287,11 @@ public class Item implements Bundlable {
 	
 	public final boolean collect() {
 		return collect( Dungeon.hero.belongings.backpack );
+	}
+
+	public void collectWithAnnouncing(){
+		collect();
+		GLog.positive(Messages.get(this, "announce"));
 	}
 	
 	//returns a new item if the split was sucessful and there are now 2 items, otherwise null

@@ -29,10 +29,12 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ChaoticCenser;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.SaltCube;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 
 public class Regeneration extends Buff {
 	
@@ -51,6 +53,29 @@ public class Regeneration extends Buff {
 			return true;
 		}
 		return false;
+	}
+
+	public static void regenerate(Char ch, int amount){
+		regenerate(ch, amount, true, false);
+	}
+
+	public static void regenerate(Char ch, int amount, boolean visible){
+		regenerate(ch, amount, visible, false);
+	}
+
+	public static void regenerate(Char ch, int amount, boolean visible, boolean showHPString){
+		int healAmt = amount;
+		healAmt = Math.min( healAmt, ch.HT - ch.HP );
+
+		if (healAmt > 0 && ch.isAlive()) {
+			ch.HP += healAmt;
+			if (visible){
+				if (showHPString)
+					ch.sprite.showStatus(CharSprite.POSITIVE, "+%dHP", healAmt);
+				else
+					ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(healAmt), FloatingText.HEALING);
+			}
+		}
 	}
 
 	@Override

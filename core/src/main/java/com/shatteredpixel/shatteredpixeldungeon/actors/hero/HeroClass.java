@@ -81,6 +81,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger2;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Knife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Rapier;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
@@ -335,6 +336,8 @@ public enum HeroClass {
 	}
 
 	private static void initConjurer( Hero hero ) {
+		(hero.belongings.weapon = new Knife()).identify();
+
 		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
 			ConjurerBook book = new ConjurerBook();
 			book.collect();

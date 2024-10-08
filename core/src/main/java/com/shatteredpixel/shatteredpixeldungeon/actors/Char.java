@@ -40,17 +40,20 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Berserk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Block;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chungus;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corrosion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Daze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FireImbue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurn;
@@ -320,6 +323,10 @@ public abstract class Char extends Actor {
 	}
 
 	public boolean blockSound( float pitch ) {
+		if (buff(Block.class) != null){
+			Sample.INSTANCE.play( Assets.Sounds.HIT_PARRY, 1, pitch);
+			return true;
+		}
 		return false;
 	}
 	
@@ -572,7 +579,12 @@ public abstract class Char extends Actor {
 			enemy.sprite.showStatus( CharSprite.NEUTRAL, enemy.defenseVerb() );
 			if (visibleFight) {
 				//TODO enemy.defenseSound? currently miss plays for monks/crab even when they parry
-				Sample.INSTANCE.play(Assets.Sounds.MISS);
+				if (enemy.buff(Block.class)!=null) {
+					enemy.buff(Block.class).detach();
+					Sample.INSTANCE.play( Assets.Sounds.HIT_PARRY, 1f, Random.Float(0.96f, 1.05f));
+				} else {
+					Sample.INSTANCE.play(Assets.Sounds.MISS);
+				}
 			}
 			
 			return false;
@@ -642,6 +654,7 @@ public abstract class Char extends Actor {
 		if (defender.buff(  Hex.class) != null) defRoll *= 0.8f;
 		if (defender.buff( Daze.class) != null) defRoll *= 0.5f;
 		if (defender.buff(Shrunken.class)!= null) defRoll *= 0.8f;
+		if (defender.buff(Chungus.class) != null) defRoll *= 0.6f;
 		for (ChampionEnemy buff : defender.buffs(ChampionEnemy.class)){
 			defRoll *= buff.evasionAndAccuracyFactor();
 		}
@@ -655,10 +668,12 @@ public abstract class Char extends Actor {
 	}
 	
 	public int defenseSkill( Char enemy ) {
+		if (buff(Block.class) != null) return INFINITE_EVASION;
 		return 0;
 	}
 	
 	public String defenseVerb() {
+		if (buff(Block.class) != null) return Messages.get(Hero.class, "absorbed");
 		return Messages.get(this, "def_verb");
 	}
 	
@@ -703,6 +718,7 @@ public abstract class Char extends Actor {
 		if ( buff( Adrenaline.class ) != null) speed *= 2f;
 		if ( buff( Haste.class ) != null) speed *= 3f;
 		if ( buff( Dread.class ) != null) speed *= 2f;
+		if ( buff( Empowered.class ) != null) speed *= 1.35f;
 		return speed;
 	}
 
@@ -791,6 +807,9 @@ public abstract class Char extends Actor {
 		}
 		if (this.buff(GasterBlaster.Karma.class) != null){
 			dmg *= 1.15f;
+		}
+		if (this.buff(Empowered.class) != null){
+			dmg *= 0.65f;
 		}
 
 		if (buff(Sickle.HarvestBleedTracker.class) != null){
@@ -1270,6 +1289,9 @@ public abstract class Char extends Actor {
 		//TODO any more of these and we should make it a property of the buff, like with resistances/immunities
 		if (buff(ChampionEnemy.Giant.class) != null) {
 			props.add(Property.LARGE);
+		}
+		for (Buff b : buffs()){
+			props.addAll(b.properties());
 		}
 		return props;
 	}

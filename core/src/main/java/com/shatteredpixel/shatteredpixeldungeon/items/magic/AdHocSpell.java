@@ -60,7 +60,6 @@ public abstract class AdHocSpell extends ConjurerSpell {
                 updateQuickslot();
             }
 
-        } else
-            tierableActions(action);
+        }
     }
 }

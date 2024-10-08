@@ -131,6 +131,13 @@ public class BuffIndicator extends Component {
 	public static final int FROSTBURN   = 76;
 	public static final int FOOD_REGEN  = 77;
 	public static final int FOOD_DEBUFF = 78;
+	public static final int NECROMANCY  = 79;
+	public static final int SOUL_BUFF   = 80;
+	public static final int ARMOR_GENERIC=81;
+	public static final int DEFENSE_BUFF= 82;
+	public static final int OFFENSE_BUFF= 83;
+	public static final int MAGIC_BUFF  = 84;
+	public static final int RANGED_BUFF = 85;
 
 	public static final int SIZE_SMALL  = 7;
 	public static final int SIZE_LARGE  = 16;
