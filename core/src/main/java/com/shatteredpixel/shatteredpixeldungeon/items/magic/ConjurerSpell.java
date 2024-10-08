@@ -83,6 +83,16 @@ public abstract class ConjurerSpell extends Item implements Rankable {
         return actions;
     }
 
+    @Override
+    public int rank() {
+        return level()+1;
+    }
+
+    @Override
+    public void rank(int rank) {
+        level(rank-1);
+    }
+
     public int manaCost(){
         return manaCost;
     }
