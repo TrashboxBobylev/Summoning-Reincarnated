@@ -55,11 +55,15 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScoutArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.SyntheticArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.Heal;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.Stars;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.Zap;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
@@ -71,6 +75,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMappi
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.FroggitStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
@@ -145,6 +150,17 @@ public enum HeroClass {
 			(hero.belongings.artifact = cloak).identify();
 			hero.belongings.artifact.activate( hero );
 			Dungeon.quickslot.setSlot(3, cloak);
+			ConjurerBook book = new ConjurerBook();
+			book.collect();
+			FroggitStaff staff1 = new FroggitStaff();
+			staff1.identify().collect();
+			Stars star = new Stars();
+			star.collect();
+			Heal heal = new Heal();
+			heal.collect();
+			new Zap().collect();
+			Dungeon.quickslot.setSlot(4, staff1);
+			Dungeon.quickslot.setSlot(5, book);
 			new PotionBandolier().collect();
 			Dungeon.LimitedDrops.POTION_BANDOLIER.drop();
 			new ScrollHolder().collect();
@@ -312,6 +328,35 @@ public enum HeroClass {
 			new MagicalHolster().collect();
 			Dungeon.LimitedDrops.MAGICAL_HOLSTER.drop();
 		}
+	}
+
+	private static void initConjurer( Hero hero ) {
+		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
+			ConjurerBook book = new ConjurerBook();
+			book.collect();
+
+			FroggitStaff staff1 = new FroggitStaff();
+			staff1.identify().collect();
+
+			new MagicalHolster().collect();
+			Dungeon.LimitedDrops.MAGICAL_HOLSTER.drop();
+
+			Dungeon.quickslot.setSlot(0, book);
+			Dungeon.quickslot.setSlot(1, staff1);
+		}
+
+//		(hero.belongings.armor = new ConjurerArmor()).identify();
+
+		hero.HP = hero.HT = 13;
+		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
+			Stars star = new Stars();
+			star.collect();
+			Heal heal = new Heal();
+			heal.collect();
+			new Zap().collect();
+		}
+
+		new PotionOfStrength().identify();
 	}
 
 	public String title() {
