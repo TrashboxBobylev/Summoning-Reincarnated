@@ -892,6 +892,52 @@ public class ItemSpriteSheet {
 		assignItemRect(HALLS_PAGE,  10, 11);
 	}
 
+	private static final int C_SPELLS = xy(9, 31);
+	public static final int STARS             = C_SPELLS +0;
+	public static final int HEAL            = C_SPELLS +1;
+	public static final int ZAP             = C_SPELLS +2;
+	public static final int SHIELD          = C_SPELLS +3;
+	public static final int SHOCKER         = C_SPELLS +4;
+	public static final int CAMOUFLAGE      = C_SPELLS +5;
+	public static final int CLONE           = C_SPELLS +6;
+	public static final int GONER           = C_SPELLS +7;
+
+	private static final int C_KNIGHT = xy(13, 29);
+	public static final int PUNCH           = C_KNIGHT -5;
+	public static final int HEALKI          = C_KNIGHT -4;
+	public static final int BOOM            = C_KNIGHT -3;
+	public static final int SPREAD          = C_KNIGHT -2;
+	public static final int FLOWER          = C_KNIGHT -1;
+
+	private static final int C_SOUL_REAVER = xy(13, 30);
+	public static final int SR_OFFENSE      = C_SOUL_REAVER +11;
+	public static final int SR_DEFENSE      = C_SOUL_REAVER +12;
+	public static final int SR_MAGICAL      = C_SOUL_REAVER +13;
+	public static final int SR_RANGED       = C_SOUL_REAVER +14;
+	public static final int SR_SUPPORT      = C_SOUL_REAVER +15;
+	static {
+		assignItemRect(STARS, 11, 11);
+		assignItemRect(HEAL, 10, 10);
+		assignItemRect(ZAP, 12, 8);
+		assignItemRect(SHIELD, 11, 11);
+		assignItemRect(SHOCKER, 13, 15);
+		assignItemRect(CAMOUFLAGE, 14, 14);
+		assignItemRect(CLONE, 14, 13);
+		assignItemRect(GONER, 16, 16);
+
+		assignItemRect(PUNCH, 13, 14);
+		assignItemRect(HEALKI, 13, 14);
+		assignItemRect(BOOM, 15, 14);
+		assignItemRect(SPREAD, 12, 15);
+		assignItemRect(FLOWER, 15, 15);
+
+		assignItemRect(SR_OFFENSE, 12, 12);
+		assignItemRect(SR_DEFENSE, 11, 11);
+		assignItemRect(SR_MAGICAL, 13, 13);
+		assignItemRect(SR_RANGED, 12, 12);
+		assignItemRect(SR_SUPPORT, 10, 9);
+	}
+
 	//for smaller 8x8 icons that often accompany an item sprite
 	public static class Icons {
 
