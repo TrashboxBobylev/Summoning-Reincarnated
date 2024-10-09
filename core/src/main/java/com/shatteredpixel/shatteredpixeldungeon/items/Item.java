@@ -591,6 +591,10 @@ public class Item implements Bundlable {
 		return quantity != 1 ? Integer.toString( quantity ) : null;
 	}
 
+	public int heroLvl(){
+		return Dungeon.hero != null ? Dungeon.hero.lvl : 1;
+	}
+
 	public static void updateQuickslot() {
 		GameScene.updateItemDisplays = true;
 	}

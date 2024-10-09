@@ -120,8 +120,8 @@ public class Shards extends AdHocSpell {
 
     private int damage(int rank){
         switch (rank){
-            case 2: return Random.NormalIntRange(5 + Dungeon.hero.lvl/3, 12 + Dungeon.hero.lvl*3/4);
-            case 3: return Random.NormalIntRange(8 + Dungeon.hero.lvl/2, 18 + Dungeon.hero.lvl);
+            case 2: return Random.NormalIntRange(5 + heroLvl()/3, 12 + heroLvl()*3/4);
+            case 3: return Random.NormalIntRange(8 + heroLvl()/2, 18 + heroLvl());
         }
         return 0;
     }

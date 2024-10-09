@@ -80,8 +80,8 @@ public class Defense extends ConjurerSpell {
 
     private int defenseEarthValue(int rank){
         switch (rank){
-            case 1: return 6 + Dungeon.hero.lvl*3/4;
-            case 2: return 10 + Dungeon.hero.lvl;
+            case 1: return 6 + heroLvl()*3/4;
+            case 2: return 10 + heroLvl();
             case 3: return 5;
         }
         return 0;
@@ -89,8 +89,8 @@ public class Defense extends ConjurerSpell {
 
     private int defenseArcaneValue(int rank){
         switch (rank){
-            case 1: return 3 + Dungeon.hero.lvl/3;
-            case 2: return 7 + Dungeon.hero.lvl/2;
+            case 1: return 3 + heroLvl()/3;
+            case 2: return 7 + heroLvl()/2;
             case 3: return 3;
         }
         return 0;

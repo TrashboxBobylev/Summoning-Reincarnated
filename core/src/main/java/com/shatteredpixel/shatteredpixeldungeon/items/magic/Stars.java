@@ -116,18 +116,18 @@ public class Stars extends ConjurerSpell {
 
     private int min(int rank){
         switch (rank){
-            case 1: return (int) (3 + Dungeon.hero.lvl / 3f);
-            case 2: return (int) (5 + Dungeon.hero.lvl/2.5f);
-            case 3: return (int) (7 + Dungeon.hero.lvl/2f);
+            case 1: return (int) (3 + heroLvl() / 3f);
+            case 2: return (int) (5 + heroLvl()/2.5f);
+            case 3: return (int) (7 + heroLvl()/2f);
         }
         return 0;
     }
 
     private int max(int rank){
         switch (rank){
-            case 1: return (int) (8 + Dungeon.hero.lvl / 2f);
-            case 2: return (int) (10 + Dungeon.hero.lvl/1.5f);
-            case 3: return (int) (12 + Dungeon.hero.lvl/1.25f);
+            case 1: return (int) (8 + heroLvl() / 2f);
+            case 2: return (int) (10 + heroLvl()/1.5f);
+            case 3: return (int) (12 + heroLvl()/1.25f);
         }
         return 0;
     }
