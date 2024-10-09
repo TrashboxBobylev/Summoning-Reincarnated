@@ -88,6 +88,9 @@ public class ManaIndicator extends Tag {
                 manaCounter.scale.set(0.75f);
                 placeNumber();
 
+                int manaFullness = (int) ((0.25f + 0.70f * (Dungeon.hero.mana / ((float)Dungeon.hero.maxMana())))*256);
+                setColor((manaFullness << 16) | (manaFullness << 8) | (manaFullness));
+
                 flash();
             }
         }
