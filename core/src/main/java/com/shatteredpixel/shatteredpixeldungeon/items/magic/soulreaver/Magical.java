@@ -74,12 +74,13 @@ public class Magical extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost(){
-        switch (level()){
-            case 1: return 30;
-            case 2: return 35;
+    public int manaCost(int rank) {
+        switch (rank){
+            case 1: return 18;
+            case 2: return 30;
+            case 3: return 35;
         }
-        return 18;
+        return 0;
     }
 
     public String desc() {

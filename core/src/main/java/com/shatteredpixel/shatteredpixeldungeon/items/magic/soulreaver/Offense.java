@@ -72,12 +72,13 @@ public class Offense extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost() {
-        switch (level()){
-            case 1: return 25;
+    public int manaCost(int rank) {
+        switch (rank){
+            case 1: return 15;
             case 2: return 25;
+            case 3: return 25;
         }
-        return 15;
+        return 0;
     }
 
     public String desc() {

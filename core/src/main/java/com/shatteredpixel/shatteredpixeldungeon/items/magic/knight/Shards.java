@@ -126,12 +126,13 @@ public class Shards extends AdHocSpell {
     }
 
     @Override
-    public int manaCost() {
-        switch (level()){
-            case 1: return 40;
-            case 2: return 60;
+    public int manaCost(int rank) {
+        switch (rank){
+            case 1: return 15;
+            case 2: return 40;
+            case 3: return 60;
         }
-        return 15;
+        return 0;
     }
 
     @Override

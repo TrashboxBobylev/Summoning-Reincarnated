@@ -58,12 +58,13 @@ public class Barrier extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost() {
-        switch (level()){
-            case 1: return 15;
-            case 2: return 20;
+    public int manaCost(int rank) {
+        switch (rank){
+            case 1: return 3;
+            case 2: return 15;
+            case 3: return 20;
         }
-        return 3;
+        return 0;
     }
 
     private int heal(Char ch){

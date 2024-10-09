@@ -41,7 +41,6 @@ public class Necro extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.CLONE;
-        manaCost = 0;
     }
 
     @Override
@@ -60,12 +59,13 @@ public class Necro extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost() {
-        switch (level()){
-            case 1: return 12;
-            case 2: return 30;
+    public int manaCost(int rank) {
+        switch (rank){
+            case 1: return 9;
+            case 2: return 12;
+            case 3: return 30;
         }
-        return 9;
+        return 0;
     }
 
     private int heal(){

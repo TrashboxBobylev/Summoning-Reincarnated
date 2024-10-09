@@ -42,7 +42,6 @@ public class Field extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.GONER;
-        manaCost = 0;
     }
 
     @Override
@@ -63,12 +62,13 @@ public class Field extends ConjurerSpell {
         }
 
     @Override
-    public int manaCost() {
-        switch (level()){
-            case 1: return 60;
-            case 2: return 80;
+    public int manaCost(int rank) {
+        switch (rank){
+            case 1: return 40;
+            case 2: return 60;
+            case 3: return 80;
         }
-        return 40;
+        return 0;
     }
 
     public int resource() {

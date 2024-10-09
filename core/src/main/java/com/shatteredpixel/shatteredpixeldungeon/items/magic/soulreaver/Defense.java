@@ -93,12 +93,13 @@ public class Defense extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost(){
-        switch (level()){
-            case 1: return 35;
-            case 2: return 5;
+    public int manaCost(int rank) {
+        switch (rank){
+            case 1: return 30;
+            case 2: return 35;
+            case 3: return 5;
         }
-        return 30;
+        return 0;
     }
 
     public String desc() {

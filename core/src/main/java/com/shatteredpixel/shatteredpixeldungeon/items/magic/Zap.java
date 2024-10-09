@@ -107,10 +107,11 @@ public class Zap extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost() {
-        switch (level()){
-            case 1: return 11;
-            case 2: return 14;
+    public int manaCost(int rank) {
+        switch (rank){
+            case 1: return 0;
+            case 2: return 11;
+            case 3: return 14;
         }
         return 0;
     }

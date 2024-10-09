@@ -46,7 +46,6 @@ public class Shocker extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.SHOCKER;
-        manaCost = 0;
     }
 
     @Override
@@ -87,12 +86,13 @@ public class Shocker extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost() {
-        switch (level()){
-            case 1: return 25;
-            case 2: return 35;
+    public int manaCost(int rank) {
+        switch (rank){
+            case 1: return 15;
+            case 2: return 25;
+            case 3: return 35;
         }
-        return 15;
+        return 0;
     }
 
     private int noheal(){

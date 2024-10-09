@@ -79,12 +79,13 @@ public class Boom extends AdHocSpell {
     }
 
     @Override
-    public int manaCost() {
-        switch (level()){
-            case 1: return 30;
-            case 2: return 15;
+    public int manaCost(int rank) {
+        switch (rank){
+            case 1: return 50;
+            case 2: return 30;
+            case 3: return 15;
         }
-        return 50;
+        return 0;
     }
 
     public String desc() {

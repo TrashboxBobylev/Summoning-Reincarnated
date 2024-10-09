@@ -138,12 +138,13 @@ public class Wave extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost() {
-        switch (level()){
-            case 1: return 15;
-            case 2: return 30;
+    public int manaCost(int rank) {
+        switch (rank){
+            case 1: return 9;
+            case 2: return 15;
+            case 3: return 30;
         }
-        return 9;
+        return 0;
     }
 
     @Override

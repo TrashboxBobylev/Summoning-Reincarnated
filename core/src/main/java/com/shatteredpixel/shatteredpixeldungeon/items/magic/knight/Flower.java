@@ -61,12 +61,13 @@ public class Flower extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost() {
-        switch (level()){
-            case 1: return 36;
-            case 2: return 72;
+    public int manaCost(int rank) {
+        switch (rank){
+            case 1: return 18;
+            case 2: return 36;
+            case 3: return 72;
         }
-        return 18;
+        return 0;
     }
 
     @Override

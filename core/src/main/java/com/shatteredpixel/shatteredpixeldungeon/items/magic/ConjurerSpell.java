@@ -51,8 +51,6 @@ public abstract class ConjurerSpell extends Item implements Rankable {
     public static final String AC_ZAP	= "ZAP";
     protected static int collision = Ballistica.FRIENDLY_PROJECTILE;
 
-    public int manaCost;
-
     {
         defaultAction = AC_ZAP;
         unique = true;
@@ -93,8 +91,12 @@ public abstract class ConjurerSpell extends Item implements Rankable {
         level(rank-1);
     }
 
-    public int manaCost(){
-        return manaCost;
+    public int manaCost() {
+        return manaCost(rank());
+    }
+
+    public int manaCost(int rank){
+        return 0;
     }
 
     @Override
@@ -134,6 +136,12 @@ public abstract class ConjurerSpell extends Item implements Rankable {
 
     public boolean validateCell(int pos){
         return true;
+    }
+
+    @Override
+    public String getRankMessage(int rank) {
+        return Messages.get(this, "mana_cost", manaCost(rank)) + "\n" +
+                Messages.get(this, "rank" + rank);
     }
 
     private  static CellSelector.Listener targeter = new  CellSelector.Listener(){

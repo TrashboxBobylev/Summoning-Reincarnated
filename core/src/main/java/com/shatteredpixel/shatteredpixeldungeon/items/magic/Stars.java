@@ -96,12 +96,13 @@ public class Stars extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost() {
-        switch (level()){
-            case 1: return 4;
-            case 2: return 10;
+    public int manaCost(int rank) {
+        switch (rank){
+            case 1: return 1;
+            case 2: return 4;
+            case 3: return 10;
         }
-        return 1;
+        return 0;
     }
 
     public int range() {

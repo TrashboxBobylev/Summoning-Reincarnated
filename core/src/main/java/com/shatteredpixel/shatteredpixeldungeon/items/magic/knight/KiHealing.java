@@ -81,7 +81,7 @@ public class KiHealing extends AdHocSpell {
     }
 
     @Override
-    public int manaCost() {
+    public int manaCost(int rank) {
         return 25;
     }
 

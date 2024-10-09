@@ -54,12 +54,13 @@ public class Punch extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost() {
-        switch (level()){
-            case 1: return 3;
-            case 2: return 0;
+    public int manaCost(int rank) {
+        switch (rank){
+            case 1: return 5;
+            case 2: return 3;
+            case 3: return 0;
         }
-        return 5;
+        return 0;
     }
 
     private float buff(){
