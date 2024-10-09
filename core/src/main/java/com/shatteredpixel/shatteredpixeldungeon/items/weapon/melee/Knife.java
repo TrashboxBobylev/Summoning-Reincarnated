@@ -30,7 +30,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.effects.WhiteWound;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
@@ -39,7 +38,7 @@ public class Knife extends MeleeWeapon {
     public boolean ranged;
 	
 	{
-		image = ItemSpriteSheet.DAGGER;
+		image = ItemSpriteSheet.TOY_KNIFE;
 
 		tier = 1;
 
@@ -70,39 +69,39 @@ public class Knife extends MeleeWeapon {
 //        }
 //    }
 
-    @Override
-    public String name() {
-        String name;
-        switch (buffedLvl()){
-            case 0: case 1: case 2: case 3:
-                name = Messages.get(this, "name");
-                break;
-            case 4: case 5: case 6:
-                name = Messages.get(this, "name2");
-                break;
-            case 7: case 8: case 9:
-                name = Messages.get(this, "name3");
-                break;
-            default:
-                name = Messages.get(this, "name4");
-                break;
-        }
-        return enchantment != null && (cursedKnown || !enchantment.curse()) ? enchantment.name( name ) : name;
-    }
+//    @Override
+//    public String name() {
+//        String name;
+//        switch (buffedLvl()){
+//            case 0: case 1: case 2: case 3:
+//                name = Messages.get(this, "name");
+//                break;
+//            case 4: case 5: case 6:
+//                name = Messages.get(this, "name2");
+//                break;
+//            case 7: case 8: case 9:
+//                name = Messages.get(this, "name3");
+//                break;
+//            default:
+//                name = Messages.get(this, "name4");
+//                break;
+//        }
+//        return enchantment != null && (cursedKnown || !enchantment.curse()) ? enchantment.name( name ) : name;
+//    }
 
-    @Override
-    public String desc() {
-        switch (buffedLvl()){
-            case 0: case 1: case 2: case 3:
-                return Messages.get(this, "desc");
-            case 4: case 5: case 6:
-                return Messages.get(this, "desc2");
-            case 7: case 8: case 9:
-                return Messages.get(this, "desc3");
-            default:
-                return Messages.get(this, "desc4");
-        }
-    }
+//    @Override
+//    public String desc() {
+//        switch (buffedLvl()){
+//            case 0: case 1: case 2: case 3:
+//                return Messages.get(this, "desc");
+//            case 4: case 5: case 6:
+//                return Messages.get(this, "desc2");
+//            case 7: case 8: case 9:
+//                return Messages.get(this, "desc3");
+//            default:
+//                return Messages.get(this, "desc4");
+//        }
+//    }
 
 
 
