@@ -36,8 +36,8 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponEnchantable;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -88,7 +88,7 @@ public class ScrollOfRemoveCurse extends InventoryScroll {
 	public static boolean uncursable( Item item ){
 		if (item.isEquipped(Dungeon.hero) && Dungeon.hero.buff(Degrade.class) != null) {
 			return true;
-		} if ((item instanceof EquipableItem || item instanceof Wand) && ((!item.isIdentified() && !item.cursedKnown) || item.cursed)){
+		} if ((item instanceof EquipableItem || item instanceof Wand || item instanceof Staff) && ((!item.isIdentified() && !item.cursedKnown) || item.cursed)){
 			return true;
 		} else if (item instanceof WeaponEnchantable){
 			return ((WeaponEnchantable)item).hasCurseEnchant();
