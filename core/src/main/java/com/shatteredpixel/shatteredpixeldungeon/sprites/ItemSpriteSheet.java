@@ -902,28 +902,28 @@ public class ItemSpriteSheet {
 	public static final int CLONE           = C_SPELLS +6;
 	public static final int GONER           = C_SPELLS +7;
 
-	private static final int C_KNIGHT = xy(13, 29);
-	public static final int PUNCH           = C_KNIGHT -5;
-	public static final int HEALKI          = C_KNIGHT -4;
-	public static final int BOOM            = C_KNIGHT -3;
-	public static final int SPREAD          = C_KNIGHT -2;
-	public static final int FLOWER          = C_KNIGHT -1;
+	private static final int C_KNIGHT = xy(12, 29);
+	public static final int PUNCH           = C_KNIGHT +0;
+	public static final int HEALKI          = C_KNIGHT +1;
+	public static final int BOOM            = C_KNIGHT +2;
+	public static final int SPREAD          = C_KNIGHT +3;
+	public static final int FLOWER          = C_KNIGHT +4;
 
-	private static final int C_SOUL_REAVER = xy(13, 30);
-	public static final int SR_OFFENSE      = C_SOUL_REAVER +11;
-	public static final int SR_DEFENSE      = C_SOUL_REAVER +12;
-	public static final int SR_MAGICAL      = C_SOUL_REAVER +13;
-	public static final int SR_RANGED       = C_SOUL_REAVER +14;
-	public static final int SR_SUPPORT      = C_SOUL_REAVER +15;
+	private static final int C_SOUL_REAVER = xy(12, 30);
+	public static final int SR_OFFENSE      = C_SOUL_REAVER +0;
+	public static final int SR_DEFENSE      = C_SOUL_REAVER +1;
+	public static final int SR_MAGICAL      = C_SOUL_REAVER +2;
+	public static final int SR_RANGED       = C_SOUL_REAVER +3;
+	public static final int SR_SUPPORT      = C_SOUL_REAVER +4;
 	static {
 		assignItemRect(STARS, 11, 11);
 		assignItemRect(HEAL, 10, 10);
-		assignItemRect(ZAP, 12, 8);
-		assignItemRect(SHIELD, 11, 11);
+		assignItemRect(ZAP, 10, 7);
+		assignItemRect(SHIELD, 10, 10);
 		assignItemRect(SHOCKER, 13, 15);
 		assignItemRect(CAMOUFLAGE, 14, 14);
 		assignItemRect(CLONE, 14, 13);
-		assignItemRect(GONER, 16, 16);
+		assignItemRect(GONER, 14, 16);
 
 		assignItemRect(PUNCH, 13, 14);
 		assignItemRect(HEALKI, 13, 14);
