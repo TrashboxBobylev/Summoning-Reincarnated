@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
 import com.shatteredpixel.shatteredpixeldungeon.items.Torch;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
@@ -79,6 +80,24 @@ import com.shatteredpixel.shatteredpixeldungeon.items.keys.CrystalKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.Barrier;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.Field;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.Heal;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.Necro;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.Shocker;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.Stars;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.Wave;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.Zap;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.Boom;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.Flower;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.KiHealing;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.Punch;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.Shards;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.Defense;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.Magical;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.Offense;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.Ranged;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.Support;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.AquaBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.CausticBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.FrostburnBrew;
@@ -145,6 +164,7 @@ public enum Catalog {
 	THROWN_WEAPONS,
 	WANDS,
 	STAFFS,
+	CONJURER_SPELLS,
 	RINGS,
 	ARTIFACTS,
 	TRINKETS,
@@ -231,6 +251,10 @@ public enum Catalog {
 		STAFFS.addItems(Generator.Category.STAFF_T4.classes);
 		STAFFS.addItems(Generator.Category.STAFF_T5.classes);
 
+		CONJURER_SPELLS.addItems(Stars.class, Heal.class, Zap.class, Barrier.class, Wave.class, Shocker.class, Necro.class, Field.class,
+				Punch.class, KiHealing.class, Boom.class, Shards.class, Flower.class,
+				Offense.class, Defense.class, Magical.class, Ranged.class, Support.class);
+
 		RINGS.addItems(Generator.Category.RING.classes);
 
 		ARTIFACTS.addItems(Generator.Category.ARTIFACT.classes);
@@ -238,7 +262,7 @@ public enum Catalog {
 		TRINKETS.addItems(Generator.Category.TRINKET.classes);
 
 		MISC_EQUIPMENT.addItems(BrokenSeal.class, SpiritBow.class, Waterskin.class, VelvetPouch.class,
-				PotionBandolier.class, ScrollHolder.class, MagicalHolster.class, Amulet.class);
+				PotionBandolier.class, ScrollHolder.class, MagicalHolster.class, ConjurerBook.class, Amulet.class);
 
 
 
