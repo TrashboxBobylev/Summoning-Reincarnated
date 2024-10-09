@@ -268,12 +268,13 @@ public class Hero extends Char {
 	public void updateHT( boolean boostHP ){
 		int curHT = HT;
 
-		int baseHP = 20;
+		int baseHP = heroClass == HeroClass.CONJURER ? 13 : 20;
+		int adjustScaling = heroClass == HeroClass.CONJURER ? 3 : 5;
 		if (heroClass == HeroClass.ADVENTURER){
 			baseHP = 30;
 		}
 
-		HT = baseHP + 5*(lvl-1) + HTBoost;
+		HT = baseHP + adjustScaling*(lvl-1) + HTBoost;
 		float multiplier = RingOfMight.HTMultiplier(this);
 		HT = Math.round(multiplier * HT);
 		
