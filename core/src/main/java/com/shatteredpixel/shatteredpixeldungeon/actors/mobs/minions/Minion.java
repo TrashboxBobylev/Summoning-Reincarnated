@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Attunement;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chungus;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Fury;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.ArmoredShielding;
@@ -192,6 +193,7 @@ public class Minion extends Mob {
         int i = Random.NormalIntRange(minDamage, maxDamage);
         if (Dungeon.hero.buff(Attunement.class) != null) i *= Attunement.empowering();
         if (buff(Chungus.class) != null) i*=1.4f;
+        if (buff(Fury.class) != null) i*=1.5f;
         return augment.damageFactor(i);
     }
 
@@ -284,6 +286,7 @@ public class Minion extends Mob {
         }
         float empowering = 1f;
         if (buff(Chungus.class) != null) empowering *= 1.4f;
+        if (buff(Fury.class) != null) empowering *= 1.5f;
         if (Dungeon.hero.buff(Attunement.class) != null) empowering = Attunement.empowering();
         return String.format("%s\n\n%s\n\n%s", d, Messages.get(Minion.class, "stats",
                 augment.damageFactor(Math.round(minDamage * empowering)),
@@ -335,6 +338,8 @@ public class Minion extends Mob {
         if (Dungeon.hero.belongings.armor instanceof ConjurerArmor &&
                 ((ConjurerArmor) Dungeon.hero.belongings.armor).rank() == 2)
             dmg *= 0.6f;
+        if (buff(Fury.class) != null)
+            dmg *= 1.6f;
         super.damage(dmg, src);
         Item.updateQuickslot();
     }
