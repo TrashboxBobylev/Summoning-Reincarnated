@@ -508,6 +508,8 @@ public enum Icons {
 				return new ItemSprite(ItemSpriteSheet.RAPIER);
 			case ADVENTURER:
 				return get( Icons.BACKPACK_LRG );
+			case CONJURER:
+				return new ItemSprite(ItemSpriteSheet.ARMOR_CONJURER);
 			default:
 				return null;
 		}
