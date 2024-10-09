@@ -28,6 +28,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
@@ -81,6 +83,7 @@ public class Wave extends ConjurerSpell {
                 //trim it to just be the part that goes past them
                 trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size() - 1), Ballistica.FRIENDLY_PROJECTILE);
                 WandOfBlastWave.throwChar(ch, trajectory, 3, true, true, this);
+                Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
             } else if (ch.alignment == Char.Alignment.ALLY){
                 ArrayList<Integer> respawnPoints = new ArrayList<Integer>();
 

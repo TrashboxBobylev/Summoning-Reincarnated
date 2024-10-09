@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulParalysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.GoatClone;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.AdHocSpell;
@@ -68,6 +69,7 @@ public class Shards extends AdHocSpell {
                         if (ch != null) {
                             Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC);
                             Buff.affect(ch, Knife.SoulGain.class, buff());
+                            Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
                             if (level() >= 1) {
                                 ch.damage(damage(), hero);
                                 GoatClone clone = GoatClone.findClone();

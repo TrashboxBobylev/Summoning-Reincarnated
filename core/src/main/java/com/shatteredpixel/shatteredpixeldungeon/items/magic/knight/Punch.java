@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.magic.knight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ConjurerSpell;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Knife;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -48,6 +49,7 @@ public class Punch extends ConjurerSpell {
         if (ch != null && ch.alignment == Char.Alignment.ENEMY) {
             Buff.affect(ch, Knife.SoulGain.class, buff());
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
+            Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
         }
     }
 

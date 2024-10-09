@@ -28,6 +28,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -56,6 +58,7 @@ public class Stars extends ConjurerSpell {
             Char ch = Actor.findChar(trajectory.collisionPos);
             if (ch != null && ch.alignment != Char.Alignment.ALLY){
                 ch.damage(damageRoll(), this);
+                Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
 
                 for (int b : PathFinder.NEIGHBOURS8){
                     ((MagicMissile)curUser.sprite.parent.recycle( MagicMissile.class )).reset(
@@ -75,6 +78,7 @@ public class Stars extends ConjurerSpell {
                     Char ch = Actor.findChar(i);
                     if (ch != null) {
                         ch.damage(damageRoll(), this);
+                        Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
 
                         for (int b : PathFinder.NEIGHBOURS8) {
                             ((MagicMissile) curUser.sprite.parent.recycle(MagicMissile.class)).reset(

@@ -28,7 +28,9 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.GoatClone;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
@@ -59,6 +61,7 @@ public class Boom extends AdHocSpell {
                 Char ch = Actor.findChar(pos);
                 if (ch != null && ch != Dungeon.hero){
                     ch.damage((int) (Bomb.damageRoll()*damage()), clone);
+                    Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
                 }
             }
             return true;

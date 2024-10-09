@@ -53,6 +53,7 @@ public class Offense extends ConjurerSpell {
 
         if (ch != null){
             Buff.affect(ch, FrostBurn.class).reignite(ch, frostburn());
+            Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
             for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
                 if (mob instanceof Minion && level() < 2){
                     mob.aggro(ch);
