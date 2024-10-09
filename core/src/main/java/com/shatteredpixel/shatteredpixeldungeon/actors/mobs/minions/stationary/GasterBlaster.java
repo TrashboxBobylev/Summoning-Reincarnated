@@ -105,7 +105,6 @@ public class GasterBlaster extends StationaryMinion {
                     damage *= 1.25f * (hitAmount-1);
                 }
 //                if (buff(MagicPower.class) != null) damage *= Random.NormalFloat(1.5f, 3.4f);
-//                if (Dungeon.hero.buff(Attunement.class) != null) damage *= Attunement.empowering();
                 ch.damage(damage, (rank == 3 ? new Karma() : this));
                 if (rank == 3)
                     Buff.affect(ch, Karma.class);

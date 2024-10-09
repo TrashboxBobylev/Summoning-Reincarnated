@@ -52,6 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ropes;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScoutArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.SyntheticArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
@@ -352,7 +353,7 @@ public enum HeroClass {
 			Dungeon.quickslot.setSlot(1, staff1);
 		}
 
-//		(hero.belongings.armor = new ConjurerArmor()).identify();
+		(hero.belongings.armor = new ConjurerArmor()).identify();
 
 		hero.HP = hero.HT = 13;
 		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {

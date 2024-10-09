@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.GooWarn;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Attunement;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -161,7 +162,7 @@ public class GooMinion extends Minion {
         }
 
         float multiplier = 1f;
-//        if (Dungeon.hero.buff(Attunement.class) != null) multiplier *= Attunement.empowering();
+        if (Dungeon.hero.buff(Attunement.class) != null) multiplier *= Attunement.empowering();
 
         min *= multiplier; max *= multiplier;
 

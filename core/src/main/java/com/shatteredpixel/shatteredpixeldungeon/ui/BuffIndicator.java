@@ -138,6 +138,7 @@ public class BuffIndicator extends Component {
 	public static final int OFFENSE_BUFF= 83;
 	public static final int MAGIC_BUFF  = 84;
 	public static final int RANGED_BUFF = 85;
+	public static final int SOUL_REFUSAL= 86;
 
 	public static final int SIZE_SMALL  = 7;
 	public static final int SIZE_LARGE  = 16;

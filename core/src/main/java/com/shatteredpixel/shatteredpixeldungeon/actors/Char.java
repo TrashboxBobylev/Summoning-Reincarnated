@@ -105,6 +105,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Potential;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
@@ -457,6 +458,10 @@ public abstract class Char extends Actor {
 			}
 
 			if (enemy.buff(Shrunken.class) != null) dmg *= 1.4f;
+
+			if (this instanceof Hero && ((Hero) this).belongings.armor instanceof ConjurerArmor &&
+					((Hero) this).belongings.armor.level() == 2)
+				dmg *= 1.5f;
 
 			//characters influenced by aggression deal 1/2 damage to bosses
 			if ( enemy.buff(StoneOfAggression.Aggression.class) != null

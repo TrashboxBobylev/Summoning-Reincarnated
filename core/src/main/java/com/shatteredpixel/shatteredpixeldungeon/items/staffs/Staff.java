@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Attunement;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
@@ -408,7 +409,7 @@ public abstract class Staff extends Item implements AttunementItem, Rankable, We
 
         if (isIdentified()) {
             float robeBonus = 1f;
-//            if (Dungeon.hero.buff(Attunement.class) != null) robeBonus = Attunement.empowering();
+            if (Dungeon.hero.buff(Attunement.class) != null) robeBonus = Attunement.empowering();
             info += "\n\n" + Messages.get(this, "stats_known",
                     tier,
                     ATUReq(),

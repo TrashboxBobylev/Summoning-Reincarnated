@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Attunement;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chungus;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
@@ -36,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -188,6 +190,7 @@ public class Minion extends Mob {
     @Override
     public int damageRoll() {
         int i = Random.NormalIntRange(minDamage, maxDamage);
+        if (Dungeon.hero.buff(Attunement.class) != null) i *= Attunement.empowering();
         if (buff(Chungus.class) != null) i*=1.4f;
         return augment.damageFactor(i);
     }
@@ -265,6 +268,8 @@ public class Minion extends Mob {
         return Math.round(Dungeon.hero.defenseSkill(enemy) / augment.delayFactor(1f));
     }
 
+
+
     @Override
     public String name() {
         return enchantment != null ? enchantment.name( super.name() ) : super.name();
@@ -279,7 +284,7 @@ public class Minion extends Mob {
         }
         float empowering = 1f;
         if (buff(Chungus.class) != null) empowering *= 1.4f;
-//        if (Dungeon.hero.buff(Attunement.class) != null) empowering = Attunement.empowering();
+        if (Dungeon.hero.buff(Attunement.class) != null) empowering = Attunement.empowering();
         return String.format("%s\n\n%s\n\n%s", d, Messages.get(Minion.class, "stats",
                 augment.damageFactor(Math.round(minDamage * empowering)),
                 augment.damageFactor(Math.round(maxDamage * empowering)),
@@ -327,6 +332,9 @@ public class Minion extends Mob {
 
     @Override
     public void damage(int dmg, Object src) {
+        if (Dungeon.hero.belongings.armor instanceof ConjurerArmor &&
+                ((ConjurerArmor) Dungeon.hero.belongings.armor).rank() == 2)
+            dmg *= 0.6f;
         super.damage(dmg, src);
         Item.updateQuickslot();
     }

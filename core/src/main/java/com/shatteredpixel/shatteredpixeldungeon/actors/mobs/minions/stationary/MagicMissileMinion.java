@@ -76,7 +76,6 @@ public class MagicMissileMinion extends StationaryMinion {
             int dmg = damageRoll();
             if (rank == 2)
                 dmg -= enemy.drRoll()*2;
-//            if (Dungeon.hero.buff(Attunement.class) != null) dmg *= Attunement.empowering();
             enemy.damage(dmg, this);
             EffectHalo shield = new EffectHalo(enemy.sprite);
             GameScene.effect(shield);
