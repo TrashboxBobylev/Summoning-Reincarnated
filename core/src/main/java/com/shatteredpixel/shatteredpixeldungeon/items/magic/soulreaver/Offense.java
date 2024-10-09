@@ -52,10 +52,10 @@ public class Offense extends ConjurerSpell {
         Char ch = Actor.findChar(trajectory.collisionPos);
 
         if (ch != null){
-            Buff.affect(ch, FrostBurn.class).reignite(ch, frostburn());
+            Buff.affect(ch, FrostBurn.class).reignite(ch, frostburn(rank()));
             Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
             for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
-                if (mob instanceof Minion && level() < 2){
+                if (mob instanceof Minion && rank() < 3){
                     mob.aggro(ch);
                     mob.beckon(trajectory.collisionPos);
                 }
@@ -63,12 +63,13 @@ public class Offense extends ConjurerSpell {
         }
     }
 
-    private float frostburn(){
-        switch (level()){
-            case 1: return 20f;
-            case 2: return 40f;
+    private float frostburn(int rank){
+        switch (rank){
+            case 1: return 7f;
+            case 2: return 20f;
+            case 3: return 40f;
         }
-        return 7f;
+        return 0f;
     }
 
     @Override
@@ -82,7 +83,12 @@ public class Offense extends ConjurerSpell {
     }
 
     public String desc() {
-        return Messages.get(this, "desc", new DecimalFormat("#.#").format(frostburn()), manaCost());
+        return Messages.get(this, "desc", new DecimalFormat("#.#").format(frostburn(rank())), manaCost());
+    }
+
+    @Override
+    public String spellRankMessage(int rank) {
+        return Messages.get(this, "rank"+ (rank == 3 ? "3" : ""), new DecimalFormat("#.#").format(frostburn(rank)), manaCost());
     }
 
     @Override

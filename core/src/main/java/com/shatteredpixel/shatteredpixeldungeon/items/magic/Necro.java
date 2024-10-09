@@ -49,10 +49,10 @@ public class Necro extends ConjurerSpell {
         if (ch != null && ch.alignment == Char.Alignment.ALLY
                     && Dungeon.hero.buff(NecromancyCD.class) == null && ch.isAlive()){
             Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
-            int healing = heal();
+            int healing = heal(rank());
             ch.sprite.emitter().burst(Speck.factory(Speck.STEAM), 20);
             Buff.affect(ch, NecromancyStat.class, 1000f).level = healing;
-            Buff.affect(Dungeon.hero, NecromancyCD.class, cd());
+            Buff.affect(Dungeon.hero, NecromancyCD.class, cd(rank()));
 
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
         }
@@ -68,25 +68,32 @@ public class Necro extends ConjurerSpell {
         return 0;
     }
 
-    private int heal(){
-        switch (level()){
-            case 1: return 10;
-            case 2: return 21;
+    private int heal(int rank){
+        switch (rank){
+            case 1: return 4;
+            case 2: return 10;
+            case 3: return 21;
         }
-        return 4;
+        return 0;
     }
 
-    private int cd(){
-        switch (level()){
-            case 1: return 640;
-            case 2: return 800;
+    private int cd(int rank){
+        switch (rank){
+            case 1: return 200;
+            case 2: return 640;
+            case 3: return 800;
         }
-        return 200;
+        return 0;
     }
 
 
     @Override
     public String desc() {
-        return Messages.get(this, "desc", heal(), cd(), manaCost());
+        return Messages.get(this, "desc", heal(rank()), cd(rank()), manaCost());
+    }
+
+    @Override
+    public String spellRankMessage(int rank) {
+        return Messages.get(this, "rank", heal(rank), cd(rank));
     }
 }

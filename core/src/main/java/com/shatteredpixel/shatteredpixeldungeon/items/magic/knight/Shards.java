@@ -68,15 +68,15 @@ public class Shards extends AdHocSpell {
                         Mob ch = targets.get(this);
                         if (ch != null) {
                             Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC);
-                            Buff.affect(ch, Knife.SoulGain.class, buff());
+                            Buff.affect(ch, Knife.SoulGain.class, buff(rank()));
                             Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
                             if (level() >= 1) {
-                                ch.damage(damage(), hero);
+                                ch.damage(damage(rank()), hero);
                                 GoatClone clone = GoatClone.findClone();
                                 if (clone != null) {
                                     ch.aggro(clone);
                                 }
-                                if (level() >= 2){
+                                if (rank() >= 3){
                                     Buff.prolong(ch, SoulParalysis.class, 1f);
                                 }
                             }
@@ -109,18 +109,19 @@ public class Shards extends AdHocSpell {
         return true;
     }
 
-    private float buff(){
-        switch (level()){
-            case 1: return 15.0f;
-            case 2: return 30.0f;
+    private float buff(int rank){
+        switch (rank){
+            case 1: return 9.0f;
+            case 2: return 15.0f;
+            case 3: return 30.0f;
         }
-        return 9.0f;
+        return 0f;
     }
 
-    private int damage(){
-        switch (level()){
-            case 1: return Random.NormalIntRange(5 + Dungeon.hero.lvl/3, 12 + Dungeon.hero.lvl*3/4);
-            case 2: return Random.NormalIntRange(8 + Dungeon.hero.lvl/2, 18 + Dungeon.hero.lvl);
+    private int damage(int rank){
+        switch (rank){
+            case 2: return Random.NormalIntRange(5 + Dungeon.hero.lvl/3, 12 + Dungeon.hero.lvl*3/4);
+            case 3: return Random.NormalIntRange(8 + Dungeon.hero.lvl/2, 18 + Dungeon.hero.lvl);
         }
         return 0;
     }
@@ -137,7 +138,12 @@ public class Shards extends AdHocSpell {
 
     @Override
     public String desc() {
-        return Messages.get(this, "desc", new DecimalFormat("#.#").format(buff()), manaCost());
+        return Messages.get(this, "desc", new DecimalFormat("#.#").format(buff(rank())), manaCost());
+    }
+
+    @Override
+    public String spellRankMessage(int rank) {
+        return Messages.get(this, "rank"+ (rank == 3 ? "3" : ""), new DecimalFormat("#.#").format(buff(rank)), damage(rank));
     }
 
 }

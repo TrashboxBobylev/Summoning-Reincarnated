@@ -47,7 +47,7 @@ public class Punch extends ConjurerSpell {
     public void effect(Ballistica trajectory) {
         Char ch = Actor.findChar(trajectory.collisionPos);
         if (ch != null && ch.alignment == Char.Alignment.ENEMY) {
-            Buff.affect(ch, Knife.SoulGain.class, buff());
+            Buff.affect(ch, Knife.SoulGain.class, buff(rank()));
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
             Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
         }
@@ -63,16 +63,22 @@ public class Punch extends ConjurerSpell {
         return 0;
     }
 
-    private float buff(){
-        switch (level()){
-            case 1: return 3.0f;
-            case 2: return 1.1f;
+    private float buff(int rank){
+        switch (rank){
+            case 1: return 9.0f;
+            case 2: return 3.0f;
+            case 3: return 1.1f;
         }
-        return 9.0f;
+        return 0f;
     }
 
     @Override
     public String desc() {
-        return Messages.get(this, "desc", new DecimalFormat("#.#").format(buff()), manaCost());
+        return Messages.get(this, "desc", new DecimalFormat("#.#").format(buff(rank())), manaCost());
+    }
+
+    @Override
+    public String spellRankMessage(int rank) {
+        return Messages.get(this, "rank", new DecimalFormat("#.#").format(buff(rank)));
     }
 }

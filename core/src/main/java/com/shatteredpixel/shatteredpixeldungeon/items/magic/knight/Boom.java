@@ -60,7 +60,7 @@ public class Boom extends AdHocSpell {
                 CellEmitter.get(pos).burst(MagicMissile.WhiteParticle.FACTORY, 12);
                 Char ch = Actor.findChar(pos);
                 if (ch != null && ch != Dungeon.hero){
-                    ch.damage((int) (Bomb.damageRoll()*damage()), clone);
+                    ch.damage((int) (Bomb.damageRoll()*damage(rank())), clone);
                     Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
                 }
             }
@@ -70,12 +70,13 @@ public class Boom extends AdHocSpell {
         }
     }
 
-    private float damage(){
-        switch (level()){
-            case 1: return 0.5f;
-            case 2: return 0.2f;
+    private float damage(int rank){
+        switch (rank){
+            case 1: return 1f;
+            case 2: return 0.5f;
+            case 3: return 0.2f;
         }
-        return 1f;
+        return 0f;
     }
 
     @Override
@@ -89,7 +90,11 @@ public class Boom extends AdHocSpell {
     }
 
     public String desc() {
-        return Messages.get(this, "desc", new DecimalFormat("#").format(damage()*100), manaCost());
+        return Messages.get(this, "desc", new DecimalFormat("#").format(damage(rank())*100), manaCost());
     }
 
+    @Override
+    public String spellRankMessage(int rank) {
+        return Messages.get(this, "rank", new DecimalFormat("#").format(damage(rank)*100));
+    }
 }

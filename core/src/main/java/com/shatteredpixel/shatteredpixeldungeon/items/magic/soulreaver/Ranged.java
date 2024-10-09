@@ -66,7 +66,7 @@ public class Ranged extends ConjurerSpell {
                         !Dungeon.level.passable[chPos + dir]) {
                     GLog.i( Messages.get(this, "solid"));
                     return false;
-                } else if (Dungeon.level.distance(chPos + dir, Dungeon.hero.pos) > distance()){
+                } else if (Dungeon.level.distance(chPos + dir, Dungeon.hero.pos) > distance(rank())){
                     GLog.i( Messages.get(this, "too_far"));
                     return false;
                 }
@@ -83,7 +83,7 @@ public class Ranged extends ConjurerSpell {
             for (int dir: PathFinder.NEIGHBOURS8){
                 if (Actor.findChar(pos + dir) == null &&
                         Dungeon.level.passable[pos+dir]    &&
-                        Dungeon.level.distance(pos + dir, Dungeon.hero.pos) <= distance()){
+                        Dungeon.level.distance(pos + dir, Dungeon.hero.pos) <= distance(rank())){
                     curUser.busy();
                     curUser.sprite.emitter().burst(WhiteParticle.UP, 8);
                     curUser.sprite.operate(curUser.pos, new Callback() {
@@ -103,12 +103,13 @@ public class Ranged extends ConjurerSpell {
         }
     }
 
-    private int distance(){
-        switch (level()){
-            case 1: return 13;
-            case 2: return Integer.MAX_VALUE;
+    private int distance(int rank){
+        switch (rank){
+            case 1: return 6;
+            case 2: return 13;
+            case 3: return 1000;
         }
-        return 6;
+        return 0;
     }
 
     @Override
@@ -122,6 +123,11 @@ public class Ranged extends ConjurerSpell {
     }
 
     public String desc() {
-        return Messages.get(this, "desc", distance(), manaCost());
+        return Messages.get(this, "desc", distance(rank()), manaCost());
+    }
+
+    @Override
+    public String spellRankMessage(int rank) {
+        return Messages.get(this, "rank", distance(rank));
     }
 }

@@ -114,7 +114,7 @@ public class Wave extends ConjurerSpell {
 
         cone = new ConeAOE( bolt,
                 d,
-                60 + level()*30,
+                60 + rank()*30,
                 Ballistica.STOP_SOLID);
 
         //cast to cells at the tip, rather than all cells, better performance.
@@ -149,7 +149,12 @@ public class Wave extends ConjurerSpell {
 
     @Override
     public String desc() {
-        return Messages.get(this, "desc", 5 + level()*3, manaCost());
+        return Messages.get(this, "desc", 5 + rank()*3, manaCost());
+    }
+
+    @Override
+    public String spellRankMessage(int rank) {
+        return Messages.get(this, "rank", 5 + rank*3, 60 + rank*30);
     }
 
 }

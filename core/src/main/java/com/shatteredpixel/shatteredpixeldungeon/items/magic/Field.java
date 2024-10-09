@@ -58,8 +58,8 @@ public class Field extends ConjurerSpell {
             }
         }
         for (int i: cells)
-            GameScene.add(Blob.seed(i, resource() / cells.size(), GonerField.class));
-        }
+            GameScene.add(Blob.seed(i, resource(rank()) / cells.size(), GonerField.class));
+    }
 
     @Override
     public int manaCost(int rank) {
@@ -71,16 +71,22 @@ public class Field extends ConjurerSpell {
         return 0;
     }
 
-    public int resource() {
-        switch (level()){
-            case 1: return 333;
-            case 2: return 425;
+    public int resource(int rank) {
+        switch (rank){
+            case 1: return 250;
+            case 2: return 333;
+            case 3: return 425;
         }
-        return 250;
+        return 0;
     }
 
     @Override
     public String desc() {
-        return Messages.get(this, "desc", resource(), manaCost());
+        return Messages.get(this, "desc", resource(rank()), manaCost());
+    }
+
+    @Override
+    public String spellRankMessage(int rank) {
+        return Messages.get(this, "rank", resource(rank));
     }
 }

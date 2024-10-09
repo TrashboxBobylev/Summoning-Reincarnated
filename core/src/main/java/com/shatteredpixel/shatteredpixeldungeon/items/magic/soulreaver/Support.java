@@ -46,73 +46,80 @@ public class Support extends AdHocSpell {
     @Override
     public boolean effect(Hero hero) {
         Sample.INSTANCE.play(Assets.Sounds.READ);
-        HolyAuraBuff aura = Buff.affect(hero, HolyAuraBuff.class, duration());
-        aura.healingRate = healingRate();
-        aura.shieldingRate = shieldingRate();
-        aura.cd = cooldown();
-        aura.minDamage = minDamage();
-        aura.maxDamage = maxDamage();
-        aura.manaSteal = manaSteal();
-        if (shieldingRate() != 0) Buff.affect(hero, ConstantShielding.class);
+        HolyAuraBuff aura = Buff.affect(hero, HolyAuraBuff.class, duration(rank()));
+        aura.healingRate = healingRate(rank());
+        aura.shieldingRate = shieldingRate(rank());
+        aura.cd = cooldown(rank());
+        aura.minDamage = minDamage(rank());
+        aura.maxDamage = maxDamage(rank());
+        aura.manaSteal = manaSteal(rank());
+        if (shieldingRate(rank()) != 0) Buff.affect(hero, ConstantShielding.class);
         Buff.affect(hero, ManaStealing.class);
         hero.spendAndNext(1f);
         return true;
     }
 
-    private int shieldingRate(){
-        switch (level()){
-            case 1: return 1;
-            case 2: return 0;
+    private int shieldingRate(int rank){
+        switch (rank){
+            case 1: return 4;
+            case 2: return 1;
+            case 3: return 0;
         }
-        return 4;
+        return 0;
     }
 
-    private int healingRate(){
-        switch (level()){
-            case 1: return 1;
-            case 2: return 20;
+    private int healingRate(int rank){
+        switch (rank){
+            case 1: return 5;
+            case 2: return 1;
+            case 3: return 20;
         }
-        return 5;
+        return 0;
     }
 
-    private int minDamage(){
-        switch (level()){
+    private int minDamage(int rank){
+        switch (rank){
+            case 1: return 10;
+            case 2: return 50;
+            case 3: return 3;
+        }
+        return 0;
+    }
+
+    private int maxDamage(int rank){
+        switch (rank){
             case 1: return 50;
-            case 2: return 3;
+            case 2: return 150;
+            case 3: return 25;
         }
-        return 10;
+        return 0;
     }
 
-    private int maxDamage(){
-        switch (level()){
-            case 1: return 150;
-            case 2: return 25;
+    private int manaSteal(int rank){
+        switch (rank){
+            case 1: return 5;
+            case 2: return 2;
+            case 3: return 15;
         }
-        return 50;
+        return 0;
     }
 
-    private int manaSteal(){
-        switch (level()){
-            case 1: return 2;
-            case 2: return 15;
+    private int duration(int rank){
+        switch (rank){
+            case 1: return 60;
+            case 2: return 20;
+            case 3: return 500;
         }
-        return 5;
+        return 0;
     }
 
-    private int duration(){
-        switch (level()){
-            case 1: return 20;
+    private int cooldown(int rank){
+        switch (rank){
+            case 1: return 300;
             case 2: return 500;
+            case 3: return 1000;
         }
-        return 60;
-    }
-
-    private int cooldown(){
-        switch (level()){
-            case 1: return 500;
-            case 2: return 1000;
-        }
-        return 300;
+        return 0;
     }
 
     @Override
@@ -135,6 +142,12 @@ public class Support extends AdHocSpell {
     }
 
     public String desc() {
-        return Messages.get(this, "desc", shieldingRate(), healingRate(), duration(), manaCost());
+        return Messages.get(this, "desc", shieldingRate(rank()), healingRate(rank()), duration(rank()), manaCost());
+    }
+
+    @Override
+    public String spellRankMessage(int rank) {
+        return Messages.get(this, "rank"+ (rank == 3 ? "3" : ""),
+                shieldingRate(rank), healingRate(rank), manaSteal(rank), minDamage(rank), maxDamage(rank), duration(rank), cooldown(rank));
     }
 }

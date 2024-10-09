@@ -49,15 +49,16 @@ public class Flower extends ConjurerSpell {
                 && !Dungeon.level.pit[pos]
                 && Dungeon.level.traps.get(pos) == null))
         Dungeon.level.plant(new Swiftthistle.Seed(), pos);
-        Buff.affect(Dungeon.hero, FlowersCD.class, cooldown());
+        Buff.affect(Dungeon.hero, FlowersCD.class, cooldown(rank()));
     }
 
-    private int cooldown(){
-        switch (level()){
-            case 1: return 25;
-            case 2: return 10;
+    private int cooldown(int rank){
+        switch (rank){
+            case 1: return 50;
+            case 2: return 25;
+            case 3: return 10;
         }
-        return 50;
+        return 0;
     }
 
     @Override
@@ -80,7 +81,12 @@ public class Flower extends ConjurerSpell {
     }
 
     public String desc() {
-        return Messages.get(this, "desc", cooldown(), manaCost());
+        return Messages.get(this, "desc", cooldown(rank()), manaCost());
+    }
+
+    @Override
+    public String spellRankMessage(int rank) {
+        return Messages.get(this, "rank", cooldown(rank));
     }
 
 }

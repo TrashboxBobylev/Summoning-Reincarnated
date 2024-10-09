@@ -54,10 +54,10 @@ public class Stars extends ConjurerSpell {
 
     @Override
     public void effect(Ballistica trajectory) {
-        if (level() == 0){
+        if (range(rank()) < 1){
             Char ch = Actor.findChar(trajectory.collisionPos);
             if (ch != null && ch.alignment != Char.Alignment.ALLY){
-                ch.damage(damageRoll(), this);
+                ch.damage(damageRoll(rank()), this);
                 Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
 
                 for (int b : PathFinder.NEIGHBOURS8){
@@ -72,12 +72,12 @@ public class Stars extends ConjurerSpell {
             }
         }
         else {
-            PathFinder.buildDistanceMap(trajectory.collisionPos, BArray.not(Dungeon.level.solid, null), range());
+            PathFinder.buildDistanceMap(trajectory.collisionPos, BArray.not(Dungeon.level.solid, null), range(rank()));
             for (int i = 0; i < PathFinder.distance.length; i++) {
                 if (PathFinder.distance[i] < Integer.MAX_VALUE) {
                     Char ch = Actor.findChar(i);
                     if (ch != null) {
-                        ch.damage(damageRoll(), this);
+                        ch.damage(damageRoll(rank()), this);
                         Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
 
                         for (int b : PathFinder.NEIGHBOURS8) {
@@ -105,37 +105,45 @@ public class Stars extends ConjurerSpell {
         return 0;
     }
 
-    public int range() {
-        switch (level()){
-            case 1: return 1;
-            case 2: return 2;
+    public int range(int rank) {
+        switch (rank){
+            case 1: return 0;
+            case 2: return 1;
+            case 3: return 2;
         }
         return 0;
     }
 
-    private int min(){
-        switch (level()){
-            case 1: return (int) (5 + Dungeon.hero.lvl/2.5f);
-            case 2: return (int) (7 + Dungeon.hero.lvl/2f);
+    private int min(int rank){
+        switch (rank){
+            case 1: return (int) (3 + Dungeon.hero.lvl / 3f);
+            case 2: return (int) (5 + Dungeon.hero.lvl/2.5f);
+            case 3: return (int) (7 + Dungeon.hero.lvl/2f);
         }
-        return (int) (3 + Dungeon.hero.lvl / 3f);
+        return 0;
     }
 
-    private int max(){
-        switch (level()){
-            case 1: return (int) (10 + Dungeon.hero.lvl/1.5f);
-            case 2: return (int) (12 + Dungeon.hero.lvl/1.25f);
+    private int max(int rank){
+        switch (rank){
+            case 1: return (int) (8 + Dungeon.hero.lvl / 2f);
+            case 2: return (int) (10 + Dungeon.hero.lvl/1.5f);
+            case 3: return (int) (12 + Dungeon.hero.lvl/1.25f);
         }
-        return (int) (8 + Dungeon.hero.lvl / 2f);
+        return 0;
     }
 
-    private int damageRoll() {
-        return Random.NormalIntRange(min(), max());
+    private int damageRoll(int rank) {
+        return Random.NormalIntRange(min(rank), max(rank));
     }
 
     @Override
     public String desc() {
-        return Messages.get(this, "desc", min(), max(), manaCost());
+        return Messages.get(this, "desc", min(rank()), max(rank()), manaCost());
+    }
+
+    @Override
+    public String spellRankMessage(int rank) {
+        return Messages.get(this, "rank", min(rank), max(rank), range(rank)*2+1);
     }
 
     @Override

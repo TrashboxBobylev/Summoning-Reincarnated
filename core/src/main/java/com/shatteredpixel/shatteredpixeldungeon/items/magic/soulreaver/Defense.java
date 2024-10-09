@@ -49,8 +49,8 @@ public class Defense extends ConjurerSpell {
         if (ch instanceof Minion) {
             if (ch.buff(ArmoredShielding.class) == null) {
                 Buff.affect(ch, ArmoredShielding.class, 1000000f);
-                Buff.affect(ch, Barkskin.class).set(defenseEarthValue(), defenseEarthTime());
-                Buff.affect(ch, ArcaneArmor.class).set(defenseArcaneValue(), defenseArcaneTime());
+                Buff.affect(ch, Barkskin.class).set(defenseEarthValue(rank()), defenseEarthTime(rank()));
+                Buff.affect(ch, ArcaneArmor.class).set(defenseArcaneValue(rank()), defenseArcaneTime(rank()));
             } else {
                 ch.buff(ArmoredShielding.class).detach();
                 Buff.affect(ch, Barkskin.class).detach();
@@ -60,36 +60,40 @@ public class Defense extends ConjurerSpell {
         }
     }
 
-    private int defenseEarthTime(){
-        switch (level()){
-            case 1: return 8;
-            case 2: return 100;
+    private int defenseEarthTime(int rank){
+        switch (rank){
+            case 1: return 30;
+            case 2: return 8;
+            case 3: return 100;
         }
-        return 30;
+        return 0;
     }
 
-    private int defenseArcaneTime(){
-        switch (level()){
-            case 1: return 12;
-            case 2: return 120;
+    private int defenseArcaneTime(int rank){
+        switch (rank){
+            case 1: return 40;
+            case 2: return 12;
+            case 3: return 120;
         }
-        return 40;
+        return 0;
     }
 
-    private int defenseEarthValue(){
-        switch (level()){
-            case 1: return 10 + Dungeon.hero.lvl;
-            case 2: return 5;
+    private int defenseEarthValue(int rank){
+        switch (rank){
+            case 1: return 6 + Dungeon.hero.lvl*3/4;
+            case 2: return 10 + Dungeon.hero.lvl;
+            case 3: return 5;
         }
-        return 6 + Dungeon.hero.lvl*3/4;
+        return 0;
     }
 
-    private int defenseArcaneValue(){
-        switch (level()){
-            case 1: return 7 + Dungeon.hero.lvl/2;
-            case 2: return 3;
+    private int defenseArcaneValue(int rank){
+        switch (rank){
+            case 1: return 3 + Dungeon.hero.lvl/3;
+            case 2: return 7 + Dungeon.hero.lvl/2;
+            case 3: return 3;
         }
-        return 3 + Dungeon.hero.lvl/3;
+        return 0;
     }
 
     @Override
@@ -103,6 +107,11 @@ public class Defense extends ConjurerSpell {
     }
 
     public String desc() {
-        return Messages.get(this, "desc", defenseEarthValue(), defenseArcaneValue(), manaCost());
+        return Messages.get(this, "desc", defenseEarthValue(rank()), defenseArcaneValue(rank()), manaCost());
+    }
+
+    @Override
+    public String spellRankMessage(int rank) {
+        return Messages.get(this, "rank", defenseEarthValue(rank), defenseEarthTime(rank), defenseArcaneValue(rank), defenseArcaneTime(rank));
     }
 }

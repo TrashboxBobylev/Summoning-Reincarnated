@@ -50,27 +50,29 @@ public class Magical extends ConjurerSpell {
         if (ch != null) {
             CellEmitter.center( trajectory.collisionPos ).burst( MagicMissile.WardParticle.UP, Random.IntRange( 8, 15 ) );
             if (ch.alignment == Char.Alignment.ALLY) {
-                Buff.affect(ch, Chungus.class, enlargement());
+                Buff.affect(ch, Chungus.class, enlargement(rank()));
             } else if (ch.alignment == Char.Alignment.ENEMY) {
-                Buff.affect(ch, TimedShrink.class, shrinking());
+                Buff.affect(ch, TimedShrink.class, shrinking(rank()));
             }
         }
     }
 
-    private int enlargement(){
-        switch (level()){
-            case 1: return 13;
-            case 2: return 5;
+    private int enlargement(int rank){
+        switch (rank){
+            case 1: return 5;
+            case 2: return 13;
+            case 3: return 5;
         }
-        return 5;
+        return 0;
     }
 
-    private int shrinking(){
-        switch (level()){
-            case 1: return 7;
-            case 2: return 15;
+    private int shrinking(int rank){
+        switch (rank){
+            case 1: return 5;
+            case 2: return 7;
+            case 3: return 15;
         }
-        return 5;
+        return 0;
     }
 
     @Override
@@ -84,7 +86,12 @@ public class Magical extends ConjurerSpell {
     }
 
     public String desc() {
-        return Messages.get(this, "desc", shrinking(), enlargement(), manaCost());
+        return Messages.get(this, "desc", shrinking(rank()), enlargement(rank()), manaCost());
+    }
+
+    @Override
+    public String spellRankMessage(int rank) {
+        return Messages.get(this, "rank", shrinking(rank), enlargement(rank));
     }
 
 }

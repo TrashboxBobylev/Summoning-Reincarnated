@@ -34,23 +34,27 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
 
+import java.text.DecimalFormat;
+
 public class Barrier extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.SHIELD;
     }
 
+    private static final int BLOCK_DURATION = 12;
+
     @Override
     public void effect(Ballistica trajectory) {
         Char ch = Actor.findChar(trajectory.collisionPos);
-        if (ch.alignment != Char.Alignment.ALLY){
+        if (ch != null && ch.alignment != Char.Alignment.ALLY){
             Sample.INSTANCE.play(Assets.Sounds.ATK_SPIRITBOW);
-            if (level() < 2) {
-                int healing = heal(ch);
+            if (rank() < 3) {
+                int healing = heal(ch, rank());
                 Buff.affect(ch, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier.class).setShield(healing);
             }
             else {
-                Buff.affect(ch, Block.class, 12f);
+                Buff.affect(ch, Block.class, BLOCK_DURATION);
             }
 
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
@@ -67,34 +71,45 @@ public class Barrier extends ConjurerSpell {
         return 0;
     }
 
-    private int heal(Char ch){
-        switch (level()){
-            case 1: return 25;
-            case 2: return (int) (40 + ch.HT * 1.25f);
+    private int heal(Char ch, int rank){
+        switch (rank){
+            case 1: return 5 + ch.HT / 4;
+            case 2: return 25;
+//            case 3: return (int) (40 + ch.HT * 1.25f);
         }
-        return 5 + ch.HT / 4;
+        return 0;
     }
 
-    private int partialHeal(){
-        switch (level()){
-            case 1:
+    private int partialHeal(int rank){
+        switch (rank){
+            case 1: return 25;
             case 2:
+            case 3:
                 return 0;
         }
-        return 25;
+        return 0;
     }
 
-    private int intHeal(){
-        switch (level()){
-            case 1: return 25;
-            case 2: return 0;
+    private int intHeal(int rank){
+        switch (rank){
+            case 1: return 5;
+            case 2: return 25;
+            case 3: return 0;
         }
-        return 5;
+        return 0;
     }
 
 
     @Override
     public String desc() {
-        return Messages.get(this, "desc", intHeal(), partialHeal(), manaCost());
+        return Messages.get(this, "desc", intHeal(rank()), partialHeal(rank()), manaCost());
+    }
+
+    @Override
+    public String spellRankMessage(int rank) {
+        if (rank == 3){
+            return Messages.get(this, "rank3", BLOCK_DURATION);
+        }
+        return Messages.get(this, "rank", intHeal(rank), new DecimalFormat("#.##").format( partialHeal(rank)));
     }
 }

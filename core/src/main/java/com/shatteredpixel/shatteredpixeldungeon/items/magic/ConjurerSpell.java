@@ -140,8 +140,11 @@ public abstract class ConjurerSpell extends Item implements Rankable {
 
     @Override
     public String getRankMessage(int rank) {
-        return Messages.get(this, "mana_cost", manaCost(rank)) + "\n" +
-                Messages.get(this, "rank" + rank);
+        return Messages.get(this, "mana_cost", manaCost(rank)) + "\n" + spellRankMessage(rank);
+    }
+
+    public String spellRankMessage(int rank){
+        return Messages.get(this, "rank" + rank);
     }
 
     private  static CellSelector.Listener targeter = new  CellSelector.Listener(){

@@ -49,11 +49,11 @@ public class KiHealing extends AdHocSpell {
         hero.sprite.operate(hero.pos, new Callback() {
             @Override
             public void call() {
-                hero.spendAndNext(paralyse());
+                hero.spendAndNext(paralyse(rank()));
                 hero.sprite.idle();
                 hero.sprite.emitter().burst(WhiteParticle.UP, 8);
                 Sample.INSTANCE.play(Assets.Sounds.LULLABY);
-                Regeneration.regenerate(hero, intHeal());
+                Regeneration.regenerate(hero, intHeal(rank()));
                 new Flare(10, 64).color(0xFFFFFF, true).show(Dungeon.hero.sprite.parent, DungeonTilemap.tileCenterToWorld(hero.pos), 1.5f);
             }
         });
@@ -61,23 +61,25 @@ public class KiHealing extends AdHocSpell {
         return true;
     }
 
-    private int intHeal(){
+    private int intHeal(int rank){
 //        if (Dungeon.mode == Dungeon.GameMode.HELL){
 //            return 0;
 //        }
-        switch (level()){
-            case 1: return 35;
-            case 2: return 60;
+        switch (rank){
+            case 1: return 20;
+            case 2: return 35;
+            case 3: return 60;
         }
-        return 20;
+        return 0;
     }
 
-    private float paralyse(){
-        switch (level()){
-            case 1: return 9f;
-            case 2: return 20f;
+    private float paralyse(int rank){
+        switch (rank){
+            case 1: return 3f;
+            case 2: return 9f;
+            case 3: return 20f;
         }
-        return 3f;
+        return 0f;
     }
 
     @Override
@@ -86,7 +88,12 @@ public class KiHealing extends AdHocSpell {
     }
 
     public String desc() {
-        return Messages.get(this, "desc", intHeal(), new DecimalFormat("#.#").format(paralyse()), manaCost());
+        return Messages.get(this, "desc", intHeal(rank()), new DecimalFormat("#.#").format(paralyse(rank())), manaCost());
+    }
+
+    @Override
+    public String spellRankMessage(int rank) {
+        return Messages.get(this, "rank", intHeal(rank), new DecimalFormat("#.#").format(paralyse(rank)));
     }
 
 }

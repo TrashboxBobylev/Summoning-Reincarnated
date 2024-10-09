@@ -47,7 +47,7 @@ public class Heal extends ConjurerSpell {
         Char ch = Actor.findChar(trajectory.collisionPos);
         if (ch != null && ch.alignment == Char.Alignment.ALLY){
             Sample.INSTANCE.play(Assets.Sounds.DRINK);
-            int healing = heal(ch);
+            int healing = heal(ch, rank());
 
             Regeneration.regenerate(ch, healing, true, true);
 
@@ -66,34 +66,42 @@ public class Heal extends ConjurerSpell {
         return 0;
     }
 
-    private int heal(Char ch){
+    private int heal(Char ch, int rank){
         if (ch.buff(Shocker.NoHeal.class) != null) return 0;
-        switch (level()){
-            case 1: return 10 + ch.HT / 6;
-            case 2: return 14 + ch.HT / 5;
+        switch (rank){
+            case 1: return intHeal(rank) + ch.HT / 15;
+            case 2: return intHeal(rank) + ch.HT / 6;
+            case 3: return intHeal(rank) + ch.HT / 5;
         }
-        return 5 + ch.HT / 15;
+        return 0;
     }
 
-    private int intHeal(){
-        switch (level()){
-            case 1: return 10;
-            case 2: return 14;
+    private int intHeal(int rank){
+        switch (rank){
+            case 1: return 5;
+            case 2: return 10;
+            case 3: return 14;
         }
-        return 5;
+        return 0;
     }
 
-    private float partialHeal(){
-        switch (level()){
-            case 1: return 16.6f;
-            case 2: return 20f;
+    private float partialHeal(int rank){
+        switch (rank){
+            case 1: return 6.6f;
+            case 2: return 16.6f;
+            case 3: return 20f;
         }
-        return 6.6f;
+        return 0;
     }
 
 
     @Override
     public String desc() {
-        return Messages.get(this, "desc", intHeal(), new DecimalFormat("#.##").format( partialHeal()), manaCost());
+        return Messages.get(this, "desc", intHeal(rank()), new DecimalFormat("#.##").format( partialHeal(rank())), manaCost());
+    }
+
+    @Override
+    public String spellRankMessage(int rank) {
+        return Messages.get(this, "rank", intHeal(rank), new DecimalFormat("#.##").format( partialHeal(rank)));
     }
 }

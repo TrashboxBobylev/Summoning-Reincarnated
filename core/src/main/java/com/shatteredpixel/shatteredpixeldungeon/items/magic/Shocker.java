@@ -42,6 +42,8 @@ import com.watabou.noosa.Camera;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PathFinder;
 
+import java.text.DecimalFormat;
+
 public class Shocker extends ConjurerSpell {
 
     {
@@ -64,25 +66,26 @@ public class Shocker extends ConjurerSpell {
         if (ch != null && ch.alignment == Char.Alignment.ALLY){
             Sample.INSTANCE.play(Assets.Sounds.ZAP);
             Sample.INSTANCE.play(Assets.Sounds.HEALTH_WARN);
-            ch.damage((int) (ch.HT * dmg()), new Grim());
+            ch.damage((int) (ch.HT * dmg(rank())), new Grim());
             Camera.main.shake(4f, 0.4f);
             GameScene.flash(0xFFFFFF);
-            Buff.affect(ch, Empowered.class, buff());
-            Buff.affect(ch, Haste.class, buff());
-            Buff.affect(ch, Adrenaline.class, buff());
-            Buff.affect(ch, Bless.class, buff());
-            Buff.affect(ch, NoHeal.class, noheal());
+            Buff.affect(ch, Empowered.class, buff(rank()));
+            Buff.affect(ch, Haste.class, buff(rank()));
+            Buff.affect(ch, Adrenaline.class, buff(rank()));
+            Buff.affect(ch, Bless.class, buff(rank()));
+            Buff.affect(ch, NoHeal.class, noheal(rank()));
 
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
         }
     }
 
-    private float dmg(){
-        switch (level()){
-            case 1: return 0.25f;
-            case 2: return 0.5f;
+    private float dmg(int rank){
+        switch (rank){
+            case 1: return 0.5f;
+            case 2: return 0.25f;
+            case 3: return 0.5f;
         }
-        return 0.5f;
+        return 0f;
     }
 
     @Override
@@ -95,26 +98,35 @@ public class Shocker extends ConjurerSpell {
         return 0;
     }
 
-    private int noheal(){
-        switch (level()){
-            case 1: return 30;
-            case 2: return 40;
+    private int noheal(int rank){
+        switch (rank){
+            case 1: return 50;
+            case 2: return 30;
+            case 3: return 40;
         }
-        return 50;
+        return 0;
     }
 
-    private int buff(){
-        switch (level()){
-            case 1: return 15;
-            case 2: return 10;
+    private int buff(int rank){
+        switch (rank){
+            case 1: return 20;
+            case 2: return 15;
+            case 3: return 10;
         }
-        return 20;
+        return 0;
     }
 
 
     @Override
     public String desc() {
-        return Messages.get(this, "desc" + level());
+        return Messages.get(this, "desc" + (rank() == 3 ? "3" : ""),
+                new DecimalFormat("#.##").format(dmg(rank()*100)), buff(rank()), noheal(rank()), manaCost());
+    }
+
+    @Override
+    public String spellRankMessage(int rank) {
+        return Messages.get(this, "rank" + (rank == 3 ? "3" : ""),
+                new DecimalFormat("#.##").format(dmg(rank*100)), buff(rank), noheal(rank));
     }
 
     public static class NoHeal extends FlavourBuff {
