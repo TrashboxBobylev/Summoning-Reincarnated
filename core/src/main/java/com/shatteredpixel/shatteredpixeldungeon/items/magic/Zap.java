@@ -84,11 +84,13 @@ public class Zap extends ConjurerSpell {
                 }
             } else {
                 ch.damage(0, curUser);
+                Buff.affect(ch, Minion.UniversalTargeting.class, 5f);
                 if (level() == 1){
                     Buff.affect(ch, Weakness.class, 10f);
                     Buff.affect(ch, Hex.class, 10f);
                     Buff.affect(ch, Vulnerable.class, 10f);
                 } else if (level() == 2){
+                    Buff.affect(ch, Minion.UniversalTargeting.class, 15f);
                     for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )){
                         if (mob instanceof Minion){
                             mob.enemy = ch;

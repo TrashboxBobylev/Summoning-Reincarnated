@@ -393,6 +393,7 @@ public abstract class Mob extends Char {
 				}
 			}
 			if (canAttack(ch)) priority *= 2.0f;
+			if (ch.buff(Minion.UniversalTargeting.class) != null) priority *= 10f;
 			enemies.put(ch, modifyPriority(priority) * enemies.get(ch));
 		}
 
@@ -546,7 +547,7 @@ public abstract class Mob extends Char {
 					if (mob instanceof Minion){
 						if (((Minion) mob).behaviorType == Minion.BehaviorType.AGGRESSIVE){
 							enemies.put(mob, mob.targetPriority());
-						} else if (buff(((Minion) mob).behaviorType.buffType) != null){
+						} else if (buff(((Minion) mob).behaviorType.buffType) != null || buff(Minion.UniversalTargeting.class) != null){
 							enemies.put(mob, mob.targetPriority());
 						} else {
 							enemies.put(mob, mob.targetPriority()/100f);

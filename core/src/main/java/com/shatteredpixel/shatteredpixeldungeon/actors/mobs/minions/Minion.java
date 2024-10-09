@@ -228,7 +228,7 @@ public class Minion extends Mob {
                 && (Dungeon.level.distance(enemy.pos, targetPos) <= distance)
                 && (invisible == 0)
                 && (!canBeIgnored(enemy))
-                && (behaviorType.buffType == null || enemy.buff(behaviorType.buffType) != null)){
+                && (behaviorType.buffType == null || enemy.buff(behaviorType.buffType) != null || enemy.buff(UniversalTargeting.class) != null)){
             return enemy;
         }
 
@@ -389,6 +389,8 @@ public class Minion extends Mob {
     public static class ProtectiveTargeting extends FlavourBuff implements TargetBuff {};
     //never actually inflicted, but seals the crash with enemy choosing
     public static class PassiveTargeting extends FlavourBuff implements TargetBuff {};
+    //conjurer spells
+    public static class UniversalTargeting extends FlavourBuff {};
 
     public class Wandering extends Mob.Wandering implements AiState{
 
