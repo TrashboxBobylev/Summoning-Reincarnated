@@ -24,7 +24,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.watabou.noosa.BitmapText;
@@ -78,7 +80,7 @@ public class ManaIndicator extends Tag {
 
     @Override
     public void update() {
-        if (Dungeon.hero != null) {
+        if (Dungeon.hero != null && (Dungeon.hero.heroClass == HeroClass.CONJURER || Dungeon.isChallenged(Conducts.Conduct.EVERYTHING))) {
             if (Dungeon.hero.mana != lastNumber || Dungeon.hero.maxMana() != lastMaxNumber) {
                 lastNumber = Dungeon.hero.mana;
                 lastMaxNumber = Dungeon.hero.maxMana();
