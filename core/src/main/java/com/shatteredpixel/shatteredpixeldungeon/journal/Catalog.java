@@ -333,6 +333,7 @@ public enum Catalog {
 		equipmentCatalogs.add(THROWN_WEAPONS);
 		equipmentCatalogs.add(WANDS);
 		equipmentCatalogs.add(STAFFS);
+		equipmentCatalogs.add(CONJURER_SPELLS);
 		equipmentCatalogs.add(RINGS);
 		equipmentCatalogs.add(ARTIFACTS);
 		equipmentCatalogs.add(TRINKETS);
