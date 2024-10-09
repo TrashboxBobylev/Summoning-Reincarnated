@@ -65,6 +65,8 @@ public class MagicalHolster extends Bag {
 						((MissileWeapon) item).holster = true;
 					} else if (item instanceof ElectricalExplosive){
 						((ElectricalExplosive) item).charge(owner);
+					} if (item instanceof Staff) {
+						((Staff) item).charge(owner);
 					}
 				}
 			}
