@@ -49,6 +49,7 @@ public class Stars extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.STARS;
+        collision = Ballistica.STOP_TARGET;
         usesTargeting = true;
     }
 
@@ -76,7 +77,7 @@ public class Stars extends ConjurerSpell {
             for (int i = 0; i < PathFinder.distance.length; i++) {
                 if (PathFinder.distance[i] < Integer.MAX_VALUE) {
                     Char ch = Actor.findChar(i);
-                    if (ch != null) {
+                    if (ch != null && ch.alignment != Char.Alignment.ALLY) {
                         ch.damage(damageRoll(rank()), this);
                         Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
 

@@ -49,7 +49,7 @@ import java.util.ArrayList;
 public abstract class ConjurerSpell extends Item implements Rankable {
 
     public static final String AC_ZAP	= "ZAP";
-    protected static int collision = Ballistica.FRIENDLY_PROJECTILE;
+    protected int collision = Ballistica.FRIENDLY_PROJECTILE;
 
     {
         defaultAction = AC_ZAP;
@@ -163,7 +163,7 @@ public abstract class ConjurerSpell extends Item implements Rankable {
                     return;
                 }
 
-                final Ballistica shot = new Ballistica( curUser.pos, target, collision);
+                final Ballistica shot = new Ballistica( curUser.pos, target, curSpell.collision);
                 int cell = shot.collisionPos;
                 if (curSpell.validateCell(cell)) {
 
