@@ -1049,6 +1049,18 @@ public abstract class Mob extends Char {
 			GLog.i( Messages.get(this, "died") );
 		}
 
+		if (((cause instanceof Minion || cause instanceof GoatClone) && (Dungeon.hero.heroClass == HeroClass.CONJURER || Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)))
+				|| (cause instanceof Hero && buff(Knife.SoulGain.class) != null) ||
+				cause instanceof ConjurerSpell){
+			int gain = (int) Math.floor(EXP*1.5f);
+			if (cause instanceof ConjurerSpell) gain /= 2;
+			gain = Math.min(Dungeon.hero.maxMana() - Dungeon.hero.mana, gain);
+			Dungeon.hero.mana += gain;
+			if (gain > 0) {
+				Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(gain), FloatingText.MANA);
+			}
+		}
+
 		boolean soulMarked = buff(SoulMark.class) != null;
 
 		doWithHordeMinions((minion) -> {
@@ -1070,18 +1082,6 @@ public abstract class Mob extends Char {
 					CellEmitter.get(pos).burst(ShadowParticle.CURSE, 6);
 					Sample.INSTANCE.play(Assets.Sounds.CURSED);
 				}
-			}
-		}
-
-		if ((((cause instanceof Minion || cause instanceof GoatClone) && (Dungeon.hero.heroClass == HeroClass.CONJURER || Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)))
-				|| (cause instanceof Hero && buff(Knife.SoulGain.class) != null)) ||
-				cause instanceof ConjurerSpell){
-			int gain = (int) Math.floor(EXP*1.5f);
-			if (cause instanceof ConjurerSpell) gain /= 2;
-			gain = Math.min(Dungeon.hero.maxMana() - Dungeon.hero.mana, gain);
-			Dungeon.hero.mana += gain;
-			if (gain > 0) {
-				Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(gain), FloatingText.MANA);
 			}
 		}
 	}
