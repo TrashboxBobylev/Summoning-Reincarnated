@@ -41,6 +41,8 @@ public class Robo extends Minion{
         spriteClass = DM150Sprite.class;
         minDefense = 8;
         maxDefense = 22;
+
+        properties.add(Property.INORGANIC);
     }
 
     @Override
