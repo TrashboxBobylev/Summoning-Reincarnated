@@ -762,7 +762,7 @@ public class WndJournal extends WndTabbed {
 					}
 				}
 
-				if (item instanceof Rankable)
+				if (item instanceof Rankable && !seen)
 					rankedItem = item.getClass();
 
 				sprite = new ItemSprite(item.image, seen ? item.glowing() : null);
