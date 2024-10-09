@@ -62,6 +62,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.Shad
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.DirectableAlly;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.EffectTarget;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.GoatClone;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Surprise;
@@ -72,6 +73,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.ConjurerSpell;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
@@ -84,6 +86,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Lucky;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Knife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
@@ -1067,6 +1070,18 @@ public abstract class Mob extends Char {
 					CellEmitter.get(pos).burst(ShadowParticle.CURSE, 6);
 					Sample.INSTANCE.play(Assets.Sounds.CURSED);
 				}
+			}
+		}
+
+		if ((((cause instanceof Minion || cause instanceof GoatClone) && (Dungeon.hero.heroClass == HeroClass.CONJURER || Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)))
+				|| (cause instanceof Hero && buff(Knife.SoulGain.class) != null)) ||
+				cause instanceof ConjurerSpell){
+			int gain = (int) Math.floor(EXP*1.5f);
+			if (cause instanceof ConjurerSpell) gain /= 2;
+			gain = Math.min(Dungeon.hero.maxMana() - Dungeon.hero.mana, gain);
+			Dungeon.hero.mana += gain;
+			if (gain > 0) {
+				Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(gain), FloatingText.MANA);
 			}
 		}
 	}
