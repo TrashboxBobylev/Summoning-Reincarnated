@@ -49,7 +49,7 @@ public class Heal extends ConjurerSpell {
             Sample.INSTANCE.play(Assets.Sounds.DRINK);
             int healing = heal(ch, rank());
 
-            Regeneration.regenerate(ch, healing, true, true);
+            Regeneration.regenerate(ch, healing, true, false);
 
             ch.sprite.emitter().burst(Speck.factory(Speck.STEAM), 5);
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
