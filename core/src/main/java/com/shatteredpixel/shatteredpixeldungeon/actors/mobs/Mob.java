@@ -397,6 +397,8 @@ public abstract class Mob extends Char {
 			enemies.put(ch, modifyPriority(priority) * enemies.get(ch));
 		}
 
+		if (enemies.isEmpty()) return null;
+
 		float max = Collections.max(enemies.values());
 
 		for (Char ch: enemyList){
