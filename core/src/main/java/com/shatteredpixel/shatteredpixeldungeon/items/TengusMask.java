@@ -32,7 +32,18 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Preparation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.GoatClone;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.Concentration;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.DirectingPulse;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.EnergizedBlast;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.MotionBloom;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.ShardsOfDespair;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.AntarcticTouch;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.ArtemisBridge;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.HolyAura;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.TommiesArmorSpell;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.TransmogrificationWand;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -111,6 +122,23 @@ public class TengusMask extends Item {
 		
 		curUser.sprite.operate( curUser.pos );
 		Sample.INSTANCE.play( Assets.Sounds.MASTERY );
+
+		if (curUser.subClass == HeroSubClass.WILL_SORCERER){
+			GoatClone.spawnClone();
+
+			new EnergizedBlast().collectWithAnnouncing();
+			new MotionBloom().collectWithAnnouncing();
+			new Concentration().collectWithAnnouncing();
+			new DirectingPulse().collectWithAnnouncing();
+			new ShardsOfDespair().collectWithAnnouncing();
+		}
+		if (curUser.subClass == HeroSubClass.SOUL_WIELDER){
+			new AntarcticTouch().collectWithAnnouncing();
+			new TommiesArmorSpell().collectWithAnnouncing();
+			new TransmogrificationWand().collectWithAnnouncing();
+			new ArtemisBridge().collectWithAnnouncing();
+			new HolyAura().collectWithAnnouncing();
+		}
 		
 		Emitter e = curUser.sprite.centerEmitter();
 		e.pos(e.x-2, e.y-6, 4, 4);

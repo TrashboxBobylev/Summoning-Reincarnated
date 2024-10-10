@@ -204,7 +204,7 @@ public class Badges {
 		BOSS_SLAIN_3_CHAMPION,
 		BOSS_SLAIN_3_MONK,
 		BOSS_SLAIN_3_SOUL_WIELDER,
-		BOSS_SLAIN_3_KNIGHT,
+		BOSS_SLAIN_3_WILL_SORCERER,
 		BOSS_SLAIN_3_ALL_SUBCLASSES ( 103, BadgeType.GLOBAL ),
 		BOSS_CHALLENGE_3            ( 104 ),
 		BOSS_CHALLENGE_4            ( 105 ),
@@ -861,6 +861,8 @@ public class Badges {
 		thirdBossSubclassBadges.put(HeroSubClass.WARDEN, Badge.BOSS_SLAIN_3_WARDEN);
 		thirdBossSubclassBadges.put(HeroSubClass.CHAMPION, Badge.BOSS_SLAIN_3_CHAMPION);
 		thirdBossSubclassBadges.put(HeroSubClass.MONK, Badge.BOSS_SLAIN_3_MONK);
+		thirdBossSubclassBadges.put(HeroSubClass.SOUL_WIELDER, Badge.BOSS_SLAIN_3_SOUL_WIELDER);
+		thirdBossSubclassBadges.put(HeroSubClass.WILL_SORCERER, Badge.BOSS_SLAIN_3_WILL_SORCERER);
 	}
 	
 	public static void validateBossSlain() {

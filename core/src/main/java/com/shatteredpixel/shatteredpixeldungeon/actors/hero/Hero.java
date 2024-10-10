@@ -86,6 +86,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snake;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Wizard;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.GoatClone;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CheckedCell;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
@@ -321,6 +322,7 @@ public class Hero extends Char {
 				}
 			}
 		}
+		if (subClass == HeroSubClass.SOUL_WIELDER) attunementBonus++;
 
 		return ATU + attunementBonus;
 	}
@@ -509,6 +511,12 @@ public class Hero extends Char {
 	public int tier() {
 		Armor armor = belongings.armor();
 		if (heroClass == HeroClass.CONJURER){
+			switch (subClass){
+				case SOUL_WIELDER:
+					return 4;
+				case WILL_SORCERER:
+					return 5;
+			}
 			return 1;
 		} else if (armor instanceof ClassArmor){
 			return 6;
@@ -773,6 +781,7 @@ public class Hero extends Char {
 				&& (buff(Recharging.class) != null || buff(ArtifactRecharge.class) != null)){
 			dmg = Math.round(dmg * 1.025f + (.025f*pointsInTalent(Talent.WEAPON_RECHARGING)));
 		}
+		if (subClass == HeroSubClass.SOUL_WIELDER) dmg *= 0.75f;
 
 		if (dmg < 0) dmg = 0;
 		return dmg;
@@ -1015,6 +1024,10 @@ public class Hero extends Char {
 		
 		if(hasTalent(Talent.BARKSKIN) && Dungeon.level.map[pos] == Terrain.FURROWED_GRASS){
 			Barkskin.conditionallyAppend(this, (lvl*pointsInTalent(Talent.BARKSKIN))/2, 1 );
+		}
+
+		if (subClass == HeroSubClass.WILL_SORCERER && GoatClone.findClone() == null){
+			GoatClone.spawnClone();
 		}
 		
 		return actResult;

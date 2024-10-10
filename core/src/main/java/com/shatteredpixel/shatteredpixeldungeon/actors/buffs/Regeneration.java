@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
@@ -48,7 +49,7 @@ public class Regeneration extends Buff {
 
 	public boolean canHeal(){
 		if (target instanceof Hero){
-			return !((Hero)target).isStarving()/* && ((Hero) target).subClass != HeroSubClass.OCCULTIST*/;
+			return !((Hero)target).isStarving() && ((Hero) target).subClass != HeroSubClass.WILL_SORCERER;
 		} else if (target.alignment == Char.Alignment.ENEMY && Dungeon.isChallenged(Conducts.Conduct.REGENERATION)){
 			return true;
 		}

@@ -59,6 +59,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.MobSpawner;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Piranha;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlowParticle;
@@ -1407,6 +1408,18 @@ public abstract class Level implements Bundlable {
 						if (!fieldOfView[p] && distance(c.pos, p) <= mindVisRange) {
 							for (int i : PathFinder.NEIGHBOURS9) {
 								heroMindFov[mob.pos + i] = true;
+							}
+						}
+					}
+				}
+
+				if (((Hero)c).subClass == HeroSubClass.SOUL_WIELDER) {
+					for (Mob mob : mobs) {
+						int p = mob.pos;
+						if (mob instanceof Minion) {
+
+							if (!fieldOfView[p]){
+								Dungeon.hero.mindVisionEnemies.add(mob);
 							}
 						}
 					}

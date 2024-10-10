@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.effects.WhiteWound;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -131,7 +132,7 @@ public class Knife extends MeleeWeapon {
     @Override
     public float speedMultiplier(Char owner) {
         float v = super.speedMultiplier(owner);
-//        if (Dungeon.hero.subClass == HeroSubClass.OCCULTIST) v /= 0.7f;
+        if (Dungeon.hero.subClass == HeroSubClass.WILL_SORCERER) v /= 0.7f;
         return v;
     }
 
