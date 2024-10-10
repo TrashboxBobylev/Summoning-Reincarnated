@@ -2513,6 +2513,9 @@ public class Hero extends Char {
 			
 		}
 		curAction = null;
+		if (heroClass == HeroClass.CONJURER){
+			((HeroSprite)sprite).updateArmor();
+		}
 
 		if (!ready) {
 			super.onOperateComplete();
