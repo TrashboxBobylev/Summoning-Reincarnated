@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StormCloud;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Tengu;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -348,7 +349,7 @@ public class PrisonBossLevel extends Level {
 		}
 		
 		for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
-			if (mob != tengu && (safeArea == null || !safeArea.inside(cellToPoint(mob.pos)))){
+			if (mob != tengu && (safeArea == null || !safeArea.inside(cellToPoint(mob.pos))) && !(mob instanceof Minion)){
 				mob.destroy();
 				if (mob.sprite != null)
 					mob.sprite.killAndErase();
@@ -464,6 +465,8 @@ public class PrisonBossLevel extends Level {
 				Dungeon.hero.interrupt();
 				
 				clearEntities( pauseSafeArea );
+				Mob.holdAllies(this, Dungeon.hero.pos);
+				Mob.restoreAllies(this, Dungeon.hero.pos);
 				
 				setMapArena();
 				cleanMapState();
