@@ -142,15 +142,16 @@ public class GoatClone extends NPC {
     public static void spawnClone(){
         ArrayList<Integer> respawnPoints = new ArrayList<>();
 
-        for (int i = 0; i < PathFinder.NEIGHBOURS9.length; i++) {
-            int p = Dungeon.hero.pos + PathFinder.NEIGHBOURS9[i];
+        for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
+            int p = Dungeon.hero.pos + PathFinder.NEIGHBOURS8[i];
             if ((Actor.findChar( p ) == null || Actor.findChar( p ) == Dungeon.hero) && Dungeon.level.passable[p]) {
                 respawnPoints.add( p );
             }
         }
-        int index = 1;
-        if (!respawnPoints.isEmpty())
-            index = Random.index( respawnPoints );
+
+        if (respawnPoints.isEmpty()) return;
+
+        int index = Random.index( respawnPoints );
 
         GoatClone clone = new GoatClone();
 
