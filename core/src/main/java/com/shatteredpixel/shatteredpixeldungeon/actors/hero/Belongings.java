@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindofMisc;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
@@ -211,7 +212,15 @@ public class Belongings implements Iterable<Item> {
 	public static void preview( GamesInProgress.Info info, Bundle bundle ) {
 		if (bundle.contains( ARMOR )){
 			Armor armor = ((Armor)bundle.get( ARMOR ));
-			if (armor instanceof ClassArmor){
+			if (armor instanceof ConjurerArmor){
+				info.armorTier = 1;
+				switch (info.subClass){
+					case SOUL_WIELDER:
+						info.armorTier = 4; break;
+					case WILL_SORCERER:
+						info.armorTier = 5; break;
+				}
+			} else if (armor instanceof ClassArmor){
 				info.armorTier = 6;
 			} else {
 				info.armorTier = armor.tier;
