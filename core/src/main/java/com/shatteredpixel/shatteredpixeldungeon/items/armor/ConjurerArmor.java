@@ -105,4 +105,8 @@ public class ConjurerArmor extends Armor implements Rankable {
         return 9;
     }
 
+    @Override
+    public boolean keptThroughLostInventory() {
+        return true;
+    }
 }
