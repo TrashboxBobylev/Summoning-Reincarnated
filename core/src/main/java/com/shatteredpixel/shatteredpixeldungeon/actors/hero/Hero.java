@@ -122,10 +122,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.Key;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.Field;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.Necro;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.Shocker;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.Wave;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.DreemurrsNecromancy;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.PushingWaveform;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.RunicShell;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.ShockerBreaker;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.SubNullFieldLighter;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
@@ -2091,11 +2092,11 @@ public class Hero extends Char {
 				defenseSkill++;
 
 				if (heroClass == HeroClass.CONJURER) {
-					if (lvl == 5) new com.shatteredpixel.shatteredpixeldungeon.items.magic.Barrier().identify().collectWithAnnouncing();
-					if (lvl == 7) new Wave().identify().collectWithAnnouncing();
-					if (lvl == 9) new Shocker().identify().collectWithAnnouncing();
-					if (lvl == 11) new Necro().identify().collectWithAnnouncing();
-					if (lvl == 15) new Field().identify().collectWithAnnouncing();
+					if (lvl == 5) new RunicShell().identify().collectWithAnnouncing();
+					if (lvl == 7) new PushingWaveform().identify().collectWithAnnouncing();
+					if (lvl == 9) new ShockerBreaker().identify().collectWithAnnouncing();
+					if (lvl == 11) new DreemurrsNecromancy().identify().collectWithAnnouncing();
+					if (lvl == 15) new SubNullFieldLighter().identify().collectWithAnnouncing();
 				}
 
 			} else {

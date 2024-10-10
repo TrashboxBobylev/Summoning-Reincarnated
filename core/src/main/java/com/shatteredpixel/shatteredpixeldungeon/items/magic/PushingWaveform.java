@@ -45,7 +45,7 @@ import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
-public class Wave extends ConjurerSpell {
+public class PushingWaveform extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.CAMOUFLAGE;

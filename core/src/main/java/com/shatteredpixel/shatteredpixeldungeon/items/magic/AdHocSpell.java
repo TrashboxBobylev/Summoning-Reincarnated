@@ -27,7 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.magic;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.KiHealing;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.Concentration;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 
@@ -54,7 +54,7 @@ public abstract class AdHocSpell extends ConjurerSpell {
                     curUser.mana -= manaCost();
                     Invisibility.dispel();
                     curUser.busy();
-                    if (!(this instanceof KiHealing))
+                    if (!(this instanceof Concentration))
                         curUser.spendAndNext(1f);
                 }
                 updateQuickslot();

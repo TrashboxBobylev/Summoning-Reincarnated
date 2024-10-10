@@ -44,7 +44,7 @@ import com.watabou.utils.PathFinder;
 
 import java.text.DecimalFormat;
 
-public class Shocker extends ConjurerSpell {
+public class ShockerBreaker extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.SHOCKER;

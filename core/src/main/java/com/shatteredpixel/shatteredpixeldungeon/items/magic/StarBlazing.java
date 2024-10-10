@@ -45,7 +45,7 @@ import com.watabou.utils.PathFinder;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
-public class Stars extends ConjurerSpell {
+public class StarBlazing extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.STARS;

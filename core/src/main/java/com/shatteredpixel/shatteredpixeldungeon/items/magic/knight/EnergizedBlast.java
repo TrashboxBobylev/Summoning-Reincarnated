@@ -43,7 +43,7 @@ import com.watabou.utils.PathFinder;
 
 import java.text.DecimalFormat;
 
-public class Boom extends AdHocSpell {
+public class EnergizedBlast extends AdHocSpell {
 
     {
         image = ItemSpriteSheet.BOOM;

@@ -62,9 +62,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.Heal;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.Stars;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.Zap;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.BeamOfAffection;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.EnergizedRenewal;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.StarBlazing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
@@ -156,11 +156,11 @@ public enum HeroClass {
 			book.collect();
 			FroggitStaff staff1 = new FroggitStaff();
 			staff1.identify().collect();
-			Stars star = new Stars();
+			StarBlazing star = new StarBlazing();
 			star.collect();
-			Heal heal = new Heal();
-			heal.collect();
-			new Zap().collect();
+			EnergizedRenewal energizedRenewal = new EnergizedRenewal();
+			energizedRenewal.collect();
+			new BeamOfAffection().collect();
 			Dungeon.quickslot.setSlot(4, staff1);
 			Dungeon.quickslot.setSlot(5, book);
 			new PotionBandolier().collect();
@@ -357,11 +357,11 @@ public enum HeroClass {
 
 		hero.HP = hero.HT = 13;
 		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
-			Stars star = new Stars();
+			StarBlazing star = new StarBlazing();
 			star.collect();
-			Heal heal = new Heal();
-			heal.collect();
-			new Zap().collect();
+			EnergizedRenewal energizedRenewal = new EnergizedRenewal();
+			energizedRenewal.collect();
+			new BeamOfAffection().collect();
 		}
 
 		new PotionOfStrength().identify();

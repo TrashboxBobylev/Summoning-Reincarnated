@@ -80,24 +80,24 @@ import com.shatteredpixel.shatteredpixeldungeon.items.keys.CrystalKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.Barrier;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.Field;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.Heal;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.Necro;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.Shocker;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.Stars;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.Wave;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.Zap;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.Boom;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.Flower;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.KiHealing;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.Punch;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.Shards;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.Defense;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.Magical;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.Offense;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.Ranged;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.Support;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.BeamOfAffection;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.DreemurrsNecromancy;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.EnergizedRenewal;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.PushingWaveform;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.RunicShell;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.ShockerBreaker;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.StarBlazing;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.SubNullFieldLighter;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.Concentration;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.DirectingPulse;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.EnergizedBlast;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.MotionBloom;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.ShardsOfDespair;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.AntarcticTouch;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.ArtemisBridge;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.HolyAura;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.TommiesArmorSpell;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.TransmogrificationWand;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.AquaBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.CausticBrew;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.brews.FrostburnBrew;
@@ -251,9 +251,9 @@ public enum Catalog {
 		STAFFS.addItems(Generator.Category.STAFF_T4.classes);
 		STAFFS.addItems(Generator.Category.STAFF_T5.classes);
 
-		CONJURER_SPELLS.addItems(Stars.class, Heal.class, Zap.class, Barrier.class, Wave.class, Shocker.class, Necro.class, Field.class,
-				Punch.class, KiHealing.class, Boom.class, Shards.class, Flower.class,
-				Offense.class, Defense.class, Magical.class, Ranged.class, Support.class);
+		CONJURER_SPELLS.addItems(StarBlazing.class, EnergizedRenewal.class, BeamOfAffection.class, RunicShell.class, PushingWaveform.class, ShockerBreaker.class, DreemurrsNecromancy.class, SubNullFieldLighter.class,
+				DirectingPulse.class, Concentration.class, EnergizedBlast.class, ShardsOfDespair.class, MotionBloom.class,
+				AntarcticTouch.class, TommiesArmorSpell.class, TransmogrificationWand.class, ArtemisBridge.class, HolyAura.class);
 
 		RINGS.addItems(Generator.Category.RING.classes);
 

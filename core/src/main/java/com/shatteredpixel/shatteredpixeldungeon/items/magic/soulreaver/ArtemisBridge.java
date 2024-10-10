@@ -41,7 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 
-public class Ranged extends ConjurerSpell {
+public class ArtemisBridge extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.SR_RANGED;

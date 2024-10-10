@@ -36,7 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
-public class Flower extends ConjurerSpell {
+public class MotionBloom extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.FLOWER;

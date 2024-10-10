@@ -37,7 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 
-public class Support extends AdHocSpell {
+public class HolyAura extends AdHocSpell {
 
     {
         image = ItemSpriteSheet.SR_SUPPORT;

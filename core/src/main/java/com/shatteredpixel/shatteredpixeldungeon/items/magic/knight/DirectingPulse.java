@@ -22,86 +22,63 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.items.magic;
+package com.shatteredpixel.shatteredpixeldungeon.items.magic.knight;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.ConjurerSpell;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Knife;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.watabou.noosa.audio.Sample;
 
 import java.text.DecimalFormat;
 
-public class Heal extends ConjurerSpell {
+public class DirectingPulse extends ConjurerSpell {
 
     {
-        image = ItemSpriteSheet.HEAL;
+        image = ItemSpriteSheet.PUNCH;
+        usesTargeting = true;
     }
 
     @Override
     public void effect(Ballistica trajectory) {
         Char ch = Actor.findChar(trajectory.collisionPos);
-        if (ch != null && ch.alignment == Char.Alignment.ALLY){
-            Sample.INSTANCE.play(Assets.Sounds.DRINK);
-            int healing = heal(ch, rank());
-
-            Regeneration.regenerate(ch, healing, true, false);
-
-            ch.sprite.emitter().burst(Speck.factory(Speck.STEAM), 5);
+        if (ch != null && ch.alignment == Char.Alignment.ENEMY) {
+            Buff.affect(ch, Knife.SoulGain.class, buff(rank()));
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
+            Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
         }
     }
 
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 1;
-            case 2: return 4;
-            case 3: return 8;
-        }
-        return 0;
-    }
-
-    private int heal(Char ch, int rank){
-        if (ch.buff(Shocker.NoHeal.class) != null) return 0;
-        switch (rank){
-            case 1: return intHeal(rank) + ch.HT / 15;
-            case 2: return intHeal(rank) + ch.HT / 6;
-            case 3: return intHeal(rank) + ch.HT / 5;
-        }
-        return 0;
-    }
-
-    private int intHeal(int rank){
-        switch (rank){
             case 1: return 5;
-            case 2: return 10;
-            case 3: return 14;
+            case 2: return 3;
+            case 3: return 0;
         }
         return 0;
     }
 
-    private float partialHeal(int rank){
+    private float buff(int rank){
         switch (rank){
-            case 1: return 6.6f;
-            case 2: return 16.6f;
-            case 3: return 20f;
+            case 1: return 9.0f;
+            case 2: return 3.0f;
+            case 3: return 1.1f;
         }
-        return 0;
+        return 0f;
     }
-
 
     @Override
     public String desc() {
-        return Messages.get(this, "desc", intHeal(rank()), new DecimalFormat("#.##").format( partialHeal(rank())), manaCost());
+        return Messages.get(this, "desc", new DecimalFormat("#.#").format(buff(rank())), manaCost());
     }
 
     @Override
     public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", intHeal(rank), new DecimalFormat("#.##").format( partialHeal(rank)));
+        return Messages.get(this, "rank", new DecimalFormat("#.#").format(buff(rank)));
     }
 }

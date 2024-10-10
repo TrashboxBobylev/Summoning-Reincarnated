@@ -26,67 +26,74 @@ package com.shatteredpixel.shatteredpixeldungeon.items.magic;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.GonerField;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.NecromancyCD;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.NecromancyStat;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.BArray;
-import com.watabou.utils.PathFinder;
 
-import java.util.ArrayList;
-
-public class Field extends ConjurerSpell {
+public class DreemurrsNecromancy extends ConjurerSpell {
 
     {
-        image = ItemSpriteSheet.GONER;
+        image = ItemSpriteSheet.CLONE;
     }
 
     @Override
     public void effect(Ballistica trajectory) {
-        if (Dungeon.level.heroFOV[trajectory.collisionPos]) {
-            Sample.INSTANCE.play( Assets.Sounds.SHATTER );
-            Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
+        Char ch = Actor.findChar(trajectory.collisionPos);
+        if (ch != null && ch.alignment == Char.Alignment.ALLY
+                    && Dungeon.hero.buff(NecromancyCD.class) == null && ch.isAlive()){
+            Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
+            int healing = heal(rank());
+            ch.sprite.emitter().burst(Speck.factory(Speck.STEAM), 20);
+            Buff.affect(ch, NecromancyStat.class, 1000f).level = healing;
+            Buff.affect(Dungeon.hero, NecromancyCD.class, cd(rank()));
+
+            ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
         }
-        ArrayList<Integer> cells = new ArrayList<>();
-        PathFinder.buildDistanceMap( trajectory.collisionPos, BArray.not( Dungeon.level.solid, null ), 3 );
-            for (int i = 0; i < PathFinder.distance.length; i++) {
-                if (PathFinder.distance[i] < Integer.MAX_VALUE) {
-                    cells.add(i);
-            }
-        }
-        for (int i: cells)
-            GameScene.add(Blob.seed(i, resource(rank()) / cells.size(), GonerField.class));
     }
 
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 40;
-            case 2: return 60;
-            case 3: return 80;
+            case 1: return 9;
+            case 2: return 12;
+            case 3: return 30;
         }
         return 0;
     }
 
-    public int resource(int rank) {
+    private int heal(int rank){
         switch (rank){
-            case 1: return 250;
-            case 2: return 333;
-            case 3: return 425;
+            case 1: return 4;
+            case 2: return 10;
+            case 3: return 21;
         }
         return 0;
     }
+
+    private int cd(int rank){
+        switch (rank){
+            case 1: return 200;
+            case 2: return 640;
+            case 3: return 800;
+        }
+        return 0;
+    }
+
 
     @Override
     public String desc() {
-        return Messages.get(this, "desc", resource(rank()), manaCost());
+        return Messages.get(this, "desc", heal(rank()), cd(rank()), manaCost());
     }
 
     @Override
     public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", resource(rank));
+        return Messages.get(this, "rank", heal(rank), cd(rank));
     }
 }

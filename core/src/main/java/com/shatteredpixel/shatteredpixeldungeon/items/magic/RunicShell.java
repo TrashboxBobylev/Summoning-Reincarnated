@@ -25,34 +25,41 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.magic;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Block;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.NecromancyCD;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.NecromancyStat;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
 
-public class Necro extends ConjurerSpell {
+import java.text.DecimalFormat;
+
+public class RunicShell extends ConjurerSpell {
 
     {
-        image = ItemSpriteSheet.CLONE;
+        image = ItemSpriteSheet.SHIELD;
     }
+
+    private static final int BLOCK_DURATION = 12;
 
     @Override
     public void effect(Ballistica trajectory) {
         Char ch = Actor.findChar(trajectory.collisionPos);
-        if (ch != null && ch.alignment == Char.Alignment.ALLY
-                    && Dungeon.hero.buff(NecromancyCD.class) == null && ch.isAlive()){
-            Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
-            int healing = heal(rank());
-            ch.sprite.emitter().burst(Speck.factory(Speck.STEAM), 20);
-            Buff.affect(ch, NecromancyStat.class, 1000f).level = healing;
-            Buff.affect(Dungeon.hero, NecromancyCD.class, cd(rank()));
+        if (ch != null && ch.alignment == Char.Alignment.ALLY){
+            Sample.INSTANCE.play(Assets.Sounds.ATK_SPIRITBOW);
+            if (rank() < 3) {
+                int healing = heal(ch, rank());
+                Buff.affect(ch, Barrier.class).setShield(healing);
+                ch.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(healing), FloatingText.SHIELDING );
+            }
+            else {
+                Buff.affect(ch, Block.class, BLOCK_DURATION);
+            }
 
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
         }
@@ -61,27 +68,37 @@ public class Necro extends ConjurerSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 9;
-            case 2: return 12;
-            case 3: return 30;
+            case 1: return 3;
+            case 2: return 15;
+            case 3: return 20;
         }
         return 0;
     }
 
-    private int heal(int rank){
+    private int heal(Char ch, int rank){
         switch (rank){
-            case 1: return 4;
-            case 2: return 10;
-            case 3: return 21;
+            case 1: return 5 + ch.HT / 4;
+            case 2: return 25;
+//            case 3: return (int) (40 + ch.HT * 1.25f);
         }
         return 0;
     }
 
-    private int cd(int rank){
+    private int partialHeal(int rank){
         switch (rank){
-            case 1: return 200;
-            case 2: return 640;
-            case 3: return 800;
+            case 1: return 25;
+            case 2:
+            case 3:
+                return 0;
+        }
+        return 0;
+    }
+
+    private int intHeal(int rank){
+        switch (rank){
+            case 1: return 5;
+            case 2: return 25;
+            case 3: return 0;
         }
         return 0;
     }
@@ -89,11 +106,14 @@ public class Necro extends ConjurerSpell {
 
     @Override
     public String desc() {
-        return Messages.get(this, "desc", heal(rank()), cd(rank()), manaCost());
+        return Messages.get(this, "desc", intHeal(rank()), partialHeal(rank()), manaCost());
     }
 
     @Override
     public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", heal(rank), cd(rank));
+        if (rank == 3){
+            return Messages.get(this, "rank3", BLOCK_DURATION);
+        }
+        return Messages.get(this, "rank", intHeal(rank), new DecimalFormat("#.##").format( partialHeal(rank)));
     }
 }

@@ -27,39 +27,31 @@ package com.shatteredpixel.shatteredpixeldungeon.items.magic;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Block;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
 
 import java.text.DecimalFormat;
 
-public class Barrier extends ConjurerSpell {
+public class EnergizedRenewal extends ConjurerSpell {
 
     {
-        image = ItemSpriteSheet.SHIELD;
+        image = ItemSpriteSheet.HEAL;
     }
-
-    private static final int BLOCK_DURATION = 12;
 
     @Override
     public void effect(Ballistica trajectory) {
         Char ch = Actor.findChar(trajectory.collisionPos);
         if (ch != null && ch.alignment == Char.Alignment.ALLY){
-            Sample.INSTANCE.play(Assets.Sounds.ATK_SPIRITBOW);
-            if (rank() < 3) {
-                int healing = heal(ch, rank());
-                Buff.affect(ch, com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier.class).setShield(healing);
-                ch.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(healing), FloatingText.SHIELDING );
-            }
-            else {
-                Buff.affect(ch, Block.class, BLOCK_DURATION);
-            }
+            Sample.INSTANCE.play(Assets.Sounds.DRINK);
+            int healing = heal(ch, rank());
 
+            Regeneration.regenerate(ch, healing, true, false);
+
+            ch.sprite.emitter().burst(Speck.factory(Speck.STEAM), 5);
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
         }
     }
@@ -67,28 +59,19 @@ public class Barrier extends ConjurerSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 3;
-            case 2: return 15;
-            case 3: return 20;
+            case 1: return 1;
+            case 2: return 4;
+            case 3: return 8;
         }
         return 0;
     }
 
     private int heal(Char ch, int rank){
+        if (ch.buff(ShockerBreaker.NoHeal.class) != null) return 0;
         switch (rank){
-            case 1: return 5 + ch.HT / 4;
-            case 2: return 25;
-//            case 3: return (int) (40 + ch.HT * 1.25f);
-        }
-        return 0;
-    }
-
-    private int partialHeal(int rank){
-        switch (rank){
-            case 1: return 25;
-            case 2:
-            case 3:
-                return 0;
+            case 1: return intHeal(rank) + ch.HT / 15;
+            case 2: return intHeal(rank) + ch.HT / 6;
+            case 3: return intHeal(rank) + ch.HT / 5;
         }
         return 0;
     }
@@ -96,8 +79,17 @@ public class Barrier extends ConjurerSpell {
     private int intHeal(int rank){
         switch (rank){
             case 1: return 5;
-            case 2: return 25;
-            case 3: return 0;
+            case 2: return 10;
+            case 3: return 14;
+        }
+        return 0;
+    }
+
+    private float partialHeal(int rank){
+        switch (rank){
+            case 1: return 6.6f;
+            case 2: return 16.6f;
+            case 3: return 20f;
         }
         return 0;
     }
@@ -105,14 +97,11 @@ public class Barrier extends ConjurerSpell {
 
     @Override
     public String desc() {
-        return Messages.get(this, "desc", intHeal(rank()), partialHeal(rank()), manaCost());
+        return Messages.get(this, "desc", intHeal(rank()), new DecimalFormat("#.##").format( partialHeal(rank())), manaCost());
     }
 
     @Override
     public String spellRankMessage(int rank) {
-        if (rank == 3){
-            return Messages.get(this, "rank3", BLOCK_DURATION);
-        }
         return Messages.get(this, "rank", intHeal(rank), new DecimalFormat("#.##").format( partialHeal(rank)));
     }
 }

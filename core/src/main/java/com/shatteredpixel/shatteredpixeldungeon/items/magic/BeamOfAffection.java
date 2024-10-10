@@ -47,7 +47,7 @@ import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
 
-public class Zap extends ConjurerSpell {
+public class BeamOfAffection extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.ZAP;

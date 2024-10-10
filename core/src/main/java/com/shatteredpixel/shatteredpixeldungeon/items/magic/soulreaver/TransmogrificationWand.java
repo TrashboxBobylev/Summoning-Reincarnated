@@ -37,7 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Random;
 
-public class Magical extends ConjurerSpell {
+public class TransmogrificationWand extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.SR_MAGICAL;

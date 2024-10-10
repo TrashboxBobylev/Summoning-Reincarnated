@@ -39,7 +39,7 @@ import com.watabou.utils.Callback;
 
 import java.text.DecimalFormat;
 
-public class KiHealing extends AdHocSpell {
+public class Concentration extends AdHocSpell {
     {
         image = ItemSpriteSheet.HEALKI;
     }

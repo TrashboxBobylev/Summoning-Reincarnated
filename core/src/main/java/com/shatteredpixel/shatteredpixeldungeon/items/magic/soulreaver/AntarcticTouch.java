@@ -22,63 +22,82 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.items.magic.knight;
+package com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurn;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
+import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ConjurerSpell;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Knife;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.utils.Callback;
 
 import java.text.DecimalFormat;
 
-public class Punch extends ConjurerSpell {
+public class AntarcticTouch extends ConjurerSpell {
 
     {
-        image = ItemSpriteSheet.PUNCH;
+        image = ItemSpriteSheet.SR_OFFENSE;
         usesTargeting = true;
     }
 
     @Override
     public void effect(Ballistica trajectory) {
         Char ch = Actor.findChar(trajectory.collisionPos);
-        if (ch != null && ch.alignment == Char.Alignment.ENEMY) {
-            Buff.affect(ch, Knife.SoulGain.class, buff(rank()));
-            ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
+
+        if (ch != null){
+            Buff.affect(ch, FrostBurn.class).reignite(ch, frostburn(rank()));
             Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
+            Buff.affect(ch, Minion.UniversalTargeting.class, 15f);
+            for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
+                if (mob instanceof Minion && rank() < 3){
+                    mob.aggro(ch);
+                    mob.beckon(trajectory.collisionPos);
+                }
+            }
         }
     }
 
-    @Override
-    public int manaCost(int rank) {
+    private float frostburn(int rank){
         switch (rank){
-            case 1: return 5;
-            case 2: return 3;
-            case 3: return 0;
-        }
-        return 0;
-    }
-
-    private float buff(int rank){
-        switch (rank){
-            case 1: return 9.0f;
-            case 2: return 3.0f;
-            case 3: return 1.1f;
+            case 1: return 7f;
+            case 2: return 20f;
+            case 3: return 40f;
         }
         return 0f;
     }
 
     @Override
+    public int manaCost(int rank) {
+        switch (rank){
+            case 1: return 15;
+            case 2: return 25;
+            case 3: return 25;
+        }
+        return 0;
+    }
+
     public String desc() {
-        return Messages.get(this, "desc", new DecimalFormat("#.#").format(buff(rank())), manaCost());
+        return Messages.get(this, "desc", new DecimalFormat("#.#").format(frostburn(rank())), manaCost());
     }
 
     @Override
     public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", new DecimalFormat("#.#").format(buff(rank)));
+        return Messages.get(this, "rank"+ (rank == 3 ? "3" : ""), new DecimalFormat("#.#").format(frostburn(rank)), manaCost());
+    }
+
+    @Override
+    protected void fx(Ballistica bolt, Callback callback) {
+        MagicMissile.boltFromChar(curUser.sprite.parent,
+                MagicMissile.FROST,
+                curUser.sprite,
+                bolt.collisionPos,
+                callback);
     }
 }

@@ -51,6 +51,32 @@ public class ShatteredPixelDungeon extends Game {
 	public ShatteredPixelDungeon( PlatformSupport platform ) {
 		super( sceneClass == null ? TitleScene.class : sceneClass, platform );
 
+		//changing spell names
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.magic.SubNullFieldLighter.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.magic.Field" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.magic.DreemurrsNecromancy.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.magic.Necro" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.magic.ShockerBreaker.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.magic.Shocker" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.magic.PushingWaveform.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.magic.Wave" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.magic.RunicShell.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.magic.Barrier" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.magic.BeamOfAffection.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.magic.Zap" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.magic.EnergizedRenewal.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.magic.Heal" );
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.magic.StarBlazing.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.magic.Stars" );
+
 		//pre-v2.5.2
 		com.watabou.utils.Bundle.addAlias(
 				com.shatteredpixel.shatteredpixeldungeon.items.bombs.ElectricalExplosive.class,

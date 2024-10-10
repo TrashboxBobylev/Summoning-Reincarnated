@@ -47,7 +47,7 @@ import com.watabou.utils.Random;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
-public class Shards extends AdHocSpell {
+public class ShardsOfDespair extends AdHocSpell {
 
     {
         image = ItemSpriteSheet.SPREAD;
