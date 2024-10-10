@@ -41,11 +41,11 @@ public class Attunement extends Buff{
     }
 
     public static float empowering(){
-        float value = 2.5f;
+        float value = 1.5f;
         if (Dungeon.hero.belongings.armor instanceof ConjurerArmor &&
                 (((ConjurerArmor) Dungeon.hero.belongings.armor).rank() == 3))
             value *= 3f;
-        return value * ((Dungeon.hero.HT - Dungeon.hero.HP * 1f) / (Dungeon.hero.HT * 1f));
+        return (value+1f) * ((Dungeon.hero.HT - Dungeon.hero.HP * 1f) / (Dungeon.hero.HT * 1f));
     }
 
     @Override
