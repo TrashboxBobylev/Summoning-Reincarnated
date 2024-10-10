@@ -507,7 +507,9 @@ public class Hero extends Char {
 	
 	public int tier() {
 		Armor armor = belongings.armor();
-		if (armor instanceof ClassArmor){
+		if (heroClass == HeroClass.CONJURER){
+			return 1;
+		} else if (armor instanceof ClassArmor){
 			return 6;
 		} else if (armor != null){
 			return armor.tier;
