@@ -24,10 +24,12 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.staffs;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.GrayRat;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Sheep;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.utils.Point;
 
 public class SheepStaff extends Staff {
     {
@@ -54,12 +56,37 @@ public class SheepStaff extends Staff {
         return Minion.BehaviorType.AGGRESSIVE;
     }
 
+    public Point minDefense(int rank){
+        switch (rank){
+            case 1: return new Point(2, 2);
+            case 2: return new Point(1, 1);
+            case 3: return new Point(0, 0);
+        }
+        return new Point();
+    }
+
+    public Point maxDefense(int rank){
+        switch (rank){
+            case 1: return new Point(6, 3);
+            case 2: return new Point(4, 2);
+            case 3: return new Point(0, 0);
+        }
+        return new Point();
+    }
+
     @Override
     public void customizeMinion(Minion minion) {
-        switch (rank()){
-            case 1: minion.minDefense = 2; minion.maxDefense = 6; break;
-            case 2: minion.minDefense = 1; minion.maxDefense = 4; break;
-            case 3: minion.minDefense = 0; minion.maxDefense = 0; break;
-        }
+        int difference = (Dungeon.hero != null ? Dungeon.hero.ATU() : 0) - minion.attunement;
+        Point minDefense = minDefense(rank());
+        Point maxDefense = maxDefense(rank());
+        minion.minDefense = minDefense.x + minDefense.y*difference;
+        minion.maxDefense = maxDefense.x + maxDefense.y*difference;
+    }
+
+    public String minionDescription(int rank){
+        int difference = Math.max(0, (Dungeon.hero != null ? Dungeon.hero.ATU() : 0) - ATUReq());
+        Point minDefense = minDefense(rank);
+        Point maxDefense = maxDefense(rank);
+        return Messages.get(this, "minion_desc" + rank, minDefense.x + minDefense.y*difference, maxDefense.x + maxDefense.y*difference);
     }
 }
