@@ -33,9 +33,9 @@ public class MagicMissileStaff extends StationaryStaff {
         minionType = MagicMissileMinion.class;
         tier = 3;
         table = new BalanceTable(
-                40, 4, 15,
-                55, 10, 30,
-                20, 3, 12);
+                50, 4, 15,
+                65, 10, 30,
+                25, 3, 12);
     }
 
     @Override

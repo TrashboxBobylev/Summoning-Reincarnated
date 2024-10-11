@@ -34,9 +34,9 @@ public class GooStaff extends Staff {
         image = ItemSpriteSheet.GOO_STAFF;
         minionType = GooMinion.class;
         tier = 5;
-        table = new BalanceTable(45, 20, 35,
-                55, 12, 25,
-                15, 4, 15);
+        table = new BalanceTable(65, 20, 35,
+                80, 12, 25,
+                25, 4, 15);
     }
 
     @Override

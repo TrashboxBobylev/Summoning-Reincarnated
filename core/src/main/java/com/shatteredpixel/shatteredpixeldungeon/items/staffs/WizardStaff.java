@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.staffs;
 
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Wizard;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
@@ -33,9 +32,9 @@ public class WizardStaff extends Staff{
         image = ItemSpriteSheet.WIZARD_STAFF;
         minionType = Wizard.class;
         tier = 4;
-        table = new BalanceTable(35, 7, 17,
-                25, 2, 6,
-                35, 0, 0);
+        table = new BalanceTable(50, 7, 17,
+                40, 2, 6,
+                45, 0, 0);
         chargeTurns = 500;
     }
 

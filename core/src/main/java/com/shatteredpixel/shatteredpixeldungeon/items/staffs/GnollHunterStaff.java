@@ -33,8 +33,8 @@ public class GnollHunterStaff extends Staff {
         minionType = GnollHunter.class;
         tier = 3;
         table = new BalanceTable(
-                25, 5, 15,
-                30, 1, 5,
-                25, 20, 45);
+                32, 5, 15,
+                40, 1, 5,
+                32, 20, 45);
     }
 }

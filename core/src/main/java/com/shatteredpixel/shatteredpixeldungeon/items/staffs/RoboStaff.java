@@ -33,9 +33,9 @@ public class RoboStaff extends Staff {
         image = ItemSpriteSheet.ROBO_STAFF;
         minionType = Robo.class;
         tier = 4;
-        table = new BalanceTable(120, 20, 40,
-                105, 15, 25,
-                215, 5, 15);
+        table = new BalanceTable(135, 20, 40,
+                120, 15, 25,
+                230, 5, 15);
     }
 
     @Override

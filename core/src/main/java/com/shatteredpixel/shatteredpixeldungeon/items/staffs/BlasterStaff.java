@@ -32,9 +32,9 @@ public class BlasterStaff extends StationaryStaff {
         image = ItemSpriteSheet.GASTER_STAFF;
         minionType = GasterBlaster.class;
         tier = 5;
-        table = new BalanceTable(85, 20, 50,
-                75, 6, 14,
-                100, 30, 75);
+        table = new BalanceTable(110, 20, 50,
+                95, 6, 14,
+                150, 30, 75);
     }
 
     @Override
