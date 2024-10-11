@@ -204,6 +204,7 @@ public class Minion extends Mob {
     @Override
     public int drRoll() {
         int dr = Random.NormalIntRange(minDefense, maxDefense);
+        dr += Random.NormalIntRange(0, Dungeon.hero.ATU()*2);
 
         return super.drRoll() + dr;
     }
