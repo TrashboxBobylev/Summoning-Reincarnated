@@ -27,6 +27,8 @@ package com.shatteredpixel.shatteredpixeldungeon.items.magic;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -49,7 +51,11 @@ public class EnergizedRenewal extends ConjurerSpell {
             Sample.INSTANCE.play(Assets.Sounds.DRINK);
             int healing = heal(ch, rank());
 
-            Regeneration.regenerate(ch, healing, true, false);
+            if (rank() == 3){
+                Buff.affect(ch, Healing.class).setHeal(healing, 0, 1);
+            } else {
+                Regeneration.regenerate(ch, healing, true, false);
+            }
 
             ch.sprite.emitter().burst(Speck.factory(Speck.STEAM), 5);
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
@@ -59,9 +65,9 @@ public class EnergizedRenewal extends ConjurerSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 1;
-            case 2: return 4;
-            case 3: return 8;
+            case 1: return 3;
+            case 2: return 8;
+            case 3: return 12;
         }
         return 0;
     }
@@ -69,27 +75,27 @@ public class EnergizedRenewal extends ConjurerSpell {
     private int heal(Char ch, int rank){
         if (ch.buff(ShockerBreaker.NoHeal.class) != null) return 0;
         switch (rank){
-            case 1: return intHeal(rank) + ch.HT / 15;
-            case 2: return intHeal(rank) + ch.HT / 6;
-            case 3: return intHeal(rank) + ch.HT / 5;
+            case 1: return intHeal(rank);
+            case 2: return ch.HT / 4;
+            case 3: return ch.HT;
         }
         return 0;
     }
 
     private int intHeal(int rank){
         switch (rank){
-            case 1: return 5;
-            case 2: return 10;
-            case 3: return 14;
+            case 1: return 10;
+            case 2: return 0;
+            case 3: return 0;
         }
         return 0;
     }
 
     private float partialHeal(int rank){
         switch (rank){
-            case 1: return 6.6f;
-            case 2: return 16.6f;
-            case 3: return 20f;
+            case 1: return 0f;
+            case 2: return 25f;
+            case 3: return 100f;
         }
         return 0;
     }
@@ -102,6 +108,9 @@ public class EnergizedRenewal extends ConjurerSpell {
 
     @Override
     public String spellRankMessage(int rank) {
+        if (rank == 3){
+            return Messages.get(this, "rank3", new DecimalFormat("#.##").format( partialHeal(rank)));
+        }
         return Messages.get(this, "rank", intHeal(rank), new DecimalFormat("#.##").format( partialHeal(rank)));
     }
 }
