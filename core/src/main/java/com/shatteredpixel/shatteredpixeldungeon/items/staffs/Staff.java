@@ -628,9 +628,9 @@ public abstract class Staff extends Item implements AttunementItem, Rankable, We
         BalanceTable(int hp1, int min1, int max1,
                      int hp2, int min2, int max2,
                      int hp3, int min3, int max3){
-            this.hp1 = hp1; this.hpInc1 = hp1 / 3; this.min1 = min1; this.max1 = max1; this.minInc1 = min1 / 3; this.maxInc1 = max1 / 3;
-            this.hp2 = hp2; this.hpInc2 = hp2 / 3; this.min2 = min2; this.max2 = max2; this.minInc2 = min2 / 3; this.maxInc2 = max2 / 3;
-            this.hp3 = hp3; this.hpInc3 = hp3 / 3; this.min3 = min3; this.max3 = max3; this.minInc3 = min3 / 3; this.maxInc3 = max3 / 3;
+            this.hp1 = hp1; this.hpInc1 = hp1 / 5; this.min1 = min1; this.max1 = max1; this.minInc1 = min1 / 4; this.maxInc1 = max1 / 4;
+            this.hp2 = hp2; this.hpInc2 = hp2 / 5; this.min2 = min2; this.max2 = max2; this.minInc2 = min2 / 4; this.maxInc2 = max2 / 4;
+            this.hp3 = hp3; this.hpInc3 = hp3 / 5; this.min3 = min3; this.max3 = max3; this.minInc3 = min3 / 4; this.maxInc3 = max3 / 4;
         }
     }
 }
