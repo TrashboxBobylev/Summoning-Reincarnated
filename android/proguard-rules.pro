@@ -39,5 +39,4 @@
     float   reportRayFixture(long, float, float, float, float, float);
 }
 
--keep class org.apache.commons.** { *; }
--keep class java.lang.** { *; }
+-keep class org.apache.commons.lang3.ClassUtils { *; }
