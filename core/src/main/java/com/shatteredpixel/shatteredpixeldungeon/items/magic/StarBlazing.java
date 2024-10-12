@@ -101,7 +101,7 @@ public class StarBlazing extends ConjurerSpell {
         switch (rank){
             case 1: return 1;
             case 2: return 4;
-            case 3: return 10;
+            case 3: return 12;
         }
         return 0;
     }
@@ -110,7 +110,7 @@ public class StarBlazing extends ConjurerSpell {
         switch (rank){
             case 1: return 0;
             case 2: return 1;
-            case 3: return 2;
+            case 3: return 8;
         }
         return 0;
     }
@@ -118,8 +118,8 @@ public class StarBlazing extends ConjurerSpell {
     private int min(int rank){
         switch (rank){
             case 1: return (int) (3 + heroLvl() / 3f);
-            case 2: return (int) (5 + heroLvl()/2.5f);
-            case 3: return (int) (7 + heroLvl()/2f);
+            case 2: return (int) (6 + heroLvl()/2f);
+            case 3: return (int) (6 + heroLvl()/2f);
         }
         return 0;
     }
@@ -127,7 +127,7 @@ public class StarBlazing extends ConjurerSpell {
     private int max(int rank){
         switch (rank){
             case 1: return (int) (8 + heroLvl() / 2f);
-            case 2: return (int) (10 + heroLvl()/1.5f);
+            case 2: return (int) (12 + heroLvl()/1.25f);
             case 3: return (int) (12 + heroLvl()/1.25f);
         }
         return 0;
@@ -154,6 +154,23 @@ public class StarBlazing extends ConjurerSpell {
             @Override
             public void call() {
                 Dungeon.hero.sprite.idle();
+                if (rank() == 3){
+                    PathFinder.buildDistanceMap(bolt.collisionPos, BArray.not(Dungeon.level.solid, null), range(rank()));
+                    for (int i = 0; i < PathFinder.distance.length; i++) {
+                        if (PathFinder.distance[i] < Integer.MAX_VALUE && i != bolt.collisionPos) {
+                            Char ch = Actor.findChar(i);
+                            if (ch != null && ch.alignment != Char.Alignment.ALLY) {
+                                MissileSprite starSprite = (MissileSprite) Dungeon.hero.sprite.parent.recycle(MissileSprite.class);
+                                Item sprite = new ProjectileStar();
+                                PointF starDest = DungeonTilemap.tileCenterToWorld(i);
+                                PointF starSource = DungeonTilemap.raisedTileCenterToWorld(Dungeon.hero.pos);
+                                starSource.y -= 150;
+
+                                starSprite.reset( starSource, starDest, sprite, () -> {});
+                            }
+                        }
+                    }
+                }
                 MissileSprite starSprite = (MissileSprite) Dungeon.hero.sprite.parent.recycle(MissileSprite.class);
                 Item sprite = new ProjectileStar();
                 PointF starDest = DungeonTilemap.tileCenterToWorld(bolt.collisionPos);
