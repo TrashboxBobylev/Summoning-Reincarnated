@@ -2,9 +2,9 @@ apply plugin: 'com.android.application'
 
 android {
     namespace 'com.shatteredpixel.shatteredpixeldungeon.android'
-    isCoreLibraryDesugaringEnabled = true
     compileSdk appAndroidCompileSDK
     compileOptions.sourceCompatibility = compileOptions.targetCompatibility = appJavaCompatibility
+    compileOptions.isCoreLibraryDesugaringEnabled = true
 
     sourceSets.main.assets.srcDirs = [new File(project(':core').projectDir, "/src/main/assets")]
 
@@ -19,7 +19,7 @@ android {
         minSdkVersion appAndroidMinSDK
         targetSdkVersion appAndroidTargetSDK
         resourceConfigurations += ['en_US', 'cs', 'de', 'el', 'es', 'fr', 'hu', 'in', 'it', 'ja', 'ko', 'nl', 'pl', 'pt', 'ru', 'tr', 'uk', 'vi', 'zh_CN']
-
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -75,7 +75,7 @@ dependencies {
     natives "com.badlogicgames.gdx:gdx-freetype-platform:1.11.0:natives-x86_64"
     implementation "com.badlogicgames.gdx-controllers:gdx-controllers-android:$gdxControllersVersion"
     implementation "com.github.RohitSurwase.UCE-Handler:uce_handler:1.4"
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.1.2"
 }
 
 // called every time gradle gets executed, takes the native dependencies of
