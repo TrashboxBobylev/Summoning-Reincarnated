@@ -40,4 +40,4 @@
 }
 
 -keep class org.apache.commons.** { *; }
--keep class java.lang.invoke.** { *; }
+-keep class java.lang.** { *; }
