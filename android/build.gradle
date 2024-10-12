@@ -4,7 +4,7 @@ android {
     namespace 'com.shatteredpixel.shatteredpixeldungeon.android'
     compileSdk appAndroidCompileSDK
     compileOptions.sourceCompatibility = compileOptions.targetCompatibility = appJavaCompatibility
-    compileOptions.isCoreLibraryDesugaringEnabled = true
+    compileOptions.coreLibraryDesugaringEnabled = true
 
     sourceSets.main.assets.srcDirs = [new File(project(':core').projectDir, "/src/main/assets")]
 
