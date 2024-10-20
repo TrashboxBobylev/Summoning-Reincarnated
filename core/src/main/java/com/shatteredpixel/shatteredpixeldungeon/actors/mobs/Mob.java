@@ -1051,7 +1051,7 @@ public abstract class Mob extends Char {
 		}
 
 		if (cause instanceof ManaSource && (Dungeon.hero.heroClass == HeroClass.CONJURER || Dungeon.isChallenged(Conducts.Conduct.EVERYTHING))){
-			int gain = (int) Math.floor(EXP*((ManaSource)cause).manaModifier(this));
+			int gain = (int) Math.floor(Dungeon.hero.ATU()*((ManaSource)cause).manaModifier(this));
 			gain = Math.min(Dungeon.hero.maxMana() - Dungeon.hero.mana, gain);
 			Dungeon.hero.mana += gain;
 			if (gain > 0) {
