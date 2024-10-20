@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -46,7 +47,7 @@ import com.watabou.utils.Callback;
 
 import java.util.ArrayList;
 
-public abstract class ConjurerSpell extends Item implements Rankable {
+public abstract class ConjurerSpell extends Item implements Rankable, ManaSource {
 
     public static final String AC_ZAP	= "ZAP";
     protected int collision = Ballistica.FRIENDLY_PROJECTILE;
@@ -136,6 +137,11 @@ public abstract class ConjurerSpell extends Item implements Rankable {
 
     public boolean validateCell(int pos){
         return true;
+    }
+
+    @Override
+    public float manaModifier(Char source) {
+        return 0.5f;
     }
 
     @Override
