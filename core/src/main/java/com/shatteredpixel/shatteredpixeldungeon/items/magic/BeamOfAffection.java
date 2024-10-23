@@ -39,9 +39,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.audio.Sample;
@@ -61,7 +63,12 @@ public class BeamOfAffection extends ConjurerSpell {
                 if (rank() != 3)
                     ch.die( curUser );
                 if (rank() == 2){
-                    Dungeon.hero.mana = Math.min(Dungeon.hero.mana + 24, Dungeon.hero.maxMana());
+                    int gain = 18;
+                    gain = Math.min(Dungeon.hero.maxMana() - Dungeon.hero.mana, gain);
+                    Dungeon.hero.mana += gain;
+                    if (gain > 0) {
+                        Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(gain), FloatingText.MANA);
+                    }
                 } else if (rank() == 3){
                     CellEmitter.center(ch.pos).start( Speck.factory( Speck.SCREAM ), 0.3f, 3 );
                     Buff.affect(ch, Fury.class);
@@ -96,8 +103,8 @@ public class BeamOfAffection extends ConjurerSpell {
     public int manaCost(int rank) {
         switch (rank){
             case 1: return 0;
-            case 2: return 11;
-            case 3: return 14;
+            case 2: return 6;
+            case 3: return 9;
         }
         return 0;
     }
