@@ -120,13 +120,13 @@ public class ShockerBreaker extends ConjurerSpell {
     @Override
     public String desc() {
         return Messages.get(this, "desc" + (rank() == 3 ? "3" : ""),
-                new DecimalFormat("#.##").format(dmg(rank()*100)), buff(rank()), noheal(rank()), manaCost());
+                new DecimalFormat("#.##").format(dmg(rank())*100), buff(rank()), noheal(rank()), manaCost());
     }
 
     @Override
     public String spellRankMessage(int rank) {
         return Messages.get(this, "rank" + (rank == 3 ? "3" : ""),
-                new DecimalFormat("#.##").format(dmg(rank*100)), buff(rank), noheal(rank));
+                new DecimalFormat("#.##").format(dmg(rank)*100), buff(rank), noheal(rank));
     }
 
     public static class NoHeal extends FlavourBuff {
