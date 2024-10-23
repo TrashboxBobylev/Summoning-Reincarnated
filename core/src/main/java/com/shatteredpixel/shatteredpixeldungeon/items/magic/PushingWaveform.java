@@ -82,7 +82,7 @@ public class PushingWaveform extends ConjurerSpell {
                 Ballistica trajectory = new Ballistica(Dungeon.hero.pos, ch.pos, Ballistica.STOP_TARGET);
                 //trim it to just be the part that goes past them
                 trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size() - 1), Ballistica.FRIENDLY_PROJECTILE);
-                WandOfBlastWave.throwChar(ch, trajectory, 3, true, true, this);
+                WandOfBlastWave.throwChar(ch, trajectory, 4, true, true, this);
                 Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
             } else if (ch.alignment == Char.Alignment.ALLY){
                 ArrayList<Integer> respawnPoints = new ArrayList<Integer>();
