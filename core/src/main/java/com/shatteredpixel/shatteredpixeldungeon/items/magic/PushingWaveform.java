@@ -140,9 +140,9 @@ public class PushingWaveform extends ConjurerSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 9;
-            case 2: return 15;
-            case 3: return 30;
+            case 1: return 5;
+            case 2: return 9;
+            case 3: return 16;
         }
         return 0;
     }
