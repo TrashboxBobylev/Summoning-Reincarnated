@@ -45,7 +45,7 @@ public class RunicShell extends ConjurerSpell {
         image = ItemSpriteSheet.SHIELD;
     }
 
-    private static final int BLOCK_DURATION = 12;
+    private static final int BLOCK_DURATION = 30;
 
     @Override
     public void effect(Ballistica trajectory) {
@@ -68,17 +68,17 @@ public class RunicShell extends ConjurerSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 3;
-            case 2: return 15;
-            case 3: return 20;
+            case 1: return 6;
+            case 2: return 8;
+            case 3: return 4;
         }
         return 0;
     }
 
     private int heal(Char ch, int rank){
         switch (rank){
-            case 1: return 5 + ch.HT / 4;
-            case 2: return 25;
+            case 1: return 10 + ch.HT / 3;
+            case 2: return 35;
 //            case 3: return (int) (40 + ch.HT * 1.25f);
         }
         return 0;
@@ -86,7 +86,7 @@ public class RunicShell extends ConjurerSpell {
 
     private int partialHeal(int rank){
         switch (rank){
-            case 1: return 25;
+            case 1: return 33;
             case 2:
             case 3:
                 return 0;
@@ -96,8 +96,8 @@ public class RunicShell extends ConjurerSpell {
 
     private int intHeal(int rank){
         switch (rank){
-            case 1: return 5;
-            case 2: return 25;
+            case 1: return 10;
+            case 2: return 30;
             case 3: return 0;
         }
         return 0;
