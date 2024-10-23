@@ -109,7 +109,7 @@ public class PushingWaveform extends ConjurerSpell {
         //need to perform flame spread logic here so we can determine what cells to put flames in.
 
         // unlimited distance
-        int d = 5 + level()*3;
+        int d = 5 + rank()*3;
         int dist = Math.min(bolt.dist, d);
 
         cone = new ConeAOE( bolt,
