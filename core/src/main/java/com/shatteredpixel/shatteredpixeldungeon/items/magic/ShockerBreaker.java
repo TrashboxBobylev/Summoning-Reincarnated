@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -73,6 +74,9 @@ public class ShockerBreaker extends ConjurerSpell {
             Buff.affect(ch, Haste.class, buff(rank()));
             Buff.affect(ch, Adrenaline.class, buff(rank()));
             Buff.affect(ch, Bless.class, buff(rank()));
+            if (rank() == 2){
+                Buff.affect(ch, Invulnerability.class, buff(rank()));
+            }
             Buff.affect(ch, NoHeal.class, noheal(rank()));
 
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
@@ -82,8 +86,8 @@ public class ShockerBreaker extends ConjurerSpell {
     private float dmg(int rank){
         switch (rank){
             case 1: return 0.5f;
-            case 2: return 0.25f;
-            case 3: return 0.5f;
+            case 2: return 0.95f;
+            case 3: return 0.25f;
         }
         return 0f;
     }
@@ -91,9 +95,9 @@ public class ShockerBreaker extends ConjurerSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 15;
-            case 2: return 25;
-            case 3: return 35;
+            case 1: return 9;
+            case 2: return 12;
+            case 3: return 24;
         }
         return 0;
     }
@@ -101,7 +105,7 @@ public class ShockerBreaker extends ConjurerSpell {
     private int noheal(int rank){
         switch (rank){
             case 1: return 50;
-            case 2: return 30;
+            case 2: return 1500;
             case 3: return 40;
         }
         return 0;
@@ -110,8 +114,8 @@ public class ShockerBreaker extends ConjurerSpell {
     private int buff(int rank){
         switch (rank){
             case 1: return 20;
-            case 2: return 15;
-            case 3: return 10;
+            case 2: return 10;
+            case 3: return 40;
         }
         return 0;
     }
@@ -119,13 +123,13 @@ public class ShockerBreaker extends ConjurerSpell {
 
     @Override
     public String desc() {
-        return Messages.get(this, "desc" + (rank() == 3 ? "3" : ""),
+        return Messages.get(this, "desc" + rank(),
                 new DecimalFormat("#.##").format(dmg(rank())*100), buff(rank()), noheal(rank()), manaCost());
     }
 
     @Override
     public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank" + (rank == 3 ? "3" : ""),
+        return Messages.get(this, "rank" + rank,
                 new DecimalFormat("#.##").format(dmg(rank)*100), buff(rank), noheal(rank));
     }
 
