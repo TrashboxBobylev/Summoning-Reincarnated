@@ -184,7 +184,7 @@ public class DeathMark extends ArmorAbility {
 		@Override
 		public boolean attachTo(Char target) {
 			if (super.attachTo(target)){
-				target.deathMarked = true;
+				target.deathRefusal = Char.DeathRefusals.DEATH_MARK;
 				return true;
 			} else {
 				return false;
@@ -194,7 +194,7 @@ public class DeathMark extends ArmorAbility {
 		@Override
 		public void detach() {
 			super.detach();
-			target.deathMarked = false;
+			target.deathRefusal = null;
 			if (!target.isAlive()){
 				target.sprite.flash();
 				target.sprite.bloodBurstA(target.sprite.center(), target.HT*2);

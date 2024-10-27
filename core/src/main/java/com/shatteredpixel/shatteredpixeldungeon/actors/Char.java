@@ -67,6 +67,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.NecromancyStat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
@@ -111,6 +112,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.FrostBomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.DreemurrsNecromancy;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
@@ -887,6 +889,21 @@ public abstract class Char extends Actor {
 			}
 		}
 
+		if (buff(NecromancyStat.class) != null && HP < 0){
+			NecromancyStat tracker = buff(NecromancyStat.class);
+			tracker.partialActiveDrain += DreemurrsNecromancy.activeManaDrain(tracker.level);
+			if (tracker.partialActiveDrain > 1){
+				int drain = (int)tracker.partialActiveDrain;
+				if (drain > Dungeon.hero.mana){
+					tracker.detach();
+					return;
+				} else {
+					Dungeon.hero.mana -= drain;
+					Dungeon.hero.sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(drain), FloatingText.MANA);
+				}
+			}
+		}
+
 		if (HP < 0 && src instanceof Char && alignment == Alignment.ENEMY){
 			if (((Char) src).buff(Kinetic.KineticTracker.class) != null){
 				int dmgToAdd = -HP;
@@ -1003,10 +1020,14 @@ public abstract class Char extends Actor {
 	//we cache this info to prevent having to call buff(...) in isAlive.
 	//This is relevant because we call isAlive during drawing, which has both performance
 	//and thread coordination implications
-	public boolean deathMarked = false;
+	public enum DeathRefusals {
+		DEATH_MARK,
+		DREEMURR_NECROMANCY
+	}
+	public DeathRefusals deathRefusal = null;
 	
 	public boolean isAlive() {
-		return HP > 0 || deathMarked;
+		return HP > 0 || deathRefusal != null;
 	}
 
 	public boolean isActive() {
@@ -1043,6 +1064,9 @@ public abstract class Char extends Actor {
 			timeScale *= buff( FrostBurn.class ).speedFactor();
 		}
 		if (buff( Speed.class ) != null) {
+			timeScale *= 2.0f;
+		}
+		if (buff(NecromancyStat.class) != null && buff(NecromancyStat.class).level == 3 && HP <= 0){
 			timeScale *= 2.0f;
 		}
 		

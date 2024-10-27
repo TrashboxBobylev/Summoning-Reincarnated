@@ -25,17 +25,17 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.magic;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.NecromancyCD;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.NecromancyStat;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.NecromancyStat;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
+
+import java.text.DecimalFormat;
 
 public class DreemurrsNecromancy extends ConjurerSpell {
 
@@ -46,13 +46,10 @@ public class DreemurrsNecromancy extends ConjurerSpell {
     @Override
     public void effect(Ballistica trajectory) {
         Char ch = Actor.findChar(trajectory.collisionPos);
-        if (ch != null && ch.alignment == Char.Alignment.ALLY
-                    && Dungeon.hero.buff(NecromancyCD.class) == null && ch.isAlive()){
+        if (ch != null && ch.isAlive() && ch.alignment != Char.Alignment.NEUTRAL){
             Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
-            int healing = heal(rank());
             ch.sprite.emitter().burst(Speck.factory(Speck.STEAM), 20);
-            Buff.affect(ch, NecromancyStat.class, 1000f).level = healing;
-            Buff.affect(Dungeon.hero, NecromancyCD.class, cd(rank()));
+            Buff.affect(ch, NecromancyStat.class).level = rank();
 
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
         }
@@ -61,27 +58,31 @@ public class DreemurrsNecromancy extends ConjurerSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 9;
-            case 2: return 12;
-            case 3: return 30;
+            case 1: return 12;
+            case 2: return 24;
+            case 3: return 0;
         }
         return 0;
     }
 
-    private int heal(int rank){
+    public static float passiveManaDrain(int rank){
         switch (rank){
-            case 1: return 4;
-            case 2: return 10;
-            case 3: return 21;
+            case 1:
+                return 0.75f;
+            case 2:
+                return 0.2f;
+            case 3:
+                return 2f;
         }
         return 0;
     }
 
-    private int cd(int rank){
+    public static float activeManaDrain(int rank){
         switch (rank){
-            case 1: return 200;
-            case 2: return 640;
-            case 3: return 800;
+            case 2:
+                return 0.1f;
+            case 3:
+                return 0.2f;
         }
         return 0;
     }
@@ -89,11 +90,11 @@ public class DreemurrsNecromancy extends ConjurerSpell {
 
     @Override
     public String desc() {
-        return Messages.get(this, "desc", heal(rank()), cd(rank()), manaCost());
+        return Messages.get(this, "desc" + (rank() == 3 ? "3" : ""), new DecimalFormat("#.##").format(passiveManaDrain(rank())), new DecimalFormat("#.##").format(activeManaDrain(rank())), manaCost());
     }
 
     @Override
     public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", heal(rank), cd(rank));
+        return Messages.get(this, "rank" + (rank == 3 ? "3" : ""), new DecimalFormat("#.##").format(passiveManaDrain(rank)), new DecimalFormat("#.##").format(activeManaDrain(rank)));
     }
 }
