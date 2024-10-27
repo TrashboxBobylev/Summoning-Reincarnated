@@ -324,10 +324,11 @@ public class Bomb extends Item {
 	@Override
 	public String desc() {
 		String desc = Messages.get(this, "desc", minDamage(), maxDamage());
-		if (fuse == null)
+		if (fuse == null) {
 			return desc + "\n\n" + Messages.get(this, "desc_fuse");
-		else
+		} else {
 			return desc + "\n\n" + Messages.get(this, "desc_burning");
+		}
 	}
 
 	private static final String FUSE = "fuse";
