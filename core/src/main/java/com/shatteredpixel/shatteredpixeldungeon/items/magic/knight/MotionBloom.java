@@ -25,7 +25,10 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.magic.knight;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.FlowersCD;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ConjurerSpell;
@@ -44,19 +47,26 @@ public class MotionBloom extends ConjurerSpell {
 
     @Override
     public void effect(Ballistica trajectory) {
-        int pos = trajectory.collisionPos;
-        if ((Dungeon.level.map[pos] != Terrain.ALCHEMY
-                && !Dungeon.level.pit[pos]
-                && Dungeon.level.traps.get(pos) == null))
-        Dungeon.level.plant(new Swiftthistle.Seed(), pos);
+        if (rank() == 2){
+            Char ch = Actor.findChar(trajectory.collisionPos);
+            if (ch != null && !(ch instanceof Hero) && ch.alignment == Char.Alignment.ALLY){
+                Buff.affect(ch, Haste.class, 5f);
+            }
+        } else {
+            int pos = trajectory.collisionPos;
+            if ((Dungeon.level.map[pos] != Terrain.ALCHEMY
+                    && !Dungeon.level.pit[pos]
+                    && Dungeon.level.traps.get(pos) == null))
+                Dungeon.level.plant(new Swiftthistle.Seed(), pos);
+        }
         Buff.affect(Dungeon.hero, FlowersCD.class, cooldown(rank()));
     }
 
     private int cooldown(int rank){
         switch (rank){
-            case 1: return 50;
-            case 2: return 25;
-            case 3: return 10;
+            case 1: return 120;
+            case 2: return 120;
+            case 3: return 60;
         }
         return 0;
     }
@@ -64,9 +74,9 @@ public class MotionBloom extends ConjurerSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 18;
-            case 2: return 36;
-            case 3: return 72;
+            case 1: return 5;
+            case 2: return 10;
+            case 3: return 15;
         }
         return 0;
     }
@@ -81,12 +91,12 @@ public class MotionBloom extends ConjurerSpell {
     }
 
     public String desc() {
-        return Messages.get(this, "desc", cooldown(rank()), manaCost());
+        return Messages.get(this, "desc" + (rank() == 2 ? "2" : ""), cooldown(rank()), manaCost());
     }
 
     @Override
     public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", cooldown(rank));
+        return Messages.get(this, "rank" + (rank == 2 ? "2" : ""), cooldown(rank));
     }
 
 }
