@@ -64,9 +64,9 @@ public class MotionBloom extends ConjurerSpell {
 
     private int cooldown(int rank){
         switch (rank){
-            case 1: return 120;
-            case 2: return 120;
-            case 3: return 60;
+            case 1: return 90;
+            case 2: return 90;
+            case 3: return 45;
         }
         return 0;
     }
@@ -74,9 +74,9 @@ public class MotionBloom extends ConjurerSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 5;
-            case 2: return 10;
-            case 3: return 15;
+            case 1: return 10;
+            case 2: return 13;
+            case 3: return 25;
         }
         return 0;
     }
