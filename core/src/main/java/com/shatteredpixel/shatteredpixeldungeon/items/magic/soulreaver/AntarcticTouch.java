@@ -67,8 +67,8 @@ public class AntarcticTouch extends ConjurerSpell {
     private float frostburn(int rank){
         switch (rank){
             case 1: return 7f;
-            case 2: return 20f;
-            case 3: return 40f;
+            case 2: return 15f;
+            case 3: return 25f;
         }
         return 0f;
     }
