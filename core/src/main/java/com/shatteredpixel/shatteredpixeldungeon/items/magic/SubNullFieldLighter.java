@@ -64,9 +64,9 @@ public class SubNullFieldLighter extends ConjurerSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 40;
-            case 2: return 60;
-            case 3: return 80;
+            case 1: return 20;
+            case 2: return 30;
+            case 3: return 40;
         }
         return 0;
     }
