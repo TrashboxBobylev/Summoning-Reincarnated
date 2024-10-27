@@ -99,9 +99,9 @@ public class TommiesArmorSpell extends ConjurerSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 30;
-            case 2: return 35;
-            case 3: return 5;
+            case 1: return 20;
+            case 2: return 24;
+            case 3: return 4;
         }
         return 0;
     }
