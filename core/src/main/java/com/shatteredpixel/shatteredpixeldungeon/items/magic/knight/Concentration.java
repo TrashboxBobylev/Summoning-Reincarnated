@@ -84,7 +84,7 @@ public class Concentration extends AdHocSpell {
 
     @Override
     public int manaCost(int rank) {
-        return 25;
+        return 15;
     }
 
     public String desc() {
