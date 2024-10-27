@@ -115,9 +115,9 @@ public class ArtemisBridge extends ConjurerSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 7;
-            case 2: return 12;
-            case 3: return 25;
+            case 1: return 3;
+            case 2: return 6;
+            case 3: return 12;
         }
         return 0;
     }
