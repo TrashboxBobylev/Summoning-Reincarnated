@@ -77,7 +77,7 @@ public class ShardsOfDespair extends AdHocSpell {
                                     ch.aggro(clone);
                                 }
                                 if (rank() >= 3){
-                                    Buff.prolong(ch, SoulParalysis.class, 1f);
+                                    Buff.prolong(ch, SoulParalysis.class, 6f);
                                 }
                             }
                         }
@@ -111,17 +111,32 @@ public class ShardsOfDespair extends AdHocSpell {
 
     private float buff(int rank){
         switch (rank){
-            case 1: return 9.0f;
-            case 2: return 15.0f;
-            case 3: return 30.0f;
+            case 1: return 12.0f;
+            case 2: return 20.0f;
+            case 3: return 5.0f;
         }
         return 0f;
     }
 
+    private int minDamage(int rank){
+        switch (rank){
+            case 2: return 6 + heroLvl()*2/5;
+            case 3: return 12 + heroLvl()*4/5;
+        }
+        return 0;
+    }
+
+    private int maxDamage(int rank){
+        switch (rank){
+            case 2: return 16 + heroLvl()*3/4;
+            case 3: return 32 + heroLvl()*3/2;
+        }
+        return 0;
+    }
+
     private int damage(int rank){
         switch (rank){
-            case 2: return Random.NormalIntRange(5 + heroLvl()/3, 12 + heroLvl()*3/4);
-            case 3: return Random.NormalIntRange(8 + heroLvl()/2, 18 + heroLvl());
+            case 2: case 3: return Random.NormalIntRange(minDamage(rank), maxDamage(rank));
         }
         return 0;
     }
@@ -129,9 +144,9 @@ public class ShardsOfDespair extends AdHocSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 15;
-            case 2: return 40;
-            case 3: return 60;
+            case 1: return 10;
+            case 2: return 20;
+            case 3: return 45;
         }
         return 0;
     }
@@ -143,7 +158,7 @@ public class ShardsOfDespair extends AdHocSpell {
 
     @Override
     public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank"+ (rank == 3 ? "3" : ""), new DecimalFormat("#.#").format(buff(rank)), damage(rank));
+        return Messages.get(this, "rank"+ (rank == 3 ? "3" : ""), new DecimalFormat("#.#").format(buff(rank)), minDamage(rank), maxDamage(rank));
     }
 
 }
