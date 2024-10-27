@@ -65,9 +65,9 @@ public class DirectingPulse extends ConjurerSpell {
 
     private float buff(int rank){
         switch (rank){
-            case 1: return 9.0f;
-            case 2: return 3.0f;
-            case 3: return 1.1f;
+            case 1: return 12.0f;
+            case 2: return 6.0f;
+            case 3: return 2f;
         }
         return 0f;
     }
