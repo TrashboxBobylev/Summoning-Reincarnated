@@ -34,9 +34,14 @@ public class FroggitStaff extends Staff {
         tier = 1;
         table = new BalanceTable(
                 15, 3, 8,
-                20, 4, 9,
-                25, 6, 11);
+                15, 1, 2,
+                30, 0, 0);
 
         unique = true;
+    }
+
+    @Override
+    public String minionDescription(int rank) {
+        return super.minionDescription(rank);
     }
 }

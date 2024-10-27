@@ -24,11 +24,67 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.FroggitSprite;
+import com.watabou.utils.Bundle;
 
 public class Froggit extends Minion {
     {
         spriteClass = FroggitSprite.class;
         maxDefense = 1;
+    }
+
+    int counter;
+
+    @Override
+    public float attackDelay() {
+        float attackMod = 1f;
+        if (rank == 2)
+            attackMod = 0.25f;
+        return super.attackDelay()*attackMod;
+    }
+
+    @Override
+    public float speed() {
+        float speedMod = 1f;
+        if (rank == 3)
+            speedMod = 0.25f;
+        return super.speed()*speedMod;
+    }
+
+    @Override
+    public int attackProc(Char enemy, int damage) {
+        if (rank == 2)
+            damage += enemy.drRoll();
+        if (rank == 3){
+            if (++counter == 4){
+                counter = 0;
+                Dungeon.hero.mana = Math.min(Dungeon.hero.mana + 1, Dungeon.hero.maxMana());
+                Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(1), FloatingText.MANA);
+            }
+        }
+        return super.attackProc(enemy, damage);
+    }
+
+    private static final String COUNTER = "counter";
+
+    @Override
+    public void storeInBundle(Bundle bundle) {
+        super.storeInBundle(bundle);
+        bundle.put(COUNTER, counter);
+    }
+
+    @Override
+    public void restoreFromBundle(Bundle bundle) {
+        super.restoreFromBundle(bundle);
+        counter = bundle.getInt(COUNTER);
+    }
+
+    @Override
+    public float targetPriority() {
+        return super.targetPriority()*0.5f;
     }
 }
