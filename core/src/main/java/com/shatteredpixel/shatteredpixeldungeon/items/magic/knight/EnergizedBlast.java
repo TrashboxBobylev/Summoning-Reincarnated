@@ -82,9 +82,9 @@ public class EnergizedBlast extends AdHocSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 50;
-            case 2: return 30;
-            case 3: return 15;
+            case 1: return 25;
+            case 2: return 15;
+            case 3: return 8;
         }
         return 0;
     }
