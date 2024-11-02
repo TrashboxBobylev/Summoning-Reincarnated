@@ -30,7 +30,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnchantment;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponEnchantable;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -69,7 +68,7 @@ public class StoneOfEnchantment extends InventoryStone {
 		curUser.sprite.emitter().start( Speck.factory( Speck.LIGHT ), 0.1f, 5 );
 		Enchanting.show( curUser, item );
 		
-		if (item instanceof Weapon) {
+		if (item instanceof WeaponEnchantable) {
 			GLog.p(Messages.get(this, "weapon"));
 		} else {
 			GLog.p(Messages.get(this, "armor"));
