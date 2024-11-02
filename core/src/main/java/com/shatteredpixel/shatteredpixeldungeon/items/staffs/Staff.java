@@ -50,6 +50,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponEnchantable;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
@@ -504,6 +505,10 @@ public abstract class Staff extends Item implements AttunementItem, Rankable, We
     @Override
     public void setEnchantment(Weapon.Enchantment enchantment) {
         this.enchantment = enchantment;
+    }
+
+    public ItemSprite.Glowing glowing() {
+        return enchantment != null && (cursedKnown || !enchantment.curse()) ? enchantment.glowing() : null;
     }
 
     private static final String CUR_CHARGES = "cur_changes";
