@@ -135,6 +135,13 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
         }
     }
 
+    @Override
+    public int targetingPos(Hero user, int dst) {
+        if (validateCell(dst))
+            return new Ballistica( user.pos, dst, collision).collisionPos;
+        return user.pos;
+    }
+
     public boolean validateCell(int pos){
         return true;
     }
