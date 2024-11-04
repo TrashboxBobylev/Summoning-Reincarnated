@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LifeLink;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -556,10 +557,13 @@ public class DwarfKing extends Mob {
 			h.destroy();
 		}
 
-		if (Dungeon.level.solid[pos]){
-			Dungeon.level.drop(new KingsCrown(), pos + Dungeon.level.width()).sprite.drop(pos);
-		} else {
-			Dungeon.level.drop(new KingsCrown(), pos).sprite.drop();
+		// TODO: should be fixed when Summoning's class armor handling will be introduced
+		if (Dungeon.hero.heroClass != HeroClass.ADVENTURER && Dungeon.hero.heroClass != HeroClass.CONJURER) {
+			if (Dungeon.level.solid[pos]) {
+				Dungeon.level.drop(new KingsCrown(), pos + Dungeon.level.width()).sprite.drop(pos);
+			} else {
+				Dungeon.level.drop(new KingsCrown(), pos).sprite.drop();
+			}
 		}
 
 		Badges.validateBossSlain();
