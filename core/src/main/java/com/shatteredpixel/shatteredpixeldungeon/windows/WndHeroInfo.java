@@ -216,7 +216,6 @@ public class WndHeroInfo extends WndTabbed {
 							new ItemSprite(ItemSpriteSheet.FROGGIT_STAFF),
 							new ItemSprite(ItemSpriteSheet.ARMOR_CONJURER),
 							new Image(Assets.Interfaces.BUFFS_LARGE, 224, 32, 16, 16),
-							new ItemSprite(ItemSpriteSheet.RATION),
 							Icons.get(Icons.BACKPACK_LRG),
 							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
 					break;
