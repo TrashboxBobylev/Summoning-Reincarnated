@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Attunement;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CounterBuff;
@@ -438,6 +439,43 @@ public enum Talent {
 		}
 	}
 	public static class CounterAbilityTacker extends FlavourBuff{};
+	public static class SpiritualBarrierTracker extends Buff {
+		float barrierInc = 2/12.0f;
+
+		@Override
+		public boolean act() {
+			//barrier every 6/4 turns, to a max of 3/5
+			if (Dungeon.hero.hasTalent(Talent.SPIRITUAL_BARRIER) && Dungeon.hero.buff(Attunement.class) != null){
+				Barrier barrier = Buff.affect(target, Barrier.class);
+				if (barrier.shielding() < 1 + 2*Dungeon.hero.pointsInTalent(Talent.SPIRITUAL_BARRIER)) {
+					barrierInc += 1/12.0f * (1+Dungeon.hero.pointsInTalent(Talent.SPIRITUAL_BARRIER));
+				}
+				if (barrierInc >= 1){
+					barrierInc = 0;
+					barrier.incShield(1);
+				} else {
+					barrier.incShield(0); //resets barrier decay
+				}
+			} else {
+				detach();
+			}
+			spend( TICK );
+			return true;
+		}
+
+		private static final String BARRIER_INC = "barrier_inc";
+		@Override
+		public void storeInBundle(Bundle bundle) {
+			super.storeInBundle(bundle);
+			bundle.put( BARRIER_INC, barrierInc);
+		}
+
+		@Override
+		public void restoreFromBundle(Bundle bundle) {
+			super.restoreFromBundle(bundle);
+			barrierInc = bundle.getFloat( BARRIER_INC );
+		}
+	}
 
 	int icon;
 	int maxPoints;
@@ -579,6 +617,14 @@ public enum Talent {
 			for (Item item: hero.belongings){
 				if (!item.isIdentified()){
 					item.identify();
+				}
+			}
+		}
+
+		if (talent == SPIRITUAL_BARRIER && hero.HP <= hero.HT / 2){
+			for (Mob mob: Dungeon.level.mobs) {
+				if (mob.alignment == Char.Alignment.ALLY && Dungeon.level.heroFOV[mob.pos]) {
+					Buff.affect(mob, Talent.SpiritualBarrierTracker.class);
 				}
 			}
 		}

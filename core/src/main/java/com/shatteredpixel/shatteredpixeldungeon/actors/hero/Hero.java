@@ -1025,7 +1025,24 @@ public class Hero extends Char implements ManaSource {
 			if (HP <= HT / 2) {
 				Buff.affect(this, Attunement.class);
 			}
-			else if (buff(Attunement.class) != null) buff(Attunement.class).detach();
+			else if (buff(Attunement.class) != null) {
+				buff(Attunement.class).detach();
+			}
+		}
+		if (hasTalent(Talent.SPIRITUAL_BARRIER)){
+			if (HP <= HT / 2) {
+				for (Mob mob: Dungeon.level.mobs){
+					if (mob.alignment == Alignment.ALLY && Dungeon.level.heroFOV[mob.pos]){
+						Buff.affect(mob, Talent.SpiritualBarrierTracker.class);
+					}
+				}
+			} else {
+				for (Mob mob: Dungeon.level.mobs){
+					if (mob.alignment == Alignment.ALLY && Dungeon.level.heroFOV[mob.pos]){
+						Buff.detach(mob, Talent.SpiritualBarrierTracker.class);
+					}
+				}
+			}
 		}
 		
 		if(hasTalent(Talent.BARKSKIN) && Dungeon.level.map[pos] == Terrain.FURROWED_GRASS){
