@@ -27,7 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.HolyAuraBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.ManaStealHost;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -44,7 +44,7 @@ public class ManaStealing extends Buff {
 
     @Override
     public boolean act() {
-        if (target.buff(HolyAuraBuff.class) != null) {
+        if (target.buff(ManaStealHost.class) != null) {
             boolean[] FOV = new boolean[Dungeon.level.length()];
             Point c = Dungeon.level.cellToPoint(target.pos);
             ShadowCaster.castShadow(c.x, c.y, Dungeon.level.width(), FOV, Dungeon.level.losBlocking, 8);
@@ -67,7 +67,7 @@ public class ManaStealing extends Buff {
                 }
             }
 
-            spend( target.buff(HolyAuraBuff.class).manaSteal );
+            spend( target.buff(ManaStealHost.class).manaStealDelay() );
 
         } else {
 

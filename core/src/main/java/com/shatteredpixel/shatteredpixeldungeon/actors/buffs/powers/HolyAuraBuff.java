@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.EffectBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.ManaStealHost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -40,7 +41,7 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
-public class HolyAuraBuff extends EffectBuff {
+public class HolyAuraBuff extends EffectBuff implements ManaStealHost {
     @Override
     public int icon() {
         return BuffIndicator.SOUL_BUFF;
@@ -72,6 +73,11 @@ public class HolyAuraBuff extends EffectBuff {
         Buff.affect(target, HolyAuraCD.class, cd);
 
         super.detach();
+    }
+
+    @Override
+    public int manaStealDelay() {
+        return manaSteal;
     }
 
     private static final String HEAL	= "heal";
