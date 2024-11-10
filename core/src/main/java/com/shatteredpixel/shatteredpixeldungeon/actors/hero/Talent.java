@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.EnhancedRings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ManaStealing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PhysicalEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
@@ -48,6 +49,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ScrollEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TieringEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.WandEmpower;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.ManaStealHost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -805,6 +807,10 @@ public enum Talent {
 				Buff.prolong(hero, LiquidAgilACCTracker.class, 5f).uses = Math.round(factor);
 			}
 		}
+		if (hero.hasTalent(LIQUID_CASTING)){
+			Buff.prolong(hero, LiquidCastingTracker.class, hero.cooldown() + (1 + hero.pointsInTalent(LIQUID_CASTING)*2)*factor);
+			Buff.affect(hero, ManaStealing.class);
+		}
 	}
 
 	public static void onScrollUsed( Hero hero, int pos, float factor ){
@@ -1016,6 +1022,13 @@ public enum Talent {
 			super.restoreFromBundle(bundle);
 			object = bundle.getInt(OBJECT);
 		}
+	}
+	public static class LiquidCastingTracker extends FlavourBuff implements ManaStealHost {
+		{ type = Buff.buffType.POSITIVE; }
+		public int icon() { return BuffIndicator.SOUL_BUFF; }
+		public void tintIcon(Image icon) { icon.hardlight(2f, 2f, 2f); }
+		public float iconFadePercent() { return Math.max(0, 1f - (visualcooldown() / (1 + Dungeon.hero.pointsInTalent(LIQUID_CASTING)*2))); }
+		@Override public int manaStealDelay(){return 1;}
 	}
 
 	public static final int MAX_TALENT_TIERS = 4;

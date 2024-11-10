@@ -28,7 +28,9 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.ManaStealHost;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
@@ -62,8 +64,14 @@ public class ManaStealing extends Buff {
             for (Char ch : affected){
                 if (ch.alignment == Char.Alignment.ENEMY) {
                     target.sprite.parent.add(new Beam.LightRay(target.sprite.center(), DungeonTilemap.raisedTileCenterToWorld(ch.pos)));
-                    Dungeon.hero.mana = Math.min(Dungeon.hero.mana + 1, Dungeon.hero.maxMana());
-                    target.sprite.showStatus( CharSprite.DEFAULT, Integer.toString(1 ));
+                    if (Dungeon.hero.heroClass == HeroClass.CONJURER) {
+                        Dungeon.hero.mana = Math.min(Dungeon.hero.mana + 1, Dungeon.hero.maxMana());
+                        target.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(1), FloatingText.MANA);
+                    } else {
+                        int shieldToGive = 1;
+                        Buff.affect(Dungeon.hero, Barrier.class).incShield(shieldToGive);
+                        Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shieldToGive), FloatingText.SHIELDING);
+                    }
                 }
             }
 
