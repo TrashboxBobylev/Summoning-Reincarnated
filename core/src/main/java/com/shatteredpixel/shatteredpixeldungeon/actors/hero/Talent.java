@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Attunement;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CounterBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.EnhancedRings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
@@ -701,6 +702,16 @@ public enum Talent {
 					Regeneration.regenerate(mob, heal);
 					mob.sprite.emitter().burst(Speck.factory(Speck.STEAM), heal);
 					mob.sprite.burst(0xFFFFFFFF, heal);
+				}
+			}
+		}
+		if (hero.hasTalent(INSPIRING_MEAL)){
+			int turns = (1 + hero.pointsInTalent(INSPIRING_MEAL))*2;
+			for (Mob mob: Dungeon.level.mobs){
+				if (mob.alignment == Char.Alignment.ALLY && Dungeon.level.heroFOV[mob.pos]){
+					Buff.affect(mob, Empowered.class, turns);
+					mob.sprite.emitter().burst(Speck.factory(Speck.STEAM), turns);
+					mob.sprite.burst(0xFFFFFFFF, turns);
 				}
 			}
 		}
