@@ -186,7 +186,19 @@ public enum Talent {
 	//adventurer T2
 	UPGRADING_MEAL(260), ENERGY_SCROLL(261), DUNGEON_OF_DOOM(262), RUDE_STRIKE(263), MONEY_IS_IMPORTANT(264),
 	//adventurer T3
-	AFFECTED_BY_LUCK(265, 3), UNIQUE_ATTENTION(266, 3), SLICE_OF_POWER(267, 3), MEAL_OF_POWER(268, 3);
+	AFFECTED_BY_LUCK(265, 3), UNIQUE_ATTENTION(266, 3), SLICE_OF_POWER(267, 3), MEAL_OF_POWER(268, 3),
+
+	//Conjurer T1
+	BENEVOLENT_MEAL(288), EMPOWERING_INTUITION(289), ENERGY_BREAK(290), SPIRITUAL_BARRIER(291),
+	//Conjurer T2
+	INSPIRING_MEAL(292), LIQUID_CASTING(293), ENERGIZED_SUPPORT(294), AFTERBURN(295), SOULS_BURST(296),
+	//Conjurer T3
+	NEWBORN_MOTIVATION(297, 3), SOUL_SPIRIT_ENTRANCE(298, 3),
+	//Soul Wielder T3
+	LEADER_APPRECIATION(299, 3), CONCENTRATED_SUPPORT(300, 3), ETERNAL_FRIENDSHIP(301, 3),
+	//Will Sorcerer T3
+	VIOLENT_OVERCOMING(302, 3), REJUVENATING_FORCE(303, 3), SPIRITUAL_RESTOCK(304, 3)
+	;
 
 	public static abstract class Cooldown extends FlavourBuff {
 		public static <T extends Cooldown> void affectChar(Char ch, Class<T> cls) {
@@ -931,6 +943,9 @@ public enum Talent {
 			case ADVENTURER:
 				Collections.addAll(tierTalents, DECENT_MEAL, ULTIMATE_INTUITION, PRECISE_STRIKE, PREPARED_TO_DEFEND);
 				break;
+			case CONJURER:
+				Collections.addAll(tierTalents, BENEVOLENT_MEAL, EMPOWERING_INTUITION, ENERGY_BREAK, SPIRITUAL_BARRIER);
+				break;
 		}
 		for (Talent talent : tierTalents){
 			if (replacements.containsKey(talent)){
@@ -960,6 +975,9 @@ public enum Talent {
 			case ADVENTURER:
 				Collections.addAll(tierTalents, UPGRADING_MEAL, ENERGY_SCROLL, DUNGEON_OF_DOOM, RUDE_STRIKE, MONEY_IS_IMPORTANT);
 				break;
+			case CONJURER:
+				Collections.addAll(tierTalents, INSPIRING_MEAL, LIQUID_CASTING, ENERGIZED_SUPPORT, AFTERBURN, SOULS_BURST);
+				break;
 		}
 		for (Talent talent : tierTalents){
 			if (replacements.containsKey(talent)){
@@ -988,6 +1006,9 @@ public enum Talent {
 				break;
 			case ADVENTURER:
 				Collections.addAll(tierTalents, AFFECTED_BY_LUCK, UNIQUE_ATTENTION, SLICE_OF_POWER, MEAL_OF_POWER);
+				break;
+			case CONJURER:
+				Collections.addAll(tierTalents, NEWBORN_MOTIVATION, SOUL_SPIRIT_ENTRANCE);
 				break;
 		}
 		for (Talent talent : tierTalents){
@@ -1046,6 +1067,12 @@ public enum Talent {
 				break;
 			case MONK:
 				Collections.addAll(tierTalents, UNENCUMBERED_SPIRIT, MONASTIC_VIGOR, COMBINED_ENERGY);
+				break;
+			case SOUL_WIELDER:
+				Collections.addAll(tierTalents, LEADER_APPRECIATION, CONCENTRATED_SUPPORT, ETERNAL_FRIENDSHIP);
+				break;
+			case WILL_SORCERER:
+				Collections.addAll(tierTalents, VIOLENT_OVERCOMING, REJUVENATING_FORCE, SPIRITUAL_RESTOCK);
 				break;
 		}
 		for (Talent talent : tierTalents){
