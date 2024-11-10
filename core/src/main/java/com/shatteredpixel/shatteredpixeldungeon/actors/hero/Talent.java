@@ -817,7 +817,22 @@ public enum Talent {
 
 	//note that IDing can happen in alchemy scene, so be careful with VFX here
 	public static void onItemIdentified( Hero hero, Item item ){
-		//currently no talents that trigger here, it wasn't a very popular trigger =(
+		if (hero.hasTalent(EMPOWERING_INTUITION)){
+			if (hero.heroClass == HeroClass.CONJURER){
+				int gain = 1 + hero.pointsInTalent(EMPOWERING_INTUITION)*2;
+				gain = Math.min(Dungeon.hero.maxMana() - Dungeon.hero.mana, gain);
+				Dungeon.hero.mana += gain;
+				if (gain > 0 && hero.sprite != null) {
+					hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(gain), FloatingText.MANA);
+				}
+			} else {
+				int gain = 1 + hero.pointsInTalent(EMPOWERING_INTUITION);
+				Buff.affect(hero, Barrier.class).incShield(gain);
+				if (hero.sprite != null) {
+					hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(gain), FloatingText.SHIELDING);
+				}
+			}
+		}
 	}
 
 	public static int onAttackProc( Hero hero, Char enemy, int dmg ){
