@@ -29,9 +29,11 @@ import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
@@ -198,6 +200,12 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
                             Invisibility.dispel();
                             curSpell.updateQuickslot();
                             curUser.spendAndNext(1f);
+                            if (curUser.hasTalent(Talent.ENERGY_BREAK) && curSpell.manaCost() != 0 && Actor.findChar(shot.collisionPos) != null){
+                                Char thing = Actor.findChar(shot.collisionPos);
+                                if (thing.isAlive() && thing.alignment == Char.Alignment.ENEMY){
+                                    Buff.prolong(curUser, Talent.EnergyBreakTracker.class, 5f).object = thing.id();
+                                }
+                            }
                         }
                     });
                 }

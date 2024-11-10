@@ -220,8 +220,14 @@ public abstract class Wand extends Item {
 			SoulMark.prolong(target, SoulMark.class, SoulMark.DURATION + wandLevel);
 		}
 
-		if (target != Dungeon.hero)
+		if (target != Dungeon.hero) {
 			Buff.affect(target, Minion.ReactiveTargeting.class, 10f);
+
+			if (Dungeon.hero.hasTalent(Talent.ENERGY_BREAK) && Dungeon.hero.heroClass != HeroClass.CONJURER &&
+				target.alignment == Char.Alignment.ENEMY){
+				Buff.affect(Dungeon.hero, Talent.EnergyBreakTracker.class, 5f).object = target.id();
+			}
+		}
 	}
 
 	@Override
