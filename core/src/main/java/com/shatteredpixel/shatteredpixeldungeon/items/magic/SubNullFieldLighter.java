@@ -87,6 +87,6 @@ public class SubNullFieldLighter extends ConjurerSpell {
 
     @Override
     public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", resource(rank));
+        return Messages.get(this, "rank", rank);
     }
 }
