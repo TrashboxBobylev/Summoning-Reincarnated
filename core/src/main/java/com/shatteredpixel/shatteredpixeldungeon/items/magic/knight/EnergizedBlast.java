@@ -47,6 +47,7 @@ public class EnergizedBlast extends AdHocSpell {
 
     {
         image = ItemSpriteSheet.BOOM;
+        alignment = Alignment.OFFENSIVE;
     }
 
     @Override
@@ -89,8 +90,8 @@ public class EnergizedBlast extends AdHocSpell {
         return 0;
     }
 
-    public String desc() {
-        return Messages.get(this, "desc", new DecimalFormat("#").format(damage(rank())*100), manaCost());
+    public String spellDesc() {
+        return Messages.get(this, "desc", new DecimalFormat("#").format(damage(rank())*100));
     }
 
     @Override

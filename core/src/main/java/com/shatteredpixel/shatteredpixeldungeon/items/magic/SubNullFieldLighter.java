@@ -42,6 +42,7 @@ public class SubNullFieldLighter extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.GONER;
+        alignment = Alignment.OFFENSIVE;
     }
 
     @Override
@@ -81,8 +82,8 @@ public class SubNullFieldLighter extends ConjurerSpell {
     }
 
     @Override
-    public String desc() {
-        return Messages.get(this, "desc", resource(rank()), manaCost());
+    public String spellDesc() {
+        return Messages.get(this, "desc", resource(rank()));
     }
 
     @Override

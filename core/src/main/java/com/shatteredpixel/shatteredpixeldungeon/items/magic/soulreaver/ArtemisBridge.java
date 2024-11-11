@@ -45,6 +45,7 @@ public class ArtemisBridge extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.SR_RANGED;
+        alignment = Alignment.BENEFICIAL;
         collision = Ballistica.STOP_TARGET;
     }
 
@@ -122,8 +123,8 @@ public class ArtemisBridge extends ConjurerSpell {
         return 0;
     }
 
-    public String desc() {
-        return Messages.get(this, "desc", distance(rank()), manaCost());
+    public String spellDesc() {
+        return Messages.get(this, "desc", distance(rank()));
     }
 
     @Override

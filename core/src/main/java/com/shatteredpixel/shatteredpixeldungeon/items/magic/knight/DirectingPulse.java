@@ -40,6 +40,7 @@ public class DirectingPulse extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.PUNCH;
+        alignment = Alignment.OFFENSIVE;
         usesTargeting = true;
     }
 
@@ -73,8 +74,8 @@ public class DirectingPulse extends ConjurerSpell {
     }
 
     @Override
-    public String desc() {
-        return Messages.get(this, "desc", new DecimalFormat("#.#").format(buff(rank())), manaCost());
+    public String spellDesc() {
+        return Messages.get(this, "desc", new DecimalFormat("#.#").format(buff(rank())));
     }
 
     @Override

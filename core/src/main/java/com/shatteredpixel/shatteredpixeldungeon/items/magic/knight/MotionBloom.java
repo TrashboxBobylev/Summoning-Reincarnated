@@ -43,6 +43,7 @@ public class MotionBloom extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.FLOWER;
+        alignment = Alignment.BENEFICIAL;
     }
 
     @Override
@@ -90,8 +91,8 @@ public class MotionBloom extends ConjurerSpell {
         return super.tryToZap(owner);
     }
 
-    public String desc() {
-        return Messages.get(this, "desc" + (rank() == 2 ? "2" : ""), cooldown(rank()), manaCost());
+    public String spellDesc() {
+        return Messages.get(this, "desc" + (rank() == 2 ? "2" : ""), cooldown(rank()));
     }
 
     @Override

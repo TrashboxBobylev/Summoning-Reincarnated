@@ -42,6 +42,7 @@ import java.text.DecimalFormat;
 public class Concentration extends AdHocSpell {
     {
         image = ItemSpriteSheet.HEALKI;
+        alignment = Alignment.BENEFICIAL;
     }
 
     @Override
@@ -87,8 +88,8 @@ public class Concentration extends AdHocSpell {
         return 15;
     }
 
-    public String desc() {
-        return Messages.get(this, "desc", intHeal(rank()), new DecimalFormat("#.#").format(paralyse(rank())), manaCost());
+    public String spellDesc() {
+        return Messages.get(this, "desc", intHeal(rank()), new DecimalFormat("#.#").format(paralyse(rank())));
     }
 
     @Override

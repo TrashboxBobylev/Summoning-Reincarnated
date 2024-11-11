@@ -43,6 +43,7 @@ public class RunicShell extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.SHIELD;
+        alignment = Alignment.BENEFICIAL;
     }
 
     private static final int BLOCK_DURATION = 30;
@@ -105,8 +106,8 @@ public class RunicShell extends ConjurerSpell {
 
 
     @Override
-    public String desc() {
-        return Messages.get(this, "desc", intHeal(rank()), partialHeal(rank()), manaCost());
+    public String spellDesc() {
+        return Messages.get(this, "desc", intHeal(rank()), partialHeal(rank()));
     }
 
     @Override

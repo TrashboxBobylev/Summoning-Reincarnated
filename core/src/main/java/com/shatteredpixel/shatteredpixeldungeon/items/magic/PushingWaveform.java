@@ -49,6 +49,7 @@ public class PushingWaveform extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.CAMOUFLAGE;
+        alignment = Alignment.OFFENSIVE;
     }
 
     ConeAOE cone;
@@ -148,8 +149,8 @@ public class PushingWaveform extends ConjurerSpell {
     }
 
     @Override
-    public String desc() {
-        return Messages.get(this, "desc", 5 + rank()*3, manaCost());
+    public String spellDesc() {
+        return Messages.get(this, "desc", 5 + rank()*3);
     }
 
     @Override

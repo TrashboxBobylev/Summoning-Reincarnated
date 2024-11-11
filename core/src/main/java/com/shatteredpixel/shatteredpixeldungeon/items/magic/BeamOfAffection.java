@@ -53,6 +53,7 @@ public class BeamOfAffection extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.ZAP;
+        alignment = Alignment.NEUTRAL;
     }
 
     @Override
@@ -110,7 +111,7 @@ public class BeamOfAffection extends ConjurerSpell {
     }
 
     @Override
-    public String desc() {
+    public String spellDesc() {
         return Messages.get(this, "desc" + level());
     }
 

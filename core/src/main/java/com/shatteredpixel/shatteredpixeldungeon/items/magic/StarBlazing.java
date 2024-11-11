@@ -50,6 +50,7 @@ public class StarBlazing extends ConjurerSpell {
     {
         image = ItemSpriteSheet.STARS;
         collision = Ballistica.STOP_TARGET;
+        alignment = Alignment.OFFENSIVE;
         usesTargeting = true;
     }
 
@@ -138,8 +139,8 @@ public class StarBlazing extends ConjurerSpell {
     }
 
     @Override
-    public String desc() {
-        return Messages.get(this, "desc", min(rank()), max(rank()), manaCost());
+    public String spellDesc() {
+        return Messages.get(this, "desc", min(rank()), max(rank()));
     }
 
     @Override

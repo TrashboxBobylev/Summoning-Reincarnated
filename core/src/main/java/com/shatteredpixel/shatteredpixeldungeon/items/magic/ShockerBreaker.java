@@ -49,6 +49,7 @@ public class ShockerBreaker extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.SHOCKER;
+        alignment = Alignment.BENEFICIAL;
     }
 
     @Override
@@ -122,9 +123,9 @@ public class ShockerBreaker extends ConjurerSpell {
 
 
     @Override
-    public String desc() {
+    public String spellDesc() {
         return Messages.get(this, "desc" + rank(),
-                new DecimalFormat("#.##").format(dmg(rank())*100), buff(rank()), noheal(rank()), manaCost());
+                new DecimalFormat("#.##").format(dmg(rank())*100), buff(rank()), noheal(rank()));
     }
 
     @Override

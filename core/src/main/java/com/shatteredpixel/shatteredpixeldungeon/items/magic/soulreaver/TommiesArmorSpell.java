@@ -41,6 +41,7 @@ public class TommiesArmorSpell extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.SR_DEFENSE;
+        alignment = Alignment.BENEFICIAL;
     }
 
     @Override
@@ -106,8 +107,8 @@ public class TommiesArmorSpell extends ConjurerSpell {
         return 0;
     }
 
-    public String desc() {
-        return Messages.get(this, "desc", defenseEarthValue(rank()), defenseArcaneValue(rank()), manaCost());
+    public String spellDesc() {
+        return Messages.get(this, "desc", defenseEarthValue(rank()), defenseArcaneValue(rank()));
     }
 
     @Override

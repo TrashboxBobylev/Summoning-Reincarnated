@@ -41,6 +41,7 @@ public class HolyAura extends AdHocSpell {
 
     {
         image = ItemSpriteSheet.SR_SUPPORT;
+        alignment = Alignment.BENEFICIAL;
     }
 
     @Override
@@ -141,8 +142,8 @@ public class HolyAura extends AdHocSpell {
         return super.tryToZap(owner);
     }
 
-    public String desc() {
-        return Messages.get(this, "desc", shieldingRate(rank()), healingRate(rank()), duration(rank()), manaCost());
+    public String spellDesc() {
+        return Messages.get(this, "desc", shieldingRate(rank()), healingRate(rank()), duration(rank()));
     }
 
     @Override

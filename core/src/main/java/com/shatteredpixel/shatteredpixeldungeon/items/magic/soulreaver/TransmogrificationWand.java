@@ -41,6 +41,7 @@ public class TransmogrificationWand extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.SR_MAGICAL;
+        alignment = Alignment.BENEFICIAL;
         usesTargeting = true;
     }
 
@@ -55,6 +56,16 @@ public class TransmogrificationWand extends ConjurerSpell {
                 Buff.affect(ch, TimedShrink.class, shrinking(rank()));
             }
         }
+    }
+
+    @Override
+    public Alignment alignment(int rank) {
+        switch (rank){
+            case 1: return Alignment.NEUTRAL;
+            case 2: return Alignment.BENEFICIAL;
+            case 3: return Alignment.OFFENSIVE;
+        }
+        return super.alignment(rank);
     }
 
     private int enlargement(int rank){
@@ -85,8 +96,8 @@ public class TransmogrificationWand extends ConjurerSpell {
         return 0;
     }
 
-    public String desc() {
-        return Messages.get(this, "desc", shrinking(rank()), enlargement(rank()), manaCost());
+    public String spellDesc() {
+        return Messages.get(this, "desc", shrinking(rank()), enlargement(rank()));
     }
 
     @Override

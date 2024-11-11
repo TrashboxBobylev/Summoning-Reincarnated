@@ -51,6 +51,7 @@ public class ShardsOfDespair extends AdHocSpell {
 
     {
         image = ItemSpriteSheet.SPREAD;
+        alignment = Alignment.OFFENSIVE;
     }
 
     private HashMap<Callback, Mob> targets = new HashMap<>();
@@ -152,8 +153,8 @@ public class ShardsOfDespair extends AdHocSpell {
     }
 
     @Override
-    public String desc() {
-        return Messages.get(this, "desc", new DecimalFormat("#.#").format(buff(rank())), manaCost());
+    public String spellDesc() {
+        return Messages.get(this, "desc", new DecimalFormat("#.#").format(buff(rank())));
     }
 
     @Override

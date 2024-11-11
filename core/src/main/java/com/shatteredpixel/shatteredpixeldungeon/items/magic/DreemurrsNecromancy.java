@@ -41,6 +41,7 @@ public class DreemurrsNecromancy extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.CLONE;
+        alignment = Alignment.BENEFICIAL;
     }
 
     @Override
@@ -89,8 +90,8 @@ public class DreemurrsNecromancy extends ConjurerSpell {
 
 
     @Override
-    public String desc() {
-        return Messages.get(this, "desc" + (rank() == 3 ? "3" : ""), new DecimalFormat("#.##").format(passiveManaDrain(rank())), new DecimalFormat("#.##").format(activeManaDrain(rank())), manaCost());
+    public String spellDesc() {
+        return Messages.get(this, "desc" + (rank() == 3 ? "3" : ""), new DecimalFormat("#.##").format(passiveManaDrain(rank())), new DecimalFormat("#.##").format(activeManaDrain(rank())));
     }
 
     @Override

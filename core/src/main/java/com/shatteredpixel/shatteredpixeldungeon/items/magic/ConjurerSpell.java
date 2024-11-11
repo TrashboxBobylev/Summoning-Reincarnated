@@ -51,8 +51,13 @@ import java.util.ArrayList;
 
 public abstract class ConjurerSpell extends Item implements Rankable, ManaSource {
 
+    public enum Alignment {
+        OFFENSIVE, BENEFICIAL, NEUTRAL
+    }
+
     public static final String AC_ZAP	= "ZAP";
     protected int collision = Ballistica.FRIENDLY_PROJECTILE;
+    public Alignment alignment = Alignment.NEUTRAL;
 
     {
         defaultAction = AC_ZAP;
@@ -100,6 +105,14 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
 
     public int manaCost(int rank){
         return 0;
+    }
+
+    public Alignment alignment(){
+        return alignment(rank());
+    }
+
+    public Alignment alignment(int rank){
+        return alignment;
     }
 
     @Override
@@ -151,6 +164,20 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
     @Override
     public float manaModifier(Char source) {
         return 0.5f;
+    }
+
+    public String manaCostDesc(){
+        return Messages.get(this,  manaCost() == 0 ? "desc_mana_zero_cost" : "desc_mana_some_cost",
+                Messages.get(this, "alignment_" + alignment().name()), manaCost());
+    }
+
+    @Override
+    public String desc() {
+        return spellDesc() + "\n\n" + manaCostDesc();
+    }
+
+    public String spellDesc(){
+        return Messages.get(this, "desc");
     }
 
     @Override

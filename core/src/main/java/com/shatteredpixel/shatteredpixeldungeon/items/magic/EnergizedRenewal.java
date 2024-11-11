@@ -42,6 +42,7 @@ public class EnergizedRenewal extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.HEAL;
+        alignment = Alignment.BENEFICIAL;
     }
 
     @Override
@@ -102,8 +103,8 @@ public class EnergizedRenewal extends ConjurerSpell {
 
 
     @Override
-    public String desc() {
-        return Messages.get(this, "desc", intHeal(rank()), new DecimalFormat("#.##").format( partialHeal(rank())), manaCost());
+    public String spellDesc() {
+        return Messages.get(this, "desc", intHeal(rank()), new DecimalFormat("#.##").format( partialHeal(rank())));
     }
 
     @Override

@@ -44,6 +44,7 @@ public class AntarcticTouch extends ConjurerSpell {
 
     {
         image = ItemSpriteSheet.SR_OFFENSE;
+        alignment = Alignment.OFFENSIVE;
         usesTargeting = true;
     }
 
@@ -83,8 +84,8 @@ public class AntarcticTouch extends ConjurerSpell {
         return 0;
     }
 
-    public String desc() {
-        return Messages.get(this, "desc", new DecimalFormat("#.#").format(frostburn(rank())), manaCost());
+    public String spellDesc() {
+        return Messages.get(this, "desc", new DecimalFormat("#.#").format(frostburn(rank())));
     }
 
     @Override
