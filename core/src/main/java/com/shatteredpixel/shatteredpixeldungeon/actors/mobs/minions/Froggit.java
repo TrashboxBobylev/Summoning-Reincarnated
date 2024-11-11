@@ -85,6 +85,8 @@ public class Froggit extends Minion {
 
     @Override
     public float targetPriority() {
-        return super.targetPriority()*0.5f;
+        if (rank == 3)
+            return super.targetPriority()*0.5f;
+        return super.targetPriority();
     }
 }
