@@ -515,6 +515,8 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
     private static final String PARTIAL_CHARGE = "partial_change";
     private static final String MINION_ID = "minionID";
     private static final String RANK = "rank";
+    private static final String AUGMENT	        = "augment";
+    private static final String ENCHANTMENT	    = "enchantment";
 
 
     @Override
@@ -524,6 +526,8 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
         bundle.put(PARTIAL_CHARGE, partialCharge);
         bundle.put(MINION_ID, minionID);
         bundle.put(RANK, rank);
+        bundle.put(ENCHANTMENT, enchantment );
+        bundle.put(AUGMENT, augment );
     }
 
     @Override
@@ -533,6 +537,8 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
         partialCharge = bundle.getFloat(PARTIAL_CHARGE);
         minionID = bundle.getInt(MINION_ID);
         rank = bundle.getInt(RANK);
+        augment = bundle.getEnum(AUGMENT, Weapon.Augment.class);
+        enchantment = (Weapon.Enchantment)bundle.get( ENCHANTMENT );
     }
 
     public class Charger extends Buff {
