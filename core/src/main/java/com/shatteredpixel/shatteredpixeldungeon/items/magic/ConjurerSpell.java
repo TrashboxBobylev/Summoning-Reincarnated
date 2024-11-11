@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -150,6 +151,22 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
         }
     }
 
+    protected void afterZap(Hero owner, Ballistica shot){
+        if (owner.hasTalent(Talent.ENERGY_BREAK) && manaCost() != 0 && shot != null && Actor.findChar(shot.collisionPos) != null){
+            Char thing = Actor.findChar(shot.collisionPos);
+            if (thing.isAlive() && thing.alignment == Char.Alignment.ENEMY){
+                Buff.prolong(owner, Talent.EnergyBreakTracker.class, 5f).object = thing.id();
+            }
+        }
+
+        if (owner.hasTalent(Talent.ENERGIZED_SUPPORT) && manaCost() != 0 && alignment() == Alignment.BENEFICIAL){
+            for (Staff.Charger charger : owner.buffs(Staff.Charger.class)){
+                charger.gainCharge((1 + owner.pointsInTalent(Talent.ENERGIZED_SUPPORT))*50f / (float) charger.staff().getChargeTurns());
+            }
+            Item.updateQuickslot();
+        }
+    }
+
     @Override
     public int targetingPos(Hero user, int dst) {
         if (validateCell(dst))
@@ -227,12 +244,7 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
                             Invisibility.dispel();
                             curSpell.updateQuickslot();
                             curUser.spendAndNext(1f);
-                            if (curUser.hasTalent(Talent.ENERGY_BREAK) && curSpell.manaCost() != 0 && Actor.findChar(shot.collisionPos) != null){
-                                Char thing = Actor.findChar(shot.collisionPos);
-                                if (thing.isAlive() && thing.alignment == Char.Alignment.ENEMY){
-                                    Buff.prolong(curUser, Talent.EnergyBreakTracker.class, 5f).object = thing.id();
-                                }
-                            }
+                            curSpell.afterZap(curUser, shot);
                         }
                     });
                 }

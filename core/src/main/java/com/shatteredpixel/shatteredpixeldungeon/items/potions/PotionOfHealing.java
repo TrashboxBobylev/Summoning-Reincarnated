@@ -44,6 +44,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -116,6 +119,14 @@ public class PotionOfHealing extends Potion {
 		}
 
 		GameScene.add( Blob.seed( cell, 450, HealGas.class ) );
+		Char entity;
+
+		if ((entity = Actor.findChar(cell)) != null && entity.alignment == Char.Alignment.ALLY && Dungeon.hero.hasTalent(Talent.ENERGIZED_SUPPORT)){
+			for (Staff.Charger charger : Dungeon.hero.buffs(Staff.Charger.class)){
+				charger.gainCharge((2 + Dungeon.hero.pointsInTalent(Talent.ENERGIZED_SUPPORT))*50f / (float) charger.staff().getChargeTurns());
+			}
+			Item.updateQuickslot();
+		}
 	}
 	
 	public static void cure( Char ch ) {

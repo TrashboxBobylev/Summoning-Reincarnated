@@ -56,6 +56,7 @@ public abstract class AdHocSpell extends ConjurerSpell {
                     curUser.busy();
                     if (!(this instanceof Concentration))
                         curUser.spendAndNext(1f);
+                    afterZap(curUser, null);
                 }
                 updateQuickslot();
             }

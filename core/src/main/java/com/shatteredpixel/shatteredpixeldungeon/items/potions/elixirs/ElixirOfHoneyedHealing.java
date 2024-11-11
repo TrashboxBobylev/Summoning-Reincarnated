@@ -38,7 +38,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bee;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -73,6 +75,12 @@ public class ElixirOfHoneyedHealing extends Elixir {
 			if (ch instanceof Bee && ch.alignment != curUser.alignment){
 				ch.alignment = Char.Alignment.ALLY;
 				((Bee)ch).setPotInfo(-1, null);
+			}
+			if (ch.alignment == Char.Alignment.ALLY && Dungeon.hero.hasTalent(Talent.ENERGIZED_SUPPORT)){
+				for (Staff.Charger charger : Dungeon.hero.buffs(Staff.Charger.class)){
+					charger.gainCharge((2 + Dungeon.hero.pointsInTalent(Talent.ENERGIZED_SUPPORT))*50f / (float) charger.staff().getChargeTurns());
+				}
+				Item.updateQuickslot();
 			}
 		}
 	}
