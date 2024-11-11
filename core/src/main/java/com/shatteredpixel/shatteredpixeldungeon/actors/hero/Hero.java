@@ -95,6 +95,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
+import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -146,7 +147,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ThirteenLeafClover;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfDisintegration;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
@@ -2724,11 +2724,11 @@ public class Hero extends Char implements ManaSource {
 				((EquipableItem) i).activate(this);
 			} else if (i instanceof CloakOfShadows && i.keptThroughLostInventory() && hasTalent(Talent.LIGHT_CLOAK)){
 				((CloakOfShadows) i).activate(this);
-			} else if (i instanceof Wand && i.keptThroughLostInventory()){
+			} else if (i instanceof ChargingItem && i.keptThroughLostInventory()){
 				if (holster != null && holster.contains(i)){
-					((Wand) i).charge(this, MagicalHolster.HOLSTER_SCALE_FACTOR);
+					((ChargingItem) i).charge(this, MagicalHolster.HOLSTER_SCALE_FACTOR);
 				} else {
-					((Wand) i).charge(this);
+					((ChargingItem) i).charge(this);
 				}
 			} else if (i instanceof MagesStaff && i.keptThroughLostInventory()){
 				((MagesStaff) i).applyWandChargeBuff(this);

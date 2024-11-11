@@ -379,7 +379,10 @@ public class Item implements Bundlable {
 		return getClass() == item.getClass();
 	}
 
-	protected void onDetach(){}
+	protected void onDetach(){
+		if (this instanceof ChargingItem)
+			((ChargingItem) this).stopCharging();
+	}
 
 	//returns the true level of the item, ignoring all modifiers aside from upgrades
 	public final int trueLevel(){

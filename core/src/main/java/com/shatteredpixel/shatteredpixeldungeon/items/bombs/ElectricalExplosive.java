@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
@@ -57,7 +58,7 @@ import com.watabou.utils.Random;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class ElectricalExplosive extends Bomb {
+public class ElectricalExplosive extends Bomb implements ChargingItem {
 
 	{
 		image = ItemSpriteSheet.FLASHBANG;
@@ -347,8 +348,8 @@ public class ElectricalExplosive extends Bomb {
 	}
 
 	@Override
-	public void onDetach( ) {
-		stopCharging();
+	public void charge(Char owner, float chargeScaleFactor) {
+		charge(owner);
 	}
 
 	public void stopCharging() {

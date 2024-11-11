@@ -24,9 +24,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.bags;
 
+import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
-import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ElectricalExplosive;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
@@ -59,16 +59,12 @@ public class MagicalHolster extends Bag {
 		if (super.collect( container )) {
 			if (owner != null) {
 				for (Item item : items) {
-					if (item instanceof Wand) {
-						((Wand) item).charge(owner, HOLSTER_SCALE_FACTOR);
+					if (item instanceof ChargingItem) {
+						((ChargingItem) item).charge(owner, HOLSTER_SCALE_FACTOR);
 					} else if (item instanceof MissileWeapon){
 						((MissileWeapon) item).holster = true;
-					} else if (item instanceof ElectricalExplosive){
-						((ElectricalExplosive) item).charge(owner);
-					} if (item instanceof Staff) {
-						((Staff) item).charge(owner);
 					}
-				}
+                }
 			}
 			return true;
 		} else {

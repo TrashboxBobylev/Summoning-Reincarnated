@@ -47,6 +47,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage.WildM
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
@@ -73,7 +74,7 @@ import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
-public abstract class Wand extends Item {
+public abstract class Wand extends Item implements ChargingItem {
 
 	public static final String AC_ZAP	= "ZAP";
 
@@ -228,11 +229,6 @@ public abstract class Wand extends Item {
 				Buff.affect(Dungeon.hero, Talent.EnergyBreakTracker.class, 5f).object = target.id();
 			}
 		}
-	}
-
-	@Override
-	public void onDetach( ) {
-		stopCharging();
 	}
 
 	public void stopCharging() {

@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.AttunementItem;
+import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
@@ -60,7 +61,7 @@ import com.watabou.utils.Random;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-public abstract class Staff extends Item implements AttunementItem, Rankable, WeaponEnchantable {
+public abstract class Staff extends Item implements AttunementItem, ChargingItem, Rankable, WeaponEnchantable {
 
     {
         stackable = false;
@@ -106,9 +107,8 @@ public abstract class Staff extends Item implements AttunementItem, Rankable, We
         charger.attachTo( owner );
     }
 
-    @Override
-    public void onDetach( ) {
-        stopCharging();
+    public void charge( Char owner, float chargeScaleFactor ) {
+        charge(owner);
     }
 
     public void stopCharging() {
