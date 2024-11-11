@@ -27,7 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.watabou.noosa.TextureFilm;
 
-public class SheepTankSprite extends MobSprite {
+public class SheepTankSprite extends MinionSprite {
 
 	public SheepTankSprite() {
 		super();

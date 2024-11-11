@@ -32,7 +32,7 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.tweeners.AlphaTweener;
 import com.watabou.utils.Callback;
 
-public class MagicMissileSprite extends MobSprite {
+public class MagicMissileSprite extends MinionSprite {
 
     public MagicMissileSprite(){
         super();

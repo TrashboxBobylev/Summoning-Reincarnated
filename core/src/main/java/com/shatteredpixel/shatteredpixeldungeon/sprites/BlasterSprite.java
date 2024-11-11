@@ -32,7 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.TextureFilm;
 import com.watabou.noosa.audio.Sample;
 
-public class BlasterSprite extends MobSprite {
+public class BlasterSprite extends MinionSprite {
     private int attackPos;
 
     public BlasterSprite() {

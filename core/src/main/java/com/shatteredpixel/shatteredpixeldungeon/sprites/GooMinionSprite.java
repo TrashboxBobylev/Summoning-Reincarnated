@@ -35,7 +35,7 @@ import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 import com.watabou.utils.SparseArray;
 
-public class GooMinionSprite extends MobSprite {
+public class GooMinionSprite extends MinionSprite {
 
 	private Animation pump;
 	private Animation pumpAttack;

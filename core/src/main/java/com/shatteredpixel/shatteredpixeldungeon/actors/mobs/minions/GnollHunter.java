@@ -33,13 +33,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.GnollTricksterSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.GnollHunterSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.Callback;
 
 public class GnollHunter extends Minion {
     {
@@ -137,31 +135,6 @@ public class GnollHunter extends Minion {
     public static class GnollShot extends Item {
         {
             image = ItemSpriteSheet.BLINDING_DART;
-        }
-    }
-
-    public static class GnollHunterSprite extends GnollTricksterSprite {
-        //blinding dart instead of paralytic
-        @Override
-        public void attack( int cell ) {
-            if (!Dungeon.level.adjacent(cell, ch.pos)) {
-
-                ((MissileSprite)parent.recycle( MissileSprite.class )).
-                        reset( ch.pos, cell, new GnollShot(), new Callback() {
-                            @Override
-                            public void call() {
-                                ch.onAttackComplete();
-                            }
-                        } );
-
-                play( cast );
-                turnTo( ch.pos , cell );
-
-            } else {
-
-                super.attack( cell );
-
-            }
         }
     }
 }

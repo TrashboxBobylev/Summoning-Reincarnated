@@ -27,7 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.watabou.noosa.TextureFilm;
 
-public class FroggitSprite extends MobSprite {
+public class FroggitSprite extends MinionSprite {
 
 	public FroggitSprite() {
 		super();

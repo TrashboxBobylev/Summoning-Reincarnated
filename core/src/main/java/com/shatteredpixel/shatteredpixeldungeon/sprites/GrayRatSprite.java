@@ -27,7 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.watabou.noosa.TextureFilm;
 
-public class GrayRatSprite extends MobSprite {
+public class GrayRatSprite extends MinionSprite {
 
 	public GrayRatSprite() {
 		super();
