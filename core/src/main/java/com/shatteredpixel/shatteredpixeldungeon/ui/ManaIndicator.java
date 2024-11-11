@@ -95,6 +95,8 @@ public class ManaIndicator extends Tag {
 
                 flash();
             }
+        } else {
+            visible = false;
         }
 
         super.update();
