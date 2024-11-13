@@ -566,6 +566,10 @@ public class Hero extends Char implements ManaSource {
 	//I am lazy to implement interfaces
 	public boolean shoot(Char enemy, Knife knife) {
 
+		this.enemy = enemy;
+		boolean wasEnemy = enemy.alignment == Alignment.ENEMY
+				|| (enemy instanceof Mimic && enemy.alignment == Alignment.NEUTRAL);
+
 		//temporarily set the hero's weapon to the missile weapon being used
 		KindOfWeapon equipped = belongings.weapon;
 		belongings.weapon = knife;
@@ -575,6 +579,14 @@ public class Hero extends Char implements ManaSource {
 			hit = attack( enemy );
 		Invisibility.dispel();
 		belongings.weapon = equipped;
+
+		if (hit && subClass == HeroSubClass.GLADIATOR && wasEnemy){
+			Buff.affect( this, Combo.class ).hit( enemy );
+		}
+
+		if (hit && (heroClass == HeroClass.DUELIST || Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) && wasEnemy){
+			Buff.affect( this, Sai.ComboStrikeTracker.class).addHit();
+		}
 
 		return hit;
 	}
