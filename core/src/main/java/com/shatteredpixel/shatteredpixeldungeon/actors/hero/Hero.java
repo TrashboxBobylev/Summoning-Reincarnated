@@ -87,10 +87,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snake;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Wizard;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.GoatClone;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CheckedCell;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
@@ -129,6 +131,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.PushingWaveform;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.RunicShell;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ShockerBreaker;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.StarBlazing;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.SubNullFieldLighter;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
@@ -180,10 +183,12 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.StatusPane;
+import com.shatteredpixel.shatteredpixeldungeon.ui.TargetHealthIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndHero;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndResurrect;
@@ -1630,6 +1635,37 @@ public class Hero extends Char implements ManaSource {
 	
 	@Override
 	public int defenseProc( Char enemy, int damage ) {
+
+		if (damage > 0 && hasTalent(Talent.MANABURN) &&
+				(mana >= maxMana() / 20 || (heroClass != HeroClass.CONJURER && HP >= HT / 20))){
+			sprite.parent.add(new Beam.LightRay(sprite.center(), DungeonTilemap.raisedTileCenterToWorld(enemy.pos)));
+			ShieldHalo shield;
+
+			GameScene.effect(shield = new ShieldHalo(enemy.sprite));
+			shield.hardlight(0xEBEBEB);
+			shield.putOut();
+			Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, Random.Float(0.87f, 1.15f) );
+			Sample.INSTANCE.play( Assets.Sounds.BLAST);
+
+			if (heroClass == HeroClass.CONJURER) {
+				mana -= maxMana() / 20;
+				Dungeon.hero.sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(maxMana() / 20), FloatingText.MANA);
+			} else
+				damage(HT / 20, new StarBlazing());
+
+			for (int i : PathFinder.NEIGHBOURS9){
+				Char target = Actor.findChar(pos + i);
+				if (target != null && target.alignment != Alignment.ALLY) {
+					float damageMultiplier = i != 0 ?
+							0.25f + 0.75f * pointsInTalent(Talent.MANABURN) :
+							0.50f * pointsInTalent(Talent.MANABURN);
+					if (heroClass != HeroClass.CONJURER)
+						damageMultiplier *= 1.25f;
+					target.damage((int) (damage * damageMultiplier), new StarBlazing());
+					TargetHealthIndicator.instance.update();
+				}
+			}
+		}
 		
 		if (damage > 0 && subClass == HeroSubClass.BERSERKER){
 			Berserk berserk = Buff.affect(this, Berserk.class);
