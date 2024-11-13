@@ -38,7 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Random;
 
-public class Knife extends MeleeWeapon {
+public class ToyKnife extends MeleeWeapon {
 
     public boolean ranged;
 	

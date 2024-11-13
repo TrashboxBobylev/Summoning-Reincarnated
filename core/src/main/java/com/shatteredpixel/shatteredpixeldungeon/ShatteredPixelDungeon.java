@@ -51,6 +51,11 @@ public class ShatteredPixelDungeon extends Game {
 	public ShatteredPixelDungeon( PlatformSupport platform ) {
 		super( sceneClass == null ? TitleScene.class : sceneClass, platform );
 
+		//changing knife's name
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Knife" );
+
 		//changing spell names
 		com.watabou.utils.Bundle.addAlias(
 				com.shatteredpixel.shatteredpixeldungeon.items.magic.SubNullFieldLighter.class,

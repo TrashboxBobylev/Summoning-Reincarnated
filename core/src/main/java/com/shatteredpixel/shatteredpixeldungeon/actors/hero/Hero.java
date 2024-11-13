@@ -157,12 +157,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cleaver;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Flail;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Knife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Quarterstaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RoundShield;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sai;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scimitar;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
@@ -339,7 +339,7 @@ public class Hero extends Char implements ManaSource {
 
 	@Override
 	public float manaModifier(Char source) {
-		return source.buff(Knife.SoulGain.class) != null ? (Dungeon.hero.subClass == HeroSubClass.SOUL_WIELDER ? 2.25f : 1.5f) : 0f;
+		return source.buff(ToyKnife.SoulGain.class) != null ? (Dungeon.hero.subClass == HeroSubClass.SOUL_WIELDER ? 2.25f : 1.5f) : 0f;
 	}
 
 	private static final String CLASS       = "class";
@@ -564,7 +564,7 @@ public class Hero extends Char implements ManaSource {
 
 	//same, but with knife
 	//I am lazy to implement interfaces
-	public boolean shoot(Char enemy, Knife knife) {
+	public boolean shoot(Char enemy, ToyKnife knife) {
 
 		this.enemy = enemy;
 		boolean wasEnemy = enemy.alignment == Alignment.ENEMY

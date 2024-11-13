@@ -36,7 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.GoatClone;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.AdHocSpell;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Knife;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -69,7 +69,7 @@ public class ShardsOfDespair extends AdHocSpell {
                         Mob ch = targets.get(this);
                         if (ch != null) {
                             Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC);
-                            Buff.affect(ch, Knife.SoulGain.class, buff(rank()));
+                            Buff.affect(ch, ToyKnife.SoulGain.class, buff(rank()));
                             Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
                             if (level() >= 1) {
                                 ch.damage(damage(rank()), hero);

@@ -35,7 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Knife;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GoatCloneSprite;
 import com.watabou.utils.PathFinder;
@@ -73,7 +73,7 @@ public class GoatClone extends NPC implements ManaSource {
             newEnemy = true;
         } else if (enemy.isInvulnerable(getClass()) && enemy.buff(StoneOfAggression.Aggression.class) == null) {
             newEnemy = true;
-        } else if (enemy.buff(Knife.SoulGain.class) == null) {
+        } else if (enemy.buff(ToyKnife.SoulGain.class) == null) {
             newEnemy = true;
         }
 
@@ -81,7 +81,7 @@ public class GoatClone extends NPC implements ManaSource {
             HashMap<Char, Float> enemies = new HashMap<>();
 
             for (Mob mob : Dungeon.level.mobs)
-                if (mob.alignment == Alignment.ENEMY && fieldOfView[mob.pos] && mob.buff(Knife.SoulGain.class) != null) {
+                if (mob.alignment == Alignment.ENEMY && fieldOfView[mob.pos] && mob.buff(ToyKnife.SoulGain.class) != null) {
                         enemies.put(mob, mob.targetPriority());
                     }
             return chooseClosest(enemies);

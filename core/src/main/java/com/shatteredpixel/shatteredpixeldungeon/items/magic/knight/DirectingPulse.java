@@ -29,7 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ConjurerSpell;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Knife;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -48,7 +48,7 @@ public class DirectingPulse extends ConjurerSpell {
     public void effect(Ballistica trajectory) {
         Char ch = Actor.findChar(trajectory.collisionPos);
         if (ch != null && ch.alignment == Char.Alignment.ENEMY) {
-            Buff.affect(ch, Knife.SoulGain.class, buff(rank()));
+            Buff.affect(ch, ToyKnife.SoulGain.class, buff(rank()));
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
             Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
         }
