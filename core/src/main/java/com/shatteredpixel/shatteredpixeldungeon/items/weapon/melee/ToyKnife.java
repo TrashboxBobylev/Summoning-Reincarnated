@@ -175,6 +175,11 @@ public class ToyKnife extends MeleeWeapon implements Rankable {
         return v;
     }
 
+    @Override
+    public float castDelay(Char user, int dst) {
+        return super.castDelay(user, dst)*augment.delayFactor(delayMod(rank()));
+    }
+
     public static void processSoulsBurst(Item source, int pos){
         if (Dungeon.hero.hasTalent(Talent.SOULS_BURST)){
             Class<? extends Item> sample = Dungeon.hero.heroClass == HeroClass.CONJURER ? ToyKnife.class : Wand.class;
