@@ -27,12 +27,13 @@ package com.shatteredpixel.shatteredpixeldungeon.items.staffs;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.stationary.StationaryMinion;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
@@ -233,6 +234,9 @@ public class StationaryStaff extends Staff {
                 minion.behaviorType = defaultBehaviorType();
                 minion.setMaxHP(hp(rank()));
                 resource.init(maxActions(rank()), maxActions(rank()));
+                if (owner.hasTalent(Talent.NEWBORN_MOTIVATION)){
+                    Buff.affect(minion, Empowered.class, 25 * owner.pointsInTalent(Talent.NEWBORN_MOTIVATION));
+                }
             } else {
                 minion.HT = hp(rank());
                 ((StationaryMinion)minion).useResource(1);

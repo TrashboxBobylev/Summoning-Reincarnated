@@ -33,10 +33,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Attunement;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.AttunementItem;
@@ -371,6 +373,9 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
             minion.behaviorType = defaultBehaviorType();
             minion.setMaxHP(hp(rank()));
             this.customizeMinion(minion);
+            if (owner.hasTalent(Talent.NEWBORN_MOTIVATION)){
+                Buff.affect(minion, Empowered.class, 25 * owner.pointsInTalent(Talent.NEWBORN_MOTIVATION));
+            }
         } else GLog.warning( Messages.get(Staff.class, "fizzles") );
         staffUsed();
     }
