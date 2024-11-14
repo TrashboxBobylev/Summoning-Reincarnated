@@ -38,14 +38,17 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.WhiteWound;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
-public class ToyKnife extends MeleeWeapon {
+public class ToyKnife extends MeleeWeapon implements Rankable {
 
     public boolean ranged;
 	
@@ -62,59 +65,57 @@ public class ToyKnife extends MeleeWeapon {
 	}
 
     @Override
-    public int max(int lvl) {
-        return  7*(tier) + ((1 + (lvl+1)) / 2)*lvl;
-
+    public int min(int lvl) {
+        return Math.round(damageMod(rank())* (1 + 2*lvl));
     }
 
-//    @Override
-//    public int image() {
-//	    switch (buffedLvl()){
-//            case 0: case 1: case 2: case 3:
-//                return ItemSpriteSheet.KNIFE;
-//            case 4: case 5: case 6:
-//                return ItemSpriteSheet.KNIVE_MK2;
-//            case 7: case 8: case 9:
-//                return ItemSpriteSheet.KNIVE_MK3;
-//            default:
-//                return ItemSpriteSheet.KNIVE_MK4;
-//        }
-//    }
+    @Override
+    public int max(int lvl) {
+        return Math.round(damageMod(rank())* (7*(tier) + 4*lvl));
+    }
 
-//    @Override
-//    public String name() {
-//        String name;
-//        switch (buffedLvl()){
-//            case 0: case 1: case 2: case 3:
-//                name = Messages.get(this, "name");
-//                break;
-//            case 4: case 5: case 6:
-//                name = Messages.get(this, "name2");
-//                break;
-//            case 7: case 8: case 9:
-//                name = Messages.get(this, "name3");
-//                break;
-//            default:
-//                name = Messages.get(this, "name4");
-//                break;
-//        }
-//        return enchantment != null && (cursedKnown || !enchantment.curse()) ? enchantment.name( name ) : name;
-//    }
+    @Override
+    public int level() {
+        return super.level() + Dungeon.hero.ATU()-1;
+    }
 
-//    @Override
-//    public String desc() {
-//        switch (buffedLvl()){
-//            case 0: case 1: case 2: case 3:
-//                return Messages.get(this, "desc");
-//            case 4: case 5: case 6:
-//                return Messages.get(this, "desc2");
-//            case 7: case 8: case 9:
-//                return Messages.get(this, "desc3");
-//            default:
-//                return Messages.get(this, "desc4");
-//        }
-//    }
+    @Override
+    public int buffedLvl() {
+        return level();
+    }
 
+    @Override
+    public int STRReq(int lvl) {
+        return super.STRReq(0);
+    }
+
+    @Override
+    public boolean isUpgradable() {
+        return false;
+    }
+
+    public float damageMod(int rank){
+        switch (rank){
+            case 1: return 1.0f;
+            case 2: return 0.75f;
+            case 3: return 2f;
+        }
+        return 1f;
+    }
+
+    public float delayMod(int rank){
+        switch (rank){
+            case 1: return 1.0f;
+            case 2: return 1.0f;
+            case 3: return 0.5f;
+        }
+        return 1f;
+    }
+
+    @Override
+    protected float baseDelay(Char owner) {
+        return super.baseDelay(owner)*delayMod(rank());
+    }
 
     @Override
     public int damageRoll(Char owner) {
@@ -131,9 +132,21 @@ public class ToyKnife extends MeleeWeapon {
         return damageRoll;
     }
 
+    public float soulGainMod(int rank){
+        switch (rank){
+            case 1: return 1.0f;
+            case 2: return 0.75f;
+            case 3: return 1.5f;
+        }
+        return 1f;
+    }
+
     @Override
     public int proc(Char attacker, Char defender, int damage ) {
 	    int modifier = ranged ? 7 : 4;
+        modifier *= soulGainMod(rank);
+        if (rank() == 2)
+            modifier *= 1.40f;
         Buff.prolong( defender, SoulGain.class, /*speedModifier(attacker) **/ modifier );
         WhiteWound.hit(defender);
         return super.proc( attacker, defender, damage );
@@ -186,6 +199,48 @@ public class ToyKnife extends MeleeWeapon {
                 }
             }
         }
+    }
+
+    int rank = 1;
+
+    @Override
+    public int rank() {
+        return rank;
+    }
+
+    @Override
+    public void rank(int rank) {
+        this.rank = rank;
+    }
+
+    @Override
+    public String getRankMessage(int rank){
+        String rankMessage = generalRankMessage(rank);
+        if (!Messages.get(this, "rank" + rank).equals(Messages.NO_TEXT_FOUND))
+            rankMessage += "\n\n" + Messages.get(this, "rank" + rank);
+        return rankMessage;
+    }
+
+    protected String generalRankMessage(int rank) {
+        return Messages.get(this, "rank_info",
+                Math.round(damageMod(rank)* (1 + 2*buffedLvl())), Math.round(damageMod(rank)* (7*(tier) + 4*buffedLvl())),
+                Math.round(4*soulGainMod(rank)), Math.round(7*soulGainMod(rank)*(rank == 2 ? 1.40f : 1f)),
+                Messages.decimalFormat("#.##", delayMod(rank))
+        );
+    }
+
+    private static final String RANK = "rank";
+
+    @Override
+    public void storeInBundle(Bundle bundle) {
+        super.storeInBundle(bundle);
+        bundle.put(RANK, rank);
+    }
+
+    @Override
+    public void restoreFromBundle(Bundle bundle) {
+        super.restoreFromBundle(bundle);
+        rank = bundle.getInt(RANK);
     }
 
     public static class SoulGain extends FlavourBuff{

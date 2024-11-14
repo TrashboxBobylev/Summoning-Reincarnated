@@ -576,7 +576,7 @@ public class Hero extends Char implements ManaSource {
 		knife.ranged = true;
 		boolean hit = false;
 		if (enemy.alignment != Alignment.ALLY)
-			hit = attack( enemy );
+			hit = attack( enemy, knife.rank() == 2 ? 1.40f : 0f, 0f, 1f );
 		Invisibility.dispel();
 		belongings.weapon = equipped;
 
