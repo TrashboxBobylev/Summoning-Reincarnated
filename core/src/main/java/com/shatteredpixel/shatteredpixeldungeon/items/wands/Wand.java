@@ -57,6 +57,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ShardOfOblivion;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.WondrousResin;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
@@ -237,8 +238,14 @@ public abstract class Wand extends Item implements ChargingItem {
 			charger = null;
 		}
 	}
-	
-	public void level( int value) {
+
+	@Override
+	protected void onThrow(int cell) {
+		super.onThrow(cell);
+		ToyKnife.processSoulsBurst(this, cell);
+	}
+
+	public void level(int value) {
 		super.level( value );
 		updateLevel();
 	}

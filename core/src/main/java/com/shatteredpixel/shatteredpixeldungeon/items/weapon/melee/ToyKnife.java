@@ -24,18 +24,25 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.WhiteWound;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 public class ToyKnife extends MeleeWeapon {
@@ -144,6 +151,7 @@ public class ToyKnife extends MeleeWeapon {
             } else {
                 Dungeon.level.drop( this, cell ).sprite.drop();
             }
+            processSoulsBurst(this, cell);
         }
     }
 
@@ -152,6 +160,32 @@ public class ToyKnife extends MeleeWeapon {
         float v = super.speedMultiplier(owner);
         if (Dungeon.hero.subClass == HeroSubClass.WILL_SORCERER) v /= 0.7f;
         return v;
+    }
+
+    public static void processSoulsBurst(Item source, int pos){
+        if (Dungeon.hero.hasTalent(Talent.SOULS_BURST)){
+            Class<? extends Item> sample = Dungeon.hero.heroClass == HeroClass.CONJURER ? ToyKnife.class : Wand.class;
+            if (sample.isInstance(source)){
+                ToyKnife damageSource = source instanceof ToyKnife ? (ToyKnife) source : new ToyKnife();
+                int damage = Math.round(damageSource.damageRoll(Dungeon.hero)*(1 + Dungeon.hero.pointsInTalent(Talent.SOULS_BURST)/2f));
+                Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, Random.Float(0.87f, 1.15f) );
+                for (int i : PathFinder.NEIGHBOURS8){
+                    ((MagicMissile)curUser.sprite.parent.recycle( MagicMissile.class )).reset(
+                            MagicMissile.MAGIC_MISSILE,
+                            pos,
+                            pos+i,
+                            null
+                    );
+                    Char target;
+                    if ((target = Actor.findChar(pos+i)) != null && target.alignment == Char.Alignment.ENEMY){
+                        target.damage(damage, damageSource);
+                        if (source instanceof ToyKnife){
+                            Buff.prolong(target, SoulGain.class, 2 + 4*Dungeon.hero.pointsInTalent(Talent.SOULS_BURST));
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static class SoulGain extends FlavourBuff{
