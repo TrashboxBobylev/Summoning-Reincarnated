@@ -1101,10 +1101,10 @@ public class Hero extends Char implements ManaSource {
 		resting = false;
 	}
 	
-	public void resume() {
+	public void resume(boolean damageInterrupt) {
 		curAction = lastAction;
 		lastAction = null;
-		damageInterrupt = false;
+		this.damageInterrupt = damageInterrupt;
 		next();
 	}
 

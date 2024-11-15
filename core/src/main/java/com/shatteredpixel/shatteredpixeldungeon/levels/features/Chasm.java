@@ -88,7 +88,7 @@ public class Chasm implements Hero.Doom {
 								if (index == 0 && elapsed > 0.2f) {
 									if (Dungeon.hero.pos == heroPos) {
 										jumpConfirmed = true;
-										hero.resume();
+										hero.resume(false);
 									}
 								}
 							}

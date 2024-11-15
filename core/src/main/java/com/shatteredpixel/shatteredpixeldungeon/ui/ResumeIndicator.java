@@ -72,8 +72,16 @@ public class ResumeIndicator extends Tag {
 	protected void onClick() {
 		super.onClick();
 		if (Dungeon.hero.ready) {
-			Dungeon.hero.resume();
+			Dungeon.hero.resume(true);
 		}
+	}
+
+	@Override
+	protected boolean onLongClick() {
+		if (Dungeon.hero.ready) {
+			Dungeon.hero.resume(false);
+		}
+		return true;
 	}
 
 	@Override
