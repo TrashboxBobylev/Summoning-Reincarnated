@@ -370,7 +370,7 @@ public abstract class Char extends Actor implements ManaSource {
 
 	@Override
 	public float manaModifier(Char source) {
-		return (source.buff(ToyKnife.SoulGain.class) != null && alignment == Alignment.ALLY) ? (Dungeon.hero.subClass == HeroSubClass.SOUL_WIELDER ? 2.25f : 1.5f) : 0f;
+		return (source.buff(ToyKnife.SoulGain.class) != null && alignment == Alignment.ALLY) ? 1f : 0f;
 	}
 
 	final public boolean attack( Char enemy ){

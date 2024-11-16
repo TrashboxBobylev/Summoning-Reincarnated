@@ -240,6 +240,11 @@ public class Minion extends Mob implements ManaSource {
     }
 
     @Override
+    public float manaModifier(Char source) {
+        return 1f;
+    }
+
+    @Override
     public int attackSkill(Char target) {
 
         int encumbrance = attunement - Dungeon.hero.ATU();

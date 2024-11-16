@@ -91,6 +91,11 @@ public class GoatClone extends NPC implements ManaSource {
     }
 
     @Override
+    public float manaModifier(Char source) {
+        return 1f;
+    }
+
+    @Override
     public int damageRoll() {
         int i = Random.NormalIntRange(Dungeon.hero.lvl / 3, Dungeon.hero.lvl);
         if (Dungeon.isChallenged(Conducts.Conduct.PACIFIST)) i /= 3;
