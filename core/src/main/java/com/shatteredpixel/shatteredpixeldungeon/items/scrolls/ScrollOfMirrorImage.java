@@ -27,7 +27,10 @@ package com.shatteredpixel.shatteredpixeldungeon.items.scrolls;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -86,6 +89,10 @@ public class ScrollOfMirrorImage extends Scroll {
 			mob.duplicate( hero );
 			GameScene.add( mob );
 			ScrollOfTeleportation.appear( mob, respawnPoints.get( index ) );
+
+			if (hero.hasTalent(Talent.LEADER_APPRECIATION)){
+				Buff.affect(mob, Barrier.class).setShield(1 + 7 * hero.pointsInTalent(Talent.LEADER_APPRECIATION));
+			}
 			
 			respawnPoints.remove( index );
 			nImages--;

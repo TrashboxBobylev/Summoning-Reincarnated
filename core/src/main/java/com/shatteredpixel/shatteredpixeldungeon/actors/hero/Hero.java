@@ -147,6 +147,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfTenacity;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ThirteenLeafClover;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfDisintegration;
@@ -2597,6 +2598,8 @@ public class Hero extends Char {
 		return super.isImmune(effect);
 	}
 
+	private static final int LEADER_MIRROR_COST = 18;
+
 	public boolean search( boolean intentional ) {
 		
 		if (!isAlive()) return false;
@@ -2728,6 +2731,12 @@ public class Hero extends Char {
 				}
 			}
 			spendAndNext(TIME_TO_SEARCH);
+
+			if (hasTalent(Talent.LEADER_APPRECIATION) && mana >= LEADER_MIRROR_COST){
+				mana -= LEADER_MIRROR_COST;
+				Dungeon.hero.sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(LEADER_MIRROR_COST), FloatingText.MANA);
+				ScrollOfMirrorImage.spawnImages(this, 1);
+			}
 			
 		}
 		
