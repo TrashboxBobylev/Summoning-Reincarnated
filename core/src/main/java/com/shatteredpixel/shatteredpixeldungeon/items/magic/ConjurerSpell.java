@@ -36,8 +36,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -49,6 +51,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
+import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
 
@@ -166,6 +169,32 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
                 charger.gainCharge((1 + owner.pointsInTalent(Talent.ENERGIZED_SUPPORT))*50f / (float) charger.staff().getChargeTurns());
             }
             Item.updateQuickslot();
+        }
+
+        if (owner.hasTalent(Talent.COMBINED_REFILL)){
+            Talent.CombinedRefillTracker tracker = owner.buff(Talent.CombinedRefillTracker.class);
+            if (manaCost() != 0) {
+                if (tracker == null || tracker.weapon == getClass() || tracker.weapon == null) {
+                    Buff.affect(owner, Talent.CombinedRefillTracker.class).weapon = getClass();
+                } else {
+                    tracker.detach();
+
+                    ShieldHalo shield;
+                    GameScene.effect(shield = new ShieldHalo(owner.sprite));
+                    shield.hardlight(0xEBEBEB);
+                    shield.putOut();
+
+                    int gain = (manaCost() + ((ConjurerSpell)Reflection.newInstance(tracker.weapon)).manaCost());
+                    gain = Math.round(gain*(0.15f*owner.pointsInTalent(Talent.COMBINED_REFILL)));
+                    gain = Math.min(Dungeon.hero.maxMana() - Dungeon.hero.mana, gain);
+                    Dungeon.hero.mana += gain;
+                    if (gain > 0) {
+                        Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(gain), FloatingText.MANA);
+                    }
+
+                    ScrollOfRecharging.charge(owner);
+                }
+            }
         }
     }
 

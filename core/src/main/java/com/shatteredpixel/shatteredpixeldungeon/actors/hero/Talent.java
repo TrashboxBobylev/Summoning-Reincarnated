@@ -199,7 +199,7 @@ public enum Talent {
 	//Conjurer T2
 	INSPIRING_MEAL(292), LIQUID_CASTING(293), ENERGIZED_SUPPORT(294), MANABURN(295), SOULS_BURST(296),
 	//Conjurer T3
-	NEWBORN_MOTIVATION(297, 3), SOUL_SPIRIT_ENTRANCE(298, 3),
+	NEWBORN_MOTIVATION(297, 3), COMBINED_REFILL(298, 3),
 	//Soul Wielder T3
 	LEADER_APPRECIATION(299, 3), CONCENTRATED_SUPPORT(300, 3), ETERNAL_FRIENDSHIP(301, 3),
 	//Will Sorcerer T3
@@ -477,6 +477,21 @@ public enum Talent {
 		public void restoreFromBundle(Bundle bundle) {
 			super.restoreFromBundle(bundle);
 			barrierInc = bundle.getFloat( BARRIER_INC );
+		}
+	}
+	public static class CombinedRefillTracker extends Buff{
+		public Class weapon;
+
+		private static final String WEAPON    = "weapon";
+		@Override
+		public void storeInBundle(Bundle bundle) {
+			super.storeInBundle(bundle);
+			bundle.put(WEAPON, weapon);
+		}
+		@Override
+		public void restoreFromBundle(Bundle bundle) {
+			super.restoreFromBundle(bundle);
+			weapon = bundle.getClass(WEAPON);
 		}
 	}
 
@@ -1133,7 +1148,7 @@ public enum Talent {
 				Collections.addAll(tierTalents, AFFECTED_BY_LUCK, UNIQUE_ATTENTION, SLICE_OF_POWER, MEAL_OF_POWER);
 				break;
 			case CONJURER:
-				Collections.addAll(tierTalents, NEWBORN_MOTIVATION, SOUL_SPIRIT_ENTRANCE);
+				Collections.addAll(tierTalents, NEWBORN_MOTIVATION, COMBINED_REFILL);
 				break;
 		}
 		for (Talent talent : tierTalents){

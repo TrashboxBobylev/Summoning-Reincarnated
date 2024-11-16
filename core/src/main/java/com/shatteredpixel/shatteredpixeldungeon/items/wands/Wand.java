@@ -47,6 +47,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage.WildM
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
 import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
@@ -500,6 +501,24 @@ public abstract class Wand extends Item implements ChargingItem {
 				&& charger != null && charger.target == Dungeon.hero){
 
 			Buff.prolong(Dungeon.hero, Talent.LingeringMagicTracker.class, 5f);
+		}
+
+		if (Dungeon.hero.hasTalent(Talent.COMBINED_REFILL)){
+			Talent.CombinedRefillTracker tracker = Dungeon.hero.buff(Talent.CombinedRefillTracker.class);
+			if (tracker == null || tracker.weapon == getClass() || tracker.weapon == null) {
+				Buff.affect(Dungeon.hero, Talent.CombinedRefillTracker.class).weapon = getClass();
+			} else {
+				tracker.detach();
+
+				ShieldHalo shield;
+				GameScene.effect(shield = new ShieldHalo(Dungeon.hero.sprite));
+				shield.hardlight(0xEBEBEB);
+				shield.putOut();
+
+				Dungeon.hero.belongings.charge((0.125f*Dungeon.hero.pointsInTalent(Talent.COMBINED_REFILL)));
+
+				ScrollOfRecharging.charge(Dungeon.hero);
+			}
 		}
 
 		Invisibility.dispel();
