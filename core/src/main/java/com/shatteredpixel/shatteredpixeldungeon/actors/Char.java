@@ -114,6 +114,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.FrostBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.DreemurrsNecromancy;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
@@ -134,6 +135,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Kineti
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sickle;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.ShockingDart;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -163,7 +165,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 
-public abstract class Char extends Actor {
+public abstract class Char extends Actor implements ManaSource {
 	
 	public int pos = 0;
 	
@@ -364,6 +366,11 @@ public abstract class Char extends Actor {
 				((Buff)b).attachTo( this );
 			}
 		}
+	}
+
+	@Override
+	public float manaModifier(Char source) {
+		return (source.buff(ToyKnife.SoulGain.class) != null && alignment == Alignment.ALLY) ? (Dungeon.hero.subClass == HeroSubClass.SOUL_WIELDER ? 2.25f : 1.5f) : 0f;
 	}
 
 	final public boolean attack( Char enemy ){

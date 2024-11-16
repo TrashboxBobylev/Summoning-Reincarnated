@@ -127,7 +127,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.Key;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.DreemurrsNecromancy;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.PushingWaveform;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.RunicShell;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ShockerBreaker;
@@ -207,7 +206,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 
-public class Hero extends Char implements ManaSource {
+public class Hero extends Char {
 
 	{
 		actPriority = HERO_PRIO;
@@ -335,11 +334,6 @@ public class Hero extends Char implements ManaSource {
 
 	public int maxMana(){
 		return (Dungeon.hero.lvl + 3)*5;
-	}
-
-	@Override
-	public float manaModifier(Char source) {
-		return source.buff(ToyKnife.SoulGain.class) != null ? (Dungeon.hero.subClass == HeroSubClass.SOUL_WIELDER ? 2.25f : 1.5f) : 0f;
 	}
 
 	private static final String CLASS       = "class";
