@@ -42,9 +42,13 @@ public class AttunementBoost extends FlavourBuff implements AttunementBooster {
         return boost;
     }
 
+    public void boost(float value){
+        boost = value;
+    }
+
     @Override
     public String desc() {
-        return Messages.get(this, "desc", boost, dispTurns());
+        return Messages.get(this, "desc", Float.toString(boost), dispTurns());
     }
 
     @Override
@@ -57,9 +61,11 @@ public class AttunementBoost extends FlavourBuff implements AttunementBooster {
         icon.hardlight(0x00FF00);
     }
 
+    public static final int DURATION = 15;
+
     @Override
     public float iconFadePercent() {
-        return Math.max(0, (15 - visualcooldown()) / 15);
+        return Math.max(0, (DURATION - visualcooldown()) / DURATION);
     }
 
     private static final String BOOST	    = "boost";

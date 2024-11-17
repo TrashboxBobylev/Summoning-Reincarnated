@@ -29,11 +29,13 @@ import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AttunementBoost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
@@ -193,6 +195,12 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
 
                 ScrollOfRecharging.charge(owner);
             }
+        }
+
+
+        if (owner.hasTalent(Talent.CONCENTRATED_SUPPORT) && thing instanceof Minion){
+            float duration = AttunementBoost.DURATION * (alignment == Alignment.OFFENSIVE ? 2f : 1f);
+            Buff.affect(thing, AttunementBoost.class, duration).boost((1 + owner.pointsInTalent(Talent.CONCENTRATED_SUPPORT))*0.5f);
         }
     }
 

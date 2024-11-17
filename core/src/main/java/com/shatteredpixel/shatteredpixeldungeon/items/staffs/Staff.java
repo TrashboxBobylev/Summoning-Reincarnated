@@ -429,7 +429,7 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
             if (Dungeon.hero.buff(Attunement.class) != null) robeBonus = Attunement.empowering();
             info += "\n\n" + Messages.get(this, "stats_known",
                     tier,
-                    ATUReq(),
+                    ATUReq(0),
                     augment.damageFactor(Math.round(minionMin()*robeBonus)),
                     augment.damageFactor(Math.round(minionMax()*robeBonus)),
                     (hp(rank())));
