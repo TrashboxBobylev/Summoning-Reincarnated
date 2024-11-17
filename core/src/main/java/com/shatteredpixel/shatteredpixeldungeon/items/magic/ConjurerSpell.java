@@ -157,14 +157,14 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
     }
 
     protected void afterZap(Hero owner, Ballistica shot){
-        if (owner.hasTalent(Talent.ENERGY_BREAK) && manaCost() != 0 && shot != null && Actor.findChar(shot.collisionPos) != null){
-            Char thing = Actor.findChar(shot.collisionPos);
+        Char thing = shot != null ? Actor.findChar(shot.collisionPos) : null;
+        if (owner.hasTalent(Talent.ENERGY_BREAK) && thing != null){
             if (thing.isAlive() && thing.alignment == Char.Alignment.ENEMY){
                 Buff.prolong(owner, Talent.EnergyBreakTracker.class, 5f).object = thing.id();
             }
         }
 
-        if (owner.hasTalent(Talent.ENERGIZED_SUPPORT) && manaCost() != 0 && alignment() == Alignment.BENEFICIAL){
+        if (owner.hasTalent(Talent.ENERGIZED_SUPPORT) && alignment() == Alignment.BENEFICIAL){
             for (Staff.Charger charger : owner.buffs(Staff.Charger.class)){
                 charger.gainCharge((1 + owner.pointsInTalent(Talent.ENERGIZED_SUPPORT))*50f / (float) charger.staff().getChargeTurns());
             }
@@ -173,27 +173,25 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
 
         if (owner.hasTalent(Talent.COMBINED_REFILL)){
             Talent.CombinedRefillTracker tracker = owner.buff(Talent.CombinedRefillTracker.class);
-            if (manaCost() != 0) {
-                if (tracker == null || tracker.weapon == getClass() || tracker.weapon == null) {
-                    Buff.affect(owner, Talent.CombinedRefillTracker.class).weapon = getClass();
-                } else {
-                    tracker.detach();
+            if (tracker == null || tracker.weapon == getClass() || tracker.weapon == null) {
+                Buff.affect(owner, Talent.CombinedRefillTracker.class).weapon = getClass();
+            } else {
+                tracker.detach();
 
-                    ShieldHalo shield;
-                    GameScene.effect(shield = new ShieldHalo(owner.sprite));
-                    shield.hardlight(0xEBEBEB);
-                    shield.putOut();
+                ShieldHalo shield;
+                GameScene.effect(shield = new ShieldHalo(owner.sprite));
+                shield.hardlight(0xEBEBEB);
+                shield.putOut();
 
-                    int gain = (manaCost() + ((ConjurerSpell)Reflection.newInstance(tracker.weapon)).manaCost());
-                    gain = Math.round(gain*(0.15f*owner.pointsInTalent(Talent.COMBINED_REFILL)));
-                    gain = Math.min(Dungeon.hero.maxMana() - Dungeon.hero.mana, gain);
-                    Dungeon.hero.mana += gain;
-                    if (gain > 0) {
-                        Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(gain), FloatingText.MANA);
-                    }
-
-                    ScrollOfRecharging.charge(owner);
+                int gain = (manaCost() + ((ConjurerSpell)Reflection.newInstance(tracker.weapon)).manaCost());
+                gain = Math.round(gain*(0.15f*owner.pointsInTalent(Talent.COMBINED_REFILL)));
+                gain = Math.min(Dungeon.hero.maxMana() - Dungeon.hero.mana, gain);
+                Dungeon.hero.mana += gain;
+                if (gain > 0) {
+                    Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(gain), FloatingText.MANA);
                 }
+
+                ScrollOfRecharging.charge(owner);
             }
         }
     }
@@ -279,7 +277,8 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
                             Invisibility.dispel();
                             curSpell.updateQuickslot();
                             curUser.spendAndNext(1f);
-                            curSpell.afterZap(curUser, shot);
+                            if (manaCost != 0)
+                                curSpell.afterZap(curUser, shot);
                         }
                     });
                 }
