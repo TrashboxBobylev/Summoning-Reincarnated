@@ -297,7 +297,7 @@ public class ItemSlot extends Button {
 		if (item instanceof AttunementItem) {
 
 			if (item.levelKnown){
-				int atu = ((AttunementItem) item).ATUReq();
+				int atu = (int)((AttunementItem) item).ATUReq();
 				extra.text( Messages.format( TXT_ATTUNEMENT, atu ) );
 				if (atu > Dungeon.hero.ATU()) {
 					extra.hardlight( DEGRADED_ATU );

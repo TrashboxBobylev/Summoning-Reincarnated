@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.AttunementBooster;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
@@ -182,8 +183,14 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
     }
 
     @Override
-    public int ATUReq() {
-        return ATUReq(0);
+    public float ATUReq() {
+        float atuReq = ATUReq(0);
+        if (minion != null){
+            for (AttunementBooster boost : minion.genericBuffs(AttunementBooster.class)){
+                atuReq -= boost.boost();
+            }
+        }
+        return atuReq;
     }
 
     @Override
@@ -191,9 +198,13 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
         return tier;
     }
 
+    public float powerLevel(){
+        return Math.max(0, (Dungeon.hero == null ? 0 : Dungeon.hero.ATU()) - ATUReq());
+    }
+
     @Override
     public int level() {
-        return Math.max(0, (Dungeon.hero == null ? 0 : Dungeon.hero.ATU()) - ATUReq());
+        return (int)powerLevel();
     }
 
     @Override
@@ -208,9 +219,9 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
 
     public int hp(int lvl){
         switch (lvl) {
-            case 1: return table.hp1 + table.hpInc1 * level();
-            case 2: return table.hp2 + table.hpInc2 * level();
-            case 3: return table.hp3 + table.hpInc3 * level();
+            case 1: return Math.round(table.hp1 + table.hpInc1 * powerLevel());
+            case 2: return Math.round(table.hp2 + table.hpInc2 * powerLevel());
+            case 3: return Math.round(table.hp3 + table.hpInc3 * powerLevel());
         }
         return 0;
     }
@@ -222,9 +233,9 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
     public int minionMin(int lvl) {
         int dmg = 0;
         switch (lvl) {
-            case 1: dmg = table.min1 + table.minInc1 * level(); break;
-            case 2: dmg = table.min2 + table.minInc2 * level(); break;
-            case 3: dmg = table.min3 + table.minInc3 * level(); break;
+            case 1: dmg = Math.round(table.min1 + table.minInc1 * powerLevel()); break;
+            case 2: dmg = Math.round(table.min2 + table.minInc2 * powerLevel()); break;
+            case 3: dmg = Math.round(table.min3 + table.minInc3 * powerLevel()); break;
         }
         if (Dungeon.isChallenged(Conducts.Conduct.PACIFIST)) dmg /= 3;
         return dmg;
@@ -237,9 +248,9 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
     public int minionMax(int lvl) {
         int dmg = 0;
         switch (lvl) {
-            case 1: dmg = table.max1 + table.maxInc1 * level(); break;
-            case 2: dmg = table.max2 + table.maxInc2 * level(); break;
-            case 3: dmg = table.max3 + table.maxInc3 * level(); break;
+            case 1: dmg = Math.round(table.max1 + table.maxInc1 * powerLevel()); break;
+            case 2: dmg = Math.round(table.max2 + table.maxInc2 * powerLevel()); break;
+            case 3: dmg = Math.round(table.max3 + table.maxInc3 * powerLevel()); break;
         }
         if (Dungeon.isChallenged(Conducts.Conduct.PACIFIST)) dmg /= 3;
         return dmg;

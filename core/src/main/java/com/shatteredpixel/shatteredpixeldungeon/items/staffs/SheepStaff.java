@@ -76,17 +76,17 @@ public class SheepStaff extends Staff {
 
     @Override
     public void customizeMinion(Minion minion) {
-        int difference = (Dungeon.hero != null ? Dungeon.hero.ATU() : 0) - minion.attunement;
+        float difference = (Dungeon.hero != null ? Dungeon.hero.ATU() : 0) - minion.attunement;
         Point minDefense = minDefense(rank());
         Point maxDefense = maxDefense(rank());
-        minion.minDefense = minDefense.x + minDefense.y*difference;
-        minion.maxDefense = maxDefense.x + maxDefense.y*difference;
+        minion.minDefense = minDefense.x + Math.round(minDefense.y*difference);
+        minion.maxDefense = maxDefense.x + Math.round(maxDefense.y*difference);
     }
 
     public String minionDescription(int rank){
-        int difference = Math.max(0, (Dungeon.hero != null ? Dungeon.hero.ATU() : 0) - ATUReq());
+        float difference = Math.max(0, (Dungeon.hero != null ? Dungeon.hero.ATU() : 0) - ATUReq());
         Point minDefense = minDefense(rank);
         Point maxDefense = maxDefense(rank);
-        return Messages.get(this, "minion_desc" + rank, minDefense.x + minDefense.y*difference, maxDefense.x + maxDefense.y*difference);
+        return Messages.get(this, "minion_desc" + rank, minDefense.x + Math.round(minDefense.y*difference), Math.round(maxDefense.x + maxDefense.y*difference));
     }
 }

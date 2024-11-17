@@ -22,10 +22,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.items;
+package com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic;
 
-public interface AttunementItem {
-    public float ATUReq();
-
-    public int ATUReq(int lvl);
+public interface AttunementBooster {
+    float boost();
 }

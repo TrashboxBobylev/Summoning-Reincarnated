@@ -69,7 +69,7 @@ public class Minion extends Mob implements ManaSource {
     public Weapon.Enchantment enchantment;
     public Weapon.Augment augment = Weapon.Augment.NONE;
     public int rank;
-    public int attunement;
+    public float attunement;
     public BehaviorType behaviorType;
     private Staff staff = null;
     public int minDefense;
@@ -109,7 +109,7 @@ public class Minion extends Mob implements ManaSource {
         super.restoreFromBundle(bundle);
 
         rank = bundle.getInt(RANK);
-        attunement = bundle.getInt(ATTUNEMENT);
+        attunement = bundle.getFloat(ATTUNEMENT);
 
         minDamage = bundle.getInt(MIN_DAMAGE);
         maxDamage = bundle.getInt(MAX_DAMAGE);
@@ -180,7 +180,7 @@ public class Minion extends Mob implements ManaSource {
         HP = HT = hp;
     }
 
-    public void setAttunement(int atu){
+    public void setAttunement(float atu){
         attunement = atu;
     }
 
@@ -247,7 +247,7 @@ public class Minion extends Mob implements ManaSource {
     @Override
     public int attackSkill(Char target) {
 
-        int encumbrance = attunement - Dungeon.hero.ATU();
+        float encumbrance = attunement - Dungeon.hero.ATU();
 
         float accuracy = 1;
 
