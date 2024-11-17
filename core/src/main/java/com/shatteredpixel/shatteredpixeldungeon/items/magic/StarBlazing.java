@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -58,7 +59,7 @@ public class StarBlazing extends ConjurerSpell {
     public void effect(Ballistica trajectory) {
         if (range(rank()) < 1){
             Char ch = Actor.findChar(trajectory.collisionPos);
-            if (ch != null && ch.alignment != Char.Alignment.ALLY){
+            if (ch != null && (ch.alignment != Char.Alignment.ALLY || Dungeon.hero.hasTalent(Talent.CONCENTRATED_SUPPORT))){
                 ch.damage(damageRoll(rank()), this);
                 Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
 
@@ -78,7 +79,7 @@ public class StarBlazing extends ConjurerSpell {
             for (int i = 0; i < PathFinder.distance.length; i++) {
                 if (PathFinder.distance[i] < Integer.MAX_VALUE) {
                     Char ch = Actor.findChar(i);
-                    if (ch != null && ch.alignment != Char.Alignment.ALLY) {
+                    if (ch != null && (ch.alignment != Char.Alignment.ALLY || (Dungeon.hero.hasTalent(Talent.CONCENTRATED_SUPPORT) && i == trajectory.collisionPos))) {
                         ch.damage(damageRoll(rank()), this);
                         Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
 
