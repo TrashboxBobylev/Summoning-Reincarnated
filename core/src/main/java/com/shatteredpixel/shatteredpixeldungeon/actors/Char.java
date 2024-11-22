@@ -704,6 +704,14 @@ public abstract class Char extends Actor implements ManaSource {
 
 		if (buff(Shrunken.class) != null) dr /= 2;
 
+		if (alignment == Alignment.ALLY && Dungeon.hero.hasTalent(Talent.ETERNAL_FRIENDSHIP)){
+			Talent.EternalFriendshipTracker tracker;
+			if ((tracker = Dungeon.hero.buff(Talent.EternalFriendshipTracker.class)) != null){
+				int count = tracker.uniqueAlliesCount();
+				dr += Random.NormalIntRange( 0 , count * Dungeon.hero.pointsInTalent(Talent.ETERNAL_FRIENDSHIP));
+			}
+		}
+
 		return dr;
 	}
 	

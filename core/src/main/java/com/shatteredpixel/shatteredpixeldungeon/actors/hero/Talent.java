@@ -646,6 +646,11 @@ public enum Talent {
 				}
 			}
 		}
+
+		if (talent == ETERNAL_FRIENDSHIP){
+			EternalFriendshipTracker tracker = Buff.affect(hero, EternalFriendshipTracker.class);
+			tracker.recalculate();
+		}
 	}
 
 	public static class CachedRationsDropped extends CounterBuff{{revivePersists = true;}};
@@ -1044,6 +1049,32 @@ public enum Talent {
 		public void tintIcon(Image icon) { icon.hardlight(2f, 2f, 2f); }
 		public float iconFadePercent() { return Math.max(0, 1f - (visualcooldown() / (1 + Dungeon.hero.pointsInTalent(LIQUID_CASTING)*2))); }
 		@Override public int manaStealDelay(){return 1;}
+	}
+
+	public static class EternalFriendshipTracker extends Buff {
+		{ revivePersists = true; actPriority = VFX_PRIO;}
+
+		HashSet<Class<? extends Char>> uniqueAllies = new HashSet<>();
+
+		private void recalculate(){
+			uniqueAllies.clear();
+			for (Char ch: Dungeon.level.mobs){
+				if (ch.alignment == Char.Alignment.ALLY){
+					uniqueAllies.add(ch.getClass());
+				}
+			}
+		}
+
+		@Override
+		public boolean act() {
+			recalculate();
+			spend(TICK);
+			return true;
+		}
+
+		public int uniqueAlliesCount(){
+			return uniqueAllies.size();
+		}
 	}
 
 	public static final int MAX_TALENT_TIERS = 4;
