@@ -36,11 +36,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GoatCloneSprite;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
@@ -62,6 +64,8 @@ public class GoatClone extends NPC implements ManaSource {
         state = WANDERING;
 //        properties.add(Property.IGNORE_ARMOR);
     }
+
+    public int healCombo = 0;
 
     @Override
     public Char chooseEnemy() {
@@ -125,7 +129,19 @@ public class GoatClone extends NPC implements ManaSource {
     @Override
     public int attackProc(Char enemy, int damage) {
 //        if (Dungeon.mode != Dungeon.GameMode.HELL)
-        Dungeon.hero.HP = Math.min(Dungeon.hero.HT, Dungeon.hero.HP+1);
+        if (++healCombo > 5){
+            healCombo = 0;
+            int hpGain = Dungeon.hero.pointsInTalent(Talent.REJUVENATING_FORCE)+1;
+            int manaGain = Dungeon.hero.pointsInTalent(Talent.REJUVENATING_FORCE);
+            hpGain = Math.min(Dungeon.hero.HT-Dungeon.hero.HP, hpGain);
+            manaGain = Math.min(Dungeon.hero.maxMana()-Dungeon.hero.mana, manaGain);
+            Dungeon.hero.HP += hpGain;
+            Dungeon.hero.mana += manaGain;
+            if (hpGain > 0)
+                Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(hpGain), FloatingText.HEALING);
+            if (manaGain > 0)
+                Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(manaGain), FloatingText.MANA);
+        }
         damage = super.attackProc(enemy, damage);
         if (Dungeon.hero.hasTalent(Talent.VIOLENT_OVERCOMING)){
             Buff.affect(enemy, ViolentOvercomingCombo.class, 1.5f).proc(this);
@@ -183,6 +199,19 @@ public class GoatClone extends NPC implements ManaSource {
         }
 
         return speed;
+    }
+
+    private static final String HEAL_COMBO = "healCombo";
+    @Override
+    public void storeInBundle(Bundle bundle) {
+        super.storeInBundle(bundle);
+        bundle.put(HEAL_COMBO, healCombo);
+    }
+
+    @Override
+    public void restoreFromBundle(Bundle bundle) {
+        super.restoreFromBundle(bundle);
+        healCombo = bundle.getInt(HEAL_COMBO);
     }
 
     {
