@@ -29,8 +29,12 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
@@ -38,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GoatCloneSprite;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -122,6 +127,9 @@ public class GoatClone extends NPC implements ManaSource {
 //        if (Dungeon.mode != Dungeon.GameMode.HELL)
         Dungeon.hero.HP = Math.min(Dungeon.hero.HT, Dungeon.hero.HP+1);
         damage = super.attackProc(enemy, damage);
+        if (Dungeon.hero.hasTalent(Talent.VIOLENT_OVERCOMING)){
+            Buff.affect(enemy, ViolentOvercomingCombo.class, 1.5f).proc(this);
+        }
         if (Dungeon.hero.belongings.weapon != null){
             return Dungeon.hero.belongings.weapon.proc( enemy, this, damage );
         } else {
@@ -231,6 +239,31 @@ public class GoatClone extends NPC implements ManaSource {
             return true;
         }
 
+    }
+
+    public static class ViolentOvercomingCombo extends FlavourBuff {
+        public int combo = 0;
+
+        private static final String COMBO = "combo";
+
+        public void proc(Char attacker){
+            combo++;
+            if (combo >= (9 - 2 * Dungeon.hero.pointsInTalent(Talent.VIOLENT_OVERCOMING))){
+                Buff.affect(attacker, Empowered.class, 0.33f);
+            }
+        }
+
+        @Override
+        public void storeInBundle(Bundle bundle) {
+            super.storeInBundle(bundle);
+            bundle.put(COMBO, combo);
+        }
+
+        @Override
+        public void restoreFromBundle(Bundle bundle) {
+            super.restoreFromBundle(bundle);
+            combo = bundle.getInt(COMBO);
+        }
     }
 
 }
