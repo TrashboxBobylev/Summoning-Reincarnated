@@ -156,6 +156,12 @@ public class Assets {
 		public static final String HALLS_TENSE          = "music/halls_tense.ogg";
 		public static final String HALLS_BOSS           = "music/halls_boss.ogg";
 		public static final String HALLS_BOSS_FINALE    = "music/halls_boss_finale.ogg";
+
+		public static final String ABYSS_1               = "music/abyss_1.ogg";
+		public static final String ABYSS_2               = "music/abyss_2.ogg";
+		public static final String ABYSS_3               = "music/abyss_3.ogg";
+		public static final String ABYSS_4               = "music/abyss_4.ogg";
+		public static final String ABYSS_5               = "music/abyss_5.ogg";
 	}
 
 	public static class Sounds {
@@ -260,6 +266,7 @@ public class Assets {
 		public static final String CAVES    = "splashes/caves.jpg";
 		public static final String CITY     = "splashes/city.jpg";
 		public static final String HALLS    = "splashes/halls.jpg";
+		public static final String ABYSS    = "splashes/halls.jpg";
 	}
 
 	public static class Sprites {
@@ -342,11 +349,16 @@ public class Assets {
 		public static final String FUNGAL_SENTRY    = "sprites/fungal_sentry.png";
 		public static final String FUNGAL_CORE      = "sprites/fungal_core.png";
 
-		public static final String FROGGIT          = "sprites/froggit.png";
-		public static final String MAGIC_MISSILE    = "sprites/magic_missile.png";
-		public static final String WIZARD           = "sprites/wizard.png";
-		public static final String DM150            = "sprites/dm150.png";
-		public static final String BLASTER          = "sprites/blaster.png";
-		public static final String ATU_CONSTRUCT    = "sprites/attunement_construct.png";
+		public static final String FROGGIT           = "sprites/froggit.png";
+		public static final String MAGIC_MISSILE     = "sprites/magic_missile.png";
+		public static final String WIZARD            = "sprites/wizard.png";
+		public static final String DM150             = "sprites/dm150.png";
+		public static final String BLASTER           = "sprites/blaster.png";
+		public static final String ATU_CONSTRUCT     = "sprites/attunement_construct.png";
+		public static final String DRAGON            = "sprites/mob_drake.png";
+		public static final String TRAPPET           = "sprites/trappet.png";
+		public static final String ATTUNEMENT_SPIRIT = "sprites/attunement_spirit.png";
+		public static final String CHICKEN           = "sprites/chicken.png";
+		public static final String ABYSS_SPAWNER     = "sprites/abyss_spawner.png";
 	}
 }
