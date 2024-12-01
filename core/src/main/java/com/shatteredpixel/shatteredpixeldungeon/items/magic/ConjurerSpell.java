@@ -200,7 +200,7 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
 
         if (owner.hasTalent(Talent.CONCENTRATED_SUPPORT) && thing instanceof Minion){
             float duration = AttunementBoost.DURATION * (alignment == Alignment.OFFENSIVE ? 2f : 1f);
-            Buff.affect(thing, AttunementBoost.class, duration).boost((1 + owner.pointsInTalent(Talent.CONCENTRATED_SUPPORT))*0.5f);
+            Buff.prolong(thing, AttunementBoost.class, duration).boost((1 + owner.pointsInTalent(Talent.CONCENTRATED_SUPPORT))*0.5f);
         }
     }
 

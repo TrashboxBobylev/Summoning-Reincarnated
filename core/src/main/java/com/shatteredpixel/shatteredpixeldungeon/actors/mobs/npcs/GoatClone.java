@@ -146,11 +146,11 @@ public class GoatClone extends NPC implements ManaSource {
         }
         damage = super.attackProc(enemy, damage);
         if (Dungeon.hero.hasTalent(Talent.VIOLENT_OVERCOMING)){
-            Buff.affect(enemy, ViolentOvercomingCombo.class, 1.5f).proc(this);
+            Buff.prolong(enemy, ViolentOvercomingCombo.class, 2f).proc(this);
         }
         if (Dungeon.hero.hasTalent(Talent.SPIRITUAL_RESTOCK) && enemy.alignment == Alignment.ALLY){
-            Buff.affect(enemy, Adrenaline.class, 8f);
-            Buff.affect(enemy, PotionOfCleansing.Cleanse.class, 8f);
+            Buff.prolong(enemy, Adrenaline.class, 8f);
+            Buff.prolong(enemy, PotionOfCleansing.Cleanse.class, 8f);
             damage *= 1f - 0.25f * Dungeon.hero.pointsInTalent(Talent.SPIRITUAL_RESTOCK);
         }
         if (Dungeon.hero.belongings.weapon != null){
@@ -285,7 +285,7 @@ public class GoatClone extends NPC implements ManaSource {
         public void proc(Char attacker){
             combo++;
             if (combo >= (9 - 2 * Dungeon.hero.pointsInTalent(Talent.VIOLENT_OVERCOMING))){
-                Buff.affect(attacker, Empowered.class, 0.33f);
+                Buff.prolong(attacker, Empowered.class, 2f);
             }
         }
 
