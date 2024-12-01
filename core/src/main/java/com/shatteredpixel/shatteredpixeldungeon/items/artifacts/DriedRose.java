@@ -59,6 +59,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsi
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
@@ -799,6 +800,10 @@ public class DriedRose extends Artifact {
 				//only some lines are said on the first floor of a depth
 				int variant = Dungeon.depth % 5 == 1 ? Random.IntRange(1, 3) : Random.IntRange(1, 6);
 
+				if (Dungeon.branch == AbyssLevel.BRANCH){
+					depth = 10;
+				}
+
 				switch (depth) {
 					case 0:
 						yell(Messages.get(this, "dialogue_sewers_" + variant));
@@ -813,8 +818,11 @@ public class DriedRose extends Artifact {
 						yell(Messages.get(this, "dialogue_city_" + variant));
 						break;
 					case 4:
-					default:
 						yell(Messages.get(this, "dialogue_halls_" + variant));
+						break;
+					case 10:
+					default:
+						yell(Messages.get(this, "dialogue_abyss_" + variant));
 						break;
 				}
 			}

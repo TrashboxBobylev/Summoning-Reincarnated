@@ -24,7 +24,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
@@ -78,15 +80,19 @@ public abstract class SecretRoom extends SpecialRoom {
 		if (floorsLeft == 0) {
 			secrets = regionSecretsThisRun[region];
 		} else {
-			secrets = regionSecretsThisRun[region] / (float)floorsLeft;
+			if (Dungeon.branch == AbyssLevel.BRANCH){
+				secrets = 1;
+			}
+			else secrets = regionSecretsThisRun[region] / (float)floorsLeft;
 			if (Random.Float() < secrets % 1f){
 				secrets = (float)Math.ceil(secrets);
 			} else {
 				secrets = (float)Math.floor(secrets);
 			}
 		}
-		
-		regionSecretsThisRun[region] -= (int)secrets;
+
+		if (Dungeon.branch != AbyssLevel.BRANCH)
+			regionSecretsThisRun[region] -= (int)secrets;
 		return (int)secrets;
 	}
 	

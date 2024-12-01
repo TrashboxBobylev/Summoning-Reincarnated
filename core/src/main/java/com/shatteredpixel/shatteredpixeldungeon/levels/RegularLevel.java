@@ -225,6 +225,9 @@ public abstract class RegularLevel extends Level {
 			mobs = (int)Math.ceil(mobs * 1.33f);
 		}
 		if (Dungeon.isChallenged(Conducts.Conduct.LIMITED_MONSTERS)) mobs = (int)Math.ceil(mobs * 0.75f);
+		if (Dungeon.bossLevel() && Dungeon.branch == AbyssLevel.BRANCH){
+			mobs *= 3;
+		}
 		return mobs;
 	}
 	

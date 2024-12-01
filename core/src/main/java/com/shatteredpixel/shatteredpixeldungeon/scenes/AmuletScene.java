@@ -125,6 +125,17 @@ public class AmuletScene extends PixelScene {
 		btnStay.icon(Icons.CLOSE.get());
 		btnStay.setSize( WIDTH, BTN_HEIGHT );
 		add( btnStay );
+
+		StyledButton btnMastery = new StyledButton(Chrome.Type.GREY_BUTTON_TR,  Messages.get(this, "mastery") ) {
+			@Override
+			protected void onClick() {
+				InterlevelScene.mode = InterlevelScene.Mode.ABYSS;
+				Game.switchScene(InterlevelScene.class);
+			}
+		};
+		btnMastery.icon(Icons.CHALLENGE_COLOR.get());
+		btnMastery.setSize( WIDTH, BTN_HEIGHT );
+		add( btnMastery );
 		
 		float height;
 		if (noText) {
@@ -136,6 +147,7 @@ public class AmuletScene extends PixelScene {
 
 			btnExit.setPos( (Camera.main.width - btnExit.width()) / 2, amulet.y + amulet.height + LARGE_GAP );
 			btnStay.setPos( btnExit.left(), btnExit.bottom() + SMALL_GAP );
+			btnMastery.setPos(btnExit.left(), btnStay.bottom() + SMALL_GAP);
 			
 		} else {
 			height = amulet.height + LARGE_GAP + text.height() + LARGE_GAP + btnExit.height() + SMALL_GAP + btnStay.height();
@@ -150,6 +162,7 @@ public class AmuletScene extends PixelScene {
 			
 			btnExit.setPos( (Camera.main.width - btnExit.width()) / 2, text.top() + text.height() + LARGE_GAP );
 			btnStay.setPos( btnExit.left(), btnExit.bottom() + SMALL_GAP );
+			btnMastery.setPos(btnExit.left(), btnStay.bottom() + SMALL_GAP);
 		}
 
 		new Flare( 8, 48 ).color( 0xFFDDBB, true ).show( amulet, 0 ).angularSpeed = +30;

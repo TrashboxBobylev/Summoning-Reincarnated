@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.ShadowBox;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.LostBackpack;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
@@ -77,7 +78,7 @@ public class InterlevelScene extends PixelScene {
 	private static float fadeTime;
 	
 	public enum Mode {
-		DESCEND, ASCEND, CONTINUE, RESURRECT, RETURN, FALL, RESET, NONE
+		DESCEND, ASCEND, CONTINUE, RESURRECT, RETURN, FALL, RESET, ABYSS, NONE
 	}
 	public static Mode mode;
 
@@ -156,10 +157,14 @@ public class InterlevelScene extends PixelScene {
 			case RETURN:
 				loadingDepth = returnDepth;
 				break;
+			case ABYSS:
+				loadingDepth = 1;
+				fadeTime = SLOW_FADE;
+				break;
 		}
 
 		//flush the texture cache whenever moving between regions, helps reduce memory load
-		int region = (int)Math.ceil(loadingDepth / 5f);
+		int region = (mode == Mode.ABYSS || Dungeon.branch == AbyssLevel.BRANCH) ? 10 : (int)Math.ceil(loadingDepth / 5f);
 		if (region != lastRegion){
 			TextureCache.clear();
 			lastRegion = region;
@@ -198,12 +203,16 @@ public class InterlevelScene extends PixelScene {
 						case 1: loadingCenter = 485; break; //focus on center pathway
 					}
 					break;
-				case 5: default:
+				case 5:
 					loadingAsset = Assets.Splashes.HALLS;
 					switch (Random.Int(3)){
 						case 0: loadingCenter = 145; break; //focus on left arches
 						case 1: loadingCenter = 400; break; //focus on ripper demon
 					}
+					break;
+				case 10: default:
+					loadingAsset = Assets.Splashes.ABYSS;
+					loadingCenter = Random.IntRange(140, 420); //completely random
 					break;
 			}
 		Random.popGenerator();
@@ -429,6 +438,9 @@ public class InterlevelScene extends PixelScene {
 								break;
 							case RESET:
 								reset();
+								break;
+							case ABYSS:
+								abyssDescend();
 								break;
 						}
 						
@@ -778,6 +790,25 @@ public class InterlevelScene extends PixelScene {
 
 		Level level = Dungeon.newLevel();
 		Dungeon.switchLevel( level, level.entrance() );
+	}
+
+	private void abyssDescend() throws IOException {
+
+		if (Dungeon.hero == null) {
+			Mob.clearHeldAllies();
+			Dungeon.init();
+			GameLog.wipe();
+		} else {
+			Mob.holdAllies( Dungeon.level );
+			Dungeon.saveAll();
+		}
+
+		Dungeon.depth = 1;
+		Dungeon.branch = AbyssLevel.BRANCH;
+		Statistics.deepestFloor = 0;
+		Statistics.floorsExplored.clear();
+		Level level = Dungeon.newLevel();
+		Dungeon.switchLevel( level, level.entrance );
 	}
 	
 	@Override
