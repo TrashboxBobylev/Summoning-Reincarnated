@@ -139,6 +139,7 @@ public class GamesInProgress {
 		info.depth = Dungeon.depth;
 		info.challenges = Dungeon.challenges;
 		info.conducts = Dungeon.conducts;
+		info.branch = Dungeon.branch;
 
 		info.seed = Dungeon.seed;
 		info.customSeed = Dungeon.customSeedText;
@@ -200,6 +201,8 @@ public class GamesInProgress {
 		
 		public int goldCollected;
 		public int maxDepth;
+
+		public int branch;
 	}
 	
 	public static final Comparator<GamesInProgress.Info> scoreComparator = new Comparator<GamesInProgress.Info>() {

@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.BadgeBanner;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.Chaosstone;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -81,9 +82,13 @@ public class AmuletScene extends PixelScene {
 		btnExit = new StyledButton(Chrome.Type.GREY_BUTTON_TR, Messages.get(this, "exit") ) {
 			@Override
 			protected void onClick() {
+				Class clazz = Amulet.class;
+				if (Dungeon.hero.belongings.getSimilar(new Chaosstone()) != null) {
+					clazz = Chaosstone.class;
+				}
 				if (Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)){
-					Dungeon.fail( Amulet.class);
-				} else Dungeon.win( Amulet.class );
+					Dungeon.fail( clazz );
+				} else Dungeon.win( clazz );
 				Dungeon.deleteGame( GamesInProgress.curSlot, true );
 				Badges.saveGlobal();
 				btnExit.enable(false);

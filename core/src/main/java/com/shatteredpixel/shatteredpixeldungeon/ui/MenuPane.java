@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -82,9 +83,16 @@ public class MenuPane extends Component {
 		add(bg);
 
 		depthIcon = Icons.get(Dungeon.level.feeling);
+		if (Dungeon.branch == AbyssLevel.BRANCH){
+			depthIcon.tint(2f, 2f, 2f, 1f);
+		}
 		add(depthIcon);
 
-		depthText = new BitmapText( Integer.toString( Dungeon.depth ), PixelScene.pixelFont);
+		String depthStr = Integer.toString(Dungeon.depth);
+		if (Dungeon.branch == AbyssLevel.BRANCH){
+			depthStr = Messages.format("A%s", depthStr);
+		}
+		depthText = new BitmapText( depthStr, PixelScene.pixelFont);
 		depthText.hardlight( 0xCACFC2 );
 		depthText.measure();
 		add( depthText );

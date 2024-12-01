@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.Chaosstone;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -233,7 +234,10 @@ public class RankingsScene extends PixelScene {
 			int odd = pos % 2;
 			
 			if (rec.win) {
-				shield.copy( new ItemSprite(ItemSpriteSheet.AMULET, null) );
+				if (rec.cause == Chaosstone.class)
+					shield.copy(new ItemSprite(ItemSpriteSheet.CHAOSSTONE, new ItemSprite.Glowing()));
+				else
+					shield.copy( new ItemSprite(ItemSpriteSheet.AMULET, null) );
 				position.hardlight( TEXT_WIN[odd] );
 				desc.hardlight( TEXT_WIN[odd] );
 				depth.hardlight( TEXT_WIN[odd] );
@@ -245,9 +249,14 @@ public class RankingsScene extends PixelScene {
 				level.hardlight( TEXT_LOSE[odd] );
 
 				if (rec.depth != 0){
-					depth.text( Integer.toString(rec.depth) );
+					if (rec.abyssal)
+						depth.text( "A" + rec.depth);
+					else
+						depth.text( Integer.toString(rec.depth) );
 					depth.measure();
 					steps.copy(Icons.STAIRS.get());
+					if (rec.abyssal)
+						steps.tint(2f, 2f, 2f, 0.5f);
 
 					add(steps);
 					add(depth);

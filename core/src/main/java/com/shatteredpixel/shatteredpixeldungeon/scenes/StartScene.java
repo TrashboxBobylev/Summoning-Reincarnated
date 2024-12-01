@@ -24,9 +24,14 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
-import com.shatteredpixel.shatteredpixeldungeon.*;
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Chrome;
+import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
+import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Journal;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Archs;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Button;
@@ -180,6 +185,8 @@ public class StartScene extends PixelScene {
 					add(hero);
 					
 					steps = new Image(Icons.get(Icons.STAIRS));
+					if (info.branch == AbyssLevel.BRANCH)
+						steps.tint(2f, 2f, 2f, 0.5f);
 					add(steps);
 					depth = new BitmapText(PixelScene.pixelFont);
 					add(depth);
@@ -197,8 +204,11 @@ public class StartScene extends PixelScene {
 					
 					classIcon.copy(Icons.get(info.heroClass));
 				}
-				
-				depth.text(Integer.toString(info.depth));
+
+				if (info.branch == AbyssLevel.BRANCH)
+					depth.text( "A" + info.depth);
+				else
+					depth.text( Integer.toString(info.depth) );
 				depth.measure();
 				
 				level.text(Integer.toString(info.level));
