@@ -53,6 +53,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.ConjurerSpell;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ShardOfOblivion;
@@ -503,9 +504,9 @@ public abstract class Wand extends Item implements ChargingItem {
 			Buff.prolong(Dungeon.hero, Talent.LingeringMagicTracker.class, 5f);
 		}
 
-		if (Dungeon.hero.hasTalent(Talent.COMBINED_REFILL)){
+		if (Dungeon.hero.hasTalent(Talent.COMBINED_REFILL) && Dungeon.hero.heroClass != HeroClass.CONJURER){
 			Talent.CombinedRefillTracker tracker = Dungeon.hero.buff(Talent.CombinedRefillTracker.class);
-			if (tracker == null || tracker.weapon == getClass() || tracker.weapon == null) {
+			if (tracker == null || tracker.weapon == getClass() || tracker.weapon == null || (!tracker.weapon.isInstance(ConjurerSpell.class))) {
 				Buff.affect(Dungeon.hero, Talent.CombinedRefillTracker.class).weapon = getClass();
 			} else {
 				tracker.detach();
