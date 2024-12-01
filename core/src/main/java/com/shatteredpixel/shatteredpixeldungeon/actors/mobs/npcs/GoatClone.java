@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Adrenaline;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
@@ -38,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife;
@@ -78,7 +80,7 @@ public class GoatClone extends NPC implements ManaSource {
         boolean newEnemy = false;
         if ( enemy == null || !enemy.isAlive() || !Actor.chars().contains(enemy) || state == WANDERING) {
             newEnemy = true;
-        } else if (enemy.alignment == Alignment.ALLY) {
+        } else if (enemy.alignment == Alignment.ALLY && !Dungeon.hero.hasTalent(Talent.SPIRITUAL_RESTOCK)) {
             newEnemy = true;
         } else if (enemy.isInvulnerable(getClass()) && enemy.buff(StoneOfAggression.Aggression.class) == null) {
             newEnemy = true;
@@ -90,7 +92,7 @@ public class GoatClone extends NPC implements ManaSource {
             HashMap<Char, Float> enemies = new HashMap<>();
 
             for (Mob mob : Dungeon.level.mobs)
-                if (mob.alignment == Alignment.ENEMY && fieldOfView[mob.pos] && mob.buff(ToyKnife.SoulGain.class) != null) {
+                if ((mob.alignment == Alignment.ENEMY || Dungeon.hero.hasTalent(Talent.SPIRITUAL_RESTOCK)) && fieldOfView[mob.pos] && mob.buff(ToyKnife.SoulGain.class) != null) {
                         enemies.put(mob, mob.targetPriority());
                     }
             return chooseClosest(enemies);
@@ -145,6 +147,11 @@ public class GoatClone extends NPC implements ManaSource {
         damage = super.attackProc(enemy, damage);
         if (Dungeon.hero.hasTalent(Talent.VIOLENT_OVERCOMING)){
             Buff.affect(enemy, ViolentOvercomingCombo.class, 1.5f).proc(this);
+        }
+        if (Dungeon.hero.hasTalent(Talent.SPIRITUAL_RESTOCK) && enemy.alignment == Alignment.ALLY){
+            Buff.affect(enemy, Adrenaline.class, 8f);
+            Buff.affect(enemy, PotionOfCleansing.Cleanse.class, 8f);
+            damage *= 1f - 0.25f * Dungeon.hero.pointsInTalent(Talent.SPIRITUAL_RESTOCK);
         }
         if (Dungeon.hero.belongings.weapon != null){
             return Dungeon.hero.belongings.weapon.proc( enemy, this, damage );

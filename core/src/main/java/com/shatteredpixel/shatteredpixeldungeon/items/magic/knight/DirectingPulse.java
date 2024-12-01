@@ -24,9 +24,11 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.magic.knight;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ConjurerSpell;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife;
@@ -47,7 +49,7 @@ public class DirectingPulse extends ConjurerSpell {
     @Override
     public void effect(Ballistica trajectory) {
         Char ch = Actor.findChar(trajectory.collisionPos);
-        if (ch != null && ch.alignment == Char.Alignment.ENEMY) {
+        if (ch != null && (ch.alignment == Char.Alignment.ENEMY || Dungeon.hero.hasTalent(Talent.SPIRITUAL_RESTOCK))) {
             Buff.affect(ch, ToyKnife.SoulGain.class, buff(rank()));
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
             Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
