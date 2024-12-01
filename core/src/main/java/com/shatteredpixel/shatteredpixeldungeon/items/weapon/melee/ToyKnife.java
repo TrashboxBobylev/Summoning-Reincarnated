@@ -143,7 +143,7 @@ public class ToyKnife extends MeleeWeapon implements Rankable {
 
     @Override
     public int proc(Char attacker, Char defender, int damage ) {
-	    int modifier = ranged ? 7 : 4;
+	    int modifier = ranged ? 8 : 4;
         modifier *= soulGainMod(rank);
         if (rank() == 2)
             modifier *= 1.40f;
@@ -229,7 +229,7 @@ public class ToyKnife extends MeleeWeapon implements Rankable {
     protected String generalRankMessage(int rank) {
         return Messages.get(this, "rank_info",
                 Math.round(damageMod(rank)* (1 + 2*buffedLvl())), Math.round(damageMod(rank)* (7*(tier) + 4*buffedLvl())),
-                Math.round(4*soulGainMod(rank)), Math.round(7*soulGainMod(rank)*(rank == 2 ? 1.40f : 1f)),
+                Math.round(4*soulGainMod(rank)), Math.round(8*soulGainMod(rank)*(rank == 2 ? 1.40f : 1f)),
                 Messages.decimalFormat("#.##", delayMod(rank))
         );
     }
