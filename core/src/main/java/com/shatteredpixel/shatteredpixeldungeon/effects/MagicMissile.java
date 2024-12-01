@@ -81,6 +81,7 @@ public class MagicMissile extends Emitter {
 	public static final int CRYSTAL         = 24;
 	public static final int CRYSTAL_SHARDS  = 25;
 	public static final int STAR            = 26;
+	public static final int INVISI          = 27;
 
 	public static final int MAGIC_MISS_CONE = 100;
 	public static final int FROST_CONE      = 101;
@@ -221,6 +222,10 @@ public class MagicMissile extends Emitter {
 			case STAR:
 				size( 4 );
 				pour( FrostfireParticle.FACTORY, 0.01f );
+				break;
+			case INVISI:
+				size( 20 );
+				pour( InvisibleParticle.FACTORY, 0.03f );
 				break;
 
 			case MAGIC_MISS_CONE:
@@ -754,6 +759,66 @@ public class MagicMissile extends Emitter {
 			lifespan = 0.6f;
 
 			color( Random.element(colors) );
+		}
+
+		public void reset( float x, float y ) {
+			revive();
+
+			this.x = x;
+			this.y = y;
+			color( Random.element(colors) );
+
+			left = lifespan;
+			size = 12;
+		}
+
+		public void resetUp( float x, float y){
+			reset(x, y);
+
+			size = 8;
+		}
+
+		@Override
+		public void update() {
+			super.update();
+
+			am = Random.Float();
+		}
+	}
+
+	public static class InvisibleParticle extends PixelParticle.Shrinking {
+
+		public static final Emitter.Factory FACTORY = new Factory() {
+			@Override
+			public void emit( Emitter emitter, int index, float x, float y ) {
+				((WardParticle)emitter.recycle( WardParticle.class )).reset( x, y );
+			}
+			@Override
+			public boolean lightMode() {
+				return true;
+			}
+		};
+
+		static Integer[] colors = {0xFFe380e3, 0xFF9485c9};
+
+		public static final Emitter.Factory SHARD = new Factory() {
+			@Override
+			public void emit( Emitter emitter, int index, float x, float y ) {
+				((WardParticle)emitter.recycle( WardParticle.class )).resetUp( x, y );
+			}
+			@Override
+			public boolean lightMode() {
+				return true;
+			}
+		};
+
+		public InvisibleParticle() {
+			super();
+
+			lifespan = 0.6f;
+
+			color( Random.element(colors) );
+			alpha(0f);
 		}
 
 		public void reset( float x, float y ) {

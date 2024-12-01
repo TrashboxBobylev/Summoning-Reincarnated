@@ -1221,6 +1221,10 @@ public abstract class Char extends Actor implements ManaSource {
 			buff.fx( true );
 		}
 	}
+
+	public boolean isWet(){
+		return Dungeon.level.water[pos];
+	}
 	
 	public float stealth() {
 		return 0;
@@ -1283,6 +1287,10 @@ public abstract class Char extends Actor implements ManaSource {
 	}
 	
 	protected final HashSet<Class> resistances = new HashSet<>();
+
+	public float resistanceValue(Class effect){
+		return 0.5f;
+	}
 	
 	//returns percent effectiveness after resistances
 	//TODO currently resistances reduce effectiveness by a static 50%, and do not stack.
@@ -1298,7 +1306,7 @@ public abstract class Char extends Actor implements ManaSource {
 		float result = 1f;
 		for (Class c : resists){
 			if (areRelated(effect, c)){
-				result *= 0.5f;
+				result *= resistanceValue(effect);
 			}
 		}
 		if (buff(FrostBomb.ResistTracker.class) != null && effect != FrostBomb.ResistTracker.class){

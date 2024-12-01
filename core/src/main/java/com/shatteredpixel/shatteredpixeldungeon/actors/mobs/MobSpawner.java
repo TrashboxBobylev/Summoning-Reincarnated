@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.RatSkull;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
@@ -71,6 +72,11 @@ public class MobSpawner extends Actor {
 
 	//returns a rotation of standard mobs, unshuffled.
 	private static ArrayList<Class<? extends Mob>> standardMobRotation( int depth ){
+		if (Dungeon.branch == AbyssLevel.BRANCH){
+			return new ArrayList<>(Arrays.asList(
+					SpectreRat.class, DarkestElf.class, GhostChicken.class, Phantom.class, BlinkingMan.class, Trappet.class
+			));
+		}
 		switch(depth){
 
 			// Sewers

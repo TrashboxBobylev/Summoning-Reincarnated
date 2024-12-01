@@ -124,6 +124,7 @@ public class Dungeon {
 		//alchemy
 		COOKING_HP,
 		BLANDFRUIT_SEED,
+		SPECTRE_RAT,
 
 		//Other limited enemy drops
 		SLIME_WEP,
@@ -133,6 +134,7 @@ public class Dungeon {
 		SHAMAN_WAND,
 		DM200_EQUIP,
 		GOLEM_EQUIP,
+		PHANTOM_EQUIP,
 
 		//containers
 		VELVET_POUCH,

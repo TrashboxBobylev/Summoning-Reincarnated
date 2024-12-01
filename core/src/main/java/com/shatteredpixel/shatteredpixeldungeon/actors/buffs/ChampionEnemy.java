@@ -89,6 +89,21 @@ public abstract class ChampionEnemy extends Buff {
 		immunities.add(AllyBuff.class);
 	}
 
+	public static Class[] championTitles = {
+			Blazing.class, Projecting.class, AntiMagic.class, Giant.class,
+			Blessed.class, Growing.class, /*Cursed.class, Splintering.class,
+			Stone.class, Flowing.class, Voodoo.class, Explosive.class,
+			Swiftness.class, Reflective.class, Paladin.class*/
+	};
+
+	private static Class<? extends ChampionEnemy> getTitle(){
+		return Random.element(championTitles);
+	}
+
+	private static void makeChampion(Mob m, Class<? extends ChampionEnemy> title) {
+		Buff.affect(m, title);
+	}
+
 	public static void rollForChampion(Mob m){
 		if (Dungeon.mobsToChampion <= 0) Dungeon.mobsToChampion = 8;
 
@@ -96,20 +111,16 @@ public abstract class ChampionEnemy extends Buff {
 
 		//we roll for a champion enemy even if we aren't spawning one to ensure that
 		//mobsToChampion does not affect levelgen RNG (number of calls to Random.Int() is constant)
-		Class<?extends ChampionEnemy> buffCls;
-		switch (Random.Int(6)){
-			case 0: default:    buffCls = Blazing.class;      break;
-			case 1:             buffCls = Projecting.class;   break;
-			case 2:             buffCls = AntiMagic.class;    break;
-			case 3:             buffCls = Giant.class;        break;
-			case 4:             buffCls = Blessed.class;      break;
-			case 5:             buffCls = Growing.class;      break;
-		}
 
 		if (Dungeon.mobsToChampion <= 0 && Dungeon.isChallenged(Challenges.CHAMPION_ENEMIES)) {
-			Buff.affect(m, buffCls);
+			Buff.affect(m, getTitle());
 			m.state = m.WANDERING;
 		}
+	}
+
+	public static void rollForChampionInstantly(Mob m){
+		makeChampion(m, getTitle());
+		m.state = m.WANDERING;
 	}
 
 	public static class Blazing extends ChampionEnemy {
