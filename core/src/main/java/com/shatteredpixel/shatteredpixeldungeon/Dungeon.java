@@ -112,6 +112,7 @@ public class Dungeon {
 		INT_STONE,
 		TRINKET_CATA,
 		LAB_ROOM, ATU_ROOM, //actually a room, but logic is the same
+		ABYSSAL_SPAWNER,
 
 		//Health potion sources
 		//enemies
