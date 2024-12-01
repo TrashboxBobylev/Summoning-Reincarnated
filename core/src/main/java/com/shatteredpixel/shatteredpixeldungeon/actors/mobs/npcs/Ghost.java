@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.MailArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScaleArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ParchmentScrap;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
@@ -229,16 +230,20 @@ public class Ghost extends NPC {
 		
 		public static Weapon weapon;
 		public static Armor armor;
+		public static Staff staff;
 		public static Weapon.Enchantment enchant;
 		public static Armor.Glyph glyph;
+		public static Weapon.Enchantment staffEnchant;
 		
 		public static void reset() {
 			spawned = false;
 			
 			weapon = null;
 			armor = null;
+			staff = null;
 			enchant = null;
 			glyph = null;
+			staffEnchant = null;
 		}
 		
 		private static final String NODE		= "sadGhost";
@@ -250,8 +255,10 @@ public class Ghost extends NPC {
 		private static final String DEPTH		= "depth";
 		private static final String WEAPON		= "weapon";
 		private static final String ARMOR		= "armor";
+		private static final String STAFF		= "staff";
 		private static final String ENCHANT		= "enchant";
 		private static final String GLYPH		= "glyph";
+		private static final String STAFF_ENCH	= "staffEnchant";
 		
 		public static void storeInBundle( Bundle bundle ) {
 			
@@ -269,10 +276,12 @@ public class Ghost extends NPC {
 				
 				node.put( WEAPON, weapon );
 				node.put( ARMOR, armor );
+				node.put( STAFF, staff );
 
 				if (enchant != null) {
 					node.put(ENCHANT, enchant);
 					node.put(GLYPH, glyph);
+					node.put(STAFF_ENCH, staffEnchant);
 				}
 			}
 			
@@ -293,10 +302,12 @@ public class Ghost extends NPC {
 				
 				weapon	= (Weapon)node.get( WEAPON );
 				armor	= (Armor)node.get( ARMOR );
+				staff = (Staff)node.get( STAFF );
 
 				if (node.contains(ENCHANT)) {
 					enchant = (Weapon.Enchantment) node.get(ENCHANT);
 					glyph   = (Armor.Glyph) node.get(GLYPH);
+					staffEnchant = (Weapon.Enchantment) node.get(STAFF_ENCH);
 				}
 			} else {
 				reset();
@@ -332,11 +343,14 @@ public class Ghost extends NPC {
 				//50%:tier2, 30%:tier3, 15%:tier4, 5%:tier5
 				int wepTier = Random.chances(new float[]{0, 0, 10, 6, 3, 1});
 				weapon = (Weapon) Generator.random(Generator.wepTiers[wepTier - 1]);
+				staff = (Staff) Generator.random(Generator.staffTiers[wepTier - 1]);
 
 				//clear weapon's starting properties
 				weapon.level(0);
 				weapon.enchant(null);
 				weapon.cursed = false;
+				staff.enchant(null);
+				staff.cursed = false;
 
 				//50%:+0, 30%:+1, 15%:+2, 5%:+3
 				float itemLevelRoll = Random.Float();
@@ -352,16 +366,19 @@ public class Ghost extends NPC {
 				}
 				weapon.upgrade(itemLevel);
 				armor.upgrade(itemLevel);
+				staff.rank(Random.IntRange(1, 3));
 
 				// 20% base chance to be enchanted, stored separately so status isn't revealed early
 				//we generate first so that the outcome doesn't affect the number of RNG rolls
 				enchant = Weapon.Enchantment.random();
 				glyph = Armor.Glyph.random();
+				staffEnchant = Weapon.Enchantment.random();
 
 				float enchantRoll = Random.Float();
 				if (enchantRoll > 0.2f * ParchmentScrap.enchantChanceMultiplier()){
 					enchant = null;
 					glyph = null;
+					staffEnchant = null;
 				}
 
 			}
@@ -397,6 +414,7 @@ public class Ghost extends NPC {
 		public static void complete() {
 			weapon = null;
 			armor = null;
+			staff = null;
 			
 			Notes.remove( Notes.Landmark.GHOST );
 		}
@@ -406,7 +424,7 @@ public class Ghost extends NPC {
 		}
 		
 		public static boolean completed(){
-			return processed() && weapon == null && armor == null;
+			return processed() && weapon == null && armor == null && staff == null;
 		}
 	}
 }
