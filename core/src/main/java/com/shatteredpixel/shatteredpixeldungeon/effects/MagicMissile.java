@@ -82,6 +82,7 @@ public class MagicMissile extends Emitter {
 	public static final int CRYSTAL_SHARDS  = 25;
 	public static final int STAR            = 26;
 	public static final int INVISI          = 27;
+	public static final int ABYSS           = 28;
 
 	public static final int MAGIC_MISS_CONE = 100;
 	public static final int FROST_CONE      = 101;
@@ -226,6 +227,10 @@ public class MagicMissile extends Emitter {
 			case INVISI:
 				size( 20 );
 				pour( InvisibleParticle.FACTORY, 0.03f );
+				break;
+			case ABYSS:
+				size( 9 );
+				pour( YogParticle.FACTORY, 0.04f );
 				break;
 
 			case MAGIC_MISS_CONE:
@@ -843,6 +848,57 @@ public class MagicMissile extends Emitter {
 			super.update();
 
 			am = Random.Float();
+		}
+	}
+
+	public static class YogParticle extends PixelParticle {
+
+		public static final Emitter.Factory FACTORY = new Factory() {
+			@Override
+			public void emit( Emitter emitter, int index, float x, float y ) {
+				((YogParticle)emitter.recycle( YogParticle.class )).reset( x, y );
+			}
+			@Override
+			public boolean lightMode() {
+				return true;
+			}
+		};
+
+		public YogParticle() {
+			super();
+
+			color( 0x88CCFF );
+			lifespan = 3f;
+
+			speed.set( Random.Float( -0.03f, +0.03f ), Random.Float( -4, +4 ) );
+		}
+
+		public void reset( float x, float y ) {
+			revive();
+
+			this.x = x;
+			this.y = y;
+
+			left = lifespan;
+		}
+
+		public void resetAttract( float x, float y) {
+			revive();
+
+			//size = 8;
+			left = lifespan;
+
+			speed.polar( Random.Float( PointF.PI2 ), Random.Float( 16, 32 ) );
+			this.x = x - speed.x * lifespan;
+			this.y = y - speed.y * lifespan;
+		}
+
+		@Override
+		public void update() {
+			super.update();
+			// alpha: 1 -> 0; size: 1 -> 4
+			size( 8 );
+			am = left * 0.75f / lifespan;
 		}
 	}
 }
