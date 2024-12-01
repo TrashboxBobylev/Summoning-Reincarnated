@@ -164,7 +164,8 @@ public class InterlevelScene extends PixelScene {
 		}
 
 		//flush the texture cache whenever moving between regions, helps reduce memory load
-		int region = (mode == Mode.ABYSS || Dungeon.branch == AbyssLevel.BRANCH) ? 10 : (int)Math.ceil(loadingDepth / 5f);
+		int region = (mode == Mode.ABYSS ||
+				GamesInProgress.check(GamesInProgress.curSlot).branch == AbyssLevel.BRANCH || Dungeon.branch == AbyssLevel.BRANCH) ? 10 : (int)Math.ceil(loadingDepth / 5f);
 		if (region != lastRegion){
 			TextureCache.clear();
 			lastRegion = region;
