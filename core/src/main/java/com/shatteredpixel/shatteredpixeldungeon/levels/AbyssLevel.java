@@ -80,7 +80,7 @@ public class AbyssLevel extends RegularLevel {
 
     @Override
     protected int standardRooms(boolean forceMax) {
-        if (forceMax) return 18;
+        if (forceMax) return 32;
         return Math.max(30, 23 + Dungeon.depth/3)+Random.chances(new float[]{3, 2, 1, 1, 1});
     }
 
