@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.connection;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
@@ -61,6 +62,7 @@ public abstract class ConnectionRoom extends Room {
 	}
 	
 	private static float[][] chances = new float[27][];
+	private static float[] abyss;
 	static {
 		chances[1] =  new float[]{20, 1,    0, 2,       2, 1};
 		chances[4] =  chances[3] = chances[2] = chances[1];
@@ -79,9 +81,14 @@ public abstract class ConnectionRoom extends Room {
 		
 		chances[22] = new float[]{15, 4,    0, 2,       3, 2};
 		chances[26] = chances[25] = chances[24] = chances[23] = chances[22];
+
+		abyss = new float[]{1, 1,    1, 1,      1, 1};
 	}
 	
 	public static ConnectionRoom createRoom(){
+		if (Dungeon.branch == AbyssLevel.BRANCH){
+			return Reflection.newInstance(rooms.get(Random.chances(abyss)));
+		}
 		return Reflection.newInstance(rooms.get(Random.chances(chances[Dungeon.depth])));
 	}
 }
