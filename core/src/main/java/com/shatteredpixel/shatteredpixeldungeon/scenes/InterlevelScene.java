@@ -120,24 +120,34 @@ public class InterlevelScene extends PixelScene {
 		
 		String loadingAsset;
 		int loadingDepth;
+		int loadingBranch;
 		fadeTime = NORM_FADE;
 
 		long seed = Dungeon.seed;
 		switch (mode){
 			default:
 				loadingDepth = Dungeon.depth;
+				loadingBranch = Dungeon.branch;
 				break;
 			case CONTINUE:
 				loadingDepth = GamesInProgress.check(GamesInProgress.curSlot).depth;
+				loadingBranch = GamesInProgress.check(GamesInProgress.curSlot).branch;
 				seed = GamesInProgress.check(GamesInProgress.curSlot).seed;
 				break;
 			case DESCEND:
 				if (Dungeon.hero == null){
 					loadingDepth = 1;
+					loadingBranch = Dungeon.branch;
 					fadeTime = SLOW_FADE;
 				} else {
-					if (curTransition != null)  loadingDepth = curTransition.destDepth;
-					else                        loadingDepth = Dungeon.depth+1;
+					if (curTransition != null)  {
+						loadingDepth = curTransition.destDepth;
+						loadingBranch = curTransition.destBranch;
+					}
+					else {
+						loadingDepth = Dungeon.depth+1;
+						loadingBranch = Dungeon.branch;
+					}
 					if (Statistics.deepestFloor >= loadingDepth) {
 						fadeTime = FAST_FADE;
 					} else if (loadingDepth == 6 || loadingDepth == 11
@@ -148,24 +158,32 @@ public class InterlevelScene extends PixelScene {
 				break;
 			case FALL:
 				loadingDepth = Dungeon.depth+1;
+				loadingBranch = Dungeon.branch;
 				break;
 			case ASCEND:
 				fadeTime = FAST_FADE;
-				if (curTransition != null)  loadingDepth = curTransition.destDepth;
-				else                        loadingDepth = Dungeon.depth-1;
+				if (curTransition != null)  {
+					loadingDepth = curTransition.destDepth;
+					loadingBranch = curTransition.destBranch;
+				}
+				else {
+					loadingDepth = Dungeon.depth-1;
+					loadingBranch = Dungeon.branch;
+				}
 				break;
 			case RETURN:
 				loadingDepth = returnDepth;
+				loadingBranch = returnBranch;
 				break;
 			case ABYSS:
 				loadingDepth = 1;
+				loadingBranch = AbyssLevel.BRANCH;
 				fadeTime = SLOW_FADE;
 				break;
 		}
 
 		//flush the texture cache whenever moving between regions, helps reduce memory load
-		int region = (mode == Mode.ABYSS ||
-				GamesInProgress.check(GamesInProgress.curSlot).branch == AbyssLevel.BRANCH || Dungeon.branch == AbyssLevel.BRANCH) ? 10 : (int)Math.ceil(loadingDepth / 5f);
+		int region = (loadingBranch == AbyssLevel.BRANCH) ? 10 : (int)Math.ceil(loadingDepth / 5f);
 		if (region != lastRegion){
 			TextureCache.clear();
 			lastRegion = region;
