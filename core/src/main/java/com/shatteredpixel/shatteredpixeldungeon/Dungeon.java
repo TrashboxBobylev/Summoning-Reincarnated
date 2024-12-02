@@ -39,8 +39,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpiritHawk;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Crab;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Gnoll;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Rat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
@@ -94,6 +97,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
@@ -192,6 +196,50 @@ public class Dungeon {
 
 	}
 
+	public enum MobVariants {
+
+		PUPPY(Rat.class, Gnoll.class, Crab.class);
+
+		final Class<? extends Mob> baseMob;
+		final ArrayList<Class<? extends Mob>> possibleReplacements = new ArrayList<>();
+
+		Class<? extends Mob> currentReplacement;
+
+		MobVariants(Class<? extends Mob> baseMob, Class<? extends Mob>... replacementClasses){
+			this.baseMob = baseMob;
+			Collections.addAll(possibleReplacements, replacementClasses);
+		}
+
+		public static void initForRun(){
+			for (MobVariants variant: values()){
+				variant.currentReplacement = Random.element(variant.possibleReplacements);
+			}
+		}
+
+		public static Class<? extends Mob> getCurrentReplacement(Class<? extends Mob> mobClass){
+			for (MobVariants variant: values()){
+				if (variant.baseMob == mobClass){
+					return variant.currentReplacement;
+				}
+			}
+
+			return null;
+		}
+
+		public static void store(Bundle bundle){
+			for (MobVariants variant: values()){
+				bundle.put(variant.name(), variant.currentReplacement);
+			}
+		}
+
+		public static void restore(Bundle bundle){
+			for (MobVariants variant: values()){
+				variant.currentReplacement = (Class<? extends Mob>) bundle.getClass(variant.name());
+			}
+		}
+
+	}
+
 	public static Conducts.ConductStorage conducts = new Conducts.ConductStorage();
 
 	public static Conducts.Conduct conduct() {
@@ -271,6 +319,8 @@ public class Dungeon {
 			SecretRoom.initForRun();
 
 			Generator.fullReset();
+
+			MobVariants.initForRun();
 
 		Random.resetGenerators();
 		
@@ -660,6 +710,7 @@ public class Dungeon {
 	private static final String PORTED      = "ported%d";
 	private static final String LEVEL		= "level";
 	private static final String LIMDROPS    = "limited_drops";
+	private static final String MOBVARS     = "mob_variants";
 	private static final String CHAPTERS	= "chapters";
 	private static final String QUESTS		= "quests";
 	private static final String BADGES		= "badges";
@@ -693,6 +744,10 @@ public class Dungeon {
 			Bundle limDrops = new Bundle();
 			LimitedDrops.store( limDrops );
 			bundle.put ( LIMDROPS, limDrops );
+
+			Bundle mobVariants = new Bundle();
+			MobVariants.store( mobVariants );
+			bundle.put ( MOBVARS, mobVariants );
 			
 			int count = 0;
 			int ids[] = new int[chapters.size()];
@@ -804,6 +859,7 @@ public class Dungeon {
 		if (fullLoad) {
 			
 			LimitedDrops.restore( bundle.getBundle(LIMDROPS) );
+			MobVariants.restore( bundle.getBundle(MOBVARS) );
 
 			chapters = new HashSet<>();
 			int ids[] = bundle.getIntArray( CHAPTERS );

@@ -64,8 +64,9 @@ public class MobSpawner extends Actor {
 
 	public static ArrayList<Class<? extends Mob>> getMobRotation(int depth ){
 		ArrayList<Class<? extends Mob>> mobs = standardMobRotation( depth );
+		swapMobVariantAlts(mobs);
 		addRareMobs(depth, mobs);
-		swapMobAlts(mobs);
+		swapMobRareAlts(mobs);
 		Random.shuffle(mobs);
 		return mobs;
 	}
@@ -249,7 +250,7 @@ public class MobSpawner extends Actor {
 	}
 
 	//switches out regular mobs for their alt versions when appropriate
-	private static void swapMobAlts(ArrayList<Class<?extends Mob>> rotation) {
+	private static void swapMobRareAlts(ArrayList<Class<?extends Mob>> rotation) {
 		float altChance = 1 / 50f * RatSkull.exoticChanceMultiplier();
 		for (int i = 0; i < rotation.size(); i++) {
 			if (Random.Float() < altChance) {
@@ -272,6 +273,15 @@ public class MobSpawner extends Actor {
 					cl = Acidic.class;
 				}
 				rotation.set(i, cl);
+			}
+		}
+	}
+
+	private static void swapMobVariantAlts(ArrayList<Class<?extends Mob>> rotation){
+		for (int i = 0; i < rotation.size(); i++) {
+			Class<? extends Mob> mobVariant;
+			if ((mobVariant = Dungeon.MobVariants.getCurrentReplacement(rotation.get(i))) != null){
+				rotation.set(i, mobVariant);
 			}
 		}
 	}
