@@ -360,5 +360,6 @@ public class Assets {
 		public static final String ATTUNEMENT_SPIRIT = "sprites/attunement_spirit.png";
 		public static final String CHICKEN           = "sprites/chicken.png";
 		public static final String ABYSS_SPAWNER     = "sprites/abyss_spawner.png";
+		public static final String DOG               = "sprites/doggy.png";
 	}
 }
