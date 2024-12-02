@@ -25,14 +25,14 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Wound;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class Stabber extends MeleeWeapon {
@@ -82,6 +82,34 @@ public class Stabber extends MeleeWeapon {
             }
         }
         return super.damageRoll(owner);
+    }
+
+    @Override
+    public String targetingPrompt() {
+        return Messages.get(this, "prompt");
+    }
+
+    public boolean useTargeting(){
+        return false;
+    }
+
+    @Override
+    protected void duelistAbility(Hero hero, Integer target) {
+        Dagger.sneakAbility(hero, target, 2, 4+buffedLvl()*2, this);
+    }
+
+    @Override
+    public String abilityInfo() {
+        if (levelKnown){
+            return Messages.get(this, "ability_desc", 4+buffedLvl()*2);
+        } else {
+            return Messages.get(this, "typical_ability_desc", 4);
+        }
+    }
+
+    @Override
+    public String upgradeAbilityStat(int level) {
+        return Integer.toString(4+level*2);
     }
 
 //    @Override

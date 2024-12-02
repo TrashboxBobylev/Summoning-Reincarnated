@@ -27,7 +27,10 @@ package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sai;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class Jjango extends MeleeWeapon {
@@ -46,6 +49,32 @@ public class Jjango extends MeleeWeapon {
     public int proc(Char attacker, Char defender, int damage) {
         Buff.affect( defender, Bleeding.class ).set( Math.round(damage*0.85f) );
         return super.proc(attacker, defender, damage);
+    }
+
+    @Override
+    public String targetingPrompt() {
+        return Messages.get(this, "prompt");
+    }
+
+    @Override
+    protected void duelistAbility(Hero hero, Integer target) {
+        //+(4+1*lvl) damage, roughly +45% base damage, +45% scaling
+        int dmgBoost = augment.damageFactor(3 + Math.round(1f*buffedLvl()));
+        Sai.comboStrikeAbility(hero, target, 0, dmgBoost, this);
+    }
+
+    @Override
+    public String abilityInfo() {
+        int dmgBoost = levelKnown ? 4 + Math.round(1f*buffedLvl()) : 4;
+        if (levelKnown){
+            return Messages.get(this, "ability_desc", augment.damageFactor(dmgBoost));
+        } else {
+            return Messages.get(this, "typical_ability_desc", augment.damageFactor(dmgBoost));
+        }
+    }
+
+    public String upgradeAbilityStat(int level){
+        return "+" + augment.damageFactor(4 + Math.round(1f*level));
     }
 
 //    @Override
