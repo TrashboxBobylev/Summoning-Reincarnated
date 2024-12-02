@@ -229,6 +229,16 @@ public class Dungeon {
 			return null;
 		}
 
+		public static Class<? extends Mob> getBaseVariant(Class<? extends Mob> mobClass){
+			for (MobVariants variant: values()){
+				if (variant.currentReplacement == mobClass){
+					return variant.baseMob;
+				}
+			}
+
+			return null;
+		}
+
 		public static void store(Bundle bundle){
 			for (MobVariants variant: values()){
 				bundle.put(variant.name(), variant.currentReplacement);
