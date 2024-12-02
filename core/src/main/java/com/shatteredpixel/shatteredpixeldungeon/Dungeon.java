@@ -42,7 +42,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.S
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Dog;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.RattleSnake;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snake;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Spinner;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
@@ -197,7 +199,8 @@ public class Dungeon {
 
 	public enum MobVariants {
 
-		PUPPY(Snake.class, Dog.class);
+		PUPPY(Snake.class, Dog.class),
+		SNAKE(Spinner.class, RattleSnake.class);
 
 		final Class<? extends Mob> baseMob;
 		final ArrayList<Class<? extends Mob>> possibleReplacements = new ArrayList<>();
