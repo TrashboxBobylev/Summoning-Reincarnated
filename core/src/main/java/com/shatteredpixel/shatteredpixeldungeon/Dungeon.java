@@ -207,6 +207,7 @@ public class Dungeon {
 
 		MobVariants(Class<? extends Mob> baseMob, Class<? extends Mob>... replacementClasses){
 			this.baseMob = baseMob;
+			Collections.addAll(possibleReplacements, baseMob);
 			Collections.addAll(possibleReplacements, replacementClasses);
 		}
 
