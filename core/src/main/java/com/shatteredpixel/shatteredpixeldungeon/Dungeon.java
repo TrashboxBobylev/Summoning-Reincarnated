@@ -1131,7 +1131,7 @@ public class Dungeon {
 		if (((flags & PATHBLOCK_CHARS) != 0)) {
 			for (Char c : Actor.chars()) {
 				if (vis[c.pos]) {
-					if (c.alignment != ch.alignment || ((flags & PATHBLOCK_NOT_ALLIES) == 0 || !isSafeToSwap(ch, c)))
+					if (c.alignment != Char.Alignment.ALLY || ((flags & PATHBLOCK_NOT_ALLIES) == 0 || !isSafeToSwap(ch, c)))
 						passable[c.pos] = false;
 				}
 			}
