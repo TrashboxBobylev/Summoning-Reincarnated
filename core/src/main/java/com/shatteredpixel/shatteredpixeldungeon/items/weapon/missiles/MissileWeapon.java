@@ -233,7 +233,7 @@ abstract public class MissileWeapon extends Weapon {
 	}
 
 	@Override
-	protected void onThrow( int cell ) {
+    public void onThrow(int cell) {
 		if (Dungeon.isChallenged(Conducts.Conduct.PACIFIST)) {
 			super.onThrow(cell);
 			return;

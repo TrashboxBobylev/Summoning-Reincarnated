@@ -78,6 +78,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.FroggitStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Slingshot;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger2;
@@ -89,7 +90,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortswor
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnive2;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpike;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingStone;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 
@@ -169,6 +169,9 @@ public enum HeroClass {
 			Dungeon.LimitedDrops.SCROLL_HOLDER.drop();
 			new MagicalHolster().collect();
 			Dungeon.LimitedDrops.MAGICAL_HOLSTER.drop();
+			Slingshot stones = new Slingshot();
+			stones.charge = 1;
+			stones.identify().collect();
 		}
 		switch (this) {
 			case WARRIOR:
@@ -232,8 +235,9 @@ public enum HeroClass {
 	private static void initWarrior( Hero hero ) {
 		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
 			(hero.belongings.weapon = new WornShortsword()).identify();
-			ThrowingStone stones = new ThrowingStone();
-			stones.quantity(3).collect();
+			Slingshot stones = new Slingshot();
+			stones.charge = 1;
+			stones.identify().collect();
 			Dungeon.quickslot.setSlot(0, stones);
 
             if (hero.belongings.armor != null){
