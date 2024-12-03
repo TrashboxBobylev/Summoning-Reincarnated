@@ -27,26 +27,46 @@ package com.shatteredpixel.shatteredpixeldungeon.ui.changelist;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ropes;
-import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScoutArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ChaoticBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Firebomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
-import com.shatteredpixel.shatteredpixeldungeon.items.quest.CleanWater;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.UpgradeClump;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.EnchantParchment;
-import com.shatteredpixel.shatteredpixeldungeon.items.staffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.BlasterStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.FroggitStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.GnollHunterStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.GooStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.GrayRatStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.MagicMissileStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.RoboStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.SheepStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.WizardStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Slingshot;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cleaver;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Quarterstaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RunicBlade;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.StoneHammer;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.*;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.AbyssalSpawnerSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.AttunementConstructSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.DogSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.RatSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIcon;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
+import com.shatteredpixel.shatteredpixeldungeon.ui.TalentIcon;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.noosa.Image;
 
@@ -54,9 +74,216 @@ import java.util.ArrayList;
 
 public class vReInc_Changes {
     public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
+        add_v0_4_0_Changes(changeInfos);
         add_v0_3_0_Changes(changeInfos);
         add_v0_2_0_Changes(changeInfos);
         add_v0_1_0_Changes(changeInfos);
+    }
+
+    public static void add_v0_4_0_Changes( ArrayList<ChangeInfo> changeInfos ){
+        ChangeInfo changes = new ChangeInfo("vReInc-0.4.0", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBYLEV), "Developer Commentary",
+                "_-_ Released December 4th, 2024\n" +
+                        "_-_ 217 days after Reincarnated 0.3.2\n\n" +
+                        "Each update just keeps one-upping another in terms of length and wait..." +
+                        "This monumental update reimplements Conjurer and Abyss, adds Conjurer talents and reintroduces a lot of original Summoning's first release, like slingshot and new mobs!\n\n" +
+                        "This release was actually supposed to be done on October 31st, the 5th anniversary to original Summoning's release, but PC upgrading troubles, overall motivation blocks and getting re-addicted to modded Minecraft made it hard to do it on deadline.\n" +
+                        "Still, this release should actually make Reincarnated feel like Summoning we know and love... for its first few years of existence, that is. More global stuff, like game modes, wand and armor ranks, rogue's talents, abilities, still remain unported."));
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered Ports",
+                "Implemented Shattered v2.5.4 changes."));
+
+        changes = new ChangeInfo("Conjurer", false, null);
+        changes.hardlight(0x4c51ad);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(HeroSprite.avatar(HeroClass.CONJURER, 6), HeroClass.CONJURER.title(),
+                "The Goat is back, and more invested than ever.\n\n" +
+                        "_-_ Now has a full set of tier 1, tier 2 and tier 3 talents (no armor abilities or t4...)!\n" +
+                        "_-_ His appearance changes when choosing a subclass.\n" +
+                        "_-_ The mana system has been \"deflated\", now depending on current attunement instead of mob's EXP value. This reduces mana outputs by 2x-3x depending on stage of the game.\n" +
+                        "_-_ All spell costs have been adjusted for mana deflation.\n" +
+                        "_-_ Added Shattered 2.4's text icons for gaining and spending mana.\n" +
+                        "_-_ Added a tag-based mana indicator instead of plain white bar.\n" +
+                        "_-_ Removed food healing perk.\n" +
+                        "_-_ Mana can now be gained by any ally, as long as their target has soul gain effect."));
+
+        changes.addButton(new ChangeButton(new ItemSprite(new ConjurerBook()), "Spell Changes",
+                "_-_ Several spells have been renamed to more accurately reflect their purposes and powers.\n\n" +
+                        "_-_ _Energized Renewal_'s ranking is completely reworked, and the spell no longer can be used to heal Conjurer himself.\n\n" +
+                        "_-_ _Star Blazing_ no longer hits allies, ignores obstacles and has its damage increased on rank II and rank III. Rank III now covers the entire room worth of enemies.\n\n" +
+                        "_-_ _Beam of Affection_ rank III can be used to enrage minion, making them deal more damage, but also take more damage.\n\n" +
+                        "_-_ _Runic Shell_ is significantly cheaper and gives more shielding and longer Temporary Block.\n\n" +
+                        "_-_ _Shocker Breaker_ rank III is more powerful and rank II now almost kills minion, but makes them invulnerable for short time and practically unhealable.\n\n" +
+                        "_-_ _Pushing Waveform_ now has slightly higher push force.\n\n" +
+                        "_-_ _Dreemur's Necromancy_ is completely reworked: now makes characters be able to live on 0 HP, but consume mana as if it was their health; works on both enemies and allies."));
+
+        changes.addButton(new ChangeButton(new ItemSprite(new FroggitStaff()), "Equipment Changes",
+                "_-_ Toy Knife is now a ranked weapon and scales with attunement. Its ranged soul gain is increased from 7 to 8 turns.\n\n" +
+                        "_-_ Froggit has received completely new ranks: rank II rapidly attacks with low damage, while rank III sucks up mana out of enemies it targets."));
+
+        changes.addButton(new ChangeButton(new TalentIcon(Talent.SPIRITUAL_BARRIER), "Base Talents",
+                "_Tier 1:_\n\n" +
+                        "_-_ _Benevolent Meal_ makes Conjurer heal his allies on eating food.\n\n" +
+                        "_-_ _Empowering Intuition_ rewards Conjurer with mana on identifying items.\n\n" +
+                        "_-_ _Energy Break_ gives Toy Knife extra damage, when used after a spell.\n\n" +
+                        "_-_ _Spiritual Barrier_ makes Conjurer generate shielding for his allies, when his soul is sparking.",
+
+                        "_Tier 2:_\n\n" +
+                        "_-_ _Inspiring Meal_ empowers Conjurer's allies, when he is eating.\n\n" +
+                        "_-_ _Liquid Casting_ creates short-living mana stealing effect on using potions.\n\n" +
+                        "_-_ _Energized Support_ rewards active spell usage by speeding up recharge of inactive summon staffs.\n\n" +
+                        "_-_ _Manaburn_ gives Conjurer great defensive ability of hurting attackers at cost of mana.\n\n" +
+                        "_-_ _Soul's Burst_ increases Toy Knife's ranged capabilities by giving it 3x3 spirit explosions.",
+
+                        "_Tier 3:_\n\n" +
+                        "_-_ _Newborn Motivation_ boosts newly created summons with Empowered effect.\n\n" +
+                        "_-_ _Combined Refill_ rewards diverse spellcasting by refunding some of mana cast of two spells, that are used consequently."));
+
+        changes.addButton(new ChangeButton(new HeroIcon(HeroSubClass.SOUL_WIELDER), HeroSubClass.SOUL_WIELDER.title(),
+                "_-_ Increased physical weakness from 25% to 33%.\n\n" +
+                        "_-_ Reduced _Antarctic Touch_'s frostburn effect from 7/20/40 to 7/15/25 turns.",
+
+                        "_Talents:_\n\n" +
+                        "_-_ _Leader Appreciation_ greatly buffs mirror images with shielding and allows to spawn them with manually searching at cost of mana.\n\n" +
+                        "_-_ _Concentrated Support_ allows to boost minion's attunement power with casting spells on them.\n\n" +
+                        "_-_ _Eternal Friendship_ rewards diverse ally army by giving them extra armor, the strength of which depends on unique ally types."));
+
+        changes.addButton(new ChangeButton(new HeroIcon(HeroSubClass.WILL_SORCERER), HeroSubClass.WILL_SORCERER.title(),
+                "_-_ Was previously named Knight.\n\n" +
+                        "_-_ Changed _Directing Pulse_'s soul gain buff from 9/3/1.1 to 12/6/2 turns.\n\n" +
+                        "_-_ _Shards of Despair_'s rank II and rank III damage have been significantly increased, stun duration is increased from 1 to 6 turns.\n\n" +
+                        "_-_ _Motion Bloom_ is now significantly cheaper, but has longer cooldown; rank II applies Haste instead of Time Freeze.\n\n" +
+                        "_-_ Moved stand healing into its own talent.",
+
+                        "_Talents:_\n\n" +
+                                "_-_ _Violent Overcoming_ makes the stand empowered after hitting the enemy enough times, increasing their damage per turn.\n\n" +
+                                "_-_ _Rejuvenating Force_ heals and restores Will Sorcerer's mana every 5 successful hits.\n\n" +
+                                "_-_ _Spiritual Restock_ allows to target the stand at allies, making them buffed with Adrenaline and Cleanse effects."));
+
+        changes = new ChangeInfo("Abyss", false, null);
+        changes.hardlight(0xa8a8a8);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new Image(Assets.Environment.TILES_ABYSS, 0, 48, 16, 16 ), "Highlights",
+                "_-_ Has been ported to new branch standard, replacing the older format with going beyond depth 26.\n\n" +
+                "_-_ Added \"placeholder\" music, consisting of 5 ominous edits of existing tracks.\n\n" +
+                "_-_ Added a chaotic, distorted splash background.\n\n" +
+                "_-_ Runs, that got into Abyss, now have white tint over the depth icon in rankings and save select..\n\n" +
+                "_-_ Certain score categories are now more rewarding in Abyss.\n\n" +
+                "_-_ Abyss' difficulty increase doesn't happen yet due to no Increased Difficulty mode.\n\n" +
+                "_-_ Room randomization now includes entrance and exit rooms.\n\n" +
+                "_-_ Exit tile is now highlighted."));
+
+        changes.addButton(new ChangeButton(new ItemSprite(new UpgradeClump()), "Progression",
+                "_-_ Scrolls of Upgrade and Potions of Strength no longer _spawn naturally_ in Abyss.\n\n" +
+                "_-_ Instead, special items are dropped by abyssal spawners, _Runic and Reddish Clusters_ and that can be converted into progression items.\n\n" +
+                "_-_ 2 Runic Clusters turn into Scroll of Upgrade, while 3 Reddish Clusters can be brewed into Potion of Strength.\n\n" +
+                "_-_ This effectively decreases amount of strength to 1.67 and amount of upgrades to 2.5 on each set of 5 floors."));
+
+        changes.addButton(new ChangeButton(new AbyssalSpawnerSprite(), "Enemies",
+                "_Abyssal Spawners:_\n\n" +
+                "_-_ Updated sprites.\n" +
+                "_-_ Reduced HP from 420 to 150, but restored soft damage cap, now equal to 25% of spawner's HP.\n" +
+                "_-_ Now heals 0.67% of its max HP every turn.\n" +
+                "_-_ Increased spawn cooldown from _23 at depth 1 to 4 at depth 19_ to _25 at depth 1 to 3 at abyss depth 44_.",
+
+                "_Abyssal Dragons:_\n\n" +
+                "_-_ Increased HP from 300 to 400 and EXP from 20 to 50.\n" +
+                "_-_ Decreased evasion from 45 to 30.\n" +
+                "_-_ Increased attack delay to 2 turns and decreased movement speed from 2 to 1.5 tiles per turn.\n" +
+                "_-_ Increased physical damage from 46-90 to 60-115.\n" +
+                "_-_ Increased armor roll from 20-35 to 25-40.\n" +
+                "_-_ Increased ranged attack cooldown from 3-5 to 9-16 turns, but it now inflicts 12 turns of frostburn instead of 8 and uses 1 turn instead of 2.\n\n" +
+                "_Dragon Spawns:_\n\n" +
+                "_-_ Reduced HP from 85 to 70.\n" +
+                "_-_ Increased evasion from 60 to 70 and accuracy from 55 to 65.\n" +
+                "_-_ Decreased physical damage from 25-48 to 16-30.\n" +
+                "_-_ Decreased attack delay to 0.5 turns.\n" +
+                "_-_ Decreased armor roll from 19-28 to 12-20.",
+
+                "_Abyssal Nightmares:_\n\n" +
+                "_-_ Reduced HP from 620 to 320 and passive healing from 7 to 2-3 and increased EXP from 20 to 50.\n" +
+                "_-_ Now reduces magical damage/effects by 75% instead of being completely immune to any magic.\n" +
+                "_-_ Now has scaling damage reduction, with 67% at 100% HP to -200% at 0% HP.\n" +
+                "_-_ Clones spawn with 25% chance instead of 20%, but no longer split further and have 80% HP of their host.\n\n" +
+                "_Lost Spirits:_\n\n" +
+                "_-_ Reduced health from 145 to 70 and increased EXP from 20 to 50.\n" +
+                "_-_ Increased threshold of summon teleport from 10% HP to 20% HP.\n" +
+                "_-_ Now gets shielding equal to 75% max HP of target from successful championing.\n\n" +
+                "_Miscellaneous:_\n\n" +
+                "_-_ Possessed Rodents now do rapid but weak attacks instead of zaps in melee range.\n" +
+                "_-_ Phantoms are more visible, but their miasma attack has lower chance to occur, spreads 1.5x more miasma and has its use time and cooldown doubled."));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+        changes.hardlight(CharSprite.POSITIVE);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new DogSprite(), "Enemies",
+                "_-_ To make the enemy selection less overwhelming, all original Summoning enemies from this point forward will spawn as _mob variants_, randomly being chosen to replace vanilla enemies at beginning of each run.\n\n" +
+                        "_-_ Sewer dog is variant of snake, with no changes.\n\n" +
+                        "_-_ Rattlesnake is variant of spinner, with attack speed doubled, but damage decreased."));
+
+        changes.addButton(new ChangeButton(new ItemSprite(new ChaoticBomb()), "Bomb Revamp",
+                "_-_ _Holy Grenade_ has been reworked to hit 9x9 area instead of 3x3 cross for more damage, bless allies and produce satisfying visuals and sound.\n\n" +
+                        "_-_ _Frost Bomb_ now freezes its targets solid, making them take less damage but be completely paralyzed in ice.\n\n" +
+                        "_-_ Webbomb has been reworked into _Spider Bomb_ with webs poisoning its targets.\n\n" +
+                        "_-_ Woolly Bomb and Shrinking Bomb now exist together.\n\n" +
+                        "_-_ Added _Chaotic Bomb_ that fires cursed wand blasts in all directions instead of exploding.\n\n" +
+                        "_-_ _Noisemaker_ applies an actual knockback instead of reverse knockback-ish.\n\n" +
+                        "_-_ _Arcane Bomb_ does less damage, but no longer destroys unnecessary stuff and has no damage falloff.\n\n" +
+                        "_-_ _Supply Station_ provides its healing and saturation faster, also increased total satiety from 400 to 450.\n\n" +
+                        "_-_ _Electrical Explosive_ does more damage and stuns enemies, but charges slower and break chance scales depending on charges used instead of total throws."));
+
+        changes.addButton(new ChangeButton(new Slingshot(),
+                "_-_ Implemented slingshot with no changes."));
+
+        changes.addButton(new ChangeButton(new ItemSprite(new Food()), "Full Food rework",
+                "Finished porting original Summoning's hunger system:\n\n" +
+                        "_-_ Increased max satiety from 450 to 1000.\n" +
+                        "_-_ Adjusted food values to be roughly the same as original Summoning.\n" +
+                        "_-_ Reimplemented saturation and food poisoning buffs.\n" +
+                        "_-_ Reimplemented satiety stat in hero's info menu.\n" +
+                        "_-_ Hunger consumption values have been returned to original values."));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+        changes.hardlight(CharSprite.WARNING);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.STAFF_PLACEHOLDER), "Staffs in General",
+                "_-_ Now actually have enchantments and curses (they weren't saved before).\n\n" +
+                        "_-_ Enchanted staff minions now glow just like staff items.\n\n" +
+                        "_-_ Now can be rewarded by Sad Ghost.\n\n" +
+                        "_-_ Now can be actually stored in magical holster.\n\n" +
+                        "_-_ Journal tracks how many times staffs have been used.\n\n" +
+                        "_-_ Minions get additional defense, that scales with attunement.\n\n" +
+                        "_-_ Slightly increased the health of all late-game minions.\n\n" +
+                        "_-_ Reduced attunement HP scaling from 33% to 20% and damage scaling from 33% to 25%.\n\n" +
+                        "_-_ Invisibility and purity potions now affect minions in visible range, when drank by player.\n\n" +
+                        "_-_ DM-150 is now inorganic enemy."));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+                "_-_ Phase 2 Tengu now attempts to bring minions next to you.\n" +
+                        "_-_ Added Duelist weapon abilities for shop weapons.\n" +
+                        "_-_ Hero automatically swaps with allies when moving.\n" +
+                        "_-_ Rank Manager now shows ranking stats instead of having buttons for them in revamped menu.\n" +
+                        "_-_ Using \"resume motion\" button no longer disables damage interruption (to do old behavior, hold the button).\n" +
+                        "_-_ Added all of Reincarnated's content into new journal.\n" +
+                        "_-_ Changed healing icon to be more respectful to outside world.\n" +
+                        "_-_ Spectral Necromancer's wraiths now spawn with Empowered effect.\n" +
+                        "_-_ Elixir of Attunement room now spawns either in floor 2 or 3, and uses same logic as laboratory.\n" +
+                        "_-_ Changed Enchant Transfer spell to use arcane resin, but cost 2 less energy."));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "Fixed the following bugs:\n" +
+                        "_-_ Attunement Constructs never actually spawning\n" +
+                        "_-_ Staffs being impossible to uncurse\n" +
+                        "_-_ Crystal chests not having a text string for staffs\n" +
+                        "_-_ Horde members literally sharing behavior code with their leader\n" +
+                        "_-_ "));
     }
 
     public static void add_v0_3_0_Changes( ArrayList<ChangeInfo> changeInfos ){
