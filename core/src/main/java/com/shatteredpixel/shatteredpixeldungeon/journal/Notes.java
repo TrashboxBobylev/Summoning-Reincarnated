@@ -509,6 +509,11 @@ public class Notes {
 	public static void reset() {
 		records = new ArrayList<>();
 	}
+
+	public static void resetForAbyss() {
+		records.removeIf((element) -> !(element instanceof CustomRecord));
+		Collections.sort(records, comparator);
+	}
 	
 	private static final String RECORDS	        = "records";
 	private static final String NEXT_CUSTOM_ID	= "next_custom_id";

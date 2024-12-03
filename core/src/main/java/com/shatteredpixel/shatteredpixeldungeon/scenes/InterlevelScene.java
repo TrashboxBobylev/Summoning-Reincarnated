@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.ShadowBox;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.LostBackpack;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -821,6 +822,8 @@ public class InterlevelScene extends PixelScene {
 			Mob.holdAllies( Dungeon.level );
 			Dungeon.saveAll();
 		}
+
+		Notes.resetForAbyss();
 
 		Dungeon.depth = 1;
 		Dungeon.branch = AbyssLevel.BRANCH;
