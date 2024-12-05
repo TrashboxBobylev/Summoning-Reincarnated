@@ -51,7 +51,7 @@ public class Froggit extends Minion {
     public float speed() {
         float speedMod = 1f;
         if (rank == 3)
-            speedMod = 0.25f;
+            speedMod = 4f;
         return super.speed()*speedMod;
     }
 
