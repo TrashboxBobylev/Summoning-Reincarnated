@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.staffs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -41,7 +40,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.AttunementB
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
-import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.AttunementItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -56,7 +54,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.watabou.noosa.audio.Sample;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndQuickBehavior;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
@@ -160,6 +158,10 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
                 minionID = 0;
             }
         }
+    }
+
+    public Minion minion(){
+        return minion;
     }
 
     @Override
@@ -316,24 +318,12 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
                         GLog.warning(Messages.get(Staff.class, "fizzles"));
                     }
                 } else {
-                    Minion.BehaviorType[] behaviorTypes = availableBehaviorTypes();
-                    int nextTypeID = 0;
-                    for (int i = 0; i < behaviorTypes.length; i++)
-                        if (behaviorTypes[i].ordinal() == minion.behaviorType.ordinal())
-                            nextTypeID = i+1;
-                    nextTypeID = nextTypeID > behaviorTypes.length-1 ? 0 : nextTypeID;
-                    minion.behaviorType = behaviorTypes[nextTypeID];
-                    GLog.highlight( Messages.get(this, "behavior_switch", minion.name(), minion.behaviorType.name()) );
-                    minion.sprite.emitter().burst(MagicMissile.MagicParticle.FACTORY, 8);
-                    curUser.spendAndNext(Actor.TICK);
-                    Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
-                    updateQuickslot();
+                    GameScene.show( new WndQuickBehavior( this ) );
                 }
             } catch (Exception e) {
                 ShatteredPixelDungeon.reportException(e);
                 GLog.warning( Messages.get(Wand.class, "fizzles") );
             }
-
         }
     }
 

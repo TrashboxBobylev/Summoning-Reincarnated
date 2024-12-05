@@ -948,6 +948,19 @@ public class ItemSpriteSheet {
 		assignItemRect(SR_SUPPORT, 10, 9);
 	}
 
+	public static final int BEHAVIOR_ICONS = xy(12, 32);
+	public static final int BEHAVIOR_REACTIVE = BEHAVIOR_ICONS+0;
+	public static final int BEHAVIOR_DEFENSIVE = BEHAVIOR_ICONS+1;
+	public static final int BEHAVIOR_AGGRESSIVE = BEHAVIOR_ICONS+2;
+	public static final int BEHAVIOR_PASSIVE = BEHAVIOR_ICONS+3;
+
+	static {
+		assignItemRect(BEHAVIOR_REACTIVE,  14, 14);
+		assignItemRect(BEHAVIOR_DEFENSIVE, 13, 14);
+		assignItemRect(BEHAVIOR_AGGRESSIVE,13, 13);
+		assignItemRect(BEHAVIOR_PASSIVE,   12, 12);
+	}
+
 	//for smaller 8x8 icons that often accompany an item sprite
 	public static class Icons {
 
