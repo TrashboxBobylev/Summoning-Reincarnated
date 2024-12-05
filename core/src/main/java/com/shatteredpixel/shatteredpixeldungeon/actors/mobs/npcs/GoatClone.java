@@ -198,7 +198,7 @@ public class GoatClone extends NPC implements ManaSource {
 
     @Override
     public float speed() {
-        float speed = super.speed();
+        float speed = Dungeon.hero.speed();
 
         //moves 2 tiles at a time when returning to the hero
         if (state == WANDERING && defendingPos == -1){
