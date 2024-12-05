@@ -175,6 +175,10 @@ public class Armor extends EquipableItem {
 	@Override
 	public ArrayList<String> actions(Hero hero) {
 		ArrayList<String> actions = super.actions(hero);
+		if (hero.heroClass == HeroClass.CONJURER){
+			actions.remove(AC_EQUIP);
+			actions.remove(AC_UNEQUIP);
+		}
 		if (seal != null) actions.add(AC_DETACH);
 		return actions;
 	}

@@ -64,7 +64,6 @@ public class ConjurerArmor extends Armor implements Rankable {
     @Override
     public ArrayList<String> actions(Hero hero ) {
         ArrayList<String> actions = super.actions( hero );
-        actions.remove(AC_UNEQUIP);
         actions.remove(AC_DROP);
         actions.remove(AC_THROW);
         return actions;
