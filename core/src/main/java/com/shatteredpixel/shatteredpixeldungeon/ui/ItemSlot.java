@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
@@ -155,12 +156,12 @@ public class ItemSlot extends Button {
 		}
 		
 		if (extra != null) {
-			if (itemIcon != null){
+			if (itemIcon != null && !(item instanceof Staff)){
 				extra.x = x + margin.left;
 				extra.y = y + (height - extra.baseLine() - 1) - margin.bottom;
 			} else {
-				extra.x = x + (width - extra.width()) - margin.right;
-				extra.y = y + margin.top;
+				extra.x = x + (width - extra.width()) + margin.right;
+				extra.y = y - margin.top;
 			}
 			PixelScene.align(extra);
 
@@ -179,6 +180,10 @@ public class ItemSlot extends Button {
 			} else {
 				itemIcon.x = x + width - itemIcon.width() - margin.right;
 				itemIcon.y = y + margin.top;
+			}
+			if (item instanceof Staff){
+				itemIcon.x = x + margin.left;
+				itemIcon.y = y + height - itemIcon.height - margin.top;
 			}
 			PixelScene.align(itemIcon);
 		}
