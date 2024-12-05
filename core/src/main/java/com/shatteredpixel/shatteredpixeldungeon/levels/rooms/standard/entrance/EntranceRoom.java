@@ -91,6 +91,9 @@ public class EntranceRoom extends StandardRoom {
 			entrance = level.pointToCell(random(2));
 		} while (level.findMob(entrance) != null);
 
+		if (Dungeon.branch != AbyssLevel.BRANCH)
+			Painter.set( level, entrance, Terrain.ENTRANCE );
+
 		if (Dungeon.depth == 1){
 			level.transitions.add(new LevelTransition(level, entrance, LevelTransition.Type.SURFACE));
 		} else {
