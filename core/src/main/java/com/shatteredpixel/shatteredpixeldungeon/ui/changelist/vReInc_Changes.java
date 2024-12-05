@@ -96,6 +96,25 @@ public class vReInc_Changes {
         changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered Ports",
                 "Implemented Shattered v2.5.4 changes."));
 
+        changes = new ChangeInfo("v0.4.1", false, null);
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+                "_-_ Reworked minion behavior selection to use better UI and to be instantaneous.\n" +
+                        "_-_ Added Conjurer text for shopkeeper and blacksmith.\n" +
+                        "_-_ Tweaked clarity of minion behavior icon.\n" +
+                        "_-_ Added distinct particles for each type of behavior switch.\n" +
+                        "_-_ Underground Paradise now moves at the same speed as his master."));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "Fixed the following bugs:\n" +
+                        "_-_ Stairs not spawning in entrance rooms\n" +
+                        "_-_ Conjurer being able to equip other armor\n" +
+                        "_-_ Toy Knife rank III attacking 2x faster instead of 2x slower\n" +
+                        "_-_ Froggit rank III moving 4x slower instead of 2x faster\n" +
+                        "_-_ Victory showcase mentioning Shattered PD"));
+
         changes = new ChangeInfo("Conjurer", false, null);
         changes.hardlight(0x4c51ad);
         changeInfos.add(changes);
@@ -282,8 +301,7 @@ public class vReInc_Changes {
                         "_-_ Attunement Constructs never actually spawning\n" +
                         "_-_ Staffs being impossible to uncurse\n" +
                         "_-_ Crystal chests not having a text string for staffs\n" +
-                        "_-_ Horde members literally sharing behavior code with their leader\n" +
-                        "_-_ "));
+                        "_-_ Horde members literally sharing behavior code with their leader"));
     }
 
     public static void add_v0_3_0_Changes( ArrayList<ChangeInfo> changeInfos ){
