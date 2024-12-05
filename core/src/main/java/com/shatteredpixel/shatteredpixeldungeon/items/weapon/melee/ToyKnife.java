@@ -107,7 +107,7 @@ public class ToyKnife extends MeleeWeapon implements Rankable {
         switch (rank){
             case 1: return 1.0f;
             case 2: return 1.0f;
-            case 3: return 0.5f;
+            case 3: return 2.0f;
         }
         return 1f;
     }
