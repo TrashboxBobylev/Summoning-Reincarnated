@@ -29,7 +29,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Chrome;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
-import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -86,7 +85,7 @@ public class WndQuickBehavior extends Window {
 					Minion minion = staff.minion();
 					minion.behaviorType = behaviorType;
 					GLog.highlight( Messages.get(staff, "behavior_switch", minion.name(), minion.behaviorType.name()) );
-					minion.sprite.emitter().burst(MagicMissile.MagicParticle.FACTORY, 8);
+					minion.sprite.emitter().burst(behaviorType.visual, 8);
 					Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
 					updateQuickslot();
 				}

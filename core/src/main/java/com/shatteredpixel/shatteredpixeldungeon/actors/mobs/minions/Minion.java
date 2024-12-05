@@ -47,6 +47,7 @@ import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
@@ -376,12 +377,21 @@ public class Minion extends Mob implements ManaSource {
     }
 
     public enum BehaviorType {
-        REACTIVE(ItemSpriteSheet.Icons.BEHAVIOR_REACT, ReactiveTargeting.class),
-        PROTECTIVE(ItemSpriteSheet.Icons.BEHAVIOR_DEFEND, ProtectiveTargeting.class),
-        AGGRESSIVE(ItemSpriteSheet.Icons.BEHAVIOR_ATTACK),
-        PASSIVE(ItemSpriteSheet.Icons.BEHAVIOR_PASSIVE, PassiveTargeting.class);
+        REACTIVE(ItemSpriteSheet.Icons.BEHAVIOR_REACT, ReactiveTargeting.class){
+            {visual = MagicMissile.ForceParticle.FACTORY;}
+        },
+        PROTECTIVE(ItemSpriteSheet.Icons.BEHAVIOR_DEFEND, ProtectiveTargeting.class){
+            {visual = MagicMissile.EarthParticle.ATTRACT;}
+        },
+        AGGRESSIVE(ItemSpriteSheet.Icons.BEHAVIOR_ATTACK){
+            {visual = MagicMissile.WardParticle.FACTORY;}
+        },
+        PASSIVE(ItemSpriteSheet.Icons.BEHAVIOR_PASSIVE, PassiveTargeting.class){
+            {visual = MagicMissile.MagicParticle.ATTRACTING;}
+        };
 
         public final Class<? extends TargetBuff> buffType;
+        public Emitter.Factory visual;
         public int icon;
 
         BehaviorType(int icon){
