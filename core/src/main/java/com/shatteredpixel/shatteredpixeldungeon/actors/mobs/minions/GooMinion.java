@@ -246,7 +246,7 @@ public class GooMinion extends Minion {
     @Override
     public void damage(int dmg, Object src) {
         if (rank == 3){
-            damage(dmg/10, src);
+            dmg /= 10;
         } else {
             if (!(src instanceof Viscosity.DeferedDamage)) {
                 float deferedDmgMulti = 0.5f;
@@ -258,8 +258,8 @@ public class GooMinion extends Minion {
                 deferred.prolong((int) (dmg * deferedDmgMulti));
                 dmg = (int) Math.min(dmg - dmg * deferedDmgMulti, 0);
             }
-            super.damage(dmg, src);
         }
+        super.damage(dmg, src);
     }
 
     private final String PUMPEDUP = "pumpedup";
