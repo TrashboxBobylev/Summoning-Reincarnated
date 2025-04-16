@@ -114,8 +114,8 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.Bulk;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.Bulk;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Brimstone;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Flow;
@@ -925,18 +925,18 @@ if (Dungeon.hero.heroClass != HeroClass.CLERIC
 
         if (!(src instanceof GasterBlaster.Karma)) {
             Terror t = buff(Terror.class);
-            if (t != null){
+            if (t != null) {
                 t.recover();
             }
             Dread d = buff(Dread.class);
-            if (d != null){
+            if (d != null) {
                 d.recover();
             }
             Charm c = buff(Charm.class);
-            if (c != null){
+            if (c != null) {
                 c.recover(src);
             }
-            if (this.buff(Frost.class) != null){
+            if (this.buff(Frost.class) != null) {
                 Buff.detach( this, Frost.class );
             }
             if (this.buff(MagicalSleep.class) != null){
