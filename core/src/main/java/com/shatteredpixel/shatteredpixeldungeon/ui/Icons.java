@@ -419,7 +419,7 @@ public enum Icons {
 			case CONJURER_BOOK:
 				icon.frame( icon.texture.uvRectBySize( 226, 80, 8, 10 ) );
 				break;
-		
+
 			case LIBGDX:
 				icon.frame( icon.texture.uvRectBySize( 0, 96, 16, 13 ) );
 				break;
@@ -510,6 +510,8 @@ public enum Icons {
 				return get( Icons.BACKPACK_LRG );
 			case CONJURER:
 				return new ItemSprite(ItemSpriteSheet.ARMOR_CONJURER);
+			case CLERIC:
+				return new ItemSprite(ItemSpriteSheet.ARTIFACT_TOME);
 			default:
 				return null;
 		}

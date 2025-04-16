@@ -25,11 +25,13 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.stones;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -45,6 +47,7 @@ public class StoneOfDetectMagic extends InventoryStone {
 	@Override
 	public boolean usableOnItem(Item item){
 		return (item instanceof EquipableItem || item instanceof Wand)
+				&& !(item instanceof MissileWeapon)
 				&& (!item.isIdentified() || !item.cursedKnown);
 	}
 
@@ -85,8 +88,11 @@ public class StoneOfDetectMagic extends InventoryStone {
 			GLog.w(Messages.get(this, "detected_bad"));
 		}
 
-		curItem.detach( curUser.belongings.backpack );
-		Catalog.countUse(getClass());
+		if (!anonymous) {
+			curItem.detach(curUser.belongings.backpack);
+			Catalog.countUse(getClass());
+			Talent.onRunestoneUsed(curUser, curUser.pos, getClass());
+		}
 
 	}
 

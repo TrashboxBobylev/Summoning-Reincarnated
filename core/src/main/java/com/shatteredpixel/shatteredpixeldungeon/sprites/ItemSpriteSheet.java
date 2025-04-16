@@ -161,6 +161,7 @@ public class ItemSpriteSheet {
 	public static final int BROKEN_HILT     = MISC_CONSUMABLE +20;
 	public static final int ARMOR_REMAINS   = MISC_CONSUMABLE +22;
 	public static final int TRINKET_CATA    = MISC_CONSUMABLE +21;
+	public static final int TORN_PAGE       = MISC_CONSUMABLE +21;
 
 	static{
 		assignItemRect(ANKH,            10, 16);
@@ -188,6 +189,8 @@ public class ItemSpriteSheet {
 		assignItemRect(BOW_FRAGMENT,    12,  9);
 		assignItemRect(BROKEN_HILT,      9,  9);
 		assignItemRect(ARMOR_REMAINS,    9,  9);
+		assignItemRect(TORN_PAGE,       11, 13);
+
 		assignItemRect(TRINKET_CATA,    12, 11);
 	}
 	
@@ -253,6 +256,7 @@ public class ItemSpriteSheet {
 	public static final int TOY_KNIFE       = WEP_TIER1+1;
 	static{
 		assignItemRect(WORN_SHORTSWORD, 13, 13);
+		assignItemRect(CUDGEL,          15, 15);
 		assignItemRect(GLOVES,          12, 16);
 		assignItemRect(RAPIER,          13, 14);
 		assignItemRect(DAGGER,          12, 13);
@@ -414,6 +418,7 @@ public class ItemSpriteSheet {
 	public static final int ARMOR_SCOUT     = ARMOR+10;
 	public static final int ARMOR_ADVENTURER = ARMOR+11;
 	public static final int ARMOR_CONJURER  = ARMOR+12;
+	public static final int ARMOR_CLERIC    = ARMOR+10;
 	static{
 		assignItemRect(ARMOR_CLOTH,     15, 12);
 		assignItemRect(ARMOR_LEATHER,   14, 13);
@@ -428,6 +433,7 @@ public class ItemSpriteSheet {
 		assignItemRect(ARMOR_SCOUT,  13, 15);
 		assignItemRect(ARMOR_ADVENTURER, 14, 13);
 		assignItemRect(ARMOR_CONJURER,  15, 15);
+		assignItemRect(ARMOR_CLERIC,    13, 14);
 	}
 
 	private static final int STAFFS         =                               xy(1, 13);//15 free slots
@@ -530,6 +536,7 @@ public class ItemSpriteSheet {
 	public static final int ARTIFACT_ROSE1      = ARTIFACTS+20;
 	public static final int ARTIFACT_ROSE2      = ARTIFACTS+21;
 	public static final int ARTIFACT_ROSE3      = ARTIFACTS+22;
+	public static final int ARTIFACT_TOME       = ARTIFACTS+23;
 	static{
 		assignItemRect(ARTIFACT_CLOAK,      9,  15);
 		assignItemRect(ARTIFACT_ARMBAND,    16, 13);
@@ -554,6 +561,7 @@ public class ItemSpriteSheet {
 		assignItemRect(ARTIFACT_ROSE1,      14, 14);
 		assignItemRect(ARTIFACT_ROSE2,      14, 14);
 		assignItemRect(ARTIFACT_ROSE3,      14, 14);
+		assignItemRect(ARTIFACT_TOME,       14, 16);
 	}
 
 	private static final int TRINKETS        =                               xy(9, 17);  //24 slots

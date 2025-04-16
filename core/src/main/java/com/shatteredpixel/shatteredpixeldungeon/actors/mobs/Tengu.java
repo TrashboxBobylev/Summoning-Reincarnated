@@ -400,7 +400,9 @@ public class Tengu extends Mob {
 				if (canUseAbility()){
 					return useAbility();
 				}
-				
+
+				recentlyAttackedBy.clear();
+				target = enemy.pos;
 				return doAttack( enemy );
 				
 			} else {

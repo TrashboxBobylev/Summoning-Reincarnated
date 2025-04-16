@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Sleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.Stasis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
@@ -61,6 +62,7 @@ public class WandOfWarding extends Wand {
 
 	{
 		image = ItemSpriteSheet.WAND_WARDING;
+		usesTargeting = false; //player usually targets wards or spaces, not enemies
 	}
 
 	@Override
@@ -80,6 +82,10 @@ public class WandOfWarding extends Wand {
 			if (ch instanceof Ward){
 				currentWardEnergy += ((Ward) ch).tier;
 			}
+		}
+
+		if (Stasis.getStasisAlly() instanceof Ward){
+			currentWardEnergy += ((Ward) Stasis.getStasisAlly()).tier;
 		}
 		
 		int maxWardEnergy = 0;

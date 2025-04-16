@@ -174,6 +174,8 @@ public class ScrollOfEnchantment extends ExoticScroll {
 			enchantments[0] = ench1;
 			enchantments[1] = ench2;
 			enchantments[2] = ench3;
+
+			WndGlyphSelect.arm = null;
 		}
 
 		@Override
@@ -234,6 +236,8 @@ public class ScrollOfEnchantment extends ExoticScroll {
 			glyphs[0] = glyph1;
 			glyphs[1] = glyph2;
 			glyphs[2] = glyph3;
+
+			WndEnchantSelect.wep = null;
 		}
 
 		@Override

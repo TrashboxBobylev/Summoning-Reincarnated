@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.stones;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Identification;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
@@ -92,7 +93,7 @@ public class StoneOfIntuition extends InventoryStone {
 	public static class IntuitionUseTracker extends Buff {{ revivePersists = true; }};
 	
 	private static Class curGuess = null;
-	
+
 	public class WndGuess extends Window {
 		
 		private static final int WIDTH = 120;
@@ -117,7 +118,6 @@ public class StoneOfIntuition extends InventoryStone {
 				protected void onClick() {
 					super.onClick();
 					useAnimation();
-					Catalog.countUse(StoneOfIntuition.class);
 					if (item.getClass() == curGuess){
 						if (item instanceof Ring){
 							((Ring) item).setKnown();
@@ -129,11 +129,15 @@ public class StoneOfIntuition extends InventoryStone {
 					} else {
 						GLog.w( Messages.get(WndGuess.class, "incorrect") );
 					}
-					if (curUser.buff(IntuitionUseTracker.class) == null){
-						Buff.affect(curUser, IntuitionUseTracker.class);
-					} else {
-						curItem.detach( curUser.belongings.backpack );
-						curUser.buff(IntuitionUseTracker.class).detach();
+					if (!anonymous) {
+						Catalog.countUse(StoneOfIntuition.class);
+						if (curUser.buff(IntuitionUseTracker.class) == null) {
+							Buff.affect(curUser, IntuitionUseTracker.class);
+						} else {
+							curItem.detach(curUser.belongings.backpack);
+							curUser.buff(IntuitionUseTracker.class).detach();
+						}
+						Talent.onRunestoneUsed(curUser, curUser.pos, StoneOfIntuition.class);
 					}
 					curGuess = null;
 					hide();

@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Conducts;
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -413,7 +414,11 @@ public class ElementalBlast extends ArmorAbility {
 
 						//*** Wand of Prismatic Light ***
 						} else if (finalWandCls == WandOfPrismaticLight.class){
-							Buff.prolong( hero, Light.class, effectMulti*50f);
+							if (Dungeon.isChallenged(Challenges.DARKNESS)){
+								Buff.prolong(hero, Light.class, effectMulti * 10f);
+							} else {
+								Buff.prolong(hero, Light.class, effectMulti * 50f);
+							}
 
 						}
 

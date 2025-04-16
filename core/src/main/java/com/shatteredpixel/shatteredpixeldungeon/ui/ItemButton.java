@@ -104,4 +104,8 @@ public class ItemButton extends Component {
 		slot.clear();
 	}
 
+	public ItemSlot slot(){
+		return slot;
+	}
+
 }

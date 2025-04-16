@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard;
 
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrapMechanism;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
@@ -68,6 +69,8 @@ public class MinefieldRoom extends StandardRoom {
 				break;
 		}
 
+		float revealedChance = TrapMechanism.revealHiddenTrapChance();
+		float revealInc = 0;
 		for (int i = 0; i < mines; i++ ){
 			int pos;
 			do {
@@ -82,8 +85,15 @@ public class MinefieldRoom extends StandardRoom {
 				}
 			}
 
-			Painter.set(level, pos, Terrain.SECRET_TRAP);
-			level.setTrap(new ExplosiveTrap().hide(), pos);
+			revealInc += revealedChance;
+			if (revealInc >= 1) {
+				Painter.set(level, pos, Terrain.TRAP);
+				level.setTrap(new ExplosiveTrap().reveal(), pos);
+				revealInc--;
+			} else {
+				Painter.set(level, pos, Terrain.SECRET_TRAP);
+				level.setTrap(new ExplosiveTrap().hide(), pos);
+			}
 
 		}
 

@@ -54,7 +54,8 @@ public class TenguSprite extends MobSprite {
 		die = new Animation( 8, false );
 		die.frames( frames, 8, 9, 10, 10, 10, 10, 10, 10 );
 		
-		play( run.clone() );
+		play( run );
+		isMoving = true;
 	}
 
 	@Override
@@ -86,7 +87,9 @@ public class TenguSprite extends MobSprite {
 
 	@Override
 	public void update() {
-		if (paused) isMoving = false;
+		if (paused && !curAnim.looped){
+			updateAnimation();
+		}
 		super.update();
 	}
 

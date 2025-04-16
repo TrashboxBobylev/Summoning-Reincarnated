@@ -33,6 +33,7 @@ public class RingOfTenacity extends Ring {
 
 	{
 		icon = ItemSpriteSheet.Icons.RING_TENACITY;
+		buffClass = Tenacity.class;
 	}
 
 	public String statsInfo() {

@@ -33,6 +33,7 @@ public class RingOfHaste extends Ring {
 
 	{
 		icon = ItemSpriteSheet.Icons.RING_HASTE;
+		buffClass = Haste.class;
 	}
 
 	public String statsInfo() {

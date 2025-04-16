@@ -118,6 +118,10 @@ public class Kinetic extends Weapon.Enchantment {
 			spend(TICK);
 			return true;
 		}
+
+		public void delay( float value ){
+			spend(value);
+		}
 		
 		@Override
 		public String desc() {

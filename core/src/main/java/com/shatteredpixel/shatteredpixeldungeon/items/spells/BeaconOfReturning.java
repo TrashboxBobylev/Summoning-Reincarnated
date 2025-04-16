@@ -179,7 +179,7 @@ public class BeaconOfReturning extends Spell {
 		detach(hero.belongings.backpack);
 		Catalog.countUse(getClass());
 		if (Random.Float() < talentChance){
-			Talent.onScrollUsed(curUser, curUser.pos, talentFactor);
+			Talent.onScrollUsed(curUser, curUser.pos, talentFactor, getClass());
 		}
 	}
 	
