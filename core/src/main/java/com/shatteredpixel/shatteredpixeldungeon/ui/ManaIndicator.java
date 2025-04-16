@@ -27,8 +27,13 @@ package com.shatteredpixel.shatteredpixeldungeon.ui;
 import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndQuickBag;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.Image;
 
@@ -100,5 +105,15 @@ public class ManaIndicator extends Tag {
         }
 
         super.update();
+    }
+
+    @Override
+    protected void onClick() {
+        GameScene.show(new WndQuickBag(Dungeon.hero.belongings.getItem(ConjurerBook.class)));
+    }
+
+    @Override
+    protected String hoverText() {
+        return Messages.titleCase(Messages.get(WndKeyBindings.class, "tag_mana"));
     }
 }

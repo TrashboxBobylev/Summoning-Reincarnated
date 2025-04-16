@@ -162,7 +162,6 @@ public enum HeroClass {
 			energizedRenewal.collect();
 			new BeamOfAffection().collect();
 			Dungeon.quickslot.setSlot(4, staff1);
-			Dungeon.quickslot.setSlot(5, book);
 			new PotionBandolier().collect();
 			Dungeon.LimitedDrops.POTION_BANDOLIER.drop();
 			new ScrollHolder().collect();
@@ -353,8 +352,7 @@ public enum HeroClass {
 			new MagicalHolster().collect();
 			Dungeon.LimitedDrops.MAGICAL_HOLSTER.drop();
 
-			Dungeon.quickslot.setSlot(0, book);
-			Dungeon.quickslot.setSlot(1, staff1);
+			Dungeon.quickslot.setSlot(0, staff1);
 		}
 
 		(hero.belongings.armor = new ConjurerArmor()).identify();
