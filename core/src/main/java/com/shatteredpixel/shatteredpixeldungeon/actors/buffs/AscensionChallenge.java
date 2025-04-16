@@ -117,9 +117,13 @@ public class AscensionChallenge extends Buff {
 		}
 
 		for (Class<?extends Mob> cls : modifiers.keySet()){
-			if (cls.isAssignableFrom(ch.getClass()) ||
-					cls.isAssignableFrom(Dungeon.MobVariants.getBaseVariant((Class<? extends Mob>) ch.getClass()))){
+			if (cls.isAssignableFrom(ch.getClass())){
 				return modifiers.get(cls);
+			} else {
+				Class<? extends Mob> variant = Dungeon.MobVariants.getBaseVariant((Class<? extends Mob>) ch.getClass());
+				if (variant != null && cls.isAssignableFrom(variant)){
+					return modifiers.get(cls);
+				}
 			}
 		}
 
