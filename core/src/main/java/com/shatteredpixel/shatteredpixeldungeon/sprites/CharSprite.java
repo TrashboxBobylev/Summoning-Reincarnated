@@ -31,10 +31,10 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.DarkBlock;
 import com.shatteredpixel.shatteredpixeldungeon.effects.EmoIcon;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.effects.GlowBlock;
 import com.shatteredpixel.shatteredpixeldungeon.effects.HolyAura;
 import com.shatteredpixel.shatteredpixeldungeon.effects.IceBlock;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
-import com.shatteredpixel.shatteredpixeldungeon.effects.GlowBlock;
 import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
@@ -90,7 +90,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 	public enum State {
 		BURNING, LEVITATING, INVISIBLE, PARALYSED, FROZEN, ILLUMINATED, CHILLED, DARKENED, MARKED, HEALING, SHIELDED, HEARTS, GLOWING, AURA,
-		SHRUNK, FROSTBURNING, SPIRIT, ENLARGED, AURA
+		SHRUNK, FROSTBURNING, SPIRIT, ENLARGED, CONJURER_AURA
 	}
 	
 	protected Animation idle;
@@ -380,7 +380,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 	//Aura needs color data too
 	public void aura( int color ){
-		add(State.AURA);
+		add(State.CONJURER_AURA);
 		auraColor = color;
 	}
 
@@ -485,7 +485,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 					Sample.INSTANCE.play( Assets.Sounds.BURNING );
 				}
 				break;
-			case AURA:
+			case CONJURER_AURA:
 				GameScene.effect( holyAura = new HolyAura( this ));
 				break;
 		}
@@ -501,7 +501,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public void clearAura(){
-		remove(State.AURA);
+		remove(State.CONJURER_AURA);
 	}
 
 	protected synchronized void processStateRemoval( State state ) {
@@ -602,7 +602,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 					glowBlock = null;
 				}
 				break;
-			case AURA:
+			case CONJURER_AURA:
 				if (aura != null){
 					aura.killAndErase();
 					aura = null;

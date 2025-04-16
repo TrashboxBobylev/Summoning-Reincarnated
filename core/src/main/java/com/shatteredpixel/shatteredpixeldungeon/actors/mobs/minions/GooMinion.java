@@ -255,7 +255,7 @@ public class GooMinion extends Minion {
                     deferedDmgMulti = 1f;
                 }
                 Viscosity.DeferedDamage deferred = Buff.affect(this, Viscosity.DeferedDamage.class);
-                deferred.prolong((int) (dmg * deferedDmgMulti));
+                deferred.postpone((int) (dmg * deferedDmgMulti));
                 dmg = (int) Math.min(dmg - dmg * deferedDmgMulti, 0);
             }
         }

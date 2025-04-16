@@ -112,8 +112,8 @@ public class HolyAuraBuff extends EffectBuff implements ManaStealHost {
 
     @Override
     public void fx(boolean on) {
-        if (on) target.sprite.add(CharSprite.State.AURA);
-        else target.sprite.remove(CharSprite.State.AURA);
+        if (on) target.sprite.add(CharSprite.State.CONJURER_AURA);
+        else target.sprite.remove(CharSprite.State.CONJURER_AURA);
     }
 
     @Override
