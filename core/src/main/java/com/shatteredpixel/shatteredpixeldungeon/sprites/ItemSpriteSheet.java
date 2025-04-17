@@ -253,7 +253,7 @@ public class ItemSpriteSheet {
 	public static final int RAPIER          = WEP_TIER1+3;
 	public static final int DAGGER          = WEP_TIER1+4;
 	public static final int MAGES_STAFF     = WEP_TIER1+5;
-	public static final int TOY_KNIFE       = WEP_TIER1+1;
+	public static final int TOY_KNIFE       = WEP_TIER1+6;
 	static{
 		assignItemRect(WORN_SHORTSWORD, 13, 13);
 		assignItemRect(CUDGEL,          15, 15);
@@ -415,10 +415,10 @@ public class ItemSpriteSheet {
 	public static final int ARMOR_ROGUE     = ARMOR+7;
 	public static final int ARMOR_HUNTRESS  = ARMOR+8;
 	public static final int ARMOR_DUELIST   = ARMOR+9;
-	public static final int ARMOR_SCOUT     = ARMOR+10;
-	public static final int ARMOR_ADVENTURER = ARMOR+11;
-	public static final int ARMOR_CONJURER  = ARMOR+12;
 	public static final int ARMOR_CLERIC    = ARMOR+10;
+	public static final int ARMOR_SCOUT     = ARMOR+11;
+	public static final int ARMOR_ADVENTURER= ARMOR+12;
+	public static final int ARMOR_CONJURER  = ARMOR+13;
 	static{
 		assignItemRect(ARMOR_CLOTH,     15, 12);
 		assignItemRect(ARMOR_LEATHER,   14, 13);
@@ -436,39 +436,59 @@ public class ItemSpriteSheet {
 		assignItemRect(ARMOR_CLERIC,    13, 14);
 	}
 
-	private static final int STAFFS         =                               xy(1, 13);//15 free slots
-	public static final int FROGGIT_STAFF     = STAFFS+0;
-	public static final int GREY_RAT_STAFF = STAFFS+1;
-	public static final int GNOLL_HUNTER_STAFF = STAFFS+2;
-	public static final int WOOLY_STAFF     = STAFFS+3;
-	public static final int SKELETON_STAFF     = STAFFS+4;
-	public static final int SLIME_STAFF     = STAFFS+5;
-	public static final int CHICKEN_STAFF     = STAFFS+6;
-	public static final int MAGIC_MISSILE_STAFF     = STAFFS+7;
-	public static final int WIZARD_STAFF     = STAFFS+8;
-	public static final int ROBO_STAFF     = STAFFS+9;
-	public static final int ROSE_STAFF     = STAFFS+10;
-	public static final int FROST_ELEMENTAL_STAFF     = STAFFS+11;
-	public static final int GOO_STAFF = STAFFS+12;
-	public static final int GASTER_STAFF = STAFFS+13;
-	public static final int IMP_STAFF = STAFFS+14;
-	public static final int HACATU_STAFF = STAFFS+15;
+	private static final int STAFF_T1       =                               xy(1, 34);
+	public static final int FROGGIT_STAFF     = STAFF_T1+0;
+
 	static {
 		assignItemRect(FROGGIT_STAFF, 14, 14);
+	}
+
+	private static final int STAFF_T2       =                               xy(7, 34);
+	public static final int GREY_RAT_STAFF      = STAFF_T2+0;
+	public static final int GNOLL_HUNTER_STAFF  = STAFF_T2+1;
+	public static final int WOOLY_STAFF         = STAFF_T2+2;
+
+	static {
 		assignItemRect(GREY_RAT_STAFF, 16, 16);
 		assignItemRect(GNOLL_HUNTER_STAFF, 16, 16);
 		assignItemRect(WOOLY_STAFF, 16, 16);
-		assignItemRect(SKELETON_STAFF, 15, 15);
-		assignItemRect(FROST_ELEMENTAL_STAFF, 15, 15);
-		assignItemRect(SLIME_STAFF, 16, 16);
-		assignItemRect(CHICKEN_STAFF, 16, 16);
-		assignItemRect(MAGIC_MISSILE_STAFF, 14, 14);
-		assignItemRect(WIZARD_STAFF, 16, 16);
-		assignItemRect(ROBO_STAFF, 16, 16);
-		assignItemRect(ROSE_STAFF, 14, 14);
-		assignItemRect(GOO_STAFF, 16, 16);
+	}
+
+	private static final int STAFF_T3       =                               xy(1, 35);
+	public static final int SKELETON_STAFF      = STAFF_T3+0;
+	public static final int SLIME_STAFF         = STAFF_T3+1;
+	public static final int CHICKEN_STAFF       = STAFF_T3+2;
+	public static final int MAGIC_MISSILE_STAFF = STAFF_T3+3;
+
+	static {
+		assignItemRect(SKELETON_STAFF,     15, 15);
+		assignItemRect(SLIME_STAFF,        16, 16);
+		assignItemRect(CHICKEN_STAFF,      16, 16);
+		assignItemRect(MAGIC_MISSILE_STAFF,14, 14);
+	}
+
+	private static final int STAFF_T4       =                               xy(7, 35);
+	public static final int WIZARD_STAFF              = STAFF_T4+0;
+	public static final int ROBO_STAFF                = STAFF_T4+1;
+	public static final int ROSE_STAFF                = STAFF_T4+2;
+	public static final int FROST_ELEMENTAL_STAFF     = STAFF_T4+3;
+
+	static {
+		assignItemRect(WIZARD_STAFF,           16, 16);
+		assignItemRect(ROBO_STAFF,             16, 16);
+		assignItemRect(ROSE_STAFF,             14, 14);
+		assignItemRect(FROST_ELEMENTAL_STAFF,  15, 15);
+	}
+
+	private static final int STAFF_T5       =                               xy(1, 36);
+	public static final int GOO_STAFF    = STAFF_T5+0;
+	public static final int GASTER_STAFF = STAFF_T5+1;
+	public static final int IMP_STAFF    = STAFF_T5+2;
+	public static final int HACATU_STAFF = STAFF_T5+3;
+	static {
+		assignItemRect(GOO_STAFF,    16, 16);
 		assignItemRect(GASTER_STAFF, 16, 16);
-		assignItemRect(IMP_STAFF, 16, 16);
+		assignItemRect(IMP_STAFF,    16, 16);
 		assignItemRect(HACATU_STAFF, 14, 16);
 	}
 
@@ -910,8 +930,8 @@ public class ItemSpriteSheet {
 		assignItemRect(HALLS_PAGE,  10, 11);
 	}
 
-	private static final int C_SPELLS = xy(9, 31);
-	public static final int STARS             = C_SPELLS +0;
+	private static final int C_SPELLS =                                    xy(1, 37);
+	public static final int STARS           = C_SPELLS +0;
 	public static final int HEAL            = C_SPELLS +1;
 	public static final int ZAP             = C_SPELLS +2;
 	public static final int SHIELD          = C_SPELLS +3;
@@ -920,47 +940,47 @@ public class ItemSpriteSheet {
 	public static final int CLONE           = C_SPELLS +6;
 	public static final int GONER           = C_SPELLS +7;
 
-	private static final int C_KNIGHT = xy(12, 29);
+	private static final int C_KNIGHT = xy(1, 38);
 	public static final int PUNCH           = C_KNIGHT +0;
 	public static final int HEALKI          = C_KNIGHT +1;
 	public static final int BOOM            = C_KNIGHT +2;
 	public static final int SPREAD          = C_KNIGHT +3;
 	public static final int FLOWER          = C_KNIGHT +4;
 
-	private static final int C_SOUL_REAVER = xy(12, 30);
+	private static final int C_SOUL_REAVER = xy(9, 38);
 	public static final int SR_OFFENSE      = C_SOUL_REAVER +0;
 	public static final int SR_DEFENSE      = C_SOUL_REAVER +1;
 	public static final int SR_MAGICAL      = C_SOUL_REAVER +2;
 	public static final int SR_RANGED       = C_SOUL_REAVER +3;
 	public static final int SR_SUPPORT      = C_SOUL_REAVER +4;
 	static {
-		assignItemRect(STARS, 11, 11);
-		assignItemRect(HEAL, 10, 10);
-		assignItemRect(ZAP, 10, 7);
-		assignItemRect(SHIELD, 10, 10);
-		assignItemRect(SHOCKER, 13, 15);
+		assignItemRect(STARS,      11, 11);
+		assignItemRect(HEAL,       10, 10);
+		assignItemRect(ZAP,        10, 7);
+		assignItemRect(SHIELD,     10, 10);
+		assignItemRect(SHOCKER,    13, 15);
 		assignItemRect(CAMOUFLAGE, 14, 14);
-		assignItemRect(CLONE, 14, 13);
-		assignItemRect(GONER, 14, 16);
+		assignItemRect(CLONE,      14, 13);
+		assignItemRect(GONER,      14, 16);
 
-		assignItemRect(PUNCH, 13, 14);
+		assignItemRect(PUNCH,  13, 14);
 		assignItemRect(HEALKI, 13, 14);
-		assignItemRect(BOOM, 15, 14);
+		assignItemRect(BOOM,   15, 14);
 		assignItemRect(SPREAD, 12, 15);
 		assignItemRect(FLOWER, 15, 15);
 
 		assignItemRect(SR_OFFENSE, 12, 12);
 		assignItemRect(SR_DEFENSE, 11, 11);
 		assignItemRect(SR_MAGICAL, 13, 13);
-		assignItemRect(SR_RANGED, 12, 12);
+		assignItemRect(SR_RANGED,  12, 12);
 		assignItemRect(SR_SUPPORT, 10, 9);
 	}
 
-	public static final int BEHAVIOR_ICONS = xy(12, 32);
-	public static final int BEHAVIOR_REACTIVE = BEHAVIOR_ICONS+0;
-	public static final int BEHAVIOR_DEFENSIVE = BEHAVIOR_ICONS+1;
+	public static final int BEHAVIOR_ICONS = xy(1, 34);
+	public static final int BEHAVIOR_REACTIVE   = BEHAVIOR_ICONS+0;
+	public static final int BEHAVIOR_DEFENSIVE  = BEHAVIOR_ICONS+1;
 	public static final int BEHAVIOR_AGGRESSIVE = BEHAVIOR_ICONS+2;
-	public static final int BEHAVIOR_PASSIVE = BEHAVIOR_ICONS+3;
+	public static final int BEHAVIOR_PASSIVE    = BEHAVIOR_ICONS+3;
 
 	static {
 		assignItemRect(BEHAVIOR_REACTIVE,  14, 14);
