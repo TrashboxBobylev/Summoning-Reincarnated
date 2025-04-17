@@ -59,10 +59,18 @@ public class BuffIcon extends Image {
 	public void refresh(int icon){
 		if (large){
 			if (largeFilm == null) largeFilm = new TextureFilm(texture, LRG_SIZE, LRG_SIZE);
-			frame(largeFilm.get(icon));
+			frame(largeFilm.get(actualIconID(icon, 16)));
 		} else {
 			if (smallFilm == null ) smallFilm = new TextureFilm(texture, SML_SIZE, SML_SIZE);
-			frame(smallFilm.get(icon));
+			frame(smallFilm.get(actualIconID(icon, 18)));
+		}
+	}
+
+	public static int actualIconID(int icon, int filmWidth){
+		if (icon > 99){
+			return (icon / 100)-1 + (icon % 100) * filmWidth;
+		} else {
+			return icon;
 		}
 	}
 
