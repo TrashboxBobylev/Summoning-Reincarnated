@@ -159,8 +159,8 @@ public class ItemSpriteSheet {
 	public static final int CLOAK_SCRAP     = MISC_CONSUMABLE +18;
 	public static final int BOW_FRAGMENT    = MISC_CONSUMABLE +19;
 	public static final int BROKEN_HILT     = MISC_CONSUMABLE +20;
-	public static final int ARMOR_REMAINS   = MISC_CONSUMABLE +22;
-	public static final int TRINKET_CATA    = MISC_CONSUMABLE +21;
+	public static final int ARMOR_REMAINS   = MISC_CONSUMABLE +23;
+	public static final int TRINKET_CATA    = MISC_CONSUMABLE +22;
 	public static final int TORN_PAGE       = MISC_CONSUMABLE +21;
 
 	static{
