@@ -380,7 +380,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 	//Aura needs color data too
 	public void aura( int color ){
-		add(State.CONJURER_AURA);
+		add(State.AURA);
 		auraColor = color;
 	}
 
@@ -501,7 +501,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	}
 
 	public void clearAura(){
-		remove(State.CONJURER_AURA);
+		remove(State.AURA);
 	}
 
 	protected synchronized void processStateRemoval( State state ) {
@@ -591,7 +591,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 					spirit = null;
 				}
 				break;
-			case AURA:
+			case CONJURER_AURA:
 				if (holyAura != null){
 					holyAura.putOut();
 				}
@@ -602,7 +602,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 					glowBlock = null;
 				}
 				break;
-			case CONJURER_AURA:
+			case AURA:
 				if (aura != null){
 					aura.killAndErase();
 					aura = null;
