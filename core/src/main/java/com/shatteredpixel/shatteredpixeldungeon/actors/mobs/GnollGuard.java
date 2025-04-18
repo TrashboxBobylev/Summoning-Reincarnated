@@ -111,7 +111,7 @@ public class GnollGuard extends Mob {
 	}
 
 	@Override
-	protected boolean canAttack( Char enemy ) {
+	public boolean canAttack( Char enemy ) {
 		//cannot 'curve' spear hits like the hero, requires fairly open space to hit at a distance
 		return Dungeon.level.distance(enemy.pos, pos) <= 2
 				&& new Ballistica( pos, enemy.pos, Ballistica.PROJECTILE).collisionPos == enemy.pos

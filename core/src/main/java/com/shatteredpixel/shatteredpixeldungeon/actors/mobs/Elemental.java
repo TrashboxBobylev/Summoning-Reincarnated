@@ -132,7 +132,7 @@ public abstract class Elemental extends Mob {
 	}
 	
 	@Override
-	protected boolean canAttack( Char enemy ) {
+	public boolean canAttack( Char enemy ) {
 		if (super.canAttack(enemy)){
 			return true;
 		} else {
@@ -295,7 +295,7 @@ public abstract class Elemental extends Mob {
 		}
 
 		@Override
-		protected boolean canAttack( Char enemy ) {
+		public boolean canAttack( Char enemy ) {
 			if (super.canAttack(enemy)){
 				return true;
 			} else {

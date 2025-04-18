@@ -104,6 +104,10 @@ public class LayOnHands extends TargetedClericSpell {
 
 	}
 
+	protected boolean validTarget(Char ch){
+		return super.validTarget(ch) && ch.alignment == Char.Alignment.ALLY;
+	}
+
 	private void affectChar(Hero hero, Char ch){
 		Barrier barrier = Buff.affect(ch, Barrier.class);
 		int totalHeal = 5 + 5*hero.pointsInTalent(Talent.LAY_ON_HANDS);

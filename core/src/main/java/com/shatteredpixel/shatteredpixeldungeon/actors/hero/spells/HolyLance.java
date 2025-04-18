@@ -169,6 +169,10 @@ public class HolyLance extends TargetedClericSpell {
 		}
 	}
 
+	protected boolean validTarget(Char ch){
+		return super.validTarget(ch) && ch.alignment != Char.Alignment.ALLY;
+	}
+
 	public static class LanceCooldown extends FlavourBuff {
 
 		@Override

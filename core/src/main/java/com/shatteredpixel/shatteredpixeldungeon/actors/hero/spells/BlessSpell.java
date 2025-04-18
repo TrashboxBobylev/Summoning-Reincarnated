@@ -128,4 +128,8 @@ public class BlessSpell extends TargetedClericSpell {
 		return Messages.get(this, "desc", 2+4*talentLvl, 5+5*talentLvl, 5+5*talentLvl, 5+5*talentLvl) + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}
 
+	protected boolean validTarget(Char ch){
+		return super.validTarget(ch) && ch.alignment == Char.Alignment.ALLY;
+	}
+
 }

@@ -21,7 +21,10 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -32,16 +35,41 @@ public abstract class TargetedClericSpell extends ClericSpell {
 
 	@Override
 	public void onCast(HolyTome tome, Hero hero ){
-		GameScene.selectCell(new CellSelector.Listener() {
+		GameScene.selectCell(new CellSelector.TargetedListener() {
+
 			@Override
-			public void onSelect(Integer cell) {
-				onTargetSelected(tome, hero, cell);
+			protected void action(Char enemy) {
+				onTargetSelected(tome, hero, enemy.pos);
 			}
 
 			@Override
-			public String prompt() {
-				return targetingPrompt();
+			protected boolean isValidTarget(Char ch) {
+				return validTarget(ch);
 			}
+
+			@Override
+			protected boolean canAutoTarget(Char ch) {
+				return validTarget(ch);
+			}
+
+			@Override
+			protected void findTargets() {
+				super.findTargets();
+				targets.add(Dungeon.hero);
+			}
+
+			protected boolean canIgnore(Char ch) {
+				switch (ch.alignment) {
+					case ALLY: return true;
+					case NEUTRAL: if(ch instanceof NPC) return true;
+					case ENEMY: default:
+						// this prevents potentially dangerous actions without forcing it every time.
+						return ch.sprite != null && !ch.sprite.isVisible() && !validTarget(ch);
+				}
+			}
+
+			@Override
+			public String prompt() { return targetingPrompt(); }
 		});
 	}
 
@@ -52,6 +80,10 @@ public abstract class TargetedClericSpell extends ClericSpell {
 
 	protected String targetingPrompt(){
 		return Messages.get(this, "prompt");
+	}
+
+	protected boolean validTarget(Char ch){
+		return ch != null && Dungeon.level.heroFOV[ch.pos];
 	}
 
 	protected abstract void onTargetSelected(HolyTome tome, Hero hero, Integer target);

@@ -128,6 +128,10 @@ public class Sunray extends TargetedClericSpell {
 
 	}
 
+	protected boolean validTarget(Char ch){
+		return super.validTarget(ch) && ch.alignment != Char.Alignment.ALLY;
+	}
+
 	public static class SunRayUsedTracker extends Buff {}
 	public static class SunRayRecentlyBlindedTracker extends FlavourBuff {}
 

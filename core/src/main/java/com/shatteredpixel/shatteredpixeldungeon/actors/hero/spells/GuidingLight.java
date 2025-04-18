@@ -123,6 +123,10 @@ public class GuidingLight extends TargetedClericSpell {
 		return desc + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}
 
+	protected boolean validTarget(Char ch){
+		return super.validTarget(ch) && ch.alignment != Char.Alignment.ALLY;
+	}
+
 	public static class GuidingLightPriestCooldown extends FlavourBuff {
 
 		@Override

@@ -176,6 +176,10 @@ public class BeamingRay extends TargetedClericSpell {
 		onSpellCast(tome, hero);
 	}
 
+	protected boolean validTarget(Char ch){
+		return super.validTarget(ch) && ch.alignment == Char.Alignment.ALLY;
+	}
+
 	public static class BeamingRayBoost extends FlavourBuff {
 
 		{

@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cleric.AscendedForm;
@@ -80,5 +81,9 @@ public class Flash extends TargetedClericSpell {
 			hero.buff(AscendedForm.AscendBuff.class).flashCasts++;
 		}
 
+	}
+
+	protected boolean validTarget(Char ch){
+		return true;
 	}
 }

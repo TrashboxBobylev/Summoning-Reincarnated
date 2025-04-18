@@ -56,6 +56,8 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 
+import java.util.HashMap;
+
 public class Combo extends Buff implements ActionIndicator.Action {
 
 	{
@@ -298,7 +300,7 @@ public class Combo extends Buff implements ActionIndicator.Action {
 			Dungeon.hero.busy();
 		} else {
 			moveBeingUsed = move;
-			GameScene.selectCell(listener);
+			GameScene.selectCell(new Selector());
 		}
 	}
 
@@ -546,4 +548,67 @@ public class Combo extends Buff implements ActionIndicator.Action {
 			return Messages.get(Combo.class, "prompt");
 		}
 	};
+
+	// more than just a selector
+	private class Selector extends CellSelector.TargetedListener {
+		private int getLeapDistance() {
+			return 1 + count/3;
+		}
+
+		private HashMap<Char, Integer> targets = new HashMap<>();
+		protected boolean isValidTarget(Char enemy) {
+			if (enemy != null
+					&& enemy.alignment != Char.Alignment.ALLY
+					&& enemy != target
+					&& Dungeon.level.heroFOV[enemy.pos]
+					&& !target.isCharmedBy(enemy)) {
+				if (target.canAttack(enemy)) {
+					targets.put(enemy, target.pos); // no need to generate a ballistica.
+					return true;
+				} else if (!target.rooted && ((Hero) target).pointsInTalent(Talent.ENHANCED_COMBO) == 3
+						&& Dungeon.level.distance(target.pos, enemy.pos) <= getLeapDistance()) {
+					Ballistica b = new Ballistica(target.pos, enemy.pos, Ballistica.PROJECTILE);
+					if(b.collisionPos == enemy.pos) {
+						int leapPos = b.path.get(b.dist-1);
+						if(Dungeon.level.passable[leapPos] || target.flying && Dungeon.level.avoid[leapPos]) {
+							targets.put(enemy, leapPos);
+							return true;
+						}
+					}
+				}
+			}
+			return false;
+		}
+
+		@Override
+		protected void onInvalid(int cell) {
+			if(cell == -1) return;
+			if(target.rooted) {
+				PixelScene.shake( 1, 1f );
+			}
+			GLog.w(Messages.get(Combo.class, "bad_target"));
+		}
+
+		@Override
+		protected void action(Char enemy) {
+			int leapPos = targets.get(enemy);
+			((Hero)target).busy();
+			if(leapPos != target.pos) {
+				target.sprite.jump(target.pos, leapPos, () -> {
+					target.move(leapPos);
+					Dungeon.level.occupyCell(target);
+					Dungeon.observe();
+					GameScene.updateFog();
+					target.sprite.attack(enemy.pos, () -> doAttack(enemy));
+				});
+			} else {
+				target.sprite.attack(enemy.pos, ()->doAttack(enemy));
+			}
+		}
+
+		@Override
+		public String prompt() {
+			return Messages.get(Combo.class, "prompt");
+		}
+	}
 }
