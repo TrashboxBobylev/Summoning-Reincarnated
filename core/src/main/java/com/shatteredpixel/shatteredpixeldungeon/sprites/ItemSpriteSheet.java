@@ -976,7 +976,7 @@ public class ItemSpriteSheet {
 		assignItemRect(SR_SUPPORT, 10, 9);
 	}
 
-	public static final int BEHAVIOR_ICONS = xy(1, 34);
+	public static final int BEHAVIOR_ICONS = xy(1, 33);
 	public static final int BEHAVIOR_REACTIVE   = BEHAVIOR_ICONS+0;
 	public static final int BEHAVIOR_DEFENSIVE  = BEHAVIOR_ICONS+1;
 	public static final int BEHAVIOR_AGGRESSIVE = BEHAVIOR_ICONS+2;
