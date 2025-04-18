@@ -24,7 +24,11 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
-import com.shatteredpixel.shatteredpixeldungeon.*;
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CircleArc;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -62,6 +66,9 @@ public class StatusPane extends Component {
 	private Image hp;
 	private BitmapText hpText;
 	private Button heroInfoOnBar;
+
+	private Image mode;
+	private Image conduct;
 
 	private Image exp;
 	private BitmapText expText;
@@ -110,6 +117,13 @@ public class StatusPane extends Component {
 
 		avatar = HeroSprite.avatar( Dungeon.hero );
 		add( avatar );
+
+		mode = new Image(Icons.get(Dungeon.mode.icon));
+		add( mode );
+		if (Dungeon.conducts.isConductedAtAll()){
+			conduct = new Image(Assets.Interfaces.SUBCLASS_ICONS, (Dungeon.conduct().ordinal()) * 16, 16, 16, 16);
+			add( conduct );
+		}
 
 		talentBlink = 0;
 
@@ -209,6 +223,14 @@ public class StatusPane extends Component {
 
 			busy.x = x + bg.width + 1;
 			busy.y = y + bg.height - 9;
+
+			mode.x = 1;
+			mode.y = 1;
+
+			if (conduct != null){
+				conduct.x = mode.x + conduct.width - 1;
+				conduct.y = mode.y;
+			}
 		} else {
 			exp.x = x;
 			exp.y = y;
@@ -228,6 +250,16 @@ public class StatusPane extends Component {
 
 			busy.x = x + 1;
 			busy.y = y + 33;
+
+			mode.x = (width - mode.width) / 2;
+			mode.y = 5;
+
+			if (conduct != null){
+				float axis = width / 2;
+				mode.x = axis - mode.width / 2;
+				conduct.x = axis + conduct.width / 2;
+				conduct.y = mode.y;
+			}
 		}
 
 		counter.point(busy.center());
