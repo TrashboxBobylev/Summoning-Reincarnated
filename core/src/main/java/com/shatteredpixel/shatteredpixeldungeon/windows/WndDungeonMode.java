@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -38,7 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
-import com.watabou.noosa.audio.Sample;
+import com.watabou.noosa.PointerArea;
 import com.watabou.noosa.ui.Component;
 
 import java.util.ArrayList;
@@ -67,16 +66,7 @@ public class WndDungeonMode extends Window {
         title.maxWidth(width - MARGIN * 2);
         add(title);
 
-        modeList = new ScrollPane( new Component()){
-            @Override
-            public void onClick( float x, float y ) {
-                for (ModeButton slot : slots) {
-                    if (slot.onClick(x, y)) {
-                        return;
-                    }
-                }
-            }
-        };
+        modeList = new ScrollPane( new Component());
         add(modeList);
 
         pos = title.bottom() + 3*MARGIN;
@@ -131,18 +121,17 @@ public class WndDungeonMode extends Window {
 
         public ModeButton(String label, int size, Dungeon.GameMode m){
             super(label, size);
+            hotArea.blockLevel = PointerArea.NEVER_BLOCK;
 
             mode = m;
         }
 
-        public boolean onClick(float x, float y){
-            if (inside(x, y) && chosenGameMode == null){
+        @Override
+        public void onClick(){
+            if (chosenGameMode == null){
                 bg.brightness( 1.2f );
-                Sample.INSTANCE.play( Assets.Sounds.CLICK );
                 chosenGameMode = mode;
-                return true;
             }
-            return false;
         }
     }
 }
