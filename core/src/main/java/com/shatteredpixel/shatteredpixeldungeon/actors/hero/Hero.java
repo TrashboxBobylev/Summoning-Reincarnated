@@ -2416,10 +2416,6 @@ public class Hero extends Char {
 	}
 	
 	public static void reallyDie( Object cause ) {
-
-		if (Dungeon.mode == Dungeon.GameMode.EXPLORE){
-			((Char)Dungeon.hero).die(cause);
-		}
 		
 		int length = Dungeon.level.length();
 		int[] map = Dungeon.level.map;
