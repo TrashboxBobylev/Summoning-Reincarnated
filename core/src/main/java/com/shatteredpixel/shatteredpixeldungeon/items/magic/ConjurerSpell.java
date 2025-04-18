@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
@@ -63,7 +64,8 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
         OFFENSIVE, BENEFICIAL, NEUTRAL
     }
 
-    public static final String AC_ZAP	= "ZAP";
+    public static final String AC_ZAP	    = "ZAP";
+    public static final String AC_FAVORITE	= "FAVORITE";
     protected int collision = Ballistica.FRIENDLY_PROJECTILE;
     public Alignment alignment = Alignment.NEUTRAL;
 
@@ -92,6 +94,7 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
     public ArrayList<String> actions(Hero hero ) {
         ArrayList<String> actions = super.actions(hero);
         actions.add( AC_ZAP );
+        actions.add( AC_FAVORITE );
         actions.remove( AC_DROP );
         actions.remove( AC_THROW );
         return actions;
@@ -135,6 +138,11 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
                 curItem = this;
                 GameScene.selectCell(targeter);
             }
+        } else if (action.equals( AC_FAVORITE )){
+
+            GLog.positive(Messages.get(this, "set_favorite", trueName()));
+            hero.belongings.getItem(ConjurerBook.class).setQuickSpell(this);
+            hero.sprite.operate(hero.pos);
         } else
             super.execute(hero, action);
     }

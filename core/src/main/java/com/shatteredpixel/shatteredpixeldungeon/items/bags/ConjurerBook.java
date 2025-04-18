@@ -24,9 +24,20 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.bags;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ConjurerSpell;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
+import com.watabou.noosa.BitmapText;
+import com.watabou.noosa.Visual;
+import com.watabou.utils.Bundle;
 
 public class ConjurerBook extends Bag {
 
@@ -47,9 +58,128 @@ public class ConjurerBook extends Bag {
 		return 13;
 	}
 
+	private ConjurerSpell quickSpell = null;
+
+	private static final String QUICK_CLS = "quick_cls";
+
 	@Override
-	public int value() {
-		return 0;
+	public void storeInBundle(Bundle bundle) {
+		super.storeInBundle(bundle);
+		if (quickSpell != null) {
+			bundle.put(QUICK_CLS, quickSpell.getClass());
+		}
 	}
 
+	@Override
+	public void restoreFromBundle(Bundle bundle) {
+		super.restoreFromBundle(bundle);
+		if (bundle.contains(QUICK_CLS)){
+			Class quickCls = bundle.getClass(QUICK_CLS);
+			for (Item spell: items){
+				if (spell.getClass() == quickCls){
+					quickSpell = (ConjurerSpell) spell;
+				}
+			}
+		}
+	}
+
+	//some copypaste to have artifact-like buff
+
+	protected Buff passiveBuff;
+
+	public void activate(Hero hero){
+		if (passiveBuff != null){
+			if (passiveBuff.target != null) passiveBuff.detach();
+			passiveBuff = null;
+		}
+		passiveBuff = new SpellFavorite();
+		passiveBuff.attachTo(hero);
+	}
+
+	@Override
+	public boolean collect( Bag container ) {
+		if (super.collect(container)){
+			if (container.owner instanceof Hero
+					&& passiveBuff == null){
+				activate((Hero) container.owner);
+			}
+			return true;
+		} else{
+			return false;
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		if (passiveBuff != null){
+			passiveBuff.detach();
+			passiveBuff = null;
+		}
+	}
+
+	public void setQuickSpell(ConjurerSpell spell){
+		if (quickSpell == spell){
+			quickSpell = null; //re-assigning the same spell clears the quick spell
+			if (passiveBuff != null){
+				ActionIndicator.clearAction((ActionIndicator.Action) passiveBuff);
+			}
+		} else {
+			quickSpell = spell;
+			if (passiveBuff != null){
+				ActionIndicator.setAction((ActionIndicator.Action) passiveBuff);
+			}
+		}
+	}
+
+	public class SpellFavorite extends Buff implements ActionIndicator.Action {
+		@Override
+		public boolean attachTo( Char target ) {
+			if (super.attachTo( target )) {
+				//if we're loading in and the hero has partially spent a turn, delay for 1 turn
+				if (target instanceof Hero && Dungeon.hero == null && cooldown() == 0 && target.cooldown() > 0) {
+					spend(TICK);
+				}
+				if (quickSpell != null) ActionIndicator.setAction(this);
+				return true;
+			}
+			return false;
+		}
+
+		@Override
+		public void detach() {
+			super.detach();
+			ActionIndicator.clearAction(this);
+		}
+
+		@Override
+		public void doAction() {
+			if (quickSpell != null){
+				quickSpell.execute((Hero) owner, ConjurerSpell.AC_ZAP);
+			}
+		}
+
+		@Override
+		public String actionName() {
+			return quickSpell.name();
+		}
+
+		@Override
+		public Visual primaryVisual() {
+			return new ItemSprite(quickSpell.image);
+		}
+
+		@Override
+		public Visual secondaryVisual() {
+			BitmapText txt = new BitmapText(PixelScene.pixelFont);
+			txt.text(Rankable.getRankString(quickSpell.rank()));
+			txt.hardlight(Rankable.getRankColor(quickSpell.rank()));
+			txt.measure();
+			return txt;
+		}
+
+		@Override
+		public int indicatorColor() {
+			return 0x4C51AD;
+		}
+	}
 }
