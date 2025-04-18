@@ -40,8 +40,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cleric.PowerOfMany;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpiritHawk;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Dog;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.DivineSense;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Dog;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.RattleSnake;
@@ -83,6 +83,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret.SecretRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Toolbar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
@@ -98,6 +99,7 @@ import com.watabou.utils.SparseArray;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -254,6 +256,50 @@ public class Dungeon {
 			return conducts.getFirst();
 		return null;
 	}
+
+	public enum GameMode {
+		NORMAL("normal", Icons.STAIRS),
+//		GAUNTLET("gauntlet", Icons.GAUNTLET, 1.33f),
+/*		SMALL("small", Icons.SHRINKING, 1.1f),
+		BIGGER("bigger", Icons.ENLARGEMENT, 1.2f),
+		CAVES("caves", Icons.CAVES, 1.09f),
+		EXPLORE( "explore", Icons.EXPLORE, 0f),
+		LOL("lol", Icons.GOLD, 0.33f),
+		NO_SOU("no_sou", Icons.SOULLESS, 2.0f),
+		NO_EXP("no_exp", Icons.NO_EXP, 3.0f),
+		HELL("hell", Icons.HELL_CHEST, 4.0f),
+		DIFFICULT("oh_my_is_this_eternity_mode", Icons.DARK_AMU, 1.8f),
+		REALTIME("realtime", Icons.REAL_TIME, 2.0f),
+		CHAOS("chaos", Icons.CHAOS, 1.33f)*/;
+
+		public String saveName;
+		public Icons icon;
+		public float scoreMod;
+
+		GameMode(String saveName, Icons icon) {
+			this.saveName = saveName;
+			this.icon = icon;
+			this.scoreMod = 1.0f;
+		}
+
+		GameMode(String saveName, Icons icon, float scoreMod) {
+			this.saveName = saveName;
+			this.icon = icon;
+			this.scoreMod = scoreMod;
+		}
+
+		public String desc(){
+			return "_" + this + "_: " + Messages.get(Dungeon.class, "mode_desc_" + saveName) + "\n" +
+					Messages.get(Dungeon.class, "score", new DecimalFormat("#.##").format(scoreMod));
+		}
+
+		@Override
+		public String toString() {
+			return Messages.get(Dungeon.class, "mode_name_" + saveName);
+		}
+	}
+
+	public static GameMode mode;
 
 	public static int challenges;
 	public static int mobsToChampion;
@@ -708,6 +754,7 @@ public class Dungeon {
 	private static final String DAILY_REPLAY= "daily_replay";
 	private static final String LAST_PLAYED = "last_played";
 	private static final String CHALLENGES	= "challenges";
+	private static final String MODE        = "mode";
 	private static final String MOBS_TO_CHAMPION	= "mobs_to_champion";
 	private static final String HERO		= "hero";
 	private static final String DEPTH		= "depth";
@@ -741,6 +788,7 @@ public class Dungeon {
 			bundle.put( HERO, hero );
 			bundle.put( DEPTH, depth );
 			bundle.put( BRANCH, branch );
+			bundle.put( MODE, mode);
 
 			bundle.put( GOLD, gold );
 			bundle.put( ENERGY, energy );
@@ -850,6 +898,11 @@ public class Dungeon {
 		Dungeon.challenges = bundle.getInt( CHALLENGES );
 		conducts.restoreFromBundle(bundle);
 		Dungeon.mobsToChampion = bundle.getInt( MOBS_TO_CHAMPION );
+
+		if (bundle.contains(MODE))
+			Dungeon.mode = GameMode.valueOf(bundle.getString(MODE));
+		else
+			Dungeon.mode = GameMode.NORMAL;
 		
 		Dungeon.level = null;
 		Dungeon.depth = -1;
@@ -976,6 +1029,10 @@ public class Dungeon {
 		info.dailyReplay = bundle.getBoolean( DAILY_REPLAY );
 		info.branch = bundle.getInt( BRANCH );
 		info.lastPlayed = bundle.getLong( LAST_PLAYED );
+		if (bundle.contains(MODE))
+			info.gameMode = bundle.getEnum(MODE, GameMode.class);
+		else
+			info.gameMode = GameMode.NORMAL;
 
 		Hero.preview( info, bundle.getBundle( HERO ) );
 		Statistics.preview( info, bundle );

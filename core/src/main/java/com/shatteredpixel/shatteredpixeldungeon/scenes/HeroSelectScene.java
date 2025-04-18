@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndChallenges;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndConducts;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndDungeonMode;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndHeroInfo;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndMessage;
@@ -138,15 +139,7 @@ public class HeroSelectScene extends PixelScene {
 			protected void onClick() {
 				super.onClick();
 
-				if (GamesInProgress.selectedClass == null) return;
-
-				Dungeon.hero = null;
-				Dungeon.daily = Dungeon.dailyReplay = false;
-				Dungeon.initSeed();
-				ActionIndicator.clearAction();
-				InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
-
-				Game.switchScene( InterlevelScene.class );
+				ShatteredPixelDungeon.scene().addToFront(new WndDungeonMode());
 			}
 		};
 		startBtn.icon(Icons.get(Icons.ENTER));

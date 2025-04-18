@@ -131,6 +131,19 @@ public enum Icons {
 	POTION_BANDOLIER,
 	CONJURER_BOOK,
 
+	// game modes
+	GAUNTLET,
+	SHRINKING,
+	ENLARGEMENT,
+	EXPLORE,
+	SOULLESS,
+	HELL_CHEST,
+	REAL_TIME,
+	CHAOS,
+	NO_EXP,
+	CAVES,
+	DARK_AMU,
+
 	//icons that appear in the about screen, variable spacing
 	LIBGDX,
 	ALEKS,
@@ -418,6 +431,40 @@ public enum Icons {
 				break;
 			case CONJURER_BOOK:
 				icon.frame( icon.texture.uvRectBySize( 226, 80, 8, 10 ) );
+				break;
+
+			case GAUNTLET:
+				icon.frame( icon.texture.uvRectBySize( 15, 160, 15, 16 ) );
+				break;
+			case SHRINKING:
+				icon.frame( icon.texture.uvRectBySize( 32, 161, 15, 13 ) );
+				break;
+			case ENLARGEMENT:
+				icon.frame( icon.texture.uvRectBySize( 49, 161, 20, 20 ) );
+				break;
+			case EXPLORE:
+				icon.frame( icon.texture.uvRectBySize( 0, 176,  16, 15 ) );
+				break;
+			case SOULLESS:
+				icon.frame( icon.texture.uvRectBySize( 16, 176, 16, 16 ) );
+				break;
+			case HELL_CHEST:
+				icon.frame( icon.texture.uvRectBySize( 32, 176, 16, 16 ) );
+				break;
+			case REAL_TIME:
+				icon.frame( icon.texture.uvRectBySize( 80, 160, 21, 16 ) );
+				break;
+			case CHAOS:
+				icon.frame( icon.texture.uvRectBySize( 16, 192, 15, 18 ) );
+				break;
+			case NO_EXP:
+				icon.frame( icon.texture.uvRectBySize( 32, 192, 15, 15 ) );
+				break;
+			case CAVES:
+				icon.frame( icon.texture.uvRectBySize( 48, 192, 16, 16 ) );
+				break;
+			case DARK_AMU:
+				icon.frame( icon.texture.uvRectBySize( 64, 192, 16, 16 ) );
 				break;
 
 			case LIBGDX:

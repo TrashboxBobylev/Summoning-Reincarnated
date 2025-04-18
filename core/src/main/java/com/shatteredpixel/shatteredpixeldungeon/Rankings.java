@@ -486,6 +486,7 @@ public enum Rankings {
 		private static final String DEPTH	= "depth";
 		private static final String ASCEND	= "ascending";
 		private static final String ABYSS	= "abyssal";
+		private static final String MODE    = "mode";
 		private static final String DATA	= "gameData";
 		private static final String ID      = "gameID";
 		private static final String SEED    = "custom_seed";
@@ -503,6 +504,7 @@ public enum Rankings {
 		public int depth;
 		public boolean ascending;
 		public boolean abyssal;
+		public Dungeon.GameMode mode;
 
 		public Bundle gameData;
 		public String gameID;
@@ -559,6 +561,11 @@ public enum Rankings {
 			ascending   = bundle.getBoolean( ASCEND );
 			abyssal     = bundle.getBoolean( ABYSS );
 
+			if (bundle.contains(MODE))
+				mode = bundle.getEnum(MODE, Dungeon.GameMode.class);
+			else
+				mode = Dungeon.GameMode.NORMAL;
+
 			if (bundle.contains( DATE )){
 				date = bundle.getString( DATE );
 				version = bundle.getString( VERSION );
@@ -589,6 +596,7 @@ public enum Rankings {
 			bundle.put( DEPTH, depth );
 			bundle.put( ASCEND, ascending );
 			bundle.put( ABYSS, abyssal );
+			bundle.put( MODE, mode );
 
 			bundle.put( DATE, date );
 			bundle.put( VERSION, version );

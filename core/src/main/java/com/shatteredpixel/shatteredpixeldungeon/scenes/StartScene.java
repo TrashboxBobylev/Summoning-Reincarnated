@@ -176,7 +176,6 @@ public class StartScene extends PixelScene {
 		private BitmapText depth;
 		private Image classIcon;
 		private BitmapText level;
-		private Image mode;
 		private Image conduct;
 
 		private int slot;
@@ -227,7 +226,7 @@ public class StartScene extends PixelScene {
 					hero = new Image(info.heroClass.spritesheet(), 0, 15*info.armorTier, 12, 15);
 					add(hero);
 					
-					steps = new Image(Icons.get(Icons.STAIRS));
+					steps = Icons.get(info.gameMode.icon);
 					if (info.branch == AbyssLevel.BRANCH)
 						steps.tint(2f, 2f, 2f, 0.5f);
 					add(steps);

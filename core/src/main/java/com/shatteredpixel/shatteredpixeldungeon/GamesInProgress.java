@@ -149,6 +149,7 @@ public class GamesInProgress {
 		info.depth = Dungeon.depth;
 		info.challenges = Dungeon.challenges;
 		info.conducts = Dungeon.conducts;
+		info.gameMode = Dungeon.mode;
 		info.branch = Dungeon.branch;
 
 		info.seed = Dungeon.seed;
@@ -190,6 +191,7 @@ public class GamesInProgress {
 		public int version;
 		public int challenges;
 		public Conducts.ConductStorage conducts;
+		public Dungeon.GameMode gameMode;
 
 		public long seed;
 		public String customSeed;
