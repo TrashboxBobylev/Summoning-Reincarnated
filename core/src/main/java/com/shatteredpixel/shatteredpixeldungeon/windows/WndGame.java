@@ -24,7 +24,11 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
-import com.shatteredpixel.shatteredpixeldungeon.*;
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
+import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.HeroSelectScene;
@@ -36,7 +40,6 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
-import com.watabou.noosa.audio.Music;
 
 import java.io.IOException;
 
@@ -116,6 +119,19 @@ public class WndGame extends Window {
 			curBtn.icon(Dungeon.conducts.oneConduct() ?
 					new Image(Assets.Interfaces.SUBCLASS_ICONS, (Dungeon.conduct().icon-1)*16, 16, 16, 16) :
 					Icons.get(Icons.CONDUCTS_COLOR));
+		}
+		if (Dungeon.mode != null) {
+			Image ic = Icons.get(Dungeon.mode.icon);
+			RedButton mode = new RedButton(Dungeon.mode.desc(), 6){
+				{
+					enable(false);
+				}
+			};
+			mode.icon(ic);
+			mode.multiline = true;
+			addButton(mode);
+			mode.setSize(WIDTH, mode.reqHeight());
+			pos += mode.reqHeight() - BTN_HEIGHT;
 		}
 
 		// Main menu
