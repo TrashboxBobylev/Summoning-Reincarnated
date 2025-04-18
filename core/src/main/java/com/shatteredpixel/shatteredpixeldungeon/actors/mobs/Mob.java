@@ -390,7 +390,7 @@ public abstract class Mob extends Char {
 	protected float modifyPriority(Char ch, float priority){
 		if (canAttack(ch)) priority *= 2.0f;
 		if (ch.buff(Minion.UniversalTargeting.class) != null) priority *= 10f;
-		return priority;
+		return 1f/priority;
 	}
 
 	protected Char chooseClosest(HashMap<Char, Float> enemies){
@@ -406,7 +406,7 @@ public abstract class Mob extends Char {
 					priority = (float)PathFinder.distance[ch.pos+i];
 				}
 			}
-			enemies.put(ch, modifyPriority(ch, priority) * enemies.get(ch));
+			enemies.put(ch, modifyPriority(ch, priority * enemies.get(ch)));
 		}
 
 		if (enemies.isEmpty()) return null;
@@ -1453,7 +1453,7 @@ public abstract class Mob extends Char {
 					boolean swapped = false;
 					for (Char ch : recentlyAttackedBy){
 						if (ch != null && ch.isActive() && Actor.chars().contains(ch) && alignment != ch.alignment && fieldOfView[ch.pos] && ch.invisible == 0 && !isCharmedBy(ch)) {
-							if (canAttack(ch) || enemy == null || Dungeon.level.distance(pos, ch.pos) * modifyPriority(ch, ch.targetPriority()) < Dungeon.level.distance(pos, enemy.pos) * modifyPriority(enemy, enemy.targetPriority())) {
+							if (canAttack(ch) || enemy == null ||  modifyPriority(ch, ch.targetPriority()*Dungeon.level.distance(pos, ch.pos)) < modifyPriority(enemy, enemy.targetPriority()*Dungeon.level.distance(pos, enemy.pos))) {
 								enemy = ch;
 								target = ch.pos;
 								enemyInFOV = true;
