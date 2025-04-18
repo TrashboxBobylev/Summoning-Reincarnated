@@ -79,12 +79,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Ch
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.ElementalStrike;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.NaturesPower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.AttunementConstruct;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.BodyForm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.HallowedGround;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.HolyWard;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.HolyWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.Smite;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.AttunementConstruct;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
@@ -111,8 +111,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CapeOfThorns;
@@ -196,6 +196,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.StatusPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.TargetHealthIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndExploreResurrect;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndHero;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndResurrect;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTradeItem;
@@ -599,6 +600,7 @@ public class Hero extends Char {
 		
 		float accuracy = 1;
 		accuracy *= RingOfAccuracy.accuracyMultiplier( this );
+		if (Dungeon.mode == Dungeon.GameMode.EXPLORE) accuracy = 1.2f;
 		if (Dungeon.isChallenged(Conducts.Conduct.KING)) accuracy = 1.1f;
 
 		if (wep instanceof MissileWeapon){
@@ -700,6 +702,7 @@ public class Hero extends Char {
 			evasion /= 2;
 		}
 
+		if (Dungeon.mode == Dungeon.GameMode.EXPLORE) evasion *= 1.2f;
 		if (Dungeon.isChallenged(Conducts.Conduct.WRAITH)) evasion *= 5;
 
 		if (belongings.armor() != null) {
@@ -1802,6 +1805,12 @@ public class Hero extends Char {
 			damage = thorns.proc((int)damage, (src instanceof Char ? (Char)src : null),  this);
 		}
 
+		if (!(src instanceof Viscosity.DeferedDamage)) {
+			if (Dungeon.mode == Dungeon.GameMode.EXPLORE) {
+				damage *= 0.75f;
+			}
+		}
+
 		if (buff(Talent.WarriorFoodImmunity.class) != null){
 			if (pointsInTalent(Talent.IRON_STOMACH) == 1)       damage /= 4f;
 			else if (pointsInTalent(Talent.IRON_STOMACH) == 2)  damage = 0;
@@ -2369,14 +2378,24 @@ public class Hero extends Char {
 				//it actually gets created. This is important so that the game knows to not
 				//delete the run or submit it to rankings, because a WndResurrect is about to exist
 				//this is needed because the actual creation of the window is delayed here
-				WndResurrect.instance = new Object();
-				Ankh finalAnkh = ankh;
-				Game.runOnRenderThread(new Callback() {
-					@Override
-					public void call() {
-						GameScene.show( new WndResurrect(finalAnkh) );
-					}
-				});
+				if (Dungeon.mode != Dungeon.GameMode.EXPLORE) {
+					WndResurrect.instance = new Object();
+					Ankh finalAnkh = ankh;
+					Game.runOnRenderThread(new Callback() {
+						@Override
+						public void call() {
+							GameScene.show(new WndResurrect(finalAnkh));
+						}
+					});
+				} else {
+					WndExploreResurrect.instance = new Object();
+					Game.runOnRenderThread(new Callback() {
+						@Override
+						public void call() {
+							GameScene.show(new WndExploreResurrect(cause));
+						}
+					});
+				}
 
 				if (cause instanceof Hero.Doom) {
 					((Hero.Doom)cause).onDeath();
@@ -2397,6 +2416,10 @@ public class Hero extends Char {
 	}
 	
 	public static void reallyDie( Object cause ) {
+
+		if (Dungeon.mode == Dungeon.GameMode.EXPLORE){
+			((Char)Dungeon.hero).die(cause);
+		}
 		
 		int length = Dungeon.level.length();
 		int[] map = Dungeon.level.map;

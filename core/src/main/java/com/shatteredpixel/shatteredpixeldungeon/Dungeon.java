@@ -259,11 +259,11 @@ public class Dungeon {
 
 	public enum GameMode {
 		NORMAL("normal", Icons.STAIRS),
+		EXPLORE( "explore", Icons.EXPLORE, 0f),
 //		GAUNTLET("gauntlet", Icons.GAUNTLET, 1.33f),
 /*		SMALL("small", Icons.SHRINKING, 1.1f),
 		BIGGER("bigger", Icons.ENLARGEMENT, 1.2f),
 		CAVES("caves", Icons.CAVES, 1.09f),
-		EXPLORE( "explore", Icons.EXPLORE, 0f),
 		LOL("lol", Icons.GOLD, 0.33f),
 		NO_SOU("no_sou", Icons.SOULLESS, 2.0f),
 		NO_EXP("no_exp", Icons.NO_EXP, 3.0f),
@@ -1039,10 +1039,12 @@ public class Dungeon {
 	}
 	
 	public static void fail( Object cause ) {
-		if (WndResurrect.instance == null) {
-			updateLevelExplored();
-			Statistics.gameWon = false;
-			Rankings.INSTANCE.submit( false, cause );
+		if (Dungeon.mode != GameMode.EXPLORE) {
+			if (WndResurrect.instance == null) {
+				updateLevelExplored();
+				Statistics.gameWon = false;
+				Rankings.INSTANCE.submit(false, cause);
+			}
 		}
 	}
 	
