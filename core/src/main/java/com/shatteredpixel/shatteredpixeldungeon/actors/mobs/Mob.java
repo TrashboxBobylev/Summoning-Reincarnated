@@ -68,7 +68,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.DirectableAlly;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.EffectTarget;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CharacterizedCell;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Surprise;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Wound;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
@@ -104,6 +106,7 @@ import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
@@ -943,11 +946,13 @@ public abstract class Mob extends Char {
 		if (state != PASSIVE){
 			state = HUNTING;
 		}
+		showCurrentTarget();
 		doWithHordeMinions((minion) -> {
 			minion.enemy = ch;
 			if (minion.state != minion.PASSIVE){
 				minion.state = minion.HUNTING;
 			}
+			minion.showCurrentTarget();
 		});
 	}
 
@@ -1263,6 +1268,31 @@ public abstract class Mob extends Char {
 	
 	public void notice() {
 		sprite.showAlert();
+		showCurrentTarget();
+	}
+
+	public void showCurrentTarget(){
+		if (enemy != null && sprite.visible && enemy.sprite.visible){
+			MagicMissile m = MagicMissile.boltFromChar(sprite.parent,
+					MagicMissile.TARGET,
+					sprite,
+					enemy.pos, null);
+			m.setSpeed(400);
+			sprite.parent.addToBack(new CharacterizedCell(enemy.sprite, alignment == Alignment.ENEMY ? 0xde625b : 0x00ad0f){
+				@Override
+				public void update() {
+					if ((alpha -= Game.elapsed/3f) > 0) {
+						alpha( alpha );
+						scale.set( alpha );
+					} else {
+						killAndErase();
+					}
+
+					x = owner.x;
+					y = owner.y;
+				}
+			});
+		}
 	}
 	
 	public void yell( String str ) {
@@ -1466,6 +1496,7 @@ public abstract class Mob extends Char {
 					}
 					recentlyAttackedBy.clear();
 					if (swapped){
+						showCurrentTarget();
 						return act( enemyInFOV, justAlerted );
 					}
 				}
@@ -1499,6 +1530,7 @@ public abstract class Mob extends Char {
 						enemy = chooseEnemy();
 						if (enemy != null && enemy != oldEnemy) {
 							recursing = true;
+							showCurrentTarget();
 							boolean result = act(enemyInFOV, justAlerted);
 							recursing = false;
 							return result;

@@ -24,24 +24,31 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.effects;
 
-import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
 
-public class TargetedCell extends Image {
+// targeted cell variant, that points to entities
+public class CharacterizedCell extends Image {
 
 	protected float alpha;
 
-	public TargetedCell( int pos, int color ) {
+	protected CharSprite owner;
+
+	public CharacterizedCell(CharSprite owner, int color ) {
 		super(Icons.get(Icons.TARGET));
+
+		this.owner = owner;
+
 		hardlight(color);
 
 		origin.set( width/2f );
 
-		point( DungeonTilemap.tileToWorld( pos ) );
-
 		alpha = 1f;
+
+		x = owner.x;
+		y = owner.y;
 	}
 
 	@Override
@@ -49,6 +56,8 @@ public class TargetedCell extends Image {
 		if ((alpha -= Game.elapsed/2f) > 0) {
 			alpha( alpha );
 			scale.set( alpha );
+			x = owner.x;
+			y = owner.y;
 		} else {
 			killAndErase();
 		}

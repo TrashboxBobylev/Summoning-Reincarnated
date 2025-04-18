@@ -85,6 +85,8 @@ public class MagicMissile extends Emitter {
 	public static final int INVISI          = 27;
 	public static final int ABYSS           = 28;
 
+	public static final int TARGET          = 29;
+
 	public static final int MAGIC_MISS_CONE = 100;
 	public static final int FROST_CONE      = 101;
 	public static final int FIRE_CONE       = 102;
@@ -236,6 +238,10 @@ public class MagicMissile extends Emitter {
 			case ABYSS:
 				size( 9 );
 				pour( YogParticle.FACTORY, 0.04f );
+				break;
+			case TARGET:
+				size( 1 );
+				pour( WhiteParticle.FACTORY, 0.001f );
 				break;
 
 			case MAGIC_MISS_CONE:
