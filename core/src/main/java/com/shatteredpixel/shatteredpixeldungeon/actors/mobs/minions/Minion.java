@@ -296,10 +296,10 @@ public class Minion extends Mob implements ManaSource {
         if (buff(Chungus.class) != null) empowering *= 1.4f;
         if (buff(Fury.class) != null) empowering *= 1.5f;
         if (Dungeon.hero.buff(Attunement.class) != null) empowering = Attunement.empowering();
-        return String.format("%s\n\n%s\n\n%s", d, Messages.get(Minion.class, "stats",
+        return String.format("%s\n\n%s\n\n%s%s", d, Messages.get(Minion.class, "stats",
                 augment.damageFactor(Math.round(minDamage * empowering)),
                 augment.damageFactor(Math.round(maxDamage * empowering)),
-                HP, HT, Messages.titleCase(Messages.get(Rankable.class, "rank" + (rank)))), Messages.get(Minion.class, "behavior_" + Messages.lowerCase(behaviorType.toString())));
+                HP, HT, Messages.titleCase(Messages.get(Rankable.class, "rank" + (rank)))), Messages.get(Minion.class, "behavior", Messages.get(Minion.class, "behavior_" + Messages.lowerCase(behaviorType.toString()))), Messages.get(Minion.class, "behavior_" + Messages.lowerCase(behaviorType.toString()) + "_desc"));
     }
 
     @Override
@@ -402,6 +402,12 @@ public class Minion extends Mob implements ManaSource {
         BehaviorType(int icon, Class<? extends TargetBuff> type){
             buffType = type;
             this.icon = icon;
+        }
+
+
+        @Override
+        public String toString() {
+            return Messages.get(Minion.class, "behavior_" + name());
         }
     }
 

@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.InventorySlot;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
@@ -74,6 +75,11 @@ public class WndQuickBehavior extends Window {
 				}
 
 				@Override
+				public String name() {
+					return behaviorType.toString();
+				}
+
+				@Override
 				public boolean isIdentified() {
 					return true;
 				}
@@ -84,7 +90,7 @@ public class WndQuickBehavior extends Window {
 
 					Minion minion = staff.minion();
 					minion.behaviorType = behaviorType;
-					GLog.highlight( Messages.get(staff, "behavior_switch", minion.name(), minion.behaviorType.name()) );
+					GLog.highlight( Messages.get(staff, "behavior_switch", minion.name(), minion.behaviorType.toString()) );
 					minion.sprite.emitter().burst(behaviorType.visual, 8);
 					Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
 					updateQuickslot();
@@ -115,14 +121,13 @@ public class WndQuickBehavior extends Window {
 
 				@Override
 				protected boolean onLongClick() {
-					onClick();
-					return true;
+					String behaviorName = Minion.BehaviorType.values()[item.image - ItemSpriteSheet.BEHAVIOR_ICONS].toString();
+					GameScene.show(new WndTitledMessage(new ItemSprite(item.image),
+							Messages.capitalize(Messages.get(Minion.class, "behavior_" +
+									behaviorName)),
+							Messages.get(Minion.class, "behavior_" + Messages.lowerCase(behaviorName) + "_desc")));
+					return false;
 				}
-
-				@Override
-				protected String hoverText() {
-					return null; //no tooltips here
- 				}
 			};
 			slot.showExtraInfo(false);
 			slot.setRect(left, top, btnWidth, btnHeight);
