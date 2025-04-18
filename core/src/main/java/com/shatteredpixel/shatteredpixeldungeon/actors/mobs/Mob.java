@@ -61,10 +61,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbili
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cleric.PowerOfMany;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Feint;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.ShadowClone;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.ClericSpell;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.GuidingLight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.Stasis;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.DirectableAlly;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.EffectTarget;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -387,7 +387,9 @@ public abstract class Mob extends Char {
 		return false;
 	}
 
-	protected float modifyPriority(float priority){
+	protected float modifyPriority(Char ch, float priority){
+		if (canAttack(ch)) priority *= 2.0f;
+		if (ch.buff(Minion.UniversalTargeting.class) != null) priority *= 10f;
 		return priority;
 	}
 
@@ -404,9 +406,7 @@ public abstract class Mob extends Char {
 					priority = (float)PathFinder.distance[ch.pos+i];
 				}
 			}
-			if (canAttack(ch)) priority *= 2.0f;
-			if (ch.buff(Minion.UniversalTargeting.class) != null) priority *= 10f;
-			enemies.put(ch, modifyPriority(priority) * enemies.get(ch));
+			enemies.put(ch, modifyPriority(ch, priority) * enemies.get(ch));
 		}
 
 		if (enemies.isEmpty()) return null;
@@ -974,19 +974,24 @@ public abstract class Mob extends Char {
 			if (state == SLEEPING) {
 				state = WANDERING;
 			}
-			if (state != HUNTING && !(src instanceof Corruption)) {
-				alerted = true;
-				doWithHordeMinions((minion) -> {
-					if (state == HUNTING){
-						minion.state = minion.HUNTING;
-					} else if (state == WANDERING){
-						minion.state = minion.WANDERING;
-					} else if (state == FLEEING){
-						minion.state = minion.FLEEING;
-					}
-					minion.alerted = true;
-					minion.target = target;
-				});
+			if (!(src instanceof Corruption)) {
+				if (state != HUNTING) {
+					alerted = true;
+					doWithHordeMinions((minion) -> {
+						if (state == HUNTING) {
+							minion.state = minion.HUNTING;
+						} else if (state == WANDERING) {
+							minion.state = minion.WANDERING;
+						} else if (state == FLEEING) {
+							minion.state = minion.FLEEING;
+						}
+						minion.alerted = true;
+						minion.target = target;
+					});
+				}
+				if (src instanceof Wand || src instanceof ClericSpell || src instanceof ArmorAbility) {
+					recentlyAttackedBy.add(Dungeon.hero);
+				}
 			}
 			if (hordeHead != -1 && Actor.findById(hordeHead) != null){
 				Mob hordeHead = (Mob) Actor.findById(this.hordeHead);
@@ -1448,7 +1453,7 @@ public abstract class Mob extends Char {
 					boolean swapped = false;
 					for (Char ch : recentlyAttackedBy){
 						if (ch != null && ch.isActive() && Actor.chars().contains(ch) && alignment != ch.alignment && fieldOfView[ch.pos] && ch.invisible == 0 && !isCharmedBy(ch)) {
-							if (canAttack(ch) || enemy == null || Dungeon.level.distance(pos, ch.pos) < Dungeon.level.distance(pos, enemy.pos)) {
+							if (canAttack(ch) || enemy == null || Dungeon.level.distance(pos, ch.pos) * modifyPriority(ch, ch.targetPriority()) < Dungeon.level.distance(pos, enemy.pos) * modifyPriority(enemy, enemy.targetPriority())) {
 								enemy = ch;
 								target = ch.pos;
 								enemyInFOV = true;
