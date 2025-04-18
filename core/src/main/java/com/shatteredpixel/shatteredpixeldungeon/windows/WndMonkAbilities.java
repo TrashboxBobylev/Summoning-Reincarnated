@@ -55,10 +55,6 @@ public class WndMonkAbilities extends Window {
 
 		pos = title.bottom() + 3*MARGIN;
 
-		MonkEnergy.MonkAbility[] abilitySet = MonkEnergy.MonkAbility.abilities;
-		abilitySet[0] = new MonkEnergy.MonkAbility.TargetedFlurry();
-		abilitySet[3] = new MonkEnergy.MonkAbility.TargetedDragonKick();
-
 		for (MonkEnergy.MonkAbility abil : MonkEnergy.MonkAbility.abilities) {
 			String text = "_" + Messages.titleCase(abil.name()) + " " + Messages.get(this, "energycost", abil.energyCost()) + ":_ " + abil.desc();
 			RedButton moveBtn = new RedButton(text, 6){

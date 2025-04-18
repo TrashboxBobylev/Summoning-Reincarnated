@@ -62,7 +62,7 @@ public class Wizard extends Minion implements Callback {
 	}
 	
 	@Override
-	public boolean canAttack(Char enemy) {
+	protected boolean canAttack( Char enemy ) {
 		return rank != 3 && new Ballistica( pos, enemy.pos, Ballistica.FRIENDLY_MAGIC).collisionPos == enemy.pos;
 	}
 

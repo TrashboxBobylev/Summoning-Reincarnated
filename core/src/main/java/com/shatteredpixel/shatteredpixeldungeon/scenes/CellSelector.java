@@ -30,8 +30,6 @@ import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
-import com.shatteredpixel.shatteredpixeldungeon.effects.SelectableCell;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.input.ControllerHandler;
@@ -47,9 +45,6 @@ import com.watabou.utils.GameMath;
 import com.watabou.utils.Point;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Signal;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CellSelector extends ScrollArea {
 
@@ -169,7 +164,7 @@ public class CellSelector extends ScrollArea {
 					listener.onRightClick( cell );
 					break;
 			}
-			if( !( listener instanceof TargetedListener && !((TargetedListener) listener ).readyOnSelect) ) GameScene.ready();
+			GameScene.ready();
 			
 		} else {
 			
@@ -529,130 +524,5 @@ public class CellSelector extends ScrollArea {
 		public void onRightClick( Integer cell ){} //do nothing by default
 
 		public abstract String prompt();
-	}
-
-	// thanks to @zrp200 for allowing me to use this
-	public static abstract class TargetedListener extends Listener {
-		private boolean skippable = true;
-
-		// stuff that allows this to work with Multishot
-		protected int conflictTolerance = 0;
-		protected boolean promptIfNoTargets = true;
-		protected boolean readyOnSelect = true;
-
-		private final List<SelectableCell> selectableCells = new ArrayList();
-		public final void highlightCells() {
-			for(Char c : getTargets()) {
-				if( canAutoTarget(c) ) { // highlight conflicts
-					selectableCells.add(new SelectableCell(c.sprite));
-				}
-			}
-		}
-		protected List<Char> targets;
-		protected void findTargets() {
-			targets = new ArrayList();
-			for(Char ch : Dungeon.level.mobs.toArray(new Char[0])) {
-				if( isValidTarget(ch) ) {
-					targets.add(ch);
-					skippable = skippable && !forceManualTargeting(ch);
-				}
-				else {
-					skippable = skippable && canIgnore(ch);
-				}
-			}
-		}
-
-		public final List<Char> getTargets() { // lazily evaluated
-			if(targets == null) findTargets();
-			return targets;
-		}
-		protected abstract boolean isValidTarget(Char ch);
-
-		/**
-		 * if a character can be highlighted by this selector at all.
-		 * Also is checked for auto-target.
-		 */
-		protected boolean canAutoTarget(Char ch) {
-			return ch instanceof Mob && Dungeon.hero.visibleEnemy( (Mob) ch );
-		}
-		// whether this character can be 'safely' skipped for purposes of, well, skipping. usually overlaps with auto-target.
-		// Sometimes we want to be given the option to choose our move even if there is only one valid target.
-		protected boolean canIgnore(Char ch) {
-			switch (ch.alignment) {
-				case ALLY: return true;
-				case NEUTRAL: if(ch instanceof NPC) return true;
-				case ENEMY: default:
-					// this prevents potentially dangerous actions without forcing it every time.
-					return ch.sprite != null && !ch.sprite.isVisible();
-			}
-		}
-
-		protected abstract void action(Char ch);
-
-		public final List<Char> getHighlightedTargets() {
-			List<Char> l = new ArrayList();
-			for(Char c : getTargets()) {
-				if( canAutoTarget(c) ) l.add(c);
-			}
-			return l;
-		}
-
-		// return value indicates whether the action should be considered a success
-		// if the action was considered a success no prompt will occur.
-		// by default, no targets means no action happened, meaning it did not succeed, thus the default false.
-		protected boolean noTargets() {
-			onCancel();
-			return false;
-		}
-
-		// if there's only one target, this skips the actual selecting.
-		protected final boolean action() {
-			if( getTargets().isEmpty() ) {
-				// result of noTargets determines whether the action was considered a success (by default false)
-				return noTargets();
-			}
-			if( !skippable ) return false;
-
-			Char target = null;
-			for(Char ch : getHighlightedTargets()) {
-				// if there are too many targets, prompt the user.
-				// conflict tolerance will let us delay this point to enable stacking (see multishot)
-				if(target != null && conflictTolerance-- == 0) return false;
-				target = ch;
-			}
-			if(target == null) {
-				// even though there are targets, we can't auto-target them, so prompt user.
-				// one thing about this is that this can cause 'suspicious' prompts when #noTargets would return true normally.
-				return false;
-			}
-			// we have a target, no need to prompt, just do the action and save us the trouble.
-			action(target);
-			return true;
-		}
-
-		// when a target is valid and this is true, the player will be forced to select it manually.
-		// currently is dependant on canAutoTarget, meaning that when this plays a role the character WON'T be highlighted.
-		protected boolean forceManualTargeting(Char ch) {
-			// 'invisible' enemies such as mimics
-			return !( ch instanceof NPC || ch.alignment == Char.Alignment.ALLY || canAutoTarget(ch) );
-		}
-
-		@Override final public void onSelect(Integer cell) {
-			for(SelectableCell c : selectableCells) c.killAndErase();
-			selectableCells.clear();
-
-			if(cell == null) {
-				onCancel();
-				return;
-			}
-
-			Char c = Actor.findChar(cell);
-			// handle the selected character.
-			if(c != null && getTargets().contains(c)) action(c);
-			else onInvalid(cell);
-		}
-
-		protected void onInvalid(int cell) { onCancel(); }
-		protected void onCancel() {/* do nothing */}
 	}
 }

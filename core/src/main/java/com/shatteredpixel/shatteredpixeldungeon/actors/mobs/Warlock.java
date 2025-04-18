@@ -82,7 +82,7 @@ public class Warlock extends Mob implements Callback {
 	}
 	
 	@Override
-	public boolean canAttack( Char enemy ) {
+	protected boolean canAttack( Char enemy ) {
 		return super.canAttack(enemy)
 				|| new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos == enemy.pos;
 	}

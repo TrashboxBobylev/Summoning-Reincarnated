@@ -104,7 +104,7 @@ public abstract class YogFist extends Mob {
 	}
 
 	@Override
-	public boolean canAttack(Char enemy) {
+	protected boolean canAttack(Char enemy) {
 		if (rangedCooldown <= 0){
 			return new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos == enemy.pos;
 		} else {

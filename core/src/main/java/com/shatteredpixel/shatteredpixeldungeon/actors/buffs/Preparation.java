@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
-import com.badlogic.gdx.utils.IntIntMap;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
@@ -268,7 +267,7 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 	
 	@Override
 	public void doAction() {
-		GameScene.selectCell(new Attack());
+		GameScene.selectCell(attack);
 	}
 	
 	private CellSelector.Listener attack = new CellSelector.Listener() {
@@ -332,91 +331,10 @@ public class Preparation extends Buff implements ActionIndicator.Action {
 				Dungeon.hero.next();
 			}
 		}
-
+		
 		@Override
 		public String prompt() {
 			return Messages.get(Preparation.class, "prompt", AttackLevel.getLvl(turnsInvis).blinkDistance());
 		}
 	};
-
-	private class Attack extends CellSelector.TargetedListener {
-
-		IntIntMap blinkPos = new IntIntMap(); // enemy pos to blink pos
-
-		private boolean canAttack(Char enemy) {
-			return !(enemy == null || Dungeon.hero.isCharmedBy(enemy) || enemy instanceof NPC || !Dungeon.level.heroFOV[enemy.pos] || enemy == Dungeon.hero);
-		}
-
-		@Override protected void findTargets() {
-			AttackLevel lvl = AttackLevel.getLvl(turnsInvis);
-			PathFinder.buildDistanceMap(Dungeon.hero.pos,BArray.or(Dungeon.level.passable, Dungeon.level.avoid, null), lvl.blinkDistance());
-			super.findTargets();
-		} @Override protected boolean isValidTarget(Char enemy) {
-			if ( !canAttack(enemy) ){
-				//GLog.w(Messages.get(Preparation.class, "no_target"));
-				return false;
-			}
-			// check if the hero can reach them outright.
-			if( Dungeon.hero.canAttack(enemy) ) {
-				return true;
-			}
-			int dest = -1;
-			for (int i : PathFinder.NEIGHBOURS8){
-				int cell = enemy.pos+i;
-				//cannot blink into a cell that's occupied or impassable, only over them
-				if (Actor.findChar(cell) != null)     continue;
-				if (!Dungeon.level.passable[cell] && !(target.flying && Dungeon.level.avoid[cell+i])) {
-					continue;
-				}
-
-				if (dest == -1 || PathFinder.distance[dest] > PathFinder.distance[cell]){
-					dest = cell;
-					//if two cells have the same pathfinder distance, prioritize the one with the closest true distance to the hero
-				} else if (PathFinder.distance[dest] == PathFinder.distance[cell]){
-					if (Dungeon.level.trueDistance(Dungeon.hero.pos, dest) > Dungeon.level.trueDistance(Dungeon.hero.pos, cell)){
-						dest = cell;
-					}
-				}
-			}
-			if (dest == -1 || PathFinder.distance[dest] == Integer.MAX_VALUE || Dungeon.hero.rooted){
-				//GLog.w(Messages.get(Preparation.class, "out_of_reach"));
-				if (Dungeon.hero.rooted) PixelScene.shake( 1, 1f );return false;
-			}
-			blinkPos.put(enemy.pos, dest);
-			return true;
-		}
-
-		@Override
-		protected void onInvalid(int cell) {
-			// this just..guesses. it just checks the conditions until it gets a reasonable result.
-			if(cell == -1) return;
-			GLog.w(Messages.get(Preparation.class,
-					canAttack(findChar(cell)) ? "out_of_reach" : "no_target"));
-		}
-
-		@Override
-		protected void action(Char enemy) {
-			int dest = blinkPos.get(enemy.pos,-1);
-			if(dest != -1) {
-				Dungeon.hero.pos = dest;
-				Dungeon.level.occupyCell(Dungeon.hero);
-				//prevents the hero from being interrupted by seeing new enemies
-				Dungeon.observe();
-				GameScene.updateFog();
-				Dungeon.hero.checkVisibleMobs();
-
-				Dungeon.hero.sprite.place( Dungeon.hero.pos );
-				Dungeon.hero.sprite.turnTo( Dungeon.hero.pos, enemy.pos);
-				CellEmitter.get( Dungeon.hero.pos ).burst( Speck.factory( Speck.WOOL ), 6 );
-				Sample.INSTANCE.play( Assets.Sounds.PUFF );
-			}
-			Dungeon.hero.curAction = new HeroAction.Attack( enemy );
-			Dungeon.hero.next();
-		}
-
-		@Override
-		public String prompt() {
-			return Messages.get(Preparation.class, "prompt", AttackLevel.getLvl(turnsInvis).blinkDistance());
-		}
-	}
 }

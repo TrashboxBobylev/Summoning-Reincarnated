@@ -142,7 +142,7 @@ public class Goo extends Mob {
 	}
 
 	@Override
-	public boolean canAttack( Char enemy ) {
+	protected boolean canAttack( Char enemy ) {
 		if (pumpedUp > 0){
 			//we check both from and to in this case as projectile logic isn't always symmetrical.
 			//this helps trim out BS edge-cases

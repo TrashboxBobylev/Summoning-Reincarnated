@@ -388,18 +388,6 @@ public abstract class Char extends Actor implements ManaSource {
 		return (source.buff(ToyKnife.SoulGain.class) != null && alignment == Alignment.ALLY) ? 1f : 0f;
 	}
 
-	public boolean canAttack(Char enemy) {
-		if (enemy == null || pos == enemy.pos || !Actor.chars().contains(enemy)) {
-			return false;
-		}
-
-		//can always attack adjacent enemies
-		if (Dungeon.level.adjacent(pos, enemy.pos)) {
-			return true;
-		}
-		return false;
-	}
-
 	final public boolean attack( Char enemy ){
 		return attack(enemy, 1f, 0f, 1f);
 	}

@@ -44,7 +44,7 @@ public class GasterBlaster extends StationaryMinion {
     }
 
     @Override
-    public boolean canAttack(Char enemy) {
+    protected boolean canAttack( Char enemy ) {
         Ballistica ballistica = new Ballistica(pos, enemy.pos, Ballistica.STOP_SOLID);
         if (ballistica.subPath(1, ballistica.dist).contains(enemy.pos) && (enemy.buffs(Karma.class).isEmpty() || rank != 3)) return true;
         return false;

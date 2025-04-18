@@ -100,7 +100,7 @@ public class GooMinion extends Minion {
     }
 
     @Override
-    public boolean canAttack(Char enemy) {
+    protected boolean canAttack( Char enemy ) {
         return (pumpedUp > 0) ? distance( enemy ) <= 2 : super.canAttack(enemy);
     }
 

@@ -88,10 +88,6 @@ public class WallOfLight extends TargetedClericSpell {
 		super.onCast(tome, hero);
 	}
 
-	protected boolean validTarget(Char ch){
-		return true;
-	}
-
 	@Override
 	protected void onTargetSelected(HolyTome tome, Hero hero, Integer target) {
 		if (target == null){

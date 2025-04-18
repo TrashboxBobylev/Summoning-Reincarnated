@@ -131,7 +131,7 @@ public class Robo extends Minion{
     }
 
     @Override
-    public boolean canAttack(Char enemy) {
+    protected boolean canAttack(Char enemy) {
         if (isChainable(enemy))
             return new Ballistica( pos, enemy.pos, Ballistica.PROJECTILE ).collisionPos == enemy.pos;
         else

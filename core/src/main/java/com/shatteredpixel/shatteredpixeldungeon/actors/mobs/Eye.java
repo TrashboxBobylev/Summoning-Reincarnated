@@ -94,7 +94,7 @@ public class Eye extends Mob {
 	public boolean beamCharged;
 
 	@Override
-	public boolean canAttack( Char enemy ) {
+	protected boolean canAttack( Char enemy ) {
 
 		if (beamCooldown == 0) {
 			Ballistica aim = new Ballistica(pos, enemy.pos, Ballistica.STOP_SOLID);

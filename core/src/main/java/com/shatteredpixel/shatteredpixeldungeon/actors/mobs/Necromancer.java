@@ -127,7 +127,7 @@ public class Necromancer extends Mob {
 	}
 
 	@Override
-	public boolean canAttack(Char enemy) {
+	protected boolean canAttack(Char enemy) {
 		return false;
 	}
 

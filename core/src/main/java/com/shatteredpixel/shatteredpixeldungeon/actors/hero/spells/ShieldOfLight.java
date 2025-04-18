@@ -138,8 +138,4 @@ public class ShieldOfLight extends TargetedClericSpell {
 
 	}
 
-	protected boolean validTarget(Char ch){
-		return super.validTarget(ch) && ch.alignment == Char.Alignment.ALLY;
-	}
-
 }

@@ -44,7 +44,7 @@ public class MagicMissileMinion extends StationaryMinion {
     }
 
     @Override
-    public boolean canAttack(Char enemy) {
+    protected boolean canAttack( Char enemy ) {
         return new Ballistica( pos, enemy.pos, Ballistica.FRIENDLY_MAGIC).collisionPos == enemy.pos;
     }
 

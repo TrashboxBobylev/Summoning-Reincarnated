@@ -111,7 +111,7 @@ public class RattleSnake extends Mob {
 	}
 	
 	@Override
-	public boolean canAttack(Char enemy) {
+	protected boolean canAttack( Char enemy ) {
 		Ballistica attack = new Ballistica( pos, enemy.pos, Ballistica.PROJECTILE);
 		return attack.collisionPos == enemy.pos;
 	}

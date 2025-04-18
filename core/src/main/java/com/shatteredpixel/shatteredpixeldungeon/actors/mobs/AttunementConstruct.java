@@ -91,7 +91,7 @@ public class AttunementConstruct extends Mob implements Callback {
 	}
 	
 	@Override
-	public boolean canAttack(Char enemy) {
+	protected boolean canAttack( Char enemy ) {
 		return new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos == enemy.pos;
 	}
 	
