@@ -237,10 +237,12 @@ public enum Rankings {
 
 		Statistics.condMultiplier = Dungeon.conducts.scoreMod();
 
+		Statistics.modeMultiplier = Dungeon.mode.scoreMod;
+
 		Statistics.totalScore = Statistics.progressScore + Statistics.treasureScore + Statistics.exploreScore
 					+ Statistics.totalBossScore + Statistics.totalQuestScore;
 
-		Statistics.totalScore *= Statistics.winMultiplier * Statistics.chalMultiplier * Statistics.condMultiplier;
+		Statistics.totalScore *= Statistics.winMultiplier * Statistics.chalMultiplier * Statistics.condMultiplier * Statistics.modeMultiplier;
 
 		return Statistics.totalScore;
 	}

@@ -57,6 +57,7 @@ public class Statistics {
 	public static float winMultiplier;
 	public static float chalMultiplier;
 	public static float condMultiplier;
+	public static float modeMultiplier;
 	public static int totalScore;
 
 	//used for hero unlock badges
@@ -101,6 +102,7 @@ public class Statistics {
 		winMultiplier   = 1;
 		chalMultiplier  = 1;
 		condMultiplier  = 0;
+		modeMultiplier  = 0;
 		totalScore      = 0;
 		
 		upgradesUsed    = 0;
@@ -142,6 +144,7 @@ public class Statistics {
 	private static final String WIN_MULT		= "win_mult";
 	private static final String CHAL_MULT		= "chal_mult";
 	private static final String COND_MULT		= "cond_mult";
+	private static final String MODE_MULT		= "mode_mult";
 	private static final String TOTAL_SCORE		= "total_score";
 	
 	private static final String UPGRADES	= "upgradesUsed";
@@ -189,6 +192,7 @@ public class Statistics {
 		bundle.put( WIN_MULT,    winMultiplier );
 		bundle.put( CHAL_MULT,   chalMultiplier );
 		bundle.put( COND_MULT,   condMultiplier );
+		bundle.put( MODE_MULT,   modeMultiplier );
 		bundle.put( TOTAL_SCORE, totalScore );
 		
 		bundle.put( UPGRADES,   upgradesUsed );
