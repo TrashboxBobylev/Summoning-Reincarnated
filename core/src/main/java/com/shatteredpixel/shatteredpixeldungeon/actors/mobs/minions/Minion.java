@@ -373,6 +373,9 @@ public class Minion extends Mob implements ManaSource {
 
     @Override
     public float targetPriority() {
+        if (state == BehaviorType.PROTECTIVE){
+            return 1.75f;
+        }
         return 3.0f;
     }
 
