@@ -384,6 +384,9 @@ public abstract class Mob extends Char {
 		for (Class<? extends Char> clazz : ignored){
 			if (ch.getClass().isAssignableFrom(clazz)) return true;
 		}
+		if (ch instanceof Minion && ((Minion) ch).state == PASSIVE){
+			return true;
+		}
 		return false;
 	}
 
@@ -1439,7 +1442,7 @@ public abstract class Mob extends Char {
 		@Override
 		public boolean act( boolean enemyInFOV, boolean justAlerted ) {
 			enemySeen = enemyInFOV;
-			if (enemyInFOV && !isCharmedBy( enemy ) && canAttack( enemy )) {
+			if (enemyInFOV && !isCharmedBy( enemy ) && canAttack( enemy ) && !canBeIgnored( enemy )) {
 
 				recentlyAttackedBy.clear();
 				target = enemy.pos;
