@@ -26,6 +26,10 @@ package com.shatteredpixel.shatteredpixeldungeon.items.weapon;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.BodyForm;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.HolyWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 
 public interface WeaponEnchantable {
@@ -45,8 +49,28 @@ public interface WeaponEnchantable {
         return enchant( ench );
     }
 
+    default boolean isEquipped(Char owner){
+        return true;
+    }
+
     default boolean hasEnchant(Class<? extends Weapon.Enchantment> type, Char owner){
-        return getEnchantment() != null && getEnchantment().getClass() == type && owner.buff(MagicImmune.class) == null;
+        if (getEnchantment() == null){
+            return false;
+        } else if (owner.buff(MagicImmune.class) != null) {
+            return false;
+        } else if (!getEnchantment().curse()
+                && owner instanceof Hero
+                && isEquipped((Hero) owner)
+                && owner.buff(HolyWeapon.HolyWepBuff.class) != null
+                && ((Hero) owner).subClass != HeroSubClass.PALADIN) {
+            return false;
+        } else if (owner.buff(BodyForm.BodyFormBuff.class) != null
+                && owner.buff(BodyForm.BodyFormBuff.class).enchant() != null
+                && owner.buff(BodyForm.BodyFormBuff.class).enchant().getClass().equals(type)){
+            return true;
+        } else {
+            return getEnchantment().getClass() == type;
+        }
     }
 
     //these are not used to process specific enchant effects, so magic immune doesn't affect them

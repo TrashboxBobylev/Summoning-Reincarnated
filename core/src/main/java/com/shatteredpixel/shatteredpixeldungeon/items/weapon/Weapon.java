@@ -457,6 +457,11 @@ abstract public class Weapon extends KindOfWeapon implements WeaponEnchantable {
 	}
 
 	@Override
+	public boolean isEquipped(Char owner) {
+		return this.isEquipped((Hero) owner);
+	}
+
+	@Override
 	public WeaponEnchantable enchant(Enchantment ench ) {
 		if (ench == null || !ench.curse()) curseInfusionBonus = false;
 		return WeaponEnchantable.super.enchant(ench);
