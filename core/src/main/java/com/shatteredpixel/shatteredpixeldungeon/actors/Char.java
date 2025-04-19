@@ -114,7 +114,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerSet;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.Bulk;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Brimstone;
@@ -510,8 +510,8 @@ public abstract class Char extends Actor implements ManaSource {
 
 			if (enemy.buff(Shrunken.class) != null) dmg *= 1.4f;
 
-			if (this instanceof Hero && ((Hero) this).belongings.armor instanceof ConjurerArmor &&
-					((Hero) this).belongings.armor.level() == 2)
+			if (this instanceof Hero && ((Hero) this).belongings.armor instanceof ConjurerSet &&
+					((ConjurerSet)((Hero) this).belongings.armor).rank() == 3)
 				dmg *= 1.5f;
 
 			//characters influenced by aggression deal 1/2 damage to bosses

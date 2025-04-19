@@ -72,6 +72,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import static com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass.CONJURER;
+
 public class HeroSelectScene extends PixelScene {
 
 	private Image background;
@@ -542,7 +544,7 @@ public class HeroSelectScene extends PixelScene {
 
 			this.cl = cl;
 
-			icon(new Image(cl.spritesheet(), 0, 90, 12, 15));
+			icon(new Image(cl.spritesheet(), 0, cl == CONJURER ? 0 : 90, 12, 15));
 
 		}
 

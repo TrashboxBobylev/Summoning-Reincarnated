@@ -59,11 +59,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScoutArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.SyntheticArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
-import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.BeamOfAffection;
@@ -427,7 +427,7 @@ public enum HeroClass {
 			case DUELIST:
 				return new ArmorAbility[]{new Challenge(), new ElementalStrike(), new Feint()};
 			case ADVENTURER: case CONJURER:
-				return new ArmorAbility[]{};
+				return new ArmorAbility[]{new AscendedForm()};
 			case CLERIC:
 				return new ArmorAbility[]{new AscendedForm(), new Trinity(), new PowerOfMany()};
 		}

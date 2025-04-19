@@ -419,6 +419,7 @@ public class ItemSpriteSheet {
 	public static final int ARMOR_SCOUT     = ARMOR+11;
 	public static final int ARMOR_ADVENTURER= ARMOR+12;
 	public static final int ARMOR_CONJURER  = ARMOR+13;
+	public static final int ARMOR_T6CONJURER= ARMOR+14;
 	static{
 		assignItemRect(ARMOR_CLOTH,     15, 12);
 		assignItemRect(ARMOR_LEATHER,   14, 13);
@@ -434,6 +435,7 @@ public class ItemSpriteSheet {
 		assignItemRect(ARMOR_ADVENTURER, 14, 13);
 		assignItemRect(ARMOR_CONJURER,  15, 15);
 		assignItemRect(ARMOR_CLERIC,    13, 14);
+		assignItemRect(ARMOR_T6CONJURER,15, 15);
 	}
 
 	private static final int STAFF_T1       =                               xy(1, 34);

@@ -54,7 +54,7 @@ import java.util.ArrayList;
 abstract public class ClassArmor extends Armor {
 
 	private static final String AC_ABILITY = "ABILITY";
-	private static final String AC_TRANSFER = "TRANSFER";
+	protected static final String AC_TRANSFER = "TRANSFER";
 	
 	{
 		levelKnown = true;
@@ -120,6 +120,9 @@ abstract public class ClassArmor extends Armor {
 				break;
 			case CLERIC:
 				classArmor = new ClericArmor();
+				break;
+			case CONJURER:
+				classArmor = new ConjurerClassArmor();
 				break;
 		}
 		

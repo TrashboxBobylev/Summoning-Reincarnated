@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -30,16 +30,20 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 import java.util.ArrayList;
 
-public class ConjurerArmor extends Armor implements Rankable, ConjurerSet {
-	
-	{
-		image = ItemSpriteSheet.ARMOR_CONJURER;
-        unique = true;
-        bones = false;
-	}
+public class ConjurerClassArmor extends ClassArmor implements Rankable, ConjurerSet {
+    {
+        image = ItemSpriteSheet.ARMOR_T6CONJURER;
 
-    public ConjurerArmor() {
-        super( 1 );
+        tier = 1;
+    }
+
+    @Override
+    public ArrayList<String> actions(Hero hero ) {
+        ArrayList<String> actions = super.actions( hero );
+        actions.remove(AC_DROP);
+        actions.remove(AC_THROW);
+        actions.remove(AC_TRANSFER);
+        return actions;
     }
 
     @Override
@@ -53,14 +57,6 @@ public class ConjurerArmor extends Armor implements Rankable, ConjurerSet {
     }
 
     @Override
-    public ArrayList<String> actions(Hero hero ) {
-        ArrayList<String> actions = super.actions( hero );
-        actions.remove(AC_DROP);
-        actions.remove(AC_THROW);
-        return actions;
-    }
-
-    @Override
     public int rank() {
         return level()+1;
     }
@@ -69,26 +65,6 @@ public class ConjurerArmor extends Armor implements Rankable, ConjurerSet {
     public void rank(int rank) {
         level(rank-1);
     }
-
-//    @Override
-//	public void doSpecial() {
-//
-//		for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
-//			if (Dungeon.level.heroFOV[mob.pos]
-//				&& mob.alignment != Char.Alignment.ALLY) {
-//				Buff.prolong( mob, SoulParalysis.class, 7 );
-//			}
-//		}
-//
-//		charge -= 75;
-//
-//		curUser.spend( Actor.TICK );
-//		curUser.sprite.operate( curUser.pos );
-//		curUser.busy();
-//
-//		curUser.sprite.centerEmitter().start( ElmoParticle.FACTORY, 0.15f, 4 );
-//		Sample.INSTANCE.play( Assets.Sounds.LULLABY );
-//	}
 
     @Override
     public int STRReq(int lvl) {

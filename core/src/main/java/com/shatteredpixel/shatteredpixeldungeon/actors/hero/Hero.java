@@ -113,6 +113,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerClassArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerSet;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CapeOfThorns;
@@ -524,14 +526,22 @@ public class Hero extends Char {
 	
 	public int tier() {
 		Armor armor = belongings.armor();
-		if (heroClass == HeroClass.CONJURER){
+		if (armor instanceof ConjurerArmor){
+			switch (subClass){
+				case SOUL_WIELDER:
+					return 1;
+				case WILL_SORCERER:
+					return 2;
+			}
+			return 0;
+		} else if (armor instanceof ConjurerClassArmor){
 			switch (subClass){
 				case SOUL_WIELDER:
 					return 4;
 				case WILL_SORCERER:
 					return 5;
 			}
-			return 1;
+			return 3;
 		} else if (armor instanceof ClassArmor){
 			return 6;
 		} else if (armor != null){
@@ -1794,9 +1804,9 @@ public class Hero extends Char {
 			if (buff(MonkEnergy.MonkAbility.Meditate.MeditateResistance.class) != null){
 				damage *= 0.2f;
 			}
-			if (this.belongings.armor instanceof ConjurerArmor &&
-					((ConjurerArmor) this.belongings.armor).rank() == 3)
-				dmg *= 1.5f;
+			if (this.belongings.armor instanceof ConjurerSet &&
+					((ConjurerSet) this.belongings.armor).rank() == 3)
+				damage *= 1.5f;
 		}
 
 		//unused, could be removed
