@@ -40,7 +40,10 @@ public class Effects {
 		LIGHT_RAY,
 		HEALTH_RAY,
 		DOOM_CLOUD,
-		ROPE
+		ROPE,
+		// flipping them just doesn't work in game!
+		CONJURER_WING_LEFT,
+		CONJURER_WING_RIGHT
 	}
 	
 	public static Image get( Type type ) {
@@ -78,6 +81,12 @@ public class Effects {
 				break;
 			case ROPE:
 				icon.frame(icon.texture.uvRect(0, 32, 2, 34));
+				break;
+			case CONJURER_WING_LEFT:
+				icon.frame(icon.texture.uvRect(0, 64, 34, 86));
+				break;
+			case CONJURER_WING_RIGHT:
+				icon.frame(icon.texture.uvRect(0, 86, 34, 118));
 				break;
 		}
 		return icon;

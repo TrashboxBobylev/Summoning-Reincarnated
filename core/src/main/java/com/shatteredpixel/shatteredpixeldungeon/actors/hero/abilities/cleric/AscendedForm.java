@@ -98,8 +98,14 @@ public class AscendedForm extends ArmorAbility {
 
 		@Override
 		public void fx(boolean on) {
-			if (on) target.sprite.add(CharSprite.State.GLOWING);
-			else    target.sprite.remove(CharSprite.State.GLOWING);
+			if (on) {
+				target.sprite.add(CharSprite.State.GLOWING);
+				target.sprite.add(CharSprite.State.CONJURER_WINGS);
+			}
+			else {
+				target.sprite.remove(CharSprite.State.GLOWING);
+				target.sprite.remove(CharSprite.State.CONJURER_WINGS);
+			}
 		}
 
 		public int left = 10;

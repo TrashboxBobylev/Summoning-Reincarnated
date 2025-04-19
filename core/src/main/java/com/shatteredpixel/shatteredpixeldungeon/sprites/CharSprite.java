@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.effects.AscendedWings;
 import com.shatteredpixel.shatteredpixeldungeon.effects.DarkBlock;
 import com.shatteredpixel.shatteredpixeldungeon.effects.EmoIcon;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
@@ -90,7 +91,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 	public enum State {
 		BURNING, LEVITATING, INVISIBLE, PARALYSED, FROZEN, ILLUMINATED, CHILLED, DARKENED, MARKED, HEALING, SHIELDED, HEARTS, GLOWING, AURA,
-		SHRUNK, FROSTBURNING, SPIRIT, ENLARGED, CONJURER_AURA
+		SHRUNK, FROSTBURNING, SPIRIT, ENLARGED, CONJURER_AURA, CONJURER_WINGS
 	}
 	
 	protected Animation idle;
@@ -121,6 +122,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	protected AlphaTweener invisible;
 	protected Flare aura;
 	protected HolyAura holyAura;
+	protected AscendedWings ascendedWings;
 
 	protected EmoIcon emo;
 	protected CharHealthIndicator health;
@@ -488,6 +490,10 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 			case CONJURER_AURA:
 				GameScene.effect( holyAura = new HolyAura( this ));
 				break;
+			case CONJURER_WINGS:
+				if (ascendedWings != null) ascendedWings.killAndErase();
+				parent.addToBack( ascendedWings = new AscendedWings(this));
+				break;
 		}
 	}
 
@@ -608,6 +614,12 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 					aura = null;
 				}
 				break;
+			case CONJURER_WINGS:
+				if (ascendedWings != null){
+					ascendedWings.killAndErase();
+					ascendedWings = null;
+				}
+				break;
 		}
 	}
 	
@@ -661,6 +673,9 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		}
 		if (hearts != null) {
 			hearts.visible = visible;
+		}
+		if (ascendedWings != null){
+			ascendedWings.visible = visible;
 		}
 		//shield fx updates its own visibility
 		if (aura != null) {
