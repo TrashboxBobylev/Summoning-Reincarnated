@@ -43,9 +43,9 @@ public class AscendedWings extends Group {
 
         this.target = target;
 
-        add(leftWing = new Wing(false));
+        addToBack(leftWing = new Wing(false));
 
-        add(rightWing = new Wing(true));
+        addToBack(rightWing = new Wing(true));
 
         updateWings();
     }
@@ -55,6 +55,8 @@ public class AscendedWings extends Group {
 
         leftWing.point(new PointF(origin.x - leftWing.width, origin.y - leftWing.height*0.75f));
         rightWing.point(new PointF(origin.x, origin.y - rightWing.height*0.5f));
+
+        target.parent.sendToBack(this);
     }
 
     @Override
