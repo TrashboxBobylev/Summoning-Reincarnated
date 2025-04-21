@@ -46,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.GreaterHaste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ManaEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Preparation;
@@ -1096,6 +1097,15 @@ public abstract class Mob extends Char {
 
 		if (cause instanceof ManaSource && (Dungeon.hero.heroClass == HeroClass.CONJURER || Dungeon.isChallenged(Conducts.Conduct.EVERYTHING))){
 			int gain = (int) Math.floor(Dungeon.hero.ATU()*1.5f*((ManaSource)cause).manaModifier(this));
+			ManaEmpower emp = buff(ManaEmpower.class);
+			if (emp != null){
+				gain += emp.manaBoost;
+				emp.left--;
+				if (emp.left <= 0) {
+					emp.detach();
+				}
+				Sample.INSTANCE.play(Assets.Sounds.CHARGEUP, 0.75f, 1.33f);
+			}
 			if (Dungeon.hero.subClass == HeroSubClass.SOUL_WIELDER)
 				gain *= 1.5f;
 			Dungeon.hero.changeMana(gain);

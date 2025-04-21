@@ -40,10 +40,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.EnhancedRings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ManaEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ManaStealing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PhysicalEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RevealedArea;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ScrollEmpower;
@@ -221,7 +221,7 @@ public enum Talent {
 	AFFECTED_BY_LUCK(265, 3), UNIQUE_ATTENTION(266, 3), SLICE_OF_POWER(267, 3), MEAL_OF_POWER(268, 3),
 
 	//Conjurer T1
-	BENEVOLENT_MEAL(288), EMPOWERING_INTUITION(289), ENERGY_BREAK(290), SPIRITUAL_BARRIER(291),
+	ATTUNED_MEAL(288), EMPOWERING_INTUITION(289), ENERGY_BREAK(290), SPIRITUAL_BARRIER(291),
 	//Conjurer T2
 	INSPIRING_MEAL(292), LIQUID_CASTING(293), ENERGIZED_SUPPORT(294), MANABURN(295), SOULS_BURST(296),
 	//Conjurer T3
@@ -776,15 +776,9 @@ public enum Talent {
 				Buff.affect( hero, PhysicalEmpower.class).set(Math.round(hero.lvl / (4f - hero.pointsInTalent(FOCUSED_MEAL))), 1);
 			}
 		}
-		if (hero.hasTalent(BENEVOLENT_MEAL)){
-			int heal = 1 + hero.pointsInTalent(BENEVOLENT_MEAL)*2;
-			for (Mob mob: Dungeon.level.mobs){
-				if (mob.alignment == Char.Alignment.ALLY && Dungeon.level.heroFOV[mob.pos]){
-					Regeneration.regenerate(mob, heal);
-					mob.sprite.emitter().burst(Speck.factory(Speck.STEAM), heal);
-					mob.sprite.burst(0xFFFFFFFF, heal);
-				}
-			}
+		if (hero.hasTalent(ATTUNED_MEAL)){
+			// +1 mana on next 3/5 kills
+			Buff.affect( hero, ManaEmpower.class).set(1, 1 + hero.pointsInTalent(UPGRADING_MEAL)*2);
 		}
 		if (hero.hasTalent(INSPIRING_MEAL)){
 			int turns = (1 + hero.pointsInTalent(INSPIRING_MEAL))*2;
@@ -1028,12 +1022,7 @@ public enum Talent {
 	public static void onItemIdentified( Hero hero, Item item ){
 		if (hero.hasTalent(EMPOWERING_INTUITION)){
 			if (hero.heroClass == HeroClass.CONJURER){
-				int gain = 1 + hero.pointsInTalent(EMPOWERING_INTUITION)*2;
-				gain = Math.min(Dungeon.hero.maxMana() - Dungeon.hero.mana, gain);
-				Dungeon.hero.mana += gain;
-				if (gain > 0 && hero.sprite != null) {
-					hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(gain), FloatingText.MANA);
-				}
+				hero.changeMana(1 + hero.pointsInTalent(EMPOWERING_INTUITION)*2);
 			} else {
 				int gain = 1 + hero.pointsInTalent(EMPOWERING_INTUITION);
 				Buff.affect(hero, Barrier.class).incShield(gain);
@@ -1241,7 +1230,7 @@ public enum Talent {
 				Collections.addAll(tierTalents, DECENT_MEAL, ULTIMATE_INTUITION, PRECISE_STRIKE, PREPARED_TO_DEFEND);
 				break;
 			case CONJURER:
-				Collections.addAll(tierTalents, BENEVOLENT_MEAL, EMPOWERING_INTUITION, ENERGY_BREAK, SPIRITUAL_BARRIER);
+				Collections.addAll(tierTalents, ATTUNED_MEAL, EMPOWERING_INTUITION, ENERGY_BREAK, SPIRITUAL_BARRIER);
 				break;
 			case CLERIC:
 				Collections.addAll(tierTalents, SATIATED_SPELLS, HOLY_INTUITION, SEARING_LIGHT, SHIELD_OF_LIGHT);
@@ -1444,6 +1433,8 @@ public enum Talent {
 
 	private static final HashMap<String, String> renamedTalents = new HashMap<>();
 	static{
+		//ReInc 0.5.0
+		renamedTalents.put("BENEVOLENT_MEAL",           "ATTUNED_MEAL");
 		//v2.4.0
 		renamedTalents.put("SECONDARY_CHARGE",          "VARIED_CHARGE");
 	}
