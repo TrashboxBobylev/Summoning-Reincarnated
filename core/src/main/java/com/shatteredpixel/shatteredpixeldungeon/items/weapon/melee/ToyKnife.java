@@ -62,6 +62,9 @@ public class ToyKnife extends MeleeWeapon implements Rankable {
 		defaultAction = AC_THROW;
 		usesTargeting = true;
 
+        //technically not, but allows to properly placeholder it for thrown action
+        stackable = true;
+
 	}
 
     @Override
@@ -154,7 +157,6 @@ public class ToyKnife extends MeleeWeapon implements Rankable {
 
     @Override
     public void onThrow(int cell) {
-	    Dungeon.quickslot.convertToPlaceholder(this);
         Char enemy = Actor.findChar(cell);
         if (enemy == null || enemy == curUser) {
             super.onThrow(cell);
