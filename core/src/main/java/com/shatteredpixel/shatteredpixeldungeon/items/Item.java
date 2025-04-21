@@ -488,6 +488,7 @@ public class Item implements Bundlable {
 		if (byHero && Dungeon.hero != null && Dungeon.hero.isAlive()){
 			Catalog.setSeen(getClass());
 			Statistics.itemTypesDiscovered.add(getClass());
+			if (!isIdentified()) Talent.onItemIdentified(Dungeon.hero, this);
 		}
 		if (this instanceof WeaponEnchantable){
 			WeaponEnchantable weaponEnchantable = (WeaponEnchantable) this;
