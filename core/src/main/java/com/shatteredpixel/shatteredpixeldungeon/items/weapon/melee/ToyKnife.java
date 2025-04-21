@@ -232,7 +232,7 @@ public class ToyKnife extends MeleeWeapon implements Rankable {
         return Messages.get(this, "rank_info",
                 Math.round(damageMod(rank)* (1 + 2*buffedLvl())), Math.round(damageMod(rank)* (7*(tier) + 4*buffedLvl())),
                 Math.round(4*soulGainMod(rank)), Math.round(8*soulGainMod(rank)*(rank == 2 ? 1.40f : 1f)),
-                Messages.decimalFormat("#.##", delayMod(rank))
+                Messages.decimalFormat("#.##", 1.0f/delayMod(rank))
         );
     }
 
