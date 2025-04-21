@@ -345,7 +345,7 @@ public class Minion extends Mob implements ManaSource {
     public void damage(int dmg, Object src) {
         if (Dungeon.hero.belongings.armor instanceof ConjurerSet &&
                 ((ConjurerSet) Dungeon.hero.belongings.armor).rank() == 2)
-            dmg *= 0.6f;
+            dmg *= 0.75f;
         if (buff(Fury.class) != null)
             dmg *= 1.6f;
         super.damage(dmg, src);
