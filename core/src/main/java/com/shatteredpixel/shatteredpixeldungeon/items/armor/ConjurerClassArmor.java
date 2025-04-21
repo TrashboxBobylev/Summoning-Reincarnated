@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor;
 
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -50,12 +49,20 @@ public class ConjurerClassArmor extends ClassArmor implements Rankable, Conjurer
 
     @Override
     public int DRMax(int lvl) {
-        return (int) (super.DRMax(lvl)*defenseLevel(rank()-1));
+        return DRMax(powerlevel(), rank());
     }
 
     @Override
     public int DRMin(int lvl) {
-        return (int) (super.DRMin(lvl)*defenseLevel(rank()-1));
+        return DRMin(powerlevel(), rank());
+    }
+
+    public int DRMax(int lvl, int rank) {
+        return (int) (super.DRMax(lvl)*defenseLevel(rank-1));
+    }
+
+    public int DRMin(int lvl, int rank) {
+        return (int) (super.DRMin(lvl)*defenseLevel(rank-1));
     }
 
     @Override
@@ -71,11 +78,6 @@ public class ConjurerClassArmor extends ClassArmor implements Rankable, Conjurer
     @Override
     public int visiblyUpgraded() {
         return 0;
-    }
-
-    @Override
-    public int level() {
-        return Dungeon.hero == null ? 0 : Dungeon.hero.ATU()-1;
     }
 
     @Override
@@ -95,6 +97,6 @@ public class ConjurerClassArmor extends ClassArmor implements Rankable, Conjurer
 
 
     public String getRankMessage(int rank) {
-        return Messages.get(this, "rank" + rank, DRMin(rank), DRMax(rank));
+        return Messages.get(this, "rank" + rank, DRMin(powerlevel(), rank), DRMax(powerlevel(), rank));
     }
 }

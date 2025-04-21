@@ -24,6 +24,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+
 public interface ConjurerSet {
     default float defenseLevel(int level) {
         switch (level){
@@ -35,4 +37,8 @@ public interface ConjurerSet {
     }
 
     int rank();
+
+    default int powerlevel() {
+        return Dungeon.hero == null ? 0 : Dungeon.hero.ATU()-1;
+    }
 }
