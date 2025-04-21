@@ -45,14 +45,15 @@ public class Attunement extends Buff{
         if (Dungeon.hero.belongings.armor instanceof ConjurerSet){
             switch (((ConjurerSet) Dungeon.hero.belongings.armor).rank()){
                 case 1: default:
-                    value = 1.5f; break;
+                    value = 0.75f; break;
                 case 2:
                     value = 0f; break;
                 case 3:
-                    value = 4.5f; break;
+                    value = 3f; break;
             }
         }
-        return 1f + (value) * ((Dungeon.hero.HT - Dungeon.hero.HP * 1f) / (Dungeon.hero.HT * 1f));
+        float hpRatio = ((Dungeon.hero.HT - Dungeon.hero.HP * 1f) / (Dungeon.hero.HT * 1f));
+        return 1f + (value) * (hpRatio - 0.5f)*2;
     }
 
     @Override
