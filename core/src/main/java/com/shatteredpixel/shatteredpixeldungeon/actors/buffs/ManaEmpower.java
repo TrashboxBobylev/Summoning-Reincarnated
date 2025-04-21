@@ -49,7 +49,7 @@ public class ManaEmpower extends Buff {
 
 	@Override
 	public float iconFadePercent() {
-		float max = 1 + Dungeon.hero.pointsInTalent(Talent.ATTUNED_MEAL);
+		float max = 1 + Dungeon.hero.pointsInTalent(Talent.ATTUNED_MEAL)*2;
 		return Math.max(0, (max-left) / max);
 	}
 

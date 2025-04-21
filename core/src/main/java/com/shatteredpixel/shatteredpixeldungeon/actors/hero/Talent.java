@@ -778,7 +778,7 @@ public enum Talent {
 		}
 		if (hero.hasTalent(ATTUNED_MEAL)){
 			// +1 mana on next 3/5 kills
-			Buff.affect( hero, ManaEmpower.class).set(1, 1 + hero.pointsInTalent(UPGRADING_MEAL)*2);
+			Buff.affect( hero, ManaEmpower.class).set(1, 1 + hero.pointsInTalent(ATTUNED_MEAL)*2);
 		}
 		if (hero.hasTalent(INSPIRING_MEAL)){
 			int turns = (1 + hero.pointsInTalent(INSPIRING_MEAL))*2;
