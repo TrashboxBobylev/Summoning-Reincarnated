@@ -1098,11 +1098,7 @@ public abstract class Mob extends Char {
 			int gain = (int) Math.floor(Dungeon.hero.ATU()*1.5f*((ManaSource)cause).manaModifier(this));
 			if (Dungeon.hero.subClass == HeroSubClass.SOUL_WIELDER)
 				gain *= 1.5f;
-			gain = Math.min(Dungeon.hero.maxMana() - Dungeon.hero.mana, gain);
-			Dungeon.hero.mana += gain;
-			if (gain > 0) {
-				Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(gain), FloatingText.MANA);
-			}
+			Dungeon.hero.changeMana(gain);
 		}
 
 		boolean soulMarked = buff(SoulMark.class) != null;

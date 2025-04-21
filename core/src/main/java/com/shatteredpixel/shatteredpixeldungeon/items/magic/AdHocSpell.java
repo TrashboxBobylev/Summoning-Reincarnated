@@ -27,11 +27,9 @@ package com.shatteredpixel.shatteredpixeldungeon.items.magic;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.Concentration;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 
 public abstract class AdHocSpell extends ConjurerSpell {
 
@@ -53,11 +51,7 @@ public abstract class AdHocSpell extends ConjurerSpell {
                 curUser = Dungeon.hero;
                 final ConjurerSpell curSpell = this;
                 if (effect(curUser)) {
-                    int manaCost = curSpell.manaCost();
-                    if (manaCost > 0) {
-                        Dungeon.hero.sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(manaCost), FloatingText.MANA);
-                    }
-                    curUser.mana -= manaCost;
+                    curUser.changeMana(-curSpell.manaCost());
                     Invisibility.dispel();
                     curUser.busy();
                     if (!(this instanceof Concentration))

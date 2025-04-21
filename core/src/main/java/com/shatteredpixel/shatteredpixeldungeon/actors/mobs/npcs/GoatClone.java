@@ -136,13 +136,10 @@ public class GoatClone extends NPC implements ManaSource {
             int hpGain = Dungeon.hero.pointsInTalent(Talent.REJUVENATING_FORCE)+1;
             int manaGain = Dungeon.hero.pointsInTalent(Talent.REJUVENATING_FORCE);
             hpGain = Math.min(Dungeon.hero.HT-Dungeon.hero.HP, hpGain);
-            manaGain = Math.min(Dungeon.hero.maxMana()-Dungeon.hero.mana, manaGain);
             Dungeon.hero.HP += hpGain;
-            Dungeon.hero.mana += manaGain;
             if (hpGain > 0)
                 Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(hpGain), FloatingText.HEALING);
-            if (manaGain > 0)
-                Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(manaGain), FloatingText.MANA);
+            Dungeon.hero.changeMana(manaGain);
         }
         damage = super.attackProc(enemy, damage);
         if (Dungeon.hero.hasTalent(Talent.VIOLENT_OVERCOMING)){

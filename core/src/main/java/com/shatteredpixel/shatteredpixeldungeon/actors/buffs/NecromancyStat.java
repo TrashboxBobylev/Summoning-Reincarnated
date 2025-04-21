@@ -28,10 +28,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
-import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.DreemurrsNecromancy;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
@@ -61,8 +59,7 @@ public class NecromancyStat extends Buff {
                     detach();
                     return true;
                 } else {
-                    Dungeon.hero.mana -= drain;
-                    Dungeon.hero.sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(drain), FloatingText.MANA);
+                    Dungeon.hero.changeMana(-drain);
                 }
             }
         }

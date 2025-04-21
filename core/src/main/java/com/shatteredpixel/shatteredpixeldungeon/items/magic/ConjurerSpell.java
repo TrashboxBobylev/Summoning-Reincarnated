@@ -36,7 +36,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
-import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -49,7 +48,6 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
@@ -194,12 +192,7 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
                 shield.putOut();
 
                 int gain = (manaCost() + ((ConjurerSpell)Reflection.newInstance(tracker.weapon)).manaCost());
-                gain = Math.round(gain*(0.15f*owner.pointsInTalent(Talent.COMBINED_REFILL)));
-                gain = Math.min(Dungeon.hero.maxMana() - Dungeon.hero.mana, gain);
-                Dungeon.hero.mana += gain;
-                if (gain > 0) {
-                    Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(gain), FloatingText.MANA);
-                }
+                Dungeon.hero.changeMana(Math.round(gain*(0.15f*owner.pointsInTalent(Talent.COMBINED_REFILL))));
 
                 ScrollOfRecharging.charge(owner);
             }
@@ -282,10 +275,7 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
                     curUser.busy();
 
                     int manaCost = curSpell.manaCost();
-                    if (manaCost > 0) {
-                        Dungeon.hero.sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(manaCost), FloatingText.MANA);
-                    }
-                    curUser.mana -= manaCost;
+                    curUser.changeMana(-manaCost);
 
                     curSpell.fx(shot, new Callback() {
                         public void call() {

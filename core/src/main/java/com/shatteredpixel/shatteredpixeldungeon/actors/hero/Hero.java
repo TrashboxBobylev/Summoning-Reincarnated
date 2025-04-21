@@ -347,6 +347,15 @@ public class Hero extends Char {
 		return (Dungeon.hero.lvl + 3)*5;
 	}
 
+	public void changeMana(int amount){
+		if (amount != 0) {
+			int gain = amount > 0 ? Math.min(maxMana() - mana, amount) : amount;
+			mana += gain;
+			if (gain != 0 && sprite != null)
+				sprite.showStatusWithIcon(gain > 0 ? CharSprite.POSITIVE : CharSprite.NEGATIVE, Integer.toString(Math.abs(gain)), FloatingText.MANA);
+		}
+	}
+
 	private static final String CLASS       = "class";
 	private static final String SUBCLASS    = "subClass";
 	private static final String ABILITY     = "armorAbility";
@@ -1707,8 +1716,7 @@ public class Hero extends Char {
 			Sample.INSTANCE.play( Assets.Sounds.BLAST);
 
 			if (heroClass == HeroClass.CONJURER) {
-				mana -= maxMana() / 20;
-				Dungeon.hero.sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(maxMana() / 20), FloatingText.MANA);
+				changeMana(-maxMana()/20);
 			} else
 				damage(HT / 20, new StarBlazing());
 
@@ -2808,8 +2816,7 @@ public class Hero extends Char {
 			spendAndNext(TIME_TO_SEARCH);
 
 			if (hasTalent(Talent.LEADER_APPRECIATION) && mana >= LEADER_MIRROR_COST){
-				mana -= LEADER_MIRROR_COST;
-				Dungeon.hero.sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(LEADER_MIRROR_COST), FloatingText.MANA);
+				Dungeon.hero.changeMana(-LEADER_MIRROR_COST);
 				ScrollOfMirrorImage.spawnImages(this, 1);
 			}
 

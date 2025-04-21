@@ -1043,8 +1043,7 @@ if (Dungeon.hero.heroClass != HeroClass.CLERIC
 					tracker.detach();
 					return;
 				} else {
-					Dungeon.hero.mana -= drain;
-					Dungeon.hero.sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(drain), FloatingText.MANA);
+					Dungeon.hero.changeMana(-drain);
 				}
 			}
 		}

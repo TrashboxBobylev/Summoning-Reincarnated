@@ -65,8 +65,7 @@ public class ManaStealing extends Buff {
                 if (ch.alignment == Char.Alignment.ENEMY) {
                     target.sprite.parent.add(new Beam.LightRay(target.sprite.center(), DungeonTilemap.raisedTileCenterToWorld(ch.pos)));
                     if (Dungeon.hero.heroClass == HeroClass.CONJURER) {
-                        Dungeon.hero.mana = Math.min(Dungeon.hero.mana + 1, Dungeon.hero.maxMana());
-                        target.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(1), FloatingText.MANA);
+                        Dungeon.hero.changeMana(1);
                     } else {
                         int shieldToGive = 1;
                         Buff.affect(Dungeon.hero, Barrier.class).incShield(shieldToGive);

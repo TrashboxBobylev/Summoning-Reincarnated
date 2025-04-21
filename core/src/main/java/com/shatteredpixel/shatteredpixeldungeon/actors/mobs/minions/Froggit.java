@@ -26,8 +26,6 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.FroggitSprite;
 import com.watabou.utils.Bundle;
 
@@ -62,8 +60,7 @@ public class Froggit extends Minion {
         if (rank == 3){
             if (++counter == 4){
                 counter = 0;
-                Dungeon.hero.mana = Math.min(Dungeon.hero.mana + 1, Dungeon.hero.maxMana());
-                Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(1), FloatingText.MANA);
+                Dungeon.hero.changeMana(1);
             }
         }
         return super.attackProc(enemy, damage);
