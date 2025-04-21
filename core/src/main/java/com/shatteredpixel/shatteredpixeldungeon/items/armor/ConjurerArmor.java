@@ -118,6 +118,6 @@ public class ConjurerArmor extends Armor implements Rankable, ConjurerSet {
     }
 
     public String getRankMessage(int rank) {
-        return Messages.get(this, "rank" + rank, DRMin(), DRMax());
+        return Messages.get(this, "rank" + rank, DRMin(rank), DRMax(rank));
     }
 }

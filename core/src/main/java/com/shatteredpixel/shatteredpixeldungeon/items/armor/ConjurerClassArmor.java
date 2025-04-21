@@ -95,6 +95,6 @@ public class ConjurerClassArmor extends ClassArmor implements Rankable, Conjurer
 
 
     public String getRankMessage(int rank) {
-        return Messages.get(this, "rank" + rank, DRMin(), DRMax());
+        return Messages.get(this, "rank" + rank, DRMin(rank), DRMax(rank));
     }
 }
