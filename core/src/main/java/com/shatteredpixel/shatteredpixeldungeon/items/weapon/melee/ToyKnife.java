@@ -79,7 +79,7 @@ public class ToyKnife extends MeleeWeapon implements Rankable {
 
     @Override
     public int level() {
-        return super.level() + Dungeon.hero.ATU()-1;
+        return super.level() + (Dungeon.hero != null ? Dungeon.hero.ATU() : 1)-1;
     }
 
     @Override
