@@ -38,7 +38,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbili
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
@@ -110,6 +112,19 @@ public class Ascension extends ArmorAbility {
         @Override
         public String iconTextDisplay() {
             return Integer.toString(shielding());
+        }
+
+        @Override
+        public boolean detachesWithinDelay(float delay){
+            if (target().buff(Swiftthistle.TimeBubble.class) != null){
+                return false;
+            }
+
+            if (target().buff(TimekeepersHourglass.timeFreeze.class) != null){
+                return false;
+            }
+
+            return partialLostShield >= delay;
         }
 
         @Override
