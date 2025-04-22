@@ -66,7 +66,7 @@ public class Ascension extends ArmorAbility {
 
     @Override
     public Talent[] talents() {
-        return new Talent[]{Talent.CHARITY, Talent.MALICE, Talent.EGOISM};
+        return new Talent[]{Talent.CHARITY, Talent.MALICE, Talent.EGOISM, Talent.HEROIC_ENERGY};
     }
 
     @Override

@@ -562,7 +562,7 @@ public enum Talent {
 			switch (cls){
 				case WARRIOR: default:
 					return 26;
-				case MAGE:
+				case MAGE: case CONJURER:
 					return 58;
 				case ROGUE:
 					return 90;
