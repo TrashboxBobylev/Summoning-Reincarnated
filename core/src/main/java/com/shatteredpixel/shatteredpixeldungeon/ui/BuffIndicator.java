@@ -150,6 +150,7 @@ public class BuffIndicator extends Component {
 	public static final int MAGIC_BUFF  = 12_08;
 	public static final int RANGED_BUFF = 13_08;
 	public static final int SOUL_REFUSAL= 14_08;
+	public static final int ASCENSION   = 15_08;
 
 	public static final int SIZE_SMALL  = 7;
 	public static final int SIZE_LARGE  = 16;

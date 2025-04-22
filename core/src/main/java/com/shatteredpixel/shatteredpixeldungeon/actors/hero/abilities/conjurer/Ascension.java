@@ -104,7 +104,7 @@ public class Ascension extends ArmorAbility {
 
         @Override
         public int icon() {
-            return BuffIndicator.ASCEND;
+            return BuffIndicator.ASCENSION;
         }
 
         @Override
@@ -125,9 +125,6 @@ public class Ascension extends ArmorAbility {
         }
 
         float partialLostShield;
-        public int spellCasts = 0;
-        public int flashCasts = 0;
-        public boolean divineInverventionCast = false;
 
         public void reset(){
             setShield(Dungeon.hero.maxMana() + Dungeon.hero.mana);
@@ -157,27 +154,17 @@ public class Ascension extends ArmorAbility {
             return Messages.get(this, "desc", shielding());
         }
 
-        public static final String LEFT = "left";
-        public static final String SPELL_CASTS = "spell_casts";
-        public static final String FLASH_CASTS = "flash_casts";
-        public static final String DIVINE_INTERVENTION_CAST = "divine_intervention_cast";
         private static final String PARTIAL_LOST_SHIELD = "partial_lost_shield";
 
         @Override
         public void storeInBundle(Bundle bundle) {
             super.storeInBundle(bundle);
-            bundle.put(SPELL_CASTS, spellCasts);
-            bundle.put(FLASH_CASTS, flashCasts);
-            bundle.put(DIVINE_INTERVENTION_CAST, divineInverventionCast);
             bundle.put(PARTIAL_LOST_SHIELD, partialLostShield);
         }
 
         @Override
         public void restoreFromBundle(Bundle bundle) {
             super.restoreFromBundle(bundle);
-            spellCasts = bundle.getInt(SPELL_CASTS);
-            flashCasts = bundle.getInt(FLASH_CASTS);
-            divineInverventionCast = bundle.getBoolean(DIVINE_INTERVENTION_CAST);
             partialLostShield = bundle.getFloat(PARTIAL_LOST_SHIELD);
         }
     }
