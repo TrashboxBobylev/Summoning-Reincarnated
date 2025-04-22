@@ -128,8 +128,8 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
     public boolean isEmpowered(){
         if (Dungeon.hero != null && Dungeon.hero.buff(Ascension.AscendBuff.class) != null){
             switch (alignment()){
-                case OFFENSIVE: return Dungeon.hero.pointsInTalent(Talent.MALICE) > 3;
-                case BENEFICIAL: return Dungeon.hero.pointsInTalent(Talent.CHARITY) > 3;
+                case OFFENSIVE: return Dungeon.hero.pointsInTalent(Talent.MALICE) > 2;
+                case BENEFICIAL: return Dungeon.hero.pointsInTalent(Talent.CHARITY) > 2;
             }
         }
         return false;
