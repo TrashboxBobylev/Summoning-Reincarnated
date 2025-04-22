@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.Ascension;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
@@ -156,7 +157,8 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
 //            return false;
 //        }
 
-        if ( manaCost() <= (Dungeon.hero.mana)){
+        if ( manaCost() <= (Dungeon.hero.buff(Ascension.AscendBuff.class) != null
+                ? Dungeon.hero.buff(Ascension.AscendBuff.class).shielding() : Dungeon.hero.mana)){
             return true;
         } else {
             GLog.warning(Messages.get(this, "fizzles"));

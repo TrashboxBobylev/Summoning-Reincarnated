@@ -58,7 +58,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HoldFast;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Levitation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
@@ -72,9 +71,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TieringEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TimeStasis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.FlightBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.TalentBooster;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cleric.AscendedForm;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.Ascension;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Challenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.ElementalStrike;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.NaturesPower;
@@ -350,9 +351,18 @@ public class Hero extends Char {
 	public void changeMana(int amount){
 		if (amount != 0) {
 			int gain = amount > 0 ? Math.min(maxMana() - mana, amount) : amount;
-			mana += gain;
+			if (buff(Ascension.AscendBuff.class) != null){
+				if (gain > 0){
+					gain = 0; //can't gain mana, while in ascension state... yet
+				} else {
+					buff(Ascension.AscendBuff.class).absorbDamage(mana);
+				}
+			} else {
+				mana += gain;
+			}
 			if (gain != 0 && sprite != null)
-				sprite.showStatusWithIcon(gain > 0 ? CharSprite.POSITIVE : CharSprite.NEGATIVE, Integer.toString(Math.abs(gain)), FloatingText.MANA);
+				sprite.showStatusWithIcon(gain > 0 ? CharSprite.POSITIVE : CharSprite.NEGATIVE,
+						Integer.toString(Math.abs(gain)), buff(Ascension.AscendBuff.class) != null ? FloatingText.SHIELDING : FloatingText.MANA);
 		}
 	}
 
@@ -2045,13 +2055,13 @@ public class Hero extends Char {
 			}
 
 			if (Dungeon.level.pit[step] && !Dungeon.level.solid[step]
-					&& (!flying || buff(Levitation.class) != null && buff(Levitation.class).detachesWithinDelay(delay))){
+					&& (!flying || buff(FlightBuff.class) != null && buff(FlightBuff.class).detachesWithinDelay(delay))){
 				if (!Chasm.jumpConfirmed){
 					Chasm.heroJump(this);
 					interrupt();
 				} else {
 					flying = false;
-					remove(buff(Levitation.class)); //directly remove to prevent cell pressing
+					remove((Buff)buff(FlightBuff.class)); //directly remove to prevent cell pressing
 					Chasm.heroFall(target);
 				}
 				canSelfTrample = false;

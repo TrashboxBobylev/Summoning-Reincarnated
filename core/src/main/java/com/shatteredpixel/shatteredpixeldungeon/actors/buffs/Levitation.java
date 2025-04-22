@@ -24,17 +24,13 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.FlightBuff;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
 
-public class Levitation extends FlavourBuff {
+public class Levitation extends FlavourBuff implements FlightBuff {
 	
 	{
 		type = buffType.POSITIVE;
@@ -45,8 +41,7 @@ public class Levitation extends FlavourBuff {
 	@Override
 	public boolean attachTo( Char target ) {
 		if (super.attachTo( target )) {
-			target.flying = true;
-			Roots.detach( target, Roots.class );
+			processFlightStart();
 			return true;
 		} else {
 			return false;
@@ -55,25 +50,13 @@ public class Levitation extends FlavourBuff {
 	
 	@Override
 	public void detach() {
-		target.flying = false;
 		super.detach();
-		//only press tiles if we're current in the game screen
-		if (ShatteredPixelDungeon.scene() instanceof GameScene) {
-			Dungeon.level.occupyCell(target );
-		}
+		processFlightEnd();
 	}
 
-	//used to determine if levitation is about to end
-	public boolean detachesWithinDelay(float delay){
-		if (target.buff(Swiftthistle.TimeBubble.class) != null){
-			return false;
-		}
-
-		if (target.buff(TimekeepersHourglass.timeFreeze.class) != null){
-			return false;
-		}
-
-		return cooldown() < delay;
+	@Override
+	public Char target() {
+		return target;
 	}
 	
 	@Override
