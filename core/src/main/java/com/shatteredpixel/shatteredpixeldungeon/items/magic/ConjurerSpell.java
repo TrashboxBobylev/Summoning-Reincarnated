@@ -125,6 +125,16 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
         return alignment;
     }
 
+    public boolean isEmpowered(){
+        if (Dungeon.hero != null && Dungeon.hero.buff(Ascension.AscendBuff.class) != null){
+            switch (alignment()){
+                case OFFENSIVE: return Dungeon.hero.pointsInTalent(Talent.MALICE) > 3;
+                case BENEFICIAL: return Dungeon.hero.pointsInTalent(Talent.CHARITY) > 3;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void execute( final Hero hero, String action ) {
 
@@ -234,16 +244,30 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
     }
 
     public String spellDesc(){
-        return Messages.get(this, "desc");
+        String desc = Messages.get(this, "desc");
+        if (!empowermentDesc().equals(Messages.NO_TEXT_FOUND))
+            desc += "\n\n" + empowermentDesc();
+        return desc;
+    }
+
+    public String empowermentDesc(){
+        return Messages.get(this, "desc_empower");
     }
 
     @Override
     public String getRankMessage(int rank) {
-        return Messages.get(this, "mana_cost", manaCost(rank)) + "\n" + spellRankMessage(rank);
+        String message = Messages.get(this, "mana_cost", manaCost(rank)) + "\n" + spellRankMessage(rank);
+        if (!empowermentRankDesc(rank).equals(Messages.NO_TEXT_FOUND))
+            message += "\n\n" + empowermentRankDesc(rank);
+        return message;
     }
 
     public String spellRankMessage(int rank){
         return Messages.get(this, "rank" + rank);
+    }
+
+    public String empowermentRankDesc(int rank){
+        return Messages.get(this, "rank" + rank + "_empower");
     }
 
     private  static CellSelector.Listener targeter = new  CellSelector.Listener(){
