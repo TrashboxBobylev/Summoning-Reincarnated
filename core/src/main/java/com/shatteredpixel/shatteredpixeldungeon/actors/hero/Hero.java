@@ -340,6 +340,7 @@ public class Hero extends Char {
 			}
 		}
 		if (subClass == HeroSubClass.SOUL_WIELDER) attunementBonus++;
+		if (buff(Ascension.AscendBuff.class) != null && pointsInTalent(Talent.CHARITY) > 3) attunementBonus += 2;
 
 		return ATU + attunementBonus;
 	}
