@@ -371,7 +371,7 @@ public class Minion extends Mob implements ManaSource {
         if (Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.hasTalent(Talent.CHARITY)){
             speed *= 1.5f;
         }
-        return 1f / speed;
+        return speed;
     }
 
     @Override
