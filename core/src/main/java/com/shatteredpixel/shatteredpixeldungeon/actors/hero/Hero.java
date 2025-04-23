@@ -603,14 +603,13 @@ public class Hero extends Char {
 				|| (enemy instanceof Mimic && enemy.alignment == Alignment.NEUTRAL);
 
 		//temporarily set the hero's weapon to the missile weapon being used
-		KindOfWeapon equipped = belongings.weapon;
-		belongings.weapon = knife;
+		belongings.thrownWeapon = knife;
 		knife.ranged = true;
 		boolean hit = false;
 		if (enemy.alignment != Alignment.ALLY)
-			hit = attack( enemy, knife.rank() == 2 ? 1.40f : 0f, 0f, 1f );
+			hit = attack( enemy, knife.rank() == 2 ? 1.40f : 1f, 0f, 1f );
 		Invisibility.dispel();
-		belongings.weapon = equipped;
+		belongings.thrownWeapon = null;
 
 		if (hit && subClass == HeroSubClass.GLADIATOR && wasEnemy){
 			Buff.affect( this, Combo.class ).hit( enemy );
