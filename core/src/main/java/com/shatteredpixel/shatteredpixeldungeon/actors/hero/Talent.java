@@ -537,6 +537,7 @@ public enum Talent {
 		public void tintIcon(Image icon) { icon.hardlight(0f, 0f, 1f); }
 		public float iconFadePercent() { return Math.max(0, visualcooldown() / 20); }
 	}
+	public static class CharityEmpoweringTracker extends Buff{}
 
 	int icon;
 	int maxPoints;

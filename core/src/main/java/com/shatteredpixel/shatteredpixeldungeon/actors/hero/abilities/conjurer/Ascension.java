@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ShieldBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.AttunementBooster;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.FlightBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -76,7 +77,7 @@ public class Ascension extends ArmorAbility {
         return HeroIcon.ASCENSION;
     }
 
-    public static class AscendBuff extends ShieldBuff implements FlightBuff {
+    public static class AscendBuff extends ShieldBuff implements FlightBuff, AttunementBooster {
 
         {
             type = buffType.POSITIVE;
@@ -125,6 +126,13 @@ public class Ascension extends ArmorAbility {
             }
 
             return partialLostShield >= delay;
+        }
+
+        @Override
+        public float boost() {
+            if (Dungeon.hero.pointsInTalent(Talent.CHARITY) > 3)
+                return 1.5f;
+            return 0;
         }
 
         @Override

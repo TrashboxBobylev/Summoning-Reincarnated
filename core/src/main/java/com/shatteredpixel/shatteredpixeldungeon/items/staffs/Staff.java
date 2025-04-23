@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.AttunementBooster;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.Ascension;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.items.AttunementItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
@@ -568,7 +569,11 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
 
             if (minion != null && minion.isAlive() && minion.behaviorType == Minion.BehaviorType.PASSIVE && target.buff(MagicImmune.class) == null){
                 if (minion.HP < minion.HT && Regeneration.regenOn()) {
-                    partialCharge += ((float) minion.HT / getRegenerationTurns());
+                    float healing = (float) minion.HT / getRegenerationTurns();
+                    if (target.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.hasTalent(Talent.CHARITY)){
+                        healing *= 2;
+                    }
+                    partialCharge += healing;
                     updateQuickslot();
 
                     if (partialCharge > 1) {

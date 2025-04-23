@@ -28,12 +28,16 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Attunement;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chungus;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Fury;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.ArmoredShielding;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.Ascension;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -264,6 +268,10 @@ public class Minion extends Mob implements ManaSource {
         if (enchantment != null && buff(MagicImmune.class) == null) {
             damage = enchantment.proc(  this, enemy, damage );
         }
+        if (Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.pointsInTalent(Talent.CHARITY) > 1 && enemy.buff(Talent.CharityEmpoweringTracker.class) == null){
+            Buff.affect(enemy, Talent.CharityEmpoweringTracker.class);
+            Buff.affect(this, Empowered.class, 5f);
+        }
         return super.attackProc(enemy, damage);
     }
 
@@ -359,7 +367,11 @@ public class Minion extends Mob implements ManaSource {
 
     @Override
     public float speed() {
-        return 1f / augment.delayFactor(Dungeon.hero.speed());
+        float speed = augment.delayFactor(Dungeon.hero.speed());
+        if (Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.hasTalent(Talent.CHARITY)){
+            speed *= 1.5f;
+        }
+        return 1f / speed;
     }
 
     @Override
