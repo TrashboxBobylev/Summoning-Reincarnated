@@ -32,10 +32,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Adrenaline;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Daze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.Ascension;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
@@ -120,7 +122,11 @@ public class GoatClone extends NPC implements ManaSource {
 
     @Override
     public float attackDelay() {
-        return super.attackDelay() * 0.3f;
+        float v = super.attackDelay() * 0.3f;
+        if (Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.hasTalent(Talent.MALICE)){
+            v /= 1.5f;
+        }
+        return v;
     }
 
     @Override
@@ -149,6 +155,14 @@ public class GoatClone extends NPC implements ManaSource {
             Buff.prolong(enemy, Adrenaline.class, 8f);
             Buff.prolong(enemy, PotionOfCleansing.Cleanse.class, 8f);
             damage *= 1f - 0.25f * Dungeon.hero.pointsInTalent(Talent.SPIRITUAL_RESTOCK);
+        }
+        if (Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.pointsInTalent(Talent.CHARITY) > 1 && enemy.buff(Talent.CharityEmpoweringTracker.class) == null){
+            Buff.affect(enemy, Talent.CharityEmpoweringTracker.class);
+            Buff.affect(this, Empowered.class, 5f);
+        }
+        if (Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.pointsInTalent(Talent.MALICE) > 1 && enemy.buff(Talent.MaliceEmpoweringTracker.class) == null){
+            Buff.affect(enemy, Talent.MaliceEmpoweringTracker.class);
+            Buff.affect(enemy, Daze.class, 5f);
         }
         if (Dungeon.hero.belongings.weapon != null){
             return Dungeon.hero.belongings.weapon.proc( enemy, this, damage );
@@ -200,6 +214,10 @@ public class GoatClone extends NPC implements ManaSource {
         //moves 2 tiles at a time when returning to the hero
         if (state == WANDERING && defendingPos == -1){
             speed *= 2;
+        }
+
+        if (Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.hasTalent(Talent.CHARITY)){
+            speed *= 1.5f;
         }
 
         return speed;
