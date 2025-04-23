@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Attunement;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chungus;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Daze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Fury;
@@ -212,7 +213,11 @@ public class Minion extends Mob implements ManaSource {
         int dr = Random.NormalIntRange(minDefense, maxDefense);
         dr += Random.NormalIntRange(0, Dungeon.hero.ATU()*2);
 
-        return super.drRoll() + dr;
+        int fullDR = super.drRoll() + dr;
+        if (Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.hasTalent(Talent.MALICE)){
+            fullDR *= 1.5f;
+        }
+        return fullDR;
     }
 
     public int independenceRange(){
@@ -272,12 +277,19 @@ public class Minion extends Mob implements ManaSource {
             Buff.affect(enemy, Talent.CharityEmpoweringTracker.class);
             Buff.affect(this, Empowered.class, 5f);
         }
+        if (Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.pointsInTalent(Talent.MALICE) > 1 && enemy.buff(Talent.MaliceEmpoweringTracker.class) == null){
+            Buff.affect(enemy, Talent.MaliceEmpoweringTracker.class);
+            Buff.affect(enemy, Daze.class, 5f);
+        }
         return super.attackProc(enemy, damage);
     }
 
     @Override
     public float attackDelay() {
         float delay = super.attackDelay();
+        if (Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.hasTalent(Talent.MALICE)){
+            delay /= 1.5f;
+        }
         return augment.delayFactor(delay);
     }
 

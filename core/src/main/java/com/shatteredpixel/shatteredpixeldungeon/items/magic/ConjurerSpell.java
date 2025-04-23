@@ -110,7 +110,11 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
     }
 
     public int manaCost() {
-        return manaCost(rank());
+        int manaCost = manaCost(rank());
+        if (Dungeon.hero != null && Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.pointsInTalent(Talent.MALICE) > 3){
+            manaCost *= 0.67f;
+        }
+        return manaCost;
     }
 
     public int manaCost(int rank){

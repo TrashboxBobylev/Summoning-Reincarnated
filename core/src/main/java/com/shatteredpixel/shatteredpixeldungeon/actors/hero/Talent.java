@@ -538,6 +538,7 @@ public enum Talent {
 		public float iconFadePercent() { return Math.max(0, visualcooldown() / 20); }
 	}
 	public static class CharityEmpoweringTracker extends Buff{}
+	public static class MaliceEmpoweringTracker extends Buff{}
 
 	int icon;
 	int maxPoints;
