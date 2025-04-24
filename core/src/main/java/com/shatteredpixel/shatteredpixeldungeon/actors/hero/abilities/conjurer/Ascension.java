@@ -38,7 +38,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbili
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -158,6 +160,20 @@ public class Ascension extends ArmorAbility {
 
             if (shielding() <= 0){
                 detach();
+            } else {
+                if (target instanceof Hero && ((Hero) target).pointsInTalent(Talent.EGOISM) > 2){
+                    //50% of wand and artifact recharging buffs
+                    for (Buff b : target.buffs()) {
+                        if (b instanceof Artifact.ArtifactBuff) {
+                            if (!((Artifact.ArtifactBuff) b).isCursed()) {
+                                ((Artifact.ArtifactBuff) b).charge((Hero) target, 0.5f);
+                            }
+                        }
+                        if (b instanceof Wand.Charger){
+                            ((Wand.Charger) b).gainCharge(0.125f);
+                        }
+                    }
+                }
             }
 
             spend(TICK);

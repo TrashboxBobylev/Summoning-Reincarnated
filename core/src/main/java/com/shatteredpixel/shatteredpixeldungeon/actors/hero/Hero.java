@@ -1714,8 +1714,10 @@ public class Hero extends Char {
 	@Override
 	public int defenseProc( Char enemy, int damage ) {
 
-		if (damage > 0 && hasTalent(Talent.MANABURN) &&
-				(mana >= maxMana() / 20 || (heroClass != HeroClass.CONJURER && HP >= HT / 20))){
+
+		final boolean isManaburnEmpowered = buff(Ascension.AscendBuff.class) != null && pointsInTalent(Talent.EGOISM) > 1;
+		if (damage > 0 && (hasTalent(Talent.MANABURN) || isManaburnEmpowered) &&
+				(mana >= maxMana() / 20 || (heroClass != HeroClass.CONJURER && HP >= HT / 20) || isManaburnEmpowered)){
 			sprite.parent.add(new Beam.LightRay(sprite.center(), DungeonTilemap.raisedTileCenterToWorld(enemy.pos)));
 			ShieldHalo shield;
 
@@ -1725,10 +1727,12 @@ public class Hero extends Char {
 			Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, Random.Float(0.87f, 1.15f) );
 			Sample.INSTANCE.play( Assets.Sounds.BLAST);
 
-			if (heroClass == HeroClass.CONJURER) {
-				changeMana(-maxMana()/20);
-			} else
-				damage(HT / 20, new StarBlazing());
+			if (!isManaburnEmpowered) {
+				if (heroClass == HeroClass.CONJURER) {
+					changeMana(-maxMana() / 20);
+				} else
+					damage(HT / 20, new StarBlazing());
+			}
 
 			for (int i : PathFinder.NEIGHBOURS9){
 				Char target = Actor.findChar(pos + i);
@@ -1738,6 +1742,9 @@ public class Hero extends Char {
 							0.50f * pointsInTalent(Talent.MANABURN);
 					if (heroClass != HeroClass.CONJURER)
 						damageMultiplier *= 1.25f;
+					if (isManaburnEmpowered){
+						damageMultiplier *= 1.33f;
+					}
 					target.damage((int) (damage * damageMultiplier), new StarBlazing());
 					TargetHealthIndicator.instance.update();
 				}
@@ -1836,6 +1843,9 @@ public class Hero extends Char {
 		if (!(src instanceof Viscosity.DeferedDamage)) {
 			if (Dungeon.mode == Dungeon.GameMode.EXPLORE) {
 				damage *= 0.75f;
+			}
+			if (buff(Ascension.AscendBuff.class) != null && pointsInTalent(Talent.EGOISM) > 3){
+				damage *= 0.67f;
 			}
 		}
 

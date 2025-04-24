@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.Ascension;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.WhiteWound;
@@ -79,7 +80,11 @@ public class ToyKnife extends MeleeWeapon implements Rankable {
 
     @Override
     public int level() {
-        return super.level() + (Dungeon.hero != null ? Dungeon.hero.ATU() : 1)-1;
+        int lvl = super.level() + (Dungeon.hero != null ? Dungeon.hero.ATU() : 1) - 1;
+        if (Dungeon.hero != null && Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.hasTalent(Talent.EGOISM)) {
+            lvl += 2;
+        }
+        return lvl;
     }
 
     @Override
@@ -206,6 +211,15 @@ public class ToyKnife extends MeleeWeapon implements Rankable {
                 }
             }
         }
+    }
+
+    @Override
+    public int reachFactor(Char owner) {
+        int reachFactor = super.reachFactor(owner);
+        if (Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.hasTalent(Talent.EGOISM)){
+            reachFactor += 2;
+        }
+        return reachFactor;
     }
 
     int rank = 1;
