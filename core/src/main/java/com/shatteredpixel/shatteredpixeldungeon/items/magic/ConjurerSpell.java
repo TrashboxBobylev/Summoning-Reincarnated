@@ -244,11 +244,15 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
 
     @Override
     public String desc() {
-        return spellDesc() + "\n\n" + manaCostDesc();
+        return fullSpellDesc() + "\n\n" + manaCostDesc();
     }
 
-    public String spellDesc(){
-        String desc = Messages.get(this, "desc");
+    public String spellDesc() {
+        return Messages.get(this, "desc");
+    }
+
+    public String fullSpellDesc(){
+        String desc = spellDesc();
         if (!empowermentDesc().equals(Messages.NO_TEXT_FOUND) && Dungeon.hero != null && Dungeon.hero.armorAbility instanceof Ascension)
             desc += "\n\n" + empowermentDesc();
         return desc;
