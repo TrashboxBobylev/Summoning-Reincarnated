@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurn;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
@@ -72,6 +73,9 @@ public class StarBlazing extends ConjurerSpell {
                     );
                 }
                 Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, Random.Float(0.87f, 1.15f) );
+                if (isEmpowered()){
+                    Buff.affect(ch, FrostBurn.class).reignite(ch, heroLvl()/4f);
+                }
             }
         }
         else {
@@ -92,6 +96,10 @@ public class StarBlazing extends ConjurerSpell {
                             );
                         }
                         Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC, 1, Random.Float(0.87f, 1.15f));
+
+                        if (isEmpowered()){
+                            Buff.affect(ch, FrostBurn.class).reignite(ch, heroLvl()/3f);
+                        }
                     }
                 }
             }
@@ -182,6 +190,16 @@ public class StarBlazing extends ConjurerSpell {
                 starSprite.reset( starSource, starDest, sprite, callback);
             }
         });
+    }
+
+    @Override
+    public String empowermentDesc() {
+        return Messages.get(this, "desc_empower", heroLvl() / (rank() == 1 ? 4 : 3));
+    }
+
+    @Override
+    public String empowermentRankDesc(int rank) {
+        return Messages.get(this, "rank_empower", heroLvl() / (rank == 1 ? 4 : 3));
     }
 
     public static class ProjectileStar extends Item {
