@@ -51,10 +51,10 @@ public class HeroIcon extends Image {
 	public static final int WARDEN      = 7;
 	public static final int CHAMPION    = 8;
 	public static final int MONK        = 9;
-	public static final int PRIEST      = 12;
-	public static final int PALADIN     = 13;
-	public static final int SOUL_WIELDER  = 14;
-	public static final int WILL_SORCERER = 15;
+	public static final int PRIEST      = 10;
+	public static final int PALADIN     = 11;
+	public static final int SOUL_WIELDER  = 12;
+	public static final int WILL_SORCERER = 13;
 
 	//abilities
 	public static final int HEROIC_LEAP     = 16;
