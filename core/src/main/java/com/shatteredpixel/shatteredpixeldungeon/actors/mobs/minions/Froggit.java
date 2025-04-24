@@ -58,7 +58,7 @@ public class Froggit extends Minion {
         if (rank == 2)
             damage += enemy.drRoll();
         if (rank == 3){
-            if (++counter == 4){
+            if (++counter == 3){
                 counter = 0;
                 Dungeon.hero.changeMana(1);
             }
