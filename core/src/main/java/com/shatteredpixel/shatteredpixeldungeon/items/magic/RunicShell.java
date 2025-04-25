@@ -57,9 +57,14 @@ public class RunicShell extends ConjurerSpell {
                 int healing = heal(ch, rank());
                 Buff.affect(ch, Barrier.class).setShield(healing);
                 ch.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(healing), FloatingText.SHIELDING );
+                if (isEmpowered())
+                    Buff.affect(ch, EmpowerTracker.class);
             }
             else {
                 Buff.affect(ch, Block.class, BLOCK_DURATION);
+                if (isEmpowered()){
+                    Buff.affect(ch, Block.class, BLOCK_DURATION);
+                }
             }
 
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
@@ -111,10 +116,26 @@ public class RunicShell extends ConjurerSpell {
     }
 
     @Override
+    public String empowermentDesc() {
+        if (rank() == 3)
+            return Messages.get(this, "desc_empower_rank3");
+        return super.empowermentDesc();
+    }
+
+    @Override
     public String spellRankMessage(int rank) {
         if (rank == 3){
             return Messages.get(this, "rank3", BLOCK_DURATION);
         }
         return Messages.get(this, "rank", intHeal(rank), new DecimalFormat("#.##").format( partialHeal(rank)));
     }
+
+    public String empowermentRankDesc(int rank){
+        if (rank == 3){
+            return Messages.get(this, "rank3_empower");
+        }
+        return Messages.get(this, "rank_empower");
+    }
+
+    public static class EmpowerTracker extends Buff {}
 }

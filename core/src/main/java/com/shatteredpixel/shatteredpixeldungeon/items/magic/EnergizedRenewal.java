@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -61,6 +62,10 @@ public class EnergizedRenewal extends ConjurerSpell {
 
             ch.sprite.emitter().burst(Speck.factory(Speck.STEAM), 5);
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
+
+            if (isEmpowered()){
+                PotionOfCleansing.cleanse(ch);
+            }
         }
     }
 
@@ -114,5 +119,10 @@ public class EnergizedRenewal extends ConjurerSpell {
             return Messages.get(this, "rank3", new DecimalFormat("#.##").format( partialHeal(rank)));
         }
         return Messages.get(this, "rank", intHeal(rank), new DecimalFormat("#.##").format( partialHeal(rank)));
+    }
+
+    @Override
+    public String empowermentRankDesc(int rank) {
+        return Messages.get(this, "rank_empower");
     }
 }

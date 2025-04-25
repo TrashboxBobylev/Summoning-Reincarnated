@@ -128,6 +128,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourg
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.FrostBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.DreemurrsNecromancy;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.RunicShell;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
@@ -1004,7 +1005,10 @@ if (Dungeon.hero.heroClass != HeroClass.CLERIC
 		//FIXME: when I add proper damage properties, should add an IGNORES_SHIELDS property to use here.
 		if (!(src instanceof Hunger)){
 			for (ShieldBuff s : buffs(ShieldBuff.class)){
-				dmg = s.absorbDamage(dmg);
+				int shieldDmg = dmg;
+				if (buff(RunicShell.EmpowerTracker.class) != null)
+					shieldDmg *= 0.67f;
+				dmg = s.absorbDamage(shieldDmg);
 				if (dmg == 0) break;
 			}
 		}
@@ -1012,6 +1016,7 @@ if (Dungeon.hero.heroClass != HeroClass.CLERIC
 		HP -= dmg;
 
 		if (HP > 0 && shielded > 0 && shielding() == 0){
+			Buff.detach(this, RunicShell.EmpowerTracker.class);
 			if (this instanceof Hero && ((Hero) this).hasTalent(Talent.PROVOKED_ANGER)){
 				Buff.affect(this, Talent.ProvokedAngerTracker.class, 5f);
 			}
