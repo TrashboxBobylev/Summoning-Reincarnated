@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulParalysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
@@ -36,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.audio.Sample;
@@ -85,6 +87,9 @@ public class PushingWaveform extends ConjurerSpell {
                 trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size() - 1), Ballistica.FRIENDLY_PROJECTILE);
                 WandOfBlastWave.throwChar(ch, trajectory, 4, true, true, this);
                 Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
+                if (isEmpowered()){
+                    Buff.affect(ch, SoulParalysis.class, 3f);
+                }
             } else if (ch.alignment == Char.Alignment.ALLY){
                 ArrayList<Integer> respawnPoints = new ArrayList<Integer>();
 
@@ -97,6 +102,9 @@ public class PushingWaveform extends ConjurerSpell {
                 if (!respawnPoints.isEmpty()){
                     ch.pos = Random.element(respawnPoints);
                     ScrollOfTeleportation.teleportToLocation(ch, ch.pos);
+                    if (isEmpowered()){
+                        Buff.affect(ch, Swiftthistle.TimeBubble.class).reset(5);
+                    }
                 }
             }
         }
@@ -158,4 +166,8 @@ public class PushingWaveform extends ConjurerSpell {
         return Messages.get(this, "rank", 5 + rank*3, 60 + rank*30);
     }
 
+    @Override
+    public String empowermentRankDesc(int rank) {
+        return Messages.get(this, "rank_empower");
+    }
 }
