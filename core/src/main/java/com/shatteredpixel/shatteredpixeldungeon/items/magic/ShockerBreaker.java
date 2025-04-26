@@ -85,6 +85,9 @@ public class ShockerBreaker extends ConjurerSpell {
     }
 
     private float dmg(int rank){
+        if (isEmpowered()){
+            return 0f;
+        }
         switch (rank){
             case 1: return 0.5f;
             case 2: return 0.95f;
@@ -101,6 +104,15 @@ public class ShockerBreaker extends ConjurerSpell {
             case 3: return 24;
         }
         return 0;
+    }
+
+    @Override
+    public int manaCost() {
+        int manaCost = super.manaCost();
+        if (isEmpowered()){
+            manaCost *= 2;
+        }
+        return manaCost;
     }
 
     private int noheal(int rank){
@@ -132,6 +144,11 @@ public class ShockerBreaker extends ConjurerSpell {
     public String spellRankMessage(int rank) {
         return Messages.get(this, "rank" + rank,
                 new DecimalFormat("#.##").format(dmg(rank)*100), buff(rank), noheal(rank));
+    }
+
+    @Override
+    public String empowermentRankDesc(int rank) {
+        return Messages.get(this, "rank_empower");
     }
 
     public static class NoHeal extends FlavourBuff {
