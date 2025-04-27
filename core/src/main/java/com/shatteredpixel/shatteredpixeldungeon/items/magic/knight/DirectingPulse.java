@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ConjurerSpell;
@@ -53,6 +54,9 @@ public class DirectingPulse extends ConjurerSpell {
             Buff.affect(ch, ToyKnife.SoulGain.class, buff(rank()));
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
             Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
+            if (isEmpowered()){
+                Buff.affect(ch, Vulnerable.class, buff(rank()) / 2);
+            }
         }
     }
 
@@ -81,7 +85,17 @@ public class DirectingPulse extends ConjurerSpell {
     }
 
     @Override
+    public String empowermentDesc() {
+        return Messages.get(this, "desc_empower", new DecimalFormat("#.#").format(buff(rank())/2));
+    }
+
+    @Override
     public String spellRankMessage(int rank) {
         return Messages.get(this, "rank", new DecimalFormat("#.#").format(buff(rank)));
+    }
+
+    @Override
+    public String empowermentRankDesc(int rank) {
+        return Messages.get(this, "rank_empower", new DecimalFormat("#.#").format(buff(rank)));
     }
 }
