@@ -52,7 +52,7 @@ public class SubNullFieldLighter extends ConjurerSpell {
             Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
         }
         ArrayList<Integer> cells = new ArrayList<>();
-        PathFinder.buildDistanceMap( trajectory.collisionPos, BArray.not( Dungeon.level.solid, null ), 3 );
+        PathFinder.buildDistanceMap( trajectory.collisionPos, BArray.not( Dungeon.level.solid, null ), isEmpowered() ? 4 : 3 );
             for (int i = 0; i < PathFinder.distance.length; i++) {
                 if (PathFinder.distance[i] < Integer.MAX_VALUE) {
                     cells.add(i);
@@ -73,12 +73,16 @@ public class SubNullFieldLighter extends ConjurerSpell {
     }
 
     public int resource(int rank) {
+        int value = 0;
         switch (rank){
-            case 1: return 250;
-            case 2: return 333;
-            case 3: return 425;
+            case 1: value = 250; break;
+            case 2: value = 333; break;
+            case 3: value = 425; break;
         }
-        return 0;
+        if (isEmpowered()){
+            value *= 1.25f;
+        }
+        return value;
     }
 
     @Override
