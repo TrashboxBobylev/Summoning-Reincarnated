@@ -27,6 +27,9 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.AttunementBooster;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.Ascension;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.DreemurrsNecromancy;
@@ -124,5 +127,13 @@ public class NecromancyStat extends Buff {
         partialActiveDrain = bundle.getFloat(ACTIVE_DRAIN);
     }
 
-    public static class NecromancyAlly extends AllyBuff {}
+    public static class NecromancyAlly extends AllyBuff implements AttunementBooster {
+        @Override
+        public float boost() {
+            if (Dungeon.hero != null && Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.pointsInTalent(Talent.CHARITY) > 2){
+                return 2;
+            }
+            return 0;
+        }
+    }
 }
