@@ -275,7 +275,7 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
     }
 
     public String empowermentRankDesc(int rank){
-        return Messages.get(this, "rank" + rank + "_empower");
+        return Messages.get(this, "rank_empower");
     }
 
     private  static CellSelector.Listener targeter = new  CellSelector.Listener(){

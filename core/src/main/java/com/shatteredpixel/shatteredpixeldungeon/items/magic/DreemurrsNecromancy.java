@@ -99,8 +99,4 @@ public class DreemurrsNecromancy extends ConjurerSpell {
         return Messages.get(this, "rank" + (rank == 3 ? "3" : ""), new DecimalFormat("#.##").format(passiveManaDrain(rank)), new DecimalFormat("#.##").format(activeManaDrain(rank)));
     }
 
-    @Override
-    public String empowermentRankDesc(int rank) {
-        return Messages.get(this, "rank_empower");
-    }
 }

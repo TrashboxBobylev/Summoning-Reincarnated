@@ -146,11 +146,6 @@ public class ShockerBreaker extends ConjurerSpell {
                 new DecimalFormat("#.##").format(dmg(rank)*100), buff(rank), noheal(rank));
     }
 
-    @Override
-    public String empowermentRankDesc(int rank) {
-        return Messages.get(this, "rank_empower");
-    }
-
     public static class NoHeal extends FlavourBuff {
 
     }

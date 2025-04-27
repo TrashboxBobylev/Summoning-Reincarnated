@@ -166,8 +166,4 @@ public class PushingWaveform extends ConjurerSpell {
         return Messages.get(this, "rank", 5 + rank*3, 60 + rank*30);
     }
 
-    @Override
-    public String empowermentRankDesc(int rank) {
-        return Messages.get(this, "rank_empower");
-    }
 }

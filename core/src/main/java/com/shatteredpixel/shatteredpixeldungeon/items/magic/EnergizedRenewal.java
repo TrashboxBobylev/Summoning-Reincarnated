@@ -121,8 +121,4 @@ public class EnergizedRenewal extends ConjurerSpell {
         return Messages.get(this, "rank", intHeal(rank), new DecimalFormat("#.##").format( partialHeal(rank)));
     }
 
-    @Override
-    public String empowermentRankDesc(int rank) {
-        return Messages.get(this, "rank_empower");
-    }
 }
