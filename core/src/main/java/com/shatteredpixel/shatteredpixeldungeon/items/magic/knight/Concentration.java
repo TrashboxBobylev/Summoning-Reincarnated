@@ -26,6 +26,8 @@ package com.shatteredpixel.shatteredpixeldungeon.items.magic.knight;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
@@ -56,6 +58,8 @@ public class Concentration extends AdHocSpell {
                 Sample.INSTANCE.play(Assets.Sounds.LULLABY);
                 Regeneration.regenerate(hero, intHeal(rank()));
                 new Flare(10, 64).color(0xFFFFFF, true).show(Dungeon.hero.sprite.parent, DungeonTilemap.tileCenterToWorld(hero.pos), 1.5f);
+                if (isEmpowered())
+                    Buff.affect(hero, MonkEnergy.MonkAbility.Meditate.MeditateResistance.class, hero.cooldown());
             }
         });
         hero.busy();
@@ -96,5 +100,4 @@ public class Concentration extends AdHocSpell {
     public String spellRankMessage(int rank) {
         return Messages.get(this, "rank", intHeal(rank), new DecimalFormat("#.#").format(paralyse(rank)));
     }
-
 }
