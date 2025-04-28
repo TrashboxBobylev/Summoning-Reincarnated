@@ -39,9 +39,11 @@ import com.shatteredpixel.shatteredpixeldungeon.items.magic.AdHocSpell;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.BArray;
 import com.watabou.utils.PathFinder;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class EnergizedBlast extends AdHocSpell {
 
@@ -56,8 +58,14 @@ public class EnergizedBlast extends AdHocSpell {
         if (clone != null){
             hero.spendAndNext(1f);
             Sample.INSTANCE.play(Assets.Sounds.BLAST);
-            for (int i: PathFinder.NEIGHBOURS8){
-                int pos = clone.pos + i;
+            ArrayList<Integer> cells = new ArrayList<>();
+            PathFinder.buildDistanceMap(clone.pos, BArray.not( Dungeon.level.solid, null ), isEmpowered() ? 2 : 1 );
+            for (int i = 0; i < PathFinder.distance.length; i++) {
+                if (PathFinder.distance[i] < Integer.MAX_VALUE) {
+                    cells.add(i);
+                }
+            }
+            for (int pos: cells){
                 CellEmitter.get(pos).burst(MagicMissile.WhiteParticle.FACTORY, 12);
                 Char ch = Actor.findChar(pos);
                 if (ch != null && ch != Dungeon.hero){
