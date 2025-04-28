@@ -379,7 +379,7 @@ public class Minion extends Mob implements ManaSource {
 
     @Override
     public float speed() {
-        float speed = augment.delayFactor(Dungeon.hero.speed());
+        float speed = augment.delayFactor(Dungeon.hero.speed() * super.speed());
         if (Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.hasTalent(Talent.CHARITY)){
             speed *= 1.5f;
         }
