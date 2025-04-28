@@ -61,6 +61,8 @@ public abstract class AdHocSpell extends ConjurerSpell {
                 updateQuickslot();
             }
 
+        } else {
+            super.execute(hero, action);
         }
     }
 }
