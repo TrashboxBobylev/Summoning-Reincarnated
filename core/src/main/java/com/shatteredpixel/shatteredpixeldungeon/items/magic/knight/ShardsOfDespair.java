@@ -36,7 +36,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.GoatClone;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.AdHocSpell;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.CursedWand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -59,7 +61,7 @@ public class ShardsOfDespair extends AdHocSpell {
     @Override
     public boolean effect(Hero hero) {
         for (Mob mob : Dungeon.level.mobs) {
-            if (Dungeon.level.distance(curUser.pos, mob.pos) <= 8
+            if (Dungeon.level.distance(curUser.pos, mob.pos) <= (isEmpowered() ? 10000 : 8)
                     && Dungeon.level.heroFOV[mob.pos]
                     && mob.alignment != Char.Alignment.ALLY) {
 
@@ -80,6 +82,11 @@ public class ShardsOfDespair extends AdHocSpell {
                                 if (rank() >= 3){
                                     Buff.prolong(ch, SoulParalysis.class, 6f);
                                 }
+                            }
+                            if (isEmpowered()){
+                                // casts positive cursed effects
+                                Ballistica bolt = new Ballistica(ch.pos, ch.pos, Ballistica.WONT_STOP);
+                                CursedWand.randomValidEffect(null, hero, bolt, true).effect(null, hero, bolt, true);
                             }
                         }
                         targets.remove( this );
@@ -144,12 +151,15 @@ public class ShardsOfDespair extends AdHocSpell {
 
     @Override
     public int manaCost(int rank) {
+        int manaCost = 0;
         switch (rank){
-            case 1: return 10;
-            case 2: return 20;
-            case 3: return 45;
+            case 1: manaCost = 10; break;
+            case 2: manaCost = 20; break;
+            case 3: manaCost = 45; break;
         }
-        return 0;
+        if (isEmpowered())
+            manaCost *= 2;
+        return manaCost;
     }
 
     @Override
