@@ -64,12 +64,16 @@ public class MotionBloom extends ConjurerSpell {
     }
 
     private int cooldown(int rank){
+        int cooldown = 0;
         switch (rank){
-            case 1: return 90;
-            case 2: return 90;
-            case 3: return 45;
+            case 1: cooldown = 90; break;
+            case 2: cooldown = 90; break;
+            case 3: cooldown = 45; break;
         }
-        return 0;
+        if (isEmpowered()){
+            cooldown /= 1.5f;
+        }
+        return cooldown;
     }
 
     @Override
