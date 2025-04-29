@@ -27,6 +27,8 @@ package com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.FrostFire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurn;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -35,8 +37,10 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ConjurerSpell;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Callback;
+import com.watabou.utils.PathFinder;
 
 import java.text.DecimalFormat;
 
@@ -54,6 +58,13 @@ public class AntarcticTouch extends ConjurerSpell {
 
         if (ch != null){
             Buff.affect(ch, FrostBurn.class).reignite(ch, frostburn(rank()));
+            if (isEmpowered()){
+                for (int offset : PathFinder.NEIGHBOURS9){
+                    if (!Dungeon.level.solid[trajectory.collisionPos+offset]) {
+                        GameScene.add(Blob.seed(trajectory.collisionPos + offset, Math.round(frostburn(rank())/3), FrostFire.class));
+                    }
+                }
+            }
             Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
             Buff.affect(ch, Minion.UniversalTargeting.class, 15f);
             for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
@@ -89,8 +100,18 @@ public class AntarcticTouch extends ConjurerSpell {
     }
 
     @Override
+    public String empowermentDesc() {
+        return Messages.get(this, "desc_empower", new DecimalFormat("#.#").format(frostburn(rank())/3));
+    }
+
+    @Override
     public String spellRankMessage(int rank) {
         return Messages.get(this, "rank"+ (rank == 3 ? "3" : ""), new DecimalFormat("#.#").format(frostburn(rank)), manaCost());
+    }
+
+    @Override
+    public String empowermentRankDesc(int rank) {
+        return Messages.get(this, "rank_empower", new DecimalFormat("#.#").format(frostburn(rank())/3));
     }
 
     @Override
