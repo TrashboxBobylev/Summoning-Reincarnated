@@ -56,7 +56,7 @@ public class TommiesArmorSpell extends ConjurerSpell {
                 ch.buff(ArmoredShielding.class).detach();
                 Buff.affect(ch, Barkskin.class).detach();
                 Buff.affect(ch, ArcaneArmor.class).detach();
-                Dungeon.hero.mana = Math.min(Dungeon.hero.maxMana(), Dungeon.hero.mana + manaCost());
+                Dungeon.hero.changeMana(manaCost());
             }
         }
     }
