@@ -356,7 +356,7 @@ public class Hero extends Char {
 				if (gain > 0){
 					gain = 0; //can't gain mana, while in ascension state... yet
 				} else {
-					buff(Ascension.AscendBuff.class).absorbDamage(mana);
+					buff(Ascension.AscendBuff.class).absorbDamage(-gain);
 				}
 			} else {
 				mana += gain;
