@@ -69,6 +69,13 @@ public class TransmogrificationWand extends ConjurerSpell {
     }
 
     private int enlargement(int rank){
+        if (isEmpowered()){
+            switch (rank){
+                case 1: return 6;
+                case 2: return 16;
+                case 3: return 4;
+            }
+        }
         switch (rank){
             case 1: return 5;
             case 2: return 13;
@@ -78,6 +85,13 @@ public class TransmogrificationWand extends ConjurerSpell {
     }
 
     private int shrinking(int rank){
+        if (isEmpowered()){
+            switch (rank){
+                case 1: return 6;
+                case 2: return 5;
+                case 3: return 19;
+            }
+        }
         switch (rank){
             case 1: return 5;
             case 2: return 7;
@@ -94,6 +108,11 @@ public class TransmogrificationWand extends ConjurerSpell {
             case 3: return 18;
         }
         return 0;
+    }
+
+    @Override
+    public String empowermentDesc() {
+        return Messages.get(this, "desc_empower_" + alignment().name());
     }
 
     public String spellDesc() {
