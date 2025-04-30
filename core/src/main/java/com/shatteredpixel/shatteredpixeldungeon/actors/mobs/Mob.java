@@ -54,6 +54,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Sleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.ArmoredShielding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
@@ -397,6 +398,7 @@ public abstract class Mob extends Char {
 	protected float modifyPriority(Char ch, float priority){
 		if (canAttack(ch)) priority *= 2.0f;
 		if (ch.buff(Minion.UniversalTargeting.class) != null) priority *= 10f;
+		if (ch.buff(ArmoredShielding.class) != null && ch.buff(ArmoredShielding.class).isEmpowered()) priority *= 1000000f;
 		return 1f/priority;
 	}
 

@@ -24,12 +24,22 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.EffectBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.Ascension;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 
 public class ArmoredShielding extends EffectBuff {
     @Override
     public int icon() {
         return BuffIndicator.DEFENSE_BUFF;
+    }
+
+    public boolean isEmpowered(){
+        if (Dungeon.hero != null && Dungeon.hero.buff(Ascension.AscendBuff.class) != null){
+            return Dungeon.hero.pointsInTalent(Talent.CHARITY) > 2;
+        }
+        return false;
     }
 }
