@@ -35,12 +35,12 @@ public class Dog extends Mob {
 	{
 		spriteClass = DogSprite.class;
 		
-		HP = HT = 10;
-		defenseSkill = 8;
+		HP = HT = 9;
+		defenseSkill = 12;
 		baseSpeed = 2f;
 		
-		EXP = 2;
-		maxLvl = 6;
+		EXP = 4;
+		maxLvl = 9;
 		
 		loot = Generator.random();
 		lootChance = 0.1f;
@@ -55,12 +55,12 @@ public class Dog extends Mob {
 
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 2, 5 );
+		return Random.NormalIntRange( 1, 4 );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 12;
+		return 10;
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class Dog extends Mob {
 //		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
 //			return 0.7f*super.attackDelay();
 //		}
-		return super.attackDelay();
+		return super.attackDelay()*0.5f;
 	}
 
 //	@Override
