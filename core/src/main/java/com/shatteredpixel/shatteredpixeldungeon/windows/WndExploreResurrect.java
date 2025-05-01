@@ -120,6 +120,8 @@ public class WndExploreResurrect extends Window {
 			protected void onClick() {
 				hide();
 
+				Dungeon.hero.sprite.die();
+
 				Dungeon.hero.reallyDie( WndExploreResurrect.causeOfDeath );
 				Rankings.INSTANCE.submit( false, WndExploreResurrect.causeOfDeath.getClass() );
 			}

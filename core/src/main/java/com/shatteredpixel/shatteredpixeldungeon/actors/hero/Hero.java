@@ -2386,37 +2386,37 @@ public class Hero extends Char {
 			}
 		}
 
-		if (ankh != null) {
-			interrupt();
+		if (Dungeon.mode != Dungeon.GameMode.EXPLORE) {
+			if (ankh != null) {
+				interrupt();
 
-			if (ankh.isBlessed()) {
-				this.HP = Math.max(1, HT / 4);
+				if (ankh.isBlessed()) {
+					this.HP = Math.max(1, HT / 4);
 
-				PotionOfHealing.cure(this);
-				Buff.prolong(this, Invulnerability.class, Invulnerability.DURATION);
+					PotionOfHealing.cure(this);
+					Buff.prolong(this, Invulnerability.class, Invulnerability.DURATION);
 
-				SpellSprite.show(this, SpellSprite.ANKH);
-				GameScene.flash(0x80FFFF40);
-				Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
-				GLog.w(Messages.get(this, "revive"));
-				Statistics.ankhsUsed++;
-				Catalog.countUse(Ankh.class);
+					SpellSprite.show(this, SpellSprite.ANKH);
+					GameScene.flash(0x80FFFF40);
+					Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
+					GLog.w(Messages.get(this, "revive"));
+					Statistics.ankhsUsed++;
+					Catalog.countUse(Ankh.class);
 
-				ankh.detach(belongings.backpack);
+					ankh.detach(belongings.backpack);
 
-				for (Char ch : Actor.chars()) {
-					if (ch instanceof DriedRose.GhostHero) {
-						((DriedRose.GhostHero) ch).sayAnhk();
-						return;
+					for (Char ch : Actor.chars()) {
+						if (ch instanceof DriedRose.GhostHero) {
+							((DriedRose.GhostHero) ch).sayAnhk();
+							return;
+						}
 					}
-				}
-			} else {
+				} else {
 
-				//this is hacky, basically we want to declare that a wndResurrect exists before
-				//it actually gets created. This is important so that the game knows to not
-				//delete the run or submit it to rankings, because a WndResurrect is about to exist
-				//this is needed because the actual creation of the window is delayed here
-				if (Dungeon.mode != Dungeon.GameMode.EXPLORE) {
+					//this is hacky, basically we want to declare that a wndResurrect exists before
+					//it actually gets created. This is important so that the game knows to not
+					//delete the run or submit it to rankings, because a WndResurrect is about to exist
+					//this is needed because the actual creation of the window is delayed here
 					WndResurrect.instance = new Object();
 					Ankh finalAnkh = ankh;
 					Game.runOnRenderThread(new Callback() {
@@ -2425,32 +2425,32 @@ public class Hero extends Char {
 							GameScene.show(new WndResurrect(finalAnkh));
 						}
 					});
-				} else {
-					WndExploreResurrect.instance = new Object();
-					Game.runOnRenderThread(new Callback() {
-						@Override
-						public void call() {
-							GameScene.show(new WndExploreResurrect(cause));
-						}
-					});
-				}
 
-				if (cause instanceof Hero.Doom) {
-					((Hero.Doom)cause).onDeath();
-				}
+					if (cause instanceof Hero.Doom) {
+						((Hero.Doom) cause).onDeath();
+					}
 
-				SacrificialFire.Marked sacMark = buff(SacrificialFire.Marked.class);
-				if (sacMark != null){
-					sacMark.detach();
-				}
+					SacrificialFire.Marked sacMark = buff(SacrificialFire.Marked.class);
+					if (sacMark != null) {
+						sacMark.detach();
+					}
 
+				}
+				return;
 			}
-			return;
-		}
-		
-		Actor.fixTime();
-		super.die( cause );
-		reallyDie( cause );
+
+			Actor.fixTime();
+			super.die( cause );
+			reallyDie( cause );
+		} else {
+            WndExploreResurrect.instance = new Object();
+            Game.runOnRenderThread(new Callback() {
+                @Override
+                public void call() {
+                    GameScene.show(new WndExploreResurrect(cause));
+                }
+            });
+        }
 	}
 	
 	public static void reallyDie( Object cause ) {
