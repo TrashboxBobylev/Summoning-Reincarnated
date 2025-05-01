@@ -153,9 +153,9 @@ public class ShardsOfDespair extends AdHocSpell {
     public int manaCost(int rank) {
         int manaCost = 0;
         switch (rank){
-            case 1: manaCost = 10; break;
-            case 2: manaCost = 20; break;
-            case 3: manaCost = 45; break;
+            case 1: manaCost = 8; break;
+            case 2: manaCost = 15; break;
+            case 3: manaCost = 35; break;
         }
         if (isEmpowered())
             manaCost *= 2;
