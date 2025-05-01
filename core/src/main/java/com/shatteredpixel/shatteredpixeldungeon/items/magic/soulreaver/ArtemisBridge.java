@@ -27,6 +27,8 @@ package com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.WhiteParticle;
@@ -97,6 +99,9 @@ public class ArtemisBridge extends ConjurerSpell {
                             Dungeon.hero.pos = pos+dir;
                             Dungeon.observe();
                             GameScene.updateFog();
+                            if (isEmpowered()){
+                                Buff.affect(ch, Empowered.class, 3f);
+                            }
                         }
                     });
                 }
