@@ -49,7 +49,7 @@ public class Conducts {
 //        INVISIBLE(2f),
         REGENERATION(1.33f, 14),
 //        UNKNOWN(1.7f),
-//        NO_STR(3f),
+        NO_STR(1.4f, 16),
 //        CHAMPS(1.7f),
         NO_REGEN(1.66f, 18),
         CURSE(1.4f, 19),

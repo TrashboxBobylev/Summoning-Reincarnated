@@ -25,7 +25,9 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AdrenalineSurge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
@@ -51,9 +53,14 @@ public class ElixirOfMight extends Elixir {
 	@Override
 	public void apply( Hero hero ) {
 		identify();
-		
-		hero.STR++;
-		hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "1", FloatingText.STRENGTH);
+
+		if (Dungeon.isChallenged(Conducts.Conduct.NO_STR)){
+			Buff.append(hero, AdrenalineSurge.class).reset(2, AdrenalineSurge.DURATION * 1.5f);
+			hero.sprite.showStatusWithIcon(CharSprite.WARNING, "2", FloatingText.STRENGTH);
+		} else {
+			hero.STR++;
+			hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "1", FloatingText.STRENGTH);
+		}
 		
 		Buff.affect(hero, HTBoost.class).reset();
 		HTBoost boost = Buff.affect(hero, HTBoost.class);

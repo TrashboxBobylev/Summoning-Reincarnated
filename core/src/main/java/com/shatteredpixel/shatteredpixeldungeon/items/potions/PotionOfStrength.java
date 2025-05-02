@@ -25,8 +25,11 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.potions;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Adrenaline;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AdrenalineSurge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hex;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
@@ -52,8 +55,13 @@ public class PotionOfStrength extends Potion {
 	public void apply( Hero hero ) {
 		identify();
 
-		hero.STR++;
-		hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "1", FloatingText.STRENGTH);
+		if (Dungeon.isChallenged(Conducts.Conduct.NO_STR)){
+			Buff.append(hero, AdrenalineSurge.class).reset(2, AdrenalineSurge.DURATION * 1.5f);
+			hero.sprite.showStatusWithIcon(CharSprite.WARNING, "2", FloatingText.STRENGTH);
+		} else {
+			hero.STR++;
+			hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, "1", FloatingText.STRENGTH);
+		}
 
 		GLog.p( Messages.get(this, "msg", hero.STR()) );
 		

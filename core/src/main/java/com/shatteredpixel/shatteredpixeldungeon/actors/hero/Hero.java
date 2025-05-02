@@ -216,6 +216,7 @@ import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 
 public class Hero extends Char {
@@ -318,8 +319,8 @@ public class Hero extends Char {
 
 		strBonus += RingOfMight.strengthBonus( this );
 		
-		AdrenalineSurge buff = buff(AdrenalineSurge.class);
-		if (buff != null){
+		HashSet<AdrenalineSurge> strBuffs = buffs(AdrenalineSurge.class);
+		for (AdrenalineSurge buff : strBuffs){
 			strBonus += buff.boost();
 		}
 
