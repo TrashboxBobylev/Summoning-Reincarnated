@@ -42,6 +42,16 @@ public class RainbowParticle extends PixelParticle {
 		}
 	};
 
+	public static final Emitter.Factory SUPER_BURST = new Emitter.Factory() {
+		@Override
+		public void emit( Emitter emitter, int index, float x, float y ) {
+			((RainbowParticle)emitter.recycle( RainbowParticle.class )).resetSuperBurst( x, y );
+		}
+		@Override
+		public boolean lightMode() {
+			return false;
+		}
+	};
 
 	public RainbowParticle() {
 		super();
@@ -70,6 +80,18 @@ public class RainbowParticle extends PixelParticle {
 		speed.polar( Random.Float( PointF.PI2 ), Random.Float( 16, 32 ) );
 
 		left = lifespan;
+	}
+
+	public void resetSuperBurst( float x, float y ) {
+		revive();
+
+		this.x = x;
+		this.y = y;
+
+		color( Random.oneOf(0xff3355, 0x99ff33, 0xff9a00, 0xffff00, 0x00a0ff, 0x5e0dcc) );
+		speed.polar( Random.Float( PointF.PI2 ), Random.Float( 2, 28 ) );
+
+		left = lifespan*1.75f;
 	}
 
 	@Override

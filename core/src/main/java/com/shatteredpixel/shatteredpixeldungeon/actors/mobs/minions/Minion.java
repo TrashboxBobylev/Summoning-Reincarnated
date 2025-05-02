@@ -77,7 +77,7 @@ public class Minion extends Mob implements ManaSource {
     public int rank;
     public float attunement;
     public BehaviorType behaviorType;
-    private Staff staff = null;
+    protected Staff staff = null;
     public int minDefense;
     public int maxDefense;
 

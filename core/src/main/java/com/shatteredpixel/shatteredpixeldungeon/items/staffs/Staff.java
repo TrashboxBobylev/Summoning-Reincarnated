@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.AttunementB
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.Ascension;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Chicken;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.items.AttunementItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
@@ -303,7 +304,7 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
 
         super.execute(hero, action);
 
-        if (hero.buff(MagicImmune.class) != null || Dungeon.isChallenged(Conducts.Conduct.NO_MAGIC)){
+        if (hero.buff(MagicImmune.class) != null){
             GLog.warning( Messages.get(Staff.class, "no_magic") );
             return;
         }
@@ -354,7 +355,11 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
         //if anything is met, spawn minion
         //if hero do not have enough strength, summoning might fail
         if (strength == 1 || Random.Float() < 1 / (float) (strength * 2)) {
-            minion = minionType.getDeclaredConstructor().newInstance();
+            if (!Dungeon.isChallenged(Conducts.Conduct.NO_MAGIC)) {
+                minion = minionType.getDeclaredConstructor().newInstance();
+            } else {
+                minion = new Chicken();
+            }
             minionID = minion.id();
             minion.init(this);
             GameScene.add(minion);

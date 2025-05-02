@@ -47,11 +47,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage.WildMagic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.DivineSense;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.GuidingLight;
-import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.RainbowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
@@ -74,8 +76,10 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
+import com.watabou.utils.PathFinder;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
@@ -157,7 +161,7 @@ public abstract class Wand extends Item implements ChargingItem {
 
 	public boolean tryToZap( Hero owner, int target ){
 
-		if (owner.buff(WildMagic.WildMagicTracker.class) == null && (owner.buff(MagicImmune.class) != null || Dungeon.isChallenged(Conducts.Conduct.NO_MAGIC))){
+		if (owner.buff(WildMagic.WildMagicTracker.class) == null && (owner.buff(MagicImmune.class) != null)){
 			GLog.w( Messages.get(this, "no_magic") );
 			return false;
 		}
@@ -802,40 +806,63 @@ public abstract class Wand extends Item implements ChargingItem {
 									}
 								});
 					} else {
-						curWand.fx(shot, new Callback() {
-							public void call() {
-								curWand.onZap(shot);
-								if (Random.Float() < WondrousResin.extraCurseEffectChance()){
-									WondrousResin.forcePositive = true;
-									CursedWand.cursedZap(curWand,
-											curUser,
-											new Ballistica(curUser.pos, target, Ballistica.MAGIC_BOLT), new Callback() {
-												@Override
-												public void call() {
-													WondrousResin.forcePositive = false;
-													curWand.wandUsed();
-												}
-											});
-								} else {
-									curWand.wandUsed();
+						if (Dungeon.isChallenged(Conducts.Conduct.NO_MAGIC)){
+							MagicMissile.boltFromChar( curUser.sprite.parent,
+									MagicMissile.RAINBOW,
+									curUser.sprite,
+									shot.collisionPos,
+									() -> {
+										Emitter emitter = CellEmitter.center(shot.collisionPos);
+										emitter.burst(RainbowParticle.SUPER_BURST, Random.Int(60, 120));
+										for (int i : PathFinder.NEIGHBOURS9){
+											Char ch = Actor.findChar( shot.collisionPos + i );
+											if (ch != null) {
+												ch.damage(1 + Dungeon.scalingDepth() / 3, curUser);
+											}
+										}
+										Sample.INSTANCE.play( Assets.Sounds.BLAST, 1.0f, 2.0f );
+										Wand.wondrousProc(curWand, shot.collisionPos);
+									});
+							Sample.INSTANCE.play( Assets.Sounds.ZAP );
+						} else {
+							curWand.fx(shot, new Callback() {
+								public void call() {
+									curWand.onZap(shot);
+									wondrousProc(curWand, target);
 								}
-							}
-						});
-
+							});
+						}
 					}
 					curWand.cursedKnown = true;
-					
+
 				}
-				
+
 			}
 		}
-		
+
 		@Override
 		public String prompt() {
 			return Messages.get(Wand.class, "prompt");
 		}
 	};
-	
+
+	private static void wondrousProc(Wand curWand, Integer target) {
+		if (Random.Float() < WondrousResin.extraCurseEffectChance()) {
+			WondrousResin.forcePositive = true;
+			CursedWand.cursedZap(curWand,
+					curUser,
+					new Ballistica(curUser.pos, target, Ballistica.MAGIC_BOLT), new Callback() {
+						@Override
+						public void call() {
+							WondrousResin.forcePositive = false;
+							curWand.wandUsed();
+						}
+					});
+		} else {
+			curWand.wandUsed();
+		}
+	}
+
 	public class Charger extends Buff {
 		
 		private static final float BASE_CHARGE_DELAY = 10f;

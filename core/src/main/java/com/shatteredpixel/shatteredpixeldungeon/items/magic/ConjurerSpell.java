@@ -25,7 +25,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.magic;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -162,7 +161,7 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
 
     public boolean tryToZap( Hero owner){
 
-        if (owner.buff(MagicImmune.class) != null || Dungeon.isChallenged(Conducts.Conduct.NO_MAGIC)){
+        if (owner.buff(MagicImmune.class) != null){
             GLog.warning( Messages.get(Wand.class, "no_magic") );
             return false;
         }

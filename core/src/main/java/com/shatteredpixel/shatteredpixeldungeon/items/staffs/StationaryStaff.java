@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.staffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -34,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Chicken;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.stationary.StationaryMinion;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
@@ -214,7 +216,11 @@ public class StationaryStaff extends Staff {
             boolean firstSummon = false;
             if (minion == null || !minion.isAlive()){
                 firstSummon = true;
-                minion = minionType.getDeclaredConstructor().newInstance();
+                if (!Dungeon.isChallenged(Conducts.Conduct.NO_MAGIC)) {
+                    minion = minionType.getDeclaredConstructor().newInstance();
+                } else {
+                    minion = new Chicken();
+                }
                 minionID = minion.id();
                 minion.init(this);
                 GameScene.add(minion);
