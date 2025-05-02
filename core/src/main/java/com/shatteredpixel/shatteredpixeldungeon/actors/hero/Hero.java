@@ -880,7 +880,6 @@ public class Hero extends Char {
 
 		speed = AscensionChallenge.modifyHeroSpeed(speed);
 		if (Dungeon.isChallenged(Conducts.Conduct.CRIPPLED)) speed/=2;
-		if (Dungeon.isChallenged(Conducts.Conduct.WRAITH)) speed *= 1.25f;
 
 		return speed;
 		

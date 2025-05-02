@@ -53,6 +53,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Daze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.EctoCharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FireImbue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
@@ -111,6 +112,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FrostfireParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
@@ -1108,7 +1110,17 @@ if (Dungeon.hero.heroClass != HeroClass.CLERIC
 			sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(dmg + shielded), icon);
 		}
 
-		if (HP < 0) HP = 0;
+		if (HP <= 0) {
+			if (this instanceof Hero && Dungeon.isChallenged(Conducts.Conduct.WRAITH) && !(src instanceof EctoCharge)){
+				HP = 1;
+				Buff.affect(this, EctoCharge.class).increment();
+				if (sprite != null){
+					sprite.emitter().burst(FrostfireParticle.FACTORY, 10);
+				}
+			} else {
+				HP = 0;
+			}
+		}
 
 		if (!isAlive()) {
 			die( src );

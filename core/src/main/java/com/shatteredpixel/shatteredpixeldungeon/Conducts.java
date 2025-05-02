@@ -41,7 +41,7 @@ public class Conducts {
         NO_MAGIC(1.5f, 4),
         ZEN(2f, 5),
 //        BERSERK(0.85f),
-        WRAITH(1.4f, 7),
+        WRAITH(1.5f, 7),
         SLEEPY(0.35f, 8),
         KING(1.3f, 10),
         EVERYTHING(0f, 11),
