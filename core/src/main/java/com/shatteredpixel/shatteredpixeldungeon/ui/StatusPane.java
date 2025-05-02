@@ -121,7 +121,7 @@ public class StatusPane extends Component {
 		mode = new Image(Icons.get(Dungeon.mode.icon));
 		add( mode );
 		if (Dungeon.conducts.isConductedAtAll()){
-			conduct = new Image(Assets.Interfaces.SUBCLASS_ICONS, (Dungeon.conduct().ordinal()) * 16, 16, 16, 16);
+			conduct = new Image(Assets.Interfaces.SUBCLASS_ICONS, (Dungeon.conduct().icon) * 16, 16, 16, 16);
 			add( conduct );
 		}
 
