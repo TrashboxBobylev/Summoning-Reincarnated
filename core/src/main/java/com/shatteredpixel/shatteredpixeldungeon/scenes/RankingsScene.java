@@ -254,7 +254,7 @@ public class RankingsScene extends PixelScene {
 					else
 						depth.text( Integer.toString(rec.depth) );
 					depth.measure();
-					steps.copy(Icons.STAIRS.get());
+					steps.copy(Icons.get(rec.mode.icon));
 					if (rec.abyssal)
 						steps.tint(2f, 2f, 2f, 0.5f);
 
