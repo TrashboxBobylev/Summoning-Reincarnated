@@ -113,6 +113,7 @@ public enum Rankings {
 			rec.depth = Statistics.highestAscent;
 			rec.ascending = true;
 		}
+		rec.mode        = Dungeon.mode;
 		rec.abyssal     = Dungeon.branch == AbyssLevel.BRANCH;
 		rec.score       = calculateScore();
 		rec.customSeed  = Dungeon.customSeedText;
@@ -252,6 +253,7 @@ public enum Rankings {
 	public static final String BADGES       = "badges";
 	public static final String HANDLERS     = "handlers";
 	public static final String CHALLENGES   = "challenges";
+	public static final String MODE         = "mode";
 	public static final String GAME_VERSION = "game_version";
 	public static final String SEED         = "seed";
 	public static final String CUSTOM_SEED	= "custom_seed";
@@ -328,6 +330,8 @@ public enum Rankings {
 		rec.gameData.put( CHALLENGES, Dungeon.challenges );
 		Dungeon.conducts.storeInBundle(rec.gameData);
 
+		rec.gameData.put( MODE, Dungeon.mode );
+
 		rec.gameData.put( GAME_VERSION, Dungeon.initialVersion );
 
 		rec.gameData.put( SEED, Dungeon.seed );
@@ -366,6 +370,8 @@ public enum Rankings {
 
 		Dungeon.conducts = new Conducts.ConductStorage();
 		Dungeon.conducts.restoreFromBundle(rec.gameData);
+
+		Dungeon.mode = rec.mode;
 
 		Dungeon.initialVersion = data.getInt(GAME_VERSION);
 
