@@ -366,6 +366,7 @@ public class CursedWand {
 			if (wand == null){
 				wand = (Wand)Generator.randomUsingDefaults(Generator.Category.WAND);
 			}
+			wand.setCurrent(Dungeon.hero);
 			wand.fx(bolt, callback);
 		}
 
