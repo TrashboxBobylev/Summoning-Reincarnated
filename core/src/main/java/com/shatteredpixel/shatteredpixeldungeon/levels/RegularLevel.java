@@ -398,7 +398,7 @@ public abstract class RegularLevel extends Level {
 
 			Item toDrop = Generator.random();
 			if (toDrop == null) continue;
-			if (Dungeon.hero.pointsInTalent(Talent.DUNGEON_OF_DOOM) > 1 && toDrop.isUpgradable() && Random.Int(3) == 0){
+			if (Dungeon.hero.pointsInTalent(Talent.DUNGEON_OF_DOOM) > 1 && toDrop.isUpgradable() && Random.Int(3) == 0 && !(toDrop instanceof MissileWeapon)){
 				toDrop.upgrade();
 			}
 
