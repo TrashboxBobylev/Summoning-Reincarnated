@@ -231,7 +231,9 @@ public enum Talent {
 	//Will Sorcerer T3
 	VIOLENT_OVERCOMING(302, 3), REJUVENATING_FORCE(303, 3), SPIRITUAL_RESTOCK(304, 3),
 	//Ascension T4
-	CHARITY(305, 4), MALICE(306, 4), EGOISM(307, 4)
+	CHARITY(305, 4), MALICE(306, 4), EGOISM(307, 4),
+	//Triad of Power T4
+	DURABILITY_OF_FIGHTER(308, 4), INFLUENCE_OF_MAGICIAN(309, 4), PRECISION_OF_RANGER(310, 4)
 	;
 
 	public static abstract class Cooldown extends FlavourBuff {
