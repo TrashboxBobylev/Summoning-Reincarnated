@@ -167,7 +167,11 @@ public abstract class BaseTriadAlly extends Mob {
         @Override
         public void resetColor() {
             super.resetColor();
-            alpha(0.8f);
+            if (ch instanceof BaseTriadAlly){
+                alpha(1f - (float) ((BaseTriadAlly) ch).left / BaseTriadAlly.maxDuration() + 0.25f);
+            } else {
+                alpha(0.8f);
+            }
             tintSprite();
             rm = gm = bm = 0;
         }
@@ -181,7 +185,11 @@ public abstract class BaseTriadAlly extends Mob {
 
         @Override
         public void draw() {
-            if (alpha() >= 0.8f) alpha(0.8f);
+            if (ch instanceof BaseTriadAlly){
+                alpha(1f - (float) ((BaseTriadAlly) ch).left / BaseTriadAlly.maxDuration() + 0.25f);
+            } else {
+                alpha(0.8f);
+            }
             rm = gm = bm = 0; //always flat and transparent
             super.draw();
         }
