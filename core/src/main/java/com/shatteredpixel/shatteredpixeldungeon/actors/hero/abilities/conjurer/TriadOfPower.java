@@ -102,8 +102,11 @@ public class TriadOfPower extends ArmorAbility {
                         armor.updateQuickslot();
 
                         ally.pos = spawnPoints.contains(target) ? target : Random.element(spawnPoints);
-                        if (newAlly)
+                        ally.updateHP();
+                        if (newAlly) {
                             GameScene.add(ally);
+                            ally.HP = ally.HT;
+                        }
 
                         ScrollOfTeleportation.appear(ally, ally.pos);
                         Dungeon.observe();
