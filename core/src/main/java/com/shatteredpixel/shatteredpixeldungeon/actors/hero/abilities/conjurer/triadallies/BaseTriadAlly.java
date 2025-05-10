@@ -147,6 +147,8 @@ public abstract class BaseTriadAlly extends Mob {
             attack = new Animation( 15, false );
             attack.frames( film, 13, 14, 15, 0 );
 
+            zap = attack.clone();
+
             play(idle, true);
             resetColor();
         }
