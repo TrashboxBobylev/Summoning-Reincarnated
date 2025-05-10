@@ -48,6 +48,8 @@ public abstract class BaseTriadAlly extends Mob {
 
         immunities.add(AllyBuff.class);
 
+        actPriority = MOB_PRIO + 1;
+
         updateHP();
     }
 
