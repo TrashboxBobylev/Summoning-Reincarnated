@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MobSprite;
 import com.watabou.noosa.TextureFilm;
@@ -109,6 +110,11 @@ public abstract class BaseTriadAlly extends Mob {
         }
 
         return speed;
+    }
+
+    @Override
+    public String description() {
+        return Messages.get(this, "desc", maxDuration() - left);
     }
 
     private static final String LEFT        = "left";
