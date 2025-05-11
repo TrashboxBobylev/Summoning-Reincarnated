@@ -24,12 +24,26 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.triadallies;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
+import com.watabou.utils.Callback;
+import com.watabou.utils.Random;
 
 public class TriadRanger extends BaseTriadAlly {
 
     {
         spriteClass = Sprite.class;
+
+        properties.add(Property.IMMOVABLE);
     }
 
     @Override
@@ -39,7 +53,38 @@ public class TriadRanger extends BaseTriadAlly {
 
     @Override
     public int baseDamageRoll() {
-        return 0;
+        int acc = Dungeon.hero.attackSkill(this);
+        return (int) Random.NormalFloat(acc*0.67f, acc);
+    }
+
+    @Override
+    protected boolean canAttack( Char enemy ) {
+        return super.canAttack(enemy) || new Ballistica( pos, enemy.pos,
+                Dungeon.hero.pointsInTalent(Talent.PRECISION_OF_RANGER) > 3 ? Ballistica.STOP_CHARS | Ballistica.STOP_TARGET | Ballistica.IGNORE_ALLY_CHARS :
+                        Ballistica.FRIENDLY_PROJECTILE).collisionPos == enemy.pos;
+    }
+
+    @Override
+    public int attackProc( Char enemy, int damage ) {
+        damage = super.attackProc( enemy, damage );
+        if (Dungeon.hero.hasTalent(Talent.PRECISION_OF_RANGER)) {
+            Buff.affect( enemy, Cripple.class, 3 );
+        }
+        if (Dungeon.hero.pointsInTalent(Talent.PRECISION_OF_RANGER) > 1){
+            Buff.affect( enemy, Vulnerable.class, 3);
+        }
+
+        return damage;
+    }
+
+    @Override
+    protected boolean getCloser(int target) {
+        return false;
+    }
+
+    @Override
+    protected boolean getFurther(int target) {
+        return false;
     }
 
     public static class Sprite extends BaseSprite {
@@ -56,6 +101,40 @@ public class TriadRanger extends BaseTriadAlly {
         @Override
         void tintSprite() {
             tint(0x82ca9c, 0.75f);
+        }
+
+        private int cellToAttack;
+
+        @Override
+        public void attack( int cell ) {
+            cellToAttack = cell;
+            zap(cell);
+        }
+
+        @Override
+        public void onComplete( Animation anim ) {
+            if (anim == zap) {
+
+                idle();
+
+                MissileSprite missileSprite = (MissileSprite) parent.recycle(MissileSprite.class);
+                missileSprite.
+                        reset(this, cellToAttack, new RangedShot(), new Callback() {
+                            @Override
+                            public void call() {
+                                ch.onAttackComplete();
+                            }
+                        });
+                missileSprite.hardlight(0x106f93);
+            } else {
+                super.onComplete( anim );
+            }
+        }
+
+        public class RangedShot extends Item {
+            {
+                image = ItemSpriteSheet.JAVELIN;
+            }
         }
     }
 }

@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.triadallies.TriadRanger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.HolyLance;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollGeomancer;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.GnollHunter;
@@ -113,6 +114,7 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 		ANGULAR_SPEEDS.put(RunicBlade.RunicMissile.class,       0);
 		ANGULAR_SPEEDS.put(GnollHunter.GnollShot.class, 0);
 		ANGULAR_SPEEDS.put(HolyLance.HolyLanceVFX.class,      0);
+		ANGULAR_SPEEDS.put(TriadRanger.Sprite.RangedShot.class, 0);
 
 		//720 is default
 
@@ -178,7 +180,8 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 			
 		} else if (item instanceof SpiritBow.SpiritArrow
 				|| item instanceof ScorpioSprite.ScorpioShot
-				|| item instanceof TenguSprite.TenguShuriken){
+				|| item instanceof TenguSprite.TenguShuriken
+				|| item instanceof TriadRanger.Sprite.RangedShot){
 			speed *= 1.5f;
 		} else if (item instanceof GnollHunter.GnollShot){
 			speed *= 2f;

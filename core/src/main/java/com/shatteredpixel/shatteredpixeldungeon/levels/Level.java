@@ -54,6 +54,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cleric.PowerOfMany;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.triadallies.TriadRanger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpiritHawk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.DivineSense;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.Stasis;
@@ -1301,6 +1302,18 @@ public abstract class Level implements Bundlable {
 				}
 			}
 
+			if (c instanceof TriadRanger && Dungeon.hero.pointsInTalent(Talent.PRECISION_OF_RANGER) > 2){
+				if (blocking == null) {
+					System.arraycopy(Dungeon.level.losBlocking, 0, modifiableBlocking, 0, modifiableBlocking.length);
+					blocking = modifiableBlocking;
+				}
+				for (int i = 0; i < blocking.length; i++){
+					if (blocking[i] && (Dungeon.level.map[i] == Terrain.HIGH_GRASS || Dungeon.level.map[i] == Terrain.FURROWED_GRASS)){
+						blocking[i] = false;
+					}
+				}
+			}
+
 			//allies and specific enemies can see through shrouding fog
 			if ((c.alignment != Char.Alignment.ALLY && !(c instanceof GnollGeomancer))
 					&& Dungeon.level.blobs.containsKey(SmokeScreen.class)
@@ -1321,7 +1334,8 @@ public abstract class Level implements Bundlable {
 				blocking = Dungeon.level.losBlocking;
 			}
 
-			if (Dungeon.isChallenged(Conducts.Conduct.ALLSIGHT)){
+			if (Dungeon.isChallenged(Conducts.Conduct.ALLSIGHT) ||
+					(c instanceof TriadRanger && Dungeon.hero.pointsInTalent(Talent.PRECISION_OF_RANGER) > 3)){
 				for (int i = 0; i < blocking.length; i++){
 					if (blocking[i])
 						blocking[i] = false;
