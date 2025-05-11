@@ -51,6 +51,9 @@ public abstract class BaseTriadAlly extends Mob {
 
         actPriority = MOB_PRIO + 1;
 
+        WANDERING = new Wandering();
+        state = WANDERING;
+
         updateHP();
     }
 
@@ -129,6 +132,39 @@ public abstract class BaseTriadAlly extends Mob {
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
         left = bundle.getInt(LEFT);
+    }
+
+    private class Wandering extends Mob.Wandering {
+
+        @Override
+        public boolean act( boolean enemyInFOV, boolean justAlerted ) {
+            if ( enemyInFOV && canAttack(enemy)) {
+
+                enemySeen = true;
+
+                notice();
+                alerted = true;
+                state = HUNTING;
+                target = enemy.pos;
+
+            } else {
+
+                enemySeen = false;
+
+                int oldPos = pos;
+                target = Dungeon.hero.pos;
+                //always move towards the hero when wandering
+                if (getCloser( target )) {
+                    spend( 1 / speed() );
+                    return moveSprite( oldPos, pos );
+                } else {
+                    spend( TICK );
+                }
+
+            }
+            return true;
+        }
+
     }
 
     public static abstract class BaseSprite extends MobSprite {
