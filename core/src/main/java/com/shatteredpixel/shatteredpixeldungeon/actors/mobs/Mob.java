@@ -395,6 +395,10 @@ public abstract class Mob extends Char {
 		return false;
 	}
 
+	public boolean canTargetAlliesAsAlly(){
+		return false;
+	}
+
 	protected float modifyPriority(Char ch, float priority){
 		if (canAttack(ch)) priority *= 2.0f;
 		if (ch.buff(Minion.UniversalTargeting.class) != null) priority *= 10f;
@@ -498,7 +502,7 @@ public abstract class Mob extends Char {
 		//additionally, if we are an ally, find a new enemy if...
 		if (!newEnemy && alignment == Alignment.ALLY){
 			//current enemy is also an ally
-			if (enemy.alignment == Alignment.ALLY){
+			if (enemy.alignment == Alignment.ALLY && !canTargetAlliesAsAlly()){
 				newEnemy = true;
 			//current enemy is invulnerable
 			} else if (enemy.isInvulnerable(getClass())){
@@ -547,7 +551,7 @@ public abstract class Mob extends Char {
 			}
 
 		//if we are an ally...
-		} else if ( alignment == Alignment.ALLY ) {
+		} else if ( alignment == Alignment.ALLY) {
 			//look for hostile mobs to attack
 			for (Mob mob : Dungeon.level.mobs)
 				if (mob.alignment == Alignment.ENEMY && canSee(mob.pos)
@@ -560,14 +564,14 @@ public abstract class Mob extends Char {
 									|| !(this instanceof Minion && ((Minion) this).behaviorType == Minion.BehaviorType.AGGRESSIVE))) {
 						enemies.put(mob, mob.targetPriority());
 					}
-
-		//if we are an enemy...
-		} else if (alignment == Alignment.ENEMY) {
+		}
+		//if we are an enemy or can target allies...
+		if (alignment == Alignment.ENEMY || canTargetAlliesAsAlly()) {
 			//look for ally mobs to attack
 			for (Mob mob : Dungeon.level.mobs)
 				if (mob.alignment == Alignment.ALLY && canSee(mob.pos) && mob.invisible <= 0) {
 					//we are neutral to minions, unless they are attacking everything or we have to pass through them
-					if (mob instanceof Minion){
+					if (mob instanceof Minion && !canTargetAlliesAsAlly()){
 						if (((Minion) mob).behaviorType == Minion.BehaviorType.AGGRESSIVE){
 							enemies.put(mob, mob.targetPriority());
 						} else if (buff(((Minion) mob).behaviorType.buffType) != null || buff(Minion.UniversalTargeting.class) != null){
