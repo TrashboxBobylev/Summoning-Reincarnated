@@ -156,6 +156,11 @@ public class TriadFighter extends BaseTriadAlly {
         return resist;
     }
 
+    @Override
+    public float targetPriority() {
+        return super.targetPriority()*1.5f;
+    }
+
     public static class Sprite extends BaseSprite {
 
         @Override

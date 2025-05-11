@@ -115,6 +115,10 @@ public abstract class BaseTriadAlly extends Mob {
         return speed;
     }
 
+    public float targetPriority(){
+        return 2.0f;
+    }
+
     @Override
     public String description() {
         return Messages.get(this, "desc", maxDuration() - left);
