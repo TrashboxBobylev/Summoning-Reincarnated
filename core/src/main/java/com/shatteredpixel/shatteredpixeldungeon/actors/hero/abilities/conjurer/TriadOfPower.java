@@ -93,7 +93,7 @@ public class TriadOfPower extends ArmorAbility {
                     ArrayList<Integer> spawnPoints = new ArrayList<>();
                     for (int i = 0; i < PathFinder.NEIGHBOURS9.length; i++) {
                         int p = target + PathFinder.NEIGHBOURS9[i];
-                        if (Actor.findChar(p) == null && (Dungeon.level.passable[p] || Dungeon.level.avoid[p])) {
+                        if (Actor.findChar(p) == null && (Dungeon.level.passable[p])) {
                             spawnPoints.add(p);
                         }
                     }
