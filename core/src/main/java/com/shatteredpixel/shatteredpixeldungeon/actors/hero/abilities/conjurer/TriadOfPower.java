@@ -58,6 +58,19 @@ public class TriadOfPower extends ArmorAbility {
         return Messages.get(this, "prompt");
     }
 
+    public float baseChargeUse(Hero hero) {
+        return super.chargeUse(hero);
+    }
+
+    @Override
+    public float chargeUse(Hero hero) {
+        for (Char ch : Actor.chars()){
+            if (ch instanceof BaseTriadAlly)
+                return 0;
+        }
+        return super.chargeUse(hero);
+    }
+
     @Override
     protected void activate(ClassArmor armor, Hero hero, Integer target) {
         if (target != null){
@@ -96,9 +109,14 @@ public class TriadOfPower extends ArmorAbility {
                         }
 
                         if (ally == null) {
-                            armor.charge -= chargeUse(hero);
-                            ally = Reflection.newInstance(variant.allyType);
-                            newAlly = true;
+                            if (armor.charge < baseChargeUse(hero)){
+                                GLog.w( Messages.get(ClassArmor.class, "low_charge") );
+                                return;
+                            } else {
+                                armor.charge -= baseChargeUse(hero);
+                                ally = Reflection.newInstance(variant.allyType);
+                                newAlly = true;
+                            }
                         }
                         armor.updateQuickslot();
 
