@@ -188,6 +188,7 @@ public class Assets {
 		public static final String HIT_STRONG       = "sounds/hit_strong.mp3";
 		public static final String HIT_PARRY        = "sounds/hit_parry.mp3";
 		public static final String HIT_ARROW        = "sounds/hit_arrow.mp3";
+		public static final String HIT_GONG         = "sounds/hit_gong.mp3";
 		public static final String ATK_SPIRITBOW    = "sounds/atk_spiritbow.mp3";
 		public static final String ATK_CROSSBOW     = "sounds/atk_crossbow.mp3";
 		public static final String HEALTH_WARN      = "sounds/health_warn.mp3";
