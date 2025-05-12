@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.spells.MagicalInfusion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cane;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gong;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greatshield;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
@@ -234,7 +235,12 @@ public class WndUpgrade extends Window {
 					bottom);
 		}
 
-		if (toUpgrade instanceof Cane){
+		if (toUpgrade instanceof Gong){
+			bottom = fillFields(Messages.get(this, "ally_tag"),
+					Messages.decimalFormat("#.##x", ((Gong) toUpgrade).multTagValue(levelFrom)),
+					Messages.decimalFormat("#.##x", ((Gong) toUpgrade).multTagValue(levelTo)),
+					bottom);
+		} else if (toUpgrade instanceof Cane){
 			bottom = fillFields(Messages.get(this, "ally_tag"),
 					Integer.toString(((Cane) toUpgrade).tagValue(levelFrom)),
 					Integer.toString(((Cane) toUpgrade).tagValue(levelTo)),
