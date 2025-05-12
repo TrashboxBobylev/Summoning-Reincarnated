@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.watabou.utils.Bundle;
@@ -36,20 +37,22 @@ public class AllyDamageTag extends FlavourBuff {
     private float mult;
     private int flat;
 
-    public void setMult(float mult){
+    public AllyDamageTag setMult(float mult){
         float oldMult = this.mult;
         this.mult = mult;
         if (oldMult != this.mult) {
-            target.sprite.showStatus(CharSprite.NEUTRAL, "+" + mult + "x", FloatingText.ALLY_TAG);
+            target.sprite.showStatus(CharSprite.NEUTRAL, target.alignment == Char.Alignment.ENEMY ? "+" : "-" + mult + "x", FloatingText.ALLY_TAG);
         }
+        return this;
     }
 
-    public void setFlat(int flat) {
+    public AllyDamageTag setFlat(int flat) {
         int oldFlat = this.flat;
         this.flat = flat;
         if (oldFlat != this.flat) {
-            target.sprite.showStatus(CharSprite.NEUTRAL, "+" + flat, FloatingText.ALLY_TAG);
+            target.sprite.showStatus(CharSprite.NEUTRAL, target.alignment == Char.Alignment.ENEMY ? "x" : "/" + flat, FloatingText.ALLY_TAG);
         }
+        return this;
     }
 
     public int processDamage(int damage){
@@ -59,6 +62,18 @@ public class AllyDamageTag extends FlavourBuff {
         if (mult > 0){
             damage *= mult;
         }
+
+        return damage;
+    }
+
+    public int processResistance(int damage){
+        if (flat > 0){
+            damage -= flat;
+        }
+        if (mult > 0){
+            damage /= mult;
+        }
+        damage = Math.max(0, damage);
 
         return damage;
     }

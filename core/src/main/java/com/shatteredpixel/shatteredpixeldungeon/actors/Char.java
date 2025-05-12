@@ -959,8 +959,12 @@ if (Dungeon.hero.heroClass != HeroClass.CLERIC
 		if (this.buff(Empowered.class) != null){
 			dmg *= 0.65f;
 		}
-		if (this.buff(AllyDamageTag.class) != null && src instanceof Char && !(src instanceof Hero) && ((Char) src).alignment == Alignment.ALLY){
-			dmg = this.buff(AllyDamageTag.class).processDamage(dmg);
+		if (this.buff(AllyDamageTag.class) != null && src instanceof Char && !(src instanceof Hero)){
+			if (alignment == Alignment.ENEMY && ((Char) src).alignment == Alignment.ALLY){
+				dmg = this.buff(AllyDamageTag.class).processDamage(dmg);
+			} else if (alignment == Alignment.ALLY) {
+				dmg = this.buff(AllyDamageTag.class).processResistance(dmg);
+			}
 		}
 
 		if (buff(Sickle.HarvestBleedTracker.class) != null){
