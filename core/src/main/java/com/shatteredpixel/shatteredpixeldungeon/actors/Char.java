@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StormCloud;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Adrenaline;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyDamageTag;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArcaneArmor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
@@ -957,6 +958,9 @@ if (Dungeon.hero.heroClass != HeroClass.CLERIC
 		}
 		if (this.buff(Empowered.class) != null){
 			dmg *= 0.65f;
+		}
+		if (this.buff(AllyDamageTag.class) != null && src instanceof Char && !(src instanceof Hero) && ((Char) src).alignment == Alignment.ALLY){
+			dmg = this.buff(AllyDamageTag.class).processDamage(dmg);
 		}
 
 		if (buff(Sickle.HarvestBleedTracker.class) != null){
