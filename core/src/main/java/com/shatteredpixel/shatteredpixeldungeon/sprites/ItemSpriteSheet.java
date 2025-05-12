@@ -237,6 +237,8 @@ public class ItemSpriteSheet {
 	public static final int PIKE         = SUMM_WEAPONS+2;
 	public static final int STABBER      = SUMM_WEAPONS+3;
 	public static final int JJANGO       = SUMM_WEAPONS+4;
+	public static final int CANE         = SUMM_WEAPONS+5;
+	public static final int GONG         = SUMM_WEAPONS+6;
 
 	static {
 		assignItemRect(STONE_HAMMER, 16, 16);
