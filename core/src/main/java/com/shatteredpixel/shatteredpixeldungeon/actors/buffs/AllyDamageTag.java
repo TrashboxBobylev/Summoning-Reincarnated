@@ -34,14 +34,14 @@ public class AllyDamageTag extends FlavourBuff {
         type = buffType.NEGATIVE;
     }
 
-    private float mult;
-    private int flat;
+    private float mult = 0;
+    private int flat = 0;
 
     public AllyDamageTag setMult(float mult){
         float oldMult = this.mult;
         this.mult = mult;
         if (oldMult != this.mult) {
-            target.sprite.showStatus(CharSprite.NEUTRAL, target.alignment == Char.Alignment.ENEMY ? "+" : "-" + mult + "x", FloatingText.ALLY_TAG);
+            target.sprite.showStatus(CharSprite.NEUTRAL, (target.alignment == Char.Alignment.ENEMY ? "x" : "/") + mult, FloatingText.ALLY_TAG);
         }
         return this;
     }
@@ -50,7 +50,7 @@ public class AllyDamageTag extends FlavourBuff {
         int oldFlat = this.flat;
         this.flat = flat;
         if (oldFlat != this.flat) {
-            target.sprite.showStatus(CharSprite.NEUTRAL, target.alignment == Char.Alignment.ENEMY ? "x" : "/" + flat, FloatingText.ALLY_TAG);
+            target.sprite.showStatus(CharSprite.NEUTRAL, (target.alignment == Char.Alignment.ENEMY ? "+" : "-") + flat, FloatingText.ALLY_TAG);
         }
         return this;
     }
