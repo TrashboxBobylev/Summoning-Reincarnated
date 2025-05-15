@@ -233,7 +233,9 @@ public enum Talent {
 	//Ascension T4
 	CHARITY(305, 4), MALICE(306, 4), EGOISM(307, 4),
 	//Triad of Power T4
-	DURABILITY_OF_FIGHTER(308, 4), INFLUENCE_OF_MAGICIAN(309, 4), PRECISION_OF_RANGER(310, 4)
+	DURABILITY_OF_FIGHTER(308, 4), INFLUENCE_OF_MAGICIAN(309, 4), PRECISION_OF_RANGER(310, 4),
+	//Hyperblast T4
+	LEVENSDUUR(311, 4), KRACHT(312, 4), VERZWAKKEN(313, 4)
 	;
 
 	public static abstract class Cooldown extends FlavourBuff {

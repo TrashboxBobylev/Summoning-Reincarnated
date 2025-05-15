@@ -78,6 +78,7 @@ public class HeroIcon extends Image {
 	public static final int RATMOGRIFY      = 34;
 	public static final int ASCENSION       = 35;
 	public static final int TRIAD_OF_POWER  = 36;
+	public static final int HYPERBLAST      = 37;
 
 	//cleric spells
 	public static final int GUIDING_LIGHT   = 40;

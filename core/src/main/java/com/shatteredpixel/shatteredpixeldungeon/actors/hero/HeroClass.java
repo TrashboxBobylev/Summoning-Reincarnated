@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cleric.Asc
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cleric.PowerOfMany;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cleric.Trinity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.Ascension;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.Hyperblast;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.TriadOfPower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.Challenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.duelist.ElementalStrike;
@@ -433,7 +434,7 @@ public enum HeroClass {
 			case CLERIC:
 				return new ArmorAbility[]{new AscendedForm(), new Trinity(), new PowerOfMany()};
 			case CONJURER:
-				return new ArmorAbility[]{new Ascension(), new TriadOfPower()};
+				return new ArmorAbility[]{new Ascension(), new TriadOfPower(), new Hyperblast()};
 		}
 	}
 
