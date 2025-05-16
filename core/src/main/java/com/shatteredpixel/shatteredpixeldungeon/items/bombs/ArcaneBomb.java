@@ -52,7 +52,7 @@ public class ArcaneBomb extends Bomb.ConjuredBomb {
 
 	{
 		image = ItemSpriteSheet.ARCANE_BOMB;
-		fuseDelay = 8;
+		fuseDelay = 4;
 	}
 
 	private static final int RADIUS = 5;
@@ -98,13 +98,17 @@ public class ArcaneBomb extends Bomb.ConjuredBomb {
 
 		ArrayList<Integer> aoe = getAreaOfEffect(cell);
 		if (!Dungeon.bossLevel()) {
-			if (cell != Dungeon.level.exit() && cell != Dungeon.level.entrance()) {
-				Level.set(cell, Terrain.CHASM);
-				GameScene.updateMap(cell);
-			}
+			ArrayList<Integer> mainCraterCells = new ArrayList<>();
+			mainCraterCells.add(cell);
 			for (int k : PathFinder.NEIGHBOURS4){
-				if (cell + k != Dungeon.level.exit() && cell + k != Dungeon.level.entrance()) Level.set(cell + k, Terrain.CHASM);
-				GameScene.updateMap(cell+k);
+				mainCraterCells.add(cell+k);
+			}
+			for (int c : mainCraterCells){
+				if (Dungeon.level.getTransition(c) == null) Level.set(c, Terrain.CHASM);
+				GameScene.updateMap(c);
+				if (Actor.findChar(c) != null){
+					Dungeon.level.occupyCell(Actor.findChar(c));
+				}
 			}
 		}
 		for (int i : aoe) {
