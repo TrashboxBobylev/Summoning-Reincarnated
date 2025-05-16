@@ -229,39 +229,38 @@ public class ShopRoom extends SpecialRoom {
 		}
 
 	}
+
+	protected static int shopLevel() {
+		if (Dungeon.mode == Dungeon.GameMode.BIGGER)
+			return Dungeon.depth / 5;
+		else
+			return Dungeon.chapterNumber()-1;
+	}
 	
 	protected static ArrayList<Item> generateItems() {
 
 		ArrayList<Item> itemsToSpawn = new ArrayList<>();
 
-		MeleeWeapon w;
-		switch (Dungeon.scalingDepth()) {
-		case 6: default:
+		MeleeWeapon w = null;
+		if (shopLevel() == 1) {
 			w = (MeleeWeapon) Generator.random(Generator.wepTiers[1]);
-			itemsToSpawn.add( Generator.random(Generator.misTiers[1]).quantity(2).identify(false) );
-			itemsToSpawn.add( new LeatherArmor().identify(false) );
-			break;
-			
-		case 11:
+			itemsToSpawn.add(Generator.random(Generator.misTiers[1]).quantity(2).identify(false));
+			itemsToSpawn.add(new LeatherArmor().identify(false));
+		} else if (shopLevel() == 2) {
 			w = (MeleeWeapon) Generator.random(Generator.wepTiers[2]);
-			itemsToSpawn.add( Generator.random(Generator.misTiers[2]).quantity(2).identify(false) );
-			itemsToSpawn.add( new MailArmor().identify(false) );
-			break;
-			
-		case 16:
+			itemsToSpawn.add(Generator.random(Generator.misTiers[2]).quantity(2).identify(false));
+			itemsToSpawn.add(new MailArmor().identify(false));
+		} else if (shopLevel() == 3) {
 			w = (MeleeWeapon) Generator.random(Generator.wepTiers[3]);
-			itemsToSpawn.add( Generator.random(Generator.misTiers[3]).quantity(2).identify(false) );
-			itemsToSpawn.add( new ScaleArmor().identify(false) );
-			break;
-
-		case 20: case 21:
+			itemsToSpawn.add(Generator.random(Generator.misTiers[3]).quantity(2).identify(false));
+			itemsToSpawn.add(new ScaleArmor().identify(false));
+		} else if (shopLevel() == 4 || Dungeon.depth == 20){
 			w = (MeleeWeapon) Generator.random(Generator.wepTiers[4]);
 			itemsToSpawn.add( Generator.random(Generator.misTiers[4]).quantity(2).identify(false) );
 			itemsToSpawn.add( new PlateArmor().identify(false) );
 			itemsToSpawn.add( new Torch() );
 			itemsToSpawn.add( new Torch() );
 			itemsToSpawn.add( new Torch() );
-			break;
 		}
 		if (Dungeon.scalingDepth() > 26){
 			w = (MeleeWeapon) Generator.random(Generator.wepTiers[5]);
@@ -270,11 +269,13 @@ public class ShopRoom extends SpecialRoom {
 			itemsToSpawn.add( Generator.randomUsingDefaults( Generator.Category.POTION ) );
 			itemsToSpawn.add( Generator.randomUsingDefaults( Generator.Category.SCROLL ) );
 		}
-		w.enchant(null);
-		w.cursed = false;
-		w.level(0);
-		w.identify(false);
-		itemsToSpawn.add(w);
+		if (w != null) {
+			w.enchant(null);
+			w.cursed = false;
+			w.level(0);
+			w.identify(false);
+			itemsToSpawn.add(w);
+		}
 
 		if (Random.Float() < 0.6) itemsToSpawn.add(ChooseShopWeapon());
 		

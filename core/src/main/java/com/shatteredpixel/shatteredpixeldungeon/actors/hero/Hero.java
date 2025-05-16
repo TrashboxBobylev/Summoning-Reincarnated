@@ -2325,11 +2325,22 @@ public class Hero extends Char {
 	}
 	
 	public int maxExp() {
-		return maxExp( lvl );
+		return Math.round(maxExp( lvl )*expMod());
 	}
 	
 	public static int maxExp( int lvl ){
 		return 5 + lvl * 5;
+	}
+
+	public float expMod(){
+		switch (Dungeon.mode){
+			case BIGGER:
+				return 1.5f;
+//			case GAUNTLET:
+//				return 1.25f;
+			default:
+				return 1.0f;
+		}
 	}
 	
 	public boolean isStarving() {

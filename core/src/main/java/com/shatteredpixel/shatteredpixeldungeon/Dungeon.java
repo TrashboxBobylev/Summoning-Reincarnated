@@ -259,10 +259,10 @@ public class Dungeon {
 
 	public enum GameMode {
 		NORMAL("normal", Icons.STAIRS),
-		EXPLORE( "explore", Icons.EXPLORE, 0f),
-//		GAUNTLET("gauntlet", Icons.GAUNTLET, 1.33f),
-/*		SMALL("small", Icons.SHRINKING, 1.1f),
+		SMALL("small", Icons.SHRINKING, 1.1f),
 		BIGGER("bigger", Icons.ENLARGEMENT, 1.2f),
+		EXPLORE( "explore", Icons.EXPLORE, 0f),
+/*		GAUNTLET("gauntlet", Icons.GAUNTLET, 1.33f),
 		CAVES("caves", Icons.CAVES, 1.09f),
 		LOL("lol", Icons.GOLD, 0.33f),
 		NO_SOU("no_sou", Icons.SOULLESS, 2.0f),
@@ -430,68 +430,36 @@ public class Dungeon {
 		
 		Level level;
 		if (branch == 0) {
-			switch (depth) {
-				case 1:
-				case 2:
-				case 3:
-				case 4:
-					level = new SewerLevel();
-					break;
-				case 5:
-					level = new SewerBossLevel();
-					break;
-				case 6:
-				case 7:
-				case 8:
-				case 9:
-					level = new PrisonLevel();
-					break;
-				case 10:
-					level = new PrisonBossLevel();
-					break;
-				case 11:
-				case 12:
-				case 13:
-				case 14:
-					level = new CavesLevel();
-					break;
-				case 15:
-					level = new CavesBossLevel();
-					break;
-				case 16:
-				case 17:
-				case 18:
-				case 19:
-					level = new CityLevel();
-					break;
-				case 20:
-					level = new CityBossLevel();
-					break;
-				case 21:
-				case 22:
-				case 23:
-				case 24:
-					level = new HallsLevel();
-					break;
-				case 25:
-					level = new HallsBossLevel();
-					break;
-				case 26:
-					level = new LastLevel();
-					break;
-				default:
-					level = new DeadEndLevel();
+			if (Dungeon.depth > 0 && Dungeon.depth < Dungeon.chapterSize()) {
+				level = new SewerLevel();
+			} else if (Dungeon.depth == Dungeon.chapterSize()){
+				level = new SewerBossLevel();
+			} else if (Dungeon.depth > Dungeon.chapterSize() && Dungeon.depth < Dungeon.chapterSize()*2) {
+				level = new PrisonLevel();
+			} else if (Dungeon.depth == Dungeon.chapterSize()*2){
+				level = new PrisonBossLevel();
+			} else if (Dungeon.depth > Dungeon.chapterSize()*2 && Dungeon.depth < Dungeon.chapterSize()*3) {
+				level = new CavesLevel();
+			} else if (Dungeon.depth == Dungeon.chapterSize()*3){
+				level = new CavesBossLevel();
+			} else if (Dungeon.depth > Dungeon.chapterSize()*3 && Dungeon.depth < Dungeon.chapterSize()*4) {
+				level = new CityLevel();
+			} else if (Dungeon.depth == Dungeon.chapterSize()*4){
+				level = new CityBossLevel();
+			} else if (Dungeon.depth > Dungeon.chapterSize()*4 && Dungeon.depth < Dungeon.chapterSize()*5) {
+				level = new HallsLevel();
+			} else if (Dungeon.depth == Dungeon.chapterSize()*5){
+				level = new HallsBossLevel();
+			} else if (Dungeon.depth == Dungeon.chapterSize()*5+1){
+				level = new LastLevel();
+			} else {
+				level = new DeadEndLevel();
 			}
 		} else if (branch == 1) {
-			switch (depth) {
-				case 11:
-				case 12:
-				case 13:
-				case 14:
-					level = new MiningLevel();
-					break;
-				default:
-					level = new DeadEndLevel();
+			if (Dungeon.depth > Dungeon.chapterSize()*2 && Dungeon.depth < Dungeon.chapterSize()*3) {
+				level = new MiningLevel();
+			} else {
+				level = new DeadEndLevel();
 			}
 		} else if (branch == AbyssLevel.BRANCH) {
 			level = new AbyssLevel();
@@ -556,7 +524,9 @@ public class Dungeon {
 	}
 	
 	public static boolean shopOnLevel() {
-		return depth == 6 || depth == 11 || depth == 16;
+		if (Dungeon.mode == GameMode.BIGGER)
+			return depth % 5 == 0 && depth != 30;
+		return (depth - 1) % Dungeon.chapterSize() == 0;
 	}
 	
 	public static boolean bossLevel() {
@@ -564,24 +534,29 @@ public class Dungeon {
 	}
 	
 	public static boolean bossLevel( int depth ) {
-		return depth == 5 || depth == 10 || depth == 15 || depth == 20 || depth == 25;
+		return depth % Dungeon.chapterSize() == 0;
 	}
 
 	//value used for scaling of damage values and other effects.
 	//is usually the dungeon depth, but can be set to 26 when ascending
 	public static int scalingDepth(){
 		if (branch == AbyssLevel.BRANCH){
-			return 26 + depth;
+			return (Dungeon.chapterSize() * 5 + 1) + depth;
 		}
 		if (Dungeon.hero != null && Dungeon.hero.buff(AscensionChallenge.class) != null){
-			return 26;
+			return (Dungeon.chapterSize() * 5 + 1);
 		} else {
 			return depth;
 		}
 	}
 
 	public static int chapterSize(){
-		return 5;
+		int size = 5;
+		if (mode == GameMode.SMALL)
+			size -= 1;
+		else if (mode == GameMode.BIGGER)
+			size += 1;
+		return size;
 	}
 
 	public static int chapterNumber(){
@@ -665,6 +640,10 @@ public class Dungeon {
 	}
 
 	public static boolean posNeeded() {
+		if (Dungeon.mode == GameMode.BIGGER){
+			return Dungeon.depth == 2 + Dungeon.chapterSize()*(LimitedDrops.STRENGTH_POTIONS.count/2) ||
+					Dungeon.depth == 4 + Dungeon.chapterSize()*(LimitedDrops.STRENGTH_POTIONS.count/2);
+		}
 		//2 POS each floor set
 		int posLeftThisSet = 2 - (LimitedDrops.STRENGTH_POTIONS.count - (depth / 5) * 2);
 		if (posLeftThisSet <= 0) return false;

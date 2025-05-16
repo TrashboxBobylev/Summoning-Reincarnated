@@ -64,6 +64,7 @@ import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.builders.Builder;
 import com.shatteredpixel.shatteredpixeldungeon.levels.builders.FigureEightBuilder;
 import com.shatteredpixel.shatteredpixeldungeon.levels.builders.LoopBuilder;
+import com.shatteredpixel.shatteredpixeldungeon.levels.builders.RegularBuilder;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret.SecretRoom;
@@ -109,6 +110,10 @@ public abstract class RegularLevel extends Level {
 	protected boolean build() {
 		
 		builder = builder();
+
+		if (Dungeon.mode == Dungeon.GameMode.BIGGER && builder instanceof RegularBuilder){
+			((RegularBuilder) builder).setExtraConnectionChance(0.67f);
+		}
 		
 		ArrayList<Room> initRooms = initRooms();
 		Random.shuffle(initRooms);
@@ -135,6 +140,13 @@ public abstract class RegularLevel extends Level {
 		if (isLarge()) {
 			standards = (int) Math.ceil(standards * 1.5f);
 		}
+		if (Dungeon.mode == Dungeon.GameMode.SMALL){
+			standards /= 2;
+			standards += 1;
+		} else if (Dungeon.mode == Dungeon.GameMode.BIGGER){
+			standards *= (int) Math.ceil(standards * 1.5f);
+			standards += 1;
+		}
 		for (int i = 0; i < standards; i++) {
 			StandardRoom s;
 			do {
@@ -153,6 +165,11 @@ public abstract class RegularLevel extends Level {
 			if (isLarge()) {
 				specials++;
 			}
+			if (Dungeon.mode == Dungeon.GameMode.SMALL){
+				specials /= 2;
+			} else if (Dungeon.mode == Dungeon.GameMode.BIGGER){
+				specials *= 2;
+			}
 			SpecialRoom.initForFloor();
 			for (int i = 0; i < specials; i++) {
 				SpecialRoom s = SpecialRoom.createRoom();
@@ -164,6 +181,7 @@ public abstract class RegularLevel extends Level {
 			int secrets = SecretRoom.secretsForFloor(Dungeon.depth);
 			//one additional secret for secret levels
 			if (feeling == Feeling.SECRETS) secrets++;
+			if (Dungeon.mode == Dungeon.GameMode.BIGGER) secrets++;
 			for (int i = 0; i < secrets; i++) {
 				initRooms.add(SecretRoom.createRoom());
 			}
@@ -202,7 +220,11 @@ public abstract class RegularLevel extends Level {
 	protected abstract Painter painter();
 	
 	protected int nTraps() {
-		return Random.NormalIntRange( 2, 3 + (Dungeon.depth/5) );
+		int traps = Random.NormalIntRange(2, 3 + (Dungeon.depth / 5));
+		if (Dungeon.mode == Dungeon.GameMode.BIGGER){
+            traps = (int) (traps * 1.5f);
+		}
+		return traps;
 	}
 	
 	protected Class<?>[] trapClasses(){
@@ -228,6 +250,8 @@ public abstract class RegularLevel extends Level {
 		if (Dungeon.bossLevel() && Dungeon.branch == AbyssLevel.BRANCH){
 			mobs *= 3;
 		}
+		if (Dungeon.mode == Dungeon.GameMode.BIGGER) mobs *= 1.5f;
+		if (Dungeon.mode == Dungeon.GameMode.SMALL) mobs /= 2;
 		return mobs;
 	}
 	
@@ -392,6 +416,10 @@ public abstract class RegularLevel extends Level {
 		if (Dungeon.isChallenged(Conducts.Conduct.NO_LOOT)){
 			nItems = 1;
 			if (Dungeon.hero.heroClass == HeroClass.ADVENTURER) nItems = 2;
+		}
+
+		if (Dungeon.mode == Dungeon.GameMode.BIGGER){
+            nItems = Math.round(nItems * 1.75f);
 		}
 
 		for (int i=0; i < nItems; i++) {
