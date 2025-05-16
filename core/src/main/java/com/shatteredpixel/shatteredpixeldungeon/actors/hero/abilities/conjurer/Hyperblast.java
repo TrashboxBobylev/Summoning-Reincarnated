@@ -74,7 +74,7 @@ public class Hyperblast extends ArmorAbility {
 				Buff.prolong( mob, SoulParalysis.class, 7 + 1.5f*hero.pointsInTalent(Talent.LEVENSDUUR) );
                 if (hero.mana > hero.pointsInTalent(Talent.KRACHT)){
                     hero.changeMana(hero.pointsInTalent(Talent.KRACHT));
-                    mob.damage(Random.NormalIntRange(15*hero.pointsInTalent(Talent.KRACHT), 30*hero.pointsInTalent(Talent.KRACHT)), new StarBlazing());
+                    mob.damage(Random.NormalIntRange(20*hero.pointsInTalent(Talent.KRACHT), 30*hero.pointsInTalent(Talent.KRACHT)), new StarBlazing());
                 }
                 if (hero.hasTalent(Talent.VERZWAKKEN)){
                     for (int i = 0; i < 1 + hero.pointsInTalent(Talent.VERZWAKKEN)/2; i++)
