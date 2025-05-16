@@ -61,7 +61,7 @@ public class Hyperblast extends ArmorAbility {
     @Override
     public float chargeUse(Hero hero) {
         float chargeUse = super.chargeUse(hero);
-        chargeUse += chargeUse * 0.075f * hero.pointsInTalent(Talent.VERZWAKKEN);
+        chargeUse += chargeUse * 0.1f * hero.pointsInTalent(Talent.VERZWAKKEN);
         return chargeUse;
     }
 
