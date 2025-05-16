@@ -59,6 +59,13 @@ public class Hyperblast extends ArmorAbility {
     }
 
     @Override
+    public float chargeUse(Hero hero) {
+        float chargeUse = super.chargeUse(hero);
+        chargeUse += chargeUse * 0.075f * hero.pointsInTalent(Talent.VERZWAKKEN);
+        return chargeUse;
+    }
+
+    @Override
     protected void activate(ClassArmor armor, Hero hero, Integer target) {
 		for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
 			if (Dungeon.level.heroFOV[mob.pos]
