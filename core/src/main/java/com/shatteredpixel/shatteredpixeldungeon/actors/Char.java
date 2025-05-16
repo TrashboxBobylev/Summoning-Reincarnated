@@ -766,7 +766,7 @@ if (Dungeon.hero.heroClass != HeroClass.CLERIC
 			Talent.EternalFriendshipTracker tracker;
 			if ((tracker = Dungeon.hero.buff(Talent.EternalFriendshipTracker.class)) != null){
 				int count = tracker.uniqueAlliesCount();
-				dr += Random.NormalIntRange( 0 , count * Dungeon.hero.pointsInTalent(Talent.ETERNAL_FRIENDSHIP));
+				dr += Random.NormalIntRange( 0 , count * (int)(Dungeon.hero.pointsInTalent(Talent.ETERNAL_FRIENDSHIP)*1.75f));
 			}
 		}
 
