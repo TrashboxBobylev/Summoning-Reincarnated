@@ -86,7 +86,7 @@ public class Hyperblast extends ArmorAbility {
         hero.spendAndNext(Actor.TICK);
         hero.sprite.operate(hero.pos);
 
-		hero.sprite.centerEmitter().start( ElmoParticle.FACTORY, 0.15f, 4 );
+        hero.sprite.centerEmitter().start( ElmoParticle.FACTORY, 0.15f, 4 );
 		Sample.INSTANCE.play( Assets.Sounds.BLAST, 1.0f, 0.25f );
     }
 
