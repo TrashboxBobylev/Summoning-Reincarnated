@@ -33,7 +33,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
-import com.shatteredpixel.shatteredpixeldungeon.items.*;
+import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
+import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.ItemStatusHandler;
+import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.UnstableSpellbook;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
@@ -209,7 +213,7 @@ public abstract class Scroll extends Item {
                 if (curUser.hasTalent(Talent.ENERGY_SCROLL)){
                     // 2/3 empowered wand zaps
                     curUser.spend(-TIME_TO_PICK_UP);
-                    new EnergyCrystal(Math.round(energyVal()*0.33f*(curUser.pointsInTalent(Talent.ENERGY_SCROLL)))).doPickUp(curUser);
+                    new EnergyCrystal(Math.round( (energyVal()/quantity)*0.33f*(curUser.pointsInTalent(Talent.ENERGY_SCROLL)))).doPickUp(curUser);
                 }
 			}
 		}
