@@ -334,10 +334,9 @@ public class Hero extends Char {
 	public int ATU() {
 		int attunementBonus = 0;
 		if (Dungeon.level != null) {
-			for (Mob ch : Dungeon.level.mobs.toArray(new Mob[0])) {
-				if (ch instanceof Wizard && ((Wizard) ch).rank == 3 && ((Wizard) ch).behaviorType == Minion.BehaviorType.AGGRESSIVE) {
-					attunementBonus += 1;
-				}
+			Wizard.ATUBoostBuff wizardBoost = buff(Wizard.ATUBoostBuff.class);
+			if (wizardBoost != null){
+				attunementBonus += wizardBoost.query();
 			}
 		}
 		if (subClass == HeroSubClass.SOUL_WIELDER) attunementBonus++;

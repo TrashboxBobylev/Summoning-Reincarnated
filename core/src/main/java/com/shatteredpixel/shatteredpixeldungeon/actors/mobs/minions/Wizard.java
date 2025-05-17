@@ -127,8 +127,7 @@ public class Wizard extends Minion implements Callback {
 					}
 					break;
 				case AGGRESSIVE:
-					//do nothing by itself
-					//the actual effect is in Hero.ATU()
+					Buff.affect(Dungeon.hero, ATUBoostBuff.class);
 					break;
 				case PASSIVE:
 					for (Buff buff: Dungeon.hero.buffs()){
@@ -198,5 +197,22 @@ public class Wizard extends Minion implements Callback {
 			case 3: mod = 1f; break;
 		}
 		return super.attackDelay() * mod;
+	}
+
+	public static class ATUBoostBuff extends Buff {
+		public int query(){
+			int boost = 0;
+			for (Mob ch : Dungeon.level.mobs.toArray(new Mob[0])) {
+				if (ch instanceof Wizard && ((Wizard) ch).rank == 3 && ((Wizard) ch).behaviorType == Minion.BehaviorType.AGGRESSIVE) {
+					boost += 1;
+				}
+			}
+			if (boost <= 0){
+				detach();
+				return 0;
+			} else {
+				return boost;
+			}
+		}
 	}
 }
