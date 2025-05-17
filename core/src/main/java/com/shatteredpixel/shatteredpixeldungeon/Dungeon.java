@@ -525,8 +525,8 @@ public class Dungeon {
 	
 	public static boolean shopOnLevel() {
 		if (Dungeon.mode == GameMode.BIGGER)
-			return depth % 5 == 0 && depth != 30;
-		return (depth - 1) % Dungeon.chapterSize() == 0;
+			return depth > 1 && depth % 5 == 0 && depth != 30;
+		return depth > 1 && (depth - 1) % Dungeon.chapterSize() == 0;
 	}
 	
 	public static boolean bossLevel() {
