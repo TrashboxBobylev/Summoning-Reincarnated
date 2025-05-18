@@ -43,7 +43,6 @@ public class FoodDebuff extends Buff implements Hero.Doom  {
 	//food regen always lasts 50 turns
 	int left;
 	public int fullHP;
-	public int initialHP;
     float partialHP;
 	
 	@Override
@@ -79,7 +78,7 @@ public class FoodDebuff extends Buff implements Hero.Doom  {
 	}
 
 	public void set(int health){
-		initialHP = fullHP = health;
+		fullHP = health;
 	}
 	
 	@Override
@@ -89,7 +88,7 @@ public class FoodDebuff extends Buff implements Hero.Doom  {
 	
 	@Override
 	public String desc() {
-		return Messages.get(this, "desc", initialHP, 51 - left );
+		return Messages.get(this, "desc", fullHP, 51 - left );
 	}
 
 	@Override
