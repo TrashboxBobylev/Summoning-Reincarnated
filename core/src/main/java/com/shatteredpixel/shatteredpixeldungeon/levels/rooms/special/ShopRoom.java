@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
+import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -52,6 +53,13 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SmallRation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.CleanWater;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.AccessoriesBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.EquipmentBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.HolsterBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.PotionsBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.ScrollsBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.SeedsBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.StonesBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
@@ -65,6 +73,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Pike;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Stabber;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.StoneHammer;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssChallengeLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
@@ -241,133 +250,153 @@ public class ShopRoom extends SpecialRoom {
 
 		ArrayList<Item> itemsToSpawn = new ArrayList<>();
 
-		MeleeWeapon w = null;
-		if (shopLevel() == 1) {
-			w = (MeleeWeapon) Generator.random(Generator.wepTiers[1]);
-			itemsToSpawn.add(Generator.random(Generator.misTiers[1]).quantity(2).identify(false));
-			itemsToSpawn.add(new LeatherArmor().identify(false));
-		} else if (shopLevel() == 2) {
-			w = (MeleeWeapon) Generator.random(Generator.wepTiers[2]);
-			itemsToSpawn.add(Generator.random(Generator.misTiers[2]).quantity(2).identify(false));
-			itemsToSpawn.add(new MailArmor().identify(false));
-		} else if (shopLevel() == 3) {
-			w = (MeleeWeapon) Generator.random(Generator.wepTiers[3]);
-			itemsToSpawn.add(Generator.random(Generator.misTiers[3]).quantity(2).identify(false));
-			itemsToSpawn.add(new ScaleArmor().identify(false));
-		} else if (shopLevel() == 4 || Dungeon.depth == 20){
-			w = (MeleeWeapon) Generator.random(Generator.wepTiers[4]);
-			itemsToSpawn.add( Generator.random(Generator.misTiers[4]).quantity(2).identify(false) );
-			itemsToSpawn.add( new PlateArmor().identify(false) );
-			itemsToSpawn.add( new Torch() );
-			itemsToSpawn.add( new Torch() );
-			itemsToSpawn.add( new Torch() );
+		if (Dungeon.level instanceof AbyssChallengeLevel){
+			//just spawn a couple of bags
+			for (int i = 0; i < 2; i++) {
+				itemsToSpawn.add(new SeedsBag());
+				itemsToSpawn.add(new StonesBag());
+				itemsToSpawn.add(new PotionsBag());
+				itemsToSpawn.add(new ScrollsBag());
+				itemsToSpawn.add(new EquipmentBag());
+				itemsToSpawn.add(new HolsterBag());
+				itemsToSpawn.add(new AccessoriesBag());
+			}
+			itemsToSpawn.add(new Amulet());
+
+		} else {
+			MeleeWeapon w = null;
+			if (shopLevel() == 1) {
+				w = (MeleeWeapon) Generator.random(Generator.wepTiers[1]);
+				itemsToSpawn.add(Generator.random(Generator.misTiers[1]).quantity(2).identify(false));
+				itemsToSpawn.add(new LeatherArmor().identify(false));
+			} else if (shopLevel() == 2) {
+				w = (MeleeWeapon) Generator.random(Generator.wepTiers[2]);
+				itemsToSpawn.add(Generator.random(Generator.misTiers[2]).quantity(2).identify(false));
+				itemsToSpawn.add(new MailArmor().identify(false));
+			} else if (shopLevel() == 3) {
+				w = (MeleeWeapon) Generator.random(Generator.wepTiers[3]);
+				itemsToSpawn.add(Generator.random(Generator.misTiers[3]).quantity(2).identify(false));
+				itemsToSpawn.add(new ScaleArmor().identify(false));
+			} else if (shopLevel() == 4 || Dungeon.depth == 20) {
+				w = (MeleeWeapon) Generator.random(Generator.wepTiers[4]);
+				itemsToSpawn.add(Generator.random(Generator.misTiers[4]).quantity(2).identify(false));
+				itemsToSpawn.add(new PlateArmor().identify(false));
+				itemsToSpawn.add(new Torch());
+				itemsToSpawn.add(new Torch());
+				itemsToSpawn.add(new Torch());
+			}
+			if (Dungeon.scalingDepth() > 26) {
+				w = (MeleeWeapon) Generator.random(Generator.wepTiers[5]);
+				itemsToSpawn.add(Generator.random(Generator.misTiers[5]).quantity(2).identify());
+				itemsToSpawn.add(ClassArmor.upgrade(Dungeon.hero, new PlateArmor()));
+				itemsToSpawn.add(Generator.randomUsingDefaults(Generator.Category.POTION));
+				itemsToSpawn.add(Generator.randomUsingDefaults(Generator.Category.SCROLL));
+			}
+			if (w != null) {
+				w.enchant(null);
+				w.cursed = false;
+				w.level(0);
+				w.identify(false);
+				itemsToSpawn.add(w);
+			}
+
+			if (Random.Float() < 0.6) itemsToSpawn.add(ChooseShopWeapon());
+
+			Bag bag = ChooseBag(Dungeon.hero.belongings);
+			if (bag != null) {
+				itemsToSpawn.add(bag);
+			}
+
+			itemsToSpawn.add(new PotionOfHealing());
+			itemsToSpawn.add(Generator.randomUsingDefaults(Generator.Category.POTION));
+			itemsToSpawn.add(Generator.randomUsingDefaults(Generator.Category.POTION));
+
+			itemsToSpawn.add(new ScrollOfIdentify());
+			itemsToSpawn.add(new ScrollOfRemoveCurse());
+			itemsToSpawn.add(new ScrollOfMagicMapping());
+
+			for (int i = 0; i < 2; i++)
+				itemsToSpawn.add(Random.Int(2) == 0 ?
+						Generator.randomUsingDefaults(Generator.Category.POTION) :
+						Generator.randomUsingDefaults(Generator.Category.SCROLL));
+
+
+			switch (Random.Int(4)) {
+				case 0:
+					itemsToSpawn.add(new Bomb());
+					break;
+				case 1:
+				case 2:
+					itemsToSpawn.add(new Bomb.DoubleBomb());
+					break;
+				case 3:
+					itemsToSpawn.add(new Honeypot());
+					break;
+			}
+
+			Item rare;
+			switch (Random.Int(10)) {
+				case 0:
+					rare = Generator.random(Generator.Category.WAND);
+					rare.level(0);
+					break;
+				case 1:
+					rare = Generator.random(Generator.Category.RING);
+					rare.level(0);
+					break;
+				case 2:
+					rare = Generator.random(Generator.Category.ARTIFACT);
+					break;
+				case 3:
+					rare = Generator.randomStaff();
+					break;
+				default:
+					rare = new Stylus();
+			}
+			rare.cursed = false;
+			rare.cursedKnown = true;
+			itemsToSpawn.add(rare);
 		}
-		if (Dungeon.scalingDepth() > 26){
-			w = (MeleeWeapon) Generator.random(Generator.wepTiers[5]);
-			itemsToSpawn.add( Generator.random(Generator.misTiers[5]).quantity(2).identify() );
-			itemsToSpawn.add(ClassArmor.upgrade(Dungeon.hero, new PlateArmor()));
-			itemsToSpawn.add( Generator.randomUsingDefaults( Generator.Category.POTION ) );
-			itemsToSpawn.add( Generator.randomUsingDefaults( Generator.Category.SCROLL ) );
-		}
-		if (w != null) {
-			w.enchant(null);
-			w.cursed = false;
-			w.level(0);
-			w.identify(false);
-			itemsToSpawn.add(w);
-		}
 
-		if (Random.Float() < 0.6) itemsToSpawn.add(ChooseShopWeapon());
-		
-		itemsToSpawn.add( TippedDart.randomTipped(2) );
+		itemsToSpawn.add(TippedDart.randomTipped(2));
 
-		itemsToSpawn.add( new Alchemize().quantity(Random.IntRange(2, 3)));
+		itemsToSpawn.add(new Alchemize().quantity(Random.IntRange(2, 3)));
 
-		itemsToSpawn.add (new Ropes().quantity(Random.Int(3, 10)));
+		itemsToSpawn.add(new Ropes().quantity(Random.Int(3, 10)));
 
-		Bag bag = ChooseBag(Dungeon.hero.belongings);
-		if (bag != null) {
-			itemsToSpawn.add(bag);
-		}
+		itemsToSpawn.add(new SmallRation());
+		itemsToSpawn.add(new SmallRation());
 
-		itemsToSpawn.add( new PotionOfHealing() );
-		itemsToSpawn.add( Generator.randomUsingDefaults( Generator.Category.POTION ) );
-		itemsToSpawn.add( Generator.randomUsingDefaults( Generator.Category.POTION ) );
-
-		itemsToSpawn.add( new ScrollOfIdentify() );
-		itemsToSpawn.add( new ScrollOfRemoveCurse() );
-		itemsToSpawn.add( new ScrollOfMagicMapping() );
-
-		for (int i=0; i < 2; i++)
-			itemsToSpawn.add( Random.Int(2) == 0 ?
-					Generator.randomUsingDefaults( Generator.Category.POTION ) :
-					Generator.randomUsingDefaults( Generator.Category.SCROLL ) );
-
-
-		itemsToSpawn.add( new SmallRation() );
-		itemsToSpawn.add( new SmallRation() );
-		
-		switch (Random.Int(4)){
-			case 0:
-				itemsToSpawn.add( new Bomb() );
-				break;
-			case 1:
-			case 2:
-				itemsToSpawn.add( new Bomb.DoubleBomb() );
-				break;
-			case 3:
-				itemsToSpawn.add( new Honeypot() );
-				break;
-		}
-
-		itemsToSpawn.add( new Ankh() );
-		itemsToSpawn.add( new StoneOfAugmentation() );
-		itemsToSpawn.add( new CleanWater() );
+		itemsToSpawn.add(new Ankh());
+		itemsToSpawn.add(new StoneOfAugmentation());
+		itemsToSpawn.add(new CleanWater());
 
 		TimekeepersHourglass hourglass = Dungeon.hero.belongings.getItem(TimekeepersHourglass.class);
-		if (hourglass != null && hourglass.isIdentified() && !hourglass.cursed){
+		if (hourglass != null && hourglass.isIdentified() && !hourglass.cursed) {
 			int bags = 0;
 			//creates the given float percent of the remaining bags to be dropped.
 			//this way players who get the hourglass late can still max it, usually.
 			switch (Dungeon.depth) {
 				case 6:
-					bags = (int)Math.ceil(( 5-hourglass.sandBags) * 0.20f ); break;
+					bags = (int) Math.ceil((5 - hourglass.sandBags) * 0.20f);
+					break;
 				case 11:
-					bags = (int)Math.ceil(( 5-hourglass.sandBags) * 0.25f ); break;
+					bags = (int) Math.ceil((5 - hourglass.sandBags) * 0.25f);
+					break;
 				case 16:
-					bags = (int)Math.ceil(( 5-hourglass.sandBags) * 0.50f ); break;
-				case 20: case 21:
-					bags = (int)Math.ceil(( 5-hourglass.sandBags) * 0.80f ); break;
+					bags = (int) Math.ceil((5 - hourglass.sandBags) * 0.50f);
+					break;
+				case 20:
+				case 21:
+					bags = (int) Math.ceil((5 - hourglass.sandBags) * 0.80f);
+					break;
 			}
 
-			for(int i = 1; i <= bags; i++){
-				itemsToSpawn.add( new TimekeepersHourglass.sandBag());
-				hourglass.sandBags ++;
+			for (int i = 1; i <= bags; i++) {
+				itemsToSpawn.add(new TimekeepersHourglass.sandBag());
+				hourglass.sandBags++;
 			}
 		}
-
-		Item rare;
-		switch (Random.Int(10)){
-			case 0:
-				rare = Generator.random( Generator.Category.WAND );
-				rare.level( 0 );
-				break;
-			case 1:
-				rare = Generator.random(Generator.Category.RING);
-				rare.level( 0 );
-				break;
-			case 2:
-				rare = Generator.random( Generator.Category.ARTIFACT );
-				break;
-			case 3:
-				rare = Generator.randomStaff();
-				break;
-			default:
-				rare = new Stylus();
-		}
-		rare.cursed = false;
-		rare.cursedKnown = true;
-		itemsToSpawn.add( rare );
 
 		//use a new generator here to prevent items in shop stock affecting levelgen RNG (e.g. sandbags)
 		//we can use a random long for the seed as it will be the same long every time
