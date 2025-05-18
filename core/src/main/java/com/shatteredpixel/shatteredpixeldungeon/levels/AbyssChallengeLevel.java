@@ -200,6 +200,10 @@ public class AbyssChallengeLevel extends RegularLevel {
     }
 
     @Override
+    protected void createMobs() {
+    }
+
+    @Override
     public boolean activateTransition(Hero hero, LevelTransition transition) {
         return false;
     }
