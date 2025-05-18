@@ -237,12 +237,12 @@ public abstract class RegularLevel extends Level {
 	
 	@Override
 	public int mobLimit() {
-		if (Dungeon.depth <= 1){
+		if (Dungeon.depth <= 1 && !(this instanceof AbyssLevel)){
 			if (!Statistics.amuletObtained) return 0;
 			else                            return 10;
 		}
 
-		int mobs = 3 + Dungeon.depth % 5 + Random.Int(3);
+		int mobs = 3 + (this instanceof AbyssLevel ? Dungeon.scalingDepth() : Dungeon.depth) % 5 + Random.Int(3);
 		if (isLarge()){
 			mobs = (int)Math.ceil(mobs * 1.33f);
 		}
