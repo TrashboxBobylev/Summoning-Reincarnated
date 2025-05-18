@@ -543,7 +543,7 @@ public class Dungeon {
 	//value used for scaling of damage values and other effects.
 	//is usually the dungeon depth, but can be set to 26 when ascending
 	public static int scalingDepth(){
-		if (branch == AbyssLevel.BRANCH){
+		if (branch == AbyssLevel.BRANCH || level instanceof AbyssChallengeLevel){
 			return (Dungeon.chapterSize() * 5 + 1) + depth;
 		}
 		if (Dungeon.hero != null && Dungeon.hero.buff(AscensionChallenge.class) != null){

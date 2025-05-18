@@ -249,7 +249,7 @@ public enum HeroClass {
 
 			new ScrollOfUpgrade().identify().quantity(15).collect();
 
-			Dungeon.gold = 1000;
+			Dungeon.gold = 5000;
 
 			hero.STR += 10;
 			hero.ATU += 5;
