@@ -113,7 +113,7 @@ public class AbyssChallengeLevel extends RegularLevel {
 
     @Override
     protected void createItems() {
-        int nItems = 25;
+        int nItems = 15;
 
         if (Dungeon.hero.heroClass == HeroClass.ADVENTURER) nItems *= 2;
         if (Dungeon.isChallenged(Conducts.Conduct.NO_LOOT)){
