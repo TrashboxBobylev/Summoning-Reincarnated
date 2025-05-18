@@ -73,7 +73,7 @@ public abstract class TreasureBag extends Item {
             ArrayList<Item> items = items();
             for (Item item: items){
                 if (item != null) {
-                    if (!item.doPickUp(hero, hero.pos, 0f)) {
+                    if (!item.doPickUp(hero, hero.pos)) {
                         Dungeon.level.drop(item, hero.pos).sprite.drop();
                     } else {
                         hero.spend(-Item.TIME_TO_PICK_UP);
