@@ -38,12 +38,12 @@ public class SeedsBag extends TreasureBag {
     @Override
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
-        for(int i = 0; i < 10; i++) items.add(Generator.random(Generator.Category.SEED));
+        for(int i = 0; i < 6; i++) items.add(Generator.random(Generator.Category.SEED));
         return items;
     }
 
     @Override
     public int value() {
-        return 25 * quantity;
+        return 20 * quantity;
     }
 }
