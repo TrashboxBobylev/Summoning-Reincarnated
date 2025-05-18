@@ -140,7 +140,7 @@ public enum Icons {
 	HELL_CHEST,
 	REAL_TIME,
 	CHAOS,
-	NO_EXP,
+    ABYSS_START,
 	CAVES,
 	DARK_AMU,
 
@@ -457,7 +457,7 @@ public enum Icons {
 			case CHAOS:
 				icon.frame( icon.texture.uvRectBySize( 16, 192, 15, 18 ) );
 				break;
-			case NO_EXP:
+			case ABYSS_START:
 				icon.frame( icon.texture.uvRectBySize( 32, 192, 15, 15 ) );
 				break;
 			case CAVES:

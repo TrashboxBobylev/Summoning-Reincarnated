@@ -55,7 +55,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.He
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Shockwave;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.KingsCrown;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ropes;
+import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
@@ -102,6 +104,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKn
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpike;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.watabou.utils.Reflection;
 
 public enum HeroClass {
 
@@ -227,6 +230,28 @@ public enum HeroClass {
 		}
 
 		if (Dungeon.isChallenged(Conducts.Conduct.WRAITH)) hero.HP = hero.HT = 1;
+
+		if (Dungeon.mode == Dungeon.GameMode.ABYSS_START){
+			// makes it compatible with endless potential
+			for (Class bagType : new Class[]{MagicalHolster.class, ScrollHolder.class, PotionBandolier.class}){
+				if (hero.belongings.getItem(bagType) == null){
+					((Item)Reflection.newInstance(bagType)).collect();
+				}
+			}
+			Dungeon.LimitedDrops.MAGICAL_HOLSTER.drop();
+			Dungeon.LimitedDrops.SCROLL_HOLDER.drop();
+			Dungeon.LimitedDrops.POTION_BANDOLIER.drop();
+
+			new ScrollOfUpgrade().identify().quantity(15).collect();
+
+			Dungeon.gold = 1000;
+
+			hero.STR += 10;
+			hero.lvl = 30;
+
+			new TengusMask().collect();
+			new KingsCrown().collect();
+		}
 
 	}
 

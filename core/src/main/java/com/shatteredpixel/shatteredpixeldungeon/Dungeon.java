@@ -62,6 +62,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssChallengeLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CavesBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CavesLevel;
@@ -262,11 +263,11 @@ public class Dungeon {
 		SMALL("small", Icons.SHRINKING, 1.1f),
 		BIGGER("bigger", Icons.ENLARGEMENT, 1.2f),
 		EXPLORE( "explore", Icons.EXPLORE, 0f),
+		ABYSS_START("abyss_start", Icons.ABYSS_START, 2.0f),
 /*		GAUNTLET("gauntlet", Icons.GAUNTLET, 1.33f),
 		CAVES("caves", Icons.CAVES, 1.09f),
 		LOL("lol", Icons.GOLD, 0.33f),
 		NO_SOU("no_sou", Icons.SOULLESS, 2.0f),
-		NO_EXP("no_exp", Icons.NO_EXP, 3.0f),
 		HELL("hell", Icons.HELL_CHEST, 4.0f),
 		DIFFICULT("oh_my_is_this_eternity_mode", Icons.DARK_AMU, 1.8f),
 		REALTIME("realtime", Icons.REAL_TIME, 2.0f),
@@ -430,7 +431,9 @@ public class Dungeon {
 		
 		Level level;
 		if (branch == 0) {
-			if (Dungeon.depth > 0 && Dungeon.depth < Dungeon.chapterSize()) {
+			if (mode == GameMode.ABYSS_START){
+				level = new AbyssChallengeLevel();
+			} else if (Dungeon.depth > 0 && Dungeon.depth < Dungeon.chapterSize()) {
 				level = new SewerLevel();
 			} else if (Dungeon.depth == Dungeon.chapterSize()){
 				level = new SewerBossLevel();
