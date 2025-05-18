@@ -240,7 +240,7 @@ public class ShopRoom extends SpecialRoom {
 
 	protected static int shopLevel() {
 		if (Dungeon.mode == Dungeon.GameMode.BIGGER)
-			return Dungeon.depth / 5;
+			return Dungeon.scalingDepth() / 5;
 		else
 			return Dungeon.chapterNumber()-1;
 	}
@@ -375,21 +375,14 @@ public class ShopRoom extends SpecialRoom {
 			int bags = 0;
 			//creates the given float percent of the remaining bags to be dropped.
 			//this way players who get the hourglass late can still max it, usually.
-			switch (Dungeon.depth) {
-				case 6:
+			if (shopLevel() == 1)
 					bags = (int) Math.ceil((5 - hourglass.sandBags) * 0.20f);
-					break;
-				case 11:
+			else if (shopLevel() == 2)
 					bags = (int) Math.ceil((5 - hourglass.sandBags) * 0.25f);
-					break;
-				case 16:
+			else if (shopLevel() == 3)
 					bags = (int) Math.ceil((5 - hourglass.sandBags) * 0.50f);
-					break;
-				case 20:
-				case 21:
+			else if (shopLevel() >= 4)
 					bags = (int) Math.ceil((5 - hourglass.sandBags) * 0.80f);
-					break;
-			}
 
 			for (int i = 1; i <= bags; i++) {
 				itemsToSpawn.add(new TimekeepersHourglass.sandBag());
