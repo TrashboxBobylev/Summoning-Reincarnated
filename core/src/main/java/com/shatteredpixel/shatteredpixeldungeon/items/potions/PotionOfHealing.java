@@ -118,7 +118,7 @@ public class PotionOfHealing extends Potion {
 			Sample.INSTANCE.play( Assets.Sounds.SHATTER );
 		}
 
-		GameScene.add( Blob.seed( cell, 450, HealGas.class ) );
+		GameScene.add( Blob.seed( cell, 400, HealGas.class ) );
 		Char entity;
 
 		if ((entity = Actor.findChar(cell)) != null && entity.alignment == Char.Alignment.ALLY && Dungeon.hero.hasTalent(Talent.ENERGIZED_SUPPORT)){

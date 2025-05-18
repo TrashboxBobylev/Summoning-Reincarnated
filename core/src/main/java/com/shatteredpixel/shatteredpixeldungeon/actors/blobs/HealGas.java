@@ -35,7 +35,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
-import com.watabou.utils.Random;
 
 public class HealGas extends Blob {
 
@@ -51,18 +50,13 @@ public class HealGas extends Blob {
 				cell = i + j*Dungeon.level.width();
 				if (cur[cell] > 0 && (ch = Actor.findChar( cell )) != null) {
 					if (!ch.isImmune(Healing.class) || (ch instanceof Hero && !Dungeon.isChallenged(Challenges.NO_HEALING))) {
-						int heal = 1 + ch.HT / 50;
+						int heal = (Dungeon.chapterNumber()+1)*2;
 						if (ch.HP < ch.HT)
 							ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(heal), FloatingText.HEALING);
                         ch.HP = Math.min(ch.HT, ch.HP + heal);
 					} else {
 
-                        int damage = (ch.HT + 5 + Dungeon.chapterNumber()) / 40;
-                        if (Random.Int( 40 ) < (ch.HT + 5 + Dungeon.chapterNumber()) % 40) {
-                            damage++;
-                        }
-
-                        ch.damage(damage, this);
+                        ch.damage((Dungeon.chapterNumber()+1)*2, this);
                     }
 				}
 			}
