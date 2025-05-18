@@ -38,7 +38,7 @@ public class PotionsBag extends TreasureBag {
     @Override
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
-        for(int i = 0; i < 4; i++) items.add(Generator.random(Generator.Category.POTION));
+        for(int i = 0; i < 4; i++) items.add(Generator.random(Generator.Category.POTION).identify());
         return items;
     }
 

@@ -38,7 +38,7 @@ public class ScrollsBag extends TreasureBag {
     @Override
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
-        for(int i = 0; i < 4; i++) items.add(Generator.random(Generator.Category.SCROLL));
+        for(int i = 0; i < 4; i++) items.add(Generator.random(Generator.Category.SCROLL).identify());
         return items;
     }
 
