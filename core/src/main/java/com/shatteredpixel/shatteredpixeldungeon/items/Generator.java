@@ -212,6 +212,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSt
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Tomahawk;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Trident;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssChallengeLevel;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Blindweed;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Fadeleaf;
@@ -848,7 +849,7 @@ public class Generator {
 	}
 
 	public static Armor randomArmor(){
-		return randomArmor(Dungeon.depth / 5);
+		return randomArmor(Dungeon.level instanceof AbyssChallengeLevel ? 6 : Dungeon.depth / 5);
 	}
 	
 	public static Armor randomArmor(int floorSet) {
@@ -869,7 +870,7 @@ public class Generator {
 	};
 
 	public static MeleeWeapon randomWeapon(){
-		return randomWeapon(Dungeon.depth / 5);
+		return randomWeapon(Dungeon.level instanceof AbyssChallengeLevel ? 6 :Dungeon.depth / 5);
 	}
 
 	public static MeleeWeapon randomWeapon(int floorSet) {
@@ -877,7 +878,7 @@ public class Generator {
 	}
 
 	public static MeleeWeapon randomWeapon(boolean useDefaults) {
-		return randomWeapon(Dungeon.depth / 5, useDefaults);
+		return randomWeapon(Dungeon.level instanceof AbyssChallengeLevel ? 6 :Dungeon.depth / 5, useDefaults);
 	}
 	
 	public static MeleeWeapon randomWeapon(int floorSet, boolean useDefaults) {
@@ -902,7 +903,7 @@ public class Generator {
 	};
 	
 	public static MissileWeapon randomMissile(){
-		return randomMissile(Dungeon.depth / 5);
+		return randomMissile(Dungeon.level instanceof AbyssChallengeLevel ? 6 :Dungeon.depth / 5);
 	}
 
 	public static MissileWeapon randomMissile(int floorSet) {
@@ -910,7 +911,7 @@ public class Generator {
 	}
 
 	public static MissileWeapon randomMissile(boolean useDefaults) {
-		return randomMissile(Dungeon.depth / 5, useDefaults);
+		return randomMissile(Dungeon.level instanceof AbyssChallengeLevel ? 6 : Dungeon.depth / 5, useDefaults);
 	}
 
 	public static MissileWeapon randomMissile(int floorSet, boolean useDefaults) {
@@ -935,7 +936,7 @@ public class Generator {
 	};
 
 	public static Staff randomStaff(){
-		return randomStaff(Dungeon.depth / 5);
+		return randomStaff(Dungeon.level instanceof AbyssChallengeLevel ? 6 :Dungeon.depth / 5);
 	}
 
 	public static Staff randomStaff(int floorSet) {
@@ -943,7 +944,7 @@ public class Generator {
 	}
 
 	public static Staff randomStaff(boolean useDefaults) {
-		return randomStaff(Dungeon.depth / 5, useDefaults);
+		return randomStaff(Dungeon.level instanceof AbyssChallengeLevel ? 6 : Dungeon.depth / 5, useDefaults);
 	}
 
 	public static Staff randomStaff(int floorSet, boolean useDefaults) {
