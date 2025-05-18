@@ -993,6 +993,21 @@ public class ItemSpriteSheet {
 		assignItemRect(BEHAVIOR_PASSIVE,   12, 12);
 	}
 
+	private static final int TREASURE_BAGS = xy(1, 39);
+	public static final int BAG_SEEDS       = TREASURE_BAGS+0;
+	public static final int BAG_POTIONS     = TREASURE_BAGS+1;
+	public static final int BAG_STONES      = TREASURE_BAGS+2;
+	public static final int BAG_SCROLLS     = TREASURE_BAGS+3;
+	public static final int BAG_EQUIPMENT   = TREASURE_BAGS+4;
+	public static final int BAG_HOLSTER     = TREASURE_BAGS+5;
+	public static final int BAG_ACCESSORIES = TREASURE_BAGS+6;
+	public static final int BAG_GENERIC     = TREASURE_BAGS+7;
+
+	static {
+		for (int i = TREASURE_BAGS; i < TREASURE_BAGS + 16; i++)
+			assignItemRect(i, 14, 15);
+	}
+
 	//for smaller 8x8 icons that often accompany an item sprite
 	public static class Icons {
 
