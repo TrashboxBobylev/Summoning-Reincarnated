@@ -72,8 +72,13 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.BeamOfAffection;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.DreemurrsNecromancy;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.EnergizedRenewal;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.PushingWaveform;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.RunicShell;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.ShockerBreaker;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.StarBlazing;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.SubNullFieldLighter;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
@@ -248,6 +253,15 @@ public enum HeroClass {
 
 			hero.STR += 10;
 			hero.lvl = 30;
+			hero.updateStats();
+			hero.HP = hero.HT;
+			if (this == HeroClass.CONJURER) {
+				new RunicShell().identify().collect();
+				new PushingWaveform().identify().collect();
+				new ShockerBreaker().identify().collect();
+				new DreemurrsNecromancy().identify().collect();
+				new SubNullFieldLighter().identify().collect();
+			}
 
 			new TengusMask().collect();
 			new KingsCrown().collect();

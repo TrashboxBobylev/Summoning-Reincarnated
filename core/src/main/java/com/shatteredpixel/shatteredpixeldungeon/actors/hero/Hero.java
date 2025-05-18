@@ -2279,9 +2279,7 @@ public class Hero extends Char {
 					buff(ElixirOfMight.HTBoost.class).onLevelUp();
 				}
 				
-				updateHT( true );
-				attackSkill++;
-				defenseSkill++;
+				updateStats();
 
 				if (heroClass == HeroClass.CONJURER) {
 					if (lvl == 5) new RunicShell().identify().collectWithAnnouncing();
@@ -2321,6 +2319,12 @@ public class Hero extends Char {
 			
 			Badges.validateLevelReached();
 		}
+	}
+
+	public void updateStats(){
+		attackSkill = lvl + 9;
+		defenseSkill = lvl + 4;
+		updateHT(true);
 	}
 	
 	public int maxExp() {
