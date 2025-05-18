@@ -51,7 +51,6 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.ShopRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.EmptyRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.StandardRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.entrance.EntranceRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.exit.ExitRoom;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.watabou.noosa.audio.Music;
 import com.watabou.utils.Random;
@@ -81,7 +80,6 @@ public class AbyssChallengeLevel extends RegularLevel {
         ArrayList<Room> initRooms = new ArrayList<>();
 
         initRooms.add(roomEntrance = EntranceRoom.createEntrance());
-        initRooms.add(roomExit = ExitRoom.createExit());
 
         int standards = standardRooms(true);
         for (int i = 0; i < standards; i++) {
