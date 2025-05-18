@@ -252,6 +252,7 @@ public enum HeroClass {
 			Dungeon.gold = 1000;
 
 			hero.STR += 10;
+			hero.ATU += 5;
 			hero.lvl = 30;
 			hero.updateStats();
 			hero.HP = hero.HT;
