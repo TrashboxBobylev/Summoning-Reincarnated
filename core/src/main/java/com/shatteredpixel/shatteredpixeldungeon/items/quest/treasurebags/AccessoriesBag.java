@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags;
 
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 import java.util.ArrayList;
@@ -38,7 +39,10 @@ public class AccessoriesBag extends TreasureBag {
     @Override
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
-        Item artifact = Generator.randomArtifact();
+        Artifact artifact = Generator.randomArtifact();
+        if (artifact != null){
+            artifact.transferUpgrade(8);
+        }
         items.add((artifact != null ? artifact : Generator.random(Generator.Category.RING)).identify());
         items.add(Generator.random(Generator.Category.RING).identify());
         return items;
