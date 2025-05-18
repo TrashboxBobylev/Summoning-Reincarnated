@@ -191,7 +191,7 @@ public class AbyssChallengeLevel extends RegularLevel {
 
     @Override
     protected int standardRooms(boolean forceMax) {
-        return 20;
+        return 10;
     }
 
     @Override
