@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -44,6 +45,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.StonesB
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.TreasureBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrinketCatalyst;
+import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.HallsPainter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
@@ -195,6 +197,11 @@ public class AbyssChallengeLevel extends RegularLevel {
     @Override
     protected int specialRooms(boolean forceMax) {
         return 0;
+    }
+
+    @Override
+    public boolean activateTransition(Hero hero, LevelTransition transition) {
+        return false;
     }
 
     @Override

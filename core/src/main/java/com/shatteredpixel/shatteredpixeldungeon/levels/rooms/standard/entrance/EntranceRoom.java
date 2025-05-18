@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.GuidePage;
 import com.shatteredpixel.shatteredpixeldungeon.items.journal.Guidebook;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssChallengeLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -91,7 +92,7 @@ public class EntranceRoom extends StandardRoom {
 			entrance = level.pointToCell(random(2));
 		} while (level.findMob(entrance) != null);
 
-		if (Dungeon.branch != AbyssLevel.BRANCH)
+		if (Dungeon.branch != AbyssLevel.BRANCH && !(level instanceof AbyssChallengeLevel))
 			Painter.set( level, entrance, Terrain.ENTRANCE );
 
 		if (Dungeon.depth == 1){
