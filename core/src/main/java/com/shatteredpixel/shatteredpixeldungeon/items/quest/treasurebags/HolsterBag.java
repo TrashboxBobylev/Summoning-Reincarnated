@@ -33,7 +33,7 @@ import java.util.ArrayList;
 
 public class HolsterBag extends TreasureBag {
     {
-        image = ItemSpriteSheet.BAG_EQUIPMENT;
+        image = ItemSpriteSheet.BAG_HOLSTER;
     }
 
     @Override
