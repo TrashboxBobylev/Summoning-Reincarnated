@@ -49,7 +49,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.HallsPainter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret.SecretLaboratoryRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.LaboratoryRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.ShopRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.EmptyRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.StandardRoom;
@@ -93,7 +93,7 @@ public class AbyssChallengeLevel extends RegularLevel {
         }
 
         initRooms.add(new ShopRoom());
-        initRooms.add(new SecretLaboratoryRoom());
+        initRooms.add(new LaboratoryRoom());
         return initRooms;
     }
 

@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrinketCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssChallengeLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
@@ -121,8 +122,10 @@ public class LaboratoryRoom extends SpecialRoom {
 			}
 		}
 
-		entrance.set( Door.Type.LOCKED );
-		level.addItemToSpawn( new IronKey( Dungeon.depth ) );
+		if (!(level instanceof AbyssChallengeLevel)) {
+			entrance.set(Door.Type.LOCKED);
+			level.addItemToSpawn(new IronKey(Dungeon.depth));
+		}
 		
 	}
 	
