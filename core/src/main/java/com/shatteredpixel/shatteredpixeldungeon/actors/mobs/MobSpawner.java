@@ -190,7 +190,7 @@ public class MobSpawner extends Actor {
 							Scorpio.class, Scorpio.class, Scorpio.class, Scorpio.class));
 			}
 		}
-		if (Dungeon.mode == Dungeon.GameMode.BIGGER){
+		if (Dungeon.mode == Dungeon.GameMode.BIGGER || Dungeon.mode == Dungeon.GameMode.GAUNTLET){
 			switch(depth){
 				// Sewers
 				case 1: default:

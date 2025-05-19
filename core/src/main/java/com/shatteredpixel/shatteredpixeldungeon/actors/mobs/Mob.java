@@ -46,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.GreaterHaste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ManaEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MindVision;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MonkEnergy;
@@ -77,10 +78,13 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Surprise;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Wound;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
+import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
@@ -1015,6 +1019,13 @@ public abstract class Mob extends Char {
 				}
 			}
 		}
+
+		if (Dungeon.mode == Dungeon.GameMode.GAUNTLET) {
+			LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
+			if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())) {
+				lock.addTime(dmg*(0.8f - 0.7f*(Dungeon.chapterNumber()/4f)));
+			}
+		}
 		
 		super.damage( dmg, src );
 	}
@@ -1126,6 +1137,36 @@ public abstract class Mob extends Char {
 			minion.beckon(target);
 		});
 
+		if (Dungeon.mode == Dungeon.GameMode.GAUNTLET && alignment == Alignment.ENEMY){
+			if (this instanceof Thief){
+				if (((Thief) this).item != null) {
+					Dungeon.level.drop( ((Thief) this).item, pos ).sprite.drop();
+					//updates position
+					if (((Thief) this).item instanceof Honeypot.ShatteredPot) ((Honeypot.ShatteredPot)((Thief) this).item).dropPot( this, pos );
+					((Thief) this).item = null;
+				}
+			}
+			boolean mobsAlive = false;
+			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
+				if (mob.isAlive() && mob.alignment == Alignment.ENEMY){
+					mobsAlive = true;
+				}
+			}
+			if (!mobsAlive && Dungeon.level.entrance == 0){
+				Dungeon.level.drop(new SkeletonKey(Dungeon.depth), Dungeon.hero.pos).sprite.drop();
+
+				int amountOfGold = 0;
+				Random.pushGenerator(Dungeon.seedCurDepth());
+				for (int i = 0; i < Random.Int(3, 4); i++){
+					amountOfGold += Random.IntRange(30 + Dungeon.scalingDepth() * 10, 60 + Dungeon.scalingDepth() * 20);
+				}
+				Random.popGenerator();
+
+				Dungeon.level.drop(new Gold().quantity(amountOfGold), Dungeon.hero.pos).sprite.drop();
+				Dungeon.level.unseal();
+			}
+		}
+
 		super.die( cause );
 
 		if (!(this instanceof Wraith)
@@ -1172,7 +1213,7 @@ public abstract class Mob extends Char {
 
 		MasterThievesArmband.StolenTracker stolen = buff(MasterThievesArmband.StolenTracker.class);
 		if (stolen == null || !stolen.itemWasStolen()) {
-			if (Random.Float() < lootChance()) {
+			if (Random.Float() < lootChance() && Dungeon.mode != Dungeon.GameMode.GAUNTLET) {
 				Item loot = createLoot();
 				if (loot != null) {
 					Dungeon.level.drop(Challenges.process(loot), pos).sprite.drop();

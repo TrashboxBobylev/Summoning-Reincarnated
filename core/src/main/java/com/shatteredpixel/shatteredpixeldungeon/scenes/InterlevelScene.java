@@ -235,6 +235,13 @@ public class InterlevelScene extends PixelScene {
 					loadingCenter = Random.IntRange(140, 420); //completely random
 					break;
 			}
+		if (Dungeon.mode == Dungeon.GameMode.GAUNTLET){
+			loadingAsset = Assets.Splashes.CITY;
+			switch (Random.Int(3)){
+				case 0: loadingCenter = 275; break; //focus on left bookcases
+				case 1: loadingCenter = 485; break; //focus on center pathway
+			}
+		}
 		Random.popGenerator();
 		
 		if (DeviceCompat.isDebug()){

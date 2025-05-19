@@ -91,7 +91,11 @@ public class Gold extends Item {
 	
 	@Override
 	public Item random() {
-		quantity = Random.IntRange( 30 + Dungeon.scalingDepth() * 10, 60 + Dungeon.scalingDepth() * 20 );
+		if (Dungeon.mode == Dungeon.GameMode.GAUNTLET){
+			quantity = 1;
+		} else {
+			quantity = Random.IntRange(30 + Dungeon.scalingDepth() * 10, 60 + Dungeon.scalingDepth() * 20);
+		}
 		return this;
 	}
 

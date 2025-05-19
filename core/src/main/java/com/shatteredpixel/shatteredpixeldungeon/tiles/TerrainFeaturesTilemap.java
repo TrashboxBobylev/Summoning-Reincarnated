@@ -74,6 +74,7 @@ public class TerrainFeaturesTilemap extends DungeonTilemap {
 		if (Dungeon.depth == 21 && Dungeon.level instanceof LastShopLevel) stage--;
 		stage = Math.min(stage, 4);
 		if (Dungeon.branch == AbyssLevel.BRANCH) stage = 4;
+		if (Dungeon.mode == Dungeon.GameMode.GAUNTLET) stage = 4;
 		if (tile == Terrain.HIGH_GRASS){
 			return 9 + 16*stage + (DungeonTileSheet.tileVariance[pos] >= 50 ? 1 : 0);
 		} else if (tile == Terrain.FURROWED_GRASS){

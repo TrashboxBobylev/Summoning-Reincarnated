@@ -86,6 +86,9 @@ public abstract class ConnectionRoom extends Room {
 	}
 	
 	public static ConnectionRoom createRoom(){
+		if (Dungeon.mode == Dungeon.GameMode.GAUNTLET){
+			return Reflection.newInstance(TunnelRoom.class);
+		}
 		if (Dungeon.branch == AbyssLevel.BRANCH){
 			return Reflection.newInstance(rooms.get(Random.chances(abyss)));
 		}

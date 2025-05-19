@@ -434,7 +434,7 @@ public enum Icons {
 				break;
 
 			case GAUNTLET:
-				icon.frame( icon.texture.uvRectBySize( 15, 160, 15, 16 ) );
+				icon.frame( icon.texture.uvRectBySize( 16, 160, 15, 16 ) );
 				break;
 			case SHRINKING:
 				icon.frame( icon.texture.uvRectBySize( 32, 161, 15, 13 ) );

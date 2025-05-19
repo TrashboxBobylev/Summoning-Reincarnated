@@ -189,6 +189,9 @@ public abstract class StandardRoom extends Room {
 	}
 	
 	public static StandardRoom createRoom(){
+		if (Dungeon.mode == Dungeon.GameMode.GAUNTLET){
+			return Reflection.newInstance(EmptyRoom.class);
+		}
 		if (Dungeon.branch == AbyssLevel.BRANCH){
 			return Reflection.newInstance(rooms.get(Random.chances(abyss)));
 		}

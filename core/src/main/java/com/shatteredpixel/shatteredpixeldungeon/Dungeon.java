@@ -53,6 +53,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Wandmaker;
 import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
@@ -64,6 +65,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssChallengeLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
+import com.shatteredpixel.shatteredpixeldungeon.levels.ArenaLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CavesBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CavesLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CityBossLevel;
@@ -264,10 +266,9 @@ public class Dungeon {
 		BIGGER("bigger", Icons.ENLARGEMENT, 1.2f),
 		EXPLORE( "explore", Icons.EXPLORE, 0f),
 		ABYSS_START("abyss_start", Icons.ABYSS_START, 2.0f),
-/*		GAUNTLET("gauntlet", Icons.GAUNTLET, 1.33f),
-		CAVES("caves", Icons.CAVES, 1.09f),
+		GAUNTLET("gauntlet", Icons.GAUNTLET, 1.33f),
+/*		CAVES("caves", Icons.CAVES, 1.09f),
 		LOL("lol", Icons.GOLD, 0.33f),
-		NO_SOU("no_sou", Icons.SOULLESS, 2.0f),
 		HELL("hell", Icons.HELL_CHEST, 4.0f),
 		DIFFICULT("oh_my_is_this_eternity_mode", Icons.DARK_AMU, 1.8f),
 		REALTIME("realtime", Icons.REAL_TIME, 2.0f),
@@ -392,6 +393,9 @@ public class Dungeon {
 
 		gold = 0;
 		energy = 0;
+		if (Dungeon.mode == GameMode.GAUNTLET){
+			gold = 250;
+		}
 
 		droppedItems = new SparseArray<>();
 
@@ -468,6 +472,9 @@ public class Dungeon {
 			level = new AbyssLevel();
 		} else {
 			level = new DeadEndLevel();
+		}
+		if (mode == GameMode.GAUNTLET){
+			level = new ArenaLevel();
 		}
 
 		//dead end levels get cleared, don't count as generated
@@ -557,7 +564,7 @@ public class Dungeon {
 		int size = 5;
 		if (mode == GameMode.SMALL)
 			size -= 1;
-		else if (mode == GameMode.BIGGER)
+		else if (mode == GameMode.BIGGER || mode == GameMode.GAUNTLET)
 			size += 1;
 		return size;
 	}
@@ -1025,7 +1032,9 @@ public class Dungeon {
 			if (WndResurrect.instance == null) {
 				updateLevelExplored();
 				Statistics.gameWon = false;
-				Rankings.INSTANCE.submit(false, cause);
+				if (Dungeon.mode == GameMode.GAUNTLET) {
+					Rankings.INSTANCE.submit(false, Gold.class);
+				} else Rankings.INSTANCE.submit(false, cause);
 			}
 		}
 	}

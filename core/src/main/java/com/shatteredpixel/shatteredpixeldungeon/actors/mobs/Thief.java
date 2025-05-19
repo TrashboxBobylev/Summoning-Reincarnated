@@ -139,7 +139,7 @@ public class Thief extends Mob {
 
 	@Override
 	public int defenseProc(Char enemy, int damage) {
-		if (state == FLEEING) {
+		if (state == FLEEING && Dungeon.mode != Dungeon.GameMode.GAUNTLET) {
 			Dungeon.level.drop( new Gold(), pos ).sprite.drop();
 		}
 

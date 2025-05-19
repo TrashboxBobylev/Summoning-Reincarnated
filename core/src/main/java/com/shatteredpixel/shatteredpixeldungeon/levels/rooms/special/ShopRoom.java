@@ -31,12 +31,15 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ankh;
+import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.KingsCrown;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ropes;
 import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
+import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
 import com.shatteredpixel.shatteredpixeldungeon.items.Torch;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherArmor;
@@ -52,6 +55,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SmallRation;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfAttunement;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.CleanWater;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.AccessoriesBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.EquipmentBag;
@@ -63,6 +68,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.StonesB
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Alchemize;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -73,6 +79,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Pike;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Stabber;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.StoneHammer;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
+import com.shatteredpixel.shatteredpixeldungeon.levels.ArenaLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
@@ -98,7 +105,14 @@ public class ShopRoom extends SpecialRoom {
 	}
 
 	public int spacesNeeded(){
-		if (itemsToSpawn == null) itemsToSpawn = generateItems();
+		if (itemsToSpawn == null){
+			if (Dungeon.mode == Dungeon.GameMode.GAUNTLET){
+				itemsToSpawn = generateItemsGauntlet();
+			}
+			else {
+				itemsToSpawn = generateItems();
+			}
+		}
 
 		//sandbags spawn based on current level of an hourglass the player may be holding
 		// so, to avoid rare cases of min sizes differing based on that, we ignore all sandbags
@@ -144,7 +158,12 @@ public class ShopRoom extends SpecialRoom {
 	protected void placeItems( Level level ){
 
 		if (itemsToSpawn == null){
-			itemsToSpawn = generateItems();
+			if (level instanceof ArenaLevel){
+				itemsToSpawn = generateItemsGauntlet();
+			}
+			else {
+				itemsToSpawn = generateItems();
+			}
 		}
 
 		Point entryInset = new Point(entrance());
@@ -395,6 +414,105 @@ public class ShopRoom extends SpecialRoom {
 		Random.pushGenerator(Random.Long());
 			Random.shuffle(itemsToSpawn);
 		Random.popGenerator();
+
+		return itemsToSpawn;
+	}
+
+	protected static ArrayList<Item> generateItemsGauntlet(){
+		ArrayList<Item> itemsToSpawn = new ArrayList<>();
+
+		for (int i = 0; i < 3; i++) {
+			itemsToSpawn.add(Generator.random(Generator.Category.POTION).identify());
+			itemsToSpawn.add(Generator.random(Generator.Category.SCROLL).identify());
+			itemsToSpawn.add(Generator.random(Generator.Category.STONE));
+		}
+
+		if (Dungeon.depth % 4 == 0) itemsToSpawn.add( TippedDart.randomTipped(2) );
+
+		itemsToSpawn.add (new Ropes().quantity(Random.Int(2, 6)));
+
+		if (Dungeon.depth % 2 == 0) itemsToSpawn.add( new ScrollOfUpgrade().identify());
+		if (Dungeon.depth % 3 == 0) itemsToSpawn.add( new PotionOfStrength().identify());
+		if (Dungeon.depth % 3 == 0) itemsToSpawn.add(new CleanWater());
+		if (Dungeon.depth % 5 == 0) itemsToSpawn.add( new ElixirOfAttunement());
+		if (Dungeon.depth % 2 == 0) itemsToSpawn.add( Generator.randomMissile());
+		if (Dungeon.depth == Dungeon.chapterSize()*5+1) itemsToSpawn.add(new Amulet());
+		if (Dungeon.hero.lvl >= 12 && Dungeon.hero.subClass == null && Dungeon.hero.heroClass.subClasses().length > 0) itemsToSpawn.add( new TengusMask());
+		if (Dungeon.hero.lvl >= 21 && Dungeon.hero.belongings.armor != null &&
+				Dungeon.hero.armorAbility == null && Dungeon.hero.heroClass.armorAbilities().length > 0) itemsToSpawn.add( new KingsCrown());
+
+		Item rare;
+		switch (Random.Int(5)){
+			case 0:
+				rare = Generator.randomUsingDefaults( Generator.Category.WAND );
+				break;
+			case 1:
+				rare = Generator.randomUsingDefaults( Generator.Category.ARTIFACT );
+				break;
+			case 2:
+				rare = Generator.randomWeapon();
+				break;
+			case 3:
+				rare = Generator.randomArmor();
+				break;
+			case 4:
+				rare = Generator.randomStaff();
+				break;
+			default:
+				rare = new Dewdrop();
+		}
+		rare.identify();
+		itemsToSpawn.add( rare );
+		itemsToSpawn.add( new Bomb().random() );
+		if (Random.Int(2) == 0){
+			Item additionalRare;
+			switch (Dungeon.hero.heroClass){
+				case WARRIOR:
+					additionalRare = Generator.randomArmor(); break;
+				case MAGE:
+					additionalRare = Generator.random(Generator.Category.WAND); break;
+				case ROGUE: case DUELIST:
+					additionalRare = Generator.randomWeapon(); break;
+				case HUNTRESS:
+					additionalRare = Generator.randomMissile(); break;
+				case CONJURER:
+					additionalRare = Generator.randomStaff(); break;
+				case ADVENTURER:
+					additionalRare = Generator.random(); break;
+				default:
+					additionalRare = new Dewdrop();
+			}
+			additionalRare.identify();
+			itemsToSpawn.add( additionalRare );
+		}
+
+		if (Dungeon.depth % 6 == 0) itemsToSpawn.add(ChooseBag(Dungeon.hero.belongings));
+
+		TimekeepersHourglass hourglass = Dungeon.hero.belongings.getItem(TimekeepersHourglass.class);
+		if (hourglass != null && hourglass.isIdentified() && !hourglass.cursed){
+			int bags = 0;
+			//creates the given float percent of the remaining bags to be dropped.
+			//this way players who get the hourglass late can still max it, usually.
+			if (shopLevel() == 1)
+				bags = (int) Math.ceil((5 - hourglass.sandBags) * 0.20f);
+			else if (shopLevel() == 2)
+				bags = (int) Math.ceil((5 - hourglass.sandBags) * 0.25f);
+			else if (shopLevel() == 3)
+				bags = (int) Math.ceil((5 - hourglass.sandBags) * 0.50f);
+			else if (shopLevel() >= 4)
+				bags = (int) Math.ceil((5 - hourglass.sandBags) * 0.80f);
+
+			for(int k = 1; k <= bags; k++){
+				itemsToSpawn.add( new TimekeepersHourglass.sandBag());
+				hourglass.sandBags ++;
+			}
+		}
+
+		Random.pushGenerator(Random.Long());
+		Random.shuffle(itemsToSpawn);
+		Random.popGenerator();
+
+		ScrollOfRemoveCurse.uncurse(Dungeon.hero, itemsToSpawn.toArray(new Item[0]));
 
 		return itemsToSpawn;
 	}
