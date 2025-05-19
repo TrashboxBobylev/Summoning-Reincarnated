@@ -140,6 +140,7 @@ public abstract class RegularLevel extends Level {
 		if (isLarge()) {
 			standards = (int) Math.ceil(standards * 1.5f);
 		}
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS) standards = Random.Int(1, standards * 2);
 		if (Dungeon.mode == Dungeon.GameMode.SMALL){
 			standards /= 2;
 			standards += 1;
@@ -165,6 +166,7 @@ public abstract class RegularLevel extends Level {
 			if (isLarge()) {
 				specials++;
 			}
+			if (Dungeon.mode == Dungeon.GameMode.CHAOS) specials = Random.Int(1, specials);
 			if (Dungeon.mode == Dungeon.GameMode.SMALL){
 				specials /= 2;
 			} else if (Dungeon.mode == Dungeon.GameMode.BIGGER){
@@ -182,6 +184,7 @@ public abstract class RegularLevel extends Level {
 			//one additional secret for secret levels
 			if (feeling == Feeling.SECRETS) secrets++;
 			if (Dungeon.mode == Dungeon.GameMode.BIGGER) secrets++;
+			if (Dungeon.mode == Dungeon.GameMode.CHAOS) secrets = Random.Int(1, secrets);
 			for (int i = 0; i < secrets; i++) {
 				initRooms.add(SecretRoom.createRoom());
 			}
@@ -224,6 +227,7 @@ public abstract class RegularLevel extends Level {
 		if (Dungeon.mode == Dungeon.GameMode.BIGGER){
             traps = (int) (traps * 1.5f);
 		}
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS) traps = Random.Int(1, traps);
 		return traps;
 	}
 	
@@ -252,6 +256,7 @@ public abstract class RegularLevel extends Level {
 		}
 		if (Dungeon.mode == Dungeon.GameMode.BIGGER) mobs *= 1.5f;
 		if (Dungeon.mode == Dungeon.GameMode.SMALL) mobs /= 2;
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS) mobs = Random.Int(1, mobs);
 		return mobs;
 	}
 	
@@ -421,6 +426,8 @@ public abstract class RegularLevel extends Level {
 		if (Dungeon.mode == Dungeon.GameMode.BIGGER){
             nItems = Math.round(nItems * 1.75f);
 		}
+
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS) nItems = Random.Int(1, nItems);
 
 		for (int i=0; i < nItems; i++) {
 

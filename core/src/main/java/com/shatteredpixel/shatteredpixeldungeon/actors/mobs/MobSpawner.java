@@ -78,6 +78,27 @@ public class MobSpawner extends Actor {
 					SpectreRat.class, DarkestElf.class, GhostChicken.class, Phantom.class, BlinkingMan.class, Trappet.class
 			));
 		}
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS){
+			if (Dungeon.depth > 0 && Dungeon.depth < Dungeon.chapterSize()) {
+				return new ArrayList<>(Arrays.asList(Rat.class, Snake.class, Gnoll.class, Swarm.class, Crab.class, Slime.class));
+			}
+			if (Dungeon.depth > Dungeon.chapterSize() && Dungeon.depth < Dungeon.chapterSize()*2) {
+				return new ArrayList<>(Arrays.asList(Skeleton.class, Thief.class, Guard.class, DM100.class, Necromancer.class));
+			}
+			if (Dungeon.depth > Dungeon.chapterSize()*2 && Dungeon.depth < Dungeon.chapterSize()*3) {
+				return new ArrayList<>(Arrays.asList(Bat.class, Brute.class,
+						Spinner.class, Shaman.random(),
+						DM200.class));
+			}
+			if (Dungeon.depth > Dungeon.chapterSize()*3 && Dungeon.depth < Dungeon.chapterSize()*4) {
+				return new ArrayList<>(Arrays.asList(Ghoul.class, Monk.class,
+						Elemental.random(),
+						Warlock.class, Golem.class));
+			}
+			if (Dungeon.depth > Dungeon.chapterSize()*4 && Dungeon.depth < Dungeon.chapterSize()*5) {
+				return new ArrayList<>(Arrays.asList(Succubus.class, Eye.class, Scorpio.class));
+			}
+		}
 		if (Dungeon.mode == Dungeon.GameMode.SMALL){
 			switch(depth){
 
@@ -517,6 +538,9 @@ public class MobSpawner extends Actor {
 		float altChance = 1 / 50f * RatSkull.exoticChanceMultiplier();
 		if (Dungeon.branch == AbyssLevel.BRANCH && Dungeon.depth % 5 == 0)
 			altChance *= 20f;
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS){
+			altChance = 1 / 2f;
+		}
 		for (int i = 0; i < rotation.size(); i++) {
 			if (Random.Float() < altChance) {
 				Class<? extends Mob> cl = rotation.get(i);

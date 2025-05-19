@@ -50,6 +50,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.IconButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.StyledButton;
+import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndError;
 import com.watabou.gltextures.TextureCache;
 import com.watabou.input.KeyEvent;
@@ -612,6 +613,11 @@ public class InterlevelScene extends PixelScene {
 							new RuntimeException("waited more than 10 seconds on levelgen. " +
 									"Seed:" + Dungeon.seed + " depth:" + Dungeon.depth + " trace:" +
 									s));
+				}
+				if (Dungeon.mode == Dungeon.GameMode.CHAOS) {
+					Dungeon.seed = DungeonSeed.randomSeed();
+					Random.resetGenerators();
+					Game.resetScene();
 				}
 			}
 			break;

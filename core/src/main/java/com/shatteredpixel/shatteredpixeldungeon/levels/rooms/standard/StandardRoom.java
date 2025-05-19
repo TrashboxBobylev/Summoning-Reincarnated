@@ -63,6 +63,8 @@ public abstract class StandardRoom extends Room {
 		//always normal by default
 		return new float[]{1, 0, 0};
 	}
+
+	private static float[] chaosSizeCatProbs = new float[]{1, 1, 0};
 	
 	public boolean setSizeCat(){
 		return setSizeCat(0, SizeCategory.values().length-1);
@@ -84,6 +86,9 @@ public abstract class StandardRoom extends Room {
 		for (int i = maxOrdinal+1; i < categories.length; i++)  probs[i] = 0;
 		
 		int ordinal = Random.chances(probs);
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS){
+			ordinal = Random.chances(chaosSizeCatProbs);
+		}
 		
 		if (ordinal != -1){
 			sizeCat = categories[ordinal];
@@ -108,15 +113,18 @@ public abstract class StandardRoom extends Room {
 	}
 
 	public int mobSpawnWeight(){
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS) return Random.IntRange(1, sizeFactor());
 		return sizeFactor();
 	}
 
 	public int connectionWeight(){
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS) return Random.IntRange(1, sizeFactor()*sizeFactor());
 		return sizeFactor() * sizeFactor();
 	}
 
 	@Override
 	public boolean canMerge(Level l, Room other, Point p, int mergeTerrain) {
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS) return true;
 		int cell = l.pointToCell(pointInside(p, 1));
 		return (Terrain.flags[l.map[cell]] & Terrain.SOLID) == 0;
 	}
@@ -185,14 +193,14 @@ public abstract class StandardRoom extends Room {
 		chances[21] = new float[]{5,  0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 15,10,5,5,   1,1,1,1,1,1,1,1,1,1};
 		chances[26] = chances[25] = chances[24] = chances[23] = chances[22] = chances[21];
 
-		abyss = new float[]{1,  1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1,   1,1,1,1,1,1,1,1,1,1};
+		abyss       = new float[]{1,  1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1,     1,1,1,1,1,1,1,1,1,1};
 	}
 	
 	public static StandardRoom createRoom(){
 		if (Dungeon.mode == Dungeon.GameMode.GAUNTLET){
 			return Reflection.newInstance(EmptyRoom.class);
 		}
-		if (Dungeon.branch == AbyssLevel.BRANCH){
+		if (Dungeon.branch == AbyssLevel.BRANCH || Dungeon.mode == Dungeon.GameMode.CHAOS){
 			return Reflection.newInstance(rooms.get(Random.chances(abyss)));
 		}
 		return Reflection.newInstance(rooms.get(Random.chances(chances[Dungeon.depth])));

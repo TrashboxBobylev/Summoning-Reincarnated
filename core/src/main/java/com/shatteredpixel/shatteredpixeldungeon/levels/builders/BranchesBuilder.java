@@ -55,14 +55,14 @@ public class BranchesBuilder extends RegularBuilder {
 
 		//we place up to 2 or 3 main path rooms first so that levelgen has a starting point for branches
 		int mainBranchRooms = Math.max(Random.Int(2, 3), mainPathRooms.size());
-		float[] pathTunnels = pathTunnelChances.clone();
+		float[] pathTunnels = getPathTunnelChances().clone();
 		for (int i = 1; i < mainBranchRooms; i++){
 			Room prev = entrance;
 			Room r = mainPathRooms.get(0);
 
 			int tunnels = Random.chances(pathTunnels);
 			if (tunnels == -1){
-				pathTunnels = pathTunnelChances.clone();
+				pathTunnels = getPathTunnelChances().clone();
 				tunnels = Random.chances(pathTunnels);
 			}
 			pathTunnels[tunnels]--;
@@ -91,7 +91,7 @@ public class BranchesBuilder extends RegularBuilder {
 		roomsToBranch.addAll(multiConnections);
 		if (exit != null) roomsToBranch.add(exit);
 		roomsToBranch.addAll(singleConnections);
-		if (!createBranches(rooms, branchable, roomsToBranch, branchTunnelChances)){
+		if (!createBranches(rooms, branchable, roomsToBranch, getBranchTunnelChances())){
 			return null;
 		}
 		

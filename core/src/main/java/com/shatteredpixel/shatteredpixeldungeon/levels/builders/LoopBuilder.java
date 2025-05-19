@@ -90,13 +90,13 @@ public class LoopBuilder extends RegularBuilder {
 		if (exit != null) mainPathRooms.add((mainPathRooms.size()+1)/2, exit);
 
 		ArrayList<Room> loop = new ArrayList<>();
-		float[] pathTunnels = pathTunnelChances.clone();
+		float[] pathTunnels = getPathTunnelChances().clone();
 		for (Room r : mainPathRooms){
 			loop.add(r);
 			
 			int tunnels = Random.chances(pathTunnels);
 			if (tunnels == -1){
-				pathTunnels = pathTunnelChances.clone();
+				pathTunnels = getPathTunnelChances().clone();
 				tunnels = Random.chances(pathTunnels);
 			}
 			pathTunnels[tunnels]--;
@@ -158,7 +158,7 @@ public class LoopBuilder extends RegularBuilder {
 		roomsToBranch.addAll(multiConnections);
 		roomsToBranch.addAll(singleConnections);
 		weightRooms(branchable);
-		if (!createBranches(rooms, branchable, roomsToBranch, branchTunnelChances)){
+		if (!createBranches(rooms, branchable, roomsToBranch, getBranchTunnelChances())){
 			return null;
 		}
 		

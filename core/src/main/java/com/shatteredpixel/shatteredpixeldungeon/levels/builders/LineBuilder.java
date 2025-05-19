@@ -57,13 +57,13 @@ public class LineBuilder extends RegularBuilder {
 		
 		Room prev = entrance;
 
-		float[] pathTunnels = pathTunnelChances.clone();
+		float[] pathTunnels = getPathTunnelChances().clone();
 		for (int i = 1; i < mainPathRooms.size(); i++){
 			Room r = mainPathRooms.get(i);
 
 			int tunnels = Random.chances(pathTunnels);
 			if (tunnels == -1){
-				pathTunnels = pathTunnelChances.clone();
+				pathTunnels = getPathTunnelChances().clone();
 				tunnels = Random.chances(pathTunnels);
 			}
 			pathTunnels[tunnels]--;
@@ -85,7 +85,7 @@ public class LineBuilder extends RegularBuilder {
 		roomsToBranch.addAll(multiConnections);
 		roomsToBranch.addAll(singleConnections);
 		weightRooms(branchable);
-		if (!createBranches(rooms, branchable, roomsToBranch, branchTunnelChances)){
+		if (!createBranches(rooms, branchable, roomsToBranch, getBranchTunnelChances())){
 			return null;
 		}
 		

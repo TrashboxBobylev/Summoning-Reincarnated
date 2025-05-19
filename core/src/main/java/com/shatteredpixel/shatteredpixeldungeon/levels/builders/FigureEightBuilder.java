@@ -113,7 +113,7 @@ public class FigureEightBuilder extends RegularBuilder {
 		}
 		firstLoopTemp.add((firstLoopTemp.size()+1)/2, entrance);
 
-		float[] pathTunnels = pathTunnelChances.clone();
+		float[] pathTunnels = getPathTunnelChances().clone();
 
 		firstLoop = new ArrayList<>();
 		for (Room r : firstLoopTemp){
@@ -121,7 +121,7 @@ public class FigureEightBuilder extends RegularBuilder {
 
 			int tunnels = Random.chances(pathTunnels);
 			if (tunnels == -1){
-				pathTunnels = pathTunnelChances.clone();
+				pathTunnels = getPathTunnelChances().clone();
 				tunnels = Random.chances(pathTunnels);
 			}
 			pathTunnels[tunnels]--;
@@ -141,7 +141,7 @@ public class FigureEightBuilder extends RegularBuilder {
 
 			int tunnels = Random.chances(pathTunnels);
 			if (tunnels == -1){
-				pathTunnels = pathTunnelChances.clone();
+				pathTunnels = getPathTunnelChances().clone();
 				tunnels = Random.chances(pathTunnels);
 			}
 			pathTunnels[tunnels]--;
@@ -244,7 +244,7 @@ public class FigureEightBuilder extends RegularBuilder {
 		roomsToBranch.addAll(multiConnections);
 		roomsToBranch.addAll(singleConnections);
 		weightRooms(branchable);
-		if (!createBranches(rooms, branchable, roomsToBranch, branchTunnelChances)){
+		if (!createBranches(rooms, branchable, roomsToBranch, getBranchTunnelChances())){
 			return null;
 		}
 		

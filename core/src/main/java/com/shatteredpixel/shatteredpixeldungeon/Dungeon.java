@@ -267,12 +267,13 @@ public class Dungeon {
 		EXPLORE( "explore", Icons.EXPLORE, 0f),
 		ABYSS_START("abyss_start", Icons.ABYSS_START, 2.0f),
 		GAUNTLET("gauntlet", Icons.GAUNTLET, 1.33f),
+		CHAOS("chaos", Icons.CHAOS, 1.5f)
 /*		CAVES("caves", Icons.CAVES, 1.09f),
 		LOL("lol", Icons.GOLD, 0.33f),
 		HELL("hell", Icons.HELL_CHEST, 4.0f),
 		DIFFICULT("oh_my_is_this_eternity_mode", Icons.DARK_AMU, 1.8f),
 		REALTIME("realtime", Icons.REAL_TIME, 2.0f),
-		CHAOS("chaos", Icons.CHAOS, 1.33f)*/;
+		*/;
 
 		public String saveName;
 		public Icons icon;

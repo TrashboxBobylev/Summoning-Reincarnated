@@ -104,6 +104,10 @@ public class AscensionChallenge extends Buff {
 	}
 
 	public static float statModifier(Char ch){
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS && Dungeon.depth <= 1){
+			return 0.5f;
+		}
+
 		if (Dungeon.hero == null || Dungeon.hero.buff(AscensionChallenge.class) == null){
 			return 1;
 		}

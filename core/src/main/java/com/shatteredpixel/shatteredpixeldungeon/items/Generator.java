@@ -689,6 +689,10 @@ public class Generator {
 			{0,  0,  0, 20, 80}
 	};
 
+	private static final float[] chaosSetTierProbs = new float[]{
+			0, 1, 1, 1, 1
+	};
+
 	private static boolean usingFirstDeck = false;
 	private static HashMap<Category,Float> defaultCatProbs = new LinkedHashMap<>();
 	private static HashMap<Category,Float> categoryProbs = new LinkedHashMap<>();
@@ -699,6 +703,16 @@ public class Generator {
 		for (Category cat : Category.values()) {
 			cat.using2ndProbs =  cat.defaultProbs2 != null && Random.Int(2) == 0;
 			reset(cat);
+			if (Dungeon.mode == Dungeon.GameMode.CHAOS){
+				if (cat.defaultProbs != null)
+					Arrays.fill(cat.defaultProbs, 1);
+				if (cat.defaultProbs2 != null)
+					Arrays.fill(cat.defaultProbs2, 1);
+				if (cat.probs != null)
+					Arrays.fill(cat.probs, 1);
+				if (cat.defaultProbsTotal != null)
+					Arrays.fill(cat.defaultProbsTotal, 1);
+			}
 			if (cat.defaultProbs != null) {
 				cat.seed = Random.Long();
 				cat.dropped = 0;
@@ -855,7 +869,9 @@ public class Generator {
 
 		floorSet = (int)GameMath.gate(0, floorSet, floorSetTierProbs.length-1);
 		
-		Armor a = (Armor)Reflection.newInstance(Category.ARMOR.classes[Random.chances(floorSetTierProbs[floorSet])]);
+		Armor a = (Armor)Reflection.newInstance(Category.ARMOR.classes[Random.chances(
+				Dungeon.mode == Dungeon.GameMode.CHAOS ? chaosSetTierProbs : floorSetTierProbs[floorSet]
+		)]);
 		a.random();
 		return a;
 	}
@@ -886,9 +902,13 @@ public class Generator {
 
 		MeleeWeapon w;
 		if (useDefaults){
-			w = (MeleeWeapon) randomUsingDefaults(wepTiers[Random.chances(floorSetTierProbs[floorSet])]);
+			w = (MeleeWeapon) randomUsingDefaults(wepTiers[Random.chances(
+					Dungeon.mode == Dungeon.GameMode.CHAOS ? chaosSetTierProbs : floorSetTierProbs[floorSet]
+			)]);
 		} else {
-			w = (MeleeWeapon) random(wepTiers[Random.chances(floorSetTierProbs[floorSet])]);
+			w = (MeleeWeapon) random(wepTiers[Random.chances(
+					Dungeon.mode == Dungeon.GameMode.CHAOS ? chaosSetTierProbs : floorSetTierProbs[floorSet]
+			)]);
 		}
 		return w;
 	}
@@ -919,9 +939,13 @@ public class Generator {
 
 		MissileWeapon w;
 		if (useDefaults){
-			w = (MissileWeapon)randomUsingDefaults(misTiers[Random.chances(floorSetTierProbs[floorSet])]);
+			w = (MissileWeapon)randomUsingDefaults(misTiers[Random.chances(
+					Dungeon.mode == Dungeon.GameMode.CHAOS ? chaosSetTierProbs : floorSetTierProbs[floorSet]
+			)]);
 		} else {
-			w = (MissileWeapon)random(misTiers[Random.chances(floorSetTierProbs[floorSet])]);
+			w = (MissileWeapon)random(misTiers[Random.chances(
+					Dungeon.mode == Dungeon.GameMode.CHAOS ? chaosSetTierProbs : floorSetTierProbs[floorSet]
+			)]);
 		}
 		return w;
 	}
@@ -952,9 +976,13 @@ public class Generator {
 
 		Staff w;
 		if (useDefaults){
-			w = (Staff) randomUsingDefaults(staffTiers[Random.chances(floorSetTierProbs[floorSet])]);
+			w = (Staff) randomUsingDefaults(staffTiers[Random.chances(
+					Dungeon.mode == Dungeon.GameMode.CHAOS ? chaosSetTierProbs : floorSetTierProbs[floorSet]
+			)]);
 		} else {
-			w = (Staff) random(staffTiers[Random.chances(floorSetTierProbs[floorSet])]);
+			w = (Staff) random(staffTiers[Random.chances(
+					Dungeon.mode == Dungeon.GameMode.CHAOS ? chaosSetTierProbs : floorSetTierProbs[floorSet]
+			)]);
 		}
 		return w;
 	}

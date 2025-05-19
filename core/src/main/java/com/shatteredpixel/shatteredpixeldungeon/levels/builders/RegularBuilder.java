@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.builders;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.connection.ConnectionRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.connection.MazeConnectionRoom;
@@ -63,6 +64,21 @@ public abstract class RegularBuilder extends Builder {
 	
 	protected float[] pathTunnelChances = new float[]{2, 2, 1};
 	protected float[] branchTunnelChances = new float[]{1, 1, 0};
+	protected static float[] chaosChances = new float[]{1, 1, 1, 1, 1};
+
+	public float[] getPathTunnelChances() {
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS){
+			return chaosChances;
+		}
+		return pathTunnelChances;
+	}
+
+	public float[] getBranchTunnelChances() {
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS){
+			return chaosChances;
+		}
+		return branchTunnelChances;
+	}
 	
 	public RegularBuilder setTunnelLength( float[] path, float[] branch){
 		pathTunnelChances = path;
@@ -124,7 +140,11 @@ public abstract class RegularBuilder extends Builder {
 		while (roomsOnMainPath > 0 && !multiConnections.isEmpty()){
 			Room r = multiConnections.remove(0);
 			if (r instanceof StandardRoom){
-				roomsOnMainPath -= ((StandardRoom) r).sizeFactor();
+				if (Dungeon.mode == Dungeon.GameMode.CHAOS){
+					roomsOnMainPath -= Random.Int(1, ((StandardRoom) r).sizeFactor());
+				} else {
+					roomsOnMainPath -= ((StandardRoom) r).sizeFactor();
+				}
 			} else {
 				roomsOnMainPath--;
 			}
@@ -246,5 +266,4 @@ public abstract class RegularBuilder extends Builder {
 	protected float randomBranchAngle( Room r ){
 		return Random.Float(360f);
 	}
-	
 }

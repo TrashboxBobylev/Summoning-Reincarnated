@@ -187,6 +187,9 @@ public abstract class SpecialRoom extends Room {
 
 			//60% chance for front of queue, 30% chance for next, 10% for one after that
 			int index = Random.chances(new float[]{6, 3, 1});
+			if (Dungeon.mode == Dungeon.GameMode.CHAOS){
+				index = Random.Int(3);
+			}
 			while (index >= floorSpecials.size()) index--;
 
 			Room r = Reflection.newInstance(floorSpecials.get( index ));
