@@ -97,6 +97,8 @@ public abstract class RemainsItem extends Item {
 				return new ArmorRemains();
 			case CLERIC:
 				return new TornPage();
+			case CONJURER:
+				return new SpellPage();
 		}
 	}
 

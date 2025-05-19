@@ -67,6 +67,8 @@ public class AttunementConstruct extends Mob implements Callback {
 		properties.add(Char.Property.RANGED);
 	}
 
+	public boolean remains = false;
+
 	//abyss not implemented yet
 	public int abyssLevel(){
 //		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT)
@@ -77,16 +79,33 @@ public class AttunementConstruct extends Mob implements Callback {
 
 	@Override
 	public int damageRoll() {
+		if (remains){
+			return Random.NormalIntRange(Dungeon.scalingDepth(), Dungeon.scalingDepth()*2);
+		}
 		return Random.NormalIntRange( 18, 25 );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
+		if (remains){
+			return Dungeon.scalingDepth()+6;
+		}
 		return 30 + abyssLevel()*10;
 	}
 
 	@Override
+	public int defenseSkill(Char enemy) {
+		if (remains){
+			return Dungeon.scalingDepth()+3;
+		}
+		return super.defenseSkill(enemy);
+	}
+
+	@Override
 	public int drRoll() {
+		if (remains){
+			return super.drRoll();
+		}
 		return super.drRoll() + Random.Int(0, 8 + abyssLevel()*15);
 	}
 	
@@ -125,6 +144,9 @@ public class AttunementConstruct extends Mob implements Callback {
 			    multiplier = (float) (Math.pow(1.2f, eradication.combo));
             }
 			int damage = Random.Int( 4 + abyssLevel()*4, 10 + abyssLevel()*8 );
+			if (remains){
+				damage = Random.NormalIntRange(Dungeon.scalingDepth(), Dungeon.scalingDepth()*2);
+			}
 			if (buff(Shrink.class) != null|| enemy.buff(TimedShrink.class) != null) damage *= 0.6f;
 			
 			int dmg = Math.round(damage * multiplier);
@@ -159,6 +181,18 @@ public class AttunementConstruct extends Mob implements Callback {
 		immunities.add(WandOfPrismaticLight.class);
 		immunities.add(Blindness.class);
 		immunities.add(Vertigo.class);
+	}
+
+	@Override
+	public void storeInBundle(Bundle bundle) {
+		super.storeInBundle(bundle);
+		bundle.put("remains", remains);
+	}
+
+	@Override
+	public void restoreFromBundle(Bundle bundle) {
+		super.restoreFromBundle(bundle);
+		remains = bundle.getBoolean("remains");
 	}
 
     public static class Eradication extends FlavourBuff {
