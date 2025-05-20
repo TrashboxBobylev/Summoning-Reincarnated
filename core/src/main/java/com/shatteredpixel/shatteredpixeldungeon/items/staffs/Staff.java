@@ -439,7 +439,7 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
             }
         }
 
-        String statsInfo = Messages.get(this, "stats_desc");
+        String statsInfo = statsDesc();
         if (!statsInfo.equals("")) info += "\n\n" + statsInfo;
 
         if (minion != null && minion.isAlive())
@@ -467,6 +467,10 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
         }
 
         return info;
+    }
+
+    protected String statsDesc() {
+        return Messages.get(this, "stats_desc");
     }
 
     @Override

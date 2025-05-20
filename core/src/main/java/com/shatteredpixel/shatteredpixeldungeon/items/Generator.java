@@ -101,6 +101,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Spell;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.BlasterStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.CrowStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.FroggitStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.GnollHunterStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.GooStaff;
@@ -590,9 +591,10 @@ public class Generator {
 
 			STAFF_T3.classes = new Class<?>[]{
 					GnollHunterStaff.class,
-					MagicMissileStaff.class
+					MagicMissileStaff.class,
+					CrowStaff.class
 			};
-			STAFF_T3.defaultProbs = new float[]{ 3, 3 };
+			STAFF_T3.defaultProbs = new float[]{ 3, 3, 2 };
 			STAFF_T3.probs = STAFF_T3.defaultProbs.clone();
 
 			STAFF_T4.classes = new Class<?>[]{

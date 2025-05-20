@@ -466,12 +466,14 @@ public class ItemSpriteSheet {
 	public static final int SLIME_STAFF         = STAFF_T3+1;
 	public static final int CHICKEN_STAFF       = STAFF_T3+2;
 	public static final int MAGIC_MISSILE_STAFF = STAFF_T3+3;
+	public static final int CROW_STAFF          = STAFF_T3+4;
 
 	static {
 		assignItemRect(SKELETON_STAFF,     15, 15);
 		assignItemRect(SLIME_STAFF,        16, 16);
 		assignItemRect(CHICKEN_STAFF,      16, 16);
 		assignItemRect(MAGIC_MISSILE_STAFF,14, 14);
+		assignItemRect(CROW_STAFF,         15, 16);
 	}
 
 	private static final int STAFF_T4       =                               xy(7, 35);
