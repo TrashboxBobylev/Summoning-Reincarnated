@@ -171,6 +171,17 @@ public class GoatClone extends NPC implements ManaSource {
         }
     }
 
+    @Override
+    protected boolean act() {
+        int oldPos = pos;
+        boolean result = super.act();
+        //partially simulates how the hero switches to idle animation
+        if ((pos == target || oldPos == pos) && sprite.looping()){
+            sprite.idle();
+        }
+        return result;
+    }
+
     public static GoatClone findClone(){
         GoatClone clone = null;
 

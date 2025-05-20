@@ -179,7 +179,13 @@ public class Minion extends Mob implements ManaSource {
         if (!isAlive()) {
             return true;
         }
-        return super.act();
+        int oldPos = pos;
+        boolean result = super.act();
+        //partially simulates how the hero switches to idle animation
+        if ((pos == target || oldPos == pos) && sprite.looping()){
+            sprite.idle();
+        }
+        return result;
     }
 
     public void setMaxHP(int hp){
