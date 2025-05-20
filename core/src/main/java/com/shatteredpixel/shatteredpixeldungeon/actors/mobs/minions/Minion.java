@@ -383,6 +383,11 @@ public class Minion extends Mob implements ManaSource {
         if (Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.hasTalent(Talent.CHARITY)){
             speed *= 1.5f;
         }
+        //moves 2 tiles at a time when returning to the hero
+        if (state == WANDERING
+                && Dungeon.level.distance(pos, Dungeon.hero.pos) > 1){
+            speed *= 2;
+        }
         return speed;
     }
 
