@@ -63,6 +63,7 @@ public class SpellPage extends RemainsItem {
             AttunementConstruct ally = new AttunementConstruct();
             ally.remains = true;
             ally.pos = Random.element(spawnPoints);
+            ally.HP = ally.HT = Dungeon.scalingDepth()*4;
             Buff.affect(ally, SummonElemental.InvisAlly.class);
             GameScene.add(ally);
 
