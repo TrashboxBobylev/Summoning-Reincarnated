@@ -429,14 +429,11 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
                     augment.damageFactor(Math.round(minionMin()*robeBonus)),
                     augment.damageFactor(Math.round(minionMax()*robeBonus)),
                     (hp(rank())));
-            if (Dungeon.hero != null && ATUReq() > Dungeon.hero.ATU()) {
-                info += "\n\n" + Messages.get(Staff.class, "too_heavy_uh");
-            }
         } else {
             info += "\n\n" + Messages.get(this, "stats_unknown", tier, ATUReq(0), minionMin(1), minionMax(1), hp(1));
-            if (Dungeon.hero != null && ATUReq(0) > Dungeon.hero.ATU()) {
-                info += "\n\n" + Messages.get(AttunementItem.class, "probably_too_heavy");
-            }
+        }
+        if (Dungeon.hero != null && ATUReq() > Dungeon.hero.ATU()) {
+            info += "\n\n" + Messages.get(Staff.class, "too_heavy_uh");
         }
 
         String statsInfo = statsDesc();
