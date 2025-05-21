@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.sprites;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Elemental;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.FrostElemental;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
@@ -257,6 +258,46 @@ public abstract class ElementalSprite extends MobSprite {
 		@Override
 		public int blood() {
 			return 0xFFE3E3E3;
+		}
+	}
+
+	public static class FrostAlly extends ElementalSprite {
+
+		{
+			boltType = MagicMissile.STAR;
+		}
+
+		@Override
+		protected int texOffset() {
+			return 70;
+		}
+
+		public void zap( int cell ) {
+			super.zap( cell, null );
+
+			MagicMissile.boltFromChar( parent,
+					boltType,
+					this,
+					cell,
+					new Callback() {
+						@Override
+						public void call() {
+							((FrostElemental)ch).onZapComplete();
+						}
+					} );
+			Sample.INSTANCE.play( Assets.Sounds.ZAP );
+		}
+
+		@Override
+		protected Emitter createEmitter() {
+			Emitter emitter = emitter();
+			emitter.pour( MagicMissile.MagicParticle.FACTORY, 0.04f );
+			return emitter;
+		}
+
+		@Override
+		public int blood() {
+			return 0xFF4C97ED;
 		}
 	}
 }

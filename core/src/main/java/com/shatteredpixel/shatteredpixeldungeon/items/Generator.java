@@ -103,6 +103,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.spells.Spell;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.BlasterStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.CrowStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.FroggitStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.FrostElementalStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.GnollHunterStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.GooStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.GrayRatStaff;
@@ -599,9 +600,10 @@ public class Generator {
 
 			STAFF_T4.classes = new Class<?>[]{
 					WizardStaff.class,
-					RoboStaff.class
+					RoboStaff.class,
+					FrostElementalStaff.class
 			};
-			STAFF_T4.defaultProbs = new float[]{ 3, 3 };
+			STAFF_T4.defaultProbs = new float[]{ 3, 3, 4 };
 			STAFF_T4.probs = STAFF_T4.defaultProbs.clone();
 
 			STAFF_T5.classes = new Class<?>[]{
