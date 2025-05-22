@@ -56,6 +56,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.noosa.BitmapText;
 import com.watabou.noosa.ColorBlock;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.Reflection;
 
 public class WndUpgrade extends Window {
@@ -203,8 +204,8 @@ public class WndUpgrade extends Window {
 		if (toUpgrade instanceof Weapon){
 			Weapon.Augment aug = ((Weapon) toUpgrade).augment;
 			bottom = fillFields(Messages.get(this, "damage"),
-					aug.damageFactor(((Weapon) toUpgrade).min(levelFrom)) + "-" + aug.damageFactor(((Weapon) toUpgrade).max(levelFrom)),
-					aug.damageFactor(((Weapon) toUpgrade).min(levelTo)) + "-" + aug.damageFactor(((Weapon) toUpgrade).max(levelTo)),
+					GameMath.printAverage(aug.damageFactor(((Weapon) toUpgrade).min(levelFrom)), aug.damageFactor(((Weapon) toUpgrade).max(levelFrom))),
+					GameMath.printAverage(aug.damageFactor(((Weapon) toUpgrade).min(levelTo)), aug.damageFactor(((Weapon) toUpgrade).max(levelTo))),
 					bottom);
 		}
 
@@ -220,18 +221,18 @@ public class WndUpgrade extends Window {
 		if (toUpgrade instanceof Armor){
 			Armor.Augment aug = ((Armor) toUpgrade).augment;
 			bottom = fillFields(Messages.get(this, "blocking"),
-					((Armor) toUpgrade).DRMin(levelFrom) + "-" + (((Armor) toUpgrade).DRMax(levelFrom)),
-					((Armor) toUpgrade).DRMin(levelTo) + "-" +  (((Armor) toUpgrade).DRMax(levelTo)),
+					GameMath.printAverage(((Armor) toUpgrade).DRMin(levelFrom), (((Armor) toUpgrade).DRMax(levelFrom))),
+					GameMath.printAverage(((Armor) toUpgrade).DRMin(levelTo), (((Armor) toUpgrade).DRMax(levelTo))),
 					bottom);
 		} else if (toUpgrade instanceof RoundShield){
 			bottom = fillFields(Messages.get(this, "blocking"),
-					0 + "-" + ((RoundShield) toUpgrade).DRMax(levelFrom),
-					0 + "-" + ((RoundShield) toUpgrade).DRMax(levelTo),
+					GameMath.printAverage(0, ((RoundShield) toUpgrade).DRMax(levelFrom)),
+					GameMath.printAverage(0, ((RoundShield) toUpgrade).DRMax(levelTo)),
 					bottom);
 		} else if (toUpgrade instanceof Greatshield){
 			bottom = fillFields(Messages.get(this, "blocking"),
-					0 + "-" + ((Greatshield) toUpgrade).DRMax(levelFrom),
-					0 + "-" + ((Greatshield) toUpgrade).DRMax(levelTo),
+					GameMath.printAverage(0, ((Greatshield) toUpgrade).DRMax(levelFrom)),
+					GameMath.printAverage(0, ((Greatshield) toUpgrade).DRMax(levelTo)),
 					bottom);
 		}
 

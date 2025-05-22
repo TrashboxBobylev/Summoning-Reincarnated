@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.GameMath;
 
 import java.util.ArrayList;
 
@@ -125,14 +126,14 @@ public class RingOfForce extends Ring {
 		float tier = tier(Dungeon.hero != null ? Dungeon.hero.STR() : 10);
 		if (isIdentified()) {
 			int level = soloBuffedBonus();
-			String info = Messages.get(this, "stats", min(level, tier), max(level, tier), level);
+			String info = Messages.get(this, "stats", GameMath.printAverage(min(level, tier), max(level, tier)), level);
 			if (isEquipped(Dungeon.hero) && soloBuffedBonus() != combinedBuffedBonus(Dungeon.hero)){
 				level = combinedBuffedBonus(Dungeon.hero);
-				info += "\n\n" + Messages.get(this, "combined_stats", min(level, tier), max(level, tier), level);
+				info += "\n\n" + Messages.get(this, "combined_stats", GameMath.printAverage(min(level, tier), max(level, tier)), level);
 			}
 			return info;
 		} else {
-			return Messages.get(this, "typical_stats", min(1, tier), max(1, tier), 1);
+			return Messages.get(this, "typical_stats", GameMath.printAverage(min(1, tier), max(1, tier)), 1);
 		}
 	}
 
@@ -140,7 +141,7 @@ public class RingOfForce extends Ring {
 	public String upgradeStat1(int level) {
 		if (cursed && cursedKnown) level = Math.min(-1, level-3);
 		float tier = tier(Dungeon.hero != null ? Dungeon.hero.STR() : 10);
-		return min(level+1, tier) + "-" + max(level+1, tier);
+		return GameMath.printAverage(min(level+1, tier), max(level+1, tier));
 	}
 
 	@Override
@@ -155,7 +156,7 @@ public class RingOfForce extends Ring {
 		if (Dungeon.hero != null && (Dungeon.hero.heroClass == HeroClass.DUELIST || Dungeon.isChallenged(Conducts.Conduct.EVERYTHING))){
 			float tier = tier(Dungeon.hero != null ? Dungeon.hero.STR() : 10);
 			int bonus = Math.round(3+tier+(level*((4+2*tier)/8f)));
-			return (min(level+1, tier) + bonus) + "-" + (max(level+1, tier) + bonus);
+			return GameMath.printAverage(min(level+1, tier) + bonus, (max(level+1, tier) + bonus));
 		} else {
 			return null;
 		}
@@ -237,9 +238,9 @@ public class RingOfForce extends Ring {
 			float tier = tier(Dungeon.hero.STR());
 			int dmgBoost = Math.round(3+tier+(level*((4+2*tier)/8f)));
 			if (isIdentified()) {
-				info += "\n\n" + Messages.get(this, "ability_desc", min(level, tier)+dmgBoost, max(level, tier)+dmgBoost);
+				info += "\n\n" + Messages.get(this, "ability_desc", GameMath.printAverage(min(level, tier)+dmgBoost, max(level, tier)+dmgBoost));
 			} else {
-				info += "\n\n" + Messages.get(this, "typical_ability_desc",  min(level, tier)+dmgBoost, max(level, tier)+dmgBoost);
+				info += "\n\n" + Messages.get(this, "typical_ability_desc",  GameMath.printAverage(min(level, tier)+dmgBoost, max(level, tier)+dmgBoost));
 			}
 		}
 

@@ -47,6 +47,7 @@ import com.watabou.noosa.Camera;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Halo;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.Point;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
@@ -127,7 +128,7 @@ public class HolyBomb extends Bomb.ConjuredBomb {
 	@Override
 	public String desc() {
 		String desc_fuse = Messages.get(this, "desc",
-				Math.round(minDamage()*0.8), Math.round(maxDamage()*0.8));
+				GameMath.printAverage(Math.round(minDamage()*0.8f), Math.round(maxDamage()*0.8f)));
 		if (fuse != null){
 			desc_fuse += "\n\n" + Messages.get(this, "desc_burning");
 		} else {

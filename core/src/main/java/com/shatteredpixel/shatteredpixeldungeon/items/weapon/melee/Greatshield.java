@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.utils.GameMath;
 
 public class Greatshield extends MeleeWeapon {
 
@@ -59,9 +60,9 @@ public class Greatshield extends MeleeWeapon {
 	
 	public String statsInfo(){
 		if (isIdentified()){
-			return Messages.get(this, "stats_desc", 6+2*buffedLvl());
+			return Messages.get(this, "stats_desc", GameMath.printAverage(0, 6+2*buffedLvl()));
 		} else {
-			return Messages.get(this, "typical_stats_desc", 6);
+			return Messages.get(this, "typical_stats_desc", GameMath.printAverage(0, 6));
 		}
 	}
 

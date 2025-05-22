@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 
 import java.util.ArrayList;
@@ -98,11 +99,11 @@ public class EnergizedBlast extends AdHocSpell {
     }
 
     public String spellDesc() {
-        return Messages.get(this, "desc", (int)(damage(rank())*Bomb.minDamage()), (int)(damage(rank())*Bomb.maxDamage()));
+        return Messages.get(this, "desc", GameMath.printAverage((int)(damage(rank())*Bomb.minDamage()), (int)(damage(rank())*Bomb.maxDamage())));
     }
 
     @Override
     public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", (int)(damage(rank)*Bomb.minDamage()), (int)(damage(rank)*Bomb.maxDamage()));
+        return Messages.get(this, "rank", GameMath.printAverage((int)(damage(rank)*Bomb.minDamage()), (int)(damage(rank)*Bomb.maxDamage())));
     }
 }

@@ -46,4 +46,8 @@ public class GameMath {
 			return value;
 		}
 	}
+
+	public static String printAverage(int min, int max){
+        return min + "-" + max + " (~" + ((max - min) / 2 + min) + ")";
+	}
 }

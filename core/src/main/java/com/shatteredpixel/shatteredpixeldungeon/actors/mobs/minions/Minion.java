@@ -54,6 +54,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -323,8 +324,10 @@ public class Minion extends Mob implements ManaSource {
         if (buff(Fury.class) != null) empowering *= 1.5f;
         if (Dungeon.hero.buff(Attunement.class) != null) empowering = Attunement.empowering();
         return String.format("%s\n\n%s\n\n%s%s", d, Messages.get(Minion.class, "stats",
-                augment.damageFactor(Math.round(minDamage * empowering)),
-                augment.damageFactor(Math.round(maxDamage * empowering)),
+                GameMath.printAverage(
+                        augment.damageFactor(Math.round(minDamage * empowering)),
+                        augment.damageFactor(Math.round(maxDamage * empowering))
+                ),
                 HP, HT, Messages.titleCase(Messages.get(Rankable.class, "rank" + (rank)))), Messages.get(Minion.class, "behavior", Messages.get(Minion.class, "behavior_" + Messages.lowerCase(behaviorType.toString()))), Messages.get(Minion.class, "behavior_" + Messages.lowerCase(behaviorType.toString()) + "_desc"));
     }
 

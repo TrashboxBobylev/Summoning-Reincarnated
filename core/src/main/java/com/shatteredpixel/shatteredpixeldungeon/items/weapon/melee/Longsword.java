@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.utils.GameMath;
 
 public class Longsword extends MeleeWeapon {
 	
@@ -65,14 +66,14 @@ public class Longsword extends MeleeWeapon {
 	public String abilityInfo() {
 		int dmgBoost = levelKnown ? 6 + buffedLvl() : 6;
 		if (levelKnown){
-			return Messages.get(this, "ability_desc", augment.damageFactor(min()+dmgBoost), augment.damageFactor(max()+dmgBoost));
+			return Messages.get(this, "ability_desc", GameMath.printAverage(augment.damageFactor(min()+dmgBoost), augment.damageFactor(max()+dmgBoost)));
 		} else {
-			return Messages.get(this, "typical_ability_desc", min(0)+dmgBoost, max(0)+dmgBoost);
+			return Messages.get(this, "typical_ability_desc", GameMath.printAverage(min(0)+dmgBoost, max(0)+dmgBoost));
 		}
 	}
 
 	public String upgradeAbilityStat(int level){
 		int dmgBoost = 6 + level;
-		return augment.damageFactor(min(level)+dmgBoost) + "-" + augment.damageFactor(max(level)+dmgBoost);
+		return GameMath.printAverage(augment.damageFactor(min(level)+dmgBoost), augment.damageFactor(max(level)+dmgBoost));
 	}
 }

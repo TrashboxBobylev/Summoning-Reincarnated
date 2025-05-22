@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -160,7 +161,7 @@ public class ArcaneBomb extends Bomb.ConjuredBomb {
 	@Override
 	public String desc() {
 		String desc_fuse = Messages.get(this, "desc",
-				Math.round(minDamage()*3.5f), Math.round(maxDamage()*3.5f));
+				GameMath.printAverage(Math.round(minDamage()*3.5f), Math.round(maxDamage()*3.5f)));
 
 		if (fuse != null){
 			desc_fuse += "\n\n" + Messages.get(this, "desc_burning");

@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
+import com.watabou.utils.GameMath;
 
 public class Mace extends MeleeWeapon {
 
@@ -73,15 +74,15 @@ public class Mace extends MeleeWeapon {
 	public String abilityInfo() {
 		int dmgBoost = levelKnown ? 5 + Math.round(1.5f*buffedLvl()) : 5;
 		if (levelKnown){
-			return Messages.get(this, "ability_desc", augment.damageFactor(min()+dmgBoost), augment.damageFactor(max()+dmgBoost));
+			return Messages.get(this, "ability_desc", GameMath.printAverage(augment.damageFactor(min()+dmgBoost), augment.damageFactor(max()+dmgBoost)));
 		} else {
-			return Messages.get(this, "typical_ability_desc", min(0)+dmgBoost, max(0)+dmgBoost);
+			return Messages.get(this, "typical_ability_desc", GameMath.printAverage(min(0)+dmgBoost, max(0)+dmgBoost));
 		}
 	}
 
 	public String upgradeAbilityStat(int level){
 		int dmgBoost = 5 + Math.round(1.5f*level);
-		return augment.damageFactor(min(level)+dmgBoost) + "-" + augment.damageFactor(max(level)+dmgBoost);
+		return GameMath.printAverage(augment.damageFactor(min(level)+dmgBoost), augment.damageFactor(max(level)+dmgBoost));
 	}
 
 	public static void heavyBlowAbility(Hero hero, Integer target, float dmgMulti, int dmgBoost, MeleeWeapon wep){

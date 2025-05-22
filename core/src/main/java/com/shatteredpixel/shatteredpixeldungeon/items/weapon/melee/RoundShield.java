@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.GameMath;
 
 public class RoundShield extends MeleeWeapon {
 
@@ -68,9 +69,9 @@ public class RoundShield extends MeleeWeapon {
 	
 	public String statsInfo(){
 		if (isIdentified()){
-			return Messages.get(this, "stats_desc", 4+buffedLvl());
+			return Messages.get(this, "stats_desc", GameMath.printAverage(0, 4+buffedLvl()));
 		} else {
-			return Messages.get(this, "typical_stats_desc", 4);
+			return Messages.get(this, "typical_stats_desc", GameMath.printAverage(0, 4));
 		}
 	}
 

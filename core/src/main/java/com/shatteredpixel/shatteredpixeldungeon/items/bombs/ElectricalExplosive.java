@@ -52,6 +52,7 @@ import com.watabou.noosa.Camera;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -319,7 +320,7 @@ public class ElectricalExplosive extends Bomb implements ChargingItem {
 	@Override
 	public String desc() {
 		String desc_fuse = Messages.get(this, "desc",
-				Math.round(minDamage()*1.25f * charge), Math.round(maxDamage()*1.25f * charge));
+				GameMath.printAverage(Math.round(minDamage()*1.25f * charge), Math.round(maxDamage()*1.25f * charge)));
 		if (fuse != null){
 			desc_fuse += "\n\n" + Messages.get(this, "desc_burning");
 		} else {

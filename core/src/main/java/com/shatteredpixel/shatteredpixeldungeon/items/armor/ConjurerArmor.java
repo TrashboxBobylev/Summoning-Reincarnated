@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.utils.GameMath;
 
 import java.util.ArrayList;
 
@@ -115,6 +116,6 @@ public class ConjurerArmor extends Armor implements Rankable, ConjurerSet {
     }
 
     public String getRankMessage(int rank) {
-        return Messages.get(this, "rank" + rank, DRMin(powerlevel(), rank), DRMax(powerlevel(), rank));
+        return Messages.get(this, "rank" + rank, GameMath.printAverage(DRMin(powerlevel(), rank), DRMax(powerlevel(), rank)));
     }
 }

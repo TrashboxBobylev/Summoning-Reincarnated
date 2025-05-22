@@ -58,6 +58,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndQuickBehavior;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -271,8 +272,7 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
     protected String generalRankMessage(int rank) {
         return Messages.get(this, "rank" + rank,
                 hp(rank),
-                minionMin(rank),
-                minionMax(rank)
+                GameMath.printAverage(minionMin(rank), minionMax(rank))
         );
     }
 
@@ -426,11 +426,13 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
             info += "\n\n" + Messages.get(this, "stats_known",
                     tier,
                     ATUReq(0),
-                    augment.damageFactor(Math.round(minionMin()*robeBonus)),
-                    augment.damageFactor(Math.round(minionMax()*robeBonus)),
+                    GameMath.printAverage(
+                        augment.damageFactor(Math.round(minionMin()*robeBonus)),
+                        augment.damageFactor(Math.round(minionMax()*robeBonus))
+                    ),
                     (hp(rank())));
         } else {
-            info += "\n\n" + Messages.get(this, "stats_unknown", tier, ATUReq(0), minionMin(1), minionMax(1), hp(1));
+            info += "\n\n" + Messages.get(this, "stats_unknown", tier, ATUReq(0), GameMath.printAverage(minionMin(1), minionMax(1)), hp(1));
         }
         if (Dungeon.hero != null && ATUReq() > Dungeon.hero.ATU()) {
             info += "\n\n" + Messages.get(Staff.class, "too_heavy_uh");

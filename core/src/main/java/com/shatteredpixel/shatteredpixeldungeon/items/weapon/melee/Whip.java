@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
+import com.watabou.utils.GameMath;
 
 import java.util.ArrayList;
 
@@ -102,13 +103,13 @@ public class Whip extends MeleeWeapon {
 	@Override
 	public String abilityInfo() {
 		if (levelKnown){
-			return Messages.get(this, "ability_desc", augment.damageFactor(min()), augment.damageFactor(max()));
+			return Messages.get(this, "ability_desc", GameMath.printAverage(augment.damageFactor(min()), augment.damageFactor(max())));
 		} else {
-			return Messages.get(this, "typical_ability_desc", min(0), max(0));
+			return Messages.get(this, "typical_ability_desc", GameMath.printAverage(min(0), max(0)));
 		}
 	}
 
 	public String upgradeAbilityStat(int level){
-		return augment.damageFactor(min(level)) + "-" + augment.damageFactor(max(level));
+		return GameMath.printAverage(augment.damageFactor(min(level)), augment.damageFactor(max(level)));
 	}
 }

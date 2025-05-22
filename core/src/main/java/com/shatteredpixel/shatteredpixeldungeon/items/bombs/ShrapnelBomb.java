@@ -32,8 +32,8 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.Point;
-import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -92,10 +92,10 @@ public class ShrapnelBomb extends Bomb {
 	@Override
 	public String desc() {
 		String desc_fuse = Messages.get(this, "desc",
-				Math.round(minDamage()*1.6), Math.round(maxDamage()*1.6))+ "\n\n" + Messages.get(this, "desc_fuse");
+				GameMath.printAverage(Math.round(minDamage()*1.6f), Math.round(maxDamage()*1.6f)))+ "\n\n" + Messages.get(this, "desc_fuse");
 		if (fuse != null){
 			desc_fuse = Messages.get(this, "desc",
-					Math.round(minDamage()*1.6), Math.round(maxDamage()*1.6)) + "\n\n" + Messages.get(this, "desc_burning");
+					GameMath.printAverage(Math.round(minDamage()*1.6f), Math.round(maxDamage()*1.6f))) + "\n\n" + Messages.get(this, "desc_burning");
 		}
 
 		return desc_fuse;

@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
 
 import java.text.DecimalFormat;
@@ -169,7 +170,7 @@ public class ShardsOfDespair extends AdHocSpell {
 
     @Override
     public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank"+ (rank == 3 ? "3" : ""), new DecimalFormat("#.#").format(buff(rank)), minDamage(rank), maxDamage(rank));
+        return Messages.get(this, "rank"+ (rank == 3 ? "3" : ""), new DecimalFormat("#.#").format(buff(rank)), GameMath.printAverage(minDamage(rank), maxDamage(rank)));
     }
 
 }

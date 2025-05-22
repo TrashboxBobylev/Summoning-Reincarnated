@@ -43,6 +43,7 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.BArray;
 import com.watabou.utils.Callback;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
@@ -149,12 +150,12 @@ public class StarBlazing extends ConjurerSpell {
 
     @Override
     public String spellDesc() {
-        return Messages.get(this, "desc", min(rank()), max(rank()));
+        return Messages.get(this, "desc", GameMath.printAverage(min(rank()), max(rank())));
     }
 
     @Override
     public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", min(rank), max(rank), range(rank)*2+1);
+        return Messages.get(this, "rank", GameMath.printAverage(min(rank), max(rank)), range(rank)*2+1);
     }
 
     @Override

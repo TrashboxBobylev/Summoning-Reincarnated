@@ -60,6 +60,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Callback;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
@@ -354,8 +355,7 @@ public class SpiritBow extends Weapon implements Rankable {
 	@Override
 	public String getRankMessage(int rank){
 		return Messages.get(this, "rank" + rank,
-				minRanked(rank),
-				maxRanked(rank),
+				GameMath.printAverage(minRanked(rank), maxRanked(rank)),
 				Math.round(speedMod(rank)*100)
 		);
 	}

@@ -64,6 +64,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
@@ -327,7 +328,7 @@ public class Bomb extends Item {
 
 	@Override
 	public String desc() {
-		String desc = Messages.get(this, "desc", minDamage(), maxDamage());
+		String desc = Messages.get(this, "desc", GameMath.printAverage(minDamage(), maxDamage()));
 		if (fuse == null) {
 			return desc + "\n\n" + Messages.get(this, "desc_fuse");
 		} else {
