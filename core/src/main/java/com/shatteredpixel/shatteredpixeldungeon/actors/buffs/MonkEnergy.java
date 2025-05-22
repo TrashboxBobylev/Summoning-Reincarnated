@@ -639,7 +639,7 @@ public class MonkEnergy extends Buff implements ActionIndicator.Action {
 
 				if (Buff.affect(hero, MonkEnergy.class).abilitiesEmpowered(hero)){
 					int toHeal = Math.round((hero.HT - hero.HP)/5f);
-					if (toHeal > 0) {
+					if (toHeal > 0 && Regeneration.canSustain()) {
 						Buff.affect(hero, Healing.class).setHeal(toHeal, 0, 1);
 					}
 					Buff.affect(hero, MeditateResistance.class, hero.cooldown());

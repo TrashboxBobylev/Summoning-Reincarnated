@@ -29,9 +29,9 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.SpiritForm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.SpiritForm;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ChaoticCenser;
@@ -157,6 +157,10 @@ public class Regeneration extends Buff {
 			return false;
 		}
 		return true;
+	}
+
+	public static boolean canSustain(){
+		return regenOn() && Dungeon.hero.buff(Hunger.class) != null && !Dungeon.hero.buff(Hunger.class).isStarving();
 	}
 
 	public static final String PARTIAL_REGEN = "partial_regen";

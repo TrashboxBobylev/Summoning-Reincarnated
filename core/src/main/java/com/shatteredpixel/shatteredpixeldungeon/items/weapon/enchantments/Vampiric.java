@@ -25,6 +25,8 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -57,9 +59,12 @@ public class Vampiric extends Weapon.Enchantment {
 			healAmt = Math.min( healAmt, attacker.HT - attacker.HP );
 			
 			if (healAmt > 0 && attacker.isAlive()) {
-				
-				attacker.HP += healAmt;
-				attacker.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString( healAmt ), FloatingText.HEALING );
+
+				if (!(attacker instanceof Hero) || Regeneration.canSustain()) {
+
+					attacker.HP += healAmt;
+					attacker.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(healAmt), FloatingText.HEALING);
+				}
 				
 			}
 		}
