@@ -127,9 +127,9 @@ public class StarBlazing extends ConjurerSpell {
 
     private int min(int rank){
         switch (rank){
-            case 1: return (int) (3 + heroLvl() / 3f);
-            case 2: return (int) (6 + heroLvl()/2f);
-            case 3: return (int) (6 + heroLvl()/2f);
+            case 1: return (int) (2 + heroLvl() / 4f);
+            case 2: return (int) (4 + heroLvl()/3f);
+            case 3: return (int) (4 + heroLvl()/3f);
         }
         return 0;
     }
