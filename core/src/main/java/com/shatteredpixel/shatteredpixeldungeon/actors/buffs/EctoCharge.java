@@ -35,8 +35,8 @@ import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
 
 public class EctoCharge extends Buff {
-    public static final float MAXIMUM = 5f;
-    public static final int RATE      = 12;
+    public static final float MAXIMUM = 2.5f;
+    public static final int RATE      = 40;
 
     {
         type = buffType.NEGATIVE;
