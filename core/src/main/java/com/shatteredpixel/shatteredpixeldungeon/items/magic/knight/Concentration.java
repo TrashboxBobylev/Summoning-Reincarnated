@@ -81,8 +81,8 @@ public class Concentration extends AdHocSpell {
     private float paralyse(int rank){
         switch (rank){
             case 1: return 3f;
-            case 2: return 9f;
-            case 3: return 20f;
+            case 2: return 6f;
+            case 3: return 15f;
         }
         return 0f;
     }
