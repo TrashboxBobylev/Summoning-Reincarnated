@@ -163,8 +163,8 @@ public class WandOfCorruption extends Wand {
 				enemyResist = 1 + AscensionChallenge.AscensionCorruptResist(enemy);
 			}
 			
-			//100% health: 5x resist   75%: 3.25x resist   50%: 2x resist   25%: 1.25x resist
-			enemyResist *= 1 + 4*Math.pow(enemy.HP/(float)enemy.HT, 2);
+			//100% health: 4x resist   75%: 2.25x resist   50%: 1x resist   25%: 1.25x resist
+			enemyResist *= 1 + 3*Math.pow(enemy.HP/(float)enemy.HT, 2);
 			
 			//debuffs placed on the enemy reduce their resistance
 			for (Buff buff : enemy.buffs()){

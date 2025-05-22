@@ -1022,8 +1022,19 @@ if (Dungeon.hero.heroClass != HeroClass.CLERIC
 				if (dmg == 0) break;
 			}
 		}
-		shielded -= dmg;
-		HP -= dmg;
+
+		if (buff(Corruption.class) != null && !(src instanceof Corruption || src instanceof Viscosity.DeferedDamage)){
+			if (dmg >= 0) {
+				Viscosity.DeferedDamage deferred = Buff.affect( this, Viscosity.DeferedDamage.class );
+				deferred.extend( dmg );
+
+				sprite.showStatus( CharSprite.WARNING, Messages.get(Viscosity.class, "deferred", dmg) );
+			}
+			return;
+		} else {
+			shielded -= dmg;
+			HP -= dmg;
+		}
 
 		if (HP > 0 && shielded > 0 && shielding() == 0){
 			Buff.detach(this, RunicShell.EmpowerTracker.class);
