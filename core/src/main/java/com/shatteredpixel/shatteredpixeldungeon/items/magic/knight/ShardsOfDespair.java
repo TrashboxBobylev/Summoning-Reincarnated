@@ -128,8 +128,8 @@ public class ShardsOfDespair extends AdHocSpell {
 
     private int minDamage(int rank){
         switch (rank){
-            case 2: return 6 + heroLvl()*2/5;
-            case 3: return 12 + heroLvl()*4/5;
+            case 2: return 7 + heroLvl()/2;
+            case 3: return 15 + heroLvl();
         }
         return 0;
     }
