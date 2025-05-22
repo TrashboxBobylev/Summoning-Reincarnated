@@ -42,7 +42,6 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
 import com.watabou.utils.PathFinder;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class EnergizedBlast extends AdHocSpell {
@@ -83,7 +82,7 @@ public class EnergizedBlast extends AdHocSpell {
         switch (rank){
             case 1: return 1f;
             case 2: return 0.5f;
-            case 3: return 0.2f;
+            case 3: return 0.25f;
         }
         return 0f;
     }
@@ -91,19 +90,19 @@ public class EnergizedBlast extends AdHocSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 25;
-            case 2: return 15;
-            case 3: return 8;
+            case 1: return 30;
+            case 2: return 18;
+            case 3: return 10;
         }
         return 0;
     }
 
     public String spellDesc() {
-        return Messages.get(this, "desc", new DecimalFormat("#").format(damage(rank())*100));
+        return Messages.get(this, "desc", (int)(damage(rank())*Bomb.minDamage()), (int)(damage(rank())*Bomb.maxDamage()));
     }
 
     @Override
     public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", new DecimalFormat("#").format(damage(rank)*100));
+        return Messages.get(this, "rank", (int)(damage(rank)*Bomb.minDamage()), (int)(damage(rank)*Bomb.maxDamage()));
     }
 }
