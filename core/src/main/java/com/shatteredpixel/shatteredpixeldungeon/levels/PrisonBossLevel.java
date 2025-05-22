@@ -598,7 +598,7 @@ public class PrisonBossLevel extends Level {
 			}
 		Random.popGenerator();
 
-		drop(new IronKey(10), randomPrisonCellPos());
+		drop(new IronKey(Dungeon.chapterSize()*2), randomPrisonCellPos());
 	}
 
 	@Override
