@@ -88,9 +88,9 @@ public class AntarcticTouch extends ConjurerSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 15;
-            case 2: return 25;
-            case 3: return 25;
+            case 1: return 10;
+            case 2: return 20;
+            case 3: return 20;
         }
         return 0;
     }
