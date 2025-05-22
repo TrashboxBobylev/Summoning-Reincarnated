@@ -126,8 +126,8 @@ public class HolyAura extends AdHocSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 35;
-            case 2: return 50;
+            case 1: return 25;
+            case 2: return 40;
             case 3: return 20;
         }
         return 0;
