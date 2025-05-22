@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Chrome;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
@@ -238,7 +237,7 @@ public class StartScene extends PixelScene {
 					level = new BitmapText(PixelScene.pixelFont);
 					add(level);
 					if (info.conducts.isConductedAtAll()) {
-						conduct = new Image(Assets.Interfaces.SUBCLASS_ICONS, (info.conducts.getFirst().icon - 1) * 16, 16, 16, 16);
+						conduct = info.conducts.getFirst().getIcon();
 						add(conduct);
 					}
 				} else {

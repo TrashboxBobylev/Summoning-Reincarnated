@@ -450,7 +450,7 @@ public class WndRanking extends WndTabbed {
 					@Override
 					protected void onClick() {
 						if (Dungeon.conducts.oneConduct()){
-							Game.scene().add( new WndTitledMessage(new Image(Assets.Interfaces.SUBCLASS_ICONS, (Dungeon.conduct().icon-1)*16, 16, 16, 16),
+							Game.scene().add( new WndTitledMessage(Dungeon.conduct().getIcon(),
 									Dungeon.conduct().toString(),
 									Dungeon.conduct().desc()));
 						} else

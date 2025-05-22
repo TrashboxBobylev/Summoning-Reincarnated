@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
@@ -111,13 +110,13 @@ public class WndGame extends Window {
 					if (!Dungeon.conducts.oneConduct()) {
 						ShatteredPixelDungeon.scene().addToFront(new WndConducts(Dungeon.conducts, false));
 					} else
-						GameScene.show( new WndTitledMessage(new Image(Assets.Interfaces.SUBCLASS_ICONS, (Dungeon.conduct().icon-1)*16, 16, 16, 16),
+						GameScene.show( new WndTitledMessage(Dungeon.conduct().getIcon(),
 								Dungeon.conduct().toString(),
 								Dungeon.conduct().desc()) );
 				}
 			} );
 			curBtn.icon(Dungeon.conducts.oneConduct() ?
-					new Image(Assets.Interfaces.SUBCLASS_ICONS, (Dungeon.conduct().icon-1)*16, 16, 16, 16) :
+					Dungeon.conduct().getIcon() :
 					Icons.get(Icons.CONDUCTS_COLOR));
 		}
 		if (Dungeon.mode != null) {

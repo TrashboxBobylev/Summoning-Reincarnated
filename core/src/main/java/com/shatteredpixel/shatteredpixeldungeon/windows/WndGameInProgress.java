@@ -24,7 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
@@ -43,7 +43,6 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.shatteredpixel.shatteredpixeldungeon.utils.DungeonSeed;
 import com.watabou.noosa.Game;
-import com.watabou.noosa.Image;
 
 import java.util.Locale;
 
@@ -97,10 +96,8 @@ public class WndGameInProgress extends Window {
 				@Override
 				protected void onClick() {
 					if (info.conducts.oneConduct()){
-						Game.scene().add( new WndTitledMessage(
-								new Image(Assets.Interfaces.SUBCLASS_ICONS, (info.conducts.getFirst().icon-1)*16, 16, 16, 16),
-								info.conducts.getFirst().toString(),
-								info.conducts.getFirst().desc())
+						Conducts.Conduct conduct = info.conducts.getFirst();
+						Game.scene().add( new WndTitledMessage(conduct.getIcon(), conduct.toString(), conduct.desc())
 						);
 					} else
 						ShatteredPixelDungeon.scene().addToFront(new WndConducts(info.conducts, false));

@@ -362,7 +362,7 @@ public class vReInc_Changes {
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
-        changes.addButton( new ChangeButton( new Image(Assets.Interfaces.SUBCLASS_ICONS, (Conducts.Conduct.FACE.icon - 1) * 16, 16, 16, 16), "Curse of Faced",
+        changes.addButton( new ChangeButton( Conducts.Conduct.FACE.getIcon(), "Curse of Faced",
                 "Implemented popular face challenge as _Curse of Faced_ conduct.\n\n" +
                         "_-_ Thanks @tiresdonexits and other face players for telling me most of details.\n" +
                         "_-_ The bugs can still be there."));

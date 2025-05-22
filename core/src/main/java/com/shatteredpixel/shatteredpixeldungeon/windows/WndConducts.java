@@ -30,7 +30,12 @@ import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
-import com.shatteredpixel.shatteredpixeldungeon.ui.*;
+import com.shatteredpixel.shatteredpixeldungeon.ui.CheckBox;
+import com.shatteredpixel.shatteredpixeldungeon.ui.IconButton;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
+import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
+import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
+import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.ui.Component;
@@ -95,7 +100,7 @@ public class WndConducts extends Window {
                         String title = Messages.titleCase(Messages.get(Conducts.class, allConducts.get(index).name()));
                         ShatteredPixelDungeon.scene().add(
                                 new WndTitledMessage(
-                                        new Image(Assets.Interfaces.SUBCLASS_ICONS, (allConducts.get(index).icon - 1) * 16, 16, 16, 16),
+                                        allConducts.get(index).getIcon(),
                                         title, message)
                         );
 
@@ -140,7 +145,7 @@ public class WndConducts extends Window {
                 info.setRect(cb.right(), pos, 16, BTN_HEIGHT);
                 content.add(info);
                 infos.add(info);
-                Image icon = new Image(Assets.Interfaces.SUBCLASS_ICONS, (i.icon - 1) * 16, 16, 16, 16);
+                Image icon = i.getIcon();
                 icon.x = cb.left()+1;
                 icon.y = cb.top()+1;
                 content.add(icon);

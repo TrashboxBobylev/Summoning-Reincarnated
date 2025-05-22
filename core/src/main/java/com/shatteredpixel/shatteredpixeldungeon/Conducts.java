@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.watabou.noosa.Image;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 
@@ -100,6 +101,10 @@ public class Conducts {
 
         public String desc(){
             return Messages.get(Conducts.class, name() + "_desc") + "\n\n" + Messages.get(Dungeon.class, "score", new DecimalFormat("#.##").format(scoreMod));
+        }
+
+        public Image getIcon(){
+            return new Image(Assets.Interfaces.SUBCLASS_ICONS, ((icon-1) % 8) * 16, ((icon-1) / 8) * 16, 16, 16);
         }
     }
 
