@@ -103,9 +103,9 @@ public class TransmogrificationWand extends ConjurerSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 10;
-            case 2: return 15;
-            case 3: return 18;
+            case 1: return 8;
+            case 2: return 12;
+            case 3: return 15;
         }
         return 0;
     }
