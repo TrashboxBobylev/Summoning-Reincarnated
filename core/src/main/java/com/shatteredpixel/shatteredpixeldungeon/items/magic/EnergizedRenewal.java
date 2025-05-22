@@ -73,7 +73,7 @@ public class EnergizedRenewal extends ConjurerSpell {
     public int manaCost(int rank) {
         switch (rank){
             case 1: return 2;
-            case 2: return 5;
+            case 2: return 4;
             case 3: return 10;
         }
         return 0;
@@ -83,7 +83,7 @@ public class EnergizedRenewal extends ConjurerSpell {
         if (ch.buff(ShockerBreaker.NoHeal.class) != null) return 0;
         switch (rank){
             case 1: return intHeal(rank);
-            case 2: return ch.HT / 4;
+            case 2: return ch.HT / 5;
             case 3: return ch.HT;
         }
         return 0;
@@ -91,7 +91,7 @@ public class EnergizedRenewal extends ConjurerSpell {
 
     private int intHeal(int rank){
         switch (rank){
-            case 1: return 10;
+            case 1: return 8;
             case 2: return 0;
             case 3: return 0;
         }
