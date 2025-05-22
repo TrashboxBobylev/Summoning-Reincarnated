@@ -42,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotio
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.Trinket;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
@@ -93,7 +94,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 
 		//all rings, wands, trinkets, seeds, and runestones
 		} else {
-			return item instanceof Ring || item instanceof Wand || item instanceof Trinket
+			return item instanceof Ring || item instanceof Wand || item instanceof Staff || item instanceof Trinket
 					|| item instanceof Plant.Seed || item instanceof Runestone;
 		}
 	}
