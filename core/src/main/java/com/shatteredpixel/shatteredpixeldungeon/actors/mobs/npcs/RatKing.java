@@ -83,26 +83,26 @@ public class RatKing extends NPC {
 	@Override
 	protected void onAdd() {
 		super.onAdd();
-		if (firstAdded && Dungeon.depth != 5){
+		if (firstAdded && Dungeon.depth != Dungeon.chapterSize()){
 			yell(Messages.get(this, "confused"));
 		}
 	}
 
 	@Override
 	public Notes.Landmark landmark() {
-		return Dungeon.depth == 5 ? Notes.Landmark.RAT_KING : null;
+		return Dungeon.depth == Dungeon.chapterSize() ? Notes.Landmark.RAT_KING : null;
 	}
 
 	@Override
 	protected boolean act() {
-		if (Dungeon.depth < 5){
+		if (Dungeon.depth < Dungeon.chapterSize()){
 			if (pos == Dungeon.level.exit()){
 				destroy();
 				sprite.killAndErase();
 			} else {
 				target = Dungeon.level.exit();
 			}
-		} else if (Dungeon.depth > 5){
+		} else if (Dungeon.depth > Dungeon.chapterSize()){
 			if (pos == Dungeon.level.entrance()){
 				destroy();
 				sprite.killAndErase();
