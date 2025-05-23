@@ -18,3 +18,5 @@ local.properties
 #intellij project files
 *.iml
 *.idea
+
+/play-config.json
