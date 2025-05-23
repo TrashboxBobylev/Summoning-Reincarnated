@@ -244,7 +244,6 @@ public class Imp extends NPC {
 					alternative = Random.Int(2) == 0;
 				else
 					alternative = false;
-				}
 				
 				given = false;
 				
