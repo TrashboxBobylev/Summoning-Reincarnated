@@ -112,7 +112,7 @@ public abstract class RegularLevel extends Level {
 		builder = builder();
 
 		if (Dungeon.mode == Dungeon.GameMode.BIGGER && builder instanceof RegularBuilder){
-			((RegularBuilder) builder).setExtraConnectionChance(0.67f);
+			((RegularBuilder) builder).setExtraConnectionChance(1f);
 		}
 		
 		ArrayList<Room> initRooms = initRooms();
@@ -145,7 +145,7 @@ public abstract class RegularLevel extends Level {
 			standards /= 2;
 			standards += 1;
 		} else if (Dungeon.mode == Dungeon.GameMode.BIGGER){
-			standards *= (int) Math.ceil(standards * 1.5f);
+			standards = (int) Math.ceil(standards * 1.5f);
 			standards += 1;
 		}
 		for (int i = 0; i < standards; i++) {
