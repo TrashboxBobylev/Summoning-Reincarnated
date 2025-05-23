@@ -31,7 +31,7 @@ import com.watabou.noosa.Image;
 
 public class TargetedCell extends Image {
 
-	protected float alpha;
+	public float alpha;
 
 	public TargetedCell( int pos, int color ) {
 		super(Icons.get(Icons.TARGET));
