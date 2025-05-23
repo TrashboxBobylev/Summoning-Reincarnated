@@ -322,10 +322,9 @@ public class YogDzewa extends Mob {
 
 				abilityCooldown += Random.NormalFloat(MIN_ABILITY_CD, MAX_ABILITY_CD);
 				abilityCooldown -= (phase - 1);
-				needCrossBeam = Random.Int(3) == 0;
+				needCrossBeam = Random.Int(2) == 0;
 				if (needCrossBeam){
 					GameScene.flash(0xFFFFFF);
-					GLog.negative(Messages.get(this, "cross_beams"));
 					for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++){
 						Ballistica b = new Ballistica(pos, pos + PathFinder.NEIGHBOURS8[i], Ballistica.STOP_SOLID);
 						for (int p : b.path){
