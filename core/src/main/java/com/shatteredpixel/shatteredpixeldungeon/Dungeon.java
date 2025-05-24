@@ -729,10 +729,10 @@ public class Dungeon {
 
 	public static boolean atuRoomNeeded(){
 		//one attunement each floor set, in floor 2 or 3, 1/2 chance each floor
-		int region = 1+depth/5;
+		int region = 1+depth/Dungeon.chapterSize();
 		if (region > LimitedDrops.ATU_ROOM.count){
-			int floorThisRegion = depth%5;
-            return floorThisRegion == 3 || (floorThisRegion == 2 && Random.Int(2) == 0);
+			int floorThisRegion = depth%Dungeon.chapterSize();
+            return floorThisRegion == (int)Math.floor(Dungeon.chapterSize()/2f) || (floorThisRegion == (int)Math.floor(Dungeon.chapterSize()/2f)-1 && Random.Int(2) == 0);
 		}
 		return false;
 	}
