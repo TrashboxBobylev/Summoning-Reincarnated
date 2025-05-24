@@ -1435,7 +1435,7 @@ public abstract class Mob extends Char {
 			}
 			doWithHordeMinions((minion) -> minion.beckon(target));
 
-			if (alignment == Alignment.ENEMY && Dungeon.isChallenged(Challenges.SWARM_INTELLIGENCE)) {
+			if (alignment == Alignment.ENEMY && Dungeon.isChallenged(Challenges.SWARM_INTELLIGENCE) && (enemy == null || enemy.buff(Corruption.class) == null)) {
 				for (Mob mob : Dungeon.level.mobs) {
 					if (mob.paralysed <= 0
 							&& Dungeon.level.distance(pos, mob.pos) <= 8
@@ -1475,7 +1475,7 @@ public abstract class Mob extends Char {
 
 			doWithHordeMinions((minion) -> minion.beckon(target));
 
-			if (alignment == Alignment.ENEMY && Dungeon.isChallenged( Challenges.SWARM_INTELLIGENCE )) {
+			if (alignment == Alignment.ENEMY && Dungeon.isChallenged( Challenges.SWARM_INTELLIGENCE ) && enemy.buff(Corruption.class) == null) {
 				for (Mob mob : Dungeon.level.mobs) {
 					if (mob.paralysed <= 0
 							&& Dungeon.level.distance(pos, mob.pos) <= 8
