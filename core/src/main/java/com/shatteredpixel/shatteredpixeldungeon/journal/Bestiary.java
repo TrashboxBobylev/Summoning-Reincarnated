@@ -25,7 +25,9 @@
 package com.shatteredpixel.shatteredpixeldungeon.journal;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cleric.PowerOfMany;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.triadallies.TriadFighter;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.triadallies.TriadMagician;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.triadallies.TriadRanger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpiritHawk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.ShadowClone;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.SmokeBomb;
@@ -95,6 +97,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Warlock;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Wraith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogDzewa;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogFist;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Crow;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Froggit;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.FrostElemental;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.GnollHunter;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.GooMinion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.GrayRat;
@@ -250,8 +255,10 @@ public enum Bestiary {
 				DriedRose.GhostHero.class,
 				WandOfWarding.Ward.class, WandOfWarding.Ward.WardSentry.class, WandOfLivingEarth.EarthGuardian.class,
 				ShadowClone.ShadowAlly.class, SmokeBomb.NinjaLog.class, SpiritHawk.HawkAlly.class,
-				GrayRat.class, com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Sheep.class, GnollHunter.class, MagicMissileMinion.class, Robo.class, Wizard.class,
-				GooMinion.class, GasterBlaster.class, PowerOfMany.LightAlly.class);
+				Froggit.class, GrayRat.class, com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Sheep.class,
+				GnollHunter.class, MagicMissileMinion.class, Crow.class,
+				Robo.class, Wizard.class, FrostElemental.class,
+				GooMinion.class, GasterBlaster.class, TriadFighter.class, TriadMagician.class, TriadRanger.class);
 
 		TRAP.addEntities(WornDartTrap.class, PoisonDartTrap.class, DisintegrationTrap.class, GatewayTrap.class,
 				ChillingTrap.class, BurningTrap.class, ShockingTrap.class, AlarmTrap.class, GrippingTrap.class, TeleportationTrap.class, OozeTrap.class,
