@@ -59,7 +59,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bombs.HolyBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Noisemaker;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.RegrowthBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ShrapnelBomb;
-import com.shatteredpixel.shatteredpixeldungeon.items.bombs.SmokeBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ShrinkingBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.SmokeBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.SupplyBomb;
@@ -123,13 +122,21 @@ import com.shatteredpixel.shatteredpixeldungeon.items.quest.DwarfToken;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Embers;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.AccessoriesBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.EquipmentBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.GenericBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.HolsterBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.PotionsBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.ScrollsBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.SeedsBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.StonesBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.ArmorRemains;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.BowFragment;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.BrokenHilt;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.BrokenStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.CloakScrap;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.SealShard;
-import com.shatteredpixel.shatteredpixeldungeon.items.remains.TornPage;
+import com.shatteredpixel.shatteredpixeldungeon.items.remains.SpellPage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Alchemize;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.BeaconOfReturning;
@@ -307,8 +314,9 @@ public enum Catalog {
 				CorpseDust.class, Embers.class, CeremonialCandle.class, DarkGold.class, DwarfToken.class,
 				GooBlob.class, TengusMask.class, MetalShard.class, KingsCrown.class,
 				LiquidMetal.class, ArcaneResin.class, Chaosstone.class,
-				SealShard.class, BrokenStaff.class, CloakScrap.class, BowFragment.class, BrokenHilt.class, ArmorRemains.class,
-				FacelessThing.class);
+				SealShard.class, BrokenStaff.class, CloakScrap.class, BowFragment.class, BrokenHilt.class, ArmorRemains.class, SpellPage.class,
+				FacelessThing.class,
+				GenericBag.class, SeedsBag.class, PotionsBag.class, StonesBag.class, ScrollsBag.class, EquipmentBag.class, HolsterBag.class, AccessoriesBag.class);
 
 
 
