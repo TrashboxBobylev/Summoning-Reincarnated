@@ -37,11 +37,10 @@ public class Sheep extends Minion {
 
     @Override
     protected boolean act() {
-        boolean actResult = super.act();
         if (rank == 3){
             Buff.affect(this, StoneOfAggression.Aggression.class, 2f);
         }
-        return actResult;
+        return super.act();
     }
 
     @Override

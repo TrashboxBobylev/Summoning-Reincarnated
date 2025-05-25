@@ -41,7 +41,7 @@ public class SheepTankSprite extends MinionSprite {
 		
 		run = idle.clone();
 
-        attack = new Animation( 10, true );
+        attack = new Animation( 10, false );
 		attack.frames( frames, 1, 2, 3);
 		
 		die = new Animation( 20, false );
