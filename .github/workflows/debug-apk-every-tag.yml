@@ -26,8 +26,8 @@ jobs:
         id: vars
         shell: bash
         run: |
-          echo "version="Reincarnated-0.4.1"" >> $GITHUB_ENV
-          echo "Reincarnated-0.4.1" > version
+          echo "version="Reincarnated-0.5.1"" >> $GITHUB_ENV
+          echo "Reincarnated-0.5.1" > version
 
       # 2
       - name: Generate Release APK
