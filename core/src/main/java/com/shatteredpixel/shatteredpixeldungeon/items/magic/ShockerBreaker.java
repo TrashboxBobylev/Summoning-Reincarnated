@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -65,7 +66,7 @@ public class ShockerBreaker extends ConjurerSpell {
     }
 
     private void shock(Char ch) {
-        if (ch != null && ch.alignment == Char.Alignment.ALLY){
+        if (ch != null && ch.alignment == Char.Alignment.ALLY && !(ch instanceof Hero)){
             Sample.INSTANCE.play(Assets.Sounds.ZAP);
             Sample.INSTANCE.play(Assets.Sounds.HEALTH_WARN);
             ch.damage((int) (ch.HT * dmg(rank())), new Grim());

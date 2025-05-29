@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.NecromancyStat;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -47,7 +48,7 @@ public class DreemurrsNecromancy extends ConjurerSpell {
     @Override
     public void effect(Ballistica trajectory) {
         Char ch = Actor.findChar(trajectory.collisionPos);
-        if (ch != null && ch.isAlive() && ch.alignment != Char.Alignment.NEUTRAL){
+        if (ch != null && ch.isAlive() && ch.alignment != Char.Alignment.NEUTRAL && !(ch instanceof Hero)){
             Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
             ch.sprite.emitter().burst(Speck.factory(Speck.STEAM), 20);
             Buff.affect(ch, NecromancyStat.class).level = rank();
