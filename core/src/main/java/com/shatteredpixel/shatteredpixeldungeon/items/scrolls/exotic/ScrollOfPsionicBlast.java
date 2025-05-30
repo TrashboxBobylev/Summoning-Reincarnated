@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
@@ -67,7 +68,10 @@ public class ScrollOfPsionicBlast extends ExoticScroll {
 		for (Mob mob : targets){
 			//always kills non-resistant enemies
 			//resistant enemies take 50% current HP at full health, scaling to 75% at 1/2 HP, and 100% at 1/3 hp
-			mob.damage(Math.round(mob.HT/2f + mob.HP/2f), this);
+			int dmg = Math.round(mob.HT / 2f + mob.HP / 2f);
+			if (mob.alignment == Char.Alignment.ALLY)
+				dmg /= 2.5f;
+			mob.damage(dmg, this);
 			if (mob.isAlive()) {
 				Buff.prolong(mob, Blindness.class, Blindness.DURATION);
 			}
