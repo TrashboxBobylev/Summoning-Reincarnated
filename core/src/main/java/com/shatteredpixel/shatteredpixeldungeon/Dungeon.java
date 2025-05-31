@@ -660,7 +660,7 @@ public class Dungeon {
 		int posLeftThisSet = 2 - (LimitedDrops.STRENGTH_POTIONS.count - (depth / 5) * 2);
 		if (posLeftThisSet <= 0) return false;
 
-		int floorThisSet = (depth % 5);
+		int floorThisSet = (depth % Dungeon.chapterSize());
 
 		//pos drops every two floors, (numbers 1-2, and 3-4) with a 50% chance for the earlier one each time.
 		int targetPOSLeft = 2 - floorThisSet/2;
@@ -673,33 +673,34 @@ public class Dungeon {
 	
 	public static boolean souNeeded() {
 		int souLeftThisSet;
+		int souForSet = Dungeon.mode == GameMode.BIGGER ? 4 : 3;
 		//3 SOU each floor set
-		souLeftThisSet = 3 - (LimitedDrops.UPGRADE_SCROLLS.count - (depth / 5) * 3);
+		souLeftThisSet = souForSet - (LimitedDrops.UPGRADE_SCROLLS.count - (depth / Dungeon.chapterSize()) * souForSet);
 		if (souLeftThisSet <= 0) return false;
 
-		int floorThisSet = (depth % 5);
+		int floorThisSet = (depth % Dungeon.chapterSize());
 		//chance is floors left / scrolls left
-		return Random.Int(5 - floorThisSet) < souLeftThisSet;
+		return Random.Int(Dungeon.chapterSize() - floorThisSet) < souLeftThisSet;
 	}
 	
 	public static boolean asNeeded() {
 		//1 AS each floor set
-		int asLeftThisSet = 1 - (LimitedDrops.ARCANE_STYLI.count - (depth / 5));
+		int asLeftThisSet = 1 - (LimitedDrops.ARCANE_STYLI.count - (depth / Dungeon.chapterSize()));
 		if (asLeftThisSet <= 0) return false;
 
-		int floorThisSet = (depth % 5);
+		int floorThisSet = (depth % Dungeon.chapterSize());
 		//chance is floors left / scrolls left
-		return Random.Int(5 - floorThisSet) < asLeftThisSet;
+		return Random.Int(Dungeon.chapterSize() - floorThisSet) < asLeftThisSet;
 	}
 
 	public static boolean enchStoneNeeded(){
 		//1 enchantment stone, spawns on chapter 2 or 3
 		if (!LimitedDrops.ENCH_STONE.dropped()){
-			int region = 1+depth/5;
+			int region = 1+depth/Dungeon.chapterSize();
 			if (region > 1){
-				int floorsVisited = depth - 5;
-				if (floorsVisited > 4) floorsVisited--; //skip floor 10
-				return Random.Int(9-floorsVisited) == 0; //1/8 chance each floor
+				int floorsVisited = depth - Dungeon.chapterSize();
+				if (floorsVisited > Dungeon.chapterSize()) floorsVisited--; //skip floor 10
+				return Random.Int((Dungeon.chapterSize()*2-1)-floorsVisited) == 0; //1/8 chance each floor
 			}
 		}
 		return false;
@@ -707,20 +708,20 @@ public class Dungeon {
 
 	public static boolean intStoneNeeded(){
 		//one stone on floors 1-3
-		return depth < 5 && !LimitedDrops.INT_STONE.dropped() && Random.Int(4-depth) == 0;
+		return depth < Dungeon.chapterSize() && !LimitedDrops.INT_STONE.dropped() && Random.Int((Dungeon.chapterSize()-1)-depth) == 0;
 	}
 
 	public static boolean trinketCataNeeded(){
 		//one trinket catalyst on floors 1-3
-		return depth < 5 && !LimitedDrops.TRINKET_CATA.dropped() && Random.Int(4-depth) == 0;
+		return depth < Dungeon.chapterSize() && !LimitedDrops.TRINKET_CATA.dropped() && Random.Int((Dungeon.chapterSize()-1)-depth) == 0;
 	}
 
 	public static boolean labRoomNeeded(){
 		//one laboratory each floor set, in floor 3 or 4, 1/2 chance each floor
-		int region = 1+depth/5;
+		int region = 1+depth/Dungeon.chapterSize();
 		if (region > LimitedDrops.LAB_ROOM.count){
-			int floorThisRegion = depth%5;
-			if (floorThisRegion >= 4 || (floorThisRegion == 3 && Random.Int(2) == 0)){
+			int floorThisRegion = depth%Dungeon.chapterSize();
+			if (floorThisRegion >= Dungeon.chapterSize()-1 || (floorThisRegion == Dungeon.chapterSize()-2 && Random.Int(2) == 0)){
 				return true;
 			}
 		}
@@ -732,7 +733,7 @@ public class Dungeon {
 		int region = 1+depth/Dungeon.chapterSize();
 		if (region > LimitedDrops.ATU_ROOM.count){
 			int floorThisRegion = depth%Dungeon.chapterSize();
-            return floorThisRegion == (int)Math.floor(Dungeon.chapterSize()/2f) || (floorThisRegion == (int)Math.floor(Dungeon.chapterSize()/2f)-1 && Random.Int(2) == 0);
+            return floorThisRegion == Dungeon.chapterSize()-2 || (floorThisRegion == Dungeon.chapterSize()-3 && Random.Int(2) == 0);
 		}
 		return false;
 	}
