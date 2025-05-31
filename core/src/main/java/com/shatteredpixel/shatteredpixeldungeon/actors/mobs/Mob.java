@@ -70,6 +70,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.Stasis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.DirectableAlly;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.EffectTarget;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.GoatClone;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CharacterizedCell;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
@@ -1686,7 +1687,7 @@ public abstract class Mob extends Char {
 				heldAllies.add(mob);
 				
 			//preserve minions no matter where they are
-			} if (mob instanceof Minion) {
+			} if (mob instanceof Minion || mob instanceof GoatClone) {
 				level.mobs.remove( mob );
 				heldAllies.add(mob);
 
