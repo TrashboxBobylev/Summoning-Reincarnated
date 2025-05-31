@@ -80,6 +80,12 @@ public class WndHeroInfo extends WndTabbed {
 			case CLERIC:
 				tabIcon = new ItemSprite(ItemSpriteSheet.ARTIFACT_TOME, null);
 				break;
+			case CONJURER:
+				tabIcon = new ItemSprite(ItemSpriteSheet.BOOK, null);
+				break;
+			case ADVENTURER:
+				tabIcon = new ItemSprite(ItemSpriteSheet.GOLD, null);
+				break;
 		}
 
 		int finalHeight = MIN_HEIGHT;
