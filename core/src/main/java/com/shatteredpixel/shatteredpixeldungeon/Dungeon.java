@@ -718,10 +718,12 @@ public class Dungeon {
 
 	public static boolean labRoomNeeded(){
 		//one laboratory each floor set, in floor 3 or 4, 1/2 chance each floor
+		//no variation on fast adventure
 		int region = 1+depth/Dungeon.chapterSize();
 		if (region > LimitedDrops.LAB_ROOM.count){
 			int floorThisRegion = depth%Dungeon.chapterSize();
-			if (floorThisRegion >= Dungeon.chapterSize()-1 || (floorThisRegion == Dungeon.chapterSize()-2 && Random.Int(2) == 0)){
+			if (floorThisRegion >= Dungeon.chapterSize()-1 ||
+					(Dungeon.chapterSize() >= 5 && (floorThisRegion == Dungeon.chapterSize()-2 && Random.Int(2) == 0))){
 				return true;
 			}
 		}
@@ -730,10 +732,12 @@ public class Dungeon {
 
 	public static boolean atuRoomNeeded(){
 		//one attunement each floor set, in floor 2 or 3, 1/2 chance each floor
+		//no variation on fast adventure
 		int region = 1+depth/Dungeon.chapterSize();
 		if (region > LimitedDrops.ATU_ROOM.count){
 			int floorThisRegion = depth%Dungeon.chapterSize();
-            return floorThisRegion == Dungeon.chapterSize()-2 || (floorThisRegion == Dungeon.chapterSize()-3 && Random.Int(2) == 0);
+            return floorThisRegion == Dungeon.chapterSize()-2 ||
+					(Dungeon.chapterSize() >= 5 && (floorThisRegion == Dungeon.chapterSize()-3 && Random.Int(2) == 0));
 		}
 		return false;
 	}
