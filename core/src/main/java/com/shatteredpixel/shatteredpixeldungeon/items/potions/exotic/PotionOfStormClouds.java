@@ -30,11 +30,18 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StormCloud;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PathFinder;
+import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
+
+import java.util.ArrayList;
 
 public class PotionOfStormClouds extends ExoticPotion {
 	
@@ -53,12 +60,12 @@ public class PotionOfStormClouds extends ExoticPotion {
 			Sample.INSTANCE.play( Assets.Sounds.GAS );
 		}
 
-		int centerVolume = 120;
+		int centerVolume = 100;
 		for (int i : PathFinder.NEIGHBOURS8){
 			if (!Dungeon.level.solid[cell+i]){
-				GameScene.add( Blob.seed( cell+i, 120, StormCloud.class ) );
+				GameScene.add( Blob.seed( cell+i, 100, StormCloud.class ) );
 			} else {
-				centerVolume += 120;
+				centerVolume += 100;
 			}
 		}
 		
@@ -83,6 +90,27 @@ public class PotionOfStormClouds extends ExoticPotion {
 				if (!ch.isImmune(getClass())
 						&& Char.hasProp(ch, Char.Property.FIERY)){
 					ch.damage(Dungeon.scalingDepth()/5, this);
+				}
+
+				ArrayList<Integer> pushTargets = new ArrayList<>();
+				for (int c : PathFinder.NEIGHBOURS8) {
+					if (!Dungeon.level.solid[ch.pos + c]) {
+						pushTargets.add(ch.pos + c);
+					}
+				}
+
+				if (!pushTargets.isEmpty()) {
+					int pushCell = Random.element(pushTargets);
+					int ce = Random.element(pushTargets);
+					// attempts to push things away from player more frequently
+					if (Dungeon.level.distance(Dungeon.hero.pos, ce) > Dungeon.level.distance(Dungeon.hero.pos, pushCell)) {
+						pushCell = ce;
+					}
+					if (ch.sprite != null && ch.sprite.visible){
+						Splash.at( DungeonTilemap.tileCenterToWorld( ch.pos ),
+								PointF.angle(DungeonTilemap.tileCenterToWorld( ch.pos ), DungeonTilemap.tileCenterToWorld( pushCell)), PointF.PI, 0xb2e9ff, 50, 0.005f);
+					}
+					WandOfBlastWave.throwChar(ch, new Ballistica(ch.pos, pushCell, Ballistica.MAGIC_BOLT), 1 + Random.Int(3), false, false, this);
 				}
 			}
 		}

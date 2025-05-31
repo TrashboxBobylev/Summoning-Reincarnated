@@ -27,9 +27,19 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.blobs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
+import com.watabou.utils.PathFinder;
+import com.watabou.utils.PointF;
+import com.watabou.utils.Random;
+
+import java.util.ArrayList;
 
 public class StormCloud extends Blob {
 	
@@ -51,10 +61,34 @@ public class StormCloud extends Blob {
 
 					//fiery enemies take damage as if they are in toxic gas
 					Char ch = Actor.findChar(cell);
-					if (ch != null
-							&& !ch.isImmune(getClass())
-							&& Char.hasProp(ch, Char.Property.FIERY)){
-						ch.damage(1 + Dungeon.scalingDepth()/5, this);
+					if (ch != null){
+						if (!ch.isImmune(getClass())
+							&& Char.hasProp(ch, Char.Property.FIERY)) {
+							ch.damage(1 + Dungeon.scalingDepth() / 5, this);
+						}
+
+						if (!(ch instanceof Hero)) {
+							ArrayList<Integer> pushTargets = new ArrayList<>();
+							for (int c : PathFinder.NEIGHBOURS8) {
+								if (!Dungeon.level.solid[cell + c]) {
+									pushTargets.add(cell + c);
+								}
+							}
+
+							if (!pushTargets.isEmpty()) {
+								int pushCell = Random.element(pushTargets);
+								int ce = Random.element(pushTargets);
+								// attempts to push things away from player more frequently
+								if (Dungeon.level.distance(Dungeon.hero.pos, ce) > Dungeon.level.distance(Dungeon.hero.pos, pushCell)) {
+									pushCell = ce;
+								}
+								if (ch.sprite != null && ch.sprite.visible){
+									Splash.at( DungeonTilemap.tileCenterToWorld( cell ),
+											PointF.angle(DungeonTilemap.tileCenterToWorld( cell ), DungeonTilemap.tileCenterToWorld( pushCell)), PointF.PI, 0xb2e9ff, 50, 0.005f);
+								}
+								WandOfBlastWave.throwChar(ch, new Ballistica(cell, pushCell, Ballistica.MAGIC_BOLT), 1 + Random.Int(3), false, false, this);
+							}
+						}
 					}
 				}
 			}
