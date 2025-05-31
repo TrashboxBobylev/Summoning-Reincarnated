@@ -1330,7 +1330,7 @@ public abstract class Mob extends Char {
 					MagicMissile.TARGET,
 					sprite,
 					enemy.pos, null);
-			m.setSpeed(400);
+			m.setSpeed(350);
 			sprite.parent.addToBack(new CharacterizedCell(enemy.sprite, alignment == Alignment.ENEMY ? 0xde625b : 0x00ad0f){
 				@Override
 				public void update() {

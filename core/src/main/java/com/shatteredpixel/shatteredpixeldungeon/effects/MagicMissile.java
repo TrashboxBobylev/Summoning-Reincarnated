@@ -240,8 +240,8 @@ public class MagicMissile extends Emitter {
 				pour( YogParticle.FACTORY, 0.04f );
 				break;
 			case TARGET:
-				size( 1 );
-				pour( WhiteParticle.FACTORY, 0.001f );
+				size( 4 );
+				pour( WhiteParticle.FACTORY, 0.0075f );
 				break;
 
 			case MAGIC_MISS_CONE:
