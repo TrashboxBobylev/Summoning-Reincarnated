@@ -62,7 +62,7 @@ public class StarBlazing extends ConjurerSpell {
         if (range(rank()) < 1){
             Char ch = Actor.findChar(trajectory.collisionPos);
             if (ch != null && (ch.alignment != Char.Alignment.ALLY || Dungeon.hero.hasTalent(Talent.CONCENTRATED_SUPPORT))){
-                ch.damage(damageRoll(rank()), this);
+                ch.damage(damageRoll(), this);
                 Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
 
                 for (int b : PathFinder.NEIGHBOURS8){
@@ -85,7 +85,7 @@ public class StarBlazing extends ConjurerSpell {
                 if (PathFinder.distance[i] < Integer.MAX_VALUE) {
                     Char ch = Actor.findChar(i);
                     if (ch != null && (ch.alignment != Char.Alignment.ALLY || (Dungeon.hero.hasTalent(Talent.CONCENTRATED_SUPPORT) && i == trajectory.collisionPos))) {
-                        ch.damage(damageRoll(rank()), this);
+                        ch.damage(damageRoll(), this);
                         Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
 
                         for (int b : PathFinder.NEIGHBOURS8) {
@@ -126,36 +126,26 @@ public class StarBlazing extends ConjurerSpell {
         return 0;
     }
 
-    private int min(int rank){
-        switch (rank){
-            case 1: return (int) (2 + heroLvl() / 4f);
-            case 2: return (int) (4 + heroLvl()/3f);
-            case 3: return (int) (4 + heroLvl()/3f);
-        }
-        return 0;
+    private int min(){
+        return (int) (2 + heroLvl() / 4f);
     }
 
-    private int max(int rank){
-        switch (rank){
-            case 1: return (int) (8 + heroLvl() / 2f);
-            case 2: return (int) (12 + heroLvl()/1.25f);
-            case 3: return (int) (12 + heroLvl()/1.25f);
-        }
-        return 0;
+    private int max(){
+        return (int) (12 + heroLvl()/1.25f);
     }
 
-    private int damageRoll(int rank) {
-        return Random.NormalIntRange(min(rank), max(rank));
+    private int damageRoll() {
+        return Random.NormalIntRange(min(), max());
     }
 
     @Override
     public String spellDesc() {
-        return Messages.get(this, "desc", GameMath.printAverage(min(rank()), max(rank())));
+        return Messages.get(this, "desc", GameMath.printAverage(min(), max()));
     }
 
     @Override
     public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", GameMath.printAverage(min(rank), max(rank)), range(rank)*2+1);
+        return Messages.get(this, "rank", range(rank)*2+1);
     }
 
     @Override
