@@ -32,7 +32,7 @@ public class ConstantShielding extends ShieldBuff{
 	public boolean act() {
 		if (target.buff(HolyAuraBuff.class) != null) {
 			incShield (1);
-			spend( target.buff(HolyAuraBuff.class).shieldingRate );
+			spend( target.buff(HolyAuraBuff.class).shieldingRate-1 );
 			
 		} else {
 			Buff.affect(target, Barrier.class).setShield(shielding());
