@@ -36,11 +36,14 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Fury;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.ArmoredShielding;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.HolyAuraBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.Ascension;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerSet;
@@ -81,6 +84,7 @@ public class Minion extends Mob implements ManaSource {
     protected Staff staff = null;
     public int minDefense;
     public int maxDefense;
+    private float partialHealing;
 
     private static final String RANK	= "rank";
     private static final String ATTUNEMENT = "attunement";
@@ -91,6 +95,7 @@ public class Minion extends Mob implements ManaSource {
     private static final String BEHAVIOR_TYPE = "behaviorType";
     private static final String MIN_DEFENSE = "minDefense";
     private static final String MAX_DEFENSE = "maxDefense";
+    private static final String PARTIAL_HEALING = "partialHealing";
 
     @Override
     public void storeInBundle(Bundle bundle) {
@@ -109,6 +114,8 @@ public class Minion extends Mob implements ManaSource {
         bundle.put(AUGMENT, augment);
 
         bundle.put(BEHAVIOR_TYPE, behaviorType);
+
+        bundle.put(PARTIAL_HEALING, partialHealing);
     }
 
     @Override
@@ -128,6 +135,7 @@ public class Minion extends Mob implements ManaSource {
         augment = bundle.getEnum(AUGMENT, Weapon.Augment.class);
 
         behaviorType = bundle.getEnum(BEHAVIOR_TYPE, BehaviorType.class);
+        partialHealing = bundle.getFloat(PARTIAL_HEALING);
     }
 
     public Minion(){} //for inheriting
@@ -180,6 +188,17 @@ public class Minion extends Mob implements ManaSource {
         if (!isAlive()) {
             return true;
         }
+
+        if (Dungeon.hero.buff(HolyAuraBuff.class) != null){
+            HolyAuraBuff buff = Dungeon.hero.buff(HolyAuraBuff.class);
+            partialHealing += 1.0f/buff.healingRate;
+            if (partialHealing >= 1) {
+                partialHealing--;
+                Regeneration.regenerate(this, 1, true);
+                sprite.emitter().burst(Speck.factory(Speck.HEALING), 3);
+            }
+        }
+
         int oldPos = pos;
         boolean result = super.act();
         //partially simulates how the hero switches to idle animation
