@@ -170,7 +170,8 @@ public class FrostBurn extends Buff implements Hero.Doom {
 	}
 	
 	public void reignite( Char ch, float duration ) {
-		left = duration;
+		if (left <= duration)
+			left = duration;
 	}
 	
 	@Override
