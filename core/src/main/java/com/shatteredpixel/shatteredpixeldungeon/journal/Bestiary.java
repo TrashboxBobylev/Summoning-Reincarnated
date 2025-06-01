@@ -255,7 +255,7 @@ public enum Bestiary {
 				Elemental.ChaosElemental.class, Senior.class,
 				Acidic.class,
 				TormentedSpirit.class, PhantomPiranha.class, CrystalMimic.class, ArmoredStatue.class,
-				AbyssalNightmare.class, Dragon.class, LostSpirit.class);
+				AbyssalNightmare.class, Dragon.class, Dragon.SmallDragon.class, LostSpirit.class);
 
 		QUEST.addEntities(FetidRat.class, GnollTrickster.class, GreatCrab.class,
 				Elemental.NewbornFireElemental.class, RotLasher.class, RotHeart.class,
