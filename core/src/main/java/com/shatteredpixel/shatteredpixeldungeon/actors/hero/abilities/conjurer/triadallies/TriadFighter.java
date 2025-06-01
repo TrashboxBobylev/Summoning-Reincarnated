@@ -48,7 +48,7 @@ public class TriadFighter extends BaseTriadAlly {
     @Override
     public int baseHP() {
         int health = 100;
-        if (Dungeon.hero.pointsInTalent(Talent.DURABILITY_OF_FIGHTER) > 3){
+        if (Dungeon.hero != null && Dungeon.hero.pointsInTalent(Talent.DURABILITY_OF_FIGHTER) > 3){
             health *= RingOfMight.HTMultiplier(Dungeon.hero);
         }
         return health;
