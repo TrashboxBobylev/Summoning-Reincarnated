@@ -60,8 +60,8 @@ public class DreemurrsNecromancy extends ConjurerSpell {
     @Override
     public int manaCost(int rank) {
         switch (rank){
-            case 1: return 12;
-            case 2: return 24;
+            case 1: return 8;
+            case 2: return 16;
             case 3: return 0;
         }
         return 0;
@@ -70,11 +70,11 @@ public class DreemurrsNecromancy extends ConjurerSpell {
     public static float passiveManaDrain(int rank){
         switch (rank){
             case 1:
-                return 0.75f;
+                return 0.5f;
             case 2:
-                return 0.2f;
+                return 0.1f;
             case 3:
-                return 2f;
+                return 1f;
         }
         return 0;
     }
@@ -82,9 +82,9 @@ public class DreemurrsNecromancy extends ConjurerSpell {
     public static float activeManaDrain(int rank){
         switch (rank){
             case 2:
-                return 0.1f;
+                return 0.05f;
             case 3:
-                return 0.2f;
+                return 0.1f;
         }
         return 0;
     }
