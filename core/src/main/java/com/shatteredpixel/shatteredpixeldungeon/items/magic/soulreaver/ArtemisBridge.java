@@ -43,6 +43,8 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 
+import java.util.ArrayList;
+
 public class ArtemisBridge extends ConjurerSpell {
 
     {
@@ -64,13 +66,24 @@ public class ArtemisBridge extends ConjurerSpell {
             return false;
         } else {
             int chPos = ch.pos;
+            ArrayList<Integer> possibleCells = new ArrayList<>();
             for (int dir: PathFinder.NEIGHBOURS8) {
-                if (Actor.findChar(chPos + dir) != null ||
-                        !Dungeon.level.passable[chPos + dir]) {
-                    GLog.i( Messages.get(this, "solid"));
-                    return false;
-                } else if (Dungeon.level.distance(chPos + dir, Dungeon.hero.pos) > distance(rank())){
-                    GLog.i( Messages.get(this, "too_far"));
+                if (!(Actor.findChar(chPos + dir) != null ||
+                        !Dungeon.level.passable[chPos + dir])) {
+                    possibleCells.add(chPos + dir);
+                }
+            }
+            if (possibleCells.isEmpty()){
+                GLog.i( Messages.get(this, "solid"));
+                return false;
+            } else {
+                for (int dir: PathFinder.NEIGHBOURS8) {
+                    if (Dungeon.level.distance(chPos + dir, Dungeon.hero.pos) > distance(rank())){
+                        possibleCells.remove(chPos + dir);
+                    }
+                }
+                if (possibleCells.isEmpty()) {
+                    GLog.i(Messages.get(this, "too_far"));
                     return false;
                 }
             }
