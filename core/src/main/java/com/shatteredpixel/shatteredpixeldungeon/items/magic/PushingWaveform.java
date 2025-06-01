@@ -85,7 +85,7 @@ public class PushingWaveform extends ConjurerSpell {
                 Ballistica trajectory = new Ballistica(Dungeon.hero.pos, ch.pos, Ballistica.STOP_TARGET);
                 //trim it to just be the part that goes past them
                 trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size() - 1), Ballistica.FRIENDLY_PROJECTILE);
-                WandOfBlastWave.throwChar(ch, trajectory, 4, true, true, this);
+                WandOfBlastWave.throwChar(ch, trajectory, 3 + rank(), true, true, this);
                 Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
                 if (isEmpowered()){
                     Buff.affect(ch, SoulParalysis.class, 3f);
@@ -118,12 +118,12 @@ public class PushingWaveform extends ConjurerSpell {
         //need to perform flame spread logic here so we can determine what cells to put flames in.
 
         // unlimited distance
-        int d = 5 + rank()*3;
+        int d = 5 + rank()*2;
         int dist = Math.min(bolt.dist, d);
 
         cone = new ConeAOE( bolt,
                 d,
-                60 + rank()*30,
+                rank()*90,
                 Ballistica.STOP_SOLID);
 
         //cast to cells at the tip, rather than all cells, better performance.
@@ -163,7 +163,7 @@ public class PushingWaveform extends ConjurerSpell {
 
     @Override
     public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", 5 + rank*3, 60 + rank*30);
+        return Messages.get(this, "rank", 3 + rank, 5 + rank*2, rank*90);
     }
 
 }
