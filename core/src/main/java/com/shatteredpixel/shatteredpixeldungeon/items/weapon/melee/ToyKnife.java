@@ -41,6 +41,8 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.WhiteWound;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Projecting;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -158,6 +160,18 @@ public class ToyKnife extends MeleeWeapon implements Rankable {
         Buff.prolong( defender, SoulGain.class, /*speedModifier(attacker) **/ modifier );
         WhiteWound.hit(defender);
         return super.proc( attacker, defender, damage );
+    }
+
+    @Override
+    public int throwPos(Hero user, int dst) {
+
+        if (hasEnchant(Projecting.class, user)
+                && (Dungeon.level.passable[dst] || Dungeon.level.avoid[dst] || Actor.findChar(dst) != null)
+                && Dungeon.level.distance(user.pos, dst) <= Math.round(4 * Enchantment.genericProcChanceMultiplier(user))){
+            return dst;
+        } else {
+            return new Ballistica( user.pos, dst, Ballistica.FRIENDLY_PROJECTILE ).collisionPos;
+        }
     }
 
     @Override
