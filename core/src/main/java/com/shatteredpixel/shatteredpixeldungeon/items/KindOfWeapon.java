@@ -286,7 +286,7 @@ abstract public class KindOfWeapon extends EquipableItem {
 		} else {
 			boolean[] passable = BArray.not(Dungeon.level.solid, null);
 			for (Char ch : Actor.chars()) {
-				if (ch != owner) passable[ch.pos] = false;
+				if (ch != owner && ch.alignment != owner.alignment) passable[ch.pos] = false;
 			}
 			
 			PathFinder.buildDistanceMap(target, passable, reach);
