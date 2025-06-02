@@ -722,10 +722,8 @@ public class Dungeon {
 		int region = 1+depth/Dungeon.chapterSize();
 		if (region > LimitedDrops.LAB_ROOM.count){
 			int floorThisRegion = depth%Dungeon.chapterSize();
-			if (floorThisRegion >= Dungeon.chapterSize()-1 ||
-					(Dungeon.chapterSize() >= 5 && (floorThisRegion == Dungeon.chapterSize()-2 && Random.Int(2) == 0))){
-				return true;
-			}
+            return floorThisRegion >= Dungeon.chapterSize() - 1 ||
+                    (Dungeon.chapterSize() >= 5 && (floorThisRegion == Dungeon.chapterSize() - 2 && Random.Int(2) == 0));
 		}
 		return false;
 	}
@@ -736,8 +734,8 @@ public class Dungeon {
 		int region = 1+depth/Dungeon.chapterSize();
 		if (region > LimitedDrops.ATU_ROOM.count){
 			int floorThisRegion = depth%Dungeon.chapterSize();
-            return floorThisRegion == Dungeon.chapterSize()-2 ||
-					(Dungeon.chapterSize() >= 5 && (floorThisRegion == Dungeon.chapterSize()-3 && Random.Int(2) == 0));
+            return floorThisRegion >= Dungeon.chapterSize()-2 ||
+					(Dungeon.chapterSize() >= 5 && (floorThisRegion >= Dungeon.chapterSize()-3 && Random.Int(2) == 0));
 		}
 		return false;
 	}
