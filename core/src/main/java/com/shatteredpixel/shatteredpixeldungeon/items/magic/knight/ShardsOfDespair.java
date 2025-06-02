@@ -89,6 +89,7 @@ public class ShardsOfDespair extends AdHocSpell {
                                 Ballistica bolt = new Ballistica(ch.pos, ch.pos, Ballistica.WONT_STOP);
                                 CursedWand.randomValidEffect(null, hero, bolt, true).effect(null, hero, bolt, true);
                             }
+                            afterZap(Dungeon.hero, new Ballistica(Dungeon.hero.pos, ch.pos, Ballistica.STOP_TARGET));
                         }
                         targets.remove( this );
                         if (targets.isEmpty()) {

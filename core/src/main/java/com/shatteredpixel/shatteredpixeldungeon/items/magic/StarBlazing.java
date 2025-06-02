@@ -101,6 +101,8 @@ public class StarBlazing extends ConjurerSpell {
                         if (isEmpowered()){
                             Buff.affect(ch, FrostBurn.class).reignite(ch, heroLvl()/3f);
                         }
+                        if (ch != Actor.findChar(trajectory.collisionPos))
+                            afterZap(Dungeon.hero, new Ballistica(Dungeon.hero.pos, ch.pos, Ballistica.STOP_TARGET));
                     }
                 }
             }
