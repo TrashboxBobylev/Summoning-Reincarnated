@@ -1206,10 +1206,6 @@ if (Dungeon.hero.heroClass != HeroClass.CLERIC
 					&& ch.buff(Talent.DeadlyFollowupTracker.class).object == id()){
 				ch.buff(Talent.DeadlyFollowupTracker.class).detach();
 			}
-			if (ch.buff(Talent.EnergyBreakTracker.class) != null
-					&& ch.buff(Talent.EnergyBreakTracker.class).object == id()){
-				ch.buff(Talent.EnergyBreakTracker.class).detach();
-			}
 		}
 	}
 	
