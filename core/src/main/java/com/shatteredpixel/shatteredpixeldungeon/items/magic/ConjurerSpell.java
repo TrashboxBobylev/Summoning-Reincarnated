@@ -196,7 +196,7 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
 
         if (owner.hasTalent(Talent.COMBINED_REFILL)){
             Talent.CombinedRefillTracker tracker = owner.buff(Talent.CombinedRefillTracker.class);
-            if (tracker == null || tracker.weapon == getClass() || tracker.weapon == null || (!tracker.weapon.isInstance(ConjurerSpell.class))) {
+            if (tracker == null || tracker.weapon == getClass() || tracker.weapon == null || (!ConjurerSpell.class.isAssignableFrom(tracker.weapon))) {
                 Buff.affect(owner, Talent.CombinedRefillTracker.class).weapon = getClass();
             } else {
                 tracker.detach();
