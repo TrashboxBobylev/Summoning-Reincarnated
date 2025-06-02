@@ -193,7 +193,7 @@ public class Wizard extends Minion implements Callback {
 		float mod = 0;
 		switch (rank){
 			case 1: mod = 1; break;
-			case 2: mod = 0.5f; break;
+			case 2: mod = 0.75f; break;
 			case 3: mod = 1f; break;
 		}
 		return super.attackDelay() * mod;

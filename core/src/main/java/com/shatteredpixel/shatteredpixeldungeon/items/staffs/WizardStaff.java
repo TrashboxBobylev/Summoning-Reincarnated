@@ -42,7 +42,7 @@ public class WizardStaff extends Staff{
     public int getChargeTurns() {
         switch (rank){
             case 1: return 600;
-            case 2: return 850;
+            case 2: return 800;
             case 3: return 750;
         }
         return 0;
