@@ -1107,10 +1107,9 @@ public enum Talent {
 		}
 
 		if (hero.hasTalent(ENERGY_BREAK) && hero.heroClass != HeroClass.CONJURER){
-			if (hero.buff(EnergyBreakTracker.class) != null &&
-				hero.buff(EnergyBreakTracker.class).object == enemy.id()){
+			if (enemy.buff(EnergyBreakTracker.class) != null){
 				dmg += 1 + hero.pointsInTalent(ENERGY_BREAK);
-				hero.buff(EnergyBreakTracker.class).detach();
+				enemy.buff(EnergyBreakTracker.class).detach();
 			}
 		}
 
@@ -1150,21 +1149,9 @@ public enum Talent {
 		}
 	};
 	public static class EnergyBreakTracker extends FlavourBuff{
-		public int object;
 		{ type = Buff.buffType.POSITIVE; }
 		public int icon() { return BuffIndicator.INVERT_MARK; }
 		public float iconFadePercent() { return Math.max(0, 1f - (visualcooldown() / 5)); }
-		private static final String OBJECT    = "object";
-		@Override
-		public void storeInBundle(Bundle bundle) {
-			super.storeInBundle(bundle);
-			bundle.put(OBJECT, object);
-		}
-		@Override
-		public void restoreFromBundle(Bundle bundle) {
-			super.restoreFromBundle(bundle);
-			object = bundle.getInt(OBJECT);
-		}
 	}
 	public static class LiquidCastingTracker extends FlavourBuff implements ManaStealHost {
 		{ type = Buff.buffType.POSITIVE; }

@@ -258,7 +258,7 @@ public abstract class Wand extends Item implements ChargingItem {
 
 			if (Dungeon.hero.hasTalent(Talent.ENERGY_BREAK) && Dungeon.hero.heroClass != HeroClass.CONJURER &&
 				target.alignment == Char.Alignment.ENEMY){
-				Buff.affect(Dungeon.hero, Talent.EnergyBreakTracker.class, 5f).object = target.id();
+				Buff.affect(target, Talent.EnergyBreakTracker.class, 5f);
 			}
 		}
 	}

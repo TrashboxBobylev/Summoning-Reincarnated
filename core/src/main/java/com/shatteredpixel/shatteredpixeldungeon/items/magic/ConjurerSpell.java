@@ -183,7 +183,7 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
         Char thing = shot != null ? Actor.findChar(shot.collisionPos) : null;
         if (owner.hasTalent(Talent.ENERGY_BREAK) && thing != null){
             if (thing.isAlive() && thing.alignment == Char.Alignment.ENEMY){
-                Buff.prolong(owner, Talent.EnergyBreakTracker.class, 5f).object = thing.id();
+                Buff.prolong(thing, Talent.EnergyBreakTracker.class, 5f);
             }
         }
 

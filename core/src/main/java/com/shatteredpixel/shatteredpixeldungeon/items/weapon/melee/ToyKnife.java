@@ -133,9 +133,8 @@ public class ToyKnife extends MeleeWeapon implements Rankable {
         if (owner instanceof Hero){
             Hero hero = (Hero)owner;
             Char enemy = hero.enemy();
-            if (enemy instanceof Mob && hero.buff(Talent.EnergyBreakTracker.class) != null &&
-                hero.buff(Talent.EnergyBreakTracker.class).object == enemy.id()){
-                hero.buff(Talent.EnergyBreakTracker.class).detach();
+            if (enemy instanceof Mob && enemy.buff(Talent.EnergyBreakTracker.class) != null){
+                enemy.buff(Talent.EnergyBreakTracker.class).detach();
                 damageRoll += Random.NormalIntRange(1, 3) + hero.pointsInTalent(Talent.ENERGY_BREAK);
             }
         }
