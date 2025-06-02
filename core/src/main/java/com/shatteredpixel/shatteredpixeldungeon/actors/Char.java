@@ -659,10 +659,19 @@ public abstract class Char extends Actor implements ManaSource {
 		}
 	}
 
-	public int attackRolls(){ return 1;}
+	public int attackRolls(){
+		int rolls = 1;
+		if (buff(Bless.class) != null){
+			rolls++;
+		}
+		return rolls;
+	}
 	public int defenseRolls(){
 		int rolls = 1;
 		if (buff(Levitation.class) != null){
+			rolls++;
+		}
+		if (buff(Bless.class) != null){
 			rolls++;
 		}
 		return rolls;
