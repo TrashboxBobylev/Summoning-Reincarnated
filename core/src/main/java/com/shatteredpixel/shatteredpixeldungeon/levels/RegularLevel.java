@@ -167,9 +167,7 @@ public abstract class RegularLevel extends Level {
 				specials++;
 			}
 			if (Dungeon.mode == Dungeon.GameMode.CHAOS) specials = Random.Int(1, specials);
-			if (Dungeon.mode == Dungeon.GameMode.SMALL){
-				specials /= 2;
-			} else if (Dungeon.mode == Dungeon.GameMode.BIGGER){
+			if (Dungeon.mode == Dungeon.GameMode.BIGGER){
 				specials *= 2;
 			}
 			SpecialRoom.initForFloor();
