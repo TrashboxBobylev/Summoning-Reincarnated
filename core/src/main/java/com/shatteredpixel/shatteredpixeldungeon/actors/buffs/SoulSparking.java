@@ -52,7 +52,7 @@ public class SoulSparking extends Buff{
                     value = 3f; break;
             }
         }
-        float hpRatio = ((Dungeon.hero.HT - Dungeon.hero.HP * 1f) / (Dungeon.hero.HT * 1f));
+        float hpRatio = Math.min(1.0f, (Dungeon.hero.HT - Dungeon.hero.HP * 1f) / (Dungeon.hero.HT * 1f)*1.12f);
         return 1f + (value) * (hpRatio - 0.5f)*2;
     }
 
