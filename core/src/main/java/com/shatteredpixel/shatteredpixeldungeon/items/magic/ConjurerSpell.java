@@ -80,9 +80,9 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
     public abstract void effect(Ballistica trajectory);
 
     protected void fx( Ballistica bolt, Callback callback ) {
-        MagicMissile.boltFromChar( curUser.sprite.parent,
+        MagicMissile.boltFromChar( Dungeon.hero.sprite.parent,
                 MagicMissile.MAGIC_MISSILE,
-                curUser.sprite,
+                Dungeon.hero.sprite,
                 bolt.collisionPos,
                 callback);
         Sample.INSTANCE.play( Assets.Sounds.ZAP );
