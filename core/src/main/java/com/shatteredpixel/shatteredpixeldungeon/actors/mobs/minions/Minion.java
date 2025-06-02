@@ -27,7 +27,6 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Attunement;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chungus;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Daze;
@@ -37,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Fury;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulSparking;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.ArmoredShielding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.HolyAuraBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -224,7 +224,7 @@ public class Minion extends Mob implements ManaSource {
     @Override
     public int damageRoll() {
         int i = Random.NormalIntRange(minDamage, maxDamage);
-        if (Dungeon.hero.buff(Attunement.class) != null) i *= Attunement.empowering();
+        if (Dungeon.hero.buff(SoulSparking.class) != null) i *= SoulSparking.empowering();
         if (buff(Chungus.class) != null) i*=1.4f;
         if (buff(Fury.class) != null) i*=1.5f;
         return augment.damageFactor(i);
@@ -341,7 +341,7 @@ public class Minion extends Mob implements ManaSource {
         float empowering = 1f;
         if (buff(Chungus.class) != null) empowering *= 1.4f;
         if (buff(Fury.class) != null) empowering *= 1.5f;
-        if (Dungeon.hero.buff(Attunement.class) != null) empowering = Attunement.empowering();
+        if (Dungeon.hero.buff(SoulSparking.class) != null) empowering = SoulSparking.empowering();
         return String.format("%s\n\n%s\n\n%s%s", d, Messages.get(Minion.class, "stats",
                 GameMath.printAverage(
                         augment.damageFactor(Math.round(minDamage * empowering)),

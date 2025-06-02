@@ -29,7 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerSet;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 
-public class Attunement extends Buff{
+public class SoulSparking extends Buff{
     @Override
     public int icon() {
         return BuffIndicator.SOUL_REFUSAL;

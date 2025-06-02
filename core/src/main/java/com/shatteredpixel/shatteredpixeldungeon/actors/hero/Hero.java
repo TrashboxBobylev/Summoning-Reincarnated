@@ -41,7 +41,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SacrificialFire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AdrenalineSurge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Attunement;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Awareness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
@@ -68,6 +67,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Shadows;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulSparking;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TieringEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TimeStasis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
@@ -1082,10 +1082,10 @@ public class Hero extends Char {
 		}
 		if (heroClass == HeroClass.CONJURER) {
 			if (HP <= HT / 2) {
-				Buff.affect(this, Attunement.class);
+				Buff.affect(this, SoulSparking.class);
 			}
-			else if (buff(Attunement.class) != null) {
-				buff(Attunement.class).detach();
+			else if (buff(SoulSparking.class) != null) {
+				buff(SoulSparking.class).detach();
 			}
 		}
 		if (hasTalent(Talent.SPIRITUAL_BARRIER)){

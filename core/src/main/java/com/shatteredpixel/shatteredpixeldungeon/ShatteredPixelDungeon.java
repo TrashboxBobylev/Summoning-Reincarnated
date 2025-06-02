@@ -48,6 +48,11 @@ public class ShatteredPixelDungeon extends Game {
 	public ShatteredPixelDungeon( PlatformSupport platform ) {
 		super( sceneClass == null ? TitleScene.class : sceneClass, platform );
 
+		//renaming soul sparking to reflect its in-game name
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulSparking.class,
+				"com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Attunement" );
+
 		//changing knife's name
 		com.watabou.utils.Bundle.addAlias(
 				com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife.class,

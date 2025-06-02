@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Attunement;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CounterBuff;
@@ -47,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RevealedArea;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ScrollEmpower;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulSparking;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TieringEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.WandEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.ManaStealHost;
@@ -480,7 +480,7 @@ public enum Talent {
 		@Override
 		public boolean act() {
 			//barrier every 6/4 turns, to a max of 3/5
-			if (Dungeon.hero.hasTalent(Talent.SPIRITUAL_BARRIER) && Dungeon.hero.buff(Attunement.class) != null){
+			if (Dungeon.hero.hasTalent(Talent.SPIRITUAL_BARRIER) && Dungeon.hero.buff(SoulSparking.class) != null){
 				Barrier barrier = Buff.affect(target, Barrier.class);
 				if (barrier.shielding() < 1 + 2*Dungeon.hero.pointsInTalent(Talent.SPIRITUAL_BARRIER)) {
 					barrierInc += 1/12.0f * (1+Dungeon.hero.pointsInTalent(Talent.SPIRITUAL_BARRIER));
