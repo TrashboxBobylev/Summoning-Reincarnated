@@ -63,7 +63,7 @@ public class BeamOfAffection extends ConjurerSpell {
                 if (rank() != 3)
                     ch.die( curUser );
                 if (rank() == 2){
-                    Dungeon.hero.changeMana(18);
+                    Dungeon.hero.changeMana(15);
                 } else if (rank() == 3){
                     CellEmitter.center(ch.pos).start( Speck.factory( Speck.SCREAM ), 0.3f, 3 );
                     Buff.affect(ch, Fury.class);
@@ -98,7 +98,7 @@ public class BeamOfAffection extends ConjurerSpell {
     public int manaCost(int rank) {
         switch (rank){
             case 1: return 0;
-            case 2: return 6;
+            case 2: return 9;
             case 3: return 9;
         }
         return 0;
