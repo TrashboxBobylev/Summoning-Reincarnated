@@ -55,7 +55,7 @@ public class GonerField extends Blob {
 				cell = i + j*Dungeon.level.width();
 				if (cur[cell] > 0) {
 					Char ch = Actor.findChar( cell );
-					if (ch != null && !ch.isImmune(this.getClass())) {
+					if (ch != null && !ch.isImmune(this.getClass()) && ch.alignment != Char.Alignment.ALLY) {
 						Buff.affect( ch, SoulParalysis.class, 1f);
 						if (cur[cell] % 2 == 1) {
 							ch.damage(Math.round(Random.Float(1 + Dungeon.chapterNumber()/2f)), this);
