@@ -166,7 +166,7 @@ public abstract class RegularLevel extends Level {
 			if (isLarge()) {
 				specials++;
 			}
-			if (Dungeon.mode == Dungeon.GameMode.CHAOS) specials = Random.Int(1, specials);
+			if (Dungeon.mode == Dungeon.GameMode.CHAOS) specials = Random.Int(specials, specials*2);
 			if (Dungeon.mode == Dungeon.GameMode.BIGGER){
 				specials *= 2;
 			}
