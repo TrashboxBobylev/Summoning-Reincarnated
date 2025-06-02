@@ -72,6 +72,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurs
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Alchemize;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfDetectMagic;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfIntuition;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
@@ -424,8 +426,19 @@ public class ShopRoom extends SpecialRoom {
 
 		for (int i = 0; i < 3; i++) {
 			itemsToSpawn.add(Generator.random(Generator.Category.POTION).identify());
-			itemsToSpawn.add(Generator.random(Generator.Category.SCROLL).identify());
-			itemsToSpawn.add(Generator.random(Generator.Category.STONE));
+
+			// do not add useless items
+			Item scroll;
+			do {
+				scroll = Generator.random(Generator.Category.SCROLL).identify();
+			} while (scroll instanceof ScrollOfIdentify);
+			itemsToSpawn.add(scroll);
+
+			Item stone;
+			do {
+				stone = Generator.random(Generator.Category.STONE).identify();
+			} while (stone instanceof StoneOfDetectMagic || stone instanceof StoneOfIntuition);
+			itemsToSpawn.add(scroll);
 		}
 
 		if (Dungeon.depth % 4 == 0) itemsToSpawn.add( TippedDart.randomTipped(2) );
