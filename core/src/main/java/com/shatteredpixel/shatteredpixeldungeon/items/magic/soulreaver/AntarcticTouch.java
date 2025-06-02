@@ -28,13 +28,16 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.FrostFire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurn;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ConjurerSpell;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.MagicalFireRoom;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -73,6 +76,26 @@ public class AntarcticTouch extends ConjurerSpell {
                     mob.beckon(trajectory.collisionPos);
                 }
             }
+        }
+
+        Heap heap = Dungeon.level.heaps.get(trajectory.collisionPos);
+        if (heap != null) {
+            heap.freeze();
+        }
+
+        Fire fire = (Fire) Dungeon.level.blobs.get(Fire.class);
+        if (fire != null && fire.volume > 0) {
+            fire.clear( trajectory.collisionPos );
+        }
+
+        MagicalFireRoom.EternalFire eternalFire = (MagicalFireRoom.EternalFire)Dungeon.level.blobs.get(MagicalFireRoom.EternalFire.class);
+        if (eternalFire != null && eternalFire.volume > 0) {
+            eternalFire.clear( trajectory.collisionPos );
+            //bolt ends 1 tile short of fire, so check next tile too
+            if (trajectory.path.size() > trajectory.dist+1){
+                eternalFire.clear( trajectory.path.get(trajectory.dist+1) );
+            }
+
         }
     }
 
