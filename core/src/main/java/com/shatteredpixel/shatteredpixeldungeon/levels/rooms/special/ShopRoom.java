@@ -71,6 +71,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMappi
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Alchemize;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.RankManager;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfDetectMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfIntuition;
@@ -447,6 +448,7 @@ public class ShopRoom extends SpecialRoom {
 
 		if (Dungeon.depth % 2 == 0) itemsToSpawn.add( new ScrollOfUpgrade().identify());
 		if (Dungeon.depth % 3 == 0) itemsToSpawn.add( new PotionOfStrength().identify());
+		if (Dungeon.depth % 3 == 0) itemsToSpawn.add( new RankManager());
 		if (Dungeon.depth % 3 == 0) itemsToSpawn.add(new CleanWater());
 		if (Dungeon.depth % 5 == 0) itemsToSpawn.add( new ElixirOfAttunement());
 		if (Dungeon.depth % 2 == 0) itemsToSpawn.add( Generator.randomMissile());
