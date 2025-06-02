@@ -79,7 +79,7 @@ public class ArtemisBridge extends ConjurerSpell {
             } else {
                 for (int dir: PathFinder.NEIGHBOURS8) {
                     if (Dungeon.level.distance(chPos + dir, Dungeon.hero.pos) > distance(rank())){
-                        possibleCells.remove(chPos + dir);
+                        possibleCells.remove((Integer)(chPos + dir));
                     }
                 }
                 if (possibleCells.isEmpty()) {
