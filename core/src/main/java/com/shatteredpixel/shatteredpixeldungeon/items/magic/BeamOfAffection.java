@@ -59,7 +59,7 @@ public class BeamOfAffection extends ConjurerSpell {
     public void effect(Ballistica trajectory) {
         Char ch = Actor.findChar(trajectory.collisionPos);
         if (ch != null && !(ch instanceof Hero)){
-            if (ch instanceof Minion){
+            if (ch.alignment == Char.Alignment.ALLY){
                 if (rank() != 3)
                     ch.die( curUser );
                 if (rank() == 2){
