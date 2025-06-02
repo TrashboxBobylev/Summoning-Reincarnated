@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
@@ -437,7 +438,7 @@ public class ShopRoom extends SpecialRoom {
 		if (Dungeon.depth % 5 == 0) itemsToSpawn.add( new ElixirOfAttunement());
 		if (Dungeon.depth % 2 == 0) itemsToSpawn.add( Generator.randomMissile());
 		if (Dungeon.depth == Dungeon.chapterSize()*5+1) itemsToSpawn.add(new Amulet());
-		if (Dungeon.hero.lvl >= 12 && Dungeon.hero.subClass == null && Dungeon.hero.heroClass.subClasses().length > 0) itemsToSpawn.add( new TengusMask());
+		if (Dungeon.hero.lvl >= 12 && Dungeon.hero.subClass == HeroSubClass.NONE && Dungeon.hero.heroClass.subClasses().length > 0) itemsToSpawn.add( new TengusMask());
 		if (Dungeon.hero.lvl >= 21 && Dungeon.hero.belongings.armor != null &&
 				Dungeon.hero.armorAbility == null && Dungeon.hero.heroClass.armorAbilities().length > 0) itemsToSpawn.add( new KingsCrown());
 
