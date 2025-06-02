@@ -77,6 +77,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Group;
+import com.watabou.noosa.audio.Music;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
@@ -99,6 +100,15 @@ public class ArenaLevel extends RegularLevel {
     private int arenaDoor;
     private boolean enteredArena = false;
     private boolean keyDropped = false;
+
+    public static final String[] TRACK_LIST
+            = new String[]{Assets.Music.SEWERS_TENSE,
+            Assets.Music.PRISON_TENSE, Assets.Music.CAVES_TENSE, Assets.Music.CITY_TENSE, Assets.Music.HALLS_TENSE};
+    public static final float[] TRACK_CHANCES = new float[]{1f, 1f, 1f, 1f, 0.25f};
+
+    public void playLevelMusic(){
+        Music.INSTANCE.playTracks(TRACK_LIST, TRACK_CHANCES, false);
+    }
 
     @Override
     public String tilesTex() {
