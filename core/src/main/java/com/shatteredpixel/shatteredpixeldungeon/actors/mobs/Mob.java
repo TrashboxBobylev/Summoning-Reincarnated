@@ -1338,12 +1338,12 @@ public abstract class Mob extends Char {
 					if ((alpha -= Game.elapsed/3f) > 0) {
 						alpha( alpha );
 						scale.set( alpha );
+						x = owner.x;
+						y = owner.y;
 					} else {
 						killAndErase();
+						owner = null;
 					}
-
-					x = owner.x;
-					y = owner.y;
 				}
 			});
 		}
