@@ -533,7 +533,7 @@ public abstract class Mob extends Char {
 		//if we are amoked...
 		if ( buff(Amok.class) != null) {
 			//try to find an enemy mob to attack first.
-			for (Mob mob : Dungeon.level.mobs)
+			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0]))
 				if (mob.alignment == Alignment.ENEMY && mob != this
 						&& canSee(mob.pos) && mob.invisible <= 0 && !canBeIgnored(mob)) {
 					enemies.put(mob, mob.targetPriority());
@@ -541,7 +541,7 @@ public abstract class Mob extends Char {
 
 			if (enemies.isEmpty()) {
 				//try to find ally mobs to attack second.
-				for (Mob mob : Dungeon.level.mobs)
+				for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0]))
 					if (mob.alignment == Alignment.ALLY && mob != this
 							&& canSee(mob.pos) && mob.invisible <= 0 && !canBeIgnored(mob)) {
 						enemies.put(mob, mob.targetPriority());
@@ -558,7 +558,7 @@ public abstract class Mob extends Char {
 		//if we are an ally...
 		} else if ( alignment == Alignment.ALLY) {
 			//look for hostile mobs to attack
-			for (Mob mob : Dungeon.level.mobs)
+			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0]))
 				if (mob.alignment == Alignment.ENEMY && canSee(mob.pos)
 						&& mob.invisible <= 0 && !mob.isInvulnerable(getClass()))
 					//do not target passive mobs
@@ -573,7 +573,7 @@ public abstract class Mob extends Char {
 		//if we are an enemy or can target allies...
 		if (alignment == Alignment.ENEMY || canTargetAlliesAsAlly()) {
 			//look for ally mobs to attack
-			for (Mob mob : Dungeon.level.mobs)
+			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0]))
 				if (mob.alignment == Alignment.ALLY && canSee(mob.pos) && mob.invisible <= 0) {
 					//we are neutral to minions, unless they are attacking everything or we have to pass through them
 					if (mob instanceof Minion && !canTargetAlliesAsAlly()){
