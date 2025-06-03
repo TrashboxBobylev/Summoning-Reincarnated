@@ -109,6 +109,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Necromancer;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Tengu;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogDzewa;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.GnollHunter;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.stationary.GasterBlaster;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
@@ -652,6 +653,9 @@ public abstract class Char extends Actor implements ManaSource {
 				} else {
 					Sample.INSTANCE.play(Assets.Sounds.MISS);
 				}
+			}
+			if (alignment == Alignment.ENEMY && enemy instanceof Hero){
+				Buff.affect(this, Minion.ProtectiveTargeting.class, 10f);
 			}
 			
 			return false;
