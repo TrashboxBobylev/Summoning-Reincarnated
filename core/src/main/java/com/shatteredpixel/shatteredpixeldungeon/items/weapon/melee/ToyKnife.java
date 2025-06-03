@@ -211,7 +211,7 @@ public class ToyKnife extends MeleeWeapon implements Rankable, ManaSource {
             Class<? extends Item> sample = Dungeon.hero.heroClass == HeroClass.CONJURER ? ToyKnife.class : Wand.class;
             if (sample.isInstance(source)){
                 ToyKnife damageSource = source instanceof ToyKnife ? (ToyKnife) source : new ToyKnife();
-                int damage = Math.round(damageSource.damageRoll(Dungeon.hero)*(1 + Dungeon.hero.pointsInTalent(Talent.SOULS_BURST)/2f));
+                int damage = Math.round(damageSource.damageRoll(Dungeon.hero)*(0.25f + Dungeon.hero.pointsInTalent(Talent.SOULS_BURST)/2f));
                 Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, Random.Float(0.87f, 1.15f) );
                 for (int i : PathFinder.NEIGHBOURS8){
                     ((MagicMissile)curUser.sprite.parent.recycle( MagicMissile.class )).reset(
