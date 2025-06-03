@@ -77,6 +77,9 @@ public class FrostElemental extends Minion {
         } else if (rangedCooldown == Integer.MAX_VALUE){
             rangedCooldown = Random.NormalIntRange( 3, 5 );
         }
+        if (state == HUNTING){
+            rangedCooldown--;
+        }
         return super.act();
     }
 
