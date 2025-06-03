@@ -97,6 +97,14 @@ public class vReInc_Changes {
                 "Implemented Shattered v3.0.2 changes.\n\n" +
                         "_-_ Cleric is dead. Don't ask why, Conjurer is happy enough of a class, right?"));
 
+        changes = new ChangeInfo("v0.5.1", false, null);
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "Fixed the following bugs:\n" +
+                        "_-_ Sheep minions softlocking the game by their attack animation"));
+
         changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
         changes.hardlight(CharSprite.POSITIVE);
         changeInfos.add(changes);
