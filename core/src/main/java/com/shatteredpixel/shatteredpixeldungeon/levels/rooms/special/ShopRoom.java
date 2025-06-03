@@ -439,7 +439,7 @@ public class ShopRoom extends SpecialRoom {
 			do {
 				stone = Generator.random(Generator.Category.STONE).identify();
 			} while (stone instanceof StoneOfDetectMagic || stone instanceof StoneOfIntuition);
-			itemsToSpawn.add(scroll);
+			itemsToSpawn.add(stone);
 		}
 
 		if (Dungeon.depth % 4 == 0) itemsToSpawn.add( TippedDart.randomTipped(2) );
