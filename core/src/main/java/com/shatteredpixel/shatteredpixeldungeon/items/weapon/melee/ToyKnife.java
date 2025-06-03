@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.WhiteWound;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Projecting;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -51,7 +52,7 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
-public class ToyKnife extends MeleeWeapon implements Rankable {
+public class ToyKnife extends MeleeWeapon implements Rankable, ManaSource {
 
     public boolean ranged;
 	
@@ -147,6 +148,11 @@ public class ToyKnife extends MeleeWeapon implements Rankable {
             case 2: return 0.75f;
             case 3: return 1.5f;
         }
+        return 1f;
+    }
+
+    @Override
+    public float manaModifier(Char source) {
         return 1f;
     }
 
