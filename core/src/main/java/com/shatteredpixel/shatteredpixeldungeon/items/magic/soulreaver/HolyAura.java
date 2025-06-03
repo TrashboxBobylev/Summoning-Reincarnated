@@ -135,6 +135,10 @@ public class HolyAura extends AdHocSpell {
 
     @Override
     public boolean tryToZap(Hero owner) {
+        if (owner.buff(HolyAuraBuff.class) != null){
+            GLog.warning( Messages.get(this, "aura_exists") );
+            return false;
+        }
         if (owner.buff(HolyAuraCD.class) != null){
             GLog.warning( Messages.get(this, "no_magic") );
             return false;
