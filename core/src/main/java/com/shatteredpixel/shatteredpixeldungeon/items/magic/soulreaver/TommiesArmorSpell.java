@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArcaneArmor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.ArmoredShielding;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ConjurerSpell;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -47,7 +46,7 @@ public class TommiesArmorSpell extends ConjurerSpell {
     @Override
     public void effect(Ballistica trajectory) {
         Char ch = Actor.findChar(trajectory.collisionPos);
-        if (ch instanceof Minion) {
+        if (ch != null && ch.alignment == Char.Alignment.ALLY) {
             if (ch.buff(ArmoredShielding.class) == null) {
                 Buff.affect(ch, ArmoredShielding.class, 1000000f);
                 Buff.affect(ch, Barkskin.class).set(defenseEarthValue(rank()), defenseEarthTime(rank()));
