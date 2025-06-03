@@ -483,7 +483,7 @@ public class ShopRoom extends SpecialRoom {
 		rare.identify();
 		itemsToSpawn.add( rare );
 		itemsToSpawn.add( new Bomb().random() );
-		if (Random.Int(2) == 0){
+		if (Random.Int(4) == 0){
 			Item additionalRare;
 			switch (Dungeon.hero.heroClass){
 				case WARRIOR:
