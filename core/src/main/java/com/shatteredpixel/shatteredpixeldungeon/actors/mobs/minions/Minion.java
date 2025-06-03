@@ -366,7 +366,7 @@ public class Minion extends Mob implements ManaSource {
         PathFinder.buildDistanceMap(follower.pos, passable, Integer.MAX_VALUE);//No limit on distance
         for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
             if (mob.alignment == follower.alignment &&
-                    PathFinder.distance[toFollow.pos] > PathFinder.distance[mob.pos] &&
+                    PathFinder.distance[toFollow.pos] >= PathFinder.distance[mob.pos] &&
                     mob.following(toFollow)) {
                 toFollow = whatToFollow(follower, mob);
             }
