@@ -458,7 +458,7 @@ public class ShopRoom extends SpecialRoom {
 				Dungeon.hero.armorAbility == null && Dungeon.hero.heroClass.armorAbilities().length > 0) itemsToSpawn.add( new KingsCrown());
 
 		Item rare;
-		switch (Random.Int(5)){
+		switch (Random.Int(6)){
 			case 0:
 				rare = Generator.randomUsingDefaults( Generator.Category.WAND );
 				break;
@@ -474,6 +474,9 @@ public class ShopRoom extends SpecialRoom {
 			case 4:
 				rare = Generator.randomStaff();
 				break;
+			case 5:
+				rare = Generator.randomUsingDefaults(Generator.Category.RING);
+				break;
 			default:
 				rare = new Dewdrop();
 		}
@@ -487,7 +490,9 @@ public class ShopRoom extends SpecialRoom {
 					additionalRare = Generator.randomArmor(); break;
 				case MAGE:
 					additionalRare = Generator.random(Generator.Category.WAND); break;
-				case ROGUE: case DUELIST:
+				case ROGUE:
+					additionalRare = Generator.random(Generator.Category.RING); break;
+				case DUELIST:
 					additionalRare = Generator.randomWeapon(); break;
 				case HUNTRESS:
 					additionalRare = Generator.randomMissile(); break;
