@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -39,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulSparking;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.ArmoredShielding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.HolyAuraBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.Ascension;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -85,6 +87,8 @@ public class Minion extends Mob implements ManaSource {
     public int minDefense;
     public int maxDefense;
     private float partialHealing;
+
+    public Char leader = null;
 
     private static final String RANK	= "rank";
     private static final String ATTUNEMENT = "attunement";
@@ -359,22 +363,28 @@ public class Minion extends Mob implements ManaSource {
             sprite.remove(CharSprite.State.SHIELDED);
         }
     }
-
-    public static Char whatToFollow(Char follower, Char start) {
-        Char toFollow = start;
+    public void initFollowing(){
+        Char candidate = null;
         boolean[] passable = Dungeon.level.passable.clone();
-        PathFinder.buildDistanceMap(follower.pos, passable, Integer.MAX_VALUE);//No limit on distance
-        for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
-            if (mob.alignment == follower.alignment &&
-                    (PathFinder.distance[toFollow.pos] > PathFinder.distance[mob.pos]) &&
-                    (mob.following(toFollow))) {
-                toFollow = whatToFollow(follower, mob);
+        PathFinder.buildDistanceMap(pos, passable, Integer.MAX_VALUE);//No limit on distance
+        for (Char ch : Actor.chars().toArray( new Char[0] )) {
+            float distance = 0;
+            if (candidate != null) {
+                distance = PathFinder.distance[candidate.pos];
             }
-            else {
-                return start;
+            if (candidate instanceof Hero){
+                distance /= 3;
+            }
+            if (ch.alignment == alignment &&
+                    ((distance < PathFinder.distance[ch.pos]))) {
+                //do not follow things that follow us
+                if (ch instanceof Minion && ((Minion) ch).leader == this){
+                    continue;
+                }
+                candidate = ch;
             }
         }
-        return toFollow;
+        leader = candidate;
     }
 
     @Override
@@ -499,9 +509,10 @@ public class Minion extends Mob implements ManaSource {
             } else {
 
                 enemySeen = false;
-                Char toFollow = whatToFollow(Minion.this, Dungeon.hero);
+                if (leader == null)
+                    initFollowing();
                 int oldPos = pos;
-                target = toFollow.pos;
+                target = leader.pos;
                 //always move towards the target when wandering
                 if (getCloser( target)) {
                     spend( 1 / speed() );
@@ -509,6 +520,8 @@ public class Minion extends Mob implements ManaSource {
                 } else {
                     //if it can't move closer to defending pos, then give up and defend current position
                     spend( TICK );
+                    if (!(leader instanceof Hero) || Dungeon.level.distance(leader.pos, pos) > 3)
+                        leader = null;
                 }
 
             }
