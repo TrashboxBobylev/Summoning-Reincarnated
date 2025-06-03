@@ -75,13 +75,14 @@ import java.util.ArrayList;
 
 public class vReInc_Changes {
     public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
+        add_v0_5_0_Changes(changeInfos);
         add_v0_4_0_Changes(changeInfos);
         add_v0_3_0_Changes(changeInfos);
         add_v0_2_0_Changes(changeInfos);
         add_v0_1_0_Changes(changeInfos);
     }
 
-    public static void add_v0_4_0_Changes( ArrayList<ChangeInfo> changeInfos ){
+    public static void add_v0_5_0_Changes( ArrayList<ChangeInfo> changeInfos ){
         ChangeInfo changes = new ChangeInfo("vReInc-0.5.0", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
@@ -105,7 +106,7 @@ public class vReInc_Changes {
                         "_-_ _Ascension_ allows Conjurer to transcend, turning his mana power into large amount of shielding, with possibility of empowering spells and minions with it.\n\n" +
                         "_-_ _Power of Triad_ gives Conjurer ability to call for the trio of powerful allies, each having different abilities, way to summon and niche.\n\n" +
                         "_-_ _Hyperblast_ is armor ability from legacy version, that stuns enemies with irresistible Soul Paralysis.",
-                        "_-_ Added a remains item: _Spell Page_! This remains summons simple ally Attunement Construct on usage, that scales its power with depth.\n\n" +
+                "_-_ Added a remains item: _Spell Page_! This remains summons simple ally Attunement Construct on usage, that scales its power with depth.\n\n" +
                         "_-_ Added a brand new robe appearance, when armor ability is available."));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.STAIRS), "Game Modes",
@@ -118,45 +119,45 @@ public class vReInc_Changes {
                         "_-_ Added a brand new _Abyssal Crusade_ mode, where you start in almost-Abyss! Your character is set to max power and is given special loot bags in shop and across the level to full prepare for the invasion into depths of Abyss."));
 
         changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.CROW_STAFF), "New summon weapons",
-                        "Added 2 new summoning staffs:\n\n" +
-                                "_-_ _Ravenous Branch_ is a tier 3 weapon, that summons a dark crow. The crows are adept at support, making other allies deal more damage, scouting or corrupting enemies depending on a rank.\n\n" +
-                                "_-_ _Frost Elemental Staff_ is a returning tier 4 weapon, that summons a frost elemental. They received a new look and new tiering behavior.",
-                        "Added 2 new support weapons, that have extra reach and inflict special ally damage tag onto enemies.\n\n" +
-                                "_Tribal Cane_ adds flat bonus damage, while _Ritual Gong_ adds a multiplier. Their effects can stack together for even more power!\n\n" +
-                                "Their Duelist abilities allows to give reverse tag to allies, making them take less damage instead of dealing more damage."));
+                "Added 2 new summoning staffs:\n\n" +
+                        "_-_ _Ravenous Branch_ is a tier 3 weapon, that summons a dark crow. The crows are adept at support, making other allies deal more damage, scouting or corrupting enemies depending on a rank.\n\n" +
+                        "_-_ _Frost Elemental Staff_ is a returning tier 4 weapon, that summons a frost elemental. They received a new look and new tiering behavior.",
+                "Added 2 new support weapons, that have extra reach and inflict special ally damage tag onto enemies.\n\n" +
+                        "_Tribal Cane_ adds flat bonus damage, while _Ritual Gong_ adds a multiplier. Their effects can stack together for even more power!\n\n" +
+                        "Their Duelist abilities allows to give reverse tag to allies, making them take less damage instead of dealing more damage."));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.CONDUCTS_COLOR), "New conduct effects",
-                        "Several conducts had their effects reinvented:\n\n" +
-                                "_-_ _Curse of the Muggle_ now replaces wand zaps with confetti blasts and minions with chickens instead of disabling them altogether.\n\n" +
-                                "_-_ _Anti-Protein Campaign_ have returned with a new effect: it now makes all strength pots essentially temporary instead of removing them.\n\n" +
-                                "_-_ _Become Ethereal_ now has a fail-safe in form of ectoplasmic charge, that accumulates on taking damage. Too much charge will kill you for real and dissipating takes some time."));
+                "Several conducts had their effects reinvented:\n\n" +
+                        "_-_ _Curse of the Muggle_ now replaces wand zaps with confetti blasts and minions with chickens instead of disabling them altogether.\n\n" +
+                        "_-_ _Anti-Protein Campaign_ have returned with a new effect: it now makes all strength pots essentially temporary instead of removing them.\n\n" +
+                        "_-_ _Become Ethereal_ now has a fail-safe in form of ectoplasmic charge, that accumulates on taking damage. Too much charge will kill you for real and dissipating takes some time."));
 
         changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
         changes.hardlight(CharSprite.WARNING);
         changeInfos.add(changes);
 
         changes.addButton( new ChangeButton(Icons.DISPLAY.get(), "Visual & Interface Changes",
-                        "_-_ Mana indicator now shows Conjurer's spell book. Spell book has been removed from quickslots due to redundancy.\n\n" +
-                                "_-_ Conjurer's spells can now be made favorite to be used from action indicator button.\n\n" +
-                                "_-_ Resprited title banner to fit with Shattered's new title art.\n\n" +
-                                "_-_ Added targeting visual: mobs will trace a white line and show a target visual towards their target, with target cell coloring depending on their alignment.\n\n" +
-                                "_-_ Long-clicking on behavior icon in behavior select window will show its description.\n\n" +
-                                "_-_ Resprited \"damage from action\" icon for Conjurer's and Adventurer's talents to fit Shattered.\n\n" +
-                                "_-_ Minions and Underground Paradise now switch to idling animation if not moving for past turn, imitating hero's behavior.\n\n" +
-                                "_-_ Made all equipment with range of numbers show the average number too."));
+                "_-_ Mana indicator now shows Conjurer's spell book. Spell book has been removed from quickslots due to redundancy.\n\n" +
+                        "_-_ Conjurer's spells can now be made favorite to be used from action indicator button.\n\n" +
+                        "_-_ Resprited title banner to fit with Shattered's new title art.\n\n" +
+                        "_-_ Added targeting visual: mobs will trace a white line and show a target visual towards their target, with target cell coloring depending on their alignment.\n\n" +
+                        "_-_ Long-clicking on behavior icon in behavior select window will show its description.\n\n" +
+                        "_-_ Resprited \"damage from action\" icon for Conjurer's and Adventurer's talents to fit Shattered.\n\n" +
+                        "_-_ Minions and Underground Paradise now switch to idling animation if not moving for past turn, imitating hero's behavior.\n\n" +
+                        "_-_ Made all equipment with range of numbers show the average number too."));
 
         changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
-                                "_-_ Reimplemented Yog-Dzewa's eradication wall attack, with new visual and more frequent chance of occurring.\n" +
-                                    "_-_ Made targeting priority system work properly, so minions and other allies are actually prioritized by enemy attacks over player.\n" +
-                                    "_-_ Tweaked healing gas to heal for flat instead of depending on target's health, reduced the amount to compensate.\n" +
-                                    "_-_ Minions now retreat to player 2x faster, like other intelligent allies.\n" +
-                                    "_-_ Certain healing effects no longer work, if player is starving (inspired by Polished PD).\n" +
-                                    "_-_ Added retribution weapon ability to Cleaver.\n" +
-                                    "_-_ Levitation buff now gives better odds at dodging.\n" +
-                                    "_-_ Throwing items onto mobs now counts as trigger for reactive minions.\n" +
-                                    "_-_ Protective minions are now less prioritized than players to allow them to take the hit.\n" +
-                                    "_-_ Dungeon of Doom talent no longer upgrades generating thrown weapons.\n" +
-                                    "_-_ Reduced Arcane Nuke's fuse time from 8 to 4 turns."));
+                "_-_ Reimplemented Yog-Dzewa's eradication wall attack, with new visual and more frequent chance of occurring.\n" +
+                        "_-_ Made targeting priority system work properly, so minions and other allies are actually prioritized by enemy attacks over player.\n" +
+                        "_-_ Tweaked healing gas to heal for flat instead of depending on target's health, reduced the amount to compensate.\n" +
+                        "_-_ Minions now retreat to player 2x faster, like other intelligent allies.\n" +
+                        "_-_ Certain healing effects no longer work, if player is starving (inspired by Polished PD).\n" +
+                        "_-_ Added retribution weapon ability to Cleaver.\n" +
+                        "_-_ Levitation buff now gives better odds at dodging.\n" +
+                        "_-_ Throwing items onto mobs now counts as trigger for reactive minions.\n" +
+                        "_-_ Protective minions are now less prioritized than players to allow them to take the hit.\n" +
+                        "_-_ Dungeon of Doom talent no longer upgrades generating thrown weapons.\n" +
+                        "_-_ Reduced Arcane Nuke's fuse time from 8 to 4 turns."));
 
         changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
                 "Fixed the following bugs:\n" +
@@ -173,7 +174,7 @@ public class vReInc_Changes {
                         "_-_ Minions not benefitting from movement speed boosts\n" +
                         "_-_ Motion Bloom having no description for rank II\n" +
                         "_-_ Crash from Erupting Darkness attempting to use random wand effect",
-                        "_-_ Enemies not falling into Arcane Nuke's crater\n" +
+                "_-_ Enemies not falling into Arcane Nuke's crater\n" +
                         "_-_ Energy Scroll talent giving energy value from entire stack of scrolls\n" +
                         "_-_ Runic Cluster's merge behavior failing to deliver Scroll of Upgrade, if inventory is full\n" +
                         "_-_ Race conditions from wizard III's attunement boost effect\n" +
@@ -190,39 +191,39 @@ public class vReInc_Changes {
         changeInfos.add(changes);
 
         changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.BOOK), "Conjurer",
-            "_-_ Changed (mostly reduced) mana cost of some spells:\n" +
-                    "   _*_ Antarctic Touch: 15/25/25 -> 10/20/20\n" +
-                    "   _*_ Tommie's Armor Spell: 20/24/4 -> 15/20/4\n" +
-                    "   _*_ Transmogrification Wand: 10/15/18 -> 8/12/15\n" +
-                    "   _*_ Artemis Bridge: 3/6/12 -> 3/5/10\n" +
-                    "   _*_ Holy Aura: 35/50/20 to 25/40/20\n" +
-                    "   _*_ Energized Blast: 25/15/8 -> 30/18/10\n" +
-                    "   _*_ Shards of Despair: 10/20/45 -> 8/15/35\n\n" +
-                    "_-_ Increased _Energized Blast_ III's damage from _20%_ to _25%_.\n\n" +
-                    "_-_ Increased _Shards of Despair_'s damage by _25%_.\n\n" +
-                    "_-_ Reduced _Concentration_'s paralysis from _3/8/20_ to _3/6/15_.",
-                    "_-_ Buffed _Eternal Friendship_ talent from _1/2/3_ armor to _1/3/5_ armor boost.\n\n" +
-                    "_-_ Buffed _Froggit III_'s mana steal counter from _4 hits_ to _3 hits_.\n\n" +
-                    "_-_ reworked _Benevolent Meal_ talent into _Attuned Meal_:\n" +
-                    "   _*_ now grants extra mana on next 3/5 kills\n\n" +
-                    "_-_ _Conjurer's Robe_'s armor value now scales with attunement."));
+                "_-_ Changed (mostly reduced) mana cost of some spells:\n" +
+                        "   _*_ Antarctic Touch: 15/25/25 -> 10/20/20\n" +
+                        "   _*_ Tommie's Armor Spell: 20/24/4 -> 15/20/4\n" +
+                        "   _*_ Transmogrification Wand: 10/15/18 -> 8/12/15\n" +
+                        "   _*_ Artemis Bridge: 3/6/12 -> 3/5/10\n" +
+                        "   _*_ Holy Aura: 35/50/20 to 25/40/20\n" +
+                        "   _*_ Energized Blast: 25/15/8 -> 30/18/10\n" +
+                        "   _*_ Shards of Despair: 10/20/45 -> 8/15/35\n\n" +
+                        "_-_ Increased _Energized Blast_ III's damage from _20%_ to _25%_.\n\n" +
+                        "_-_ Increased _Shards of Despair_'s damage by _25%_.\n\n" +
+                        "_-_ Reduced _Concentration_'s paralysis from _3/8/20_ to _3/6/15_.",
+                "_-_ Buffed _Eternal Friendship_ talent from _1/2/3_ armor to _1/3/5_ armor boost.\n\n" +
+                        "_-_ Buffed _Froggit III_'s mana steal counter from _4 hits_ to _3 hits_.\n\n" +
+                        "_-_ reworked _Benevolent Meal_ talent into _Attuned Meal_:\n" +
+                        "   _*_ now grants extra mana on next 3/5 kills\n\n" +
+                        "_-_ _Conjurer's Robe_'s armor value now scales with attunement."));
 
         changes.addButton(new ChangeButton(new WandOfCorruption(),
-        "_-_ Reduced corruption resistance from _1x-5x_ to _1x-4x_ (0%-100%).\n\n" +
-                "_-_ Increased Corrupting enchantment's chance from _(5+level)/(25+level)_ to _(8+level)/(25+level)_.\n\n" +
-                "_-_ Corrupted enemies no longer awaken enemies with Swarm Intelligence challenge and _take all damage as deferred_, allowing them to survive for far longer."));
+                "_-_ Reduced corruption resistance from _1x-5x_ to _1x-4x_ (0%-100%).\n\n" +
+                        "_-_ Increased Corrupting enchantment's chance from _(5+level)/(25+level)_ to _(8+level)/(25+level)_.\n\n" +
+                        "_-_ Corrupted enemies no longer awaken enemies with Swarm Intelligence challenge and _take all damage as deferred_, allowing them to survive for far longer."));
 
         changes = new ChangeInfo(Messages.get(ChangesScene.class, "nerfs"), false, null);
         changes.hardlight(CharSprite.NEGATIVE);
         changeInfos.add(changes);
 
         changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.BOOK), "Conjurer",
-        "_-_ Reduced minimal damage of _Star Blazing_ from _4(+0.33/+0.5)_ to _2(+0.25/0.33)_.\n" +
-                "_-_ Reduced _Energized Renewal I_'s healing from _10_ to _8_.\n" +
-                "_-_ Reduced _Conjurer's robe II_'s damage reduction boost from _40%_ to _25%_.\n" +
-                "_-_ Rebalanced Soul Sparking effect:\n" +
-                "   _*_ the increase is now more gradual, with no boost at 50% HP and full boost at 0% HP instead of half of boost at 50% HP and full boost at 0% HP\n" +
-                "   _*_ changed the max boost from _150%/0%/450%_ to _75%/0%/300%_"));
+                "_-_ Reduced minimal damage of _Star Blazing_ from _4(+0.33/+0.5)_ to _2(+0.25/0.33)_.\n" +
+                        "_-_ Reduced _Energized Renewal I_'s healing from _10_ to _8_.\n" +
+                        "_-_ Reduced _Conjurer's robe II_'s damage reduction boost from _40%_ to _25%_.\n" +
+                        "_-_ Rebalanced Soul Sparking effect:\n" +
+                        "   _*_ the increase is now more gradual, with no boost at 50% HP and full boost at 0% HP instead of half of boost at 50% HP and full boost at 0% HP\n" +
+                        "   _*_ changed the max boost from _150%/0%/450%_ to _75%/0%/300%_"));
 
         changes.addButton(new ChangeButton(new DogSprite(), "Dog retiering",
                 "_-_ Now replaces crabs instead of snakes.\n" +
@@ -231,8 +232,10 @@ public class vReInc_Changes {
                         "_-_ Increased evasion from 8 to 12.\n" +
                         "_-_ Decreased attack from 2-5 to 1-4, but now attacks twice per turn.\n" +
                         "_-_ Reduced accuracy from 12 to 10."));
+    }
 
-        changes = new ChangeInfo("vReInc-0.4.0", true, "");
+    public static void add_v0_4_0_Changes( ArrayList<ChangeInfo> changeInfos ){
+        ChangeInfo changes = new ChangeInfo("vReInc-0.4.0", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
