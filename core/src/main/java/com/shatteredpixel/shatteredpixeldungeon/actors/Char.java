@@ -85,6 +85,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.InescapableDamage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.Shrunken;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
@@ -898,7 +899,7 @@ if (Dungeon.hero.heroClass != HeroClass.CLERIC
 			return;
 		}
 
-		if(isInvulnerable(src.getClass())){
+		if(isInvulnerable(src.getClass()) && !(src instanceof InescapableDamage)){
 			sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "invulnerable"));
 			return;
 		}

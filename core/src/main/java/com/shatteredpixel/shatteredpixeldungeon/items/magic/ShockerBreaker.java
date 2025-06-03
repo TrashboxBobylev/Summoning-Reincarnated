@@ -34,8 +34,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.InescapableDamage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -69,7 +69,7 @@ public class ShockerBreaker extends ConjurerSpell {
         if (ch != null && ch.alignment == Char.Alignment.ALLY && !(ch instanceof Hero)){
             Sample.INSTANCE.play(Assets.Sounds.ZAP);
             Sample.INSTANCE.play(Assets.Sounds.HEALTH_WARN);
-            ch.damage((int) (ch.HT * dmg(rank())), new Grim());
+            ch.damage((int) (ch.HT * dmg(rank())), new NoHeal());
             Camera.main.shake(4f, 0.4f);
             GameScene.flash(0xFFFFFF);
             Buff.affect(ch, Empowered.class, buff(rank()));
@@ -147,7 +147,7 @@ public class ShockerBreaker extends ConjurerSpell {
                 new DecimalFormat("#.##").format(dmg(rank)*100), buff(rank), noheal(rank));
     }
 
-    public static class NoHeal extends FlavourBuff {
+    public static class NoHeal extends FlavourBuff implements InescapableDamage {
 
     }
 }
