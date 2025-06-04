@@ -176,9 +176,8 @@ public class Crow extends Minion {
             } else {
 
                 enemySeen = false;
-                Char toFollow = whatToFollow(Crow.this, Dungeon.hero);
                 int oldPos = pos;
-                target = defendingPos != -1 && rank == 2 ? defendingPos : toFollow.pos;
+                target = defendingPos != -1 && rank == 2 ? defendingPos : Dungeon.hero.pos;
                 //always move towards the target when wandering
                 if (getCloser( target)) {
                     spend( 1 / speed() );

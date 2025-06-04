@@ -58,7 +58,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.GameMath;
-import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 public class Minion extends Mob implements ManaSource {
@@ -360,23 +359,6 @@ public class Minion extends Mob implements ManaSource {
         }
     }
 
-    public static Char whatToFollow(Char follower, Char start) {
-        Char toFollow = start;
-        boolean[] passable = Dungeon.level.passable.clone();
-        PathFinder.buildDistanceMap(follower.pos, passable, Integer.MAX_VALUE);//No limit on distance
-        for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
-            if (mob.alignment == follower.alignment &&
-                    (PathFinder.distance[toFollow.pos] > PathFinder.distance[mob.pos]) &&
-                    (mob.following(toFollow))) {
-                toFollow = whatToFollow(follower, mob);
-            }
-            else {
-                return start;
-            }
-        }
-        return toFollow;
-    }
-
     @Override
     protected boolean getCloser(int target) {
         if (buff(ArmoredShielding.class) != null) return false;
@@ -499,9 +481,8 @@ public class Minion extends Mob implements ManaSource {
             } else {
 
                 enemySeen = false;
-                Char toFollow = whatToFollow(Minion.this, Dungeon.hero);
                 int oldPos = pos;
-                target = toFollow.pos;
+                target = Dungeon.hero.pos;
                 //always move towards the target when wandering
                 if (getCloser( target)) {
                     spend( 1 / speed() );
