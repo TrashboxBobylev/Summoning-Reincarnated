@@ -123,7 +123,7 @@ public class PushingWaveform extends ConjurerSpell {
 
         cone = new ConeAOE( bolt,
                 d,
-                rank()*90,
+                (float) (Math.pow(2, rank()-1)*90),
                 Ballistica.STOP_SOLID);
 
         //cast to cells at the tip, rather than all cells, better performance.
@@ -163,7 +163,7 @@ public class PushingWaveform extends ConjurerSpell {
 
     @Override
     public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", 3 + rank, 5 + rank*2, rank*90);
+        return Messages.get(this, "rank", 3 + rank, 5 + rank*2, (int)(Math.pow(2, rank-1)*90));
     }
 
 }
