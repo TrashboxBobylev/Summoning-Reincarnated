@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.ui.changelist;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Conducts;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -83,7 +84,112 @@ public class vReInc_Changes {
     }
 
     public static void add_v0_5_0_Changes( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("vReInc-0.5.0", true, "");
+        ChangeInfo changes = new ChangeInfo("vReInc-0.5.2", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBYLEV), "Developer Commentary",
+                "_-_ Released June 4th, 2025\n" +
+                        "_-_ 10 days after Reincarnated 0.5.0\n\n" +
+                        "This entire update just showcases how rotten is Legacy Summoning's code, design and objectives were. All of them were demolished just from few days of constant suggestions and reports of one person. This is what feedback does. This is what I deserved after all those years. And I do not happen to be proud of how inadequate the game felt to some of you who haven't spoken to me about all of this."));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.BOOK), "Conjurer spells",
+                "_Star Blazing:_\n" +
+                        "_-_ Increased mana cost from _1/3/8_ to _1/4/10_.\n" +
+                        "_-_ No longer changes damage with ranks.\n" +
+                        "_-_ Now triggers after-spell effects for every star.\n\n" +
+                        "_Beam of Affection:_\n" +
+                        "_-_ Decreased mana cost from _0/6/9_ to _0/5/7_.\n" +
+                        "_-_ Can no longer be self-targeted.\n" +
+                        "_-_ Can affect all kinds of allies, not just minions.\n" +
+                        "_-_ Rank II minion effect reworked: now refunds half of minion's HP as staff charge.\n\n" +
+                        "_Runic Shell:_\n" +
+                        "_-_ No longer benefits hero, if shot in specific way.\n" +
+                        "_-_ Changed the wording of ranks to not mention healing.\n\n" +
+                        "_Pushing Waveform:_\n" +
+                        "_-_ Push force now increases with ranks.\n" +
+                        "_-_ Reduced the spell length from _8/11/14_ to _7/9/11_ tiles.\n" +
+                        "_-_ Increased the spell's cone width from _90/120/150_ to _90/180/360_ degrees.",
+                "_Shocker Breaker:_\n" +
+                        "_-_ No longer benefits hero, if shot in specific way.\n" +
+                        "_-_ Shock damage now pierces invulnerability to prevent exploits.\n\n" +
+                        "_Dreemurr's Necromancy:_\n" +
+                        "_-_ Decreased mana cost from _12/24/0_ to _8/16/0_.\n" +
+                        "_-_ No longer benefits hero, if shot in specific way.\n" +
+                        "_-_ Decreased all necromancy effect's mana drain by 50%.\n\n" +
+                        "_Sub-Null Field Igniter:_\n" +
+                        "_-_ No longer affects minions.",
+                "_Antarctic Touch:_\n" +
+                        "_-_ Decreased mana cost from _10/20/20_ to _5/10/20_.\n" +
+                        "_-_ Now affects environment in same way as Wand of Frost.\n" +
+                        "_-_ Increased rank III's frostburn length from _25_ to _1000 turns_.\n\n" +
+                        "_Tommie's Armor Spell:_\n" +
+                        "_-_ Can affect all kinds of allies, not just minions.\n\n" +
+                        "_Transmogrification Wand:_\n" +
+                        "_-_ Decreased mana cost from _8/12/15_ to _5/8/11_.\n" +
+                        "_-_ No longer benefits hero, if shot in specific way.\n\n" +
+                        "_Artemis Bridge:_\n" +
+                        "_-_ Can affect all kinds of allies, not just minions.\n" +
+                        "_-_ Significantly improved the use validation logic.\n\n" +
+                        "_Holy Aura:_\n" +
+                        "_-_ Can no longer be extended by continuous usage.\n" +
+                        "_-_ Now properly heals allies.\n" +
+                        "_-_ Increased the rate of shielding by 1 turn on all ranks.\n\n" +
+                        "_Shards of Despair:_\n" +
+                        "_-_ Now triggers after-spell effects for every enemy hit."
+                        ));
+
+        changes.addButton(new ChangeButton(HeroSprite.avatar(HeroClass.CONJURER, 0), "Other Conjurer changes",
+                    "_-_ Underground Paradise now travels to next floor no matter the distance.\n\n" +
+                            "_-_ Severely nerfed Soul Wielder's mana boost: now only increases by 1 instead of being multiplied by 1.5x.\n\n" +
+                            "_-_ Soul Sparking's damage boost now maxes out at 10% HP.\n\n" +
+                            "_-_ Toy Knife now benefits from Projecting, when thrown.\n\n" +
+                            "_-_ _Energy Break_'s damage boost can now spread across multiple targets and benefit _Soul's Burst_'s effect.\n\n" +
+                            "_-_ One-hit kills with Toy Knife now collect mana.\n\n" +
+                            "_-_ Nerfed _Soul's Burst_'s damage multiplier from _150%/200%_ (was supposed to be 100%/150%) to _75%/125%_."
+        ));
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.GAUNTLET), "Gauntlet Mode",
+                "_-_ Increased gold payout from _3x-4x_ to _7x-10x_.\n\n" +
+                        "_-_ The shop no longer spawns identification consumables.\n\n" +
+                        "_-_ Fixed Tengu's Mask not appearing in the shop.\n\n" +
+                        "_-_ Added music list into gauntlet levels.\n\n" +
+                        "_-_ Added rings and rank managers into the shop.\n\n" +
+                        "_-_ Reduced the chance of extra, class-focused equipment from _50%_ to _25%_."));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+                "_-_ Removed custom minion following code to hopefully make them more obedient.\n" +
+                        "_-_ Scrolls of Retribution and Psionic Blast now deal 60% less damage to allies.\n" +
+                        "_-_ Made targeting visual less intense on game's performance.\n" +
+                        "_-_ Made most of secret and special rooms adhere to chapter sizes.\n" +
+                        "_-_ Rooms with trap puzzles now use a smorgasbord of traps in Abyss or Project Paradox mode.\n" +
+                        "_-_ Adventurer now directly gets tier 3 talents from Tengu instead of having to use his mask.\n" +
+                        "_-_ Added a new effect to Storm Clouds area effect: pushing entities around.\n" +
+                        "_-_ Added Abyss enemies into the journal's bestiary.\n" +
+                        "_-_ Made frostburn effect not reset duration with reignitions.\n" +
+                        "_-_ Extended reach weapons can now reach beyond allies.\n" +
+                        "_-_ Made Bless effect use rerolls for accuracy and evasion checks, making it slightly more effective.",
+                        "_-_ Rebalanced Dwarf Wizard II:\n" +
+                        "   _*_ reduced attack speed from _2 attacks/turn_ to _1.33 attacks per turn_\n" +
+                        "   _*_ reduced recharge time from _850_ to _800_ turns\n" +
+                        "_-_ Fast Adventure no longer reduces amount of special rooms.\n" +
+                        "_-_ Project Paradox no longer reduces amount of special rooms and can double them.\n" +
+                        "_-_ Changed enemy target querying to be more thread safe.\n" +
+                        "_-_ Made Fire Elementals vulnerable to frostburn.\n" +
+                        "_-_ Hero being attacked now aggravates protective minions even if attack was dodged."));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "Fixed the following bugs:\n" +
+                        "_-_ Attunement and laboratory rooms sometimes not appearing in the run on non-standard chapter sizes\n" +
+                        "_-_ Conjurer and Adventurer using warrior seal as icon in hero info window\n" +
+                        "_-_ Power of Triad's fighter crashing the game in journal\n" +
+                        "_-_ Shops appearing on first level of demon halls\n" +
+                        "_-_ Goo minion being effectively invincible\n" +
+                        "_-_ Combined Refill talent not actually working\n" +
+                        "_-_ Frost elemental minions never using ranged attacks\n" +
+                        "_-_ Gnoll brutes not giving any mana"));
+
+        changes = new ChangeInfo("vReInc-0.5.0", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
