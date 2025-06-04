@@ -130,16 +130,7 @@ public class ToyKnife extends MeleeWeapon implements Rankable, ManaSource {
 
     @Override
     public int damageRoll(Char owner) {
-        int damageRoll = super.damageRoll(owner);
-        if (owner instanceof Hero){
-            Hero hero = (Hero)owner;
-            Char enemy = hero.enemy();
-            if (enemy instanceof Mob && enemy.buff(Talent.EnergyBreakTracker.class) != null){
-                enemy.buff(Talent.EnergyBreakTracker.class).detach();
-                damageRoll += Random.NormalIntRange(1, 3) + hero.pointsInTalent(Talent.ENERGY_BREAK);
-            }
-        }
-        return damageRoll;
+        return super.damageRoll(owner);
     }
 
     public float soulGainMod(int rank){
@@ -164,6 +155,10 @@ public class ToyKnife extends MeleeWeapon implements Rankable, ManaSource {
             modifier *= 1.40f;
         Buff.prolong( defender, SoulGain.class, /*speedModifier(attacker) **/ modifier );
         WhiteWound.hit(defender);
+        if (defender instanceof Mob && defender.buff(Talent.EnergyBreakTracker.class) != null){
+            defender.buff(Talent.EnergyBreakTracker.class).detach();
+            damage += Random.NormalIntRange(1, 3) + Dungeon.hero.pointsInTalent(Talent.ENERGY_BREAK);
+        }
         return super.proc( attacker, defender, damage );
     }
 
@@ -222,6 +217,10 @@ public class ToyKnife extends MeleeWeapon implements Rankable, ManaSource {
                     );
                     Char target;
                     if ((target = Actor.findChar(pos+i)) != null && target.alignment == Char.Alignment.ENEMY){
+                        if (target instanceof Mob && target.buff(Talent.EnergyBreakTracker.class) != null){
+                            target.buff(Talent.EnergyBreakTracker.class).detach();
+                            damage += Random.NormalIntRange(1, 3) + Dungeon.hero.pointsInTalent(Talent.ENERGY_BREAK);
+                        }
                         target.damage(damage, damageSource);
                         if (source instanceof ToyKnife){
                             Buff.prolong(target, SoulGain.class, 2 + 4*Dungeon.hero.pointsInTalent(Talent.SOULS_BURST));
