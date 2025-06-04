@@ -113,8 +113,8 @@ public class StarBlazing extends ConjurerSpell {
     public int manaCost(int rank) {
         switch (rank){
             case 1: return 1;
-            case 2: return 5;
-            case 3: return 12;
+            case 2: return 4;
+            case 3: return 10;
         }
         return 0;
     }
