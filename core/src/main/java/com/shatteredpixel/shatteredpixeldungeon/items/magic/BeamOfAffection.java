@@ -102,8 +102,8 @@ public class BeamOfAffection extends ConjurerSpell {
     public int manaCost(int rank) {
         switch (rank){
             case 1: return 0;
-            case 2: return 8;
-            case 3: return 9;
+            case 2: return 5;
+            case 3: return 7;
         }
         return 0;
     }
