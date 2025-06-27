@@ -2192,7 +2192,7 @@ public class Hero extends Char {
 				&& (visibleEnemies.size() == 0 || cell == pos)
 				&& !Dungeon.level.locked
 				&& !Dungeon.level.plants.containsKey(cell)
-				&& (Dungeon.depth < 26 || Dungeon.level.getTransition(cell).type == LevelTransition.Type.REGULAR_ENTRANCE) ) {
+				&& (Dungeon.level.getTransition(cell).type == LevelTransition.Type.REGULAR_ENTRANCE) ) {
 			boolean canDo = true;
 			if (Dungeon.level.getTransition(cell).type == LevelTransition.Type.REGULAR_EXIT &&
 					(Dungeon.depth > Dungeon.chapterSize()*4) && (Dungeon.depth < Dungeon.chapterSize()*5)) {
