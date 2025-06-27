@@ -68,7 +68,7 @@ public class ExitRoom extends StandardRoom {
 		int exit = level.pointToCell(random( 2 ));
 		Painter.set( level, exit, Terrain.EXIT );
 		level.transitions.add(new LevelTransition(level, exit, LevelTransition.Type.REGULAR_EXIT));
-		if (Dungeon.depth > Dungeon.chapterSize() * 4) {
+		if (Dungeon.depth > Dungeon.chapterSize() * 4 || Dungeon.branch == AbyssLevel.BRANCH) {
 			for (int i = 0; i < Random.IntRange(1, 3); i++) {
 				AttunementConstruct npc = new AttunementConstruct();
 				do {
