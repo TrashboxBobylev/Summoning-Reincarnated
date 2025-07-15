@@ -26,8 +26,8 @@ allprojects {
         appName = 'Summoning PD Reincarnated'
         appPackageName = 'com.trashboxbobylev.resummoningpixeldungeon'
 
-        appVersionCode = 835
-        appVersionName = 'ReInc-0.5.2-' + details.gitHash.substring(0, 7)
+        appVersionCode = 836
+        appVersionName = 'ReInc-0.5.3-' + details.gitHash.substring(0, 7)
 
         appJavaCompatibility = JavaVersion.VERSION_1_8
 

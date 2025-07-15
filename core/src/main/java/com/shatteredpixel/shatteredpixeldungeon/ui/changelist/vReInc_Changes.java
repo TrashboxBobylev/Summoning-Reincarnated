@@ -26,7 +26,6 @@ package com.shatteredpixel.shatteredpixeldungeon.ui.changelist;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Conducts;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -92,6 +91,16 @@ public class vReInc_Changes {
                 "_-_ Released June 4th, 2025\n" +
                         "_-_ 10 days after Reincarnated 0.5.0\n\n" +
                         "This entire update just showcases how rotten is Legacy Summoning's code, design and objectives were. All of them were demolished just from few days of constant suggestions and reports of one person. This is what feedback does. This is what I deserved after all those years. And I do not happen to be proud of how inadequate the game felt to some of you who haven't spoken to me about all of this."));
+
+        changes = new ChangeInfo("v0.5.3", false, null);
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "Fixed the following bugs:\n" +
+                        "_-_ Being impossible to descend past depth 26\n" +
+                        "_-_ Attunement constructs not existing in Abyss\n" +
+                        "_-_ Demon halls not having any visibility in Large Enlargement"));
 
         changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.BOOK), "Conjurer spells",
                 "_Star Blazing:_\n" +
