@@ -2191,8 +2191,7 @@ public class Hero extends Char {
 				//moving to a transition doesn't automatically trigger it when enemies are near
 				&& (visibleEnemies.size() == 0 || cell == pos)
 				&& !Dungeon.level.locked
-				&& !Dungeon.level.plants.containsKey(cell)
-				&& (Dungeon.level.getTransition(cell).type == LevelTransition.Type.REGULAR_ENTRANCE) ) {
+				&& !Dungeon.level.plants.containsKey(cell) ) {
 			boolean canDo = true;
 			if (Dungeon.level.getTransition(cell).type == LevelTransition.Type.REGULAR_EXIT &&
 					(Dungeon.depth > Dungeon.chapterSize()*4) && (Dungeon.depth < Dungeon.chapterSize()*5)) {
