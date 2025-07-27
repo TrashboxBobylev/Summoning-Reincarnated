@@ -99,21 +99,21 @@ public class AbyssChallengeLevel extends RegularLevel {
 
     private static HashMap<Class<? extends TreasureBag>, Float> bagLootTable = new HashMap<>();
     static {
-        bagLootTable.put(GenericBag.class, 25f);
+        bagLootTable.put(GenericBag.class, 20f);
 
         bagLootTable.put(SeedsBag.class,   15f);
         bagLootTable.put(StonesBag.class,  15f);
         bagLootTable.put(PotionsBag.class, 10f);
         bagLootTable.put(ScrollsBag.class, 10f);
 
-        bagLootTable.put(EquipmentBag.class,   6f);
-        bagLootTable.put(HolsterBag.class,     5f);
-        bagLootTable.put(AccessoriesBag.class, 4f);
+        bagLootTable.put(EquipmentBag.class,   8f);
+        bagLootTable.put(HolsterBag.class,     7f);
+        bagLootTable.put(AccessoriesBag.class, 5f);
     }
 
     @Override
     protected void createItems() {
-        int nItems = 15;
+        int nItems = 10;
 
         if (Dungeon.hero.heroClass == HeroClass.ADVENTURER) nItems *= 2;
         if (Dungeon.isChallenged(Conducts.Conduct.NO_LOOT)){
@@ -191,7 +191,7 @@ public class AbyssChallengeLevel extends RegularLevel {
 
     @Override
     protected int standardRooms(boolean forceMax) {
-        return 10;
+        return 6;
     }
 
     @Override

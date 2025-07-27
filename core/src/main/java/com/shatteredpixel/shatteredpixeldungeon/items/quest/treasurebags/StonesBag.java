@@ -38,7 +38,7 @@ public class StonesBag extends TreasureBag {
     @Override
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
-        for(int i = 0; i < 5; i++) items.add(Generator.random(Generator.Category.STONE));
+        for(int i = 0; i < 7; i++) items.add(Generator.random(Generator.Category.STONE));
         return items;
     }
 
