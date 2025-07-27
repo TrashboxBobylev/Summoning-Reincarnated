@@ -600,7 +600,7 @@ public class Hero extends Char {
 	//I am lazy to implement interfaces
 	public boolean shoot(Char enemy, ToyKnife knife) {
 
-		this.enemy = enemy;
+		attackTarget = enemy;
 		boolean wasEnemy = enemy.alignment == Alignment.ENEMY
 				|| (enemy instanceof Mimic && enemy.alignment == Alignment.NEUTRAL);
 
@@ -2592,10 +2592,10 @@ public class Hero extends Char {
 		AttackIndicator.target(attackTarget);
 		boolean wasEnemy = attackTarget.alignment == Alignment.ENEMY
 				|| (attackTarget instanceof Mimic && attackTarget.alignment == Alignment.NEUTRAL);
-		if (wasEnemy && hasTalent(Talent.RUDE_STRIKE) && !enemy.isInvulnerable(getClass()) && Buff.count(this, Talent.RudeStrikeCounter.class, 1).count() >= 9 - pointsInTalent(Talent.RUDE_STRIKE)*2){
+		if (wasEnemy && hasTalent(Talent.RUDE_STRIKE) && !attackTarget.isInvulnerable(getClass()) && Buff.count(this, Talent.RudeStrikeCounter.class, 1).count() >= 9 - pointsInTalent(Talent.RUDE_STRIKE)*2){
 			hit = true;
 			buff(Talent.RudeStrikeCounter.class).detach();
-			Ballistica aim = new Ballistica(pos, enemy.pos, Ballistica.WONT_STOP);
+			Ballistica aim = new Ballistica(pos, attackTarget.pos, Ballistica.WONT_STOP);
 			Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC, 2f, 0.8f);
 			Sample.INSTANCE.play(Assets.Sounds.BLAST, 0.66f);
 
@@ -2618,9 +2618,9 @@ public class Hero extends Char {
 				);
 			}
 
-			enemy.damage(damageRoll()*2, new WandOfDisintegration());
+			attackTarget.damage(damageRoll()*2, new WandOfDisintegration());
 			GameScene.shake(1.25f, 0.5f);
-			enemy.sprite.emitter().burst(MagicMissile.WardParticle.UP, 8);
+			attackTarget.sprite.emitter().burst(MagicMissile.WardParticle.UP, 8);
 		} else {
 			hit = attack(attackTarget);
 		}

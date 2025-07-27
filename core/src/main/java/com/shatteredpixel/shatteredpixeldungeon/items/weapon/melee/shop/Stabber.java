@@ -55,7 +55,7 @@ public class Stabber extends MeleeWeapon {
     public int damageRoll(Char owner) {
         if (owner instanceof Hero) {
             Hero hero = (Hero)owner;
-            Char enemy = hero.enemy();
+            Char enemy = hero.attackTarget();
             if (enemy instanceof Mob && ((Mob) enemy).state != ((Mob) enemy).HUNTING && ((Mob) enemy).surprisedBy(owner)) {
                 //grims non-hunting targets
                 Weapon weapon = new Weapon() {
