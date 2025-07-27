@@ -69,8 +69,8 @@ public class FloatingText extends RenderedTextBlock {
 	public static int DEFERRED  = 15;
 	public static int CORRUPTION= 16;
 	public static int AMULET    = 17;
-	public static int KARMA     = 25;
-	public static int FROSTBURN = 26;
+	public static int KARMA     = 27;
+	public static int FROSTBURN = 28;
 
 	//positive icons
 	public static int HEALING   = 18;
@@ -78,8 +78,8 @@ public class FloatingText extends RenderedTextBlock {
 	public static int EXPERIENCE= 20;
 	public static int STRENGTH  = 21;
 	public static int ATTUNEMENT= 22;
-	public static int MANA      = 27;
-	public static int ALLY_TAG  = 28;
+	public static int MANA      = 29;
+	public static int ALLY_TAG  = 30;
 
 	//currency icons
 	public static int GOLD      = 23;

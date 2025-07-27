@@ -175,8 +175,8 @@ public class Badges {
 		RESEARCHER_3                ( 85, BadgeType.JOURNAL ),
 		GAMES_PLAYED_3              ( 86, BadgeType.GLOBAL ),
 		HIGH_SCORE_3                ( 87 ),
-		ATTUNEMENT_ATTAINED_4       ( 87 ),
-		ATTUNEMENT_ATTAINED_5       ( 88 ),
+		ATTUNEMENT_ATTAINED_4       ( 88 ),
+		ATTUNEMENT_ATTAINED_5       ( 89 ),
 
 		//platinum
 		MANY_BUFFS                  ( 96 ),
