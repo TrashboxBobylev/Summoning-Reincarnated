@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.RunicShell;
 import com.watabou.utils.Bundle;
 
 import java.util.ArrayList;
@@ -126,8 +127,12 @@ public abstract class ShieldBuff extends Buff {
 			});
 			for (ShieldBuff buff : buffs){
 				if (buff.shielding() <= 0) continue;
-				damage = buff.absorbDamage(damage);
+                int shieldDmg = damage;
+                if (target.buff(RunicShell.EmpowerTracker.class) != null)
+                    shieldDmg *= 0.67f;
+                damage = buff.absorbDamage(shieldDmg);
 				if (buff.shielding() <= 0){
+                    Buff.detach(target, RunicShell.EmpowerTracker.class);
 					if (target instanceof Hero && ((Hero) target).hasTalent(Talent.PROVOKED_ANGER)){
 						Buff.affect(target, Talent.ProvokedAngerTracker.class, 5f);
 					}
