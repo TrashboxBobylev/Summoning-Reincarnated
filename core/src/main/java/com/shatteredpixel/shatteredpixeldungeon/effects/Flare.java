@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -58,7 +58,7 @@ public class Flare extends Visual {
 		
 		super( 0, 0, 0, 0 );
 
-		int gradient[] = {0xFFFFFFFF, 0x00FFFFFF};
+		int gradient[] = {0xFFFFFFFF, 0xBBFFFFFF, 0x88FFFFFF, 0x00FFFF, 0x00FFFFFF};
 		texture = TextureCache.createGradient( gradient );
 		
 		this.nRays = nRays;

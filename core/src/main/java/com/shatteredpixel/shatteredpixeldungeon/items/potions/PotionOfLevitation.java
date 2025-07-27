@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -64,7 +64,7 @@ public class PotionOfLevitation extends Potion {
 	@Override
 	public void apply( Hero hero ) {
 		identify();
-		Buff.affect( hero, Levitation.class, Levitation.DURATION );
+		Buff.prolong( hero, Levitation.class, Levitation.DURATION );
 		GLog.i( Messages.get(this, "float") );
 	}
 

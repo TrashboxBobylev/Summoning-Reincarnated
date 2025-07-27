@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -49,7 +49,7 @@ public class ElixirOfIcyTouch extends Elixir {
 	
 	@Override
 	public void apply(Hero hero) {
-		Buff.affect(hero, FrostImbue.class, FrostImbue.DURATION);
+		Buff.prolong(hero, FrostImbue.class, FrostImbue.DURATION);
 		hero.sprite.emitter().burst(SnowParticle.FACTORY, 5);
 	}
 

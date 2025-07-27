@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -43,7 +43,8 @@ public class ShatteredPixelDungeon extends Game {
 	public static final int v2_4_2 = 782;
 	public static final int v2_5_4 = 802;
 
-	public static final int v3_0_0 = 831;
+	public static final int v3_0_2 = 833;
+	public static final int v3_1_0 = 846;
 	
 	public ShatteredPixelDungeon( PlatformSupport platform ) {
 		super( sceneClass == null ? TitleScene.class : sceneClass, platform );

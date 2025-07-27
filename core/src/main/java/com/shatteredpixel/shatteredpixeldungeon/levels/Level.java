@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -752,7 +752,9 @@ public abstract class Level implements Bundlable {
 		PathFinder.buildDistanceMap(Dungeon.hero.pos, BArray.or(passable, avoid, null));
 
 		Mob mob = createMob();
-		mob.state = mob.WANDERING;
+		if (mob.state != mob.PASSIVE) {
+			mob.state = mob.WANDERING;
+		}
 		int tries = 30;
 		do {
 			mob.pos = randomRespawnCell(mob);
@@ -951,6 +953,12 @@ public abstract class Level implements Bundlable {
 		level.avoid[cell]			= (flags & Terrain.AVOID) != 0;
 		level.pit[cell]			    = (flags & Terrain.PIT) != 0;
 		level.water[cell]			= terrain == Terrain.WATER;
+
+		if (level instanceof SewerLevel){
+			if (level.map[cell] == Terrain.REGION_DECO || level.map[cell] == Terrain.REGION_DECO_ALT){
+				level.flamable[cell] = true;
+			}
+		}
 
 		for (int i : PathFinder.NEIGHBOURS9){
 			i = cell + i;
@@ -1537,8 +1545,8 @@ public abstract class Level implements Bundlable {
 
 	}
 
-	public boolean isLevelExplored( int depth ){
-		return false;
+	public float levelExplorePercent( int depth ){
+		return 0;
 	}
 	
 	public int distance( int a, int b ) {

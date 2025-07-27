@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -343,7 +343,7 @@ abstract public class Weapon extends KindOfWeapon implements WeaponEnchantable {
 			reach += 2;
 		}
 		if (hasEnchant(Projecting.class, owner)){
-			return reach + Math.round(enchantment.procChanceMultiplier(this, owner));
+			return reach + Math.round(Enchantment.genericProcChanceMultiplier(this, owner));
 		} else {
 			return reach;
 		}

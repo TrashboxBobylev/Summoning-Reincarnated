@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -47,7 +47,7 @@ public class PotionOfInvisibility extends Potion {
 	@Override
 	public void apply( Hero hero ) {
 		identify();
-		Buff.affect( hero, Invisibility.class, Invisibility.DURATION );
+		Buff.prolong( hero, Invisibility.class, Invisibility.DURATION );
 		for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
 			if (mob instanceof Minion && hero.fieldOfView[mob.pos]) {
 				Buff.affect(mob, Invisibility.class, Invisibility.DURATION);

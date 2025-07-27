@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -110,7 +110,17 @@ public class PlantsRoom extends StandardRoom {
 			door.set( Door.Type.REGULAR );
 		}
 	}
-	
+
+	@Override
+	public boolean canPlaceItem(Point p, Level l) {
+		return super.canPlaceItem(p, l) && l.plants.get(l.pointToCell(p)) == null;
+	}
+
+	@Override
+	public boolean canPlaceCharacter(Point p, Level l) {
+		return super.canPlaceCharacter(p, l) && l.plants.get(l.pointToCell(p)) == null;
+	}
+
 	private static Plant.Seed randomSeed(){
 		Plant.Seed result;
 		do {

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -58,7 +58,7 @@ public class RatKingSprite extends MobSprite {
 
 		if (Dungeon.hero != null && Dungeon.hero.armorAbility instanceof Ratmogrify){
 			c = 24;
-			if (parent != null) aura(0xFFFF00);
+			if (parent != null) aura(0xFFFF00, 5);
 		}
 
 		texture( Assets.Sprites.RATKING );
@@ -86,7 +86,7 @@ public class RatKingSprite extends MobSprite {
 	public void link(Char ch) {
 		super.link(ch);
 		if (Dungeon.hero != null && Dungeon.hero.armorAbility instanceof Ratmogrify){
-			aura(0xFFFF00);
+			aura(0xFFFF00, 5);
 		}
 	}
 }

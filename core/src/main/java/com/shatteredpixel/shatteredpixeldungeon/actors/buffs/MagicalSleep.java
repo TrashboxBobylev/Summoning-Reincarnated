@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -46,6 +46,7 @@ public class MagicalSleep extends Buff {
 				if (target.HP == target.HT) {
 					if (target instanceof  Hero) GLog.i(Messages.get(this, "toohealthy"));
 					detach();
+					return true;
 				} else {
 					if (target instanceof  Hero) GLog.i(Messages.get(this, "fallasleep"));
 				}
@@ -81,10 +82,14 @@ public class MagicalSleep extends Buff {
 
 	@Override
 	public void detach() {
-		if (target.paralysed > 0)
+		if (target.paralysed > 0) {
 			target.paralysed--;
-		if (target instanceof Hero)
+		}
+		if (target instanceof Hero) {
 			((Hero) target).resting = false;
+		} else if (target instanceof Mob && target.alignment == Char.Alignment.ALLY && ((Mob) target).state == ((Mob) target).SLEEPING){
+			((Mob) target).state = ((Mob) target).WANDERING;
+		}
 		super.detach();
 	}
 

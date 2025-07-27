@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -71,6 +71,13 @@ public class WandOfWarding extends Wand {
 		if (cursed)                                 return super.collisionProperties(target);
 		else if (!Dungeon.level.heroFOV[target])    return Ballistica.PROJECTILE;
 		else                                        return Ballistica.STOP_TARGET;
+	}
+
+	@Override
+	public void execute(Hero hero, String action) {
+		//cursed warding does use targeting as it's just doing regular cursed zaps
+		usesTargeting = cursed && cursedKnown;
+		super.execute(hero, action);
 	}
 
 	private boolean wardAvailable = true;

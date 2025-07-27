@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -66,9 +66,11 @@ public class MovieClip extends Image {
 			while (frameTimer > curAnim.delay) {
 				frameTimer -= curAnim.delay;
 				if (curFrame >= curAnim.frames.length - 1) {
-					curFrame = curAnim.frames.length - 1;
 					if (curAnim.looped) {
 						curFrame = 0;
+					} else {
+						curFrame = curAnim.frames.length - 1;
+						frameTimer = 0;
 					}
 					finished = true;
 					if (listener != null) {

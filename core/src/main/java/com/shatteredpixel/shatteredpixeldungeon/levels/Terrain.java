@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -64,7 +64,8 @@ public class Terrain {
 	public static final int STATUE			= 25;
 	public static final int STATUE_SP		= 26;
 	//These decorations are environment-specific
-	//33 and 34 are reserved for future statue-like decorations
+	public static final int REGION_DECO		= 33;
+	public static final int REGION_DECO_ALT = 34; //alt visual for region deco, sometimes SP, sometimes other
 	public static final int MINE_CRYSTAL    = 35;
 	public static final int MINE_BOULDER    = 36;
 
@@ -119,6 +120,8 @@ public class Terrain {
 		flags[STATUE] = SOLID;
 		flags[STATUE_SP] = flags[STATUE];
 
+		flags[REGION_DECO] = flags[STATUE];
+		flags[REGION_DECO_ALT] = flags[STATUE_SP];
 		flags[MINE_CRYSTAL] = SOLID;
 		flags[MINE_BOULDER] = SOLID;
 

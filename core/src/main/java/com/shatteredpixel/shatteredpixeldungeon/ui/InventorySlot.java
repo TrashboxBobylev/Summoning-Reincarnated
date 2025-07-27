@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -92,12 +92,14 @@ public class InventorySlot extends ItemSlot {
 			if (item.cursed && item.cursedKnown) {
 				bg.ra = +0.3f;
 				bg.ga = -0.15f;
+				bg.ba = -0.15f;
 			} else if (!item.isIdentified()) {
 				if ((item instanceof EquipableItem || item instanceof Wand) && item.cursedKnown){
-					bg.ba = 0.3f;
+					bg.ba = +0.3f;
+					bg.ra = -0.1f;
 				} else {
-					bg.ra = 0.3f;
-					bg.ba = 0.3f;
+					bg.ra = +0.35f;
+					bg.ba = +0.35f;
 				}
 			}
 

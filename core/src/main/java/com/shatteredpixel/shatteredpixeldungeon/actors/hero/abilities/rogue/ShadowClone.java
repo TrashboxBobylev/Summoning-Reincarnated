@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -168,7 +168,7 @@ public class ShadowClone extends ArmorAbility {
 				HT += hpBonus;
 				HP += hpBonus;
 			}
-			defenseSkill = heroLevel + 5; //equal to base hero defense skill
+			defenseSkill = heroLevel + 4; //equal to base hero defense skill
 		}
 
 		@Override

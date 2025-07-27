@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -136,6 +137,7 @@ public class BuffIndicator extends Component {
 	public static final int ILLUMINATED = 81;
 	public static final int TRINITY_FORM= 82;
 	public static final int MANY_POWER  = 83;
+	public static final int SEAL_SHIELD = 84;
 	public static final int DECAY       = 1_08;
 	public static final int KARMA       = 2_08;
 	public static final int ERADICATION = 3_08;
@@ -276,6 +278,10 @@ public class BuffIndicator extends Component {
 				icon.givePointerPriority();
 				cumulativeAdjust -= leftAdjust;
 			}
+		}
+
+		if (this == heroInstance && buffButtons.size() >= 10){
+			Badges.validateManyBuffs();
 		}
 	}
 

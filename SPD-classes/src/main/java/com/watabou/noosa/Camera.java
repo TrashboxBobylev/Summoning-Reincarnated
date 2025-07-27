@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -139,13 +139,13 @@ public class Camera extends Gizmo {
 		panIntensity = 0f;
 	}
 	
-	public void zoom( float value ) {
+	public synchronized void zoom( float value ) {
 		zoom( value,
 			scroll.x + width / 2f,
 			scroll.y + height / 2f );
 	}
 	
-	public void zoom( float value, float fx, float fy ) {
+	public synchronized void zoom( float value, float fx, float fy ) {
 
 		PointF offsetAdjust = centerOffset.clone();
 		centerOffset.scale(zoom).invScale(value);
@@ -157,7 +157,7 @@ public class Camera extends Gizmo {
 		snapTo( fx - offsetAdjust.x, fy - offsetAdjust.y );
 	}
 	
-	public void resize( int width, int height ) {
+	public synchronized void resize( int width, int height ) {
 		this.width = width;
 		this.height = height;
 		screenWidth = (int)(width * zoom);
@@ -175,7 +175,7 @@ public class Camera extends Gizmo {
 	float followDeadzone = 0f;
 	
 	@Override
-	public void update() {
+	public synchronized void update() {
 		super.update();
 
 		float deadX = 0;
@@ -236,12 +236,12 @@ public class Camera extends Gizmo {
 		return x >= this.x && y >= this.y && x < this.x + screenWidth && y < this.y + screenHeight;
 	}
 	
-	public void shift( PointF point ){
+	public synchronized void shift( PointF point ){
 		scroll.offset(point);
 		panIntensity = 0f;
 	}
 
-	public void setCenterOffset( float x, float y ){
+	public synchronized void setCenterOffset( float x, float y ){
 		scroll.x    += x - centerOffset.x;
 		scroll.y    += y - centerOffset.y;
 		if (panTarget != null) {
@@ -251,7 +251,7 @@ public class Camera extends Gizmo {
 		centerOffset.set(x, y);
 	}
 	
-	public void snapTo(float x, float y ) {
+	public synchronized void snapTo(float x, float y ) {
 		scroll.set( x - width / 2f, y - height / 2f ).offset(centerOffset);
 		panIntensity = 0f;
 		followTarget = null;
@@ -261,18 +261,22 @@ public class Camera extends Gizmo {
 		snapTo( point.x, point.y );
 	}
 	
-	public void panTo( PointF dst, float intensity ){
+	public synchronized void panTo( PointF dst, float intensity ){
 		panTarget = dst.offset(centerOffset);
 		panIntensity = intensity;
 		followTarget = null;
 	}
 	
-	public void panFollow(Visual target, float intensity ){
+	public synchronized void panFollow(Visual target, float intensity ){
 		followTarget = target;
 		panIntensity = intensity;
 	}
 
-	public void setFollowDeadzone( float deadzone ){
+	public synchronized Visual followTarget(){
+		return followTarget;
+	}
+
+	public synchronized void setFollowDeadzone( float deadzone ){
 		followDeadzone = deadzone;
 	}
 	
@@ -313,7 +317,7 @@ public class Camera extends Gizmo {
 		
 	}
 	
-	public void shake( float magnitude, float duration ) {
+	public synchronized void shake( float magnitude, float duration ) {
 		shakeMagX = shakeMagY = magnitude;
 		shakeTime = shakeDuration = duration;
 	}

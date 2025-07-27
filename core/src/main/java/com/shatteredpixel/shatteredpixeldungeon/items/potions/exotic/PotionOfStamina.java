@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -42,7 +42,7 @@ public class PotionOfStamina extends ExoticPotion {
 	public void apply(Hero hero) {
 		identify();
 		
-		Buff.affect(hero, Stamina.class, Stamina.DURATION);
+		Buff.prolong(hero, Stamina.class, Stamina.DURATION);
 		SpellSprite.show(hero, SpellSprite.HASTE, 0.5f, 1, 0.5f);
 	}
 

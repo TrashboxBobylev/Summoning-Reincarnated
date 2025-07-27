@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -80,7 +80,7 @@ public class LifeLink extends FlavourBuff {
 
 	@Override
 	public float iconFadePercent() {
-		int duration = 4 + 2*Dungeon.hero.pointsInTalent(Talent.LIFE_LINK);
+		int duration = Math.round(6.67f + 3.33f*Dungeon.hero.pointsInTalent(Talent.LIFE_LINK));
 		return Math.max(0, (duration - visualcooldown()) / duration);
 	}
 

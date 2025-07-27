@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -36,6 +36,16 @@ public class FissureRoom extends StandardRoom {
 	@Override
 	public float[] sizeCatProbs() {
 		return new float[]{6, 3, 1};
+	}
+
+	@Override
+	public int minHeight() {
+		return Math.max(5, super.minHeight());
+	}
+
+	@Override
+	public int minWidth() {
+		return Math.max(5, super.minWidth());
 	}
 	
 	@Override

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -544,29 +544,29 @@ public class MobSpawner extends Actor {
 		for (int i = 0; i < rotation.size(); i++) {
 			if (Random.Float() < altChance) {
 				Class<? extends Mob> cl = rotation.get(i);
-				if (cl == Rat.class) {
-					cl = Albino.class;
-				} else if (cl == Slime.class) {
-					cl = CausticSlime.class;
-				} else if (cl == Thief.class) {
-					cl = Bandit.class;
-				} else if (cl == Necromancer.class) {
-					cl = SpectralNecromancer.class;
-				} else if (cl == Brute.class) {
-					cl = ArmoredBrute.class;
-				} else if (cl == DM200.class) {
-					cl = DM201.class;
-				} else if (cl == Monk.class) {
-					cl = Senior.class;
-				} else if (cl == Scorpio.class) {
-					cl = Acidic.class;
-				} else if (cl == GhostChicken.class || cl == DarkestElf.class){
-					cl = AbyssalNightmare.class;
-				} else if (cl == BlinkingMan.class || cl == Trappet.class){
-					cl = Dragon.class;
-				} else if (cl == Phantom.class || cl == SpectreRat.class){
-					cl = LostSpirit.class;
-				}
+				if (cl == Rat.class)                cl = Albino.class;
+				else if (cl == Gnoll.class)         cl = GnollExile.class;
+				else if (cl == Crab.class)          cl = HermitCrab.class;
+				else if (cl == Slime.class)         cl = CausticSlime.class;
+
+				else if (cl == Thief.class)         cl = Bandit.class;
+				else if (cl == Necromancer.class)   cl = SpectralNecromancer.class;
+
+				else if (cl == Brute.class)         cl = ArmoredBrute.class;
+				else if (cl == DM200.class)         cl = DM201.class;
+
+				else if (cl == Monk.class)          cl = Senior.class;
+				//chaos elemental spawning happens in Elemental.Random
+
+				else if (cl == Scorpio.class)       cl = Acidic.class;
+                else if (cl == GhostChicken.class || cl == DarkestElf.class){
+                    cl = AbyssalNightmare.class;
+                } else if (cl == BlinkingMan.class || cl == Trappet.class){
+                    cl = Dragon.class;
+                } else if (cl == Phantom.class || cl == SpectreRat.class){
+                    cl = LostSpirit.class;
+                }
+
 				rotation.set(i, cl);
 			}
 		}

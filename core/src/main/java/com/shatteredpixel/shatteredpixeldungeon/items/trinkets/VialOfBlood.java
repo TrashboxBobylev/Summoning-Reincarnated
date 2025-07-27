@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -50,8 +50,8 @@ public class VialOfBlood extends Trinket {
 		} else {
 			return Messages.get(this,
 					"typical_stats_desc",
-					Messages.decimalFormat("#.##", 100*(totalHealMultiplier(buffedLvl())-1f)),
-					Integer.toString(maxHealPerTurn(buffedLvl())));
+					Messages.decimalFormat("#.##", 100*(totalHealMultiplier(0)-1f)),
+					Integer.toString(maxHealPerTurn(0)));
 		}
 	}
 

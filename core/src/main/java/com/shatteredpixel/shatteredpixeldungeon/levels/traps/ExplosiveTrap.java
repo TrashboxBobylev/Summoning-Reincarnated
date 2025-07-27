@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -26,7 +26,11 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.traps;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.watabou.utils.PathFinder;
 
 public class ExplosiveTrap extends Trap {
 
@@ -37,6 +41,13 @@ public class ExplosiveTrap extends Trap {
 
 	@Override
 	public void activate() {
+
+		for( int i : PathFinder.NEIGHBOURS9) {
+			if (Actor.findChar(pos+i) instanceof Mob){
+				Buff.prolong(Actor.findChar(pos+i), Trap.HazardAssistTracker.class, HazardAssistTracker.DURATION);
+			}
+		}
+
 		new Bomb().explode(pos);
 		if (reclaimed && !Dungeon.hero.isAlive()) {
 			Badges.validateDeathFromFriendlyMagic();

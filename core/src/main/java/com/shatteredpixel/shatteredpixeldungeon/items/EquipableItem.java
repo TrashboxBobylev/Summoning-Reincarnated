@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -43,8 +43,6 @@ public abstract class EquipableItem extends Item {
 
 	public static final String AC_EQUIP		= "EQUIP";
 	public static final String AC_UNEQUIP	= "UNEQUIP";
-
-	public int customNoteID = -1;
 
 	{
 		bones = true;
@@ -165,19 +163,16 @@ public abstract class EquipableItem extends Item {
 
 	public boolean equippedBefore = false;
 	private static final String EQUIPPED_BEFORE       = "equippedBefore";
-	private static final String CUSTOM_NOTE_ID = "custom_note_id";
 
-	@Override
+    @Override
 	public void storeInBundle(Bundle bundle) {
 		super.storeInBundle(bundle);
 		bundle.put(EQUIPPED_BEFORE, equippedBefore);
-		if (customNoteID != -1)     bundle.put(CUSTOM_NOTE_ID, customNoteID);
 	}
 
 	@Override
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
 		equippedBefore = bundle.getBoolean(EQUIPPED_BEFORE);
-		if (bundle.contains(CUSTOM_NOTE_ID))    customNoteID = bundle.getInt(CUSTOM_NOTE_ID);
 	}
 }

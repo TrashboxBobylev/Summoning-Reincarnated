@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -58,6 +58,7 @@ public class FlashingTrap extends Trap {
 			Buff.prolong( c, Cripple.class, Cripple.DURATION*2f );
 			
 			if (c instanceof Mob) {
+				Buff.prolong(c, Trap.HazardAssistTracker.class, HazardAssistTracker.DURATION);
 				if (((Mob)c).state == ((Mob)c).HUNTING) ((Mob)c).state = ((Mob)c).WANDERING;
 				((Mob)c).beckon( Dungeon.level.randomDestination( c ) );
 			}

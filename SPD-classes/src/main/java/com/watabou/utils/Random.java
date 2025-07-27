@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -174,19 +174,24 @@ public class Random {
 	}
 
 	//returns an index from chances, the probability of each index is the weight values in changes
+	//negative values are treated as 0
 	public static int chances( float[] chances ) {
 		
 		int length = chances.length;
 		
 		float sum = 0;
 		for (int i=0; i < length; i++) {
-			sum += chances[i];
+			sum += Math.max(0, chances[i]);
+		}
+
+		if (sum <= 0){
+			return -1;
 		}
 		
 		float value = Float( sum );
 		sum = 0;
 		for (int i=0; i < length; i++) {
-			sum += chances[i];
+			sum += Math.max(0, chances[i]);
 			if (value < sum) {
 				return i;
 			}

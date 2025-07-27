@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -73,6 +73,10 @@ public class DungeonTerrainTilemap extends DungeonTilemap {
 				return DungeonTileSheet.RAISED_STATUE;
 			} else if (tile == Terrain.STATUE_SP) {
 				return DungeonTileSheet.RAISED_STATUE_SP;
+			} else if (tile == Terrain.REGION_DECO) {
+				return DungeonTileSheet.RAISED_REGION_DECO;
+			} else if (tile == Terrain.REGION_DECO_ALT) {
+				return DungeonTileSheet.RAISED_REGION_DECO_ALT;
 			} else if (tile == Terrain.MINE_CRYSTAL) {
 				return DungeonTileSheet.getVisualWithAlts(
 						DungeonTileSheet.RAISED_MINE_CRYSTAL,

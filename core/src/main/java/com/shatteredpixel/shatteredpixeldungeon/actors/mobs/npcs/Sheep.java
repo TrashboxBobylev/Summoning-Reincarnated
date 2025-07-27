@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -44,26 +44,23 @@ public class Sheep extends NPC {
 		spriteClass = SheepSprite.class;
 	}
 
-	public float lifespan;
-
-	private boolean initialized = false;
+	private float lifespan;
 
 	@Override
 	protected boolean act() {
 		if (Dungeon.level.heroFOV[pos]){
 			Bestiary.setSeen(getClass());
 		}
-		if (initialized) {
-			HP = 0;
+		HP = 0;
 
-			destroy();
-			sprite.die();
-
-		} else {
-			initialized = true;
-			spend( lifespan + Random.Float(-2, 2) );
-		}
+		destroy();
+		sprite.die();
 		return true;
+	}
+
+	public void initialize(float lifespan){
+		this.lifespan = lifespan;
+		spend( lifespan + Random.Float(-2, 2) );
 	}
 
 	@Override
@@ -83,6 +80,7 @@ public class Sheep extends NPC {
 
 	@Override
 	public boolean interact(Char c) {
+		Bestiary.setSeen(getClass());
 		sprite.showStatus( CharSprite.NEUTRAL, Messages.get(this, Random.element( LINE_KEYS )) );
 		if (c == Dungeon.hero) {
 			Dungeon.hero.spendAndNext(1f);

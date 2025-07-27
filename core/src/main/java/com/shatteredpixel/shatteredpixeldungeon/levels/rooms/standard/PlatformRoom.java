@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -52,7 +52,7 @@ public class PlatformRoom extends StandardRoom {
 	
 	@Override
 	public void merge(Level l, Room other, Rect merge, int mergeTerrain) {
-		if (mergeTerrain != Terrain.CHASM
+		if (mergeTerrain != Terrain.CHASM && connected.containsKey(other)
 				&& (other instanceof PlatformRoom || other instanceof ChasmRoom)){
 			super.merge(l, other, merge, Terrain.CHASM);
 			Painter.set(l, connected.get(other), Terrain.EMPTY_SP);

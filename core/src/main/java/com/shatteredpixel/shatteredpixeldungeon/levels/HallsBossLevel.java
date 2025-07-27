@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -135,10 +135,13 @@ public class HallsBossLevel extends Level {
 
 		}
 
+		int exitCell = width/2 + ((ROOM_TOP+1) * width);
+		int bossPos = exitCell + width*3;
+
 		boolean[] patch = Patch.generate(width, height, 0.20f, 0, true);
 		for (int i = 0; i < length(); i++) {
 			if (map[i] == Terrain.EMPTY && patch[i]) {
-				map[i] = Terrain.STATUE;
+				map[i] = distance(i, bossPos)+Random.Int(5) >= 10 ? Terrain.REGION_DECO : Terrain.STATUE;
 			}
 		}
 
@@ -148,7 +151,7 @@ public class HallsBossLevel extends Level {
 
 		patch = Patch.generate(width, height, 0.30f, 3, true);
 		for (int i = 0; i < length(); i++) {
-			if ((map[i] == Terrain.EMPTY || map[i] == Terrain.STATUE) && patch[i]) {
+			if ((map[i] == Terrain.EMPTY || map[i] == Terrain.STATUE || map[i] == Terrain.REGION_DECO) && patch[i]) {
 				map[i] = Terrain.WATER;
 			}
 		}
@@ -167,7 +170,6 @@ public class HallsBossLevel extends Level {
 
 		Painter.fill(this, ROOM_LEFT+3, ROOM_TOP+2, 3, 4, Terrain.EMPTY );
 
-		int exitCell = width/2 + ((ROOM_TOP+1) * width);
 		LevelTransition exit = new LevelTransition(this, exitCell, LevelTransition.Type.REGULAR_EXIT);
 		exit.top--;
 		exit.left--;
@@ -181,6 +183,12 @@ public class HallsBossLevel extends Level {
 		vis = new CenterPieceWalls();
 		vis.pos(ROOM_LEFT, ROOM_TOP);
 		customWalls.add(vis);
+
+		for (int i = 0; i < length(); i++) {
+			if (map[i] == Terrain.REGION_DECO && Random.Int(2) == 0) {
+				map[i] = Terrain.REGION_DECO_ALT;
+			}
+		}
 
 		//basic version of building flag maps for the pathfinder test
 		for (int i = 0; i < length; i++){
@@ -370,6 +378,9 @@ public class HallsBossLevel extends Level {
 			case Terrain.STATUE:
 			case Terrain.STATUE_SP:
 				return Messages.get(HallsLevel.class, "statue_name");
+			case Terrain.REGION_DECO:
+			case Terrain.REGION_DECO_ALT:
+				return Messages.get(HallsLevel.class, "region_deco_name");
 			default:
 				return super.tileName( tile );
 		}
@@ -385,6 +396,9 @@ public class HallsBossLevel extends Level {
 				return Messages.get(HallsLevel.class, "statue_desc");
 			case Terrain.BOOKSHELF:
 				return Messages.get(HallsLevel.class, "bookshelf_desc");
+			case Terrain.REGION_DECO:
+			case Terrain.REGION_DECO_ALT:
+				return Messages.get(HallsLevel.class, "region_deco_desc");
 			default:
 				return super.tileDesc( tile );
 		}

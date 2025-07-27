@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -192,6 +192,7 @@ public enum Rankings {
 					Statistics.heldItemValue += i.value();
 					if (i instanceof CorpseDust && Statistics.deepestFloor >= 10){
 						// in case player kept the corpse dust, for a necromancer run
+						//we also override the score here, ignoring penalties
 						Statistics.questScores[1] = 2000;
 					}
 				}
@@ -202,8 +203,8 @@ public enum Rankings {
 
 			Statistics.exploreScore = 0;
 			int scorePerFloor = Statistics.floorsExplored.size * (Dungeon.branch == AbyssLevel.BRANCH ? 150 : 50);
-			for (Boolean b : Statistics.floorsExplored.valueList()){
-				if (b) Statistics.exploreScore += scorePerFloor;
+			for (float percentExplored : Statistics.floorsExplored.valueList()){
+				Statistics.exploreScore += Math.round(percentExplored*scorePerFloor);
 			}
 
 			Statistics.totalBossScore = 0;

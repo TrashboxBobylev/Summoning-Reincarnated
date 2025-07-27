@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -45,7 +45,7 @@ public class PotionOfMagicalSight extends ExoticPotion {
 	@Override
 	public void apply(Hero hero) {
 		identify();
-		Buff.affect(hero, MagicalSight.class, MagicalSight.DURATION);
+		Buff.prolong(hero, MagicalSight.class, MagicalSight.DURATION);
 		SpellSprite.show(hero, SpellSprite.VISION);
 		Dungeon.observe();
 		

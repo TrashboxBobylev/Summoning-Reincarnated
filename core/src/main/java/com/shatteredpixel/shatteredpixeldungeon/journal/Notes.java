@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -39,9 +39,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.ImpShopkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.RatKing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Wandmaker;
+import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.LostBackpack;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.Key;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.BeaconOfReturning;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.WeakFloorRoom;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -129,6 +132,9 @@ public class Notes {
 		WELL_OF_AWARENESS,
 		SACRIFICIAL_FIRE,
 		STATUE,
+
+		LOST_PACK,
+		BEACON_LOCATION,
 		
 		GHOST,
 		RAT_KING,
@@ -188,6 +194,11 @@ public class Notes {
 				case STATUE:
 					return new Image(new StatueSprite());
 
+				case LOST_PACK:
+					return Icons.get(Icons.BACKPACK_LRG);
+				case BEACON_LOCATION:
+					return new ItemSprite(ItemSpriteSheet.RETURN_BEACON);
+
 				case GHOST:
 					return new Image(new GhostSprite());
 				case RAT_KING:
@@ -215,6 +226,9 @@ public class Notes {
 				case LARGE_FLOOR:   return Messages.get(Level.Feeling.class, "large_title");
 				case TRAPS_FLOOR:   return Messages.get(Level.Feeling.class, "traps_title");
 				case SECRETS_FLOOR: return Messages.get(Level.Feeling.class, "secrets_title");
+
+				case LOST_PACK:     return Messages.get(LostBackpack.class, "name");
+				case BEACON_LOCATION:return Messages.get(BeaconOfReturning.class, "name");
 			}
 		}
 
@@ -241,6 +255,9 @@ public class Notes {
 				case WELL_OF_AWARENESS: return Messages.get(WaterOfAwareness.class, "desc");
 				case SACRIFICIAL_FIRE:  return Messages.get(SacrificialFire.class, "desc");
 				case STATUE:            return Messages.get(Statue.class, "desc");
+
+				case LOST_PACK:         return Messages.get(LostBackpack.class, "desc");
+				case BEACON_LOCATION:   return Messages.get(BeaconOfReturning.class, "desc");
 
 				case GHOST:         return Messages.get(Ghost.class, "desc");
 				case RAT_KING:      return new RatKing().description(); //variable description based on holiday/run state
@@ -361,7 +378,9 @@ public class Notes {
 	public enum CustomType {
 		TEXT,
 		DEPTH,
-		ITEM,
+		ITEM_TYPE,
+		SPECIFIC_ITEM,
+		ITEM //for pre-3.1 save conversion
 	}
 
 	public static class CustomRecord extends Record {
@@ -389,8 +408,15 @@ public class Notes {
 			body = desc;
 		}
 
+		public CustomRecord(Class itemCls, String title, String desc) {
+			type = CustomType.ITEM_TYPE;
+			itemClass = itemCls;
+			this.title = title;
+			body = desc;
+		}
+
 		public CustomRecord(Item item, String title, String desc) {
-			type = CustomType.ITEM;
+			type = CustomType.SPECIFIC_ITEM;
 			itemClass = item.getClass();
 			this.title = title;
 			body = desc;
@@ -422,7 +448,8 @@ public class Notes {
 					return Icons.SCROLL_COLOR.get();
 				case DEPTH:
 					return Icons.STAIRS.get();
-				case ITEM:
+				case ITEM_TYPE:
+				case SPECIFIC_ITEM:
 					Item i = (Item) Reflection.newInstance(itemClass);
 					return new ItemSprite(i);
 			}
@@ -437,7 +464,8 @@ public class Notes {
 					BitmapText text = new BitmapText(Integer.toString(depth()), PixelScene.pixelFont);
 					text.measure();
 					return text;
-				case ITEM:
+				case ITEM_TYPE:
+				case SPECIFIC_ITEM:
 					Item item = (Item) Reflection.newInstance(itemClass);
 					if (item.isIdentified() && item.icon != -1) {
 						Image secondIcon = new Image(Assets.Sprites.ITEM_ICONS);
@@ -497,7 +525,18 @@ public class Notes {
 			type = bundle.getEnum(TYPE, CustomType.class);
 			ID = bundle.getInt(ID_NUMBER);
 
-			if (bundle.contains(ITEM_CLASS)) itemClass = bundle.getClass(ITEM_CLASS);
+			if (bundle.contains(ITEM_CLASS)) {
+				itemClass = bundle.getClass(ITEM_CLASS);
+				if (type == CustomType.ITEM){
+					//prior to v3.1 specific item notes and item type notes were the same
+					//we assume notes are for a specific item if they're for an equipment
+					if (EquipableItem.class.isAssignableFrom(itemClass)){
+						type = CustomType.SPECIFIC_ITEM;
+					} else {
+						type = CustomType.ITEM_TYPE;
+					}
+				}
+			}
 
 			title = bundle.getString(TITLE);
 			body = bundle.getString(BODY);
@@ -532,11 +571,15 @@ public class Notes {
 			records.add( (Record) rec );
 		}
 	}
-	
+
 	public static boolean add( Landmark landmark ) {
-		LandmarkRecord l = new LandmarkRecord( landmark, Dungeon.depth );
+		return add( landmark, Dungeon.depth );
+	}
+	
+	public static boolean add( Landmark landmark, int depth ) {
+		LandmarkRecord l = new LandmarkRecord( landmark, depth );
 		if (!records.contains(l)) {
-			boolean result = records.add(new LandmarkRecord(landmark, Dungeon.depth));
+			boolean result = records.add(l);
 			Collections.sort(records, comparator);
 			return result;
 		}
@@ -544,11 +587,19 @@ public class Notes {
 	}
 
 	public static boolean contains( Landmark landmark ){
-		return records.contains(new LandmarkRecord( landmark, Dungeon.depth));
+		return contains( landmark, Dungeon.depth );
 	}
-	
+
+	public static boolean contains( Landmark landmark, int depth ){
+		return records.contains(new LandmarkRecord( landmark, depth));
+	}
+
 	public static boolean remove( Landmark landmark ) {
-		return records.remove( new LandmarkRecord(landmark, Dungeon.depth) );
+		return remove( landmark, Dungeon.depth );
+	}
+
+	public static boolean remove( Landmark landmark, int depth ) {
+		return records.remove( new LandmarkRecord(landmark, depth) );
 	}
 	
 	public static boolean add( Key key ){
@@ -640,7 +691,9 @@ public class Notes {
 
 	public static CustomRecord findCustomRecord( Class itemClass ){
 		for (Record rec : records){
-			if (rec instanceof CustomRecord && ((CustomRecord) rec).itemClass == itemClass) {
+			if (rec instanceof CustomRecord
+					&& ((CustomRecord) rec).type == CustomType.ITEM_TYPE
+					&& ((CustomRecord) rec).itemClass == itemClass) {
 				return (CustomRecord) rec;
 			}
 		}

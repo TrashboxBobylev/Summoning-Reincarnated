@@ -12,7 +12,7 @@ Note that Summoning: Reincarnated is _rolling release_ project, being compiled a
 
 There is no official blog or donation page, because I am unable to create and support both.
 
-The game also has a translation project hosted on [Transifex](https://www.transifex.com/trashboxbobylev/summoning-reincarnated/).
+The game also has a translation project hosted on [Transifex](https://explore.transifex.com/trashboxbobylev/summoning-reincarnated/).
 
 Note that **this repository does not accept pull requests!** The code here is provided in hopes that others may find it useful for their own projects, not to allow community contribution. Issue reports of all kinds (bug reports, feature requests, etc.) are welcome.
 

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2024 Evan Debenham
+ * Copyright (C) 2014-2025 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -28,7 +28,6 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.CaveRoom;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Point;
@@ -92,10 +91,4 @@ public class CaveExitRoom extends CaveRoom {
 		return super.canPlaceCharacter(p, l) && l.pointToCell(p) != l.exit();
 	}
 
-	@Override
-	public boolean connect(Room room) {
-		//cannot connect to entrance, otherwise works normally
-		if (room.isEntrance())  return false;
-		else                    return super.connect(room);
-	}
 }
