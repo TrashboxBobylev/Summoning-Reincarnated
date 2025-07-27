@@ -288,28 +288,28 @@ public class ShopRoom extends SpecialRoom {
 		} else {
 			MeleeWeapon w = null;
 			if (shopLevel() == 1) {
-				w = (MeleeWeapon) Generator.random(Generator.wepTiers[1]);
-				itemsToSpawn.add(Generator.random(Generator.misTiers[1]).quantity(2).identify(false));
+				w = (MeleeWeapon) Generator.random(Generator.wepTiers[0]);
+				itemsToSpawn.add(Generator.random(Generator.misTiers[0]).quantity(2).identify(false));
 				itemsToSpawn.add(new LeatherArmor().identify(false));
 			} else if (shopLevel() == 2) {
-				w = (MeleeWeapon) Generator.random(Generator.wepTiers[2]);
-				itemsToSpawn.add(Generator.random(Generator.misTiers[2]).quantity(2).identify(false));
+				w = (MeleeWeapon) Generator.random(Generator.wepTiers[1]);
+				itemsToSpawn.add(Generator.random(Generator.misTiers[1]).quantity(2).identify(false));
 				itemsToSpawn.add(new MailArmor().identify(false));
 			} else if (shopLevel() == 3) {
-				w = (MeleeWeapon) Generator.random(Generator.wepTiers[3]);
-				itemsToSpawn.add(Generator.random(Generator.misTiers[3]).quantity(2).identify(false));
+				w = (MeleeWeapon) Generator.random(Generator.wepTiers[2]);
+				itemsToSpawn.add(Generator.random(Generator.misTiers[2]).quantity(2).identify(false));
 				itemsToSpawn.add(new ScaleArmor().identify(false));
 			} else if (shopLevel() == 4 || Dungeon.depth == 20) {
-				w = (MeleeWeapon) Generator.random(Generator.wepTiers[4]);
-				itemsToSpawn.add(Generator.random(Generator.misTiers[4]).quantity(2).identify(false));
+				w = (MeleeWeapon) Generator.random(Generator.wepTiers[3]);
+				itemsToSpawn.add(Generator.random(Generator.misTiers[3]).quantity(2).identify(false));
 				itemsToSpawn.add(new PlateArmor().identify(false));
 				itemsToSpawn.add(new Torch());
 				itemsToSpawn.add(new Torch());
 				itemsToSpawn.add(new Torch());
 			}
 			if (Dungeon.scalingDepth() > 26) {
-				w = (MeleeWeapon) Generator.random(Generator.wepTiers[5]);
-				itemsToSpawn.add(Generator.random(Generator.misTiers[5]).quantity(2).identify());
+				w = (MeleeWeapon) Generator.random(Generator.wepTiers[4]);
+				itemsToSpawn.add(Generator.random(Generator.misTiers[4]).quantity(2).identify());
 				itemsToSpawn.add(ClassArmor.upgrade(Dungeon.hero, new PlateArmor()));
 				itemsToSpawn.add(Generator.randomUsingDefaults(Generator.Category.POTION));
 				itemsToSpawn.add(Generator.randomUsingDefaults(Generator.Category.SCROLL));
