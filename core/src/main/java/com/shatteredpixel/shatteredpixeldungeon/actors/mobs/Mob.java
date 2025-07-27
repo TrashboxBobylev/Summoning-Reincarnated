@@ -1132,37 +1132,9 @@ public abstract class Mob extends Char {
 			minion.beckon(target);
 		});
 
-		if (Dungeon.mode == Dungeon.GameMode.GAUNTLET && alignment == Alignment.ENEMY){
-			if (this instanceof Thief){
-				if (((Thief) this).item != null) {
-					Dungeon.level.drop( ((Thief) this).item, pos ).sprite.drop();
-					//updates position
-					if (((Thief) this).item instanceof Honeypot.ShatteredPot) ((Honeypot.ShatteredPot)((Thief) this).item).dropPot( this, pos );
-					((Thief) this).item = null;
-				}
-			}
-			boolean mobsAlive = false;
-			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
-				if (mob.isAlive() && mob.alignment == Alignment.ENEMY){
-					mobsAlive = true;
-				}
-			}
-			if (!mobsAlive && Dungeon.level.entrance == 0){
-				Dungeon.level.drop(new SkeletonKey(Dungeon.depth), Dungeon.hero.pos).sprite.drop();
+        gauntletProcessing();
 
-				int amountOfGold = 0;
-				Random.pushGenerator(Dungeon.seedCurDepth());
-				for (int i = 0; i < Random.Int(7, 10); i++){
-					amountOfGold += Random.IntRange(30 + Dungeon.scalingDepth() * 10, 60 + Dungeon.scalingDepth() * 20);
-				}
-				Random.popGenerator();
-
-				Dungeon.level.drop(new Gold().quantity(amountOfGold), Dungeon.hero.pos).sprite.drop();
-				Dungeon.level.unseal();
-			}
-		}
-
-		super.die( cause );
+        super.die( cause );
 
 		if (!(this instanceof Wraith)
 				&& soulMarked
@@ -1178,7 +1150,39 @@ public abstract class Mob extends Char {
 		}
 	}
 
-	public void gainMana(ManaSource cause) {
+    public void gauntletProcessing() {
+        if (Dungeon.mode == Dungeon.GameMode.GAUNTLET && alignment == Alignment.ENEMY){
+            if (this instanceof Thief){
+                if (((Thief) this).item != null) {
+                    Dungeon.level.drop( ((Thief) this).item, pos ).sprite.drop();
+                    //updates position
+                    if (((Thief) this).item instanceof Honeypot.ShatteredPot) ((Honeypot.ShatteredPot)((Thief) this).item).dropPot( this, pos );
+                    ((Thief) this).item = null;
+                }
+            }
+            boolean mobsAlive = false;
+            for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])){
+                if (mob.isAlive() && mob.alignment == Alignment.ENEMY){
+                    mobsAlive = true;
+                }
+            }
+            if (!mobsAlive && Dungeon.level.entrance == 0){
+                Dungeon.level.drop(new SkeletonKey(Dungeon.depth), Dungeon.hero.pos).sprite.drop();
+
+                int amountOfGold = 0;
+                Random.pushGenerator(Dungeon.seedCurDepth());
+                for (int i = 0; i < Random.Int(7, 10); i++){
+                    amountOfGold += Random.IntRange(30 + Dungeon.scalingDepth() * 10, 60 + Dungeon.scalingDepth() * 20);
+                }
+                Random.popGenerator();
+
+                Dungeon.level.drop(new Gold().quantity(amountOfGold), Dungeon.hero.pos).sprite.drop();
+                Dungeon.level.unseal();
+            }
+        }
+    }
+
+    public void gainMana(ManaSource cause) {
 		int gain = (int) Math.floor(Dungeon.hero.ATU()*1.5f* cause.manaModifier(this));
 		ManaEmpower emp = Dungeon.hero.buff(ManaEmpower.class);
 		if (emp != null){

@@ -82,6 +82,8 @@ public abstract class AllyBuff extends Buff {
 			if (hero.subClass == HeroSubClass.MONK){
 				Buff.affect(hero, MonkEnergy.class).gainEnergy(enemy);
 			}
+
+            enemy.gauntletProcessing();
 		}
 	}
 
