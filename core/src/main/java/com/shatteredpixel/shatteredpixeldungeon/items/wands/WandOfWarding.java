@@ -142,9 +142,9 @@ public class WandOfWarding extends Wand {
 		if (ch != null){
 			if (ch instanceof Ward){
 				if (wardAvailable) {
-					((Ward) ch).upgrade( buffedLvl() );
+					((Ward) ch).upgrade( power() );
 				} else {
-					((Ward) ch).wandHeal( buffedLvl() );
+					((Ward) ch).wandHeal( power() );
 				}
 				ch.sprite.emitter().burst(MagicMissile.WardParticle.UP, ((Ward) ch).tier);
 			} else {
@@ -159,7 +159,7 @@ public class WandOfWarding extends Wand {
 		} else {
 			Ward ward = new Ward();
 			ward.pos = target;
-			ward.wandLevel = buffedLvl();
+			ward.wandLevel = power();
 			if ((Dungeon.isChallenged(Conducts.Conduct.PACIFIST)))
 				ward.wandLevel /= 3;
 			GameScene.add(ward, 1f);
@@ -236,7 +236,7 @@ public class WandOfWarding extends Wand {
 	public static class Ward extends NPC {
 
 		public int tier = 1;
-		private int wandLevel = 1;
+		private float wandLevel = 1;
 
 		public int totalZaps = 0;
 
@@ -257,7 +257,7 @@ public class WandOfWarding extends Wand {
 			return Messages.get(this, "name_" + tier );
 		}
 
-		public void upgrade(int wandLevel ){
+		public void upgrade(float wandLevel ){
 			if (this.wandLevel < wandLevel){
 				this.wandLevel = wandLevel;
 			}
@@ -301,11 +301,11 @@ public class WandOfWarding extends Wand {
 		//this class is used so that wards and sentries can have two entries in the Bestiary
 		public static class WardSentry extends Ward{};
 
-		public void wandHeal( int wandLevel ){
+		public void wandHeal( float wandLevel ){
 			wandHeal( wandLevel, 1f );
 		}
 
-		public void wandHeal( int wandLevel, float healFactor ){
+		public void wandHeal( float wandLevel, float healFactor ){
 			if (this.wandLevel < wandLevel){
 				this.wandLevel = wandLevel;
 			}
@@ -369,7 +369,7 @@ public class WandOfWarding extends Wand {
 			spend( 1f );
 
 			//always hits
-			int dmg = Hero.heroDamageIntRange( 2 + wandLevel, 8 + 4*wandLevel );
+			int dmg = Hero.heroDamageIntRange((int) (2 + wandLevel), (int) (8 + 4*wandLevel));
 			Char enemy = this.enemy;
 			enemy.damage( dmg, this );
 			if (enemy.isAlive()){
@@ -477,7 +477,7 @@ public class WandOfWarding extends Wand {
 					return Messages.get(this, "desc_generic_sentry");
 				}
 			} else {
-				return Messages.get(this, "desc_" + tier, GameMath.printAverage(2 + wandLevel, 8 + 4 * wandLevel), tier);
+				return Messages.get(this, "desc_" + tier, GameMath.printAverage((int) (2 + wandLevel), (int) (8 + 4 * wandLevel)), tier);
 			}
 		}
 		
@@ -506,7 +506,7 @@ public class WandOfWarding extends Wand {
 			super.restoreFromBundle(bundle);
 			tier = bundle.getInt(TIER);
 			viewDistance = 3 + tier;
-			wandLevel = bundle.getInt(WAND_LEVEL);
+			wandLevel = bundle.getFloat(WAND_LEVEL);
 			totalZaps = bundle.getInt(TOTAL_ZAPS);
 		}
 	}

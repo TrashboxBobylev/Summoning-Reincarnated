@@ -61,11 +61,11 @@ public class WandOfPrismaticLight extends DamageWand {
 		collisionProperties = Ballistica.FRIENDLY_MAGIC;
 	}
 
-	public int min(int lvl){
+	public float magicMin(float lvl){
 		return 1+lvl;
 	}
 
-	public int max(int lvl){
+	public float magicMax(float lvl){
 		return 5+3*lvl;
 	}
 
@@ -75,9 +75,9 @@ public class WandOfPrismaticLight extends DamageWand {
 		
 		if (Dungeon.level.viewDistance < 6 ){
 			if (Dungeon.isChallenged(Challenges.DARKNESS)){
-				Buff.prolong( curUser, Light.class, 2f + buffedLvl());
+				Buff.prolong( curUser, Light.class, 2f + power());
 			} else {
-				Buff.prolong( curUser, Light.class, 10f+buffedLvl()*5);
+				Buff.prolong( curUser, Light.class, 10f+power()*5);
 			}
 		}
 		
@@ -92,18 +92,18 @@ public class WandOfPrismaticLight extends DamageWand {
 		int dmg = damageRoll();
 
 		//three in (5+lvl) chance of failing
-		if (Random.Int(5+buffedLvl()) >= 3) {
-			Buff.prolong(ch, Blindness.class, 2f + (buffedLvl() * 0.333f));
+		if (Random.Float((5+power())) >= 3) {
+			Buff.prolong(ch, Blindness.class, 2f + (power() * 0.333f));
 			ch.sprite.emitter().burst(Speck.factory(Speck.LIGHT), 6 );
 		}
 
 		if (ch.properties().contains(Char.Property.DEMONIC) || ch.properties().contains(Char.Property.UNDEAD)){
-			ch.sprite.emitter().start( ShadowParticle.UP, 0.05f, 10+buffedLvl() );
+			ch.sprite.emitter().start( ShadowParticle.UP, 0.05f, (int) (10+power()));
 			Sample.INSTANCE.play(Assets.Sounds.BURNING);
 
 			ch.damage(Math.round(dmg*1.333f), this);
 		} else {
-			ch.sprite.centerEmitter().burst( RainbowParticle.BURST, 10+buffedLvl() );
+			ch.sprite.centerEmitter().burst( RainbowParticle.BURST, (int) (10+power()));
 
 			ch.damage(dmg, this);
 		}

@@ -48,11 +48,11 @@ public class WandOfMagicMissile extends DamageWand {
 		image = ItemSpriteSheet.WAND_MAGIC_MISSILE;
 	}
 
-	public int min(int lvl){
+	public float magicMin(float lvl){
 		return 2+lvl;
 	}
 
-	public int max(int lvl){
+	public float magicMax(float lvl){
 		return 8+2*lvl;
 	}
 	
@@ -68,11 +68,11 @@ public class WandOfMagicMissile extends DamageWand {
 			}
 			Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, Random.Float(0.87f, 1.15f) );
 
-			ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
+			ch.sprite.burst(0xFFFFFFFF, (int) (power() / 2 + 2));
 
 			//apply the magic charge buff if we have another wand in inventory of a lower level, or already have the buff
 			for (Wand.Charger wandCharger : curUser.buffs(Wand.Charger.class)){
-				if (wandCharger.wand().buffedLvl() < buffedLvl() || curUser.buff(MagicCharge.class) != null){
+				if (wandCharger.wand().power() < power() || curUser.buff(MagicCharge.class) != null){
 					Buff.prolong(curUser, MagicCharge.class, MagicCharge.DURATION).setup(this);
 					break;
 				}

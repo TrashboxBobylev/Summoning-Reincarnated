@@ -64,12 +64,12 @@ public class WandOfLivingEarth extends DamageWand {
 	}
 	
 	@Override
-	public int min(int lvl) {
+	public float magicMin(float lvl) {
 		return 4;
 	}
 	
 	@Override
-	public int max(int lvl) {
+	public float magicMax(float lvl) {
 		return 6 + 2*lvl;
 	}
 	
@@ -102,14 +102,14 @@ public class WandOfLivingEarth extends DamageWand {
 				buff = Buff.affect(curUser, RockArmor.class);
 			}
 			if (buff != null) {
-				buff.addArmor( buffedLvl(), armorToAdd);
+				buff.addArmor( power(), armorToAdd);
 			}
 		}
 
 		//shooting at the guardian
 		if (guardian != null && guardian == ch){
-			guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, 8 + buffedLvl() / 2);
-			guardian.setInfo(curUser, buffedLvl(), armorToAdd);
+			guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
+			guardian.setInfo(curUser, power(), armorToAdd);
 			wandProc(guardian, chargesPerCast());
 			Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, 0.9f * Random.Float(0.87f, 1.15f) );
 
@@ -118,7 +118,7 @@ public class WandOfLivingEarth extends DamageWand {
 
 			//create a new guardian
 			guardian = new EarthGuardian();
-			guardian.setInfo(curUser, buffedLvl(), buff.armor);
+			guardian.setInfo(curUser, power(), buff.armor);
 
 			if (buff.powerOfManyTurns > 0){
 				Buff.affect(guardian, PowerOfMany.PowerBuff.class, buff.powerOfManyTurns);
@@ -128,7 +128,7 @@ public class WandOfLivingEarth extends DamageWand {
 			//adjacent cell which is closes to the user of the wand.
 			if (ch != null) {
 
-				ch.sprite.centerEmitter().burst(MagicMissile.EarthParticle.BURST, 5 + buffedLvl() / 2);
+				ch.sprite.centerEmitter().burst(MagicMissile.EarthParticle.BURST, (int) (5 + power() / 2));
 
 				if (!(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))){
 					wandProc(ch, chargesPerCast());
@@ -148,7 +148,7 @@ public class WandOfLivingEarth extends DamageWand {
 
 				if (closest == -1){
 					if (armorToAdd > 0) {
-						curUser.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, 8 + buffedLvl() / 2);
+						curUser.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
 					}
 					return; //do not spawn guardian or detach buff
 				} else {
@@ -167,7 +167,7 @@ public class WandOfLivingEarth extends DamageWand {
 				Dungeon.level.occupyCell(guardian);
 			}
 
-			guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, 8 + buffedLvl()/2);
+			guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power()/2));
 			buff.detach();
 			Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, 0.9f * Random.Float(0.87f, 1.15f) );
 
@@ -176,7 +176,7 @@ public class WandOfLivingEarth extends DamageWand {
 
 			if (ch != null) {
 
-				ch.sprite.centerEmitter().burst(MagicMissile.EarthParticle.BURST, 5 + buffedLvl() / 2);
+				ch.sprite.centerEmitter().burst(MagicMissile.EarthParticle.BURST, (int) (5 + power() / 2));
 
 				wandProc(ch, chargesPerCast());
 				ch.damage(damage, this);
@@ -184,13 +184,13 @@ public class WandOfLivingEarth extends DamageWand {
 				
 				if (guardian == null) {
 					if (armorToAdd > 0) {
-						curUser.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, 8 + buffedLvl() / 2);
+						curUser.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
 					}
 				} else {
 					if (guardian.sprite != null) { //may be in stasis
-						guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, 8 + buffedLvl() / 2);
+						guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
 					}
-					guardian.setInfo(curUser, buffedLvl(), armorToAdd);
+					guardian.setInfo(curUser, power(), armorToAdd);
 					if (ch.alignment == Char.Alignment.ENEMY || ch.buff(Amok.class) != null) {
 						guardian.aggro(ch);
 					}
@@ -270,7 +270,7 @@ public class WandOfLivingEarth extends DamageWand {
 			type = buffType.POSITIVE;
 		}
 
-		private int wandLevel;
+		private float wandLevel;
 		private int armor;
 
 		private float powerOfManyTurns = 0;
@@ -288,13 +288,13 @@ public class WandOfLivingEarth extends DamageWand {
 			return true;
 		}
 
-		private void addArmor(int wandLevel, int toAdd ){
+		private void addArmor(float wandLevel, int toAdd ){
 			this.wandLevel = Math.max(this.wandLevel, wandLevel);
 			armor += toAdd;
-			armor = Math.min(armor, 2*armorToGuardian());
+			armor = (int) Math.min(armor, 2*armorToGuardian());
 		}
 
-		private int armorToGuardian(){
+		private float armorToGuardian(){
 			return 8 + wandLevel*4;
 		}
 
@@ -329,7 +329,7 @@ public class WandOfLivingEarth extends DamageWand {
 
 		@Override
 		public float iconFadePercent() {
-			return Math.max(0, (armorToGuardian() - armor) / (float)armorToGuardian());
+			return Math.max(0, (armorToGuardian() - armor) / armorToGuardian());
 		}
 
 		@Override
@@ -339,7 +339,7 @@ public class WandOfLivingEarth extends DamageWand {
 
 		@Override
 		public String desc() {
-			String desc = Messages.get( this, "desc", armor, armorToGuardian());
+			String desc = Messages.get( this, "desc", armor, (int)armorToGuardian());
 			if (isEmpowered()){
 				desc += "\n\n" + Messages.get(this, "desc_many", (int)powerOfManyTurns);
 			}
@@ -362,7 +362,7 @@ public class WandOfLivingEarth extends DamageWand {
 		@Override
 		public void restoreFromBundle(Bundle bundle) {
 			super.restoreFromBundle(bundle);
-			wandLevel = bundle.getInt(WAND_LEVEL);
+			wandLevel = bundle.getFloat(WAND_LEVEL);
 			armor = bundle.getInt(ARMOR);
 			powerOfManyTurns = bundle.getFloat(POWER_TURNS);
 		}
@@ -387,12 +387,12 @@ public class WandOfLivingEarth extends DamageWand {
 			HP = HT = 0;
 		}
 
-		private int wandLevel = -1;
+		private float wandLevel = -1;
 
-		public void setInfo(Hero hero, int wandLevel, int healthToAdd){
+		public void setInfo(Hero hero, float wandLevel, int healthToAdd){
 			if (wandLevel > this.wandLevel) {
 				this.wandLevel = wandLevel;
-				HT = 16 + 8 * wandLevel;
+				HT = Math.round(16 + 8 * wandLevel);
 			}
 			if (HP != 0 && sprite != null){
 				sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(healthToAdd), FloatingText.HEALING);
@@ -423,9 +423,9 @@ public class WandOfLivingEarth extends DamageWand {
 		public int drRoll() {
 			int dr = super.drRoll();
 			if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
-				return dr + Random.NormalIntRange(wandLevel, 2 + wandLevel);
+				return dr + Random.NormalIntRange((int) wandLevel, (int) (2 + wandLevel));
 			} else {
-				return dr + Random.NormalIntRange(wandLevel, 3 + 3 * wandLevel);
+				return dr + Random.NormalIntRange((int) wandLevel, (int) (3 + 3 * wandLevel));
 			}
 		}
 
@@ -435,9 +435,9 @@ public class WandOfLivingEarth extends DamageWand {
 
 			if (Actor.chars().contains(this)) {
 				if (Dungeon.isChallenged(Challenges.NO_ARMOR)) {
-					desc += "\n\n" + Messages.get(this, "wand_info", wandLevel, 2 + wandLevel);
+					desc += "\n\n" + Messages.get(this, "wand_info", (int) wandLevel, (int) (2 + wandLevel));
 				} else {
-					desc += "\n\n" + Messages.get(this, "wand_info", wandLevel, 3 + 3 * wandLevel);
+					desc += "\n\n" + Messages.get(this, "wand_info", (int) wandLevel, (int) (3 + 3 * wandLevel));
 				}
 			}
 
@@ -463,7 +463,7 @@ public class WandOfLivingEarth extends DamageWand {
 		public void restoreFromBundle(Bundle bundle) {
 			super.restoreFromBundle(bundle);
 			defenseSkill = bundle.getInt(DEFENSE);
-			wandLevel = bundle.getInt(WAND_LEVEL);
+			wandLevel = bundle.getFloat(WAND_LEVEL);
 		}
 
 		private class Wandering extends Mob.Wandering{
@@ -475,7 +475,7 @@ public class WandOfLivingEarth extends DamageWand {
 					if (buff(PowerOfMany.PowerBuff.class) != null){
 						Buff.affect(Dungeon.hero, RockArmor.class).powerOfManyTurns = buff(PowerOfMany.PowerBuff.class).cooldown()+1;
 					}
-					Dungeon.hero.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, 8 + wandLevel/2);
+					Dungeon.hero.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + wandLevel/2));
 					destroy();
 					sprite.die();
 					return true;

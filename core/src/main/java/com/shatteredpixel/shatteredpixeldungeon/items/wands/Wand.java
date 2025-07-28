@@ -55,6 +55,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.RainbowParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.AttunementItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
@@ -64,6 +65,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ShardOfOblivion;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.WondrousResin;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -79,13 +81,14 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
-public abstract class Wand extends Item implements ChargingItem {
+public abstract class Wand extends Weapon implements ChargingItem, AttunementItem {
 
 	public static final String AC_ZAP	= "ZAP";
 
@@ -109,6 +112,9 @@ public abstract class Wand extends Item implements ChargingItem {
 	protected int collisionProperties = Ballistica.FRIENDLY_MAGIC;
 	
 	{
+        hitSound = Assets.Sounds.HIT;
+        hitSoundPitch = 1.1f;
+
 		defaultAction = AC_ZAP;
 		usesTargeting = true;
 		bones = true;
@@ -120,6 +126,10 @@ public abstract class Wand extends Item implements ChargingItem {
 		if (curCharges > 0 || !curChargeKnown) {
 			actions.add( AC_ZAP );
 		}
+        if (hero.heroClass != HeroClass.MAGE){
+            actions.remove(AC_EQUIP);
+            actions.remove(AC_UNEQUIP);
+        }
 
 		return actions;
 	}
@@ -159,7 +169,47 @@ public abstract class Wand extends Item implements ChargingItem {
 		return 1f;
 	}
 
-	public boolean tryToZap( Hero owner, int target ){
+    @Override
+    public int STRReq() {
+        return Dungeon.hero != null ? Dungeon.hero.STR(): 10;
+    }
+
+    @Override
+    public int STRReq(int lvl) {
+        return Dungeon.hero != null ? Dungeon.hero.STR(): 10;
+    }
+
+    @Override
+    public float ATUReq() {
+        return 1;
+    }
+
+    @Override
+    public int ATUReq(int lvl) {
+        return 1;
+    }
+
+    @Override
+    public int min(int lvl) {
+        return Math.round(1 + power());
+    }
+
+    @Override
+    public int max(int lvl) {
+        return Math.round(7 + power()*2);
+    }
+
+    @Override
+    public boolean showAttunement() {
+        return false;
+    }
+
+    public float power(){
+        int base = Dungeon.hero != null ? Dungeon.hero.ATU() - 1 : 0;
+        return base;
+    }
+
+    public boolean tryToZap(Hero owner, int target ){
 
 		if (owner.buff(WildMagic.WildMagicTracker.class) == null && (owner.buff(MagicImmune.class) != null)){
 			GLog.w( Messages.get(this, "no_magic") );
@@ -190,6 +240,11 @@ public abstract class Wand extends Item implements ChargingItem {
 		}
 	}
 
+    @Override
+    public void activate(Char ch) {
+        charge(ch, 0.75f);
+    }
+
 	public void gainCharge( float amt ){
 		gainCharge( amt, false );
 	}
@@ -215,11 +270,11 @@ public abstract class Wand extends Item implements ChargingItem {
 	}
 
 	protected void wandProc(Char target, int chargesUsed){
-		wandProc(target, buffedLvl(), chargesUsed);
+		wandProc(target, power(), chargesUsed);
 	}
 
 	//TODO Consider externalizing char awareness buff
-	protected static void wandProc(Char target, int wandLevel, int chargesUsed){
+	protected static void wandProc(Char target, float wandLevel, int chargesUsed){
 		if (Dungeon.hero.hasTalent(Talent.ARCANE_VISION)) {
 			int dur = 5 + 5*Dungeon.hero.pointsInTalent(Talent.ARCANE_VISION);
 			Buff.append(Dungeon.hero, TalismanOfForesight.CharAwareness.class, dur).charID = target.id();
@@ -314,6 +369,10 @@ public abstract class Wand extends Item implements ChargingItem {
 		String desc = super.info();
 
 		desc += "\n\n" + statsDesc();
+
+        if (Dungeon.hero.heroClass == HeroClass.MAGE){
+            desc += "\n\n" + Messages.get(Wand.class, "melee", GameMath.printAverage(min(), max()));
+        }
 
 		if (resinBonus == 1){
 			desc += "\n\n" + Messages.get(Wand.class, "resin_one");

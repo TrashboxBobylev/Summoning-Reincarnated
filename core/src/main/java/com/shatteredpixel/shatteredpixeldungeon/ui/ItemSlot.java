@@ -273,7 +273,7 @@ public class ItemSlot extends Button {
 			itemIcon.frame(ItemSpriteSheet.Icons.film.get(item.icon()));
 			add(itemIcon);
 
-		} else if (item instanceof Weapon || item instanceof Armor) {
+		} else if ((item instanceof Weapon || item instanceof Armor) && !(item instanceof Wand)) {
 
 			if (item.levelKnown){
 				int str = item instanceof Weapon ? ((Weapon)item).STRReq() : ((Armor)item).STRReq();
@@ -299,7 +299,7 @@ public class ItemSlot extends Button {
 			extra.text( null );
 
 		}
-		if (item instanceof AttunementItem) {
+		if (item instanceof AttunementItem && ((AttunementItem) item).showAttunement()) {
 
 			if (item.levelKnown){
 				int atu = (int)((AttunementItem) item).ATUReq();

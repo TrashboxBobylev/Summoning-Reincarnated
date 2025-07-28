@@ -36,24 +36,24 @@ import com.watabou.utils.GameMath;
 //wands with AOE or circumstantial direct damage count here (e.g. fireblast, transfusion), but wands with indirect damage do not (e.g. corrosion)
 public abstract class DamageWand extends Wand{
 
-	public int min(){
-		return min(buffedLvl());
+	public float magicMin(){
+		return magicMin(power());
 	}
 
-	public abstract int min(int lvl);
+	public abstract float magicMin(float lvl);
 
-	public int max(){
-		return max(buffedLvl());
+	public float magicMax(){
+		return magicMax(power());
 	}
 
-	public abstract int max(int lvl);
+	public abstract float magicMax(float lvl);
 
 	public int damageRoll(){
-		return damageRoll(buffedLvl());
+		return damageRoll(power());
 	}
 
-	public int damageRoll(int lvl){
-		int dmg = Hero.heroDamageIntRange(min(lvl), max(lvl));
+	public int damageRoll(float lvl){
+		int dmg = Hero.heroDamageIntRange((int) magicMin(lvl), (int) magicMax(lvl));
 		WandEmpower emp = Dungeon.hero.buff(WandEmpower.class);
 		if (emp != null){
 			dmg += emp.dmgBoost;
@@ -69,13 +69,13 @@ public abstract class DamageWand extends Wand{
 	@Override
 	public String statsDesc() {
 		if (levelKnown)
-			return Messages.get(this, "stats_desc", GameMath.printAverage(min(), max()));
+			return Messages.get(this, "stats_desc", GameMath.printAverage((int) magicMin(), (int) magicMax()));
 		else
-			return Messages.get(this, "stats_desc", GameMath.printAverage(min(0), max(0)));
+			return Messages.get(this, "stats_desc", GameMath.printAverage((int) magicMin(0), (int) magicMax(0)));
 	}
 
 	@Override
 	public String upgradeStat1(int level) {
-		return GameMath.printAverage(min(level), max(level));
+		return GameMath.printAverage((int)magicMin(level), (int)magicMax(level));
 	}
 }

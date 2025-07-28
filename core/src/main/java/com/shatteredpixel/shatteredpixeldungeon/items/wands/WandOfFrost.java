@@ -30,7 +30,11 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.*;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurn;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
@@ -48,11 +52,11 @@ public class WandOfFrost extends DamageWand {
 		image = ItemSpriteSheet.WAND_FROST;
 	}
 
-	public int min(int lvl){
+	public float magicMin(float lvl){
 		return 1+lvl;
 	}
 
-	public int max(int lvl){
+	public float magicMax(float lvl){
 		return 6+4*lvl;
 	}
 
@@ -92,7 +96,7 @@ public class WandOfFrost extends DamageWand {
 				float chillturns = Math.min(10, ch.buff(Chill.class).cooldown());
 				damage = (int)Math.round(damage * Math.pow(0.9333f, chillturns));
 			} else {
-				ch.sprite.burst( 0xFF99CCFF, buffedLvl() / 2 + 2 );
+				ch.sprite.burst( 0xFF99CCFF, (int) (power() / 2 + 2));
 			}
 			if (!(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))) {
 				wandProc(ch, chargesPerCast());
@@ -101,9 +105,9 @@ public class WandOfFrost extends DamageWand {
 
 			if (ch.isAlive()) {
 				if (Dungeon.level.water[ch.pos])
-					Buff.affect(ch, FrostBurn.class).reignite(ch, 4 + buffedLvl());
+					Buff.affect(ch, FrostBurn.class).reignite(ch, 4 + power());
 				else
-					Buff.affect(ch, FrostBurn.class).reignite(ch, 2 + buffedLvl());
+					Buff.affect(ch, FrostBurn.class).reignite(ch, 2 + power());
 			}
 			}
 		} else {

@@ -64,12 +64,12 @@ public class WandOfFireblast extends DamageWand {
 	}
 
 	//1/2/3 base damage with 1/2/3 scaling based on charges used
-	public int min(int lvl){
+	public float magicMin(float lvl){
 		return (1+lvl) * chargesPerCast();
 	}
 
 	//2/8/18 base damage with 2/4/6 scaling based on charges used
-	public int max(int lvl){
+	public float magicMax(float lvl){
 		switch (chargesPerCast()){
 			case 1: default:
 				return 2 + 2*lvl;
@@ -216,9 +216,9 @@ public class WandOfFireblast extends DamageWand {
 	@Override
 	public String statsDesc() {
 		if (levelKnown)
-			return Messages.get(this, "stats_desc", chargesPerCast(), GameMath.printAverage(min(), max()));
+			return Messages.get(this, "stats_desc", chargesPerCast(), GameMath.printAverage((int) magicMin(), (int) magicMax()));
 		else
-			return Messages.get(this, "stats_desc", chargesPerCast(), GameMath.printAverage(min(0), max(0)));
+			return Messages.get(this, "stats_desc", chargesPerCast(), GameMath.printAverage((int) magicMin(0), (int) magicMax(0)));
 	}
 
 	@Override

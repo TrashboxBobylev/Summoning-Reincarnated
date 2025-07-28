@@ -28,4 +28,8 @@ public interface AttunementItem {
     public float ATUReq();
 
     public int ATUReq(int lvl);
+
+    public default boolean showAttunement(){
+        return true;
+    }
 }

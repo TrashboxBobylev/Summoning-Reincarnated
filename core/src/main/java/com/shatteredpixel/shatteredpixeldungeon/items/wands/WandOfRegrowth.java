@@ -97,7 +97,7 @@ public class WandOfRegrowth extends Wand {
 		}
 
 		int chrgUsed = chargesPerCast();
-		int grassToPlace = Math.round((3.67f+buffedLvl()/3f)*chrgUsed);
+		int grassToPlace = Math.round((3.67f+power()/3f)*chrgUsed);
 
 		//ignore cells which can't have anything grow in them.
 		for (Iterator<Integer> i = cells.iterator(); i.hasNext();) {
@@ -130,7 +130,7 @@ public class WandOfRegrowth extends Wand {
 
 		if (chargesPerCast() >= 3){
 			Lotus l = new Lotus();
-			l.setLevel(buffedLvl());
+			l.setLevel(power());
 			if (cells.contains(target) && Actor.findChar(target) == null){
 				cells.remove((Integer)target);
 				l.pos = target;
@@ -429,11 +429,11 @@ public class WandOfRegrowth extends Wand {
 			viewDistance = 1;
 		}
 
-		private int wandLvl = 0;
+		private float wandLvl = 0;
 
-		private void setLevel( int lvl ){
+		private void setLevel( float lvl ){
 			wandLvl = lvl;
-			HP = HT = 25 + 3*lvl;
+			HP = HT = Math.round(25 + 3*lvl);
 		}
 
 		public boolean inRange(int pos){
@@ -492,7 +492,7 @@ public class WandOfRegrowth extends Wand {
 			String desc = Messages.get(this, "desc");
 			if (Actor.chars().contains(this)) {
 				int preservation = Math.round(seedPreservation()*100);
-				desc += "\n\n" + Messages.get(this, "wand_info", wandLvl, preservation, preservation);
+				desc += "\n\n" + Messages.get(this, "wand_info", (int)wandLvl, preservation, preservation);
 			}
 			return desc;
 		}
@@ -508,7 +508,7 @@ public class WandOfRegrowth extends Wand {
 		@Override
 		public void restoreFromBundle(Bundle bundle) {
 			super.restoreFromBundle(bundle);
-			wandLvl = bundle.getInt(WAND_LVL);
+			wandLvl = bundle.getFloat(WAND_LVL);
 		}
 	}
 
