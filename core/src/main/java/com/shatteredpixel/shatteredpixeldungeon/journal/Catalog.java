@@ -53,7 +53,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ChaoticBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ElectricalExplosive;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Firebomb;
-import com.shatteredpixel.shatteredpixeldungeon.items.bombs.FlashBangBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.FrostBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.HolyBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Noisemaker;
@@ -293,8 +292,8 @@ public enum Catalog {
 		EXOTIC_SCROLLS.addItems(ExoticScroll.exoToReg.keySet().toArray(new Class[0]));
 
 		BOMBS.addItems( Bomb.class, FrostBomb.class, Firebomb.class, SmokeBomb.class, RegrowthBomb.class,
-				WoollyBomb.class, Noisemaker.class, FlashBangBomb.class, HolyBomb.class, ArcaneBomb.class, ShrapnelBomb.class,
-				ShrinkingBomb.class, Webbomb.class, SupplyBomb.class, ChaoticBomb.class, ElectricalExplosive.class);
+				WoollyBomb.class, Noisemaker.class, ElectricalExplosive.class, HolyBomb.class, ArcaneBomb.class, ShrapnelBomb.class,
+				ShrinkingBomb.class, Webbomb.class, SupplyBomb.class, ChaoticBomb.class);
 
 		TIPPED_DARTS.addItems(TippedDart.types.values().toArray(new Class[0]));
 
