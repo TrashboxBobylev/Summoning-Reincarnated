@@ -39,7 +39,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -219,7 +218,7 @@ public class WandOfRegrowth extends Wand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(Char attacker, Char defender, int damage) {
 		//like pre-nerf vampiric enchantment, except with herbal healing buff, only in grass
 		boolean grass = false;
 		int terr = Dungeon.level.map[attacker.pos];
@@ -232,7 +231,7 @@ public class WandOfRegrowth extends Wand {
 		}
 
 		if (grass) {
-			int level = Math.max(0, staff.buffedLvl());
+			float level = Math.max(0, power());
 
 			// lvl 0 - 16%
 			// lvl 1 - 21%
@@ -312,7 +311,7 @@ public class WandOfRegrowth extends Wand {
 	}
 
 	@Override
-	public void staffFx(MagesStaff.StaffParticle particle) {
+	public void staffFx(WandParticle particle) {
 		particle.color( ColorMath.random(0x004400, 0x88CC44) );
 		particle.am = 1f;
 		particle.setLifespan(1f);

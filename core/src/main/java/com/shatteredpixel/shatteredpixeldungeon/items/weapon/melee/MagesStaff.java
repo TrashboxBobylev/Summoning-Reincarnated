@@ -64,7 +64,7 @@ import java.util.ArrayList;
 
 public class MagesStaff extends MeleeWeapon {
 
-	private Wand wand;
+	public Wand wand;
 
 	public static final String AC_IMBUE = "IMBUE";
 	public static final String AC_ZAP	= "ZAP";
@@ -182,7 +182,7 @@ public class MagesStaff extends MeleeWeapon {
 				attacker instanceof Hero && ((Hero)attacker).subClass == HeroSubClass.BATTLEMAGE) {
 			if (wand.curCharges < wand.maxCharges) wand.partialCharge += 0.5f;
 			ScrollOfRecharging.charge((Hero)attacker);
-			wand.onHit(this, attacker, defender, damage);
+			wand.onHit(attacker, defender, damage);
 		}
 
 		if (empoweredStrike != null){
@@ -531,9 +531,6 @@ public class MagesStaff extends MeleeWeapon {
 
 			this.x = x;
 			this.y = y;
-
-			if (wand != null)
-				wand.staffFx( this );
 
 		}
 

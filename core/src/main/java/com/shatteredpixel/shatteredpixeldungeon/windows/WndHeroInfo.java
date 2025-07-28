@@ -66,7 +66,7 @@ public class WndHeroInfo extends WndTabbed {
 				tabIcon = new ItemSprite(ItemSpriteSheet.SEAL, null);
 				break;
 			case MAGE:
-				tabIcon = new ItemSprite(ItemSpriteSheet.MAGES_STAFF, null);
+				tabIcon = new ItemSprite(ItemSpriteSheet.WAND_MAGIC_MISSILE, null);
 				break;
 			case ROGUE:
 				tabIcon = new ItemSprite(ItemSpriteSheet.ARTIFACT_CLOAK, null);
@@ -190,7 +190,7 @@ public class WndHeroInfo extends WndTabbed {
 							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
 					break;
 				case MAGE:
-					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.MAGES_STAFF),
+					icons = new Image[]{ new ItemSprite(ItemSpriteSheet.WAND_HOLDER),
 							new ItemSprite(ItemSpriteSheet.WAND_MAGIC_MISSILE),
 							new ItemSprite(ItemSpriteSheet.SCROLL_ISAZ)};
 					break;

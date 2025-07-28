@@ -41,7 +41,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -228,7 +227,7 @@ public class WandOfLivingEarth extends DamageWand {
 	}
 	
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(Char attacker, Char defender, int damage) {
 		EarthGuardian guardian = null;
 		for (Mob m : Dungeon.level.mobs){
 			if (m instanceof EarthGuardian){
@@ -240,16 +239,16 @@ public class WandOfLivingEarth extends DamageWand {
 		int armor = Math.round(damage*0.33f*procChanceMultiplier(attacker));
 
 		if (guardian != null){
-			guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, 8 + buffedLvl() / 2);
-			guardian.setInfo(Dungeon.hero, buffedLvl(), armor);
+			guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
+			guardian.setInfo(Dungeon.hero, power(), armor);
 		} else {
-			attacker.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, 8 + buffedLvl() / 2);
-			Buff.affect(attacker, RockArmor.class).addArmor( buffedLvl(), armor);
+			attacker.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
+			Buff.affect(attacker, RockArmor.class).addArmor( power(), armor);
 		}
 	}
 	
 	@Override
-	public void staffFx(MagesStaff.StaffParticle particle) {
+	public void staffFx(WandParticle particle) {
 		if (Random.Int(10) == 0){
 			particle.color(ColorMath.random(0xFFF568, 0x80791A));
 		} else {

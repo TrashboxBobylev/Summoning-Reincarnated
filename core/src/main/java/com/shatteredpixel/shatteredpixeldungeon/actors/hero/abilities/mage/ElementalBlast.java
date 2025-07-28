@@ -25,8 +25,8 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -72,7 +72,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfPrismaticLight
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfTransfusion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -154,9 +153,9 @@ public class ElementalBlast extends ArmorAbility {
 		}
 
 		Class<? extends Wand> wandCls = null;
-		if (hero.belongings.getItem(MagesStaff.class) != null) {
-			wandCls = hero.belongings.getItem(MagesStaff.class).wandClass();
-		}
+        if (hero.belongings.weapon instanceof Wand) {
+            wandCls = (Class<? extends Wand>) hero.belongings.weapon.getClass();
+        }
 
 		if (wandCls == null){
 			GLog.w(Messages.get(this, "no_staff"));
@@ -449,12 +448,12 @@ public class ElementalBlast extends ArmorAbility {
 	public String desc() {
 		String desc = Messages.get(this, "desc");
 		if (Game.scene() instanceof GameScene){
-			MagesStaff staff = Dungeon.hero.belongings.getItem(MagesStaff.class);
-			if (staff != null && staff.wandClass() != null){
-				desc += "\n\n" + Messages.get(staff.wandClass(), "eleblast_desc");
-			} else {
-				desc += "\n\n" + Messages.get(this, "generic_desc");
-			}
+            if (Dungeon.hero.belongings.weapon() instanceof Wand){
+                Wand mainWand = (Wand) Dungeon.hero.belongings.weapon();
+                desc += "\n\n" + Messages.get(mainWand.getClass(), "eleblast_desc");
+            } else {
+                desc += "\n\n" + Messages.get(this, "generic_desc");
+            }
 		} else {
 			desc += "\n\n" + Messages.get(this, "generic_desc");
 		}

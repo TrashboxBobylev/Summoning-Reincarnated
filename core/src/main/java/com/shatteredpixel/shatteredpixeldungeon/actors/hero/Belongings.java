@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurs
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ShardOfOblivion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -197,6 +198,9 @@ public class Belongings implements Iterable<Item> {
 		backpack.restoreFromBundle( bundle );
 		
 		weapon = (KindOfWeapon) bundle.get(WEAPON);
+        if (weapon instanceof MagesStaff){
+            weapon = ((MagesStaff) weapon).wand;
+        }
 		if (weapon() != null)       weapon().activate(owner);
 		
 		armor = (Armor)bundle.get( ARMOR );

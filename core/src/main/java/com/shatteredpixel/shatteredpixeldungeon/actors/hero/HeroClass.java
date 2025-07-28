@@ -100,7 +100,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cudgel;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger2;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Rapier;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
@@ -154,8 +153,7 @@ public enum HeroClass {
 		}
 
 		if (Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)){
-			MagesStaff staff;
-			staff = new MagesStaff(new WandOfMagicMissile());
+			WandOfMagicMissile staff = new WandOfMagicMissile();
 			(hero.belongings.weapon = staff).identify();
 			hero.belongings.weapon.activate(hero);
 			(hero.belongings.armor = new ScoutArmor()).identify();
@@ -308,14 +306,12 @@ public enum HeroClass {
 
 	private static void initMage( Hero hero ) {
 		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
-			MagesStaff staff;
+			WandOfMagicMissile wand = new WandOfMagicMissile();
 
-			staff = new MagesStaff(new WandOfMagicMissile());
-
-			(hero.belongings.weapon = staff).identify();
+			(hero.belongings.weapon = wand).identify();
 			hero.belongings.weapon.activate(hero);
 
-			Dungeon.quickslot.setSlot(0, staff);
+			Dungeon.quickslot.setSlot(0, wand);
 		}
 
 		new ScrollOfUpgrade().identify();

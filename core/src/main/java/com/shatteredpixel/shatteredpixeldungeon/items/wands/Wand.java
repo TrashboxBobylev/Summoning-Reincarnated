@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -48,6 +49,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage.WildMagic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.DivineSense;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.GuidingLight;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.HolyWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
@@ -66,7 +69,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ShardOfOblivion;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.WondrousResin;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -79,6 +81,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
+import com.watabou.noosa.particles.PixelParticle;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.GameMath;
@@ -159,7 +162,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 
 	public abstract void onZap(Ballistica attack);
 
-	public abstract void onHit( MagesStaff staff, Char attacker, Char defender, int damage);
+	public abstract void onHit( Char attacker, Char defender, int damage);
 
 	//not affected by enchantment proc chance changers
 	public static float procChanceMultiplier( Char attacker ){
@@ -269,6 +272,44 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		charger.setScaleFactor( chargeScaleFactor );
 	}
 
+    @Override
+    public int proc(Char attacker, Char defender, int damage) {
+        if (attacker instanceof Hero && ((Hero) attacker).hasTalent(Talent.MYSTICAL_CHARGE)){
+            Hero hero = (Hero) attacker;
+            ArtifactRecharge.chargeArtifacts(hero, hero.pointsInTalent(Talent.MYSTICAL_CHARGE)/2f);
+        }
+
+        Talent.EmpoweredStrikeTracker empoweredStrike = attacker.buff(Talent.EmpoweredStrikeTracker.class);
+        if (empoweredStrike != null){
+            damage = Math.round( damage * (1f + Dungeon.hero.pointsInTalent(Talent.EMPOWERED_STRIKE)/6f));
+        }
+
+        if (attacker instanceof Hero && ((Hero)attacker).subClass == HeroSubClass.BATTLEMAGE) {
+            if (curCharges < maxCharges) partialCharge += 0.5f;
+            ScrollOfRecharging.charge((Hero)attacker);
+            onHit(attacker, defender, damage);
+        }
+
+        if (empoweredStrike != null){
+            if (!empoweredStrike.delayedDetach) empoweredStrike.detach();
+            if (!(defender instanceof Mob) || !((Mob) defender).surprisedBy(attacker)){
+                Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG, 0.75f, 1.2f);
+            }
+        }
+        return super.proc(attacker, defender, damage);
+    }
+
+    @Override
+    public int reachFactor(Char owner) {
+        int reach = super.reachFactor(owner);
+        if (owner instanceof Hero
+                && this instanceof WandOfDisintegration
+                && ((Hero)owner).subClass == HeroSubClass.BATTLEMAGE){
+            reach += Math.round(Wand.procChanceMultiplier(owner));
+        }
+        return reach;
+    }
+
 	protected void wandProc(Char target, int chargesUsed){
 		wandProc(target, power(), chargesUsed);
 	}
@@ -371,7 +412,17 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		desc += "\n\n" + statsDesc();
 
         if (Dungeon.hero.heroClass == HeroClass.MAGE){
-            desc += "\n\n" + Messages.get(Wand.class, "melee", GameMath.printAverage(min(), max()));
+            desc += "\n\n" + Messages.get(Wand.class, "melee", GameMath.printAverage(augment.damageFactor(min()), augment.damageFactor(max())));
+        }
+
+        switch (augment) {
+            case SPEED:
+                desc += " " + Messages.get(Weapon.class, "faster");
+                break;
+            case DAMAGE:
+                desc += " " + Messages.get(Weapon.class, "stronger");
+                break;
+            case NONE:
         }
 
 		if (resinBonus == 1){
@@ -385,6 +436,18 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		} else if (!isIdentified() && cursedKnown){
 			desc += "\n\n" + Messages.get(Wand.class, "not_cursed");
 		}
+
+        if (isEquipped(Dungeon.hero) && !hasCurseEnchant() && Dungeon.hero.buff(HolyWeapon.HolyWepBuff.class) != null
+                && (Dungeon.hero.subClass != HeroSubClass.PALADIN || enchantment == null)){
+            desc += "\n\n" + Messages.capitalize(Messages.get(Weapon.class, "enchanted", Messages.get(HolyWeapon.class, "ench_name", Messages.get(Enchantment.class, "enchant"))));
+            desc += " " + Messages.get(HolyWeapon.class, "ench_desc");
+        } else if (enchantment != null && (cursedKnown || !enchantment.curse())){
+            desc += "\n\n" + Messages.capitalize(Messages.get(Weapon.class, "enchanted", enchantment.name()));
+            if (enchantHardened) desc += " " + Messages.get(Weapon.class, "enchant_hardened");
+            desc += " " + enchantment.desc();
+        } else if (enchantHardened){
+            desc += "\n\n" + Messages.get(Weapon.class, "hardened_no_enchant");
+        }
 
 		if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE){
 			desc += "\n\n" + Messages.get(this, "bmage_desc");
@@ -468,6 +531,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 	@Override
 	public int buffedLvl() {
 		int lvl = super.buffedLvl();
+        lvl += (int) power();
 
 		if (charger != null && charger.target != null) {
 
@@ -527,13 +591,23 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		Sample.INSTANCE.play( Assets.Sounds.ZAP );
 	}
 
-	public void staffFx( MagesStaff.StaffParticle particle ){
+	public void staffFx(WandParticle particle ){
 		particle.color(0xFFFFFF); particle.am = 0.3f;
 		particle.setLifespan( 1f);
 		particle.speed.polar( Random.Float(PointF.PI2), 2f );
 		particle.setSize( 1f, 2f );
 		particle.radiateXY(0.5f);
 	}
+
+    @Override
+    public Emitter emitter() {
+        if (!isEquipped(Dungeon.hero)) return null;
+        Emitter emitter = new Emitter();
+        emitter.pos(11.5f, 1.5f);
+        emitter.fillTarget = false;
+        emitter.pour(WandParticleFactory, 0.1f);
+        return emitter;
+    }
 
 	public void wandUsed() {
 		if (!isIdentified()) {
@@ -754,7 +828,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 
 		@Override
 		public void onZap(Ballistica attack) {}
-		public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {}
+		public void onHit(Char attacker, Char defender, int damage) {}
 
 		@Override
 		public String info() {
@@ -829,7 +903,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 							&& curWand.charger != null && curWand.charger.target == curUser){
 
 						//regular. If hero owns wand but it isn't in belongings it must be in the staff
-						if (curUser.heroClass == HeroClass.MAGE && !curUser.belongings.contains(curWand)){
+						if (curUser.heroClass == HeroClass.MAGE && curUser.belongings.weapon() == curWand){
 							//grants 3/5 shielding
 							int shieldToGive = 1 + 2 * Dungeon.hero.pointsInTalent(Talent.BACKUP_BARRIER);
 							Buff.affect(Dungeon.hero, Barrier.class).setShield(shieldToGive);
@@ -1005,4 +1079,77 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 			this.scalingFactor = value;
 		}
 	}
+
+    private final Emitter.Factory WandParticleFactory = new Emitter.Factory() {
+        @Override
+        //reimplementing this is needed as instance creation of new staff particles must be within this class.
+        public void emit( Emitter emitter, int index, float x, float y ) {
+            WandParticle c = (WandParticle)emitter.getFirstAvailable(WandParticle.class);
+            if (c == null) {
+                c = new WandParticle();
+                emitter.add(c);
+            }
+            c.reset(x, y);
+        }
+
+        @Override
+        //some particles need light mode, others don't
+        public boolean lightMode() {
+            return !((Wand.this instanceof WandOfDisintegration)
+                    || (Wand.this instanceof WandOfCorruption)
+                    || (Wand.this instanceof WandOfCorrosion)
+                    || (Wand.this instanceof WandOfRegrowth)
+                    || (Wand.this instanceof WandOfLivingEarth));
+        }
+    };
+
+    //determines particle effects to use based on wand the staff owns.
+    public class WandParticle extends PixelParticle {
+
+        private float minSize;
+        private float maxSize;
+        public float sizeJitter = 0;
+
+        public WandParticle(){
+            super();
+        }
+
+        public void reset( float x, float y ) {
+            revive();
+
+            speed.set(0);
+
+            this.x = x;
+            this.y = y;
+
+            staffFx( this );
+
+        }
+
+        public void setSize( float minSize, float maxSize ){
+            this.minSize = minSize;
+            this.maxSize = maxSize;
+        }
+
+        public void setLifespan( float life ){
+            lifespan = left = life;
+        }
+
+        public void shuffleXY(float amt){
+            x += Random.Float(-amt, amt);
+            y += Random.Float(-amt, amt);
+        }
+
+        public void radiateXY(float amt){
+            float hypot = (float)Math.hypot(speed.x, speed.y);
+            this.x += speed.x/hypot*amt;
+            this.y += speed.y/hypot*amt;
+        }
+
+        @Override
+        public void update() {
+            super.update();
+            size(minSize + (left / lifespan)*(maxSize-minSize) + Random.Float(sizeJitter));
+        }
+    }
 }

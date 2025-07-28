@@ -41,7 +41,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.Stasis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -185,8 +184,8 @@ public class WandOfWarding extends Wand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
-		int level = Math.max( 0, staff.buffedLvl() );
+	public void onHit(Char attacker, Char defender, int damage) {
+		float level = Math.max( 0, power() );
 
 		// lvl 0 - 20%
 		// lvl 1 - 33%
@@ -198,7 +197,7 @@ public class WandOfWarding extends Wand {
 
 			for (Char ch : Actor.chars()){
 				if (ch instanceof Ward){
-					((Ward) ch).wandHeal(staff.buffedLvl(), powerMulti);
+					((Ward) ch).wandHeal(power(), powerMulti);
 					ch.sprite.emitter().burst(MagicMissile.WardParticle.UP, ((Ward) ch).tier);
 				}
 			}
@@ -206,7 +205,7 @@ public class WandOfWarding extends Wand {
 	}
 
 	@Override
-	public void staffFx(MagesStaff.StaffParticle particle) {
+	public void staffFx(WandParticle particle) {
 		particle.color( 0x8822FF );
 		particle.am = 0.3f;
 		particle.setLifespan(3f);

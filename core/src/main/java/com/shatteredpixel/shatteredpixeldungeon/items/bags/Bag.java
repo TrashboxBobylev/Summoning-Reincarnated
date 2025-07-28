@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndQuickBag;
 import com.watabou.utils.Bundlable;
@@ -173,6 +174,9 @@ public class Bag extends Item implements Iterable<Item> {
 		loading = true;
 		for (Bundlable item : bundle.getCollection( ITEMS )) {
 			if (item != null){
+                if (item instanceof MagesStaff){
+                    item = ((MagesStaff) item).wand;
+                }
 				if (!((Item)item).collect( this )){
 					//force-add the item if necessary, such as if its item category changed after an update
 					items.add((Item) item);

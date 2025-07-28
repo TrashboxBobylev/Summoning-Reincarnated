@@ -37,7 +37,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Elastic;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Door;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.TenguDartTrap;
@@ -198,7 +197,7 @@ public class WandOfBlastWave extends DamageWand {
 	public static class Knockback{}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(Char attacker, Char defender, int damage) {
 
 		Talent.EmpoweredStrikeTracker tracker = attacker.buff(Talent.EmpoweredStrikeTracker.class);
 
@@ -218,7 +217,7 @@ public class WandOfBlastWave extends DamageWand {
 			protected boolean act() {
 				Actor.remove(this);
 				if (defender.isAlive()) {
-					new BlastWaveOnHit().proc(staff, attacker, defender, damage);
+					new BlastWaveOnHit().proc(WandOfBlastWave.this, attacker, defender, damage);
 				}
 				if (tracker != null) tracker.detach();
 				return true;
@@ -249,7 +248,7 @@ public class WandOfBlastWave extends DamageWand {
 	}
 
 	@Override
-	public void staffFx(MagesStaff.StaffParticle particle) {
+	public void staffFx(WandParticle particle) {
 		particle.color( 0x664422 ); particle.am = 0.6f;
 		particle.setLifespan(3f);
 		particle.speed.polar(Random.Float(PointF.PI2), 0.3f);

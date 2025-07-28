@@ -39,7 +39,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage.WildM
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazing;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -155,9 +154,9 @@ public class WandOfFireblast extends DamageWand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
+	public void onHit(Char attacker, Char defender, int damage) {
 		//acts like blazing enchantment
-		new FireBlastOnHit().proc( staff, attacker, defender, damage);
+		new FireBlastOnHit().proc( this, attacker, defender, damage);
 	}
 
 	public static class FireBlastOnHit extends Blazing {
@@ -237,7 +236,7 @@ public class WandOfFireblast extends DamageWand {
 	}
 
 	@Override
-	public void staffFx(MagesStaff.StaffParticle particle) {
+	public void staffFx(WandParticle particle) {
 		particle.color( 0xEE7722 );
 		particle.am = 0.5f;
 		particle.setLifespan(0.6f);

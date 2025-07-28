@@ -39,7 +39,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.CorrosionParticle;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -96,8 +95,8 @@ public class WandOfCorrosion extends Wand {
 	}
 
 	@Override
-	public void onHit(MagesStaff staff, Char attacker, Char defender, int damage) {
-		int level = Math.max( 0, buffedLvl() );
+	public void onHit(Char attacker, Char defender, int damage) {
+		float level = Math.max( 0, power() );
 
 		// lvl 0 - 33%
 		// lvl 1 - 50%
@@ -114,7 +113,7 @@ public class WandOfCorrosion extends Wand {
 	}
 
 	@Override
-	public void staffFx(MagesStaff.StaffParticle particle) {
+	public void staffFx(WandParticle particle) {
 		particle.color( ColorMath.random( 0xAAAAAA, 0xFF8800) );
 		particle.am = 0.6f;
 		particle.setLifespan( 1f );
