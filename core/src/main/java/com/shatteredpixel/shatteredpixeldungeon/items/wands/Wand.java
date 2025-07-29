@@ -60,6 +60,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.RainbowParticl
 import com.shatteredpixel.shatteredpixeldungeon.items.AttunementItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
@@ -90,7 +91,7 @@ import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
-public abstract class Wand extends Weapon implements ChargingItem, AttunementItem {
+public abstract class Wand extends Weapon implements ChargingItem, AttunementItem, Rankable {
 
 	public static final String AC_ZAP	= "ZAP";
 
@@ -372,11 +373,6 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		super.onThrow(cell);
 		ToyKnife.processSoulsBurst(this, cell);
 	}
-
-	public void level(int value) {
-		super.level( value );
-		updateLevel();
-	}
 	
 	@Override
 	public Item identify( boolean byHero ) {
@@ -492,18 +488,6 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 	}
 	
 	@Override
-	public int level() {
-		if (!cursed && curseInfusionBonus){
-			curseInfusionBonus = false;
-			updateLevel();
-		}
-		int level = super.level();
-		if (curseInfusionBonus) level += 1 + level/6;
-		level += resinBonus;
-		return level;
-	}
-	
-	@Override
 	public Item upgrade() {
 
 		super.upgrade();
@@ -569,6 +553,33 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 	protected int chargesPerCast() {
 		return 1;
 	}
+
+    @Override
+    public int level() {
+        return (int)power();
+    }
+
+    @Override
+    public int visiblyUpgraded() {
+        return 0;
+    }
+
+    @Override
+    public boolean isUpgradable() {
+        return false;
+    }
+
+    int rank = 1;
+
+    @Override
+    public int rank() {
+        return rank;
+    }
+
+    @Override
+    public void rank(int rank) {
+        this.rank = rank;
+    }
 	
 	public void fx(Ballistica bolt, Callback callback) {
 		MagicMissile.boltFromChar( curUser.sprite.parent,
@@ -761,6 +772,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 	private static final String PARTIALCHARGE       = "partialCharge";
 	private static final String CURSE_INFUSION_BONUS= "curse_infusion_bonus";
 	private static final String RESIN_BONUS         = "resin_bonus";
+    private static final String RANK = "rank";
 
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -772,6 +784,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		bundle.put( PARTIALCHARGE , partialCharge );
 		bundle.put( CURSE_INFUSION_BONUS, curseInfusionBonus );
 		bundle.put( RESIN_BONUS, resinBonus );
+        bundle.put(RANK, rank);
 	}
 	
 	@Override
@@ -787,6 +800,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		curCharges = bundle.getInt( CUR_CHARGES );
 		curChargeKnown = bundle.getBoolean( CUR_CHARGE_KNOWN );
 		partialCharge = bundle.getFloat( PARTIALCHARGE );
+        rank = bundle.getInt(RANK);
 	}
 	
 	@Override
