@@ -562,6 +562,19 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         return base;
     }
 
+    public float powerModifier(int rank){
+        switch (rank){
+            case 0: return 1.0f;
+            case 1: return 1.0f;
+            case 2: return 1.0f;
+        }
+        return 0f;
+    }
+
+    public float powerModifier(){
+        return powerModifier(rank());
+    }
+
 	public void updateLevel() {
 		curCharges = Math.min( curCharges, maxCharges );
 	}
@@ -608,7 +621,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         );
     }
 
-    private String getRechargeInfo(int rank) {
+    public String getRechargeInfo(int rank) {
         return new DecimalFormat("#.##").format(
                 charger == null ? Charger.BASE_CHARGE_DELAY*rechargeModifier(rank) : charger.getTurnsToCharge(rank - 1));
     }

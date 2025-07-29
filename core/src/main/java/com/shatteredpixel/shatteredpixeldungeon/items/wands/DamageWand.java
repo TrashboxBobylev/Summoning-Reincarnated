@@ -37,13 +37,13 @@ import com.watabou.utils.GameMath;
 public abstract class DamageWand extends Wand{
 
 	public float magicMin(){
-		return magicMin(power());
+		return magicMin(power())*powerModifier();
 	}
 
 	public abstract float magicMin(float lvl);
 
 	public float magicMax(){
-		return magicMax(power());
+		return magicMax(power())*powerModifier();
 	}
 
 	public abstract float magicMax(float lvl);
@@ -78,4 +78,13 @@ public abstract class DamageWand extends Wand{
 	public String upgradeStat1(int level) {
 		return GameMath.printAverage((int)magicMin(level), (int)magicMax(level));
 	}
+
+    @Override
+    public String getRankMessage(int rank){
+        return Messages.get(this, "rank" + rank,
+                Math.round(magicMin(rank)*powerModifier(rank)),
+                Math.round(magicMax(rank)*powerModifier(rank)),
+                getRechargeInfo(rank)
+        );
+    }
 }
