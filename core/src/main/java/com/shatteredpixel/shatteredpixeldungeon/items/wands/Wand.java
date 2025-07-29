@@ -556,7 +556,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
             }
             WandOfMagicMissile.MagicCharge buff = charger.target.buff(WandOfMagicMissile.MagicCharge.class);
             if (buff != null && buff.wandJustApplied() != this){
-                return (base+1)*1.5f-1;
+                return (base+1)*buff.wandJustApplied().powerModifier()-1;
             }
         }
         return base;
@@ -1101,7 +1101,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         }
 
         public float getTurnsToCharge(int rank){
-            return BASE_CHARGE_DELAY/rechargeModifier(rank)/scalingFactor;
+            return BASE_CHARGE_DELAY*rechargeModifier(rank)/scalingFactor;
         }
 		
 		public Wand wand(){
