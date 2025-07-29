@@ -34,12 +34,16 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.RainbowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -61,46 +65,103 @@ public class WandOfPrismaticLight extends DamageWand {
 	}
 
 	public float magicMin(float lvl){
+        if (rank() == 2)
+            return 1;
 		return 1+lvl;
 	}
 
 	public float magicMax(float lvl){
+        if (rank() == 2)
+            return 1;
 		return 5+3*lvl;
 	}
 
-	@Override
+    @Override
+    public int collisionProperties(int target) {
+        if (rank() == 2){
+            if ((Dungeon.level.passable[target] || Dungeon.level.avoid[target] || Actor.findChar(target) != null)
+                    && Dungeon.level.distance(Dungeon.hero.pos, target) <= 6)
+                return Ballistica.STOP_TARGET;
+        }
+        return super.collisionProperties(target);
+    }
+
+    @Override
+    public float rechargeModifier(int rank) {
+        switch (rank){
+            case 1: return 1.0f;
+            case 2: return 1.6f;
+            case 3: return 2.0f;
+        }
+        return super.rechargeModifier(rank);
+    }
+
+    @Override
+    public float powerModifier(int rank) {
+        switch (rank){
+            case 1: return 1.0f;
+            case 2: return 0.1f;
+            case 3: return 1.4f;
+        }
+        return super.powerModifier(rank);
+    }
+
+    @Override
 	public void onZap(Ballistica beam) {
-		affectMap(beam);
+        if (rank() != 3)
+		    affectMap(beam);
 		
-		if (Dungeon.level.viewDistance < 6 ){
+		if (Dungeon.level.viewDistance < 6 && rank() != 3){
+            float modification = 1f;
+            switch (rank()){
+                case 2:
+                    modification = 3f;
+                    break;
+            }
 			if (Dungeon.isChallenged(Challenges.DARKNESS)){
-				Buff.prolong( curUser, Light.class, 2f + power());
+				Buff.prolong( curUser, Light.class, (2f + power())*modification);
 			} else {
-				Buff.prolong( curUser, Light.class, 10f+power()*5);
+				Buff.prolong( curUser, Light.class, (10f+power()*5)*modification);
 			}
 		}
-		
-		Char ch = Actor.findChar(beam.collisionPos);
-		if (ch != null && !(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))){
-			wandProc(ch, chargesPerCast());
-			affectTarget(ch);
-		}
+        if (rank() != 2){
+            Char ch = Actor.findChar(beam.collisionPos);
+            if (ch != null && !(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))){
+                wandProc(ch, chargesPerCast());
+                affectTarget(ch);
+            }
+        }
 	}
 
 	private void affectTarget(Char ch){
 		int dmg = damageRoll();
 
 		//three in (5+lvl) chance of failing
-		if (Random.Float((5+power())) >= 3) {
-			Buff.prolong(ch, Blindness.class, 2f + (power() * 0.333f));
+		if (Random.Float((5+power())) >= 3 || (rank() == 3)) {
+			Buff.prolong(ch, Blindness.class, (2f + (power() * 0.333f)) * ((rank() == 3) ? 2 : 1f));
+            if (rank() == 3){
+                Buff.prolong(ch, Cripple.class, (4f + (power() * 0.666f)));
+            }
 			ch.sprite.emitter().burst(Speck.factory(Speck.LIGHT), 6 );
 		}
 
 		if (ch.properties().contains(Char.Property.DEMONIC) || ch.properties().contains(Char.Property.UNDEAD)){
-			ch.sprite.emitter().start( ShadowParticle.UP, 0.05f, (int) (10+power()));
-			Sample.INSTANCE.play(Assets.Sounds.BURNING);
+            if (rank() == 3){
+                ch.sprite.emitter().start( ShadowParticle.UP, 0.01f, 100);
+                Sample.INSTANCE.play(Assets.Sounds.BURNING);
+                Sample.INSTANCE.play(Assets.Sounds.CURSED);
 
-			ch.damage(Math.round(dmg*1.333f), this);
+                if (ch instanceof Mob && ch.resist(Grim.class) >= 1f){
+                    ((Mob)ch).EXP = 0;
+                    Buff.affect(ch, MasterThievesArmband.StolenTracker.class).setItemStolen(true);
+                    ch.die(this);
+                }
+            } else {
+                ch.sprite.emitter().start( ShadowParticle.UP, 0.05f, (int) (10+power()));
+                Sample.INSTANCE.play(Assets.Sounds.BURNING);
+
+                ch.damage(Math.round(dmg*1.333f), this);
+            }
 		} else {
 			ch.sprite.centerEmitter().burst( RainbowParticle.BURST, (int) (10+power()));
 
@@ -132,6 +193,15 @@ public class WandOfPrismaticLight extends DamageWand {
 					noticed = true;
 				}
 			}
+            if (rank() == 2) {
+                Char ch = Actor.findChar(c);
+                if (ch != null && ch.alignment == Char.Alignment.ENEMY && !(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))) {
+                    wandProc(ch, chargesPerCast());
+                    ch.damage(1, this);
+                    ch.sprite.emitter().burst(Speck.factory(Speck.LIGHT), 12);
+                    Buff.prolong(ch, Paralysis.class, 3f);
+                }
+            }
 
 			CellEmitter.center(c).burst( RainbowParticle.BURST, Random.IntRange( 1, 2 ) );
 		}
