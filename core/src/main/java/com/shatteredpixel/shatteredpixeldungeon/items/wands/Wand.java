@@ -34,7 +34,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
@@ -209,15 +208,6 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
     @Override
     public boolean showAttunement() {
         return false;
-    }
-
-    public float power(){
-        boolean isGame = Dungeon.hero != null;
-        float base = isGame ? Dungeon.hero.ATU() - 1 : 0;
-        if (isGame && isEquipped(Dungeon.hero) && Dungeon.hero.buff(Talent.FightingWizardryTracker.class) != null){
-            base += Dungeon.hero.buff(Talent.FightingWizardryTracker.class).powerBoost();
-        }
-        return base;
     }
 
     public boolean tryToZap(Hero owner, int target ){
@@ -543,45 +533,33 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		return this;
 	}
 
+    public float power(){
+        boolean isGame = Dungeon.hero != null;
+        float base = isGame ? Dungeon.hero.ATU() - 1 : 0;
+        if (isGame && isEquipped(Dungeon.hero) && Dungeon.hero.buff(Talent.FightingWizardryTracker.class) != null){
+            base += Dungeon.hero.buff(Talent.FightingWizardryTracker.class).powerBoost();
+        }
+        if (charger != null && charger.target != null) {
+            if (charger.target.buff(ScrollEmpower.class) != null){
+                base += 1.5f;
+            }
+            if (curCharges == 1 && charger.target instanceof Hero && ((Hero)charger.target).hasTalent(Talent.DESPERATE_POWER)){
+                base += 2/3f*((Hero)charger.target).pointsInTalent(Talent.DESPERATE_POWER);
+            }
+            if (charger.target.buff(WildMagic.WildMagicTracker.class) != null){
+                base += 1 + 0.5f*((Hero)charger.target).pointsInTalent(Talent.WILD_POWER); // +2/+2.5/+3/+3.5/+4 at 0/1/2/3/4 talent points
+            }
+            WandOfMagicMissile.MagicCharge buff = charger.target.buff(WandOfMagicMissile.MagicCharge.class);
+            if (buff != null){
+                return base*1.5f;
+            }
+        }
+        return base;
+    }
+
 	@Override
 	public int buffedLvl() {
-		int lvl = super.buffedLvl();
-        lvl += (int) power();
-
-		if (charger != null && charger.target != null) {
-
-			//inside staff, still need to apply degradation
-			if (charger.target == Dungeon.hero
-					&& !Dungeon.hero.belongings.contains(this)
-					&& Dungeon.hero.buff( Degrade.class ) != null){
-				lvl = Degrade.reduceLevel(lvl);
-			}
-
-			if (charger.target.buff(ScrollEmpower.class) != null){
-				lvl += 2;
-			}
-
-			if (curCharges == 1 && charger.target instanceof Hero && ((Hero)charger.target).hasTalent(Talent.DESPERATE_POWER)){
-				lvl += ((Hero)charger.target).pointsInTalent(Talent.DESPERATE_POWER);
-			}
-
-			if (charger.target.buff(WildMagic.WildMagicTracker.class) != null){
-				int bonus = 4 + ((Hero)charger.target).pointsInTalent(Talent.WILD_POWER);
-				if (Random.Int(2) == 0) bonus++;
-				bonus /= 2; // +2/+2.5/+3/+3.5/+4 at 0/1/2/3/4 talent points
-
-				int maxBonusLevel = 3 + ((Hero)charger.target).pointsInTalent(Talent.WILD_POWER);
-				if (lvl < maxBonusLevel) {
-					lvl = Math.min(lvl + bonus, maxBonusLevel);
-				}
-			}
-
-			WandOfMagicMissile.MagicCharge buff = charger.target.buff(WandOfMagicMissile.MagicCharge.class);
-			if (buff != null && buff.level() > lvl){
-				return buff.level();
-			}
-		}
-		return lvl;
+        return super.buffedLvl() + (int) power();
 	}
 
 	public void updateLevel() {
@@ -661,9 +639,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		//wand that just applied it
 		WandOfMagicMissile.MagicCharge buff = curUser.buff(WandOfMagicMissile.MagicCharge.class);
 		if (buff != null
-				&& buff.wandJustApplied() != this
-				&& buff.level() == buffedLvl()
-				&& buffedLvl() > super.buffedLvl()){
+				&& buff.wandJustApplied() != this){
 			buff.detach();
 		} else {
 			ScrollEmpower empower = curUser.buff(ScrollEmpower.class);

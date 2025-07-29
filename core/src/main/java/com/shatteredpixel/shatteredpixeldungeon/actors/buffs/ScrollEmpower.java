@@ -78,7 +78,7 @@ public class ScrollEmpower extends Buff {
 
 	@Override
 	public String desc() {
-		return Messages.get(this, "desc", 2, left);
+		return Messages.get(this, "desc", 1.5f, left);
 	}
 
 	private static final String LEFT = "left";

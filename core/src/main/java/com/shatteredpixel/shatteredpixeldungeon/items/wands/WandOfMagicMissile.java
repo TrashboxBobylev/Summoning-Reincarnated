@@ -33,7 +33,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
@@ -148,12 +147,7 @@ public class WandOfMagicMissile extends DamageWand {
 			return Math.max(0, (DURATION - visualcooldown()) / DURATION);
 		}
 
-		@Override
-		public String desc() {
-			return Messages.get(this, "desc", level(), dispTurns());
-		}
-
-		private static final String LEVEL = "level";
+        private static final String LEVEL = "level";
 
 		@Override
 		public void storeInBundle(Bundle bundle) {
