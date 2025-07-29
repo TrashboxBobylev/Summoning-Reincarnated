@@ -35,7 +35,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage.WildMagic;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazing;
@@ -64,12 +63,12 @@ public class WandOfFireblast extends DamageWand {
 
 	//1/2/3 base damage with 1/2/3 scaling based on charges used
 	public float magicMin(float lvl){
-		return (1+lvl) * chargesPerCast();
+		return (1+lvl) * imaginableChargePerCast();
 	}
 
 	//2/8/18 base damage with 2/4/6 scaling based on charges used
 	public float magicMax(float lvl){
-		switch (chargesPerCast()){
+		switch (imaginableChargePerCast()){
 			case 1: default:
 				return 2 + 2*lvl;
 			case 2:
@@ -78,6 +77,16 @@ public class WandOfFireblast extends DamageWand {
 				return 3*(6+2*lvl);
 		}
 	}
+
+    @Override
+    public float rechargeModifier(int level) {
+        switch (level){
+            case 1: return 1.33f;
+            case 2: return 3f;
+            case 3: return 6f;
+        }
+        return 0f;
+    }
 
 	ConeAOE cone;
 
@@ -108,7 +117,7 @@ public class WandOfFireblast extends DamageWand {
 					Dungeon.level.heaps.get(cell).burn();
 				}
 			} else {
-				GameScene.add( Blob.seed( cell, 1+chargesPerCast(), Fire.class ) );
+				GameScene.add( Blob.seed( cell, 1+imaginableChargePerCast(), Fire.class ) );
 			}
 
 			Char ch = Actor.findChar( cell );
@@ -135,11 +144,11 @@ public class WandOfFireblast extends DamageWand {
 		}
 
 		for ( Char ch : affectedChars ){
-			wandProc(ch, chargesPerCast());
+			wandProc(ch, imaginableChargePerCast());
 			ch.damage(damageRoll(), this);
 			if (ch.isAlive()) {
 				Buff.affect(ch, Burning.class).reignite(ch);
-				switch (chargesPerCast()) {
+				switch (imaginableChargePerCast()) {
 					case 1:
 						break; //no effects
 					case 2:
@@ -171,11 +180,11 @@ public class WandOfFireblast extends DamageWand {
 		//need to perform flame spread logic here so we can determine what cells to put flames in.
 
 		// 5/7/9 distance
-		int maxDist = 3 + 2*chargesPerCast();
+		int maxDist = 3 + 2*imaginableChargePerCast();
 
 		cone = new ConeAOE( bolt,
 				maxDist,
-				30 + 20*chargesPerCast(),
+				30 + 20*imaginableChargePerCast(),
 				Ballistica.STOP_TARGET | Ballistica.STOP_SOLID | Ballistica.IGNORE_SOFT_SOLID);
 
 		//cast to cells at the tip, rather than all cells, better performance.
@@ -202,22 +211,35 @@ public class WandOfFireblast extends DamageWand {
 		Sample.INSTANCE.play( Assets.Sounds.BURNING );
 	}
 
-	@Override
-	protected int chargesPerCast() {
-		if (cursed ||
-				(charger != null && charger.target != null && charger.target.buff(WildMagic.WildMagicTracker.class) != null)){
-			return 1;
-		}
-		//consumes 30% of current charges, rounded up, with a min of 1 and a max of 3.
-		return (int) GameMath.gate(1, (int)Math.ceil(curCharges*0.3f), 3);
-	}
+//	@Override
+//	protected int chargesPerCast() {
+//		if (cursed ||
+//				(charger != null && charger.target != null && charger.target.buff(WildMagic.WildMagicTracker.class) != null)){
+//			return 1;
+//		}
+//		//consumes 30% of current charges, rounded up, with a min of 1 and a max of 3.
+//		return (int) GameMath.gate(1, (int)Math.ceil(curCharges*0.3f), 3);
+//	}
+
+    protected int imaginableChargePerCast() {
+        return rank();
+    }
+
+    @Override
+    public String getRankMessage(int rank){
+        return Messages.get(this, "rank" + rank,
+                Math.round(magicMin()/imaginableChargePerCast()*(rank)),
+                Math.round(magicMax()/imaginableChargePerCast()*(rank)),
+                getRechargeInfo(rank)
+        );
+    }
 
 	@Override
 	public String statsDesc() {
 		if (levelKnown)
-			return Messages.get(this, "stats_desc", chargesPerCast(), GameMath.printAverage((int) magicMin(), (int) magicMax()));
+			return Messages.get(this, "stats_desc", GameMath.printAverage((int) magicMin(), (int) magicMax()));
 		else
-			return Messages.get(this, "stats_desc", chargesPerCast(), GameMath.printAverage((int) magicMin(0), (int) magicMax(0)));
+			return Messages.get(this, "stats_desc", GameMath.printAverage((int) magicMin(0), (int) magicMax(0)));
 	}
 
 	@Override
