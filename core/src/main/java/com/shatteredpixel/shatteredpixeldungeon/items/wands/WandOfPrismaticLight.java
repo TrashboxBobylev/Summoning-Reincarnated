@@ -65,14 +65,10 @@ public class WandOfPrismaticLight extends DamageWand {
 	}
 
 	public float magicMin(float lvl){
-        if (rank() == 2)
-            return 1;
 		return 1+lvl;
 	}
 
 	public float magicMax(float lvl){
-        if (rank() == 2)
-            return 1;
 		return 5+3*lvl;
 	}
 
