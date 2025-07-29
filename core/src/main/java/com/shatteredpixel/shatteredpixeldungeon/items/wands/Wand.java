@@ -89,6 +89,7 @@ import com.watabou.utils.PathFinder;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public abstract class Wand extends Weapon implements ChargingItem, AttunementItem, Rankable {
@@ -244,7 +245,27 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 
     @Override
     public void activate(Char ch) {
-        charge(ch, 0.75f);
+        charge(ch, 1.6f);
+    }
+
+    public float rechargeModifier(int rank){
+        switch (rank){
+            case 0: return 1.0f;
+            case 1: return 1.0f;
+            case 2: return 1.0f;
+        }
+        return 0f;
+    }
+
+    public float rechargeModifier(){
+        float rechargeModifier = rechargeModifier(rank());
+//        if (Dungeon.hero.belongings.armor instanceof ClothArmor){
+//            ClothArmor armor = (ClothArmor) Dungeon.hero.belongings.armor;
+//            if (armor.level() == 1){
+//                rechargeModifier *= 0.667f;
+//            }
+//        }
+        return rechargeModifier;
     }
 
 	public void gainCharge( float amt ){
@@ -252,7 +273,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 	}
 
 	public void gainCharge( float amt, boolean overcharge ){
-		partialCharge += amt;
+		partialCharge += amt/rechargeModifier();
 		while (partialCharge >= 1) {
 			if (overcharge) curCharges = Math.min(maxCharges+(int)amt, curCharges+1);
 			else curCharges = Math.min(maxCharges, curCharges+1);
@@ -542,12 +563,11 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
     }
 
 	public void updateLevel() {
-		maxCharges = Math.min( initialCharges() + level(), 10 );
 		curCharges = Math.min( curCharges, maxCharges );
 	}
 	
 	public int initialCharges() {
-		return 2;
+		return 5;
 	}
 
 	protected int chargesPerCast() {
@@ -580,8 +600,20 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
     public void rank(int rank) {
         this.rank = rank;
     }
-	
-	public void fx(Ballistica bolt, Callback callback) {
+
+    @Override
+    public String getRankMessage(int rank) {
+        return Messages.get(this, "rank" + rank,
+                getRechargeInfo(rank)
+        );
+    }
+
+    private String getRechargeInfo(int rank) {
+        return new DecimalFormat("#.##").format(
+                charger == null ? Charger.BASE_CHARGE_DELAY*rechargeModifier(rank) : charger.getTurnsToCharge(rank - 1));
+    }
+
+    public void fx(Ballistica bolt, Callback callback) {
 		MagicMissile.boltFromChar( curUser.sprite.parent,
 				MagicMissile.MAGIC_MISSILE,
 				curUser.sprite,
@@ -999,9 +1031,8 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 
 	public class Charger extends Buff {
 		
-		private static final float BASE_CHARGE_DELAY = 10f;
-		private static final float SCALING_CHARGE_ADDITION = 40f;
-		private static final float NORMAL_SCALE_FACTOR = 0.875f;
+		private static final float BASE_CHARGE_DELAY = 40f;
+		private static final float NORMAL_SCALE_FACTOR = 1f;
 
 		private static final float CHARGE_BUFF_BONUS = 0.25f;
 
@@ -1040,11 +1071,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		}
 
 		private void recharge(){
-			int missingCharges = maxCharges - curCharges;
-			missingCharges = Math.max(0, missingCharges);
-
-			float turnsToCharge = (float) (BASE_CHARGE_DELAY
-					+ (SCALING_CHARGE_ADDITION * Math.pow(scalingFactor, missingCharges)));
+			float turnsToCharge = getTurnsToCharge();
 
 			if (Regeneration.regenOn())
 				partialCharge += (1f/turnsToCharge) * RingOfEnergy.wandChargeMultiplier(target);
@@ -1055,6 +1082,14 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 				}
 			}
 		}
+
+        public float getTurnsToCharge() {
+            return getTurnsToCharge(rank());
+        }
+
+        public float getTurnsToCharge(int rank){
+            return BASE_CHARGE_DELAY/rechargeModifier(rank)/scalingFactor;
+        }
 		
 		public Wand wand(){
 			return Wand.this;
@@ -1062,7 +1097,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 
 		public void gainCharge(float charge){
 			if (curCharges < maxCharges) {
-				partialCharge += charge;
+				partialCharge += charge/rechargeModifier();
 				while (partialCharge >= 1f) {
 					curCharges++;
 					partialCharge--;
