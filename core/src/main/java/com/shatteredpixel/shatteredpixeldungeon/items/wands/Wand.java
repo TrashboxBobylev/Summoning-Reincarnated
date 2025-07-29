@@ -550,17 +550,12 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
                 base += 1 + 0.5f*((Hero)charger.target).pointsInTalent(Talent.WILD_POWER); // +2/+2.5/+3/+3.5/+4 at 0/1/2/3/4 talent points
             }
             WandOfMagicMissile.MagicCharge buff = charger.target.buff(WandOfMagicMissile.MagicCharge.class);
-            if (buff != null){
-                return base*1.5f;
+            if (buff != null && buff.wandJustApplied() != this){
+                return (base+1)*1.5f-1;
             }
         }
         return base;
     }
-
-	@Override
-	public int buffedLvl() {
-        return super.buffedLvl() + (int) power();
-	}
 
 	public void updateLevel() {
 		maxCharges = Math.min( initialCharges() + level(), 10 );

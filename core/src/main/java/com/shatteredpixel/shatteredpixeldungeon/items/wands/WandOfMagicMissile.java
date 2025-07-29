@@ -37,7 +37,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
 public class WandOfMagicMissile extends DamageWand {
@@ -70,10 +69,10 @@ public class WandOfMagicMissile extends DamageWand {
 
 			//apply the magic charge buff if we have another wand in inventory of a lower level, or already have the buff
 			for (Wand.Charger wandCharger : curUser.buffs(Wand.Charger.class)){
-				if (wandCharger.wand().power() < power() || curUser.buff(MagicCharge.class) != null){
-					Buff.prolong(curUser, MagicCharge.class, MagicCharge.DURATION).setup(this);
-					break;
-				}
+                if (wandCharger != charger) {
+                    Buff.prolong(curUser, MagicCharge.class, MagicCharge.DURATION).setup(this);
+                    break;
+                }
 			}
 
 		} else {
@@ -104,15 +103,10 @@ public class WandOfMagicMissile extends DamageWand {
 		}
 
 		public static float DURATION = 4f;
-
-		private int level = 0;
 		private Wand wandJustApplied; //we don't bundle this as it's only used right as the buff is applied
 
 		public void setup(Wand wand){
-			if (level < wand.buffedLvl()){
-				this.level = wand.buffedLvl();
-				this.wandJustApplied = wand;
-			}
+            this.wandJustApplied = wand;
 		}
 
 		@Override
@@ -121,15 +115,9 @@ public class WandOfMagicMissile extends DamageWand {
 			updateQuickslot();
 		}
 
-		public int level(){
-			return this.level;
-		}
-
 		//this is used briefly so that a wand of magic missile can't clear the buff it just applied
 		public Wand wandJustApplied(){
-			Wand result = this.wandJustApplied;
-			this.wandJustApplied = null;
-			return result;
+            return this.wandJustApplied;
 		}
 
 		@Override
@@ -145,20 +133,6 @@ public class WandOfMagicMissile extends DamageWand {
 		@Override
 		public float iconFadePercent() {
 			return Math.max(0, (DURATION - visualcooldown()) / DURATION);
-		}
-
-        private static final String LEVEL = "level";
-
-		@Override
-		public void storeInBundle(Bundle bundle) {
-			super.storeInBundle(bundle);
-			bundle.put(LEVEL, level);
-		}
-
-		@Override
-		public void restoreFromBundle(Bundle bundle) {
-			super.restoreFromBundle(bundle);
-			level = bundle.getInt(LEVEL);
 		}
 	}
 
