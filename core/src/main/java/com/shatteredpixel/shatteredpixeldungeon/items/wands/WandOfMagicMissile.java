@@ -31,8 +31,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
@@ -52,28 +55,61 @@ public class WandOfMagicMissile extends DamageWand {
 	public float magicMax(float lvl){
 		return 8+2*lvl;
 	}
-	
-	@Override
+
+    @Override
+    public float powerModifier(int rank) {
+        switch (rank){
+            case 1: return 1f;
+            case 2: return 3f;
+            case 3: return 0f;
+        }
+        return super.powerModifier(rank);
+    }
+
+    @Override
+    public float rechargeModifier(int rank) {
+        switch (rank){
+            case 1: return 1f;
+            case 2: return 1.75f;
+            case 3: return 1.33f;
+        }
+        return super.rechargeModifier(rank);
+    }
+
+    @Override
 	public void onZap(Ballistica bolt) {
 				
 		Char ch = Actor.findChar( bolt.collisionPos );
 		if (ch != null) {
+            boolean hit = true;
 
 			if (!(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))) {
-				wandProc(ch, chargesPerCast());
-				ch.damage(damageRoll(), this);
-			}
-			Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, Random.Float(0.87f, 1.15f) );
-
-			ch.sprite.burst(0xFFFFFFFF, (int) (power() / 2 + 2));
-
-			//apply the magic charge buff if we have another wand in inventory of a lower level, or already have the buff
-			for (Wand.Charger wandCharger : curUser.buffs(Wand.Charger.class)){
-                if (wandCharger != charger) {
-                    Buff.prolong(curUser, MagicCharge.class, MagicCharge.DURATION).setup(this);
-                    break;
+                if (rank() == 2){
+                    hit = Char.hit( curUser, ch, 1.5f, true );
+                }
+                if (hit) {
+                    wandProc(ch, chargesPerCast());
+                    if (damageRoll() > 0)
+                        ch.damage(damageRoll(), this);
+                } else {
+                    ch.sprite.showStatus( CharSprite.NEUTRAL,  ch.defenseVerb() );
+                    Buff.detach(curUser, Talent.FightingWizardryTracker.class);
                 }
 			}
+            if (hit) {
+                Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC, 1, Random.Float(0.87f, 1.15f));
+                if (rank() != 2) {
+                    //apply the magic charge buff if we have another wand in inventory of a lower level, or already have the buff
+                    for (Wand.Charger wandCharger : curUser.buffs(Wand.Charger.class)) {
+                        if (wandCharger != charger) {
+                            Buff.prolong(curUser, MagicCharge.class, MagicCharge.DURATION).setup(this);
+                            break;
+                        }
+                    }
+                }
+            }
+
+			ch.sprite.burst(0xFFFFFFFF, (int) (power() / 2 + 2));
 
 		} else {
 			Dungeon.level.pressCell(bolt.collisionPos);
@@ -91,9 +127,6 @@ public class WandOfMagicMissile extends DamageWand {
 
 	}
 
-	public int initialCharges() {
-		return 3;
-	}
 
 	public static class MagicCharge extends FlavourBuff {
 
@@ -120,6 +153,13 @@ public class WandOfMagicMissile extends DamageWand {
             return this.wandJustApplied;
 		}
 
+        public float powerModifier(){
+            if (wandJustApplied.rank() == 3){
+                return 3f;
+            }
+            return 1.5f;
+        }
+
 		@Override
 		public int icon() {
 			return BuffIndicator.UPGRADE;
@@ -134,6 +174,11 @@ public class WandOfMagicMissile extends DamageWand {
 		public float iconFadePercent() {
 			return Math.max(0, (DURATION - visualcooldown()) / DURATION);
 		}
-	}
+
+        @Override
+        public String desc() {
+            return Messages.get(this, "desc", powerModifier(), dispTurns());
+        }
+    }
 
 }
