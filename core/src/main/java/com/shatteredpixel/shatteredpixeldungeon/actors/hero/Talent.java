@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AttunementBoost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CounterBuff;
@@ -39,9 +40,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.EnhancedRings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ManaEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ManaStealing;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PhysicalEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RevealedArea;
@@ -127,7 +128,7 @@ public enum Talent {
 	//Mage T1
 	EMPOWERING_MEAL(32), SCHOLARS_INTUITION(33), LINGERING_MAGIC(34), BACKUP_BARRIER(35),
 	//Mage T2
-	ENERGIZING_MEAL(36), INSCRIBED_POWER(37), WAND_PRESERVATION(38), ARCANE_VISION(39), SHIELD_BATTERY(40),
+	ENERGIZING_MEAL(36), INSCRIBED_POWER(37), WAND_PRESERVATION(38), ARCANE_VISION(39), SHIELD_BATTERY(40), FIGHTING_WIZARDRY(59),
 	//Mage T3
 	DESPERATE_POWER(41, 3), ALLY_WARP(42, 3),
 	//Battlemage T3
@@ -544,6 +545,31 @@ public enum Talent {
 	}
 	public static class CharityEmpoweringTracker extends Buff{}
 	public static class MaliceEmpoweringTracker extends Buff{}
+    public static class FightingWizardryTracker extends FlavourBuff{
+        public int counter;
+        { type = buffType.POSITIVE; }
+        public int icon() { return BuffIndicator.WAND; }
+        public void tintIcon(Image icon) { icon.hardlight(0x9328c9); }
+        public float iconFadePercent() { return Math.max(0, 1f - (visualcooldown() / 5)); }
+        public float powerBoost(){return counter*0.15f*(1+Dungeon.hero.pointsInTalent(FIGHTING_WIZARDRY));}
+        @Override
+        public String desc() {
+            return Messages.get(this, "desc", powerBoost(), dispTurns());
+        }
+
+        private static final String COUNT = "count";
+        @Override
+        public void storeInBundle(Bundle bundle) {
+            super.storeInBundle(bundle);
+            bundle.put(COUNT, counter);
+        }
+
+        @Override
+        public void restoreFromBundle(Bundle bundle) {
+            super.restoreFromBundle(bundle);
+            counter = bundle.getInt(COUNT);
+        }
+    };
 
 	int icon;
 	int maxPoints;
@@ -1111,6 +1137,15 @@ public enum Talent {
 			}
 		}
 
+        if (hero.hasTalent(FIGHTING_WIZARDRY)){
+            if (hero.heroClass == HeroClass.MAGE){
+                if (hero.belongings.weapon() instanceof Wand)
+                    Buff.prolong(hero, FightingWizardryTracker.class, 5f).counter++;
+            } else {
+                Buff.prolong(hero, AttunementBoost.class, 10f).boost(0.3f*hero.pointsInTalent(FIGHTING_WIZARDRY));
+            }
+        }
+
 		return dmg;
 	}
 
@@ -1243,7 +1278,7 @@ public enum Talent {
 				Collections.addAll(tierTalents, IRON_STOMACH, LIQUID_WILLPOWER, RUNIC_TRANSFERENCE, LETHAL_MOMENTUM, IMPROVISED_PROJECTILES);
 				break;
 			case MAGE:
-				Collections.addAll(tierTalents, ENERGIZING_MEAL, INSCRIBED_POWER, WAND_PRESERVATION, ARCANE_VISION, SHIELD_BATTERY);
+				Collections.addAll(tierTalents, ENERGIZING_MEAL, INSCRIBED_POWER, FIGHTING_WIZARDRY, ARCANE_VISION, SHIELD_BATTERY);
 				break;
 			case ROGUE:
 				Collections.addAll(tierTalents, MYSTICAL_MEAL, INSCRIBED_STEALTH, WIDE_SEARCH, SILENT_STEPS, ROGUES_FORESIGHT);

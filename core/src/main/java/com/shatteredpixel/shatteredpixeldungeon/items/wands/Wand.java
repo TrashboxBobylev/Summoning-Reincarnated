@@ -194,12 +194,16 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 
     @Override
     public int min(int lvl) {
-        return Math.round(1 + power());
+        boolean isGame = Dungeon.hero != null;
+        float base = isGame ? Dungeon.hero.ATU() - 1 : 0;
+        return Math.round(1 + base);
     }
 
     @Override
     public int max(int lvl) {
-        return Math.round(7 + power()*2);
+        boolean isGame = Dungeon.hero != null;
+        float base = isGame ? Dungeon.hero.ATU() - 1 : 0;
+        return Math.round(7 + base*2);
     }
 
     @Override
@@ -208,7 +212,11 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
     }
 
     public float power(){
-        int base = Dungeon.hero != null ? Dungeon.hero.ATU() - 1 : 0;
+        boolean isGame = Dungeon.hero != null;
+        float base = isGame ? Dungeon.hero.ATU() - 1 : 0;
+        if (isGame && isEquipped(Dungeon.hero) && Dungeon.hero.buff(Talent.FightingWizardryTracker.class) != null){
+            base += Dungeon.hero.buff(Talent.FightingWizardryTracker.class).powerBoost();
+        }
         return base;
     }
 
@@ -357,6 +365,8 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 				target.alignment == Char.Alignment.ENEMY){
 				Buff.affect(target, Talent.EnergyBreakTracker.class, 5f);
 			}
+
+            Buff.detach(target, Talent.FightingWizardryTracker.class);
 		}
 	}
 
@@ -447,6 +457,11 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
             desc += " " + enchantment.desc();
         } else if (enchantHardened){
             desc += "\n\n" + Messages.get(Weapon.class, "hardened_no_enchant");
+        }
+
+        if (power() > (Dungeon.hero != null ? Dungeon.hero.ATU() - 1 : 0)){
+            desc += "\n\n" + Messages.get(Wand.class, "boost",
+                    Messages.decimalFormat("#.##", power() - (Dungeon.hero != null ? Dungeon.hero.ATU() - 1 : 0)));
         }
 
 		if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE){
