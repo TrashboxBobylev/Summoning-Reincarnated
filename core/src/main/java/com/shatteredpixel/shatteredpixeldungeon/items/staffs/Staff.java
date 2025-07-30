@@ -479,10 +479,7 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
 
     @Override
     public Item random() {
-        //20% chance to have rank II or rank III
-        if (Random.Int(5) == 0){
-            rank(2 + Random.Int(2));
-        }
+        rank(Random.Int(1, 4));
 
         //25% chance to be cursed
         //10% chance to be enchanted
