@@ -428,7 +428,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 
 		desc += "\n\n" + statsDesc();
 
-        if (Dungeon.hero.heroClass == HeroClass.MAGE){
+        if (Dungeon.hero != null && Dungeon.hero.heroClass == HeroClass.MAGE){
             desc += "\n\n" + Messages.get(Wand.class, "melee", GameMath.printAverage(augment.damageFactor(min()), augment.damageFactor(max())));
         }
 
