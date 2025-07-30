@@ -135,7 +135,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourg
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.FrostBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.DreemurrsNecromancy;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.RunicShell;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
@@ -991,7 +990,7 @@ if (defRoll < acuRoll && (defRoll*FerretTuft.evasionMultiplier()) >= acuRoll){
             if (c != null) {
                 c.recover(src);
             }
-            if (this.buff(Frost.class) != null) {
+            if (this.buff(Frost.class) != null && this.buff(FrostBomb.ResistTracker.class) == null) {
                 Buff.detach( this, Frost.class );
             }
             if (this.buff(MagicalSleep.class) != null){
