@@ -653,6 +653,10 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         return emitter;
     }
 
+    public float timeToZap(){
+        return TIME_TO_ZAP;
+    }
+
 	public void wandUsed() {
 		if (!isIdentified()) {
 			float uses = Math.min( availableUsesToID, Talent.itemIDSpeedFactor(Dungeon.hero, this) );
@@ -754,7 +758,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		Invisibility.dispel();
 		updateQuickslot();
 
-		curUser.spendAndNext( TIME_TO_ZAP );
+		curUser.spendAndNext( timeToZap() );
 	}
 	
 	@Override

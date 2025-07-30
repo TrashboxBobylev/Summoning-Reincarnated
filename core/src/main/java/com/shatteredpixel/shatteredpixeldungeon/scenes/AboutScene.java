@@ -333,7 +333,8 @@ public class AboutScene extends PixelScene {
 				"_Sheep bleating_ by _zachrau_\n" +
 				"_Lemon,Juicy,Squeeze,Fruit.wav_ by _Filipe Chagas_\n" +
 				"_Lemon,Squeeze,Squishy,Fruit.wav_ by _Filipe Chagas_\n" +
-				"_The Gong sound_ by _grvmusic_",
+				"_The Gong sound_ by _grvmusic_\n" +
+                "_Lightning (thunderbolt)_ by _DominikBraun_",
 				"www.freesound.org",
 				"https://www.freesound.org");
 		freesound.setRect(transifex.left()-10, transifex.bottom() + 8, colWidth+20, 0);

@@ -31,6 +31,10 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DwarfKing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
@@ -39,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
@@ -47,6 +52,7 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
+import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
@@ -68,14 +74,49 @@ public class WandOfLightning extends DamageWand {
 	public float magicMax(float lvl){
 		return 10+5*lvl;
 	}
-	
-	@Override
+
+    @Override
+    public float timeToZap() {
+        if (rank() == 2){
+            return 5f;
+        }
+        return super.timeToZap();
+    }
+
+    @Override
+    public float powerModifier(int rank) {
+        switch (rank){
+            case 1: return 1.0f;
+            case 2: return 4.5f;
+            case 3: return 0.66f;
+        }
+        return super.powerModifier(rank);
+    }
+
+    @Override
+    public float rechargeModifier(int rank) {
+        switch (rank){
+            case 1: return 1.0f;
+            case 2: return 3f;
+            case 3: return 1.5f;
+        }
+        return super.rechargeModifier(rank);
+    }
+
+    @Override
 	public void onZap(Ballistica bolt) {
 
 		//lightning deals less damage per-target, the more targets that are hit.
-		float multiplier = 0.4f + (0.6f/affected.size());
+        float[] ratios = new float[]{0.4f, 0.6f};
+        switch (rank()){
+            case 2:
+                ratios[0] = 0.9f;
+                ratios[1] = 0.1f;
+                break;
+        }
+		float multiplier = ratios[0] + (ratios[1]/affected.size());
 		//if the main target is in water, all affected take full damage
-		if (Dungeon.level.water[bolt.collisionPos]) multiplier = 1f;
+		if ((Dungeon.level.water[bolt.collisionPos] || rank() == 3) && rank() != 2) multiplier = 1f;
 
 		for (Char ch : affected){
 			if (!(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))) {
@@ -97,6 +138,12 @@ public class WandOfLightning extends DamageWand {
 				} else {
 					ch.damage(Math.round(damageRoll() * multiplier), this);
 				}
+                if (rank() == 3){
+                    Buff.affect(ch, Paralysis.class, 2f);
+                    if (!ch.isAlive()){
+                        GameScene.add(Blob.seed(ch.pos, 5, Electricity.class));
+                    }
+                }
 			}
 		}
 	}
@@ -117,6 +164,12 @@ public class WandOfLightning extends DamageWand {
 	private void arc( Char ch ) {
 
 		int dist = Dungeon.level.water[ch.pos] ? 2 : 1;
+        if (rank() == 3){
+            dist *= 2;
+        }
+        if (rank() == 2){
+            dist = 1;
+        }
 
 		ArrayList<Char> hitThisArc = new ArrayList<>();
 		PathFinder.buildDistanceMap( ch.pos, BArray.not( Dungeon.level.solid, null ), dist );
@@ -135,7 +188,8 @@ public class WandOfLightning extends DamageWand {
 		affected.addAll(hitThisArc);
 		for (Char hit : hitThisArc){
 			arcs.add(new Lightning.Arc(ch.sprite.center(), hit.sprite.center()));
-			arc(hit);
+            if (rank() != 2)
+			    arc(hit);
 		}
 	}
 	
@@ -146,6 +200,11 @@ public class WandOfLightning extends DamageWand {
 		arcs.clear();
 
 		int cell = bolt.collisionPos;
+        PointF source = curUser.sprite.center();
+        if (rank() == 2){
+            source = DungeonTilemap.raisedTileCenterToWorld(cell);
+            source.y -= source.y*5;
+        }
 
 		Char ch = Actor.findChar( cell );
 		if (ch != null) {
@@ -154,16 +213,39 @@ public class WandOfLightning extends DamageWand {
 			}
 
 			affected.add( ch );
-			arcs.add( new Lightning.Arc(curUser.sprite.center(), ch.sprite.center()));
+            if (rank() == 2){
+                for (int i = 0; i < 5; i++){
+                    PointF dest = ch.sprite.center();
+                    dest.x += Random.Int(-4, 4);
+                    arcs.add( new Lightning.Arc(source, dest));
+                }
+            } else {
+                arcs.add(new Lightning.Arc(source, ch.sprite.center()));
+            }
 			arc(ch);
 		} else {
-			arcs.add( new Lightning.Arc(curUser.sprite.center(), DungeonTilemap.raisedTileCenterToWorld(bolt.collisionPos)));
+            if (rank() == 2){
+                for (int i = 0; i < 5; i++){
+                    PointF dest = DungeonTilemap.raisedTileCenterToWorld(bolt.collisionPos);
+                    dest.x += Random.Int(-4, 4);
+                    arcs.add( new Lightning.Arc(source, dest));
+                }
+            } else {
+                arcs.add( new Lightning.Arc(source, DungeonTilemap.raisedTileCenterToWorld(bolt.collisionPos)));
+            }
 			CellEmitter.center( cell ).burst( SparkParticle.FACTORY, 3 );
 		}
 
+        if (rank() == 2){
+            curUser.sprite.parent.add(new Lightning(cell - 1, cell + 1, null));
+            curUser.sprite.parent.add(new Lightning(cell - Dungeon.level.width(), cell + Dungeon.level.width(), null));
+            curUser.sprite.parent.add(new Lightning(cell - 1 - Dungeon.level.width(), cell + 1 + Dungeon.level.width(), null));
+            curUser.sprite.parent.add(new Lightning(cell - 1 + Dungeon.level.width(), cell + 1 - Dungeon.level.width(), null));
+        }
+
 		//don't want to wait for the effect before processing damage.
 		curUser.sprite.parent.addToFront( new Lightning( arcs, null ) );
-		Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
+		Sample.INSTANCE.play( rank() == 2 ? Assets.Sounds.LIGHTNING_BOLT : Assets.Sounds.LIGHTNING );
 		callback.call();
 	}
 
