@@ -475,6 +475,12 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 			desc += "\n\n" + Messages.get(this, "bmage_desc");
 		}
 
+        if (charger != null && curCharges < maxCharges){
+            desc += "\n\n" + Messages.get(Wand.class, "recharge",
+                    new DecimalFormat("#.##").format(
+                            charger.getTurnsToCharge() - partialCharge*charger.getTurnsToCharge()));
+        }
+
 		return desc;
 	}
 
