@@ -305,7 +305,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         }
 
         if (attacker instanceof Hero && ((Hero)attacker).subClass == HeroSubClass.BATTLEMAGE) {
-            if (curCharges < maxCharges) partialCharge += 0.5f;
+            if (curCharges < maxCharges) partialCharge += 0.5f/rechargeModifier(rank());
             ScrollOfRecharging.charge((Hero)attacker);
             onHit(attacker, defender, damage);
         }
