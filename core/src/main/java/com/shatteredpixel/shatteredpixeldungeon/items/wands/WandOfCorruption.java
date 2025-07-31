@@ -126,8 +126,29 @@ public class WandOfCorruption extends Wand {
 		MAJOR_DEBUFFS.put(Frost.class,          0f);
 		MAJOR_DEBUFFS.put(Doom.class,           0f);
 	}
-	
-	@Override
+
+    @Override
+    public float powerModifier(int rank) {
+        switch (rank){
+            case 2: return 0.8f;
+        }
+        return super.powerModifier(rank);
+    }
+
+    @Override
+    public float rechargeModifier(int rank) {
+        switch (rank){
+            case 1: return 1f;
+            case 2: return 1.33f;
+            case 3: return 0.4f;
+        }
+        return super.rechargeModifier(rank);
+    }
+
+    static final float RANK_3_MIN = 0.25f;
+    static final float RANK_3_MAX = 1.67f;
+
+    @Override
 	public void onZap(Ballistica bolt) {
 		Char ch = Actor.findChar(bolt.collisionPos);
 
@@ -143,7 +164,10 @@ public class WandOfCorruption extends Wand {
 				Statistics.qualifiedForBossChallengeBadge = false;
 			}
 
-			float corruptingPower = 3 + power()/3f;
+			float corruptingPower = corruptingPower();
+            if (rank() == 3){
+                corruptingPower *= Random.Float(RANK_3_MIN, RANK_3_MAX);
+            }
 			
 			//base enemy resistance is usually based on their exp, but in special cases it is based on other criteria
 			float enemyResist;
@@ -195,8 +219,29 @@ public class WandOfCorruption extends Wand {
 			Dungeon.level.pressCell(bolt.collisionPos);
 		}
 	}
-	
-	private void debuffEnemy( Mob enemy, HashMap<Class<? extends Buff>, Float> category ){
+
+    @Override
+    protected int chargesPerCast() {
+        if (rank() == 2){
+            return curCharges;
+        }
+        return super.chargesPerCast();
+    }
+
+    private float corruptingPower(){
+        return corruptingPower(rank());
+    }
+
+    private float corruptingPower(int rank) {
+        float power = 3 + power() / 3f;
+        power *= powerModifier(rank);
+        if (rank == 2){
+            power *= Math.pow(1.5f, Math.max(0, curCharges-1));
+        }
+        return power;
+    }
+
+    private void debuffEnemy( Mob enemy, HashMap<Class<? extends Buff>, Float> category ){
 		
 		//do not consider buffs which are already assigned, or that the enemy is immune to.
 		HashMap<Class<? extends Buff>, Float> debuffs = new HashMap<>(category);
@@ -210,20 +255,37 @@ public class WandOfCorruption extends Wand {
 			 	debuffs.put(toAssign, 0f);
 			 }
 		}
+        float debuffDuration = debuffDuration();
+        if (rank() == 3){
+            debuffDuration *= Random.Float(RANK_3_MIN, RANK_3_MAX);
+        }
 		
 		//all buffs with a > 0 chance are flavor buffs
 		Class<?extends FlavourBuff> debuffCls = (Class<? extends FlavourBuff>) Random.chances(debuffs);
 		
 		if (debuffCls != null){
-			Buff.append(enemy, debuffCls, 6 + power()*3);
+			Buff.append(enemy, debuffCls, debuffDuration);
 		} else {
 			//if no debuff can be applied (all are present), then go up one tier
 			if (category == MINOR_DEBUFFS)          debuffEnemy( enemy, MAJOR_DEBUFFS);
 			else if (category == MAJOR_DEBUFFS)     corruptEnemy( enemy );
 		}
 	}
-	
-	private void corruptEnemy( Mob enemy ){
+
+    private float debuffDuration(){
+        return debuffDuration(rank());
+    }
+
+    private float debuffDuration(int rank) {
+        float duration = 6 + power() * 3;
+        duration *= powerModifier(rank);
+        if (rank == 2){
+            duration *= Math.pow(1.66f, Math.max(0, curCharges-1));
+        }
+        return duration;
+    }
+
+    private void corruptEnemy( Mob enemy ){
 		//cannot re-corrupt or doom an enemy, so give them a major debuff instead
 		if(enemy.buff(Corruption.class) != null || enemy.buff(Doom.class) != null){
 			GLog.w( Messages.get(this, "already_corrupted") );
@@ -255,7 +317,22 @@ public class WandOfCorruption extends Wand {
 		}
 	}
 
-	@Override
+    @Override
+    public String getRankMessage(int rank) {
+        if (rank == 3){
+            return Messages.get(this, "rank" + rank,
+                    getRechargeInfo(rank),
+                    corruptingPower(rank)*RANK_3_MIN, corruptingPower(rank)*RANK_3_MAX,
+                    debuffDuration(rank)*RANK_3_MIN, debuffDuration(rank)*RANK_3_MAX
+            );
+        }
+        return Messages.get(this, "rank" + rank,
+                getRechargeInfo(rank),
+                corruptingPower(rank), debuffDuration(rank)
+        );
+    }
+
+    @Override
 	public String upgradeStat1(int level) {
 		return Messages.decimalFormat("#.##", 3f + level/3f);
 	}
