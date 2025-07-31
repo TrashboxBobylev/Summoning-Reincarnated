@@ -895,6 +895,8 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 				} else {
 					return;
 				}
+                if (curWand instanceof WandOfDisintegration)
+                    Ballistica.REFLECTION = 4;
 
 				final Ballistica shot = new Ballistica( curUser.pos, target, curWand.collisionProperties(target));
 				int cell = shot.collisionPos;

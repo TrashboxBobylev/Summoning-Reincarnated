@@ -27,6 +27,8 @@ package com.shatteredpixel.shatteredpixeldungeon.mechanics;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.watabou.utils.GameMath;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,7 +132,7 @@ public class Ballistica {
 			boolean alreadyReflected = false;
 			while (Dungeon.level.insideMap(cell)) {
 				// Wall case is treated differently by stopping one early
-				if (stopTerrain && cell != sourcePos && !Dungeon.level.passable[cell] && !Dungeon.level.avoid[cell]) {
+				if (stopTerrain && cell != sourcePos && Dungeon.level.solid[cell]) {
 					int cellBeforeWall = path.get(path.size() - 1);
 
 					alreadyReflected = reflect(stopTarget, stopChars, stopTerrain, ignoreSoftSolid, w, x0, y0, stepX, stepY, cell, alreadyReflected, cellBeforeWall);
@@ -193,45 +195,55 @@ public class Ballistica {
 		}
 	}
 
-	private boolean solidForReflect(int cell){
-		return Dungeon.level.solid[cell];
-	}
-
-	private boolean reflect(boolean stopTarget, boolean stopChars, boolean stopTerrain, boolean ignoreSoftSolid, int w, int x0, int y0, int stepX, int stepY, int cell, boolean alreadyReflected, int cellBeforeWall) {
+	private boolean reflect(boolean stopTarget, boolean stopChars, boolean stopTerrain, boolean ignoreSoftSolid, int w, int sourceX, int sourceY, int targetX, int targetY, int cell, boolean alreadyReflected, int cellBeforeWall) {
 		if (!alreadyReflected) {
-			int cellAdjacentHorizontal = cellBeforeWall + stepX;
-			int cellAdjacentVertical = cellBeforeWall + stepY * w;
-			int cellAdjacentHorizontal2 = cellBeforeWall - stepX;
-			int cellAdjacentVertical2 = cellBeforeWall - stepY * w;
-			if (solidForReflect(cellAdjacentVertical) && solidForReflect(cellAdjacentHorizontal)) {
-				// found a corner?
-				collide(cellBeforeWall);
-			} else if (!solidForReflect(cellAdjacentVertical) && !solidForReflect(cellAdjacentHorizontal)) {
-				// both sides open? how did we get this case?
-				collide(cellBeforeWall);
-			} else {
-				// actual reflection
-				int destinationX, destinationY;
-				if (!solidForReflect(cellAdjacentVertical)) {
-					// bounce against vertical wall, keep x
-					destinationX = x0;
-					destinationY = y0 + stepY * Math.abs(y0 - cell / w) * 2;
-					if (destinationY == y0){
-						collide(cellBeforeWall);
-						return true;
-					}
-				} else {
-					// bounce against horizontal wall, keep y
-					destinationY = y0;
-					destinationX = x0 + stepX * Math.abs(x0 - cell % w) * 2;
-					if (destinationX == x0){
-						collide(cellBeforeWall);
-						return true;
-					}
-				}
-				reflectPositions.add(cellBeforeWall);
-				build(cellBeforeWall, destinationX + destinationY * w, stopTarget, stopChars, stopTerrain, ignoreSoftSolid, ++reflectTimes < REFLECTION, false);
-			}
+            targetX = cellBeforeWall % w;
+            targetY = cellBeforeWall / w;
+            int reflectX = targetX;
+            int reflectY = targetY;
+
+            int deltaX = targetX - sourceX;
+            int deltaY = targetY - sourceY;
+
+            // right angles would reflect everything right back at ya so they are ignored
+            if( deltaX != 0 && deltaY != 0 ){
+                boolean horizontWall = Dungeon.level.solid[ cellBeforeWall - ( deltaX > 0 ? 1 : -1 ) ];
+                boolean verticalWall = Dungeon.level.solid[ cellBeforeWall - ( deltaY > 0 ? Dungeon.level.width() : -Dungeon.level.width() ) ];
+
+                if( !horizontWall || !verticalWall ) {
+
+                    // convex corners reflect in random direction
+                    boolean reflectHorizontally = horizontWall || ( !verticalWall && Random.Int( 2 ) == 0 );
+
+                    if( reflectHorizontally ) {
+                        // perform horizontal reflection
+                        reflectX += deltaX;
+                        reflectY -= deltaY;
+                    } else {
+                        // perform vertical reflection
+                        reflectX -= deltaX;
+                        reflectY += deltaY;
+                    }
+                } else {
+
+                    // concave corners reflect everything by both axes, unless hit from 45 degrees angle
+                    if( Math.abs( deltaX ) != Math.abs( deltaY ) ){
+
+                        if( deltaX > 0 == deltaY > 0 ){
+                            reflectX -= deltaY;
+                            reflectY -= deltaX;
+                        } else {
+                            reflectX += deltaY;
+                            reflectY += deltaX;
+                        }
+                    }
+                }
+            }
+
+            reflectX = (int) GameMath.gate( 0, reflectX, Dungeon.level.width() );
+            reflectY = (int) GameMath.gate( 0, reflectY, Dungeon.level.height() );
+            reflectPositions.add(cellBeforeWall);
+            build(cellBeforeWall, reflectX + reflectY * Dungeon.level.width(), stopTarget, stopChars, stopTerrain, ignoreSoftSolid, ++reflectTimes < REFLECTION, false);
 		}
 		return true;
 	}

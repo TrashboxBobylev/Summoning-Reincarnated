@@ -139,7 +139,7 @@ public class AboutScene extends PixelScene {
 				"The rest of credits:",
 				Icons.INFO.get(),
 				"RavenWolf#4290 - Advanced sprites\n" +
-						"Zrp200#0484, Kohru#4813 - Code spinnets\n"+
+						"Zrp200#0484, Kohru#4813, ConsideredHamster#9508 - Code spinnets\n"+
 						"smujames#5300, NeoSlav#5320 and rest of community - ideas and support",
 				"Pixel Dungeon's Discord link",
 				"https://discord.gg/KBfMN8X");

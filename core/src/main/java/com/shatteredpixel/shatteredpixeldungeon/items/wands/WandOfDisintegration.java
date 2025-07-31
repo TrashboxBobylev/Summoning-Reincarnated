@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
@@ -59,8 +60,36 @@ public class WandOfDisintegration extends DamageWand {
 	public float magicMax(float lvl){
 		return 8+4*lvl;
 	}
-	
-	@Override
+
+    @Override
+    public float powerModifier(int rank) {
+        switch (rank){
+            case 1: return 1.0f;
+            case 2: return 0.75f;
+            case 3: return 3.25f;
+        }
+        return super.powerModifier(rank);
+    }
+
+    @Override
+    public float rechargeModifier(int rank) {
+        switch (rank){
+            case 1: return 1.0f;
+            case 2: return 1.5f;
+            case 3: return 1.75f;
+        }
+        return super.rechargeModifier(rank);
+    }
+
+    @Override
+    protected int chargesPerCast() {
+        switch (rank()){
+            case 3: return 2;
+        }
+        return super.chargesPerCast();
+    }
+
+    @Override
 	public int targetingPos(Hero user, int dst) {
 		if (!cursed || !cursedKnown) {
 			return dst;
@@ -77,6 +106,9 @@ public class WandOfDisintegration extends DamageWand {
 		float level = power();
 		
 		int maxDistance = Math.min(distance(), beam.dist);
+        if (rank() == 2){
+            maxDistance = beam.path.size();
+        }
 		
 		ArrayList<Char> chars = new ArrayList<>();
 
@@ -96,7 +128,9 @@ public class WandOfDisintegration extends DamageWand {
 				if (ch instanceof Mob && ((Mob) ch).state == ((Mob) ch).PASSIVE
 						&& !(Dungeon.level.mapped[c] || Dungeon.level.visited[c])){
 					//avoid harming undiscovered passive chars
-				} else {
+				} else if (ch instanceof Hero ) {
+
+                } else {
 					chars.add(ch);
 				}
 			}
@@ -121,6 +155,9 @@ public class WandOfDisintegration extends DamageWand {
 		}
 		
 		float lvl = level + (chars.size()-1) + terrainBonus;
+        if (rank() == 3){
+            lvl -= terrainBonus + (chars.size()-1);
+        }
 		for (Char ch : chars) {
 			wandProc(ch, chargesPerCast());
 			ch.damage( damageRoll(lvl), this );
@@ -135,7 +172,7 @@ public class WandOfDisintegration extends DamageWand {
 	}
 
 	private int distance() {
-		return (int)power()*2 + 6;
+        return (int)power()*2 + 6;
 	}
 
 	@Override
@@ -143,11 +180,42 @@ public class WandOfDisintegration extends DamageWand {
 		return Integer.toString(6 + level*2);
 	}
 
-	@Override
+    @Override
+    public String getRankMessage(int rank) {
+        return Messages.get(this, "rank" + rank,
+                Math.round(magicMin(power())*powerModifier(rank)),
+                Math.round(magicMax(power())*powerModifier(rank)),
+                getRechargeInfo(rank),
+                distance()
+        );
+    }
+
+    @Override
+    public int collisionProperties(int target) {
+        if (rank() == 2){
+            return Ballistica.STOP_SOLID | Ballistica.REFLECT;
+        }
+        return super.collisionProperties(target);
+    }
+
+    @Override
 	public void fx(Ballistica beam, Callback callback) {
-		
-		int cell = beam.path.get(Math.min(beam.dist, distance()));
-		curUser.sprite.parent.add(new Beam.DeathRay(curUser.sprite.center(), DungeonTilemap.raisedTileCenterToWorld( cell )));
+        if (rank() == 2) {
+            if (beam.reflectPositions.isEmpty()) {
+                curUser.sprite.parent.add(
+                        new Beam.DeathRay(curUser.sprite.center(),
+                                DungeonTilemap.raisedTileCenterToWorld(beam.collisionPos)));
+            } else {
+                for (int i = 0; i < beam.reflectPositions.size(); i++) {
+                    curUser.sprite.parent.add(
+                            new Beam.DeathRay(i == 0 ? curUser.sprite.center() : DungeonTilemap.raisedTileCenterToWorld(beam.reflectPositions.get(i - 1)),
+                                    DungeonTilemap.raisedTileCenterToWorld(beam.reflectPositions.get(i))));
+                }
+            }
+        } else {
+            int cell = beam.path.get(Math.min(beam.dist, distance()));
+            curUser.sprite.parent.add(new Beam.DeathRay(curUser.sprite.center(), DungeonTilemap.raisedTileCenterToWorld( cell )));
+        }
 		callback.call();
 	}
 
