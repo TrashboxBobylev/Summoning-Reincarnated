@@ -71,8 +71,36 @@ public class WandOfLivingEarth extends DamageWand {
 	public float magicMax(float lvl) {
 		return 6 + 2*lvl;
 	}
-	
-	@Override
+
+    @Override
+    public float powerModifier(int rank) {
+        switch (rank){
+            case 1: return 1.0f;
+            case 2: return 2.0f;
+            case 3: return 9.0f;
+        }
+        return super.powerModifier(rank);
+    }
+
+    @Override
+    public float rechargeModifier(int rank) {
+        switch (rank){
+            case 1: return 1.0f;
+            case 2: return 2.5f;
+            case 3: return 25000f;
+        }
+        return super.powerModifier(rank);
+    }
+
+    @Override
+    protected int chargesPerCast() {
+        if (rank() == 3){
+            return maxCharges;
+        }
+        return super.chargesPerCast();
+    }
+
+    @Override
 	public void onZap(Ballistica bolt) {
 		Char ch = Actor.findChar(bolt.collisionPos);
 		int damage = damageRoll();
@@ -97,27 +125,30 @@ public class WandOfLivingEarth extends DamageWand {
 				|| ch.alignment == Char.Alignment.NEUTRAL && !(ch instanceof Mimic))){
 			armorToAdd = 0;
 		} else {
+            if (rank() == 3){
+                armorToAdd = (int) (curUser.HT*4.5f);
+            }
 			if (buff == null && guardian == null) {
 				buff = Buff.affect(curUser, RockArmor.class);
 			}
 			if (buff != null) {
-				buff.addArmor( power(), armorToAdd);
+				buff.addArmor( power(), rank(), armorToAdd);
 			}
 		}
 
 		//shooting at the guardian
 		if (guardian != null && guardian == ch){
 			guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
-			guardian.setInfo(curUser, power(), armorToAdd);
+			guardian.setInfo(curUser, power(), rank(), armorToAdd);
 			wandProc(guardian, chargesPerCast());
 			Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, 0.9f * Random.Float(0.87f, 1.15f) );
 
 		//shooting the guardian at a location
-		} else if ( guardian == null && buff != null && buff.armor >= buff.armorToGuardian()){
+		} else if ( guardian == null && buff != null && (buff.armor >= buff.armorToGuardian() && rank() != 3)){
 
 			//create a new guardian
 			guardian = new EarthGuardian();
-			guardian.setInfo(curUser, power(), buff.armor);
+			guardian.setInfo(curUser, power(), rank(), buff.armor);
 
 			if (buff.powerOfManyTurns > 0){
 				Buff.affect(guardian, PowerOfMany.PowerBuff.class, buff.powerOfManyTurns);
@@ -189,7 +220,7 @@ public class WandOfLivingEarth extends DamageWand {
 					if (guardian.sprite != null) { //may be in stasis
 						guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
 					}
-					guardian.setInfo(curUser, power(), armorToAdd);
+					guardian.setInfo(curUser, power(), rank(), armorToAdd);
 					if (ch.alignment == Char.Alignment.ENEMY || ch.buff(Amok.class) != null) {
 						guardian.aggro(ch);
 					}
@@ -240,10 +271,10 @@ public class WandOfLivingEarth extends DamageWand {
 
 		if (guardian != null){
 			guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
-			guardian.setInfo(Dungeon.hero, power(), armor);
+			guardian.setInfo(Dungeon.hero, power(), rank(), armor);
 		} else {
 			attacker.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
-			Buff.affect(attacker, RockArmor.class).addArmor( power(), armor);
+			Buff.affect(attacker, RockArmor.class).addArmor( power(), rank(), armor);
 		}
 	}
 	
@@ -263,7 +294,37 @@ public class WandOfLivingEarth extends DamageWand {
 		particle.y += dst;
 	}
 
-	public static class RockArmor extends Buff {
+    @Override
+    public String getRankMessage(int rank) {
+        return Messages.get(this, "rank" + rank,
+                Math.round(magicMin(power())*powerModifier(rank)),
+                Math.round(magicMax(power())*powerModifier(rank)),
+                getRechargeInfo(rank),
+                neededArmor(rank, power()),
+                Math.round(damageRatio(rank)*100),
+                Math.round(16 + 8 * power())*rank
+        );
+    }
+
+    public static int neededArmor(int rank, float power){
+        switch (rank){
+            case 1: return Math.round(8 + power*4);
+            case 2: return Math.round(16 + power*8);
+            case 3: return Dungeon.hero != null ? Math.round(Dungeon.hero.HT * 4.5f) : 90;
+        }
+        return 0;
+    }
+    public static float damageRatio(int rank){
+        switch (rank){
+            case 1: return 1/2f;
+            case 2: return 0f;
+            case 3: return 1f;
+        }
+        return 0f;
+    }
+
+
+    public static class RockArmor extends Buff {
 
 		{
 			type = buffType.POSITIVE;
@@ -271,6 +332,7 @@ public class WandOfLivingEarth extends DamageWand {
 
 		private float wandLevel;
 		private int armor;
+        private int rank;
 
 		private float powerOfManyTurns = 0;
 
@@ -287,18 +349,21 @@ public class WandOfLivingEarth extends DamageWand {
 			return true;
 		}
 
-		private void addArmor(float wandLevel, int toAdd ){
+		private void addArmor(float wandLevel, int rank, int toAdd ){
 			this.wandLevel = Math.max(this.wandLevel, wandLevel);
+            this.rank = rank;
 			armor += toAdd;
 			armor = (int) Math.min(armor, 2*armorToGuardian());
 		}
 
 		private float armorToGuardian(){
-			return 8 + wandLevel*4;
+            return neededArmor(rank, wandLevel);
 		}
 
+
+
 		public int absorb( int damage ) {
-			int block = damage - damage/2;
+			int block = (int) (damage - damage*(1f-damageRatio(rank)));
 			if (armor <= block) {
 				detach();
 				return damage - armor;
@@ -338,7 +403,7 @@ public class WandOfLivingEarth extends DamageWand {
 
 		@Override
 		public String desc() {
-			String desc = Messages.get( this, "desc", armor, (int)armorToGuardian());
+			String desc = Messages.get( this, "desc", Math.round(damageRatio(rank)*100), armor, (int)armorToGuardian());
 			if (isEmpowered()){
 				desc += "\n\n" + Messages.get(this, "desc_many", (int)powerOfManyTurns);
 			}
@@ -347,7 +412,7 @@ public class WandOfLivingEarth extends DamageWand {
 
 		private static final String WAND_LEVEL = "wand_level";
 		private static final String ARMOR = "armor";
-
+        private static final String RANK = "rank";
 		private static final String POWER_TURNS = "power_turns";
 
 		@Override
@@ -356,6 +421,7 @@ public class WandOfLivingEarth extends DamageWand {
 			bundle.put(WAND_LEVEL, wandLevel);
 			bundle.put(ARMOR, armor);
 			bundle.put(POWER_TURNS, powerOfManyTurns);
+            bundle.put(RANK, rank);
 		}
 
 		@Override
@@ -364,6 +430,7 @@ public class WandOfLivingEarth extends DamageWand {
 			wandLevel = bundle.getFloat(WAND_LEVEL);
 			armor = bundle.getInt(ARMOR);
 			powerOfManyTurns = bundle.getFloat(POWER_TURNS);
+            rank = bundle.getInt(RANK);
 		}
 	}
 
@@ -387,24 +454,36 @@ public class WandOfLivingEarth extends DamageWand {
 		}
 
 		private float wandLevel = -1;
+        private int rank = 1;
 
-		public void setInfo(Hero hero, float wandLevel, int healthToAdd){
+		public void setInfo(Hero hero, float wandLevel, int rank, int healthToAdd){
 			if (wandLevel > this.wandLevel) {
 				this.wandLevel = wandLevel;
 				HT = Math.round(16 + 8 * wandLevel);
+                if (rank == 2){
+                    HT *= 2;
+                }
 			}
+            this.rank = rank;
 			if (HP != 0 && sprite != null){
 				sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(healthToAdd), FloatingText.HEALING);
 			}
 			HP = Math.min(HT, HP + healthToAdd);
 			//half of hero's evasion
 			defenseSkill = (hero.lvl + 4)/2;
+            if (rank == 2){
+                defenseSkill /= 1.5f;
+            }
 		}
 
 		@Override
 		public int attackSkill(Char target) {
 			//same as the hero
-			return 2*defenseSkill + 5;
+            int accuracy = 2 * defenseSkill + 5;
+            if (rank == 2){
+                accuracy *= 1.5f;
+            }
+            return accuracy;
 		}
 
 		@Override
@@ -415,17 +494,33 @@ public class WandOfLivingEarth extends DamageWand {
 
 		@Override
 		public int damageRoll() {
-			return Random.NormalIntRange(2, 4 + Dungeon.scalingDepth()/2);
+            int damage = Random.NormalIntRange(2, 4 + Dungeon.scalingDepth() / 2);
+            if (rank == 2){
+                damage *= 3;
+            }
+            return damage;
 		}
 
-		@Override
+        @Override
+        public float attackDelay() {
+            if (rank == 2){
+                return super.attackDelay()*2;
+            }
+            return super.attackDelay();
+        }
+
+        @Override
 		public int drRoll() {
 			int dr = super.drRoll();
 			if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
-				return dr + Random.NormalIntRange((int) wandLevel, (int) (2 + wandLevel));
+				dr += Random.NormalIntRange((int) wandLevel, (int) (2 + wandLevel));
 			} else {
-				return dr + Random.NormalIntRange((int) wandLevel, (int) (3 + 3 * wandLevel));
+				dr += Random.NormalIntRange((int) wandLevel, (int) (3 + 3 * wandLevel));
 			}
+            if (rank == 2){
+                dr *= 1.5f;
+            }
+            return dr;
 		}
 
 		@Override
@@ -433,11 +528,16 @@ public class WandOfLivingEarth extends DamageWand {
 			String desc = Messages.get(this, "desc");
 
 			if (Actor.chars().contains(this)) {
-				if (Dungeon.isChallenged(Challenges.NO_ARMOR)) {
-					desc += "\n\n" + Messages.get(this, "wand_info", (int) wandLevel, (int) (2 + wandLevel));
-				} else {
-					desc += "\n\n" + Messages.get(this, "wand_info", (int) wandLevel, (int) (3 + 3 * wandLevel));
-				}
+                int minDr, maxDr;
+                if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
+                    minDr = (int)wandLevel; maxDr = (int)(2 + wandLevel);
+                } else {
+                    minDr = (int) wandLevel; maxDr = (int) (3 + 3 * wandLevel);
+                }
+                if (rank == 2){
+                    minDr *= 1.5f; maxDr *= 1.5f;
+                }
+                desc += "\n\n" + Messages.get(this, "wand_info", minDr, maxDr);
 			}
 
 			return desc;
@@ -450,12 +550,14 @@ public class WandOfLivingEarth extends DamageWand {
 
 		private static final String DEFENSE = "defense";
 		private static final String WAND_LEVEL = "wand_level";
+        private static final String RANK = "rank";
 
 		@Override
 		public void storeInBundle(Bundle bundle) {
 			super.storeInBundle(bundle);
 			bundle.put(DEFENSE, defenseSkill);
 			bundle.put(WAND_LEVEL, wandLevel);
+            bundle.put(RANK, rank);
 		}
 
 		@Override
@@ -463,6 +565,7 @@ public class WandOfLivingEarth extends DamageWand {
 			super.restoreFromBundle(bundle);
 			defenseSkill = bundle.getInt(DEFENSE);
 			wandLevel = bundle.getFloat(WAND_LEVEL);
+            rank = bundle.getInt(RANK);
 		}
 
 		private class Wandering extends Mob.Wandering{
@@ -470,7 +573,7 @@ public class WandOfLivingEarth extends DamageWand {
 			@Override
 			public boolean act(boolean enemyInFOV, boolean justAlerted) {
 				if (!enemyInFOV){
-					Buff.affect(Dungeon.hero, RockArmor.class).addArmor(wandLevel, HP);
+					Buff.affect(Dungeon.hero, RockArmor.class).addArmor(wandLevel, rank, HP);
 					if (buff(PowerOfMany.PowerBuff.class) != null){
 						Buff.affect(Dungeon.hero, RockArmor.class).powerOfManyTurns = buff(PowerOfMany.PowerBuff.class).cooldown()+1;
 					}
