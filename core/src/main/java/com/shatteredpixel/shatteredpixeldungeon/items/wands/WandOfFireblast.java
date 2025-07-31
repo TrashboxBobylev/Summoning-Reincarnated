@@ -62,13 +62,19 @@ public class WandOfFireblast extends DamageWand {
 	}
 
 	//1/2/3 base damage with 1/2/3 scaling based on charges used
-	public float magicMin(float lvl){
-		return (1+lvl) * imaginableChargePerCast();
+    public float magicMin(float lvl){
+        return magicMin(lvl, imaginableChargePerCast());
+    }
+    public float magicMin(float lvl, int rank){
+		return (1+lvl)*rank;
 	}
 
 	//2/8/18 base damage with 2/4/6 scaling based on charges used
-	public float magicMax(float lvl){
-		switch (imaginableChargePerCast()){
+    public float magicMax(float lvl) {
+        return magicMax(lvl, rank());
+    }
+    public float magicMax(float lvl, int rank) {
+		switch (rank){
 			case 1: default:
 				return 2 + 2*lvl;
 			case 2:
@@ -228,8 +234,8 @@ public class WandOfFireblast extends DamageWand {
     @Override
     public String getRankMessage(int rank){
         return Messages.get(this, "rank" + rank,
-                Math.round(magicMin()/imaginableChargePerCast()*(rank)),
-                Math.round(magicMax()/imaginableChargePerCast()*(rank)),
+                Math.round(magicMin(power(), rank)),
+                Math.round(magicMax(power(), rank)),
                 getRechargeInfo(rank)
         );
     }
