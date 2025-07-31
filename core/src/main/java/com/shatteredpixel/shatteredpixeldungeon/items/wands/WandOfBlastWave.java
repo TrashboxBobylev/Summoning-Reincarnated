@@ -71,36 +71,61 @@ public class WandOfBlastWave extends DamageWand {
 		return 3+3*lvl;
 	}
 
-	@Override
+    @Override
+    public float powerModifier(int rank) {
+        switch (rank){
+            case 1: return 1.0f;
+            case 2: return 2f;
+            case 3: return 1.75f;
+        }
+        return super.powerModifier(rank);
+    }
+
+    @Override
+    public float rechargeModifier(int rank) {
+        switch (rank){
+            case 1: return 2.0f;
+            case 2: return 1.5f;
+            case 3: return 3.25f;
+        }
+        return super.rechargeModifier(rank);
+    }
+
+    @Override
 	public void onZap(Ballistica bolt) {
 		Sample.INSTANCE.play( Assets.Sounds.BLAST );
 		BlastWave.blast(bolt.collisionPos);
 
 		//presses all tiles in the AOE first, with the exception of tengu dart traps
 		for (int i : PathFinder.NEIGHBOURS9){
+            if (rank() == 3 && i != 0)
+                continue;
 			if (!(Dungeon.level.traps.get(bolt.collisionPos+i) instanceof TenguDartTrap)) {
 				Dungeon.level.pressCell(bolt.collisionPos + i);
 			}
 		}
 
 		//throws other chars around the center.
-		for (int i  : PathFinder.NEIGHBOURS8){
-			Char ch = Actor.findChar(bolt.collisionPos + i);
+        if (rank() != 3) {
+            for (int i : PathFinder.NEIGHBOURS8) {
+                Char ch = Actor.findChar(bolt.collisionPos + i);
 
-			if (ch != null){
-				wandProc(ch, chargesPerCast());
-				if (ch.alignment != Char.Alignment.ALLY && !(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))) ch.damage(damageRoll(), this);
+                if (ch != null) {
+                    wandProc(ch, chargesPerCast());
+                    if (ch.alignment != Char.Alignment.ALLY && !(Dungeon.isChallenged(Conducts.Conduct.PACIFIST)))
+                        ch.damage(damageRoll(), this);
 
-				//do not push chars that are dieing over a pit, or that move due to the damage
-				if ((ch.isAlive() || ch.flying || !Dungeon.level.pit[ch.pos])
-						&& ch.pos == bolt.collisionPos + i) {
-					Ballistica trajectory = new Ballistica(ch.pos, ch.pos + i, Ballistica.MAGIC_BOLT);
-					int strength = 1 + Math.round(power() / 2f);
-					throwChar(ch, trajectory, strength, false, true, this);
-				}
+                    //do not push chars that are dieing over a pit, or that move due to the damage
+                    if (((ch.isAlive() || ch.flying || !Dungeon.level.pit[ch.pos])
+                            && ch.pos == bolt.collisionPos + i) && rank() != 2) {
+                        Ballistica trajectory = new Ballistica(ch.pos, ch.pos + i, Ballistica.MAGIC_BOLT);
+                        int strength = sideKnockback(rank());
+                        throwChar(ch, trajectory, strength, false, true, this);
+                    }
 
-			}
-		}
+                }
+            }
+        }
 
 		//throws the char at the center of the blast
 		Char ch = Actor.findChar(bolt.collisionPos);
@@ -109,15 +134,33 @@ public class WandOfBlastWave extends DamageWand {
 			ch.damage(damageRoll(), this);
 
 			//do not push chars that are dieing over a pit, or that move due to the damage
-			if ((ch.isAlive() || ch.flying || !Dungeon.level.pit[ch.pos])
-					&& bolt.path.size() > bolt.dist+1 && ch.pos == bolt.collisionPos) {
+			if (((ch.isAlive() || ch.flying || !Dungeon.level.pit[ch.pos])
+					&& bolt.path.size() > bolt.dist+1 && ch.pos == bolt.collisionPos) && rank() != 2) {
 				Ballistica trajectory = new Ballistica(ch.pos, bolt.path.get(bolt.dist + 1), Ballistica.MAGIC_BOLT);
-				int strength = Math.round(power() + 3);
+				int strength = Math.round(mainKnockback(rank()));
 				throwChar(ch, trajectory, strength, false, true, this);
 			}
 		}
 		
 	}
+
+    public float mainKnockback(int rank){
+        switch (rank){
+            case 1: return power() + 3;
+            case 2: return 0;
+            case 3: return power()*2 + 4;
+        }
+        return 1;
+    }
+
+    public int sideKnockback(int rank){
+        switch (rank){
+            case 1: return Math.round(1 + power() / 2f);
+            case 2: return 0;
+            case 3: return 0;
+        }
+        return 1;
+    }
 
 	public static void throwChar(final Char ch, final Ballistica trajectory, int power,
 	                             boolean closeDoors, boolean collideDmg, Object cause){
@@ -193,6 +236,16 @@ public class WandOfBlastWave extends DamageWand {
 			}
 		}));
 	}
+
+    @Override
+    public String getRankMessage(int rank){
+        return Messages.get(this, "rank" + rank,
+                Math.round(magicMin(power())*powerModifier(rank)),
+                Math.round(magicMax(power())*powerModifier(rank)),
+                getRechargeInfo(rank),
+                mainKnockback(rank), sideKnockback(rank)
+        );
+    }
 
 	public static class Knockback{}
 
