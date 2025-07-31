@@ -1085,8 +1085,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		private void recharge(){
 			float turnsToCharge = getTurnsToCharge();
 
-			if (Regeneration.regenOn())
-				partialCharge += (1f/turnsToCharge) * RingOfEnergy.wandChargeMultiplier(target);
+			partialCharge += (1f/turnsToCharge);
 
 			for (Recharging bonus : target.buffs(Recharging.class)){
 				if (bonus != null && bonus.remainder() > 0f) {
@@ -1100,7 +1099,10 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         }
 
         public float getTurnsToCharge(int rank){
-            return BASE_CHARGE_DELAY*rechargeModifier(rank)/scalingFactor;
+            float charge = BASE_CHARGE_DELAY * rechargeModifier(rank) / scalingFactor;
+            if (Regeneration.regenOn())
+                charge /= RingOfEnergy.wandChargeMultiplier(target);
+            return charge;
         }
 		
 		public Wand wand(){
