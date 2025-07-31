@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -43,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
 
 public class WallOfLight extends TargetedClericSpell {
 
@@ -259,6 +261,13 @@ public class WallOfLight extends TargetedClericSpell {
 					l.solid[cell] = off[cell] > 0 || (Terrain.flags[l.map[cell]] & Terrain.SOLID) != 0;
 					l.passable[cell] = off[cell] == 0 && (Terrain.flags[l.map[cell]] & Terrain.PASSABLE) != 0;
 					l.avoid[cell] = off[cell] == 0 && (Terrain.flags[l.map[cell]] & Terrain.AVOID) != 0;
+
+                    for (int c: PathFinder.NEIGHBOURS4){
+                        Char target;
+                        if ((target = Actor.findChar(c)) != null && target.alignment == Char.Alignment.ENEMY){
+                            target.damage(Random.NormalIntRange(0, 1 + Dungeon.scalingDepth() / 5), new WandOfWarding());
+                        }
+                    }
 				}
 			}
 		}
@@ -301,7 +310,7 @@ public class WallOfLight extends TargetedClericSpell {
 		@Override
 		public void use(BlobEmitter emitter) {
 			super.use( emitter );
-			emitter.pour( MagicMissile.WhiteParticle.WALL, 0.02f );
+			emitter.pour( MagicMissile.WardParticle.WALL, 0.02f );
 		}
 
 		@Override

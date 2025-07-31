@@ -1026,7 +1026,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		}
 	};
 
-	private static void wondrousProc(Wand curWand, Integer target) {
+	protected static void wondrousProc(Wand curWand, Integer target) {
 		if (Random.Float() < WondrousResin.extraCurseEffectChance()) {
 			WondrousResin.forcePositive = true;
 			CursedWand.cursedZap(curWand,

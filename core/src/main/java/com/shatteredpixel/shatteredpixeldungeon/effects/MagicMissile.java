@@ -697,6 +697,17 @@ public class MagicMissile extends Emitter {
 				return true;
 			}
 		};
+
+        public static final Emitter.Factory WALL = new Factory() {
+            @Override
+            public void emit( Emitter emitter, int index, float x, float y ) {
+                ((WardParticle)emitter.recycle( WardParticle.class )).resetWall( x, y );
+            }
+            @Override
+            public boolean lightMode() {
+                return true;
+            }
+        };
 		
 		public WardParticle() {
 			super();
@@ -721,6 +732,16 @@ public class MagicMissile extends Emitter {
 
 			speed.set( Random.Float( -8, +8 ), Random.Float( -32, -48 ) );
 		}
+
+        public void resetWall( float x, float y){
+            reset(x, y);
+
+            left = lifespan = 2f;
+
+            this.x = Math.round(x/4)*4;
+            this.y = Math.round(y/4)*4 - 6;
+            this.x += Math.round(this.y % 16)/4f - 2;
+        }
 		
 		@Override
 		public void update() {
