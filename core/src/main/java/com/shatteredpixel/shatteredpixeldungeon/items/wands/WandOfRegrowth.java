@@ -29,14 +29,21 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage.WildMagic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DwarfKing;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -44,20 +51,24 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Sungrass;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.LotusSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.RotLasherSprite;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.noosa.particles.Emitter;
+import com.watabou.noosa.tweeners.AlphaTweener;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.ColorMath;
-import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class WandOfRegrowth extends Wand {
@@ -85,7 +96,44 @@ public class WandOfRegrowth extends Wand {
 		}
 	}
 
-	@Override
+    @Override
+    public float rechargeModifier(int rank) {
+        switch (rank){
+            case 1:
+                return 1.333f;
+            case 2:
+                return 2.25f;
+            case 3:
+                return 2.5f;
+        }
+        return super.rechargeModifier(rank);
+    }
+
+    public float grassPlaced(int rank, float power){
+        switch (rank){
+            case 1:
+                return 3.67f+power/3f;
+            case 2:
+                return 2.25f+power/5f;
+            case 3:
+                return 0f;
+        }
+        return 1f;
+    }
+
+    public float rootPlaced(int rank){
+        switch (rank){
+            case 1:
+                return 4f;
+            case 2:
+                return 8f;
+            case 3:
+                return 0f;
+        }
+        return 0;
+    }
+
+    @Override
 	public void onZap(Ballistica bolt) {
 
 		ArrayList<Integer> cells = new ArrayList<>(cone.cells);
@@ -96,7 +144,7 @@ public class WandOfRegrowth extends Wand {
 		}
 
 		int chrgUsed = chargesPerCast();
-		int grassToPlace = Math.round((3.67f+power()/3f)*chrgUsed);
+		int grassToPlace = Math.round((grassPlaced(rank(), power()))*chrgUsed);
 
 		//ignore cells which can't have anything grow in them.
 		for (Iterator<Integer> i = cells.iterator(); i.hasNext();) {
@@ -120,15 +168,15 @@ public class WandOfRegrowth extends Wand {
 						Statistics.qualifiedForBossChallengeBadge = false;
 					}
 					wandProc(ch, chargesPerCast());
-					Buff.prolong( ch, Roots.class, 4f * chrgUsed );
+					Buff.prolong( ch, Roots.class, rootPlaced(rank()) * chrgUsed );
 				}
 			}
 		}
 
 		Random.shuffle(cells);
 
-		if (chargesPerCast() >= 3){
-			Lotus l = new Lotus();
+		if (chargesPerCast() == 2){
+			Lotus l = getFlower();
 			l.setLevel(power());
 			if (cells.contains(target) && Actor.findChar(target) == null){
 				cells.remove((Integer)target);
@@ -203,19 +251,30 @@ public class WandOfRegrowth extends Wand {
 	}
 
 	private int chargeLimit( int heroLvl ){
-		return chargeLimit(  heroLvl, level() );
+		return chargeLimit(  heroLvl, power() );
 	}
 
-	private int chargeLimit( int heroLvl, int wndLvl ){
-		if (wndLvl >= 10){
+	private int chargeLimit( int heroLvl, float wndLvl ){
+		if (wndLvl >= 7){
 			return Integer.MAX_VALUE;
 		} else {
 			//20 charges at base, plus:
-			//2/3.1/4.2/5.5/6.8/8.4/10.4/13.2/18.0/30.8/inf. charges per hero level, at wand level:
-			//0/1  /2  /3  /4  /5  /6   /7   /8   /9   /10
+			//2/3.1/4.2/5.5/6.8/8.4/10.4/inf. charges per hero level, at wand level:
+			//0/1  /2  /3  /4  /5  /6   /10
 			return Math.round(20 + heroLvl * (2+wndLvl) * (1f + (wndLvl/(50 - 5*wndLvl))));
 		}
 	}
+
+    public Lotus getFlower(){
+        switch (rank()) {
+            case 1: default:
+                return new Lotus();
+            case 2:
+                return new Thornflower();
+            case 3:
+                return new Vanguard();
+        }
+    }
 
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {
@@ -245,12 +304,12 @@ public class WandOfRegrowth extends Wand {
 
 	public void fx(Ballistica bolt, Callback callback) {
 
-		// 4/6/8 distance
-		int maxDist = 2 + 2*chargesPerCast();
+		// 5/7 distance
+		int maxDist = 3 + 2*chargesPerCast();
 
 		cone = new ConeAOE( bolt,
 				maxDist,
-				20 + 10*chargesPerCast(),
+				30 + 15*chargesPerCast(),
 				Ballistica.STOP_SOLID | Ballistica.STOP_TARGET);
 
 		//cast to cells at the tip, rather than all cells, better performance.
@@ -282,8 +341,8 @@ public class WandOfRegrowth extends Wand {
 				(charger != null && charger.target != null && charger.target.buff(WildMagic.WildMagicTracker.class) != null)){
 			return 1;
 		}
-		//consumes 30% of current charges, rounded up, with a min of 1 and a max of 3.
-		return (int) GameMath.gate(1, (int)Math.ceil(curCharges*0.3f), 3);
+		//consumes 2 charges if above 50%, 1 otherwise
+		return curCharges >= maxCharges / 2 ? 2 : 1;
 	}
 
 	@Override
@@ -310,7 +369,31 @@ public class WandOfRegrowth extends Wand {
 		}
 	}
 
-	@Override
+    @Override
+    public String getRankMessage(int rank) {
+        return Messages.get(this, "rank",
+                getRechargeInfo(rank),
+                grassPlaced(rank, power()),
+                (int)rootPlaced(rank),
+                plantDescription(rank)
+        );
+    }
+
+    public String plantDescription(int rank){
+        switch (rank){
+            case 1:
+                return Messages.get(this, "lotus", (int)(25 + 3*power()), (int)(1 + power()*2), (int)(Math.min( 1f, 0.40f + 0.05f*power() )*100));
+            case 2:
+                return Messages.get(this, "thorn", (int)(20 + 2.5f*power()), (int)(3+power()), (int)(1 + power()));
+            case 3:
+                return Messages.get(this, "vanguard", (int)(50 + 7.5f*power()));
+        }
+        return "";
+    }
+
+
+
+    @Override
 	public void staffFx(WandParticle particle) {
 		particle.color( ColorMath.random(0x004400, 0x88CC44) );
 		particle.am = 1f;
@@ -428,19 +511,27 @@ public class WandOfRegrowth extends Wand {
 			viewDistance = 1;
 		}
 
-		private float wandLvl = 0;
+		protected float wandLvl = 0;
 
 		private void setLevel( float lvl ){
 			wandLvl = lvl;
-			HP = HT = Math.round(25 + 3*lvl);
+			HP = HT = Math.round(lifeMod(lvl));
 		}
+
+        public float lifeMod(float lvl){
+            return 25 + 3*lvl;
+        }
 
 		public boolean inRange(int pos){
-			return Dungeon.level.trueDistance(this.pos, pos) <= wandLvl;
+			return Dungeon.level.trueDistance(this.pos, pos) <= rangeMod();
 		}
 
+        public float rangeMod(){
+            return 1 + wandLvl*2;
+        }
+
 		public float seedPreservation(){
-			return Math.min( 1f, 0.40f + 0.04f*wandLvl );
+			return Math.min( 1f, 0.40f + 0.05f*wandLvl );
 		}
 
 		@Override
@@ -510,5 +601,223 @@ public class WandOfRegrowth extends Wand {
 			wandLvl = bundle.getFloat(WAND_LVL);
 		}
 	}
+
+    public static class Thornflower extends Lotus {
+        {
+            spriteClass = LotusSprite.Thornflower.class;
+        }
+
+        @Override
+        public float lifeMod(float lvl){
+            return 20 + 2.5f*lvl;
+        }
+
+        @Override
+        public float seedPreservation() {
+            return 0f;
+        }
+
+        @Override
+        public float rangeMod() {
+            return 3 + wandLvl;
+        }
+
+        @Override
+        protected boolean act() {
+            viewDistance = (int) (3 + wandLvl);
+
+            boolean act = super.act();
+
+            int lashAmount = 0;
+            for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0]))
+                if (mob instanceof ThornLasher)
+                    lashAmount++;
+
+            if (lashAmount < wandLvl + 1) {
+                HashMap<Char, Float> enemies = new HashMap<>();
+                for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0]))
+                    if (mob.alignment == Alignment.ENEMY && inRange(mob.pos)
+                            && mob.invisible <= 0 && !mob.isInvulnerable(getClass()))
+                        //do not target passive mobs
+                        //intelligent allies also don't target mobs which are wandering or asleep
+                        //unless they are aggressive minions
+                        if (mob.state != mob.PASSIVE) {
+                            int isOccupied = 0;
+                            for (int i: PathFinder.NEIGHBOURS8){
+                                if (Actor.findChar(mob.pos + i) instanceof ThornLasher){
+                                    isOccupied++;
+                                    break;
+                                }
+                            }
+                            if (isOccupied < wandLvl / 2)
+                                enemies.put(mob, mob.targetPriority());
+                        }
+                Char target = chooseClosest(enemies);
+                if (target != null){
+                    ArrayList<Integer> respawnPoints = new ArrayList<>();
+
+                    for (int i = 0; i < PathFinder.NEIGHBOURS9.length; i++) {
+                        int p = target.pos + PathFinder.NEIGHBOURS9[i];
+                        if (Actor.findChar( p ) == null && Dungeon.level.passable[p]) {
+                            respawnPoints.add( p );
+                        }
+                    }
+
+                    if (respawnPoints.size() > 0) {
+                        int index = Random.index( respawnPoints );
+
+                        ThornLasher mob = new ThornLasher();
+                        mob.pos = respawnPoints.get(index);
+                        GameScene.add( mob );
+
+                        if (Dungeon.level.heroFOV[mob.pos]) {
+                            CellEmitter.get(mob.pos).start(LeafParticle.LEVEL_SPECIFIC, 0.1f, 8);
+                            mob.sprite.alpha( 0 );
+                            mob.sprite.parent.add( new AlphaTweener( mob.sprite, 1, 0.4f ) );
+                            Sample.INSTANCE.play(Assets.Sounds.PLANT);
+                        }
+                    }
+                }
+            }
+
+            return act;
+        }
+
+        @Override
+        public void destroy() {
+            super.destroy();
+            for (Char mob: Actor.chars()){
+                if (mob instanceof ThornLasher){
+                    mob.destroy();
+                }
+            }
+        }
+
+        @Override
+        public String description() {
+            return Messages.get(this, "desc", (int)(3 + wandLvl), 1 + wandLvl);
+        }
+    }
+
+    public static class ThornLasher extends Mob {
+        {
+            alignment = Alignment.ALLY;
+            spriteClass = RotLasherSprite.class;
+            defenseSkill = 0;
+
+            HP = HT = Dungeon.depth * 3;
+            viewDistance = 1;
+
+            actPriority = MOB_PRIO + 10;
+
+            properties.add(Property.IMMOVABLE);
+
+            state = WANDERING = new Waiting();
+        }
+
+        @Override
+        public void damage(int dmg, Object src) {
+            if (src instanceof Burning) {
+                destroy();
+                sprite.die();
+            } else {
+                super.damage(dmg, src);
+            }
+        }
+
+        @Override
+        public boolean reset() {
+            return true;
+        }
+
+        @Override
+        protected boolean getCloser(int target) {
+            return false;
+        }
+
+        @Override
+        protected boolean getFurther(int target) {
+            return false;
+        }
+
+        @Override
+        public float attackDelay() {
+            return 0.5f;
+        }
+
+        @Override
+        public int damageRoll() {
+            return Random.NormalIntRange( 1 + Dungeon.scalingDepth()/2, 2 + 2*Dungeon.scalingDepth());
+        }
+
+        @Override
+        public int attackProc(Char enemy, int damage) {
+            Buff.affect( enemy, Bleeding.class ).set( Math.round(damage*0.45f) );
+            return super.attackProc(enemy, damage);
+        }
+
+        @Override
+        public int attackSkill(Char target) {
+            return (int) (Dungeon.scalingDepth()*2.5f);
+        }
+
+        {
+            immunities.add( ToxicGas.class );
+        }
+
+        private class Waiting extends Mob.Wandering{}
+    }
+
+    public static class Vanguard extends Lotus {
+        {
+            spriteClass = LotusSprite.Vanguard.class;
+        }
+
+        @Override
+        public float lifeMod(float lvl){
+            return 50 + 7.5f*lvl;
+        }
+
+        @Override
+        public float seedPreservation() {
+            return 0.5f;
+        }
+
+        @Override
+        public float rangeMod() {
+            return 3;
+        }
+
+        @Override
+        protected boolean act() {
+            viewDistance = 3;
+
+            boolean act = super.act();
+
+            for (int i = 0; i < Dungeon.level.length(); i++){
+                if (!Dungeon.level.solid[i] && inRange(i)) {
+                    Emitter e = CellEmitter.get(i);
+                    e.burst(LeafParticle.GENERAL,  10);
+                    int terr = Dungeon.level.map[i];
+                    if ((terr == Terrain.EMPTY || terr == Terrain.EMBERS || terr == Terrain.EMPTY_DECO ||
+                            terr == Terrain.GRASS || terr == Terrain.HIGH_GRASS || terr == Terrain.FURROWED_GRASS)
+                            && !Char.hasProp(Actor.findChar(i), Property.IMMOVABLE)) {
+                        Level.set(i, Terrain.FURROWED_GRASS);
+                        GameScene.updateMap( i );
+                    }
+                    Char target;
+                    if ((target = Actor.findChar(i)) != null){
+                        if (target.alignment == Alignment.ENEMY){
+                            Buff.prolong(target, Vulnerable.class, 2f);
+                        } else {
+                            Buff.affect(target, Earthroot.Armor.class).level(target.HP/3);
+                        }
+                    }
+                }
+            }
+
+            return act;
+        }
+    }
 
 }

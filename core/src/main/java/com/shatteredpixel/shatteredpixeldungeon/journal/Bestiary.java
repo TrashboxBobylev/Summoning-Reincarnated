@@ -75,8 +75,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Golem;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Goo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GreatCrab;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Guard;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.LostSpirit;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.HermitCrab;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.LostSpirit;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Necromancer;
@@ -286,7 +286,8 @@ public enum Bestiary {
 				Firebloom.class, Sorrowmoss.class, Swiftthistle.class, Blindweed.class,
 				Stormvine.class, Earthroot.class, Mageroyal.class, Starflower.class,
 				BlandfruitBush.class,
-				WandOfRegrowth.Dewcatcher.class, WandOfRegrowth.Seedpod.class, WandOfRegrowth.Lotus.class);
+				WandOfRegrowth.Dewcatcher.class, WandOfRegrowth.Seedpod.class,
+                WandOfRegrowth.Lotus.class, WandOfRegrowth.Thornflower.class, WandOfRegrowth.ThornLasher.class, WandOfRegrowth.Vanguard.class);
 
 	}
 

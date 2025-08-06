@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.plants;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barkskin;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -32,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.EarthParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -87,7 +89,18 @@ public class Earthroot extends Plant {
 		@Override
 		public boolean act() {
 			if (target.pos != pos) {
-				detach();
+                boolean preserve = false;
+                for (Char ch : Actor.chars()) {
+                    if (ch instanceof WandOfRegrowth.Vanguard) {
+                        WandOfRegrowth.Lotus vanguard = (WandOfRegrowth.Vanguard) ch;
+                        if (vanguard.inRange(target.pos)) {
+                            preserve = true;
+                            break;
+                        }
+                    }
+                }
+                if (!preserve)
+				    detach();
 			}
 			spend( STEP );
 			return true;

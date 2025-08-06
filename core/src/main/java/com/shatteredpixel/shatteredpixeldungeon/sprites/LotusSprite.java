@@ -39,10 +39,16 @@ import java.util.ArrayList;
 public class LotusSprite extends MobSprite {
 
 	private ArrayList<Emitter> grassVfx;
+    public LotusSprite(){
+        super();
+        sprite(type());
+    }
 
-	public LotusSprite(){
-		super();
+    public int type(){
+        return 0;
+    }
 
+	public void sprite(int type){
 		perspectiveRaise = 0f;
 
 		texture( Assets.Sprites.LOTUS );
@@ -50,16 +56,16 @@ public class LotusSprite extends MobSprite {
 		TextureFilm frames = new TextureFilm( texture, 19, 16 );
 
 		idle = new MovieClip.Animation( 1, true );
-		idle.frames( frames, 0 );
+		idle.frames( frames, type );
 
 		run = new MovieClip.Animation( 1, true );
-		run.frames( frames, 0 );
+		run.frames( frames, type );
 
 		attack = new MovieClip.Animation( 1, false );
-		attack.frames( frames, 0 );
+		attack.frames( frames, type );
 
 		die = new MovieClip.Animation( 1, false );
-		die.frames( frames, 0 );
+		die.frames( frames, type );
 
 		play( idle );
 	}
@@ -123,4 +129,18 @@ public class LotusSprite extends MobSprite {
 			grassVfx = null;
 		}
 	}
+
+    public static class Thornflower extends LotusSprite {
+        @Override
+        public int type() {
+            return 1;
+        }
+    }
+
+    public static class Vanguard extends LotusSprite {
+        @Override
+        public int type() {
+            return 2;
+        }
+    }
 }
