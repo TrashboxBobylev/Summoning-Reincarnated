@@ -82,6 +82,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Jjango;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Pike;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Stabber;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.StoneHammer;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
 import com.shatteredpixel.shatteredpixeldungeon.levels.ArenaLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -267,7 +268,7 @@ public class ShopRoom extends SpecialRoom {
 		else
 			return Dungeon.chapterNumber()-1;
 	}
-	
+
 	protected static ArrayList<Item> generateItems() {
 
 		ArrayList<Item> itemsToSpawn = new ArrayList<>();

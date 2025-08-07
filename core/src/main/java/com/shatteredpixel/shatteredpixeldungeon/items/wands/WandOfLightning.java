@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DwarfKing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
@@ -47,6 +48,9 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.watabou.noosa.Image;
+import com.watabou.utils.BArray;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
@@ -106,6 +110,14 @@ public class WandOfLightning extends DamageWand {
     @Override
 	public void onZap(Ballistica bolt) {
 
+		for (Char ch : affected.toArray(new Char[0])){
+			if (ch != curUser && ch.alignment == curUser.alignment && ch.pos != bolt.collisionPos){
+				affected.remove(ch);
+			} else if (ch.buff(LightningCharge.class) != null){
+				affected.remove(ch);
+			}
+		}
+
 		//lightning deals less damage per-target, the more targets that are hit.
         float[] ratios = new float[]{0.4f, 0.6f};
         switch (rank()){
@@ -124,9 +136,7 @@ public class WandOfLightning extends DamageWand {
 				ch.sprite.centerEmitter().burst(SparkParticle.FACTORY, 3);
 				ch.sprite.flash();
 
-				if (ch != curUser && ch.alignment == curUser.alignment && ch.pos != bolt.collisionPos) {
-					continue;
-				}
+
 				wandProc(ch, chargesPerCast());
 				if (ch == curUser && ch.isAlive()) {
 					ch.damage(Math.round(damageRoll() * multiplier * 0.5f), this);
@@ -150,8 +160,40 @@ public class WandOfLightning extends DamageWand {
 
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {
-		//acts like shocking enchantment
-		new LightningOnHit().proc(this, attacker, defender, damage);
+
+		// lvl 0 - 25%
+		// lvl 1 - 40%
+		// lvl 2 - 50%
+		float procChance = (buffedLvl()+1f)/(buffedLvl()+4f) * procChanceMultiplier(attacker);
+		if (Random.Float() < procChance) {
+
+			float powerMulti = Math.min(1f, procChance);
+
+			FlavourBuff.prolong(attacker, LightningCharge.class, powerMulti*LightningCharge.DURATION);
+			attacker.sprite.centerEmitter().burst( SparkParticle.FACTORY, 10 );
+			attacker.sprite.flash();
+			Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
+
+		}
+	}
+
+	public static class LightningCharge extends FlavourBuff {
+
+		{
+			type = buffType.POSITIVE;
+		}
+
+		public static float DURATION = 10f;
+
+		@Override
+		public int icon() {
+			return BuffIndicator.IMBUE;
+		}
+
+		@Override
+		public void tintIcon(Image icon) {
+			icon.hardlight(1, 1, 0);
+		}
 	}
 
 	public static class LightningOnHit extends Shocking {
@@ -170,6 +212,10 @@ public class WandOfLightning extends DamageWand {
         if (rank() == 2){
             dist = 1;
         }
+
+		if (curUser.buff(LightningCharge.class) != null){
+			dist++;
+		}
 
 		ArrayList<Char> hitThisArc = new ArrayList<>();
 		PathFinder.buildDistanceMap( ch.pos, BArray.not( Dungeon.level.solid, null ), dist );

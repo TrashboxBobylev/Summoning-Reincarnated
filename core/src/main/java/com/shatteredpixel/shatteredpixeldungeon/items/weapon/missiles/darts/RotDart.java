@@ -54,7 +54,7 @@ public class RotDart extends TippedDart {
 	}
 	
 	@Override
-	public float durabilityPerUse() {
+	public float durabilityPerUse(int level) {
 		return MAX_DURABILITY/5f; //always 5 uses
 	}
 }

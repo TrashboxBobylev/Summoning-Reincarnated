@@ -693,7 +693,7 @@ public class Item implements Bundlable {
 		Char enemy = Actor.findChar( cell );
 		QuickSlotButton.target(enemy);
 		
-		final float delay = castDelay(user, dst);
+		final float delay = castDelay(user, cell);
 		Hunger.adjustHunger(-3f*delay);
 
 		if (enemy != null) {
@@ -742,7 +742,7 @@ public class Item implements Bundlable {
 		}
 	}
 	
-	public float castDelay( Char user, int dst ){
+	public float castDelay( Char user, int cell ){
 		return TIME_TO_THROW;
 	}
 	

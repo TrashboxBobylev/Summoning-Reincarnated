@@ -411,6 +411,13 @@ public class SpiritBow extends Weapon implements Rankable {
 			image = ItemSpriteSheet.SPIRIT_ARROW;
 
 			hitSound = Assets.Sounds.HIT_ARROW;
+
+			setID = 0;
+		}
+
+		@Override
+		public int defaultQuantity() {
+			return 1;
 		}
 
 		@Override
@@ -522,7 +529,7 @@ public class SpiritBow extends Weapon implements Rankable {
 						user.buff(Talent.LethalMomentumTracker.class).detach();
 						user.next();
 					} else {
-						user.spendAndNext(castDelay(user, dst));
+						user.spendAndNext(castDelay(user, cell));
 					}
 					sniperSpecial = false;
 					flurryCount = -1;
@@ -577,7 +584,7 @@ public class SpiritBow extends Weapon implements Rankable {
 												user.buff(Talent.LethalMomentumTracker.class).detach();
 												user.next();
 											} else {
-												user.spendAndNext(castDelay(user, dst));
+												user.spendAndNext(castDelay(user, cell));
 											}
 											sniperSpecial = false;
 											flurryCount = -1;

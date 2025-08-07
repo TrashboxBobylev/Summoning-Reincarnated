@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -275,6 +276,9 @@ public class Shopkeeper extends NPC {
 								value = Math.round(value*1.4f);
 							Dungeon.gold -= value;
 							Statistics.goldCollected -= value;
+							if (returned instanceof MissileWeapon && returned.isUpgradable()){
+								Buff.affect(Dungeon.hero, MissileWeapon.UpgradedSetTracker.class).levelThresholds.put(((MissileWeapon) returned).setID, returned.level());
+							}
 							if (!returned.doPickUp(Dungeon.hero)){
 								Dungeon.level.drop(returned, Dungeon.hero.pos);
 							}

@@ -138,6 +138,7 @@ public class BuffIndicator extends Component {
 	public static final int TRINITY_FORM= 82;
 	public static final int MANY_POWER  = 83;
 	public static final int SEAL_SHIELD = 84;
+	public static final int THROWN_WEP  = 85;
 	public static final int DECAY       = 1_08;
 	public static final int KARMA       = 2_08;
 	public static final int ERADICATION = 3_08;

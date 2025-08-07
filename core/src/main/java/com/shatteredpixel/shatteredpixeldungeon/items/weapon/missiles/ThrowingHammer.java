@@ -35,7 +35,7 @@ public class ThrowingHammer extends MissileWeapon {
 		hitSoundPitch = 0.8f;
 		
 		tier = 5;
-		baseUses = 15;
+		baseUses = 12;
 		sticky = false;
 	}
 	
