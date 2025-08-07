@@ -244,7 +244,8 @@ abstract public class Weapon extends KindOfWeapon implements WeaponEnchantable {
 		curseInfusionBonus = bundle.getBoolean( CURSE_INFUSION_BONUS );
 		masteryPotionBonus = bundle.getBoolean( MASTERY_POTION_BONUS );
 
-		augment = bundle.getEnum(AUGMENT, Augment.class);
+		if (bundle.contains(AUGMENT))
+            augment = bundle.getEnum(AUGMENT, Augment.class);
 		rank = bundle.getInt(RANK);
 	}
 	
