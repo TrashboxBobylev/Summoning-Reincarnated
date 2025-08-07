@@ -98,7 +98,7 @@ public class WandOfTransfusion extends DamageWand {
     @Override
     protected int chargesPerCast() {
         switch (rank()){
-            case 2: return curCharges;
+            case 2: return Math.max(1, curCharges);
             case 3: return 2;
         }
         return super.chargesPerCast();

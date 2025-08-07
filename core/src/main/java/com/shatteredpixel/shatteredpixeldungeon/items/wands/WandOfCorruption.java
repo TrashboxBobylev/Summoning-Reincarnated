@@ -223,7 +223,7 @@ public class WandOfCorruption extends Wand {
     @Override
     protected int chargesPerCast() {
         if (rank() == 2){
-            return curCharges;
+            return Math.max(1, curCharges);
         }
         return super.chargesPerCast();
     }
