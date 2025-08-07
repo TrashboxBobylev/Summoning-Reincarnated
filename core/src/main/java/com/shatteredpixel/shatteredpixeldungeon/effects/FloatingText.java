@@ -25,13 +25,16 @@
 package com.shatteredpixel.shatteredpixeldungeon.effects;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chungus;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Daze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hex;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Shrink;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -127,6 +130,11 @@ public class FloatingText extends RenderedTextBlock {
 	public static int HIT_SUPR  = 45;
 	public static int HIT_PRES  = 46;
 	public static int HIT_MOMEN = 47;
+    public static int HIT_SHRINK= 90;
+    public static int HIT_CHUNGUS=91;
+    public static int HIT_EXPLORE=92;
+    public static int HIT_KING   =93;
+    public static int HIT_WRAITH =94;
 
 	//extra row for hit icons that are armor-piercing
 
@@ -142,6 +150,9 @@ public class FloatingText extends RenderedTextBlock {
 	public static int MISS_DEF  = 80;
 	public static int MISS_TUFT = 81;
 	public static int MISS_RUN  = 82;
+    public static int MISS_SHRINK = 126;
+    public static int MISS_EXPLORE= 127;
+    public static int MISS_WRAITH = 128;
 
 	private Image icon;
 	private boolean iconLeft;
@@ -383,10 +394,23 @@ public class FloatingText extends RenderedTextBlock {
 				hitReasons.put(HIT_MOMEN, 1f + ((Hero) attacker).pointsInTalent(Talent.PROJECTILE_MOMENTUM) / 2f);
 			}
 		}
+        if (attacker instanceof Hero){
+            if (Dungeon.mode == Dungeon.GameMode.EXPLORE){
+                hitReasons.put(HIT_EXPLORE, 1.2f);
+            }
+            if (Dungeon.isChallenged(Conducts.Conduct.KING)){
+                hitReasons.put(HIT_KING, 1.1f);
+            }
+            if (Dungeon.isChallenged(Conducts.Conduct.WRAITH)){
+                hitReasons.put(HIT_WRAITH, 1.25f);
+            }
+        }
 
 		//evasion reductions (always < 1)
 		if (defender.buff(Hex.class) != null)                   hitReasons.put(HIT_HEX, 0.8f);
 		if (defender.buff(Daze.class) != null)                  hitReasons.put(HIT_DAZE, 0.5f);
+        if (defender.buff(Shrink.class) != null)                hitReasons.put(HIT_SHRINK, 0.8f);
+        if (defender.buff(Chungus.class) != null)               hitReasons.put(HIT_CHUNGUS, 0.6f);
 		if (RingOfEvasion.evasionMultiplier(defender) < 1)      hitReasons.put(HIT_EVA, RingOfEvasion.evasionMultiplier(defender));
 		if (arm != null && arm.evasionFactor(defender, 100) < 100) {
 			//we express armor's normally flat evasion boost as a %, yes this is very awkward
@@ -475,6 +499,14 @@ public class FloatingText extends RenderedTextBlock {
 			}
 		}
 		if (defender.buff(Talent.LiquidAgilEVATracker.class) != null)   missReasons.put(MISS_LIQ, 3f);
+        if (defender instanceof Hero){
+            if (Dungeon.mode == Dungeon.GameMode.EXPLORE){
+                missReasons.put(MISS_EXPLORE, 1.2f);
+            }
+            if (Dungeon.isChallenged(Conducts.Conduct.WRAITH)){
+                missReasons.put(MISS_WRAITH, 5f);
+            }
+        }
 
 		//accuracy reductions (always < 1)
 		if (wep != null && wep.accuracyFactor(attacker, defender) < 1){
@@ -482,6 +514,7 @@ public class FloatingText extends RenderedTextBlock {
 		}
 		if (attacker.buff(Hex.class) != null)                   missReasons.put(MISS_HEX, 0.8f);
 		if (attacker.buff(Daze.class) != null)                  missReasons.put(MISS_DAZE, 0.5f);
+        if (attacker.buff(Shrink.class) != null)                missReasons.put(MISS_SHRINK, 0.6f);
 		if (RingOfAccuracy.accuracyMultiplier(attacker) < 1)    missReasons.put(MISS_ACC, RingOfAccuracy.accuracyMultiplier(attacker));
 
 		//sort from largest modifier to smallest one
