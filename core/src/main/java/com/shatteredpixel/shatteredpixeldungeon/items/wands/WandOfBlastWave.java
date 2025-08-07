@@ -68,7 +68,7 @@ public class WandOfBlastWave extends DamageWand {
 	}
 
 	public float magicMax(float lvl){
-		return 3+3*lvl;
+		return 4+4.33f*lvl;
 	}
 
     @Override

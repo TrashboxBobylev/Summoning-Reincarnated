@@ -54,11 +54,11 @@ public class WandOfDisintegration extends DamageWand {
 
 
 	public float magicMin(float lvl){
-		return 2+lvl;
+		return 3+lvl;
 	}
 
 	public float magicMax(float lvl){
-		return 8+4*lvl;
+		return 8+5.5f*lvl;
 	}
 
     @Override

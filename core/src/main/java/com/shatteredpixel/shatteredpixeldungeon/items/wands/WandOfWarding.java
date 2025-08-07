@@ -391,8 +391,8 @@ public class WandOfWarding extends Wand {
     public String getRankMessage(int rank) {
         if (rank == 1)
             return Messages.get(this, "rank" + rank,
-                    Math.round(2 + power()),
-                            Math.round(8 + 4*power()),
+                    Math.round(4 + power()),
+                    Math.round(Math.round(8 + 5.33f*power())),
                     getRechargeInfo(rank),
                     (int)Math.ceil(power()*1.5f)+3
             );
@@ -403,10 +403,10 @@ public class WandOfWarding extends Wand {
                     1 + Dungeon.depth/5
             );
         return Messages.get(this, "rank" + rank,
-                Math.round(2 + power()),
-                Math.round(8 + 4*power()),
+                Math.round(4 + power()),
+                Math.round(8 + 5.33f*power()),
                 Math.round((2 + power())*4),
-                Math.round((8 + 4*power())*4),
+                Math.round((8 + 5.33f*power())*4),
                 getRechargeInfo(rank),
                 (int)Math.ceil(power()*1.5f)+3
         );
@@ -501,7 +501,7 @@ public class WandOfWarding extends Wand {
                         Char ch = Actor.findChar(i);
                         if (ch != null && ch.alignment == Alignment.ENEMY) {
                             Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC);
-                            int damage = Math.round(Hero.heroDamageIntRange((int) (2 + wandLevel), (int) (8 + 4*wandLevel))*Math.max(1, tier*2f/3));
+                            int damage = Math.round(Hero.heroDamageIntRange((int) (4 + wandLevel), (int) (8 + 5.33f*wandLevel))*Math.max(1, tier*2f/3));
                             damage *= 1f - (Dungeon.level.trueDistance(ch.pos, pos)-1)/tier;
                             ch.damage(damage, this);
                             if (ch.isAlive()){
@@ -595,7 +595,7 @@ public class WandOfWarding extends Wand {
 			spend( 1f );
 
 			//always hits
-			int dmg = Hero.heroDamageIntRange((int) (2 + wandLevel), (int) (8 + 4*wandLevel));
+			int dmg = Hero.heroDamageIntRange((int) (4 + wandLevel), (int) (8 + 5.33f*wandLevel));
 			Char enemy = this.enemy;
 			enemy.damage( dmg, this );
 			if (enemy.isAlive()){
@@ -704,8 +704,8 @@ public class WandOfWarding extends Wand {
 				}
 			} else {
                 if (isBomb)
-                    return Messages.get(this, "desc_bomb", GameMath.printAverage((int) ((2 + wandLevel)*Math.max(1, tier*2f/3)), (int) ((8 + 4 * wandLevel)*Math.max(1, tier*2f/3))), tier, 1 + tier*2);
-				return Messages.get(this, "desc_" + tier, GameMath.printAverage((int) (2 + wandLevel), (int) (8 + 4 * wandLevel)), tier);
+                    return Messages.get(this, "desc_bomb", GameMath.printAverage((int) ((4 + wandLevel)*Math.max(1, tier*2f/3)), (int) ((8 + 5.33f * wandLevel)*Math.max(1, tier*2f/3))), tier, 1 + tier*2);
+				return Messages.get(this, "desc_" + tier, GameMath.printAverage((int) (4 + wandLevel), (int) (8 + 5.33f * wandLevel)), tier);
 			}
 		}
 		

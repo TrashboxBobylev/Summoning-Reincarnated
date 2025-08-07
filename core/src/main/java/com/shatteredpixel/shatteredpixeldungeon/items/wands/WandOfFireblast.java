@@ -66,7 +66,7 @@ public class WandOfFireblast extends DamageWand {
         return magicMin(lvl, imaginableChargePerCast());
     }
     public float magicMin(float lvl, int rank){
-		return (1+lvl)*rank;
+		return (2+lvl)*rank;
 	}
 
 	//2/8/18 base damage with 2/4/6 scaling based on charges used
@@ -76,11 +76,11 @@ public class WandOfFireblast extends DamageWand {
     public float magicMax(float lvl, int rank) {
 		switch (rank){
 			case 1: default:
-				return 2 + 2*lvl;
+				return 3 + 2*lvl;
 			case 2:
-				return 2*(4 + 2*lvl);
+				return 2*(4 + 2.5f*lvl);
 			case 3:
-				return 3*(6+2*lvl);
+				return 3*(6+2.5f*lvl);
 		}
 	}
 
