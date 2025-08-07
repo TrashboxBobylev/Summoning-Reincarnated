@@ -108,6 +108,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 	
 	public boolean curseInfusionBonus = false;
 	public int resinBonus = 0;
+    public boolean magicalPotionBonus = false;
 
 	private static final int USES_TO_ID = 10;
 	private float usesLeftToID = USES_TO_ID;
@@ -187,18 +188,36 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 
     @Override
     public float ATUReq() {
-        return 1;
+        int i = 1;
+        if (magicalPotionBonus)
+            i -= 2;
+        return i;
     }
 
     @Override
     public int ATUReq(int lvl) {
-        return 1;
+        int i = 1;
+        if (magicalPotionBonus)
+            i -= 2;
+        return i;
+    }
+
+    @Override
+    public boolean hasMastery() {
+        return magicalPotionBonus;
+    }
+
+    @Override
+    public void giveMastery() {
+        magicalPotionBonus = true;
     }
 
     @Override
     public int min(int lvl) {
         boolean isGame = Dungeon.hero != null;
         float base = isGame ? Dungeon.hero.ATU() - 1 : 0;
+        if (magicalPotionBonus)
+            base += 2;
         base += resinBonus*RESIN_BOOST;
         int scaling = 1;
         if (isGame && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE){
@@ -211,6 +230,8 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
     public int max(int lvl) {
         boolean isGame = Dungeon.hero != null;
         float base = isGame ? Dungeon.hero.ATU() - 1 : 0;
+        if (magicalPotionBonus)
+            base += 2;
         base += resinBonus*RESIN_BOOST;
         int scaling = 3;
         if (isGame && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE){
@@ -560,6 +581,8 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
     public float power(){
         boolean isGame = Dungeon.hero != null;
         float base = isGame ? Dungeon.hero.ATU() - 1 : 0;
+        if (magicalPotionBonus)
+            base += 2;
         if (isGame && isEquipped(Dungeon.hero) && Dungeon.hero.buff(Talent.FightingWizardryTracker.class) != null){
             base += Dungeon.hero.buff(Talent.FightingWizardryTracker.class).powerBoost();
         }
@@ -831,6 +854,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 	private static final String CURSE_INFUSION_BONUS= "curse_infusion_bonus";
 	private static final String RESIN_BONUS         = "resin_bonus";
     private static final String RANK = "rank";
+    private static final String MASTERY_POTION_BONUS = "mastery_potion_bonus";
 
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -843,6 +867,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		bundle.put( CURSE_INFUSION_BONUS, curseInfusionBonus );
 		bundle.put( RESIN_BONUS, resinBonus );
         bundle.put(RANK, rank);
+        bundle.put(MASTERY_POTION_BONUS, magicalPotionBonus);
 	}
 	
 	@Override
@@ -865,6 +890,9 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         }
         else
             rank = 1;
+
+        if (bundle.contains(MASTERY_POTION_BONUS))
+            magicalPotionBonus = bundle.getBoolean(MASTERY_POTION_BONUS);
 	}
 	
 	@Override

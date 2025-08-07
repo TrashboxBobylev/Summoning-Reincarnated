@@ -353,6 +353,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		n.cursed = w.cursed;
 		n.curseInfusionBonus = w.curseInfusionBonus;
 		n.resinBonus = w.resinBonus;
+        n.magicalPotionBonus = w.magicalPotionBonus;
 
 		n.curCharges =  w.curCharges;
 		n.updateLevel();

@@ -32,4 +32,8 @@ public interface AttunementItem {
     public default boolean showAttunement(){
         return true;
     }
+
+    boolean hasMastery();
+
+    void giveMastery();
 }

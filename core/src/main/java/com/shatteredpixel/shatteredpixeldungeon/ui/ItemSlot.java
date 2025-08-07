@@ -59,6 +59,7 @@ public class ItemSlot extends Button {
 	public static final int DEGRADED_ATU	= 0x9C3B8D;
 	public static final int WARNING_ATU		= 0x3239A1;
 	public static final int NORMAL_ATU		= 0x2E4CE6;
+    public static final int MASTERED_ATU    = 0x6F58FF;
 	
 	private static final float ENABLED	= 1.0f;
 	private static final float DISABLED	= 0.3f;
@@ -306,7 +307,9 @@ public class ItemSlot extends Button {
 				extra.text( Messages.format( TXT_ATTUNEMENT, atu ) );
 				if (atu > Dungeon.hero.ATU()) {
 					extra.hardlight( DEGRADED_ATU );
-				} else {
+				} else if (((AttunementItem) item).hasMastery()){
+                    extra.hardlight( MASTERED_ATU );
+                } else {
 					extra.hardlight( NORMAL_ATU );
 				}
 			} else {

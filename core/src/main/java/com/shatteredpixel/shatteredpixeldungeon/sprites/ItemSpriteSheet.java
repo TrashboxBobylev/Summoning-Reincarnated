@@ -639,6 +639,7 @@ public class ItemSpriteSheet {
 	public static final int RED_CRYSTAL     = SUMM_MISCS+5;
 	public static final int CHAOSSTONE      = SUMM_MISCS+6;
 	public static final int SLINGSHOT       = SUMM_MISCS+7;
+    public static final int ATT_MASTERY     = SUMM_MISCS+8;
 	static {
 		assignItemRect(ROPES, 16, 16);
 		assignItemRect(RUNIC_SHOT, 13, 13);
@@ -649,6 +650,7 @@ public class ItemSpriteSheet {
 		assignItemRect(RED_CRYSTAL,     10, 15);
 		assignItemRect(CHAOSSTONE, 10, 15);
 		assignItemRect(SLINGSHOT, 12, 13);
+        assignItemRect(ATT_MASTERY, 14, 16);
 	}
 
 	private static final int SCROLLS        =                               xy(1, 19);  //16 slots

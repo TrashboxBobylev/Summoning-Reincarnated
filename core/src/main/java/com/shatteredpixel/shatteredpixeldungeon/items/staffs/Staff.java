@@ -84,6 +84,7 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
     public int tier;
     public Weapon.Augment augment = Weapon.Augment.NONE;
     public Weapon.Enchantment enchantment;
+    public boolean masteryPotionBonus = false;
 
     public int curCharges = 1;
     public float partialCharge = 0f;
@@ -200,7 +201,20 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
 
     @Override
     public int ATUReq(int lvl) {
-        return tier;
+        int i = tier;
+        if (masteryPotionBonus)
+            i -= 2;
+        return i;
+    }
+
+    @Override
+    public boolean hasMastery() {
+        return masteryPotionBonus;
+    }
+
+    @Override
+    public void giveMastery() {
+        masteryPotionBonus = true;
     }
 
     public float powerLevel(){
@@ -529,6 +543,7 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
     private static final String RANK = "rank";
     private static final String AUGMENT	        = "augment";
     private static final String ENCHANTMENT	    = "enchantment";
+    private static final String MASTERY_POTION_BONUS = "mastery_potion_bonus";
 
 
     @Override
@@ -540,6 +555,7 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
         bundle.put(RANK, rank);
         bundle.put(ENCHANTMENT, enchantment );
         bundle.put(AUGMENT, augment );
+        bundle.put( MASTERY_POTION_BONUS, masteryPotionBonus );
     }
 
     @Override
@@ -551,6 +567,8 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
         rank = bundle.getInt(RANK);
         augment = bundle.getEnum(AUGMENT, Weapon.Augment.class);
         enchantment = (Weapon.Enchantment)bundle.get( ENCHANTMENT );
+        if (bundle.contains(MASTERY_POTION_BONUS))
+            masteryPotionBonus = bundle.getBoolean(MASTERY_POTION_BONUS);
     }
 
     public class Charger extends Buff {

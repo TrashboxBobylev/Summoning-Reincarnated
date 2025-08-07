@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfFe
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfHoneyedHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfIcyTouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMight;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMysticProwess;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfToxicEssence;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.RedCrystal;
@@ -181,6 +182,7 @@ public abstract class Recipe {
 		new ArcaneResin.Recipe(),
 //		new BlizzardBrew.Recipe(),
 //		new InfernalBrew.Recipe(),
+        new ElixirOfMysticProwess.Recipe(),
 		new LiquidMetal.Recipe(),
 		new AquaBrew.Recipe(),
 		new ShockingBrew.Recipe(),
