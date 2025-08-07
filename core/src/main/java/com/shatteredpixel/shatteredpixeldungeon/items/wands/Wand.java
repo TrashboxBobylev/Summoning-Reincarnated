@@ -199,14 +199,24 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
     public int min(int lvl) {
         boolean isGame = Dungeon.hero != null;
         float base = isGame ? Dungeon.hero.ATU() - 1 : 0;
-        return Math.round(1 + base);
+        base += resinBonus*RESIN_BOOST;
+        int scaling = 1;
+        if (isGame && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE){
+            scaling = 2;
+        }
+        return Math.round(1 + base*scaling);
     }
 
     @Override
     public int max(int lvl) {
         boolean isGame = Dungeon.hero != null;
         float base = isGame ? Dungeon.hero.ATU() - 1 : 0;
-        return Math.round(7 + base*2);
+        base += resinBonus*RESIN_BOOST;
+        int scaling = 3;
+        if (isGame && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE){
+            scaling = 4;
+        }
+        return Math.round(7 + base*scaling);
     }
 
     @Override
