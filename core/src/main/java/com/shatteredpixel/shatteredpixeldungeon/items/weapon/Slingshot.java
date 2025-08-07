@@ -258,7 +258,7 @@ public class Slingshot extends Weapon {
         }
 
         @Override
-        public float durabilityPerUse() {
+        public float durabilityPerUse(int level) {
             return 0;
         }
 

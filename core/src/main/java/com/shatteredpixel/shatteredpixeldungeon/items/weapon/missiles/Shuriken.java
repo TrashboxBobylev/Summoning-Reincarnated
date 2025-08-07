@@ -49,7 +49,7 @@ public class Shuriken extends MissileWeapon {
 	}
 
 	@Override
-	protected void onThrow(int cell) {
+	public void onThrow(int cell) {
 		super.onThrow(cell);
 		if (curUser.buff(ShurikenInstantTracker.class) == null) {
 			//1 less turn as the attack will be instant
