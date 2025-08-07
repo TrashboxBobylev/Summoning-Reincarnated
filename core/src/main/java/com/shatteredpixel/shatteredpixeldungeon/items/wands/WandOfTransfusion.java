@@ -90,7 +90,7 @@ public class WandOfTransfusion extends DamageWand {
         switch (rank){
             case 1: return 1.2f;
             case 2: return 0.5f;
-            case 3: return 3.75f;
+            case 3: return 4f;
         }
         return super.rechargeModifier(rank);
     }
@@ -99,6 +99,7 @@ public class WandOfTransfusion extends DamageWand {
     protected int chargesPerCast() {
         switch (rank()){
             case 2: return curCharges;
+            case 3: return 2;
         }
         return super.chargesPerCast();
     }
@@ -120,7 +121,7 @@ public class WandOfTransfusion extends DamageWand {
 			//this wand does different things depending on the target.
 
             //on rank III, swap health states
-            if (rank() == 3 && !ch.properties().contains(Char.Property.BOSS)) {
+            if (rank() == 3 && !ch.properties().contains(Char.Property.BOSS) && !ch.properties().contains(Char.Property.UNDEAD)) {
                 int myHealth = curUser.HP;
                 int enemyHealth = ch.HP;
                 float myHP = curUser.HP * 1f / curUser.HT;
