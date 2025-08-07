@@ -844,7 +844,13 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		curCharges = bundle.getInt( CUR_CHARGES );
 		curChargeKnown = bundle.getBoolean( CUR_CHARGE_KNOWN );
 		partialCharge = bundle.getFloat( PARTIALCHARGE );
-        rank = bundle.getInt(RANK);
+        if (bundle.contains(RANK)) {
+            rank = bundle.getInt(RANK);
+            if (rank < 1 || rank > 3)
+                rank = 1;
+        }
+        else
+            rank = 1;
 	}
 	
 	@Override
