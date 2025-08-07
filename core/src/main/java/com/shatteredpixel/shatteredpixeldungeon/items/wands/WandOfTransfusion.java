@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LifeLink;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
@@ -74,7 +75,35 @@ public class WandOfTransfusion extends DamageWand {
 
 	private boolean freeCharge = false;
 
-	@Override
+    @Override
+    public float powerModifier(int rank) {
+        switch (rank){
+            case 1: return 1.0f;
+            case 2: return 0.4f*chargesPerCast();
+            case 3: return 0f;
+        }
+        return super.powerModifier(rank);
+    }
+
+    @Override
+    public float rechargeModifier(int rank) {
+        switch (rank){
+            case 1: return 1.2f;
+            case 2: return 0.5f;
+            case 3: return 3.75f;
+        }
+        return super.rechargeModifier(rank);
+    }
+
+    @Override
+    protected int chargesPerCast() {
+        switch (rank()){
+            case 2: return curCharges;
+        }
+        return super.chargesPerCast();
+    }
+
+    @Override
 	public void onZap(Ballistica beam) {
 
 		for (int c : beam.subPath(0, beam.dist))
@@ -89,61 +118,94 @@ public class WandOfTransfusion extends DamageWand {
 			wandProc(ch, chargesPerCast());
 			
 			//this wand does different things depending on the target.
-			
-			//heals/shields an ally or a charmed enemy while damaging self
-			if (ch.alignment == Char.Alignment.ALLY || ch.buff(Charm.class) != null){
-				
-				// 5% of max hp
-				int selfDmg = Math.round(curUser.HT*0.05f);
-				
-				int healing = Math.round(selfDmg + 3*power());
-				int shielding = (ch.HP + healing) - ch.HT;
-				if (shielding > 0){
-					healing -= shielding;
-					Buff.affect(ch, Barrier.class).setShield(shielding);
-				} else {
-					shielding = 0;
-				}
-				
-				ch.HP += healing;
-				
-				ch.sprite.emitter().burst(Speck.factory(Speck.HEALING), (int) (2 + power() / 2));
-				if (healing > 0) {
-					ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(healing), FloatingText.HEALING);
-				}
-				if (shielding > 0){
-					ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shielding), FloatingText.SHIELDING);
-				}
-				
-				if (!freeCharge) {
-					damageHero(selfDmg);
-				} else {
-					freeCharge = false;
-				}
 
-			//for enemies...
-			//(or for mimics which are hiding, special case)
-			} else if ((ch.alignment == Char.Alignment.ENEMY || ch instanceof Mimic) && !(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))) {
+            //on rank III, swap health states
+            if (rank() == 3 && !ch.properties().contains(Char.Property.BOSS)) {
+                int myHealth = curUser.HP;
+                int enemyHealth = ch.HP;
+                float myHP = curUser.HP * 1f / curUser.HT;
+                float enemyHP = ch.HP * 1f / ch.HT;
+                if (ch.properties().contains(Char.Property.MINIBOSS)) {
+                    myHP /= 3;
+                    enemyHP /= 1.5f;
+                }
+                curUser.HP = (int) (curUser.HT * enemyHP);
+                if (curUser.HP - myHealth != 0){
+                    if (curUser.HP - myHealth > 0)
+                        curUser.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(curUser.HP - myHealth), FloatingText.HEALING);
+                    else
+                        curUser.sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(-(curUser.HP - myHealth)), FloatingText.MAGIC_DMG);
+                }
+                ch.HP = (int) (ch.HT * myHP);
+                if (ch.HP - enemyHealth != 0){
+                    if (ch.HP - enemyHealth > 0)
+                        ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(ch.HP - enemyHealth), FloatingText.HEALING);
+                    else
+                        ch.sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(-(ch.HP - enemyHealth)), FloatingText.MAGIC_DMG);
+                }
+            } else {
 
-				//grant a self-shield, and...
-				Buff.affect(curUser, Barrier.class).setShield((int) (5 + power()));
-				curUser.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString((int) (5+power())), FloatingText.SHIELDING);
-				
-				//charms living enemies
-				if (!ch.properties().contains(Char.Property.UNDEAD)) {
-					Charm charm = Buff.affect(ch, Charm.class, Charm.DURATION/2f);
-					charm.object = curUser.id();
-					charm.ignoreHeroAllies = true;
-					ch.sprite.centerEmitter().start( Speck.factory( Speck.HEART ), 0.2f, 3 );
-				
-				//harms the undead
-				} else {
-					ch.damage(damageRoll(), this);
-					ch.sprite.emitter().start(ShadowParticle.UP, 0.05f, (int) (10 + power()));
-					Sample.INSTANCE.play(Assets.Sounds.BURNING);
-				}
+                //heals/shields an ally or a charmed enemy while damaging self
+                if (ch.alignment == Char.Alignment.ALLY || ch.buff(Charm.class) != null) {
+                    if (rank() == 2){
+                        Buff.prolong(ch, LifeLink.class, chargesPerCast()*(5 + power())).object = curUser.id();
+                        Buff.prolong(curUser, LifeLink.class, chargesPerCast()*(5 + power())).object = ch.id();
+                    } else {
 
-			}
+                        // 5% of max hp
+                        int selfDmg = Math.round(curUser.HT * 0.05f);
+
+                        int healing = Math.round(selfDmg + 3 * power());
+                        int shielding = (ch.HP + healing) - ch.HT;
+                        if (shielding > 0) {
+                            healing -= shielding;
+                            Buff.affect(ch, Barrier.class).setShield(shielding);
+                        } else {
+                            shielding = 0;
+                        }
+
+                        ch.HP += healing;
+
+                        ch.sprite.emitter().burst(Speck.factory(Speck.HEALING), (int) (2 + power() / 2));
+                        if (healing > 0) {
+                            ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(healing), FloatingText.HEALING);
+                        }
+                        if (shielding > 0) {
+                            ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shielding), FloatingText.SHIELDING);
+                        }
+                    }
+
+                    if (!freeCharge) {
+                        damageHero(Math.round(curUser.HT * 0.05f));
+                    } else {
+                        freeCharge = false;
+                    }
+
+                    //for enemies...
+                    //(or for mimics which are hiding, special case)
+                } else if ((ch.alignment == Char.Alignment.ENEMY || ch instanceof Mimic) && !(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))) {
+
+                    //grant a self-shield, and...
+                    int shield = (int) ((5 + power())*powerModifier(rank()));
+                    Buff.affect(curUser, Barrier.class).setShield(shield);
+                    curUser.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shield), FloatingText.SHIELDING);
+
+                    //charms living enemies
+                    if (!ch.properties().contains(Char.Property.UNDEAD)) {
+                        Charm charm = Buff.affect(ch, Charm.class, (Charm.DURATION / 2f)*powerModifier(rank()));
+                        charm.object = curUser.id();
+                        charm.ignoreHeroAllies = true;
+                        ch.sprite.centerEmitter().start(Speck.factory(Speck.HEART), 0.2f, 3);
+
+                        //harms the undead
+                    } else {
+                        ch.damage(damageRoll(), this);
+                        ch.sprite.emitter().start(ShadowParticle.UP, 0.05f, (int) (10 + power()));
+                        Sample.INSTANCE.play(Assets.Sounds.BURNING);
+                    }
+
+                }
+            }
 			
 		}
 		
@@ -194,13 +256,37 @@ public class WandOfTransfusion extends DamageWand {
 	@Override
 	public String statsDesc() {
 		int selfDMG = Dungeon.hero != null ? Math.round(Dungeon.hero.HT*0.05f): 1;
-		if (levelKnown)
-			return Messages.get(this, "stats_desc", selfDMG, selfDMG + (int)(3*power()), (int)(5+power()), GameMath.printAverage((int) magicMin(), (int) magicMax()));
-		else
-			return Messages.get(this, "stats_desc", selfDMG, selfDMG, 5, GameMath.printAverage((int) magicMin(0), (int) magicMax(0)));
+        switch (rank()){
+            case 2: return Messages.get(this, "stats_desc" + rank(), selfDMG, (int)(5+power())*chargesPerCast(), (int)(Charm.DURATION*powerModifier(rank())), (int)((5+power())*powerModifier(rank())), GameMath.printAverage((int) magicMin(), (int) magicMax()));
+        }
+        return Messages.get(this, "stats_desc" + rank(), selfDMG, selfDMG + (int)(3*power()), (int)(5+power()), GameMath.printAverage((int) magicMin(), (int) magicMax()));
 	}
 
-	@Override
+    @Override
+    public String getRankMessage(int rank) {
+        if (rank == 2){
+            return Messages.get(this, "rank" + rank,
+                    Math.round(magicMin(power())*powerModifier(rank)),
+                    Math.round(magicMax(power())*powerModifier(rank)),
+                    getRechargeInfo(rank),
+                    (int)(Charm.DURATION*powerModifier(rank)),
+                    (int)((5+power())*powerModifier(rank)),
+                    Dungeon.hero != null ? Dungeon.hero.HT / 20 : 1,
+                    (int)((5+power())*chargesPerCast())
+            );
+        }
+        return Messages.get(this, "rank" + rank,
+                Math.round(magicMin(power())*powerModifier(rank)),
+                Math.round(magicMax(power())*powerModifier(rank)),
+                getRechargeInfo(rank),
+                (int)(Charm.DURATION*powerModifier(rank)),
+                (int)((5+power())*powerModifier(rank)),
+                Dungeon.hero != null ? Dungeon.hero.HT / 20 : 1,
+                (int)((Dungeon.hero != null ? Dungeon.hero.HT / 20f : 1) + 3 * power())
+        );
+    }
+
+    @Override
 	public String upgradeStat1(int level) {
 		int selfDMG = Dungeon.hero != null ? Math.round(Dungeon.hero.HT*0.05f): 1;
 		return Integer.toString(selfDMG + 3*level);
