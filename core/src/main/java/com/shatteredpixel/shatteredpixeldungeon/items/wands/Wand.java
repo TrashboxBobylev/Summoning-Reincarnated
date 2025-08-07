@@ -173,6 +173,8 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		return 1f;
 	}
 
+    public static final float RESIN_BOOST = 2/3f;
+
     @Override
     public int STRReq() {
         return Dungeon.hero != null ? Dungeon.hero.STR(): 10;
@@ -442,11 +444,8 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
             case NONE:
         }
 
-		if (resinBonus == 1){
-			desc += "\n\n" + Messages.get(Wand.class, "resin_one");
-		} else if (resinBonus > 1){
-			desc += "\n\n" + Messages.get(Wand.class, "resin_many", resinBonus);
-		}
+        if (resinBonus > 0)
+		    desc += "\n\n" + Messages.get(Wand.class, "resin_many", resinBonus*RESIN_BOOST);
 
 		if (cursed && cursedKnown) {
 			desc += "\n\n" + Messages.get(Wand.class, "cursed");
@@ -554,6 +553,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         if (isGame && isEquipped(Dungeon.hero) && Dungeon.hero.buff(Talent.FightingWizardryTracker.class) != null){
             base += Dungeon.hero.buff(Talent.FightingWizardryTracker.class).powerBoost();
         }
+        base += RESIN_BOOST*resinBonus;
         if (charger != null && charger.target != null) {
             if (charger.target.buff(ScrollEmpower.class) != null){
                 base += 1.5f;
