@@ -264,7 +264,7 @@ public class WallOfLight extends TargetedClericSpell {
 
                     for (int c: PathFinder.NEIGHBOURS4){
                         Char target;
-                        if ((target = Actor.findChar(c)) != null && target.alignment == Char.Alignment.ENEMY){
+                        if ((target = Actor.findChar(c + cell)) != null && target.alignment == Char.Alignment.ENEMY){
                             target.damage(Random.NormalIntRange(0, 1 + Dungeon.scalingDepth() / 5), new WandOfWarding());
                         }
                     }
