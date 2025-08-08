@@ -27,6 +27,8 @@ package com.shatteredpixel.shatteredpixeldungeon.mechanics;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.WallOfLight;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
 
@@ -159,7 +161,11 @@ public class Ballistica {
 						&& !Dungeon.level.passable[cell]
 						&& !Dungeon.level.avoid[cell]
 						&& Actor.findChar(cell) == null) {
-					collide(path.get(path.size() - 1));
+                    if (ignoreAllies && Blob.volumeAt(cell, WallOfLight.LightWall.class) > 0){
+                        //friendly projectiles can go through warding lights
+                    } else {
+                        collide(path.get(path.size() - 1));
+                    }
 				}
 
 				path.add(cell);
@@ -167,7 +173,9 @@ public class Ballistica {
 				if (collisionPos == null && stopTerrain && cell != sourcePos && Dungeon.level.solid[cell]) {
 					if (ignoreSoftSolid && (Dungeon.level.passable[cell] || Dungeon.level.avoid[cell])) {
 						//do nothing
-					} else {
+					} else if (ignoreAllies && Blob.volumeAt(cell, WallOfLight.LightWall.class) > 0){
+                        //friendly projectiles can go through warding lights
+                    } else {
 						collide(cell);
 					}
 				}
