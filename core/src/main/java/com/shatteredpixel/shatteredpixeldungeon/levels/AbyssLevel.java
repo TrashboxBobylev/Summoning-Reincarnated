@@ -1,9 +1,11 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
+import com.badlogic.gdx.graphics.Color;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Chaosstone;
@@ -166,6 +168,9 @@ public class AbyssLevel extends RegularLevel {
             if (level.map[i] == Terrain.WALL_DECO) {
                 group.add( new Torch( i ) );
             }
+            if (level.map[i] == Terrain.REGION_DECO || level.map[i] == Terrain.REGION_DECO_ALT) {
+                group.addToFront( new GreenFlame( i ) );
+            }
         }
     }
 
@@ -192,5 +197,52 @@ public class AbyssLevel extends RegularLevel {
                 super.update();
             }
         }
+    }
+
+    public static class GreenFlame extends Emitter {
+
+        private int pos;
+
+        public static final Emitter.Factory factory = new Factory() {
+            @Override
+            public void emit( Emitter emitter, int index, float x, float y ) {
+                GreenFlameParticle p = (GreenFlameParticle) emitter.recycle( GreenFlameParticle.class );
+                p.reset( x, y );
+            }
+            @Override
+            public boolean lightMode() {
+                return true;
+            }
+        };
+
+        public GreenFlame( int pos ) {
+            super();
+
+            this.pos = pos;
+
+            PointF p = DungeonTilemap.raisedTileCenterToWorld( pos );
+            pos( p.x - 2, p.y - 5, 4, 4 );
+
+            pour( factory, 0.1f );
+        }
+
+        @Override
+        public void update() {
+            if (visible = (pos < Dungeon.level.heroFOV.length && Dungeon.level.heroFOV[pos])) {
+                super.update();
+            }
+        }
+
+    }
+
+    public static class GreenFlameParticle extends ElmoParticle {
+
+        public GreenFlameParticle(){
+            super();
+            acc.set( 0, -40 );
+            Color tempColor = new Color().fromHsv(Random.Float(360), Random.Float(0.5f, 1f), 0.9f);
+            color(tempColor.r, tempColor.g, tempColor.b);
+        }
+
     }
 }
