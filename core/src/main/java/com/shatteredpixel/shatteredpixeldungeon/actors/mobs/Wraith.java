@@ -175,4 +175,24 @@ public class Wraith extends Mob {
 		}
 	}
 
+    public static Wraith spawnForcefullyAt( int pos ) {
+        if (Dungeon.level.passable[pos]) {
+
+            Wraith w = new Wraith();
+            w.adjustStats( Dungeon.scalingDepth() );
+            w.pos = pos;
+            w.state = w.HUNTING;
+            GameScene.add( w, SPAWN_DELAY );
+
+            w.sprite.alpha( 0 );
+            w.sprite.parent.add( new AlphaTweener( w.sprite, 1, 0.5f ) );
+
+            w.sprite.emitter().burst( ShadowParticle.CURSE, 5 );
+
+            return w;
+        } else {
+            return null;
+        }
+    }
+
 }

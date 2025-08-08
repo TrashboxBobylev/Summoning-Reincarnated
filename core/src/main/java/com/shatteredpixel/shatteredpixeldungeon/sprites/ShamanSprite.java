@@ -120,4 +120,15 @@ public abstract class ShamanSprite extends MobSprite {
 			return 42;
 		}
 	}
+
+    public static class Spectral extends ShamanSprite {
+        {
+            boltType = MagicMissile.BEACON;
+        }
+
+        @Override
+        protected int texOffset() {
+            return 63;
+        }
+    }
 }
