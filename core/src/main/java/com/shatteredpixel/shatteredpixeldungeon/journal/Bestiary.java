@@ -96,6 +96,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Skeleton;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Slime;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Snake;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.SpectralNecromancer;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.SpectralShaman;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.SpectreRat;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Spinner;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue;
@@ -105,6 +106,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Tengu;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Thief;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.TormentedSpirit;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Trappet;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.TribeGnoll;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Warlock;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Wraith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.YogDzewa;
@@ -251,9 +253,9 @@ public enum Bestiary {
 
 		UNIVERSAL.addEntities(Wraith.class, Piranha.class, Mimic.class, GoldenMimic.class, EbonyMimic.class, Statue.class, GuardianTrap.Guardian.class, SentryRoom.Sentry.class);
 
-		RARE.addEntities(Albino.class, GnollExile.class, HermitCrab.class, CausticSlime.class,
+		RARE.addEntities(Albino.class, GnollExile.class, HermitCrab.class, CausticSlime.class, TribeGnoll.class,
 				Bandit.class, SpectralNecromancer.class,
-				ArmoredBrute.class, DM201.class,
+				ArmoredBrute.class, DM201.class, SpectralShaman.class,
 				Elemental.ChaosElemental.class, Senior.class,
 				Acidic.class,
 				TormentedSpirit.class, PhantomPiranha.class, CrystalMimic.class, ArmoredStatue.class,
