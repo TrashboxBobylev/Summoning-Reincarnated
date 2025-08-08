@@ -62,8 +62,8 @@ public abstract class ConnectionRoom extends Room {
 	}
 	
 	private static float[][] chances = new float[27][];
-	private static float[] abyss;
-	static {
+
+    static {
 		chances[1] =  new float[]{20, 1,    0, 2,       2, 1};
 		chances[4] =  chances[3] = chances[2] = chances[1];
 		chances[5] =  new float[]{20, 0,    0, 0,       0, 0};
@@ -82,15 +82,14 @@ public abstract class ConnectionRoom extends Room {
 		chances[22] = new float[]{15, 4,    0, 2,       3, 2};
 		chances[26] = chances[25] = chances[24] = chances[23] = chances[22];
 
-		abyss = new float[]{1, 1,    1, 1,      1, 1};
-	}
+    }
 	
 	public static ConnectionRoom createRoom(){
 		if (Dungeon.mode == Dungeon.GameMode.GAUNTLET){
 			return Reflection.newInstance(TunnelRoom.class);
 		}
 		if (Dungeon.branch == AbyssLevel.BRANCH || Dungeon.mode == Dungeon.GameMode.CHAOS){
-			return Reflection.newInstance(rooms.get(Random.chances(abyss)));
+			return Reflection.newInstance(Random.element(rooms));
 		}
 		return Reflection.newInstance(rooms.get(Random.chances(chances[
 				(int) Math.ceil(Dungeon.depth / (Dungeon.chapterSize()*5f/25f))])));

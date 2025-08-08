@@ -181,8 +181,8 @@ public abstract class StandardRoom extends Room {
 	}
 	
 	private static float[][] chances = new float[27][];
-	private static float[] abyss;
-	static {
+
+    static {
 		chances[1] =  new float[]{16,8,8,4,4,   0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  1,0,1,0,1,0,1,1,0,0};
 		chances[2] =  new float[]{16,8,8,4,4,   0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0,  1,1,1,1,1,1,1,1,1,1};
 		chances[4] =  chances[3] = chances[2];
@@ -200,15 +200,14 @@ public abstract class StandardRoom extends Room {
 		chances[21] = new float[]{0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 0,0,0,0,0, 10,10,10,5,5,  1,1,1,1,1,1,1,1,1,1};
 		chances[26] = chances[25] = chances[24] = chances[23] = chances[22] = chances[21];
 
-		abyss       = new float[]{1,  1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1, 1,1,1,1,     1,1,1,1,1,1,1,1,1,1};
-	}
+    }
 	
 	public static StandardRoom createRoom(){
 		if (Dungeon.mode == Dungeon.GameMode.GAUNTLET){
 			return Reflection.newInstance(EmptyRoom.class);
 		}
 		if (Dungeon.branch == AbyssLevel.BRANCH || Dungeon.mode == Dungeon.GameMode.CHAOS){
-			return Reflection.newInstance(rooms.get(Random.chances(abyss)));
+			return Reflection.newInstance(Random.element(rooms));
 		}
 		return Reflection.newInstance(rooms.get(Random.chances(chances[
                 (int) Math.ceil(Dungeon.depth / (Dungeon.chapterSize()*5f/25f))])));

@@ -168,8 +168,8 @@ public class EntranceRoom extends StandardRoom {
 	}
 
 	private static float[][] chances = new float[27][];
-	private static float[] abyss;
-	static {
+
+    static {
 		//first 2 floors only use simpler entrance rooms
 		chances[1] =  new float[]{4,3,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0};
 		chances[2] =  chances[1];
@@ -188,12 +188,11 @@ public class EntranceRoom extends StandardRoom {
 		chances[21] = new float[]{0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 4,3,2,1};
 		chances[26] = chances[25] = chances[24] = chances[23] = chances[22] = chances[21];
 
-		abyss = new float[]{1,  1,1, 1,1, 1,1, 1,1, 1,1};
-	}
+    }
 
 	public static StandardRoom createEntrance(){
 		if (Dungeon.branch == AbyssLevel.BRANCH){
-			return Reflection.newInstance(rooms.get(Random.chances(abyss)));
+			return Reflection.newInstance(Random.element(rooms));
 		}
 		return Reflection.newInstance(rooms.get(Random.chances(chances[(int) Math.ceil(Dungeon.depth / (Dungeon.chapterSize()*5f/25f))])));
 	}
