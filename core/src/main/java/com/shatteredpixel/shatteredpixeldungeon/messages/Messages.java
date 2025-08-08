@@ -142,9 +142,14 @@ public class Messages {
 			//in cases where text is commonly grabbed as a utility from classes that aren't mean to be instantiated
 			//(e.g. flavourbuff.dispTurns()) using .class directly is probably smarter to prevent unnecessary recursive calls.
 			if (c != null && c.getSuperclass() != null){
-				return get(c.getSuperclass(), k, args);
+                String text = get(c.getSuperclass(), k, args);
+                if(text.startsWith("!!!")) {
+                    return "!!!" + key + "!!!";
+                } else {
+                    return text;
+                }
 			} else {
-				return NO_TEXT_FOUND;
+                return "!!!" + key + "!!!";
 			}
 		}
 	}

@@ -255,7 +255,7 @@ public class ToyKnife extends MeleeWeapon implements Rankable, ManaSource {
     @Override
     public String getRankMessage(int rank){
         String rankMessage = generalRankMessage(rank);
-        if (!Messages.get(this, "rank" + rank).equals(Messages.NO_TEXT_FOUND))
+        if (!Messages.get(this, "rank" + rank).startsWith("!!"))
             rankMessage += "\n\n" + Messages.get(this, "rank" + rank);
         return rankMessage;
     }

@@ -628,11 +628,10 @@ public enum Talent {
 
 	public String desc(boolean metamorphed){
 		String comment = Messages.get(this, name() + ".comment");
-		//noinspection StringEquality
-		comment = comment == Messages.NO_TEXT_FOUND ? "" : "\n\n" + comment;
+		comment = comment.startsWith("!!") ? "" : "\n\n" + comment;
 		if (metamorphed){
 			String metaDesc = Messages.get(this, name() + ".meta_desc");
-			if (!metaDesc.equals(Messages.NO_TEXT_FOUND)){
+			if (!metaDesc.startsWith("!!")){
 				return Messages.get(this, name() + ".desc") + "\n\n" + metaDesc + comment;
 			}
 		}

@@ -278,7 +278,7 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
     @Override
     public String getRankMessage(int rank){
         String rankMessage = generalRankMessage(rank);
-        if (!minionDescription(rank).equals(Messages.NO_TEXT_FOUND))
+        if (!minionDescription(rank).startsWith("!!"))
             rankMessage += "\n\n" + minionDescription(rank);
         return rankMessage;
     }

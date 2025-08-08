@@ -503,7 +503,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 
 		if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE){
             String rankedBMageDesc = Messages.get(this, "bmage_desc" + rank());
-			desc += "\n\n" + (!rankedBMageDesc.equals(Messages.NO_TEXT_FOUND) ? rankedBMageDesc : Messages.get(this, "bmage_desc"));
+			desc += "\n\n" + (!rankedBMageDesc.startsWith("!!") ? rankedBMageDesc : Messages.get(this, "bmage_desc"));
 		}
 
         if (charger != null && curCharges < maxCharges){
@@ -517,7 +517,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 
 	public String statsDesc(){
         String rankedStatsDesc = Messages.get(this, "stats_desc" + rank());
-        if (!rankedStatsDesc.equals(Messages.NO_TEXT_FOUND))
+        if (!rankedStatsDesc.startsWith("!!"))
             return rankedStatsDesc;
 		return Messages.get(this, "stats_desc");
 	}

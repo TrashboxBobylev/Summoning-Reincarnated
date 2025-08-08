@@ -252,7 +252,7 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
 
     public String fullSpellDesc(){
         String desc = spellDesc();
-        if (!empowermentDesc().equals(Messages.NO_TEXT_FOUND) && Dungeon.hero != null && Dungeon.hero.armorAbility instanceof Ascension)
+        if (!empowermentDesc().startsWith("!!") && Dungeon.hero != null && Dungeon.hero.armorAbility instanceof Ascension)
             desc += "\n\n" + empowermentDesc();
         return desc;
     }
@@ -264,7 +264,7 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
     @Override
     public String getRankMessage(int rank) {
         String message = Messages.get(this, "mana_cost", manaCost(rank)) + "\n" + spellRankMessage(rank);
-        if (!empowermentRankDesc(rank).equals(Messages.NO_TEXT_FOUND) && Dungeon.hero != null && Dungeon.hero.armorAbility instanceof Ascension)
+        if (!empowermentRankDesc(rank).startsWith("!!") && Dungeon.hero != null && Dungeon.hero.armorAbility instanceof Ascension)
             message += "\n\n" + empowermentRankDesc(rank);
         return message;
     }

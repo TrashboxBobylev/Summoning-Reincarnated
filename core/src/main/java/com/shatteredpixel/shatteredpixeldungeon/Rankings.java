@@ -541,7 +541,7 @@ public enum Rankings {
 				return Messages.get(this, "something");
 			} else {
 				String result = Messages.get(cause, "rankings_desc", (Messages.get(cause, "name")));
-				if (result.contains(Messages.NO_TEXT_FOUND)){
+				if (result.startsWith("!!")){
 					return Messages.get(this, "something");
 				} else {
 					return result;
