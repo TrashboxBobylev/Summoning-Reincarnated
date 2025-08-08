@@ -666,7 +666,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 
     public String getRechargeInfo(int rank) {
         return new DecimalFormat("#.##").format(
-                charger == null ? Charger.BASE_CHARGE_DELAY*rechargeModifier(rank) : charger.getTurnsToCharge(rank));
+                charger == null ? Math.round(Charger.BASE_CHARGE_DELAY*rechargeModifier(rank)) : charger.getTurnsToCharge(rank));
     }
 
     public void fx(Ballistica bolt, Callback callback) {
@@ -1152,6 +1152,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
             float charge = BASE_CHARGE_DELAY * rechargeModifier(rank) / scalingFactor;
             if (Regeneration.regenOn())
                 charge /= RingOfEnergy.wandChargeMultiplier(target);
+            charge = Math.round(charge);
             return charge;
         }
 		
