@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Miasma;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.PhantomSprite;
@@ -144,7 +145,7 @@ public class Phantom extends AbyssalMob {
 
 				int oldPos = pos;
 
-				if (ventCooldown <= 0 && distance(enemy) >= 1 && Random.Int(50/distance(enemy)) == 0/* && buff(Talent.AntiMagicBuff.class) == null*/){
+				if (ventCooldown <= 0 && distance(enemy) >= 1 && Random.Int(50/distance(enemy)) == 0 && buff(ScrollOfAntiMagic.EnemyBuff.class) == null){
 					if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
 						sprite.zap( enemy.pos );
 						return false;

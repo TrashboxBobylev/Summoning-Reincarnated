@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -95,17 +96,17 @@ public class SpectreRat extends AbyssalMob implements Callback {
 	public boolean canAttack(Char enemy) {
 		/*if (buff(ChampionEnemy.Paladin.class) != null){
 			return false;
-		}
-		if (buff(Talent.AntiMagicBuff.class) != null){
-			return super.canAttack(enemy);
 		}*/
+        if (buff(ScrollOfAntiMagic.EnemyBuff.class) != null){
+            return super.canAttack(enemy);
+        }
 		return super.canAttack(enemy) || new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos == enemy.pos;
 	}
 
 	protected boolean doAttack( Char enemy ) {
-		/*if (buff(Talent.AntiMagicBuff.class) != null){
-			return super.doAttack(enemy);
-		}*/
+		if (buff(ScrollOfAntiMagic.EnemyBuff.class) != null){
+            return super.doAttack(enemy);
+        }
 		if (Dungeon.level.adjacent( pos, enemy.pos )
 				|| new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos != enemy.pos) {
 

@@ -14,6 +14,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.RainbowParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.SummoningTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -41,10 +42,10 @@ public class LostSpirit extends AbyssalMob implements Callback {
     public boolean canAttack(Char enemy) {
         /*if (buff(ChampionEnemy.Paladin.class) != null){
             return false;
-        }
-        if (buff(Talent.AntiMagicBuff.class) != null){
-            return super.canAttack(enemy);
         }*/
+        if (buff(ScrollOfAntiMagic.EnemyBuff.class) == null){
+            return false;
+        }
         return super.canAttack(enemy) || new Ballistica( pos, enemy.pos, Ballistica.STOP_TARGET).collisionPos == enemy.pos;
     }
 

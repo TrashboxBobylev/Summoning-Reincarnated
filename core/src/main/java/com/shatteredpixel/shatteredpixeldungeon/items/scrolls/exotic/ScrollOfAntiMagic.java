@@ -24,10 +24,18 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.watabou.noosa.Image;
+
+import java.util.ArrayList;
 
 public class ScrollOfAntiMagic extends ExoticScroll {
 	
@@ -39,11 +47,48 @@ public class ScrollOfAntiMagic extends ExoticScroll {
 	public void doRead() {
 
 		detach(curUser.belongings.backpack);
+        GameScene.flash( 0x4000FF00 );
 		Buff.affect( curUser, MagicImmune.class, MagicImmune.DURATION );
-		new Flare( 5, 32 ).color( 0x00FF00, true ).show( curUser.sprite, 2f );
+		new Flare( 5, 48 ).color( 0x00FF00, true ).show( curUser.sprite, 3f );
+        ArrayList<Mob> targets = new ArrayList<>();
+
+        //calculate targets first, in case damaging/blinding a target affects hero vision
+        for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
+            if (Dungeon.level.heroFOV[mob.pos]) {
+                targets.add(mob);
+            }
+        }
+
+        for (Mob mob : targets){
+            Buff.prolong(mob, EnemyBuff.class, MagicImmune.DURATION*2f);
+        }
 
 		identify();
 		
 		readAnimation();
 	}
+
+    public static class EnemyBuff extends FlavourBuff {
+        public static final float DURATION = 20f;
+
+        {
+            type = buffType.NEGATIVE;
+            announced = true;
+        }
+
+        @Override
+        public int icon() {
+            return BuffIndicator.COMBO;
+        }
+
+        @Override
+        public void tintIcon(Image icon) {
+            icon.hardlight(0, 1, 0);
+        }
+
+        @Override
+        public float iconFadePercent() {
+            return Math.max(0, (DURATION - visualcooldown()) / DURATION);
+        }
+    }
 }

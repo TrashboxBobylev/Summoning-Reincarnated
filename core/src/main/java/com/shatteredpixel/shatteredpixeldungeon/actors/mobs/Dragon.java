@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -116,7 +117,7 @@ public class Dragon extends AbyssalMob {
 //        if (buff(ChampionEnemy.Paladin.class) != null){
 //            return false;
 //        }
-        if (rangedCooldown <= 0 /*&& buff(Talent.AntiMagicBuff.class) == null*/) {
+        if (rangedCooldown <= 0 && buff(ScrollOfAntiMagic.EnemyBuff.class) == null) {
             return super.canAttack(enemy) || new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT ).collisionPos == enemy.pos;
         } else {
             return super.canAttack( enemy );

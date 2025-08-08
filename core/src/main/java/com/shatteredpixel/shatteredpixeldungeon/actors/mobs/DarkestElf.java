@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DarkestElfSprite;
 import com.watabou.noosa.audio.Sample;
@@ -276,7 +277,7 @@ public class DarkestElf extends AbyssalMob {
 			}
 
 			//if enemy is seen, and enemy is within range, and we haven no skeleton, summon a skeleton!
-			if (enemySeen && Dungeon.level.distance(pos, enemy.pos) <= 4 && mySkeleton == null /*&& buff(Talent.AntiMagicBuff.class) == null*/){
+			if (enemySeen && Dungeon.level.distance(pos, enemy.pos) <= 4 && mySkeleton == null && buff(ScrollOfAntiMagic.EnemyBuff.class) == null){
 
 				summoningPos = -1;
 				for (int c : PathFinder.NEIGHBOURS8){
@@ -304,7 +305,7 @@ public class DarkestElf extends AbyssalMob {
 
 				return true;
 				//otherwise, if enemy is seen, and we have a skeleton...
-			} else if (enemySeen && mySkeleton != null /*&& buff(Talent.AntiMagicBuff.class) == null*/){
+			} else if (enemySeen && mySkeleton != null && buff(ScrollOfAntiMagic.EnemyBuff.class) == null){
 
 				target = enemy.pos;
 				spend(TICK);
