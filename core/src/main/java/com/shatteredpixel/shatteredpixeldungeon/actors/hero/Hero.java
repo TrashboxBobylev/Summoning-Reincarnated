@@ -1730,7 +1730,7 @@ public class Hero extends Char {
 
 		final boolean isManaburnEmpowered = buff(Ascension.AscendBuff.class) != null && pointsInTalent(Talent.EGOISM) > 1;
 		if (damage > 0 && (hasTalent(Talent.MANABURN) || isManaburnEmpowered) &&
-				(mana >= maxMana() / 20 || (heroClass != HeroClass.CONJURER && HP >= HT / 20) || isManaburnEmpowered)){
+				(mana >= maxMana() / 2 || (heroClass != HeroClass.CONJURER && HP >= HT / 2) || isManaburnEmpowered)){
 			sprite.parent.add(new Beam.LightRay(sprite.center(), DungeonTilemap.raisedTileCenterToWorld(enemy.pos)));
 			ShieldHalo shield;
 
