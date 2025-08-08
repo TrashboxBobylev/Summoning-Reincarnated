@@ -191,7 +191,7 @@ public class EntranceRoom extends StandardRoom {
     }
 
 	public static StandardRoom createEntrance(){
-		if (Dungeon.branch == AbyssLevel.BRANCH){
+		if (Dungeon.branch == AbyssLevel.BRANCH || Dungeon.mode == Dungeon.GameMode.CHAOS){
 			return Reflection.newInstance(Random.element(rooms));
 		}
 		return Reflection.newInstance(rooms.get(Random.chances(chances[(int) Math.ceil(Dungeon.depth / (Dungeon.chapterSize()*5f/25f))])));
