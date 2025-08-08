@@ -53,6 +53,8 @@ public abstract class StandardRoom extends Room {
 		}
 		
 	}
+
+    public boolean noMobs = false;
 	
 	public SizeCategory sizeCat;
 	{ setSizeCat(); }
