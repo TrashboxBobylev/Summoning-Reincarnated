@@ -290,20 +290,20 @@ public class ShopRoom extends SpecialRoom {
 			MeleeWeapon w = null;
             MissileWeapon m = null;
 			if (shopLevel() == 1) {
-				w = (MeleeWeapon) Generator.random(Generator.wepTiers[0]);
-                m = (MissileWeapon) Generator.random(Generator.misTiers[0]);
-				itemsToSpawn.add(new LeatherArmor().identify(false));
-			} else if (shopLevel() == 2) {
 				w = (MeleeWeapon) Generator.random(Generator.wepTiers[1]);
                 m = (MissileWeapon) Generator.random(Generator.misTiers[1]);
-				itemsToSpawn.add(new MailArmor().identify(false));
-			} else if (shopLevel() == 3) {
+				itemsToSpawn.add(new LeatherArmor().identify(false));
+			} else if (shopLevel() == 2) {
 				w = (MeleeWeapon) Generator.random(Generator.wepTiers[2]);
                 m = (MissileWeapon) Generator.random(Generator.misTiers[2]);
-				itemsToSpawn.add(new ScaleArmor().identify(false));
-			} else if (shopLevel() == 4 || Dungeon.depth == 20) {
+				itemsToSpawn.add(new MailArmor().identify(false));
+			} else if (shopLevel() == 3) {
 				w = (MeleeWeapon) Generator.random(Generator.wepTiers[3]);
                 m = (MissileWeapon) Generator.random(Generator.misTiers[3]);
+				itemsToSpawn.add(new ScaleArmor().identify(false));
+			} else if (shopLevel() == 4 || Dungeon.depth == 20) {
+				w = (MeleeWeapon) Generator.random(Generator.wepTiers[4]);
+                m = (MissileWeapon) Generator.random(Generator.misTiers[4]);
 				itemsToSpawn.add(new PlateArmor().identify(false));
 				itemsToSpawn.add(new Torch());
 				itemsToSpawn.add(new Torch());
