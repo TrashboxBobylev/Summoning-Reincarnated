@@ -1009,16 +1009,16 @@ acuRoll *= accMulti;
 			damage *= 1.25f;
 		}
 		if (this.buff(GasterBlaster.Karma.class) != null){
-			dmg *= 1.15f;
+			damage *= 1.15f;
 		}
 		if (this.buff(Empowered.class) != null){
-			dmg *= 0.65f;
+			damage *= 0.65f;
 		}
 		if (this.buff(AllyDamageTag.class) != null && src instanceof Char && !(src instanceof Hero)){
 			if (alignment == Alignment.ENEMY && ((Char) src).alignment == Alignment.ALLY){
-				dmg = this.buff(AllyDamageTag.class).processDamage(dmg);
+				damage = this.buff(AllyDamageTag.class).processDamage((int) damage);
 			} else if (alignment == Alignment.ALLY) {
-				dmg = this.buff(AllyDamageTag.class).processResistance(dmg);
+				damage = this.buff(AllyDamageTag.class).processResistance((int) damage);
 			}
 		}
 
