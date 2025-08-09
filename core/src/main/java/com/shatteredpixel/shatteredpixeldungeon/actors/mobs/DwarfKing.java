@@ -559,7 +559,7 @@ public class DwarfKing extends Mob {
 		}
 
 		// TODO: should be fixed when Summoning's class armor handling will be introduced
-		if (Dungeon.hero.heroClass != HeroClass.ADVENTURER && Dungeon.hero.heroClass != HeroClass.CONJURER) {
+		if (Dungeon.hero.heroClass != HeroClass.ADVENTURER) {
 			if (pos == CityBossLevel.throne) {
 				Dungeon.level.drop(new KingsCrown(), pos + Dungeon.level.width()).sprite.drop(pos);
 			} else {
