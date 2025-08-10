@@ -50,7 +50,7 @@ public class SecretArtilleryRoom extends SecretRoom {
 			if( i == 0 ){
 				level.drop(Challenges.process(new Bomb.DoubleBomb()), itemPos);
 			} else {
-				level.drop(Challenges.process(Generator.randomMissile(true)), itemPos);
+				level.drop(Challenges.process(Generator.randomUsingDefaults(Generator.Category.MISSILE)), itemPos);
 			}
 		}
 		

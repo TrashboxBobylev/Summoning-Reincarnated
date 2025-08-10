@@ -39,7 +39,7 @@ public class HolsterBag extends TreasureBag {
     @Override
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
-        items.add(Generator.randomMissile().identify());
+        items.add(Generator.random(Generator.Category.MISSILE).identify());
         if (Random.Int(2) == 0)
             items.add(Generator.randomStaff().identify());
         else

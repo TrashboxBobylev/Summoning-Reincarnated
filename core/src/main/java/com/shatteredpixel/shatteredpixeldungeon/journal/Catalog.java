@@ -237,11 +237,7 @@ public enum Catalog {
 
 		ARMOR.addItems(Generator.Category.ARMOR.classes);
 
-		THROWN_WEAPONS.addItems(Generator.Category.MIS_T1.classes);
-		THROWN_WEAPONS.addItems(Generator.Category.MIS_T2.classes);
-		THROWN_WEAPONS.addItems(Generator.Category.MIS_T3.classes);
-		THROWN_WEAPONS.addItems(Generator.Category.MIS_T4.classes);
-		THROWN_WEAPONS.addItems(Generator.Category.MIS_T5.classes);
+		THROWN_WEAPONS.addItems(Generator.Category.MISSILE.classes);
 
 		ENCHANTMENTS.addItems(Weapon.Enchantment.common);
 		ENCHANTMENTS.addItems(Weapon.Enchantment.uncommon);

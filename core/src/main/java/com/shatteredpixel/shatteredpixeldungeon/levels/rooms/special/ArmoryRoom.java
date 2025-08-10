@@ -95,7 +95,7 @@ public class ArmoryRoom extends SpecialRoom {
 			case 2:
 				return Generator.randomArmor();
 			case 3: default:
-				return Generator.randomMissile();
+				return Generator.random(Generator.Category.MISSILE);
 		}
 	}
 }

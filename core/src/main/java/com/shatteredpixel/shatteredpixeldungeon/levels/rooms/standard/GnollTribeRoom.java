@@ -81,7 +81,7 @@ public class GnollTribeRoom extends StandardRoom {
         }
 
         for (int i = 0; i < 3; i++) {
-            Item prize = Generator.randomMissile();
+            Item prize = Generator.random(Generator.Category.MISSILE);
             level.drop(prize, (center.x + center.y * level.width()));
         }
     }

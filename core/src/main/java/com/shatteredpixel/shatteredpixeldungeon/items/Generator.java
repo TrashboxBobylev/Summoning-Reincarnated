@@ -198,22 +198,18 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Pike;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Stabber;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.StoneHammer;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Bolas;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.FishingSpear;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ForceCube;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.HeavyBoomerang;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Javelin;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Kunai;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Shuriken;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingClub;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingHammer;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpear;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnive2;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpike;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingStone;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Tomahawk;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Trident;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Blindweed;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Fadeleaf;
@@ -252,11 +248,6 @@ public class Generator {
 		ARMOR	( 2, 1, Armor.class ),
 		
 		MISSILE ( 1, 2, MissileWeapon.class ),
-		MIS_T1  ( 0, 0, MissileWeapon.class ),
-		MIS_T2  ( 0, 0, MissileWeapon.class ),
-		MIS_T3  ( 0, 0, MissileWeapon.class ),
-		MIS_T4  ( 0, 0, MissileWeapon.class ),
-		MIS_T5  ( 0, 0, MissileWeapon.class ),
 
 		STAFF( 1, 1, Staff.class ),
 		STAFF_T1  ( 0, 0, Staff.class ),
@@ -527,50 +518,21 @@ public class Generator {
 			ARMOR.probs = new float[]{ 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 };
 			
 			//see Generator.randomMissile
-			MISSILE.classes = new Class<?>[]{};
-			MISSILE.probs = new float[]{};
-			
-			MIS_T1.classes = new Class<?>[]{
-					ThrowingStone.class,
-					ThrowingKnife.class,
-					ThrowingSpike.class,
-					Dart.class,
-					ThrowingKnife.class
-			};
-			MIS_T1.defaultProbs = new float[]{ 3, 3, 3, 0, 0 };
-			MIS_T1.probs = MIS_T1.defaultProbs.clone();
-			
-			MIS_T2.classes = new Class<?>[]{
-					FishingSpear.class,
-					ThrowingClub.class,
-					Shuriken.class
-			};
-			MIS_T2.defaultProbs = new float[]{ 3, 3, 3 };
-			MIS_T2.probs = MIS_T2.defaultProbs.clone();
-			
-			MIS_T3.classes = new Class<?>[]{
-					ThrowingSpear.class,
-					Kunai.class,
-					Bolas.class
-			};
-			MIS_T3.defaultProbs = new float[]{ 3, 3, 3 };
-			MIS_T3.probs = MIS_T3.defaultProbs.clone();
-			
-			MIS_T4.classes = new Class<?>[]{
-					Javelin.class,
-					Tomahawk.class,
-					HeavyBoomerang.class
-			};
-			MIS_T4.defaultProbs = new float[]{ 3, 3, 3 };
-			MIS_T4.probs = MIS_T4.defaultProbs.clone();
-			
-			MIS_T5.classes = new Class<?>[]{
-					Trident.class,
-					ThrowingHammer.class,
-					ForceCube.class
-			};
-			MIS_T5.defaultProbs = new float[]{ 3, 3, 3 };
-			MIS_T5.probs = MIS_T5.defaultProbs.clone();
+			MISSILE.classes = new Class<?>[]{
+                    ThrowingKnife.class,
+                    ThrowingSpike.class,
+                    ThrowingKnive2.class,
+                    Javelin.class,
+                    ThrowingHammer.class,
+                    Shuriken.class,
+                    Kunai.class,
+                    Bolas.class,
+                    Tomahawk.class,
+                    HeavyBoomerang.class,
+                    Trident.class,
+                    ForceCube.class
+            };
+			MISSILE.probs = new float[]{0, 0, 0, 2, 2, 1, 1, 1, 1, 1, 1, 1};
 
 			//see Generator.randomStaff
 			STAFF.classes = new Class<?>[]{};
@@ -790,8 +752,6 @@ public class Generator {
 				return randomArmor();
 			case WEAPON:
 				return randomWeapon();
-			case MISSILE:
-				return randomMissile();
 			case STAFF:
 				return randomStaff();
 			case ARTIFACT:
@@ -836,8 +796,6 @@ public class Generator {
 	public static Item randomUsingDefaults( Category cat ){
 		if (cat == Category.WEAPON){
 			return randomWeapon(true);
-		} else if (cat == Category.MISSILE){
-			return randomMissile(true);
 		} else if (cat == Category.STAFF){
 			return randomStaff(true);
 		} else if (cat.defaultProbs == null || cat == Category.ARTIFACT) {
@@ -911,43 +869,6 @@ public class Generator {
 			)]);
 		} else {
 			w = (MeleeWeapon) random(wepTiers[Random.chances(
-					Dungeon.mode == Dungeon.GameMode.CHAOS ? chaosSetTierProbs : floorSetTierProbs[floorSet]
-			)]);
-		}
-		return w;
-	}
-	
-	public static final Category[] misTiers = new Category[]{
-			Category.MIS_T1,
-			Category.MIS_T2,
-			Category.MIS_T3,
-			Category.MIS_T4,
-			Category.MIS_T5
-	};
-	
-	public static MissileWeapon randomMissile(){
-		return randomMissile(Dungeon.scalingDepth() / 5);
-	}
-
-	public static MissileWeapon randomMissile(int floorSet) {
-		return randomMissile(floorSet, false);
-	}
-
-	public static MissileWeapon randomMissile(boolean useDefaults) {
-		return randomMissile(Dungeon.scalingDepth() / 5, useDefaults);
-	}
-
-	public static MissileWeapon randomMissile(int floorSet, boolean useDefaults) {
-		
-		floorSet = (int)GameMath.gate(0, floorSet, floorSetTierProbs.length-1);
-
-		MissileWeapon w;
-		if (useDefaults){
-			w = (MissileWeapon)randomUsingDefaults(misTiers[Random.chances(
-					Dungeon.mode == Dungeon.GameMode.CHAOS ? chaosSetTierProbs : floorSetTierProbs[floorSet]
-			)]);
-		} else {
-			w = (MissileWeapon)random(misTiers[Random.chances(
 					Dungeon.mode == Dungeon.GameMode.CHAOS ? chaosSetTierProbs : floorSetTierProbs[floorSet]
 			)]);
 		}

@@ -288,22 +288,18 @@ public class ShopRoom extends SpecialRoom {
 
 		} else {
 			MeleeWeapon w = null;
-            MissileWeapon m = null;
+            MissileWeapon m = (MissileWeapon) Generator.random(Generator.Category.MISSILE);
 			if (shopLevel() == 1) {
 				w = (MeleeWeapon) Generator.random(Generator.wepTiers[1]);
-                m = (MissileWeapon) Generator.random(Generator.misTiers[1]);
 				itemsToSpawn.add(new LeatherArmor().identify(false));
 			} else if (shopLevel() == 2) {
 				w = (MeleeWeapon) Generator.random(Generator.wepTiers[2]);
-                m = (MissileWeapon) Generator.random(Generator.misTiers[2]);
 				itemsToSpawn.add(new MailArmor().identify(false));
 			} else if (shopLevel() == 3) {
 				w = (MeleeWeapon) Generator.random(Generator.wepTiers[3]);
-                m = (MissileWeapon) Generator.random(Generator.misTiers[3]);
 				itemsToSpawn.add(new ScaleArmor().identify(false));
 			} else if (shopLevel() == 4 || Dungeon.depth == 20) {
 				w = (MeleeWeapon) Generator.random(Generator.wepTiers[4]);
-                m = (MissileWeapon) Generator.random(Generator.misTiers[4]);
 				itemsToSpawn.add(new PlateArmor().identify(false));
 				itemsToSpawn.add(new Torch());
 				itemsToSpawn.add(new Torch());
@@ -311,7 +307,6 @@ public class ShopRoom extends SpecialRoom {
 			}
 			if (Dungeon.scalingDepth() > 26) {
 				w = (MeleeWeapon) Generator.random(Generator.wepTiers[4]);
-                m = (MissileWeapon) Generator.random(Generator.misTiers[4]);
 				itemsToSpawn.add(ClassArmor.upgrade(Dungeon.hero, new PlateArmor()));
 				itemsToSpawn.add(Generator.randomUsingDefaults(Generator.Category.POTION));
 				itemsToSpawn.add(Generator.randomUsingDefaults(Generator.Category.SCROLL));
@@ -460,7 +455,7 @@ public class ShopRoom extends SpecialRoom {
 		if (Dungeon.depth % 3 == 0) itemsToSpawn.add( new RankManager());
 		if (Dungeon.depth % 3 == 0) itemsToSpawn.add(new CleanWater());
 		if (Dungeon.depth % 5 == 0) itemsToSpawn.add( new ElixirOfAttunement());
-		if (Dungeon.depth % 2 == 0) itemsToSpawn.add( Generator.randomMissile());
+		if (Dungeon.depth % 2 == 0) itemsToSpawn.add( Generator.random(Generator.Category.MISSILE));
 		if (Dungeon.depth == Dungeon.chapterSize()*5+1) itemsToSpawn.add(new Amulet());
 		if (Dungeon.hero.lvl >= 12 && Dungeon.hero.subClass == HeroSubClass.NONE && Dungeon.hero.heroClass.subClasses().length > 0) itemsToSpawn.add( new TengusMask());
 		if (Dungeon.hero.lvl >= 21 && Dungeon.hero.belongings.armor != null &&
@@ -504,7 +499,7 @@ public class ShopRoom extends SpecialRoom {
 				case DUELIST:
 					additionalRare = Generator.randomWeapon(); break;
 				case HUNTRESS:
-					additionalRare = Generator.randomMissile(); break;
+					additionalRare = Generator.random(Generator.Category.MISSILE); break;
 				case CONJURER:
 					additionalRare = Generator.randomStaff(); break;
 				case ADVENTURER:

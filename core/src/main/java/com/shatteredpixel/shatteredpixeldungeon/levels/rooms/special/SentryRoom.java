@@ -195,7 +195,7 @@ public class SentryRoom extends SpecialRoom {
 				}
 				break;
 			case 2:
-				prize = Generator.randomMissile((Dungeon.depth / 5) + 1);
+				prize = Generator.random(Generator.Category.MISSILE);
 				if (((Weapon)prize).hasCurseEnchant()){
 					((Weapon) prize).enchant(null);
 				}
