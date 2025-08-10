@@ -646,11 +646,7 @@ abstract public class MissileWeapon extends Weapon {
 
 		String info = super.info();
 
-		if (levelKnown) {
-			info += "\n\n" + Messages.get(MissileWeapon.class, "stats_known", GameMath.printAverage(augment.damageFactor(min()), augment.damageFactor(max())));
-		} else {
-			info += "\n\n" + Messages.get(MissileWeapon.class, "stats_unknown", GameMath.printAverage(min(0), max(0)));
-		}
+        info += "\n\n" + Messages.get(MissileWeapon.class, "stats_known", GameMath.printAverage(augment.damageFactor(min()), augment.damageFactor(max())));
 
 		if (enchantment != null && (cursedKnown || !enchantment.curse())){
 			info += "\n\n" + Messages.get(Weapon.class, "enchanted", enchantment.name());
@@ -689,9 +685,9 @@ abstract public class MissileWeapon extends Weapon {
 			} else {
 				info += "\n\n" + Messages.get(this, "unlimited_uses");
 			}
-		}  else {
-			if (durabilityPerUse(0) > 0) {
-				info += "\n\n" + Messages.get(this, "unknown_uses", (int) Math.ceil(MAX_DURABILITY / durabilityPerUse(0)));
+		} else {
+			if (durabilityPerUse() > 0) {
+				info += "\n\n" + Messages.get(this, "unknown_uses", (int) Math.ceil(MAX_DURABILITY / durabilityPerUse()));
 			} else {
 				info += "\n\n" + Messages.get(this, "unlimited_uses");
 			}
