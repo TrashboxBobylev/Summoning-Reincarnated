@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
@@ -67,7 +68,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-abstract public class MissileWeapon extends Weapon {
+abstract public class MissileWeapon extends Weapon implements Rankable {
 
 	{
 		stackable = true;
@@ -105,31 +106,55 @@ abstract public class MissileWeapon extends Weapon {
 	@Override
 	public int min() {
 		if (Dungeon.hero != null){
-			return Math.max(0, min(buffedLvl() + RingOfSharpshooting.levelDamageBonus(Dungeon.hero)));
+			return Math.max(0, Math.round(min(powerLevel() + RingOfSharpshooting.levelDamageBonus(Dungeon.hero))));
 		} else {
-			return Math.max(0 , min( buffedLvl() ));
+			return Math.max(0 , Math.round(min( powerLevel() )));
 		}
 	}
 	
 	@Override
 	public int min(int lvl) {
-		return  2 * tier +                      //base
-				lvl;                            //level scaling
+        return Math.round(min(powerLevel()));
+    }
+
+    public float min(float lvl) {
+        return min(lvl, rank());
+    }
+
+    public float min(float lvl, int rank) {
+        switch (rank){
+            case 1: return 4 + lvl;
+            case 2: return 4 + lvl;
+            case 3: return 4 + lvl;
+        }
+		return 0;
 	}
 	
 	@Override
 	public int max() {
 		if (Dungeon.hero != null){
-			return Math.max(0, max( buffedLvl() + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) ));
+			return Math.max(0, Math.round(max(powerLevel() + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) )));
 		} else {
-			return Math.max(0 , max( buffedLvl() ));
+			return Math.max(0 , Math.round(max(powerLevel() )));
 		}
 	}
 	
 	@Override
 	public int max(int lvl) {
-		return  5 * tier +                      //base
-				tier*lvl;                       //level scaling
+        return Math.round(max(powerLevel()));
+    }
+
+    public float max(float lvl) {
+        return max(lvl, rank());
+    }
+
+    public float max(float lvl, int rank) {
+        switch (rank){
+            case 1: return 10 + lvl*3;
+            case 2: return 10 + lvl*3;
+            case 3: return 10 + lvl*3;
+        }
+		return 0;
 	}
 	
 	public int STRReq(int lvl){
@@ -176,6 +201,18 @@ abstract public class MissileWeapon extends Weapon {
     @Override
     public boolean isUpgradable() {
         return false;
+    }
+
+    int rank = 1;
+
+    @Override
+    public int rank() {
+        return rank;
+    }
+
+    @Override
+    public void rank(int rank) {
+        this.rank = rank;
     }
 
 	public Item upgrade( boolean enchant ) {
@@ -397,17 +434,7 @@ abstract public class MissileWeapon extends Weapon {
 
 	@Override
 	public Item random() {
-		//+0: 75% (3/4)
-		//+1: 20% (4/20)
-		//+2: 5%  (1/20)
-		int n = 0;
-		if (Random.Int(4) == 0) {
-			n++;
-			if (Random.Int(5) == 0) {
-				n++;
-			}
-		}
-		level(n);
+        rank(Random.Int(1, 4));
 
 		//we use a separate RNG here so that variance due to things like parchment scrap
 		//does not affect levelgen
@@ -477,14 +504,24 @@ abstract public class MissileWeapon extends Weapon {
 	}
 
 	public final float durabilityPerUse(){
-		return durabilityPerUse(level());
+		return durabilityPerUse(powerLevel());
 	}
 
 	//classes that add steps onto durabilityPerUse can turn rounding off, to do their own rounding after more logic
 	protected boolean useRoundingInDurabilityCalc = true;
 
-	public float durabilityPerUse( int level ){
-		float usages = baseUses * (float)(Math.pow(1.5f, level));
+    public float baseUses(float lvl, int rank){
+        switch (rank){
+            case 1: return 8;
+            case 2: return 8;
+            case 3: return 8;
+        }
+        return 1;
+    }
+
+	public float durabilityPerUse( float level ){
+        //TODO: do I want durability to scale or not?
+		float usages = baseUses(level, rank) * (float)(Math.pow(1.33f, level));
 
 		//+33%/50% durability
 		if (Dungeon.hero != null && Dungeon.hero.hasTalent(Talent.DURABLE_PROJECTILES)){
@@ -729,6 +766,7 @@ abstract public class MissileWeapon extends Weapon {
 	private static final String SPAWNED = "spawned";
 	private static final String DURABILITY = "durability";
 	private static final String EXTRA_LEFT = "extra_left";
+    private static final String RANK = "rank";
 
 	@Override
 	public void storeInBundle(Bundle bundle) {
@@ -737,6 +775,7 @@ abstract public class MissileWeapon extends Weapon {
 		bundle.put(SPAWNED, spawnedForEffect);
 		bundle.put(DURABILITY, durability);
 		bundle.put(EXTRA_LEFT, extraThrownLeft);
+        bundle.put(RANK, rank);
 	}
 	
 	private static boolean bundleRestoring = false;
@@ -768,6 +807,10 @@ abstract public class MissileWeapon extends Weapon {
 		spawnedForEffect = bundle.getBoolean(SPAWNED);
 		durability = bundle.getFloat(DURABILITY);
 		extraThrownLeft = bundle.getBoolean(EXTRA_LEFT);
+        if (bundle.contains(RANK))
+            rank = bundle.getInt(RANK);
+        else
+            rank = 1;
 	}
 
 	public static class PlaceHolder extends MissileWeapon {

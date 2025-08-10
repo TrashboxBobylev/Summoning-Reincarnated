@@ -172,7 +172,7 @@ public abstract class TippedDart extends Dart {
 	}
 
 	@Override
-	public float durabilityPerUse(int level) {
+	public float durabilityPerUse(float level) {
 		float use = super.durabilityPerUse(level);
 
 		if (Dungeon.hero != null) {
