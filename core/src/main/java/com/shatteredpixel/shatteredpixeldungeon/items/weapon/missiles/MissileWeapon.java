@@ -60,6 +60,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
 
 import java.security.SecureRandom;
@@ -132,7 +133,7 @@ abstract public class MissileWeapon extends Weapon {
 	}
 	
 	public int STRReq(int lvl){
-		int req = STRReq(tier, lvl) - 1; //1 less str than normal for their tier
+		int req = Dungeon.hero != null ? Dungeon.hero.STR() : 10;
 		if (masteryPotionBonus){
 			req -= 2;
 		}
@@ -147,6 +148,25 @@ abstract public class MissileWeapon extends Weapon {
 			return super.buffedLvl();
 		}
 	}
+
+    public float powerLevel(){
+        return Math.max(0, ((Dungeon.hero == null ? 0 : Dungeon.hero.STR()) - 10)/1.5f);
+    }
+
+    @Override
+    public int level() {
+        return (int)powerLevel();
+    }
+
+    @Override
+    public int visiblyUpgraded() {
+        return 0;
+    }
+
+    @Override
+    public boolean isUpgradable() {
+        return false;
+    }
 
 	public Item upgrade( boolean enchant ) {
 		if (!bundleRestoring) {
@@ -627,19 +647,9 @@ abstract public class MissileWeapon extends Weapon {
 		String info = super.info();
 
 		if (levelKnown) {
-			info += "\n\n" + Messages.get(MissileWeapon.class, "stats_known", tier, augment.damageFactor(min()), augment.damageFactor(max()), STRReq());
-			if (Dungeon.hero != null) {
-				if (STRReq() > Dungeon.hero.STR()) {
-					info += " " + Messages.get(Weapon.class, "too_heavy");
-				} else if (Dungeon.hero.STR() > STRReq()) {
-					info += " " + Messages.get(Weapon.class, "excess_str", Dungeon.hero.STR() - STRReq());
-				}
-			}
+			info += "\n\n" + Messages.get(MissileWeapon.class, "stats_known", GameMath.printAverage(augment.damageFactor(min()), augment.damageFactor(max())));
 		} else {
-			info += "\n\n" + Messages.get(MissileWeapon.class, "stats_unknown", tier, min(0), max(0), STRReq(0));
-			if (Dungeon.hero != null && STRReq(0) > Dungeon.hero.STR()) {
-				info += " " + Messages.get(MissileWeapon.class, "probably_too_heavy");
-			}
+			info += "\n\n" + Messages.get(MissileWeapon.class, "stats_unknown", GameMath.printAverage(min(0), max(0)));
 		}
 
 		if (enchantment != null && (cursedKnown || !enchantment.curse())){
