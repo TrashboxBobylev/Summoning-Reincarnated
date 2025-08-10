@@ -57,7 +57,10 @@ public class AllyDamageTag extends FlavourBuff {
 
     public int processDamage(int damage){
         if (flat > 0){
-            damage += flat;
+            if (damage < flat)
+                damage += flat/2;
+            else
+                damage += flat;
         }
         if (mult > 0){
             damage *= mult;
