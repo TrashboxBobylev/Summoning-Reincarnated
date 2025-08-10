@@ -69,6 +69,11 @@ public class Slingshot extends Weapon {
     }
 
     @Override
+    public boolean canHaveMastery() {
+        return false;
+    }
+
+    @Override
     public int min(int lvl) {
         return (STRReq() - 10)*3 + 3 + (curseInfusionBonus ? 1 : 0);
     }

@@ -245,6 +245,11 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         return false;
     }
 
+    @Override
+    public boolean showStrength() {
+        return false;
+    }
+
     public boolean tryToZap(Hero owner, int target ){
 
 		if (owner.buff(WildMagic.WildMagicTracker.class) == null && (owner.buff(MagicImmune.class) != null)){

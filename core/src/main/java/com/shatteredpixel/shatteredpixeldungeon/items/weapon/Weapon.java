@@ -45,6 +45,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.StrengthItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfArcana;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfForce;
@@ -88,7 +89,7 @@ import com.watabou.utils.Reflection;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-abstract public class Weapon extends KindOfWeapon implements WeaponEnchantable {
+abstract public class Weapon extends KindOfWeapon implements StrengthItem, WeaponEnchantable {
 
 	public float    ACC = 1f;	// Accuracy modifier
 	public float	DLY	= 1f;	// Speed modifier
@@ -125,7 +126,7 @@ abstract public class Weapon extends KindOfWeapon implements WeaponEnchantable {
 	}
 	
 	public Augment augment = Augment.NONE;
-protected int rank = 1;
+    protected int rank = 1;
 
 	protected int usesToID(){
 		return 20;
@@ -378,6 +379,16 @@ protected int rank = 1;
 		//strength req decreases at +1,+3,+6,+10,etc.
 		return (8 + tier * 2) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2;
 	}
+
+    @Override
+    public boolean hasMastery() {
+        return masteryPotionBonus;
+    }
+
+    @Override
+    public void giveMastery() {
+        masteryPotionBonus = true;
+    }
 
 	@Override
 	public int level() {

@@ -47,6 +47,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.StrengthItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.AntiEntropy;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.Bulk;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.Corrosion;
@@ -90,7 +91,7 @@ import com.watabou.utils.Reflection;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Armor extends EquipableItem {
+public class Armor extends EquipableItem implements StrengthItem {
 
 	protected static final String AC_DETACH       = "DETACH";
 	
@@ -712,6 +713,16 @@ public class Armor extends EquipableItem {
 		//strength req decreases at +1,+3,+6,+10,etc.
 		return (8 + Math.round(tier * 2)) - (int)(Math.sqrt(8 * lvl + 1) - 1)/2;
 	}
+
+    @Override
+    public boolean hasMastery() {
+        return masteryPotionBonus;
+    }
+
+    @Override
+    public void giveMastery() {
+        masteryPotionBonus = true;
+    }
 	
 	@Override
 	public int value() {

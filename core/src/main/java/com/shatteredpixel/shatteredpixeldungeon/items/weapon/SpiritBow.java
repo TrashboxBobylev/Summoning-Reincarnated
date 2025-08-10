@@ -210,8 +210,13 @@ public class SpiritBow extends Weapon implements Rankable {
 	public int STRReq(int lvl) {
 		return STRReq(1, lvl); //tier 1
 	}
-	
-	@Override
+
+    @Override
+    public boolean canHaveMastery() {
+        return false;
+    }
+
+    @Override
 	public int min(int lvl) {
 		return minRanked(rank());
 	}

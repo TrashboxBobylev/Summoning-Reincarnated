@@ -30,9 +30,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.StrengthItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -93,9 +92,7 @@ public class PotionOfMastery extends ExoticPotion {
 
 		@Override
 		public boolean itemSelectable(Item item) {
-			return
-					(item instanceof Weapon && !(item instanceof SpiritBow) && !((Weapon) item).masteryPotionBonus)
-					|| (item instanceof Armor && !((Armor) item).masteryPotionBonus);
+			return item instanceof StrengthItem && !((StrengthItem) item).hasMastery() && ((StrengthItem) item).canHaveMastery();
 		}
 
 		@Override
@@ -123,12 +120,9 @@ public class PotionOfMastery extends ExoticPotion {
 				} );
 			} else if (item != null) {
 
-				if (item instanceof Weapon) {
-					((Weapon) item).masteryPotionBonus = true;
-					GLog.p( Messages.get(PotionOfMastery.class, "weapon_easier") );
-				} else if (item instanceof Armor) {
-					((Armor) item).masteryPotionBonus = true;
-					GLog.p( Messages.get(PotionOfMastery.class, "armor_easier") );
+				if (item instanceof StrengthItem) {
+					((Weapon) item).giveMastery();
+					GLog.p( Messages.get(PotionOfMastery.class, "item_easier") );
 				}
 				updateQuickslot();
 

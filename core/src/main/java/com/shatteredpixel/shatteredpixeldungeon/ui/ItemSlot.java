@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.AttunementItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.StrengthItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
@@ -274,22 +275,20 @@ public class ItemSlot extends Button {
 			itemIcon.frame(ItemSpriteSheet.Icons.film.get(item.icon()));
 			add(itemIcon);
 
-		} else if ((item instanceof Weapon || item instanceof Armor) && !(item instanceof Wand)) {
+		} else if (item instanceof StrengthItem && ((StrengthItem) item).showStrength()) {
 
 			if (item.levelKnown){
-				int str = item instanceof Weapon ? ((Weapon)item).STRReq() : ((Armor)item).STRReq();
+				int str = ((StrengthItem) item).STRReq();
 				extra.text( Messages.format( TXT_STRENGTH, str ) );
 				if (Dungeon.hero != null && str > Dungeon.hero.STR()) {
 					extra.hardlight( DEGRADED );
-				} else if (item instanceof Weapon && ((Weapon) item).masteryPotionBonus){
-					extra.hardlight( MASTERED );
-				} else if (item instanceof Armor && ((Armor) item).masteryPotionBonus) {
+				} else if (((StrengthItem) item).hasMastery()) {
 					extra.hardlight( MASTERED );
 				} else {
 					extra.resetColor();
 				}
 			} else {
-				int str = item instanceof Weapon ? ((Weapon)item).STRReq(0) : ((Armor)item).STRReq(0);
+				int str = ((StrengthItem)item).STRReq(0);
 				extra.text( Messages.format( TXT_TYPICAL_STR, str ) );
 				extra.hardlight( WARNING );
 			}

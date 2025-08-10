@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.StrengthItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
@@ -249,15 +250,10 @@ public class WndUpgrade extends Window {
 		}
 
 		//weight (i.e. strength requirement)
-		if (toUpgrade instanceof Weapon){
+		if (toUpgrade instanceof StrengthItem){
 			bottom = fillFields(Messages.get(this, "weight"),
-					Integer.toString((((Weapon) toUpgrade).STRReq(levelFrom))),
-					Integer.toString((((Weapon) toUpgrade).STRReq(levelTo))),
-					bottom);
-		} else if (toUpgrade instanceof Armor) {
-			bottom = fillFields(Messages.get(this, "weight"),
-					Integer.toString((((Armor) toUpgrade).STRReq(levelFrom))),
-					Integer.toString((((Armor) toUpgrade).STRReq(levelTo))),
+					Integer.toString((((StrengthItem) toUpgrade).STRReq(levelFrom))),
+					Integer.toString((((StrengthItem) toUpgrade).STRReq(levelTo))),
 					bottom);
 		}
 
