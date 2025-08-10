@@ -140,7 +140,12 @@ abstract public class MissileWeapon extends Weapon {
 		return req;
 	}
 
-	//use the parent item if this has been thrown from a parent
+    @Override
+    public boolean showStrength() {
+        return false;
+    }
+
+    //use the parent item if this has been thrown from a parent
 	public int buffedLvl(){
 		if (parent != null) {
 			return parent.buffedLvl();
@@ -160,6 +165,11 @@ abstract public class MissileWeapon extends Weapon {
 
     @Override
     public int visiblyUpgraded() {
+        return 0;
+    }
+
+    @Override
+    public int buffedVisiblyUpgraded() {
         return 0;
     }
 
