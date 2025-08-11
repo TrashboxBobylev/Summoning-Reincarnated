@@ -512,16 +512,15 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 
     public float baseUses(float lvl, int rank){
         switch (rank){
-            case 1: return 8;
-            case 2: return 8;
-            case 3: return 8;
+            case 1: return 10;
+            case 2: return 10;
+            case 3: return 10;
         }
         return 1;
     }
 
 	public float durabilityPerUse( float level ){
-        //TODO: do I want durability to scale or not?
-		float usages = baseUses(level, rank) * (float)(Math.pow(1.33f, level));
+		float usages = baseUses(level, rank);
 
 		//+33%/50% durability
 		if (Dungeon.hero != null && Dungeon.hero.hasTalent(Talent.DURABLE_PROJECTILES)){
