@@ -710,11 +710,11 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 
 		info += "\n\n";
 		String statsInfo = Messages.get(this, "stats_desc" + rank);
-		if (!statsInfo.equals("") && !statsInfo.startsWith("!!")) {
+		if (statsInfo.equals("") || statsInfo.startsWith("!!")) {
             statsInfo = Messages.get(this, "stats_desc");
-            if (!statsInfo.equals("") && !statsInfo.startsWith("!!"))
-                info += statsInfo + " ";
         }
+        if (!statsInfo.equals("") && !statsInfo.startsWith("!!"))
+            info += statsInfo + " ";
 		info += Messages.get(MissileWeapon.class, "distance");
 
 		switch (augment) {
