@@ -512,9 +512,9 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 
     public float baseUses(float lvl, int rank){
         switch (rank){
-            case 1: return 10;
-            case 2: return 10;
-            case 3: return 10;
+            case 1: return 8 + lvl*1.75f;
+            case 2: return 8 + lvl*1.75f;
+            case 3: return 8 + lvl*1.75f;
         }
         return 1;
     }
