@@ -745,6 +745,25 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 		
 		return info;
 	}
+
+    @Override
+    public String getRankMessage(int rank){
+        String rankMessage = generalRankMessage(rank);
+        if (!missileDescription(rank).startsWith("!!"))
+            rankMessage += "\n\n" + missileDescription(rank);
+        return rankMessage;
+    }
+
+    protected String generalRankMessage(int rank) {
+        return Messages.get(this, "rank",
+                GameMath.printAverage(Math.round(min(powerLevel(), rank)), Math.round(max(powerLevel(), rank))),
+                Math.round(baseUses(powerLevel(), rank))
+        );
+    }
+
+    public String missileDescription(int rank){
+        return Messages.get(this, "missile_desc" + rank);
+    }
 	
 	@Override
 	public int value() {
