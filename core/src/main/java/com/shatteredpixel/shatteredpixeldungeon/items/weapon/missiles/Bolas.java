@@ -25,9 +25,15 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyDamageTag;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class Bolas extends MissileWeapon {
@@ -36,20 +42,55 @@ public class Bolas extends MissileWeapon {
 		image = ItemSpriteSheet.BOLAS;
 		hitSound = Assets.Sounds.HIT;
 		hitSoundPitch = 1f;
-		
-		tier = 3;
-		baseUses = 5;
 	}
-	
-	@Override
-	public int max(int lvl) {
-		return  3 * tier +                      //9 base, down from 15
-				(tier-1)*lvl;                   //2 scaling, down from 3
-	}
+
+    public float min(float lvl, int rank) {
+        switch (rank){
+            case 1: return 2 + lvl;
+            case 2: return 1 + lvl/2f;
+            case 3: return 2 + lvl;
+        }
+        return 0;
+    }
+
+    public float max(float lvl, int rank) {
+        switch (rank){
+            case 1: return 5 + lvl*1.25f;
+            case 2: return 4 + lvl*1.67f;
+            case 3: return 5 + lvl*1.25f;
+        }
+        return 0;
+    }
+
+    public float baseUses(float lvl, int rank){
+        switch (rank){
+            case 1: return 6 + lvl*1.5f;
+            case 2: return 4 + lvl*1f;
+            case 3: return 6 + lvl*1.5f;
+        }
+        return 1;
+    }
 	
 	@Override
 	public int proc( Char attacker, Char defender, int damage ) {
-		Buff.prolong( defender, Cripple.class, Cripple.DURATION );
-		return super.proc( attacker, defender, damage );
+        int dmg = super.proc(attacker, defender, damage);
+        if (rank() == 1){
+            Buff.prolong( defender, Cripple.class, Cripple.DURATION );
+        } else if (rank() == 2){
+            for (Mob mob : Dungeon.level.mobs) {
+                if (mob.paralysed <= 0
+                        && Dungeon.level.distance(defender.pos, mob.pos) <= 4
+                        && mob.alignment == Char.Alignment.ALLY) {
+                    mob.beckon(defender.pos);
+                    mob.aggro(defender);
+                    Buff.affect(defender, Minion.UniversalTargeting.class, 4f);
+                }
+            }
+            Buff.affect(defender, AllyDamageTag.class, 4f).setFlat(dmg);
+        } else if (rank() == 3){
+            Buff.prolong( defender, Vertigo.class, Cripple.DURATION );
+            Buff.prolong( defender, Haste.class, Cripple.DURATION );
+        }
+        return dmg;
 	}
 }
