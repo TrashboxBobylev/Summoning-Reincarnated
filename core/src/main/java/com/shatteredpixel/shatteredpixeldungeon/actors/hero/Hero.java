@@ -979,6 +979,7 @@ public class Hero extends Char {
 
 	@Override
 	public void spendConstant(float time) {
+        justMoved = false;
 		super.spendConstant(time);
 	}
 
@@ -1999,6 +2000,8 @@ public class Hero extends Char {
 	}
 	
 	private boolean walkingToVisibleTrapInFog = false;
+
+    public boolean justMoved = false;
 	
 	private boolean getCloser( final int target ) {
 
@@ -2115,6 +2118,7 @@ public class Hero extends Char {
 			}
 
 			spend( delay );
+            justMoved = true;
 			
 			search(false);
 

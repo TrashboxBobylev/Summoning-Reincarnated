@@ -329,6 +329,7 @@ public abstract class Char extends Actor implements ManaSource {
 			if (Dungeon.hero.subClass == HeroSubClass.FREERUNNER){
 				Buff.affect(Dungeon.hero, Momentum.class).gainStack();
 			}
+            Dungeon.hero.justMoved = true;
 
 			Dungeon.hero.busy();
 		}

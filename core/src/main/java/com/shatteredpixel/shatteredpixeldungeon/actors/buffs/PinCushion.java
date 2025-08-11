@@ -71,7 +71,8 @@ public class PinCushion extends Buff {
 	@Override
 	public void detach() {
 		for (Item item : items)
-			Dungeon.level.drop( item, target.pos).sprite.drop();
+            if (item.quantity() > 0)
+			    Dungeon.level.drop( item, target.pos).sprite.drop();
 		super.detach();
 	}
 
