@@ -25,7 +25,18 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Lucky;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.utils.GameMath;
+import com.watabou.utils.PathFinder;
+
+import java.util.ArrayList;
 
 public class ThrowingKnive2 extends MissileWeapon {
 	
@@ -33,20 +44,76 @@ public class ThrowingKnive2 extends MissileWeapon {
 		image = ItemSpriteSheet.LIGHT_KNIFE;
 		hitSound = Assets.Sounds.HIT_STAB;
 		hitSoundPitch = 1f;
-		
-		tier = 2;
-
-		baseUses = 6.67f;
 	}
 
-	@Override
-	public int max(int lvl) {
-		return  5 * tier - 3 +                      //7 base, down from 10
-				(tier == 1 ? 2*lvl : tier*lvl); //scaling unchanged
-	}
+    public float min(float lvl, int rank) {
+        switch (rank){
+            case 1: return 2 + lvl*0.75f;
+            case 2: return 3 + lvl*1;
+            case 3: return 24 + lvl*5f;
+        }
+        return 0;
+    }
 
-	@Override
-	public int min(int lvl) {
-		return tier + 1 + lvl;
-	}
+    public float max(float lvl, int rank) {
+        switch (rank){
+            case 1: return 6 + lvl*2f;
+            case 2: return 8 + lvl*3f;
+            case 3: return 48 + lvl*10f;
+        }
+        return 0;
+    }
+
+    public float baseUses(float lvl, int rank){
+        switch (rank){
+            case 1: return 9 + lvl*1f;
+            case 2: return 5 + lvl*0.75f;
+            case 3: return 1;
+        }
+        return 1;
+    }
+
+    @Override
+    public float durabilityPerUse(float level) {
+        if (rank() == 3){
+            return MAX_DURABILITY;
+        }
+        return super.durabilityPerUse(level);
+    }
+
+    @Override
+    protected String generalRankMessage(int rank) {
+        if (rank == 3){
+            return Messages.get(this, "rank3",
+                    GameMath.printAverage(Math.round(min(powerLevel(), rank)), Math.round(max(powerLevel(), rank))),
+                    Math.round(baseUses(powerLevel(), rank))
+            );
+        }
+        return super.generalRankMessage(rank);
+    }
+
+    @Override
+    public int proc(Char attacker, Char defender, int damage) {
+        int dmg = super.proc(attacker, defender, damage);
+        if (rank() == 2)
+            Buff.affect(defender, Lucky.LuckProc.class).ringLevel = -7;
+        if (rank() == 3){
+            ArrayList<Char> targets = new ArrayList<>();
+            for (int i : PathFinder.NEIGHBOURS8){
+                if (Actor.findChar(defender.pos+ i) != null) targets.add(Actor.findChar(defender.pos + i));
+            }
+            ShieldHalo shield;
+            GameScene.effect(shield = new ShieldHalo(defender.sprite));
+            shield.putOut();
+            for (Char target : targets) {
+                target.damage(dmg, this);
+            }
+        }
+        return dmg;
+    }
+
+    @Override
+    public float powerLevel() {
+        return Math.max(0, super.powerLevel()-2/1.5f);
+    }
 }
