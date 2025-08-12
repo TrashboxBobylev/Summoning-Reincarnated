@@ -52,7 +52,7 @@ public class WarScythe extends MeleeWeapon {
 	}
 
 	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
+    public void duelistAbility(Hero hero, Integer target) {
 		//replaces damage with 30+4.5*lvl bleed, roughly 133% avg base dmg, 129% avg scaling
 		int bleedAmt = augment.damageFactor(Math.round(30f + 4.5f*buffedLvl()));
 		Sickle.harvestAbility(hero, target, 0f, bleedAmt, this);

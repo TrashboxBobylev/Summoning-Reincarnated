@@ -113,7 +113,7 @@ public class Crossbow extends MeleeWeapon {
 	}
 
 	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
+    public void duelistAbility(Hero hero, Integer target) {
 		if (hero.buff(ChargedShot.class) != null){
 			GLog.w(Messages.get(this, "ability_cant_use"));
 			return;

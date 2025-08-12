@@ -58,7 +58,7 @@ public class WornShortsword extends MeleeWeapon {
 	}
 
 	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
+    public void duelistAbility(Hero hero, Integer target) {
 		//+(3+lvl) damage, roughly +55% base dmg, +67% scaling
 		int dmgBoost = augment.damageFactor(3 + buffedLvl());
 		Sword.cleaveAbility(hero, target, 1, dmgBoost, this);

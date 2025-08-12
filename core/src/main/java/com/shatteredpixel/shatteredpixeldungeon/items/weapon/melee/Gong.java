@@ -77,7 +77,7 @@ public class Gong extends Cane {
     }
 
     @Override
-    protected void duelistAbility(Hero hero, Integer target) {
+    public void duelistAbility(Hero hero, Integer target) {
         Cane.minionDefenseBoost(hero, target, 0, multTagValue(), this);
     }
 }

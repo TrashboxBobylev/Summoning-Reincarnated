@@ -56,7 +56,7 @@ public class Whip extends MeleeWeapon {
 	}
 
 	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
+    public void duelistAbility(Hero hero, Integer target) {
 
 		ArrayList<Char> targets = new ArrayList<>();
 		Char closest = null;

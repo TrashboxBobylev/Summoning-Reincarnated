@@ -51,7 +51,7 @@ public class Cudgel extends MeleeWeapon {
 	}
 
 	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
+    public void duelistAbility(Hero hero, Integer target) {
 		//+(3+1.5*lvl) damage, roughly +67% base dmg, +100% scaling
 		int dmgBoost = augment.damageFactor(3 + Math.round(1.5f*buffedLvl()));
 		Mace.heavyBlowAbility(hero, target, 1, dmgBoost, this);

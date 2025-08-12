@@ -25,6 +25,14 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class ThrowingSpike extends MissileWeapon {
@@ -35,9 +43,62 @@ public class ThrowingSpike extends MissileWeapon {
 		hitSoundPitch = 1.2f;
 
 		bones = false;
-
-		baseUses = 12;
-		tier = 1;
 	}
 
+    public float min(float lvl, int rank) {
+        switch (rank){
+            case 1: return 2 + lvl*0.75f;
+            case 2: return 2 + lvl*0.75f;
+            case 3: return 2 + lvl*0.75f;
+        }
+        return 0;
+    }
+
+    public float max(float lvl, int rank) {
+        switch (rank){
+            case 1: return 5 + lvl*2f;
+            case 2: return 5 + lvl*2f;
+            case 3: return 5 + lvl*2f;
+        }
+        return 0;
+    }
+
+    public float baseUses(float lvl, int rank){
+        switch (rank){
+            case 1: return 12 + lvl*2.5f;
+            case 2: return 6 + lvl*1.5f;
+            case 3: return 8 + lvl*2f;
+        }
+        return 1;
+    }
+
+    @Override
+    public int proc(Char attacker, Char defender, int damage) {
+        if (rank() == 2 && defender.buff(Rank2StrikeTracker.class) == null){
+            Buff.affect(defender, Rank2StrikeTracker.class);
+            Buff.affect( attacker, MeleeWeapon.Charger.class ).gainCharge(0.75f);
+            ScrollOfRecharging.charge( attacker );
+        }
+        if (rank() == 3 && attacker instanceof Hero){
+            Hero hero = (Hero) attacker;
+            MeleeWeapon wep = (MeleeWeapon) hero.belongings.weapon;
+            //do nothing
+            if (wep == null || !wep.isEquipped(hero) ||
+                    hero.heroClass != HeroClass.DUELIST && !Dungeon.isChallenged(Conducts.Conduct.EVERYTHING) ||
+                    wep.STRReq() > hero.STR() ||
+                    (Buff.affect(hero, MeleeWeapon.Charger.class).charges + Buff.affect(hero, MeleeWeapon.Charger.class).partialCharge) < wep.abilityChargeUse(hero, null)) {
+                //do nothing
+            } else {
+                if (wep.targetingPrompt() == null) {
+                    wep.duelistAbility(hero, hero.pos);
+                } else {
+                    wep.duelistAbility(hero, defender.pos);
+                }
+                updateQuickslot();
+            }
+        }
+        return super.proc(attacker, defender, damage);
+    }
+
+    public static class Rank2StrikeTracker extends Buff {}
 }

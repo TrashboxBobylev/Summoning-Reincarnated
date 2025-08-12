@@ -376,7 +376,7 @@ public class RunicBlade extends MeleeWeapon {
 	}
 
 	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
+    public void duelistAbility(Hero hero, Integer target) {
 		if (target == null) {
 			return;
 		}

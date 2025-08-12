@@ -167,7 +167,7 @@ public class MeleeWeapon extends Weapon {
 		return dst; //weapon abilities do not use projectile logic, no autoaim
 	}
 
-	protected void duelistAbility( Hero hero, Integer target ){
+	public void duelistAbility(Hero hero, Integer target){
 		//do nothing by default
 	}
 

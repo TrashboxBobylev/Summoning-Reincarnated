@@ -57,7 +57,7 @@ public class Jjango extends MeleeWeapon {
     }
 
     @Override
-    protected void duelistAbility(Hero hero, Integer target) {
+    public void duelistAbility(Hero hero, Integer target) {
         //+(4+1*lvl) damage, roughly +45% base damage, +45% scaling
         int dmgBoost = augment.damageFactor(3 + Math.round(1f*buffedLvl()));
         Sai.comboStrikeAbility(hero, target, 0, dmgBoost, this);

@@ -78,7 +78,7 @@ public class AssassinsBlade extends MeleeWeapon {
 	}
 
 	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
+    public void duelistAbility(Hero hero, Integer target) {
 		Dagger.sneakAbility(hero, target, 3, 2+buffedLvl(), this);
 	}
 

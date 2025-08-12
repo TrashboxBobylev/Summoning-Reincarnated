@@ -52,7 +52,7 @@ public class Gauntlet extends MeleeWeapon {
 	}
 
 	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
+    public void duelistAbility(Hero hero, Integer target) {
 		//+(5+lvl) damage, roughly +50% base damage, +50% scaling
 		int dmgBoost = augment.damageFactor(5 + buffedLvl());
 		Sai.comboStrikeAbility(hero, target, 0, dmgBoost, this);

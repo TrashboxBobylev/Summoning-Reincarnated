@@ -106,7 +106,7 @@ public class Flail extends MeleeWeapon {
 	}
 
 	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
+    public void duelistAbility(Hero hero, Integer target) {
 
 		SpinAbilityTracker spin = hero.buff(SpinAbilityTracker.class);
 		if (spin != null && spin.spins >= 3){

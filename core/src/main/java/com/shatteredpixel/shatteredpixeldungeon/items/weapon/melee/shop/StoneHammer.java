@@ -74,7 +74,7 @@ public class StoneHammer extends MeleeWeapon {
     }
 
     @Override
-    protected void duelistAbility(Hero hero, Integer target) {
+    public void duelistAbility(Hero hero, Integer target) {
         //+(10+1.5*lvl) damage, roughly +55% base dmg, +30% scaling
         int dmgBoost = augment.damageFactor(10 + Math.round(1.5f*buffedLvl()));
         Mace.heavyBlowAbility(hero, target, 1, dmgBoost, this);

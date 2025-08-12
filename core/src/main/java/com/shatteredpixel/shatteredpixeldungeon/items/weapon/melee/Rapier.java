@@ -72,7 +72,7 @@ public class Rapier extends MeleeWeapon {
 	}
 
 	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
+    public void duelistAbility(Hero hero, Integer target) {
 		//+(5+1.5*lvl) damage, roughly +111% base damage, +100% scaling
 		int dmgBoost =  augment.damageFactor(5 + Math.round(1.5f*buffedLvl()));
 		lungeAbility(hero, target, 1, dmgBoost, this);

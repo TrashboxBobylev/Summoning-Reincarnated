@@ -76,7 +76,7 @@ public class RoundShield extends MeleeWeapon {
 	}
 
 	@Override
-	protected void duelistAbility(Hero hero, Integer target) {
+    public void duelistAbility(Hero hero, Integer target) {
 		RoundShield.guardAbility(hero, 5+buffedLvl(), this);
 	}
 

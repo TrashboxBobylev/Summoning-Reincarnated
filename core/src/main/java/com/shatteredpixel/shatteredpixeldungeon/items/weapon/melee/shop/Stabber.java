@@ -94,7 +94,7 @@ public class Stabber extends MeleeWeapon {
     }
 
     @Override
-    protected void duelistAbility(Hero hero, Integer target) {
+    public void duelistAbility(Hero hero, Integer target) {
         Dagger.sneakAbility(hero, target, 2, 4+buffedLvl()*2, this);
     }
 
