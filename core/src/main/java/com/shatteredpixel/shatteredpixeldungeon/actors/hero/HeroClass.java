@@ -382,7 +382,7 @@ public enum HeroClass {
 			(hero.belongings.weapon = new Dagger2()).identify();
 
 			ThrowingKnive2 knives = new ThrowingKnive2();
-			knives.quantity(2).collect();
+			knives.quantity(2).identify().collect();
 			Dungeon.quickslot.setSlot(0, knives);
 			new PotionBandolier().collect();
 			Dungeon.LimitedDrops.POTION_BANDOLIER.drop();
