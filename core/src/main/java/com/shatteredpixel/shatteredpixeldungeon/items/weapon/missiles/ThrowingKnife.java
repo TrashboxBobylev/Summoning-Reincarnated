@@ -25,9 +25,12 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class ThrowingKnife extends MissileWeapon {
@@ -38,33 +41,81 @@ public class ThrowingKnife extends MissileWeapon {
 		hitSoundPitch = 1.2f;
 		
 		bones = false;
-		
-		tier = 1;
-		baseUses = 5;
 	}
-	
-	@Override
-	public int max(int lvl) {
-		return  6 * tier +                      //6 base, up from 5
-				(tier == 1 ? 2*lvl : tier*lvl); //scaling unchanged
-	}
-	
-	@Override
+
+    public float min(float lvl, int rank) {
+        switch (rank){
+            case 1: return 2 + lvl/2;
+            case 2: return 4 + lvl;
+            case 3: return 8 + lvl*2;
+        }
+        return 0;
+    }
+
+    public float max(float lvl, int rank) {
+        switch (rank){
+            case 1: return 6 + lvl*2f;
+            case 2: return 10 + lvl*3f;
+            case 3: return 16 + lvl*6f;
+        }
+        return 0;
+    }
+
+    public float baseUses(float lvl, int rank){
+        switch (rank){
+            case 1: return 6 + lvl*1.25f;
+            case 2: return 1 + lvl*0.5f;
+            case 3: return 3 + lvl*1f;
+        }
+        return 1;
+    }
+
+    @Override
+    public float castDelay(Char user, int cell) {
+        if (rank() == 3){
+            return super.castDelay(user, cell)*2;
+        }
+        return super.castDelay(user, cell);
+    }
+
+    @Override
+    protected void decrementDurability() {
+        if (rank() == 2 && Dungeon.hero.attackTarget() != null && !((Mob)Dungeon.hero.attackTarget()).enemySeen){
+
+        } else {
+            super.decrementDurability();
+        }
+    }
+
+    @Override
 	public int damageRoll(Char owner) {
 		if (owner instanceof Hero) {
 			Hero hero = (Hero)owner;
 			Char enemy = hero.attackTarget();
 			if (enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)) {
-				//deals 75% toward max to max on surprise, instead of min to max.
-				int diff = max() - min();
-				int damage = augment.damageFactor(Hero.heroDamageIntRange(
-						min() + Math.round(diff*0.75f),
-						max()));
-				int exStr = hero.STR() - STRReq();
-				if (exStr > 0) {
-					damage += Hero.heroDamageIntRange(0, exStr);
-				}
-				return damage;
+                if (rank() != 3) {
+                    //deals 75% toward max to max on surprise, instead of min to max.
+                    int diff = max() - min();
+                    int damage = augment.damageFactor(Hero.heroDamageIntRange(
+                            min() + Math.round(diff * 0.75f),
+                            max()));
+                    int exStr = hero.STR() - STRReq();
+                    if (exStr > 0) {
+                        damage += Hero.heroDamageIntRange(0, exStr);
+                    }
+                    return damage;
+                } else {
+                    //scales from 0 - 67% based on how low hp the enemy is
+                    float maxChance = 0.67f;
+
+                    //we defer logic using an actor here so we can know the true final damage
+                    //see Char.damage
+                    Buff.affect(enemy, Grim.GrimTracker.class).maxChance = maxChance;
+
+                    if (enemy.buff(Grim.GrimTracker.class) != null){
+                        enemy.buff(Grim.GrimTracker.class).qualifiesForBadge = true;
+                    }
+                }
 			}
 		}
 		return super.damageRoll(owner);
