@@ -52,6 +52,7 @@ import com.watabou.noosa.tweeners.PosTweener;
 import com.watabou.noosa.tweeners.Tweener;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PointF;
+import com.watabou.utils.Random;
 
 import java.util.HashMap;
 
@@ -188,6 +189,9 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 		} else if (item instanceof StarBlazing.ProjectileStar){
 			speed *= 1.6f;
 		}
+        if (item instanceof Kunai && ((Kunai) item).rank() == 2){
+            speed *= Random.Float(0.5f, 1.5f);
+        }
 		
 		PosTweener tweener = new PosTweener( this, to, d.length() / speed );
 		tweener.listener = this;
