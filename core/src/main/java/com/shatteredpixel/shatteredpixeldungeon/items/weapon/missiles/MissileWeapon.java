@@ -265,6 +265,10 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 	public boolean isSimilar( Item item ) {
 		return trueLevel() == item.trueLevel() && getClass() == item.getClass() && setID == (((MissileWeapon) item).setID);
 	}
+
+    protected int collisionProperties(){
+        return Ballistica.FRIENDLY_PROJECTILE;
+    }
 	
 	@Override
 	public int throwPos(Hero user, int dst) {
@@ -285,7 +289,7 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 				&& Dungeon.level.distance(user.pos, dst) <= Math.round(projecting * Enchantment.genericProcChanceMultiplier(user))){
 			return dst;
 		} else {
-			return new Ballistica( user.pos, dst, Ballistica.FRIENDLY_PROJECTILE ).collisionPos;
+			return new Ballistica( user.pos, dst, collisionProperties() ).collisionPos;
 		}
 	}
 
