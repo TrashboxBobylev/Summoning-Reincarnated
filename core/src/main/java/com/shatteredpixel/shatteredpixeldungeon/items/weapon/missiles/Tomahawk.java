@@ -64,9 +64,9 @@ public class Tomahawk extends MissileWeapon {
 
     public float max(float lvl, int rank) {
         switch (rank){
-            case 1: return 7 + lvl*2f;
-            case 2: return 10 + lvl*3.5f;
-            case 3: return 8 + lvl*1.75f;
+            case 1: return 7 + lvl*3f;
+            case 2: return 10 + lvl*4.5f;
+            case 3: return 8 + lvl*2.25f;
         }
         return 0;
     }

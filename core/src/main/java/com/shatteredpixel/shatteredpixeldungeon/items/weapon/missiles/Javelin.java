@@ -49,8 +49,8 @@ public class Javelin extends MissileWeapon {
 
     public float max(float lvl, int rank) {
         switch (rank){
-            case 1: return 10 + lvl*3;
-            case 2: return 7 + lvl*2;
+            case 1: return 10 + lvl*4.5f;
+            case 2: return 7 + lvl*3;
             case 3: return 20 + lvl*6;
         }
         return 0;

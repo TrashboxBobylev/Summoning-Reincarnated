@@ -55,9 +55,9 @@ public class Bolas extends MissileWeapon {
 
     public float max(float lvl, int rank) {
         switch (rank){
-            case 1: return 5 + lvl*1.25f;
-            case 2: return 4 + lvl*1.67f;
-            case 3: return 5 + lvl*1.25f;
+            case 1: return 5 + lvl*2f;
+            case 2: return 4 + lvl*2.25f;
+            case 3: return 5 + lvl*1.75f;
         }
         return 0;
     }

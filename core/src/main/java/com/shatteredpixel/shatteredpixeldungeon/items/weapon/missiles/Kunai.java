@@ -59,9 +59,9 @@ public class Kunai extends MissileWeapon {
 
     public float max(float lvl, int rank) {
         switch (rank){
-            case 1: return 8 + lvl*2f;
-            case 2: return 9 + lvl*2.5f;
-            case 3: return 16 + lvl*5f;
+            case 1: return 8 + lvl*3f;
+            case 2: return 9 + lvl*4f;
+            case 3: return 16 + lvl*6f;
         }
         return 0;
     }

@@ -151,9 +151,9 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 
     public float max(float lvl, int rank) {
         switch (rank){
-            case 1: return 10 + lvl*3;
-            case 2: return 10 + lvl*3;
-            case 3: return 10 + lvl*3;
+            case 1: return 10 + lvl*4.5f;
+            case 2: return 10 + lvl*4.5f;
+            case 3: return 10 + lvl*4.5f;
         }
 		return 0;
 	}

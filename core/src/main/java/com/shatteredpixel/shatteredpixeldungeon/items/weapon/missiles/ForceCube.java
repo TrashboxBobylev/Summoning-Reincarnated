@@ -60,8 +60,8 @@ public class ForceCube extends MissileWeapon {
 
     public float max(float lvl, int rank) {
         switch (rank){
-            case 1: return 8 + lvl*2.5f;
-            case 2: return 6 + lvl*1.75f;
+            case 1: return 8 + lvl*3f;
+            case 2: return 6 + lvl*2.25f;
             case 3: return 20 + lvl*8;
         }
         return 0;

@@ -55,8 +55,8 @@ public class ThrowingKnife extends MissileWeapon {
     public float max(float lvl, int rank) {
         switch (rank){
             case 1: return 6 + lvl*2f;
-            case 2: return 10 + lvl*3f;
-            case 3: return 16 + lvl*6f;
+            case 2: return 10 + lvl*3.33f;
+            case 3: return 16 + lvl*6.5f;
         }
         return 0;
     }

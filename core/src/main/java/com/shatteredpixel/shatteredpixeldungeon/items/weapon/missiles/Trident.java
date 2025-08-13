@@ -64,9 +64,9 @@ public class Trident extends MissileWeapon {
 
     public float max(float lvl, int rank) {
         switch (rank){
-            case 1: return 15 + lvl*4.5f;
-            case 2: return 15 + lvl*4.5f;
-            case 3: return 10 + lvl*3;
+            case 1: return 15 + lvl*5.5f;
+            case 2: return 15 + lvl*5.5f;
+            case 3: return 10 + lvl*4;
         }
         return 0;
     }
