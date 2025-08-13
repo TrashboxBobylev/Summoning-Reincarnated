@@ -97,7 +97,7 @@ public class HeavyBoomerang extends MissileWeapon {
             return 0;
         }
         if (rank() == 3){
-            Buff.affect(attacker, ThrowieBoost.class, ThrowieBoost.DURATION).boost(1);
+            Buff.prolong(attacker, ThrowieBoost.class, ThrowieBoost.DURATION).boost(1);
         }
         return super.proc(attacker, defender, damage);
     }
