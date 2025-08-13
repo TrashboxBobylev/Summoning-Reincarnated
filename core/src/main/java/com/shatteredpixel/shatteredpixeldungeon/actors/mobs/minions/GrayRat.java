@@ -42,6 +42,8 @@ public class GrayRat extends Minion {
         spriteClass = GrayRatSprite.class;
         minDefense = 1;
         maxDefense = 3;
+
+        properties.add(Property.ANIMAL);
     }
 
     //his fur are invulnerable to common hazards

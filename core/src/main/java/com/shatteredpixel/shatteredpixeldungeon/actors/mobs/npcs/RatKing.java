@@ -46,6 +46,8 @@ public class RatKing extends NPC {
 		spriteClass = RatKingSprite.class;
 		
 		state = SLEEPING;
+
+        properties.add(Property.ANIMAL);
 	}
 	
 	@Override

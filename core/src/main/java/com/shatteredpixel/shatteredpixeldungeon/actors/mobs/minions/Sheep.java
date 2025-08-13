@@ -33,6 +33,8 @@ import com.watabou.utils.Random;
 public class Sheep extends Minion {
     {
         spriteClass = SheepTankSprite.class;
+
+        properties.add(Property.ANIMAL);
     }
 
     @Override

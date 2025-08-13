@@ -1597,7 +1597,8 @@ acuRoll *= accMulti;
 		STATIC( new HashSet<Class>(),
 				new HashSet<Class>( Arrays.asList(AllyBuff.class, Dread.class, Terror.class, Amok.class, Charm.class, Sleep.class,
 									Paralysis.class, Frost.class, Chill.class, Slow.class, Speed.class) )),
-        RANGED,;
+        RANGED,
+        ANIMAL;
 
 		private HashSet<Class> resistances;
 		private HashSet<Class> immunities;

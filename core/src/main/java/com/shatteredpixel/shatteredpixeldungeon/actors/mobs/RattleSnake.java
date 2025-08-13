@@ -48,7 +48,7 @@ public class RattleSnake extends Mob {
 		loot = new Dart();
 		lootChance = 0.15f;
 		properties.add(Property.RANGED);
-//		properties.add(Property.ANIMAL);
+		properties.add(Property.ANIMAL);
 	}
 
 	{

@@ -30,6 +30,8 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ChickenSprite;
 public class Chicken extends Minion {
     {
         spriteClass = ChickenSprite.class;
+
+        properties.add(Property.ANIMAL);
     }
 
     @Override

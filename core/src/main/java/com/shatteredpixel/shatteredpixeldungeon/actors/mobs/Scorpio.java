@@ -56,6 +56,7 @@ public class Scorpio extends Mob {
 
 		properties.add(Property.DEMONIC);
 		properties.add(Property.RANGED);
+        properties.add(Property.ANIMAL);
 	}
 	
 	@Override

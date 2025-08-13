@@ -60,6 +60,7 @@ public class Piranha extends Mob {
 		
 		state = SLEEPING;
 
+        properties.add(Property.ANIMAL);
 	}
 	
 	public Piranha() {

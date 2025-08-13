@@ -50,6 +50,7 @@ public class GhostChicken extends AbyssalMob {
 
 		properties.add(Property.DEMONIC);
 		properties.add(Property.UNDEAD);
+        properties.add(Property.ANIMAL);
 	}
 
 	@Override

@@ -87,6 +87,7 @@ public class GnollGeomancer extends Mob {
 
 		properties.add(Property.BOSS);
 		properties.add(Property.IMMOVABLE); //moves itself via ability, otherwise is static
+        properties.add(Property.ANIMAL);
 	}
 
 	private int abilityCooldown = Random.NormalIntRange(3, 5);

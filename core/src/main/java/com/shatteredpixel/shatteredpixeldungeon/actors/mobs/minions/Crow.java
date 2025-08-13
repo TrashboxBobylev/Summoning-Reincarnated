@@ -46,6 +46,8 @@ public class Crow extends Minion {
         WANDERING = new Wandering();
 
         flying = true;
+
+        properties.add(Property.ANIMAL);
     }
 
     @Override

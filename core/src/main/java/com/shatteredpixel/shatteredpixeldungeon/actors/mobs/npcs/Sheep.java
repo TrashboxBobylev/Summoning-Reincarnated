@@ -42,6 +42,8 @@ public class Sheep extends NPC {
 
 	{
 		spriteClass = SheepSprite.class;
+
+        properties.add(Property.ANIMAL);
 	}
 
 	private float lifespan;

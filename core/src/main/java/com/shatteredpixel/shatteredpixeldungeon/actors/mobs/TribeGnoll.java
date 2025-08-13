@@ -46,7 +46,7 @@ public class TribeGnoll extends Mob {
 
         loot = RingOfWealth.genConsumableDrop(-3);
         lootChance = 1f;
-//        properties.add(Property.ANIMAL);
+        properties.add(Property.ANIMAL);
     }
 
     @Override
