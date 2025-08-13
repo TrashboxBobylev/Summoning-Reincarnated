@@ -715,7 +715,7 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
         }
         if (!statsInfo.equals("") && !statsInfo.startsWith("!!"))
             info += statsInfo + " ";
-		info += Messages.get(MissileWeapon.class, "distance");
+		info += distanceInfo();
 
 		switch (augment) {
 			case SPEED:
@@ -745,6 +745,10 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 		
 		return info;
 	}
+
+    protected String distanceInfo() {
+        return Messages.get(MissileWeapon.class, "distance");
+    }
 
     @Override
     public String getRankMessage(int rank){
