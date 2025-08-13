@@ -76,6 +76,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Vampir
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RunicBlade;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Scimitar;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.HeavyBoomerang;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -560,6 +561,9 @@ abstract public class Weapon extends KindOfWeapon implements StrengthItem, Weapo
 			if (wep instanceof SpiritBow && ((SpiritBow) wep).rank() == 3){
 				multiplier *= 2;
 			}
+            if (wep instanceof HeavyBoomerang && ((HeavyBoomerang) wep).rank() == 1){
+                multiplier *= 1.67f;
+            }
 			if (attacker instanceof GnollHunter && ((GnollHunter) attacker).rank == 2){
 				if (this instanceof Unstable)
 					multiplier += 0.25f;

@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PinCushion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RevealedArea;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ThrowieBoost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -180,7 +181,13 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 	}
 
     public float powerLevel(){
-        return Math.max(0, ((Dungeon.hero == null ? 0 : Dungeon.hero.STR()) - 10)/1.5f);
+        float power = ((Dungeon.hero == null ? 0 : Dungeon.hero.STR()) - 10) / 1.5f;
+        if (Dungeon.hero != null){
+            if (Dungeon.hero.buff(ThrowieBoost.class) != null){
+                power += Dungeon.hero.buff(ThrowieBoost.class).boost();
+            }
+        }
+        return Math.max(0, power);
     }
 
     @Override

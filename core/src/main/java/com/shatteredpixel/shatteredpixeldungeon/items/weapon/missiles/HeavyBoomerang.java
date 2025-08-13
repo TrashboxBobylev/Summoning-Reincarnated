@@ -29,12 +29,16 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ThrowieBoost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
+import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.tweeners.AlphaTweener;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
+import com.watabou.utils.Random;
 
 public class HeavyBoomerang extends MissileWeapon {
 	
@@ -42,17 +46,36 @@ public class HeavyBoomerang extends MissileWeapon {
 		image = ItemSpriteSheet.BOOMERANG;
 		hitSound = Assets.Sounds.HIT_CRUSH;
 		hitSoundPitch = 1f;
-		
-		tier = 4;
+
 		sticky = false;
-		baseUses = 5;
 	}
-	
-	@Override
-	public int max(int lvl) {
-		return  4 * tier +                  //16 base, down from 20
-				(tier) * lvl;               //scaling unchanged
-	}
+
+    public float min(float lvl, int rank) {
+        switch (rank){
+            case 1: return 4 + lvl;
+            case 2: return 4 + lvl*2;
+            case 3: return 2 + lvl;
+        }
+        return 0;
+    }
+
+    public float max(float lvl, int rank) {
+        switch (rank){
+            case 1: return 8 + lvl*2f;
+            case 2: return 7 + lvl*2.5f;
+            case 3: return 5 + lvl*1f;
+        }
+        return 0;
+    }
+
+    public float baseUses(float lvl, int rank){
+        switch (rank){
+            case 1: return 7 + lvl*1.5f;
+            case 2: return 4 + lvl*1f;
+            case 3: return 5 + lvl*1.25f;
+        }
+        return 1;
+    }
 
 	boolean circleBackhit = false;
 
@@ -65,7 +88,21 @@ public class HeavyBoomerang extends MissileWeapon {
 		return super.adjacentAccFactor(owner, target);
 	}
 
-	@Override
+    @Override
+    public int proc(Char attacker, Char defender, int damage) {
+        if (rank() == 2){
+            Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC, 1, Random.Float(0.87f, 1.15f));
+            int dmg = super.proc(attacker, defender, damage);
+            defender.damage(dmg, new WandOfMagicMissile());
+            return 0;
+        }
+        if (rank() == 3){
+            Buff.affect(attacker, ThrowieBoost.class, ThrowieBoost.DURATION).boost(1);
+        }
+        return super.proc(attacker, defender, damage);
+    }
+
+    @Override
 	protected void rangedHit(Char enemy, int cell) {
 		decrementDurability();
 		if (durability > 0){
@@ -99,7 +136,10 @@ public class HeavyBoomerang extends MissileWeapon {
 			this.returnPos = returnPos;
 			this.returnDepth = returnDepth;
 			this.returnBranch = returnBranch;
-			left = 3;
+            if (boomerang.rank() == 2)
+                left = 0;
+            else
+			    left = 3;
 		}
 		
 		public int returnPos(){
