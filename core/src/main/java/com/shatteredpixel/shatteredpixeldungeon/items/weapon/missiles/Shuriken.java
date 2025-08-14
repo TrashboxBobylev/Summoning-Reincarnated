@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -114,7 +115,16 @@ public class Shuriken extends MissileWeapon {
                     if (enemy != null) {
                         PinCushion pinCushion = enemy.buff(PinCushion.class);
                         if (pinCushion != null) {
-                            thrownOne = (Shuriken) pinCushion.grabOne();
+                            for (Item item: pinCushion.getStuckItems()){
+                                if (item instanceof Shuriken){
+                                    thrownOne = (Shuriken) item;
+                                    pinCushion.getStuckItems().remove(item);
+                                    if (pinCushion.getStuckItems().isEmpty()){
+                                        pinCushion.detach();
+                                    }
+                                    break;
+                                }
+                            }
                         }
                     } else if (Dungeon.level.heaps.get(cell) != null){
                         Heap h = Dungeon.level.heaps.get(cell);
