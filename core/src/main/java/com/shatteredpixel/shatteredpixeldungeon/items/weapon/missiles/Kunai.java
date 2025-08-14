@@ -31,10 +31,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
 
 import java.util.ArrayList;
@@ -92,7 +90,7 @@ public class Kunai extends MissileWeapon {
     public void cast(Hero user, int dst) {
         if (rank() == 2) {
             if (Dungeon.hero.visibleEnemies() == 0) {
-                GLog.w(Messages.get(this, "no_target"));
+                super.cast(user, dst);
                 return;
             }
 
