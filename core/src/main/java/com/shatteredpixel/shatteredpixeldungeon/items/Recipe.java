@@ -63,6 +63,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.Trinket;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrinketCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
@@ -266,9 +267,7 @@ public abstract class Recipe {
 		//only upgradeable thrown weapons and wands allowed among equipment items
 		if (item instanceof EquipableItem){
 			return item.cursedKnown && !item.cursed &&
-					item instanceof MissileWeapon && item.isUpgradable();
-		} else if (item instanceof Wand) {
-			return item.cursedKnown && !item.cursed;
+                    (item instanceof MissileWeapon || item instanceof Wand) && !(item instanceof Dart);
 		} else {
 			//other items can be unidentified, but not cursed
 			return !item.cursed;
