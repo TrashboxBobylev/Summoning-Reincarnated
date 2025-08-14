@@ -151,8 +151,7 @@ public class SpiritBow extends Weapon implements Rankable {
 		String info = super.info();
 		
 		info += "\n\n" + Messages.get( SpiritBow.class, "stats",
-				Math.round(augment.damageFactor(min())),
-				Math.round(augment.damageFactor(max())),
+				GameMath.printAverage(augment.damageFactor(min()), augment.damageFactor(max())),
 				STRReq());
 		
 		if (STRReq() > Dungeon.hero.STR()) {
