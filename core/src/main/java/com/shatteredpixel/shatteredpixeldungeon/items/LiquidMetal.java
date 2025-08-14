@@ -137,8 +137,7 @@ public class LiquidMetal extends Item {
 			if (item != null && item instanceof MissileWeapon) {
 				MissileWeapon m = (MissileWeapon)item;
 
-				float maxToUse = 5*(m.tier+1);
-				maxToUse *= Math.pow(1.35f, m.level());
+				float maxToUse = 10;
 
 				float durabilityPerMetal = 100 / maxToUse;
 
@@ -232,11 +231,10 @@ public class LiquidMetal extends Item {
 		}
 
 		private int metalQuantity(MissileWeapon m){
-			float quantityPerWeapon = 5*(m.tier+1);
+			float quantityPerWeapon = 10;
 			if (m.defaultQuantity() != 3){
 				quantityPerWeapon = 3f / m.defaultQuantity();
 			}
-			quantityPerWeapon *= Math.pow(1.33f, Math.min(5, m.level()));
 
 			float quantity = m.quantity()-1;
 			quantity += 0.25f + 0.0075f*m.durabilityLeft();
