@@ -32,7 +32,9 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.ViewConfiguration;
+import android.window.OnBackInvokedCallback;
 import android.window.OnBackInvokedDispatcher;
+
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -116,10 +118,13 @@ public class AndroidLauncher extends AndroidApplication {
 		//Shattered still overrides the back gesture behaviour, but we need to do it in a new way
 		// (API added in Android 13, functionality enforced in Android 16)
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-			getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, () -> {
-                KeyEvent.addKeyEvent(new KeyEvent(Input.Keys.BACK, true));
-                KeyEvent.addKeyEvent(new KeyEvent(Input.Keys.BACK, false));
-            });
+			getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, new OnBackInvokedCallback() {
+				@Override
+				public void onBackInvoked() {
+					KeyEvent.addKeyEvent(new KeyEvent(Input.Keys.BACK, true));
+					KeyEvent.addKeyEvent(new KeyEvent(Input.Keys.BACK, false));
+				}
+			});
 		}
 
 		//set desired orientation (if it exists) before initializing the app.
