@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AttunementBoost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Combo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CounterBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.EnhancedRings;
@@ -99,8 +100,10 @@ import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -166,7 +169,7 @@ public enum Talent {
 	//Huntress T3
 	POINT_BLANK(105, 3), SEER_SHOT(106, 3),
 	//Sniper T3
-	FARSIGHT(107, 3), SHARED_ENCHANTMENT(108, 3), SHARED_UPGRADES(109, 3),
+	FARSIGHT(107, 3), SHARED_ENCHANTMENT(108, 3), SHARED_UPGRADES(109, 3), OLYMPIC_DEDICATION(109, 3),
 	//Warden T3
 	DURABLE_TIPS(110, 3), BARKSKIN(111, 3), SHIELDING_DEW(112, 3),
 	//Spectral Blades T4
@@ -1132,6 +1135,11 @@ public enum Talent {
 			}
 		}
 
+        if (hero.hasTalent(OLYMPIC_DEDICATION) && enemy.alignment == Char.Alignment.ENEMY
+                && (hero.belongings.attackingWeapon() instanceof MissileWeapon) && !(hero.belongings.attackingWeapon() instanceof SpiritBow.SpiritArrow)){
+            Buff.affect(hero, OlympicDedicationTracker.class).addHit();
+        }
+
 		if (hero.hasTalent(ENERGY_BREAK) && hero.heroClass != HeroClass.CONJURER){
 			if (enemy.buff(EnergyBreakTracker.class) != null){
 				dmg += 1 + hero.pointsInTalent(ENERGY_BREAK);
@@ -1221,6 +1229,88 @@ public enum Talent {
 			return uniqueAllies.size();
 		}
 	}
+
+    public static class OlympicDedicationTracker extends Buff {
+        {
+            type = buffType.POSITIVE;
+        }
+
+        ArrayList<Integer> recentHitTimes = new ArrayList<>();
+
+        public void addHit(){
+            if (recentHitTimes.size() < 5) {
+                recentHitTimes.add(1);
+                if (recentHitTimes.size() >= 2) {
+                    Messages.get(Combo.class, "combo", recentHitTimes.size());
+                }
+            }
+        }
+
+        public int duration(){
+            return -10 + Dungeon.hero.pointsInTalent(OLYMPIC_DEDICATION)*20;
+        }
+
+        public int totalHits(){
+            Integer counter = 0;
+            return recentHitTimes.stream().reduce(counter, (count, hitTime) -> {
+                if (hitTime < duration()){
+                    count++;
+                }
+                return count;
+            });
+        }
+
+        @Override
+        public boolean act() {
+            for (int i = 0; i < recentHitTimes.size(); i++){
+                recentHitTimes.set(i, recentHitTimes.get(i)+1);
+            }
+            spend(TICK);
+            if (totalHits() <= 0) {
+                detach();
+            }
+            return true;
+        }
+
+        @Override
+        public int icon() {
+            return BuffIndicator.THROWN_WEP;
+        }
+
+        @Override
+        public void tintIcon(Image icon) {
+            icon.hardlight(0x1fdaff);
+        }
+
+        @Override
+        public float iconFadePercent() {
+            return Math.max(0, totalHits()/5);
+        }
+
+        @Override
+        public String iconTextDisplay() {
+            return Integer.toString(totalHits());
+        }
+
+        @Override
+        public String desc() {
+            return Messages.get(this, "desc", totalHits(), dispTurns(duration()), totalHits()*33);
+        }
+
+        public static String RECENT_HITS = "recent_hits";
+
+        @Override
+        public void storeInBundle(Bundle bundle) {
+            super.storeInBundle(bundle);
+            bundle.put(RECENT_HITS, recentHitTimes.stream().mapToInt(Integer::intValue).toArray());
+        }
+
+        @Override
+        public void restoreFromBundle(Bundle bundle) {
+            super.restoreFromBundle(bundle);
+            recentHitTimes.addAll(Arrays.asList(ArrayUtils.toObject(bundle.getIntArray(RECENT_HITS))));
+        }
+    }
 
 	public static final int MAX_TALENT_TIERS = 4;
 
@@ -1382,7 +1472,7 @@ public enum Talent {
 				Collections.addAll(tierTalents, EVASIVE_ARMOR, PROJECTILE_MOMENTUM, SPEEDY_STEALTH);
 				break;
 			case SNIPER:
-				Collections.addAll(tierTalents, FARSIGHT, SHARED_ENCHANTMENT, SHARED_UPGRADES);
+				Collections.addAll(tierTalents, FARSIGHT, SHARED_ENCHANTMENT, OLYMPIC_DEDICATION);
 				break;
 			case WARDEN:
 				Collections.addAll(tierTalents, DURABLE_TIPS, BARKSKIN, SHIELDING_DEW);

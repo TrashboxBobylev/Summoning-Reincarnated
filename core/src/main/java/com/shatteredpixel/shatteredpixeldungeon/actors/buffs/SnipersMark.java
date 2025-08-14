@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
@@ -137,6 +138,10 @@ public class SnipersMark extends FlavourBuff implements ActionIndicator.Action {
 		
 		bow.sniperSpecial = true;
 		bow.sniperSpecialBonusDamage = percentDmgBonus;
+        if (hero.buff(Talent.OlympicDedicationTracker.class) != null){
+            bow.sniperSpecialBonusDamage = hero.buff(Talent.OlympicDedicationTracker.class).totalHits()/3f;
+            hero.buff(Talent.OlympicDedicationTracker.class).detach();
+        }
 		
 		arrow.cast(hero, cell);
 		detach();
