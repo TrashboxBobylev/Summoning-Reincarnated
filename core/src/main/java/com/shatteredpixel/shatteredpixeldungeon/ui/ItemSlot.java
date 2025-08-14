@@ -323,10 +323,7 @@ public class ItemSlot extends Button {
 		if (item instanceof Rankable){
 			level.text(Rankable.getRankString(((Rankable) item).rank()));
 			level.measure();
-			if (item.isIdentified())
-				level.hardlight(Rankable.getRankColor(((Rankable) item).rank()));
-			else
-				level.hardlight(Rankable.getRankColor(1));
+            level.hardlight(Rankable.getRankColor(((Rankable) item).rank()));
 		} else {
 			int trueLvl = item.visiblyUpgraded();
 			int buffedLvl = item.buffedVisiblyUpgraded();
