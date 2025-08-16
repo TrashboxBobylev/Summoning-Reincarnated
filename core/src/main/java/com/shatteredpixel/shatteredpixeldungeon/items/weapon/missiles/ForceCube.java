@@ -117,7 +117,7 @@ public class ForceCube extends MissileWeapon {
             for (int i = 0; i < PathFinder.distance.length; i++) {
                 if (PathFinder.distance[i] < Integer.MAX_VALUE) {
                     if (!(Dungeon.level.traps.get(i) instanceof TenguDartTrap)) Dungeon.level.pressCell(i);
-                    if (Actor.findChar(i) != null) targets.add(Actor.findChar(i));
+                    if (Actor.findChar(i) != null && Actor.findChar(i).alignment == Char.Alignment.ENEMY) targets.add(Actor.findChar(i));
                 }
             }
         }
