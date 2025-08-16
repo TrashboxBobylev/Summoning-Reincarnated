@@ -45,7 +45,7 @@ public class ForceCube extends MissileWeapon {
 	
 	{
 		image = ItemSpriteSheet.FORCE_CUBE;
-		
+
 		sticky = false;
 	}
 

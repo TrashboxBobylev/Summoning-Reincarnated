@@ -128,6 +128,7 @@ public class Noisemaker extends Bomb {
 		private static final String CELL = "cell";
 		private static final String FLOOR = "floor";
 		private static final String LEFT = "left";
+		private static final String TRIGGERED = "triggered";
 
 		@Override
 		public void storeInBundle(Bundle bundle) {
@@ -135,6 +136,7 @@ public class Noisemaker extends Bomb {
 			bundle.put(CELL, cell);
 			bundle.put(FLOOR, floor);
 			bundle.put(LEFT, left);
+			bundle.put(TRIGGERED, triggered);
 		}
 
 		@Override
@@ -143,6 +145,7 @@ public class Noisemaker extends Bomb {
 			cell = bundle.getInt(CELL);
 			floor = bundle.getInt(FLOOR);
 			left = bundle.getInt(LEFT);
+			triggered = bundle.getBoolean(TRIGGERED);
 		}
 	}
 	

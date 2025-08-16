@@ -70,12 +70,12 @@ public class Bolas extends MissileWeapon {
         }
         return 1;
     }
-	
+
 	@Override
 	public int proc( Char attacker, Char defender, int damage ) {
         int dmg = super.proc(attacker, defender, damage);
         if (rank() == 1){
-            Buff.prolong( defender, Cripple.class, Cripple.DURATION );
+            Buff.prolong( defender, Cripple.class, Cripple.DURATION/2 );
         } else if (rank() == 2){
             for (Mob mob : Dungeon.level.mobs) {
                 if (mob.paralysed <= 0
@@ -88,8 +88,8 @@ public class Bolas extends MissileWeapon {
             }
             Buff.affect(defender, AllyDamageTag.class, 4f).setFlat(dmg);
         } else if (rank() == 3){
-            Buff.prolong( defender, Vertigo.class, Cripple.DURATION );
-            Buff.prolong( defender, Haste.class, Cripple.DURATION );
+            Buff.prolong( defender, Vertigo.class, Cripple.DURATION / 2);
+            Buff.prolong( defender, Haste.class, Cripple.DURATION / 2 );
         }
         return dmg;
 	}

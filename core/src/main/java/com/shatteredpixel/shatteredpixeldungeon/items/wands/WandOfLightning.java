@@ -203,13 +203,6 @@ public class WandOfLightning extends DamageWand {
 		}
 	}
 
-	public static class LightningOnHit extends Shocking {
-		@Override
-		protected float procChanceMultiplier(Weapon wep, Char attacker) {
-			return Wand.procChanceMultiplier(attacker);
-		}
-	}
-
 	private void arc( Char ch ) {
 
 		int dist = Dungeon.level.water[ch.pos] ? 2 : 1;

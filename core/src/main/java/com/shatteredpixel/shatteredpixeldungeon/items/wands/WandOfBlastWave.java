@@ -157,7 +157,7 @@ public class WandOfBlastWave extends DamageWand {
 
     public int sideKnockback(int rank){
         switch (rank){
-            case 1: return Math.round(1 + power() / 2f);
+            case 1: return Math.round(1.5f + power() / 2f);
             case 2: return 0;
             case 3: return 0;
         }
@@ -256,7 +256,7 @@ public class WandOfBlastWave extends DamageWand {
 
 		if (defender.buff(Paralysis.class) != null && defender.buff(BWaveOnHitTracker.class) == null){
 			defender.buff(Paralysis.class).detach();
-			int dmg = Random.NormalIntRange(6+buffedLvl(), 12+2*buffedLvl());
+			int dmg = Random.NormalIntRange(8+2*buffedLvl(), 12+3*buffedLvl());
 			defender.damage(Math.round(procChanceMultiplier(attacker) * dmg), this);
 			BlastWave.blast(defender.pos);
 			Sample.INSTANCE.play( Assets.Sounds.BLAST );

@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Daze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class ThrowingHammer extends MissileWeapon {
@@ -41,6 +42,14 @@ public class ThrowingHammer extends MissileWeapon {
 		sticky = false;
 	}
 
+    @Override
+	public boolean doPickUp(Hero hero, int pos) {
+		if (super.doPickUp(hero, pos)){
+			hero.spendAndNext( -TIME_TO_PICK_UP );
+			return true;
+		}
+		return false;
+	}
     @Override
     public float castDelay(Char user, int cell) {
         float delay = super.castDelay(user, cell);

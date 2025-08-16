@@ -51,7 +51,7 @@ public class Enchanting extends ItemSprite {
 
 	public Enchanting( Item item ) {
 		super( item.image(), null );
-		originToCenter();
+		//originToCenter();
 
 		if (item.glowing() != null) {
 			color = item.glowing().color;
@@ -68,10 +68,8 @@ public class Enchanting extends ItemSprite {
 	public void update() {
 		super.update();
 
-		if (passed == 0) {
-			x = target.sprite.center().x - width() / 2;
-			y = target.sprite.y - height();
-		}
+		x = target.sprite.center().x - width() / 2;
+		y = target.sprite.y - 8 - height()/2;
 
 		switch (phase) {
 			case FADE_IN:
