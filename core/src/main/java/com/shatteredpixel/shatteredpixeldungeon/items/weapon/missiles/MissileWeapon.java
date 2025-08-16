@@ -106,12 +106,8 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 
 	@Override
 	public int min() {
-		if (Dungeon.hero != null){
-			return Math.max(0, Math.round(min(powerLevel() + RingOfSharpshooting.levelDamageBonus(Dungeon.hero))));
-		} else {
-			return Math.max(0 , Math.round(min( powerLevel() )));
-		}
-	}
+        return Math.max(0, Math.round(min(powerLevel() )));
+    }
 	
 	@Override
 	public int min(int lvl) {
@@ -133,12 +129,8 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 	
 	@Override
 	public int max() {
-		if (Dungeon.hero != null){
-			return Math.max(0, Math.round(max(powerLevel() + RingOfSharpshooting.levelDamageBonus(Dungeon.hero) )));
-		} else {
-			return Math.max(0 , Math.round(max(powerLevel() )));
-		}
-	}
+        return Math.max(0, Math.round(max(powerLevel() )));
+    }
 	
 	@Override
 	public int max(int lvl) {
@@ -186,6 +178,7 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
             if (Dungeon.hero.buff(ThrowieBoost.class) != null){
                 power += Dungeon.hero.buff(ThrowieBoost.class).boost();
             }
+            power += RingOfSharpshooting.levelDamageBonus(Dungeon.hero)*0.67f;
         }
         return Math.max(0, power);
     }
