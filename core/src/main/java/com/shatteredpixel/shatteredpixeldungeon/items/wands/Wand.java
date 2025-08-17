@@ -666,7 +666,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
     public String getRankMessage(int rank) {
         String desc = generalRankDescription(rank);
         if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE){
-            String bmDesc = Messages.get(this, "rank_bm" + rank);
+            String bmDesc = battlemageDesc(rank);
             if (!bmDesc.startsWith("!!")){
                 desc += "\n\n" + Messages.get(this, "rank_bm_generic", bmDesc);
             }
@@ -678,6 +678,10 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         return Messages.get(this, "rank" + rank,
                 getRechargeInfo(rank)
         );
+    }
+
+    public String battlemageDesc(int rank){
+        return Messages.get(this, "rank_bm" + rank);
     }
 
     public String getRechargeInfo(int rank) {
