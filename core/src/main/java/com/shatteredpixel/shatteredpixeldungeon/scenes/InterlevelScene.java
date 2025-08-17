@@ -39,7 +39,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.LostBackpack;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
-import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
@@ -153,8 +152,7 @@ public class InterlevelScene extends PixelScene {
 					}
 					if (Statistics.deepestFloor >= loadingDepth) {
 						fadeTime = FAST_FADE;
-					} else if (loadingDepth == 6 || loadingDepth == 11
-							|| loadingDepth == 16 || loadingDepth == 21 || loadingDepth == 26) {
+					} else if (loadingDepth == Dungeon.chapterNumber()*Dungeon.chapterSize()+1 && loadingDepth != 1) {
 						fadeTime = SLOW_FADE;
 					}
 				}
@@ -186,7 +184,7 @@ public class InterlevelScene extends PixelScene {
 		}
 
 		//flush the texture cache whenever moving between regions, helps reduce memory load
-		int region = (loadingBranch == AbyssLevel.BRANCH) ? 10 : (int)Math.ceil(loadingDepth / 5f);
+		int region = (loadingBranch == AbyssLevel.BRANCH) ? 10 : (loadingDepth / Dungeon.chapterSize()+1);
 		if (region != lastRegion){
 			TextureCache.clear();
 			lastRegion = region;
@@ -304,7 +302,7 @@ public class InterlevelScene extends PixelScene {
 		add(loadingText);
 
 		if (mode == Mode.DESCEND && lastRegion <= 5 && !DeviceCompat.isDebug()){
-			if (Dungeon.hero == null || (loadingDepth > Statistics.deepestFloor && loadingDepth % 5 == 1)){
+			if (Dungeon.hero == null || (loadingDepth > Statistics.deepestFloor && loadingDepth % Dungeon.chapterSize() == 1)){
 					storyMessage = PixelScene.renderTextBlock(Document.INTROS.pageBody(region), 6);
 					storyMessage.maxWidth( PixelScene.landscape() ? 180 : 125);
 					storyMessage.setPos((Camera.main.width-storyMessage.width())/2f, (Camera.main.height-storyMessage.height())/2f);
