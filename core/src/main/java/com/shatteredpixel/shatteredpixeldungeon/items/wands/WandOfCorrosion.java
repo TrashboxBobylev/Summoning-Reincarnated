@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.CorrosiveGas;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Miasma;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corrosion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
@@ -144,9 +145,17 @@ public class WandOfCorrosion extends Wand {
 		if (Random.Float() < procChance) {
 
 			float powerMulti = Math.max(1f, procChance);
-			
-			Buff.affect( defender, Ooze.class ).set( Ooze.DURATION * powerMulti );
-			CellEmitter.center(defender.pos).burst( CorrosionParticle.SPLASH, 5 );
+
+            if (rank() == 1) {
+                Buff.affect(defender, Ooze.class).set(Ooze.DURATION * powerMulti);
+                CellEmitter.center(defender.pos).burst(CorrosionParticle.SPLASH, 5);
+            }
+            if (rank() == 2){
+                Buff.affect(defender, CorrosiveImbue.class).set(gasPower(rank())*2, amountOfGas(rank())*2);
+            }
+            if (rank() == 3){
+                GameScene.add(Blob.seed(defender.pos, amountOfGas(rank())/20, Miasma.class));
+            }
 			
 		}
 	}
