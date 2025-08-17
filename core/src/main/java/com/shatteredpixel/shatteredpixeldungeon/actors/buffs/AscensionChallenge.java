@@ -279,7 +279,7 @@ public class AscensionChallenge extends Buff {
 
 			}
 		}
-		if (Statistics.highestAscent < 20){
+		if (Statistics.highestAscent < Dungeon.chapterSize()*4){
 			for (Mob m : Dungeon.level.mobs.toArray(new Mob[0])){
 				if (m instanceof Shopkeeper){
 					((Shopkeeper) m).flee();
