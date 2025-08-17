@@ -97,6 +97,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CheckedCell;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -159,6 +160,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImag
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ThirteenLeafClover;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfDisintegration;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLightning;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -218,6 +220,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+
+import static com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking.arc;
 
 public class Hero extends Char {
 
@@ -1689,6 +1693,26 @@ public class Hero extends Char {
 				}
 			}
 		}
+
+        if (buff(WandOfLightning.LightningCharge.class) != null){
+            if (buff(WandOfLightning.LightningCharge.class).rank == 2){
+                ArrayList<Char> affected = new ArrayList<>();
+
+                ArrayList<Lightning.Arc> arcs = new ArrayList<>();
+
+                arc(this, enemy, 2, affected, arcs);
+
+                affected.remove(enemy); //defender isn't hurt by lightning
+                for (Char ch : affected) {
+                    if (ch.alignment != alignment) {
+                        ch.damage(Math.round(damage * 0.5f), this);
+                    }
+                }
+
+                sprite.parent.addToFront( new Lightning( arcs, null ) );
+                Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
+            }
+        }
 
         Buff.affect(enemy, Minion.ReactiveTargeting.class, 10f);
 

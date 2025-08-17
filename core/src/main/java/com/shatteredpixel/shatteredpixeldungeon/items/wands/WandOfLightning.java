@@ -37,11 +37,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DwarfKing;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Elemental;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -53,12 +52,14 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class WandOfLightning extends DamageWand {
 
@@ -120,7 +121,7 @@ public class WandOfLightning extends DamageWand {
 		for (Char ch : affected.toArray(new Char[0])){
 			if (ch != curUser && ch.alignment == curUser.alignment && ch.pos != bolt.collisionPos){
 				affected.remove(ch);
-			} else if (ch.buff(LightningCharge.class) != null){
+			} else if (ch.buff(LightningCharge.class) != null && ch.buff(LightningCharge.class).rank == 1){
 				affected.remove(ch);
 			}
 		}
@@ -176,7 +177,7 @@ public class WandOfLightning extends DamageWand {
 
 			float powerMulti = Math.min(1f, procChance);
 
-			FlavourBuff.prolong(attacker, LightningCharge.class, powerMulti*LightningCharge.DURATION);
+			FlavourBuff.prolong(attacker, LightningCharge.class, powerMulti*LightningCharge.DURATION).rank = rank();
 			attacker.sprite.centerEmitter().burst( SparkParticle.FACTORY, 10 );
 			attacker.sprite.flash();
 			Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
@@ -201,7 +202,39 @@ public class WandOfLightning extends DamageWand {
 		public void tintIcon(Image icon) {
 			icon.hardlight(1, 1, 0);
 		}
-	}
+
+        public int rank = 1;
+
+        @Override
+        public HashSet<Class> immunities() {
+            HashSet<Class> immunitiesList = super.immunities();
+            if (rank == 3){
+                immunitiesList.add(WandOfLightning.class);
+                immunitiesList.add(Electricity.class);
+                immunitiesList.add(Elemental.ShockElemental.class);
+            }
+            return immunitiesList;
+        }
+
+        @Override
+        public String desc() {
+            return Messages.get(this, "desc" + rank, dispTurns());
+        }
+
+        private static final String RANK = "rank";
+
+        @Override
+        public void storeInBundle(Bundle bundle) {
+            super.storeInBundle(bundle);
+            bundle.put(RANK, rank);
+        }
+
+        @Override
+        public void restoreFromBundle(Bundle bundle) {
+            super.restoreFromBundle(bundle);
+            rank = bundle.getInt(RANK);
+        }
+    }
 
 	private void arc( Char ch ) {
 
@@ -213,7 +246,7 @@ public class WandOfLightning extends DamageWand {
             dist = 1;
         }
 
-		if (curUser.buff(LightningCharge.class) != null){
+		if (curUser.buff(LightningCharge.class) != null && curUser.buff(LightningCharge.class).rank == 1){
 			dist++;
 		}
 
