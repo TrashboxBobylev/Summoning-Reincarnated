@@ -295,6 +295,10 @@ public class WandOfFireblast extends DamageWand {
         );
     }
 
+    public String battlemageDesc(int rank){
+        return Messages.get(this, "rank_bm" + rank, GameMath.printAverage((int) (2 + 2 * power()), (int) (8 + 4 * power())));
+    }
+
 	@Override
 	public String statsDesc() {
 		if (levelKnown)
