@@ -391,8 +391,8 @@ public class WandOfWarding extends Wand {
     public String generalRankDescription(int rank) {
         if (rank == 1)
             return Messages.get(this, "rank" + rank,
-                    Math.round(4 + power()),
-                    Math.round(Math.round(8 + 5.33f*power())),
+                    GameMath.printAverage(Math.round(4 + power()),
+                    Math.round(Math.round(8 + 5.33f*power()))),
                     getRechargeInfo(rank),
                     (int)Math.ceil(power()*1.5f)+3
             );
@@ -403,10 +403,10 @@ public class WandOfWarding extends Wand {
                     1 + Dungeon.depth/5
             );
         return Messages.get(this, "rank" + rank,
-                Math.round(4 + power()),
-                Math.round(8 + 5.33f*power()),
-                Math.round((2 + power())*4),
-                Math.round((8 + 5.33f*power())*4),
+                GameMath.printAverage(Math.round(4 + power()),
+                Math.round(8 + 5.33f*power())),
+                GameMath.printAverage(Math.round((2 + power())*4),
+                Math.round((8 + 5.33f*power())*4)),
                 getRechargeInfo(rank),
                 (int)Math.ceil(power()*1.5f)+3
         );

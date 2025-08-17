@@ -82,8 +82,10 @@ public abstract class DamageWand extends Wand{
     @Override
     public String generalRankDescription(int rank){
         return Messages.get(this, "rank" + rank,
-                Math.round(magicMin(power())*powerModifier(rank)),
-                Math.round(magicMax(power())*powerModifier(rank)),
+                GameMath.printAverage(
+                        Math.round(magicMin(power())*powerModifier(rank)),
+                        Math.round(magicMax(power())*powerModifier(rank))
+                ),
                 getRechargeInfo(rank)
         );
     }

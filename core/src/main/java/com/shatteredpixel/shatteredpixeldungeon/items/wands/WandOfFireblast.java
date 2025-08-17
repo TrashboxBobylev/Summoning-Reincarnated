@@ -287,8 +287,10 @@ public class WandOfFireblast extends DamageWand {
     @Override
     public String generalRankDescription(int rank){
         return Messages.get(this, "rank" + rank,
-                Math.round(magicMin(power(), rank)),
-                Math.round(magicMax(power(), rank)),
+                GameMath.printAverage(
+                        Math.round(magicMin(power(),rank)),
+                        Math.round(magicMax(power(),rank))
+                ),
                 getRechargeInfo(rank)
         );
     }

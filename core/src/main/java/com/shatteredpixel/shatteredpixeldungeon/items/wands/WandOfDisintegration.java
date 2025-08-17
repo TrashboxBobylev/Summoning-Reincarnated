@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.utils.Callback;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
@@ -183,8 +184,10 @@ public class WandOfDisintegration extends DamageWand {
     @Override
     public String generalRankDescription(int rank) {
         return Messages.get(this, "rank" + rank,
-                Math.round(magicMin(power())*powerModifier(rank)),
-                Math.round(magicMax(power())*powerModifier(rank)),
+                GameMath.printAverage(
+                        Math.round(magicMin(power())*powerModifier(rank)),
+                        Math.round(magicMax(power())*powerModifier(rank))
+                ),
                 getRechargeInfo(rank),
                 distance()
         );

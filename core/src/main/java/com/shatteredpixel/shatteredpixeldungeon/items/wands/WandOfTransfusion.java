@@ -267,8 +267,10 @@ public class WandOfTransfusion extends DamageWand {
     public String generalRankDescription(int rank) {
         if (rank == 2){
             return Messages.get(this, "rank" + rank,
-                    Math.round(magicMin(power())*powerModifier(rank)),
-                    Math.round(magicMax(power())*powerModifier(rank)),
+                    GameMath.printAverage(
+                            Math.round(magicMin(power())*powerModifier(rank)),
+                            Math.round(magicMax(power())*powerModifier(rank))
+                    ),
                     getRechargeInfo(rank),
                     (int)(Charm.DURATION*powerModifier(rank)),
                     (int)((5+power())*powerModifier(rank)),
@@ -277,8 +279,10 @@ public class WandOfTransfusion extends DamageWand {
             );
         }
         return Messages.get(this, "rank" + rank,
-                Math.round(magicMin(power())*powerModifier(rank)),
-                Math.round(magicMax(power())*powerModifier(rank)),
+                GameMath.printAverage(
+                        Math.round(magicMin(power())*powerModifier(rank)),
+                        Math.round(magicMax(power())*powerModifier(rank))
+                ),
                 getRechargeInfo(rank),
                 (int)(Charm.DURATION*powerModifier(rank)),
                 (int)((5+power())*powerModifier(rank)),

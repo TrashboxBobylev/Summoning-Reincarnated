@@ -50,6 +50,7 @@ import com.watabou.noosa.Group;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
@@ -239,8 +240,10 @@ public class WandOfBlastWave extends DamageWand {
     @Override
     public String generalRankDescription(int rank){
         return Messages.get(this, "rank" + rank,
-                Math.round(magicMin(power())*powerModifier(rank)),
-                Math.round(magicMax(power())*powerModifier(rank)),
+                GameMath.printAverage(
+                        Math.round(magicMin(power())*powerModifier(rank)),
+                        Math.round(magicMax(power())*powerModifier(rank))
+                ),
                 getRechargeInfo(rank),
                 mainKnockback(rank), sideKnockback(rank)
         );

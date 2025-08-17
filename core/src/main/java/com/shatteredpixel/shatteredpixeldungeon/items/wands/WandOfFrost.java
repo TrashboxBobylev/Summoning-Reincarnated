@@ -254,8 +254,10 @@ public class WandOfFrost extends DamageWand {
             mod = 2f;
         }
         return Messages.get(this, "rank" + rank,
-                Math.round(magicMin(power())*powerModifier(rank)),
-                Math.round(magicMax(power())*powerModifier(rank)),
+                GameMath.printAverage(
+                        Math.round(magicMin(power())*powerModifier(rank)),
+                        Math.round(magicMax(power())*powerModifier(rank))
+                ),
                 getRechargeInfo(rank),
                 Math.round((2 + power())*mod)
         );
