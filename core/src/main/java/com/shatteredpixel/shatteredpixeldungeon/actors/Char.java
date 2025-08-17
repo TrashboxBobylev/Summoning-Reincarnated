@@ -150,6 +150,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFireblast;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfFrost;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLightning;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Slingshot;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Blazing;
@@ -1060,6 +1061,10 @@ acuRoll *= accMulti;
 			if (buff(ArcaneArmor.class) != null) {
 				dmg -= Random.NormalIntRange(0, buff(ArcaneArmor.class).level());
 			}
+            if (buff(WandOfMagicMissile.ArcaneDamageStack.class) != null){
+                dmg += buff(WandOfMagicMissile.ArcaneDamageStack.class).count();
+                Buff.detach(this, WandOfMagicMissile.ArcaneDamageStack.class);
+            }
 			if (dmg < 0) dmg = 0;
 		}
 

@@ -30,9 +30,12 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CounterBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -77,6 +80,33 @@ public class WandOfMagicMissile extends DamageWand {
     }
 
     @Override
+    public int min(int lvl) {
+        int min = super.min(lvl);
+        if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE && rank() == 2){
+            min *= 4;
+        }
+        return min;
+    }
+
+    @Override
+    public int max(int lvl) {
+        int max = super.max(lvl);
+        if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE && rank() == 2){
+            max *= 2;
+        }
+        return max;
+    }
+
+    @Override
+    public float accuracyFactor(Char owner, Char target) {
+        float acc = super.accuracyFactor(owner, target);
+        if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE && rank() == 2){
+            acc *= 0.8f;
+        }
+        return acc;
+    }
+
+    @Override
 	public void onZap(Ballistica bolt) {
 				
 		Char ch = Actor.findChar( bolt.collisionPos );
@@ -118,15 +148,37 @@ public class WandOfMagicMissile extends DamageWand {
 
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {
-		SpellSprite.show(attacker, SpellSprite.CHARGE);
-		for (Wand.Charger c : attacker.buffs(Wand.Charger.class)){
-			if (c.wand() != this){
-				c.gainCharge(0.5f * procChanceMultiplier(attacker));
-			}
-		}
+        if (rank() == 1) {
+            SpellSprite.show(attacker, SpellSprite.CHARGE);
+            for (Wand.Charger c : attacker.buffs(Wand.Charger.class)) {
+                if (c.wand() != this) {
+                    c.gainCharge(0.5f * procChanceMultiplier(attacker));
+                }
+            }
+        }
+        if (rank() == 3){
+            Splash.at(defender.sprite.center(), 0xf84037, 10);
+            Buff.count(defender, ArcaneDamageStack.class, Dungeon.hero.ATU()*2);
+        }
 
 	}
 
+    public static class ArcaneDamageStack extends CounterBuff {
+        @Override
+        public int icon() {
+            return BuffIndicator.WAND;
+        }
+
+        @Override
+        public void tintIcon(Image icon) {
+            icon.hardlight(0xf84037);
+        }
+
+        @Override
+        public String desc() {
+            return Messages.get(this, "desc", (int)count());
+        }
+    }
 
 	public static class MagicCharge extends FlavourBuff {
 
