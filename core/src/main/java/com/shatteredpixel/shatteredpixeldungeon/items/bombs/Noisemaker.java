@@ -136,7 +136,6 @@ public class Noisemaker extends Bomb {
 			bundle.put(CELL, cell);
 			bundle.put(FLOOR, floor);
 			bundle.put(LEFT, left);
-			bundle.put(TRIGGERED, triggered);
 		}
 
 		@Override
@@ -145,7 +144,6 @@ public class Noisemaker extends Bomb {
 			cell = bundle.getInt(CELL);
 			floor = bundle.getInt(FLOOR);
 			left = bundle.getInt(LEFT);
-			triggered = bundle.getBoolean(TRIGGERED);
 		}
 	}
 	
