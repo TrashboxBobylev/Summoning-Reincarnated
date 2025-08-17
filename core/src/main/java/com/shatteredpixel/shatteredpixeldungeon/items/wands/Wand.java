@@ -84,6 +84,7 @@ import com.watabou.noosa.particles.Emitter;
 import com.watabou.noosa.particles.PixelParticle;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
+import com.watabou.utils.DeviceCompat;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.PointF;
@@ -664,6 +665,17 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 
     @Override
     public String getRankMessage(int rank) {
+        String desc = generalRankDescription(rank);
+        if (Badges.isUnlocked(Badges.Badge.BOSS_SLAIN_2) || DeviceCompat.isDebug()){
+            String bmDesc = Messages.get(this, "rank_bm" + rank);
+            if (!bmDesc.startsWith("!!")){
+                desc += "\n\n" + bmDesc;
+            }
+        }
+        return desc;
+    }
+
+    public String generalRankDescription(int rank){
         return Messages.get(this, "rank" + rank,
                 getRechargeInfo(rank)
         );

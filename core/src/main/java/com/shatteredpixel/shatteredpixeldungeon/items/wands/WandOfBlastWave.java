@@ -36,9 +36,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Effects;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Elastic;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Door;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.TenguDartTrap;
@@ -240,7 +237,7 @@ public class WandOfBlastWave extends DamageWand {
 	}
 
     @Override
-    public String getRankMessage(int rank){
+    public String generalRankDescription(int rank){
         return Messages.get(this, "rank" + rank,
                 Math.round(magicMin(power())*powerModifier(rank)),
                 Math.round(magicMax(power())*powerModifier(rank)),

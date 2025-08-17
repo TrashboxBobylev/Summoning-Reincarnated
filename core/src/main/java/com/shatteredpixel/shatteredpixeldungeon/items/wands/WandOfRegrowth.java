@@ -370,7 +370,7 @@ public class WandOfRegrowth extends Wand {
 	}
 
     @Override
-    public String getRankMessage(int rank) {
+    public String generalRankDescription(int rank) {
         return Messages.get(this, "rank",
                 getRechargeInfo(rank),
                 grassPlaced(rank, power()),

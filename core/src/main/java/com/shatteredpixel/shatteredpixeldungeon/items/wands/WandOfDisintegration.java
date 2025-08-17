@@ -181,7 +181,7 @@ public class WandOfDisintegration extends DamageWand {
 	}
 
     @Override
-    public String getRankMessage(int rank) {
+    public String generalRankDescription(int rank) {
         return Messages.get(this, "rank" + rank,
                 Math.round(magicMin(power())*powerModifier(rank)),
                 Math.round(magicMax(power())*powerModifier(rank)),

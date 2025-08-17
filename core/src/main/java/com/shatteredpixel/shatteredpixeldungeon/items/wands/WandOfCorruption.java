@@ -318,7 +318,7 @@ public class WandOfCorruption extends Wand {
 	}
 
     @Override
-    public String getRankMessage(int rank) {
+    public String generalRankDescription(int rank) {
         if (rank == 3){
             return Messages.get(this, "rank" + rank,
                     getRechargeInfo(rank),
