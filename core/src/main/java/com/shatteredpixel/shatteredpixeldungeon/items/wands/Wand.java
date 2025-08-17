@@ -668,7 +668,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE){
             String bmDesc = Messages.get(this, "rank_bm" + rank);
             if (!bmDesc.startsWith("!!")){
-                desc += "\n\n" + Messages.get(this, "rank_bm_generic" + rank, bmDesc);
+                desc += "\n\n" + Messages.get(this, "rank_bm_generic", bmDesc);
             }
         }
         return desc;
