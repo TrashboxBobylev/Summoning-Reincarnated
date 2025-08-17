@@ -49,6 +49,7 @@ import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.BArray;
 import com.watabou.utils.Callback;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
@@ -249,20 +250,48 @@ public class WandOfBlastWave extends DamageWand {
         );
     }
 
-	public static class Knockback{}
+    @Override
+    public String battlemageDesc(int rank) {
+        if (rank == 2){
+            return Messages.get(this, "rank_bm" + rank, GameMath.printAverage((int) (16+4*power()), (int) (24+6*power())));
+        } else {
+            return Messages.get(this, "rank_bm" + rank, GameMath.printAverage((int) (8+2*power()), (int) (12+3*power())));
+        }
+    }
+
+    public static class Knockback{}
 
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {
 
 		if (defender.buff(Paralysis.class) != null && defender.buff(BWaveOnHitTracker.class) == null){
 			defender.buff(Paralysis.class).detach();
-			int dmg = Random.NormalIntRange(8+2*buffedLvl(), 12+3*buffedLvl());
+			int dmg = Random.NormalIntRange((int) (8+2*power()), (int) (12+3*power()));
+            if (rank() == 2)
+                dmg *= 2;
 			defender.damage(Math.round(procChanceMultiplier(attacker) * dmg), this);
+            if (rank() == 3){
+                PathFinder.buildDistanceMap( defender.pos, BArray.not( Dungeon.level.solid, null ), 2 );
+                for (int i = 0; i < PathFinder.distance.length; i++) {
+                    if (PathFinder.distance[i] < Integer.MAX_VALUE) {
+                        Char target = Actor.findChar(i);
+                        if (target != null && target != defender){
+                            BlastWave.blast(defender.pos);
+                            defender.damage(Math.round(procChanceMultiplier(attacker) * dmg), this);
+                        }
+                    }
+                }
+            }
 			BlastWave.blast(defender.pos);
 			Sample.INSTANCE.play( Assets.Sounds.BLAST );
 
 			//brief immunity, to prevent stacking absurd damage with it with things like para gas
-			Buff.prolong(defender, BWaveOnHitTracker.class, 3f);
+            float cooldown = 3f;
+            if (rank() == 2)
+                cooldown = 9999999f;
+            if (rank() == 3)
+                cooldown = 8f;
+			Buff.prolong(defender, BWaveOnHitTracker.class,  cooldown);
 		}
 	}
 
