@@ -357,17 +357,6 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         return super.proc(attacker, defender, damage);
     }
 
-    @Override
-    public int reachFactor(Char owner) {
-        int reach = super.reachFactor(owner);
-        if (owner instanceof Hero
-                && this instanceof WandOfDisintegration
-                && ((Hero)owner).subClass == HeroSubClass.BATTLEMAGE){
-            reach += Math.round(Wand.procChanceMultiplier(owner));
-        }
-        return reach;
-    }
-
 	protected void wandProc(Char target, int chargesUsed){
 		wandProc(target, power(), chargesUsed);
 	}

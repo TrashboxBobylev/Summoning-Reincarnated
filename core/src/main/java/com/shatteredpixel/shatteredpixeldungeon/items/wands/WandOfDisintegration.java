@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Web;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -169,8 +170,30 @@ public class WandOfDisintegration extends DamageWand {
 
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {
-		//no direct effect, see magesStaff.reachfactor
+        if (rank() == 3){
+            defender.damage((int) (damage*0.75f), this);
+        }
 	}
+
+    @Override
+    public int proc(Char attacker, Char defender, int damage) {
+        int dmg = super.proc(attacker, defender, damage);
+        if (rank() == 2)
+            dmg *= Math.min(5f, 5f - (Dungeon.level.trueDistance(attacker.pos, defender.pos))) / 5f;
+        return dmg;
+    }
+
+    @Override
+    public int reachFactor(Char owner) {
+        int reach = super.reachFactor(owner);
+        if (owner instanceof Hero && ((Hero) owner).subClass == HeroSubClass.BATTLEMAGE){
+            if (rank() == 1)
+                reach += Math.round(Wand.procChanceMultiplier(owner));
+            if (rank() == 2)
+                reach += 6;
+        }
+        return reach;
+    }
 
 	private int distance() {
         return (int)power()*2 + 6;
