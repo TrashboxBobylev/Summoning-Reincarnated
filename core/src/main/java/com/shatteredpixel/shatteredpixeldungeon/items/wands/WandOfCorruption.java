@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Adrenaline;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
@@ -60,6 +61,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bee;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DwarfKing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
@@ -310,10 +312,34 @@ public class WandOfCorruption extends Wand {
 		// lvl 2 - 37.5%
 		float procChance = (level+1f)/(level+6f) * procChanceMultiplier(attacker);
 		if (Random.Float() < procChance) {
+            float powerMulti = Math.max(1f, procChance);
+            if (rank() == 1) {
+                Buff.prolong(defender, Amok.class, Math.round((4 + level * 2) * powerMulti));
+            }
+            if (rank() == 2){
+                if (damage >= defender.HP
+                        && Random.Float() < procChance
+                        && !defender.isImmune(Corruption.class)
+                        && defender.buff(Corruption.class) == null
+                        && defender instanceof Mob
+                        && defender.isAlive()){
 
-			float powerMulti = Math.max(1f, procChance);
+                    Mob enemy = (Mob) defender;
+                    Hero hero = (attacker instanceof Hero) ? (Hero) attacker : Dungeon.hero;
 
-			Buff.prolong( defender, Amok.class, Math.round((4+level*2) * powerMulti));
+                    Corruption.corruptionHeal(enemy);
+
+                    AllyBuff.affectAndLoot(enemy, hero, Corruption.class);
+
+                    if (powerMulti > 1.1f){
+                        //1 turn of adrenaline for each 20% above 100% proc rate
+                        Buff.affect(enemy, Adrenaline.class, Math.round(5*(powerMulti-1f)));
+                    }
+                }
+            }
+            if (rank() == 3){
+                debuffEnemy((Mob) defender, MINOR_DEBUFFS);
+            }
 		}
 	}
 
