@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurn;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.FrostBomb;
@@ -51,6 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
 import com.watabou.utils.GameMath;
+import com.watabou.utils.PathFinder;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
@@ -265,31 +267,45 @@ public class WandOfFrost extends DamageWand {
 
     @Override
 	public void onHit(Char attacker, Char defender, int damage) {
-		Chill chill = defender.buff(Chill.class);
+        if (rank() == 1) {
+            Chill chill = defender.buff(Chill.class);
 
-		if (chill != null) {
+            if (chill != null) {
 
-			//1/9 at 2 turns of chill, scaling to 9/9 at 10 turns
-			float procChance = ((int)Math.floor(chill.cooldown()) - 1)/9f;
-			procChance *= procChanceMultiplier(attacker);
+                //1/9 at 2 turns of chill, scaling to 9/9 at 10 turns
+                float procChance = ((int) Math.floor(chill.cooldown()) - 1) / 9f;
+                procChance *= procChanceMultiplier(attacker);
 
-			if (Random.Float() < procChance) {
+                if (Random.Float() < procChance) {
 
-				float powerMulti = Math.max(1f, procChance);
+                    float powerMulti = Math.max(1f, procChance);
 
-				//need to delay this through an actor so that the freezing isn't broken by taking damage from the staff hit.
-				new FlavourBuff() {
-					{
-						actPriority = VFX_PRIO;
-					}
+                    //need to delay this through an actor so that the freezing isn't broken by taking damage from the staff hit.
+                    new FlavourBuff() {
+                        {
+                            actPriority = VFX_PRIO;
+                        }
 
-					public boolean act() {
-						Buff.affect(target, Frost.class, Math.round(Frost.DURATION * powerMulti));
-						return super.act();
-					}
-				}.attachTo(defender);
-			}
-		}
+                        public boolean act() {
+                            Buff.affect(target, Frost.class, Math.round(Frost.DURATION * powerMulti));
+                            return super.act();
+                        }
+                    }.attachTo(defender);
+                }
+            }
+        }
+        if (rank() == 2){
+            for (int i: PathFinder.NEIGHBOURS9){
+                Char target = Actor.findChar(defender.pos + i);
+                if ((target instanceof Mob && target.alignment != Char.Alignment.ALLY) ||
+                        (target == null && !Dungeon.level.solid[defender.pos + i])){
+                    GameScene.add( Blob.seed( defender.pos + i, Random.Int(0, 3), Freezing.class ) );
+                }
+            }
+        }
+        if (rank() == 3){
+            Buff.affect(defender, FrostBurn.class).reignite(defender, (6 + power()*3)*Math.max(1f, procChanceMultiplier(attacker)));
+        }
 	}
 
 	@Override
