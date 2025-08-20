@@ -90,6 +90,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.EyeOfNewt;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.MossyClump;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrapMechanism;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrinketCatalyst;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfPrismaticLight;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfWarding;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.HeavyBoomerang;
@@ -1452,6 +1453,11 @@ public abstract class Level implements Bundlable {
 						mindVisRange = 1+2*((Hero) c).pointsInTalent(Talent.DIVINE_SENSE);
 					}
 				}
+                if (((Hero) c).subClass == HeroSubClass.BATTLEMAGE &&
+                        ((Hero) c).belongings.weapon() instanceof WandOfPrismaticLight &&
+                        ((WandOfPrismaticLight) ((Hero) c).belongings.weapon()).rank() == 2){
+                    mindVisRange += 2;
+                }
 				mindVisRange = Math.max(mindVisRange, EyeOfNewt.mindVisionRange());
 
 				//power of many's life link spell allows allies to get divine sense

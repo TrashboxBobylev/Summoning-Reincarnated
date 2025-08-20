@@ -230,11 +230,35 @@ public class WandOfPrismaticLight extends DamageWand {
 
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {
-		//cripples enemy
-		Buff.prolong( defender, Cripple.class, Math.round((1+power())*procChanceMultiplier(attacker)));
+        if (rank() == 1) {
+            //cripples enemy
+            Buff.prolong(defender, Cripple.class, Math.round((1 + power()) * procChanceMultiplier(attacker)));
+        }
+        if (rank() == 3) {
+            //cripples enemy
+            if (Char.hasProp(defender, Char.Property.DEMONIC) || Char.hasProp(defender, Char.Property.UNDEAD))
+                defender.damage(damage, this);
+        }
 	}
 
-	@Override
+    @Override
+    public float accuracyFactor(Char owner, Char target) {
+        if (rank() == 3){
+            if (Char.hasProp(target, Char.Property.DEMONIC) || Char.hasProp(target, Char.Property.UNDEAD))
+                return Char.INFINITE_ACCURACY;
+        }
+        return super.accuracyFactor(owner, target);
+    }
+
+    @Override
+    public String battlemageDesc(int rank) {
+        if (rank == 1){
+            return Messages.get(this, "rank_bm" + rank, (int)(1 + power()));
+        }
+        return super.battlemageDesc(rank);
+    }
+
+    @Override
 	public void staffFx(WandParticle particle) {
 		particle.color( Random.Int( 0x1000000 ) );
 		particle.am = 0.5f;
