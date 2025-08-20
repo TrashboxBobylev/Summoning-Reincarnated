@@ -310,7 +310,7 @@ public class WandOfFrost extends DamageWand {
 
     @Override
     public String battlemageDesc(int rank) {
-        if (rank() == 3){
+        if (rank == 3){
             return Messages.get(this, "rank_bm" + rank, (int)(6 + power()*3));
         }
         return super.battlemageDesc(rank);
