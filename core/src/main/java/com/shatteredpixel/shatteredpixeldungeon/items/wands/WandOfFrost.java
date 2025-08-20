@@ -308,7 +308,15 @@ public class WandOfFrost extends DamageWand {
         }
 	}
 
-	@Override
+    @Override
+    public String battlemageDesc(int rank) {
+        if (rank() == 3){
+            return Messages.get(this, "rank_bm" + rank, (int)(6 + power()*3));
+        }
+        return super.battlemageDesc(rank);
+    }
+
+    @Override
 	public void staffFx(WandParticle particle) {
 		particle.color(0x88CCFF);
 		particle.am = 0.6f;
