@@ -46,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -278,31 +279,98 @@ public class WandOfRegrowth extends Wand {
 
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {
-		//like pre-nerf vampiric enchantment, except with herbal healing buff, only in grass
-		boolean grass = false;
-		int terr = Dungeon.level.map[attacker.pos];
-		if (terr == Terrain.GRASS || terr == Terrain.HIGH_GRASS || terr == Terrain.FURROWED_GRASS){
-			grass = true;
-		}
-		terr = Dungeon.level.map[defender.pos];
-		if (terr == Terrain.GRASS || terr == Terrain.HIGH_GRASS || terr == Terrain.FURROWED_GRASS){
-			grass = true;
-		}
+        if (rank() == 1) {
+            //like pre-nerf vampiric enchantment, except with herbal healing buff, only in grass
+            boolean grass = false;
+            int terr = Dungeon.level.map[attacker.pos];
+            if (terr == Terrain.GRASS || terr == Terrain.HIGH_GRASS || terr == Terrain.FURROWED_GRASS) {
+                grass = true;
+            }
+            terr = Dungeon.level.map[defender.pos];
+            if (terr == Terrain.GRASS || terr == Terrain.HIGH_GRASS || terr == Terrain.FURROWED_GRASS) {
+                grass = true;
+            }
 
-		if (grass) {
-			float level = Math.max(0, power());
+            if (grass) {
+                float level = Math.max(0, power());
 
-			// lvl 0 - 16%
-			// lvl 1 - 21%
-			// lvl 2 - 25%
-			int healing = Math.round(damage * (level + 2f) / (level + 6f) / 2f);
-			healing = Math.round(healing * procChanceMultiplier(attacker));
-			Buff.affect(attacker, Sungrass.Health.class).boost(healing);
-		}
+                // lvl 0 - 16%
+                // lvl 1 - 21%
+                // lvl 2 - 25%
+                int healing = Math.round(damage * (level + 2f) / (level + 6f) / 2f);
+                healing = Math.round(healing * procChanceMultiplier(attacker));
+                Buff.affect(attacker, Sungrass.Health.class).boost(healing);
+            }
+        }
+        if (rank() == 2){
+            // lvl 0 - 33%
+            // lvl 1 - 50%
+            // lvl 2 - 60%
+            float procChance = (power()+1f)/(power()+3f) * procChanceMultiplier(attacker);
+            if (Random.Float() < procChance) {
+                ArrayList<Integer> respawnPoints = new ArrayList<>();
 
+                for (int i = 0; i < PathFinder.NEIGHBOURS9.length; i++) {
+                    int p = defender.pos + PathFinder.NEIGHBOURS9[i];
+                    if (Actor.findChar(p) == null && Dungeon.level.passable[p]) {
+                        respawnPoints.add(p);
+                    }
+                }
+
+                if (respawnPoints.size() > 0) {
+                    int index = Random.index(respawnPoints);
+
+                    ThornLasher mob = new ThornLasher();
+                    mob.pos = respawnPoints.get(index);
+                    Buff.affect(mob, Viscosity.DeferedDamage.class).extend(mob.HT);
+                    GameScene.add(mob);
+
+                    if (Dungeon.level.heroFOV[mob.pos]) {
+                        CellEmitter.get(mob.pos).start(LeafParticle.LEVEL_SPECIFIC, 0.1f, 8);
+                        mob.sprite.alpha(0);
+                        mob.sprite.parent.add(new AlphaTweener(mob.sprite, 1, 0.4f));
+                        Sample.INSTANCE.play(Assets.Sounds.PLANT);
+                    }
+                }
+            }
+        }
+        if (rank() == 1) {
+            //like pre-nerf vampiric enchantment, except with herbal healing buff, only in grass
+            boolean grass = false;
+            int terr = Dungeon.level.map[attacker.pos];
+            if (terr == Terrain.GRASS || terr == Terrain.HIGH_GRASS || terr == Terrain.FURROWED_GRASS) {
+                grass = true;
+            }
+            terr = Dungeon.level.map[defender.pos];
+            if (terr == Terrain.GRASS || terr == Terrain.HIGH_GRASS || terr == Terrain.FURROWED_GRASS) {
+                grass = true;
+            }
+
+            if (grass) {
+                float level = Math.max(0, power());
+
+                // lvl 0 - 16%
+                // lvl 1 - 21%
+                // lvl 2 - 25%
+                int healing = Math.round(damage * (level + 2f) / (level + 6f));
+                healing = Math.round(healing * procChanceMultiplier(attacker));
+                Buff.affect(attacker, Earthroot.Armor.class).level(healing);
+            }
+        }
 	}
 
-	public void fx(Ballistica bolt, Callback callback) {
+    @Override
+    public String battlemageDesc(int rank) {
+        if (rank() == 1){
+            return Messages.get(this, "rank_bm" + rank, (int)(((power() + 2f) / (power() + 6f) / 2f)*100));
+        }
+        if (rank() == 3){
+            return Messages.get(this, "rank_bm" + rank, (int)(((power() + 2f) / (power() + 6f))*100));
+        }
+        return super.battlemageDesc(rank);
+    }
+
+    public void fx(Ballistica bolt, Callback callback) {
 
 		// 5/7 distance
 		int maxDist = 3 + 2*chargesPerCast();
