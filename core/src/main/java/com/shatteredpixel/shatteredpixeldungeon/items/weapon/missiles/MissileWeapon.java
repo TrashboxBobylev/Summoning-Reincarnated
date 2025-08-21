@@ -775,7 +775,7 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 	
 	@Override
 	public int value() {
-		int price = 5 * tier * quantity;
+		int price = 15 * quantity;
 		if (hasGoodEnchant()) {
 			price *= 1.5;
 		}
