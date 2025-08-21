@@ -103,7 +103,7 @@ public class Dart extends MissileWeapon {
 					lvl/2f;    //scaling unchanged
 		}
         switch (rank){
-            case 2: damage *= 6;
+            case 2: damage *= 3;
             case 3: damage *= 0.6f;
         }
         return damage;
@@ -126,7 +126,7 @@ public class Dart extends MissileWeapon {
 					1.5f*lvl;  //scaling unchanged
 		}
         switch (rank){
-            case 2: damage *= 4;
+            case 2: damage *= 2;
             case 3: damage *= 0.4f;
         }
         return damage;
@@ -135,7 +135,7 @@ public class Dart extends MissileWeapon {
     public float powerMultiplier(int rank){
         switch (rank){
             case 1: return 1.0f;
-            case 2: return 3.5f;
+            case 2: return 2.25f;
             case 3: return 2.0f;
         }
         return 1.0f;
@@ -220,7 +220,7 @@ public class Dart extends MissileWeapon {
     public float throwSpeed(int rank){
         switch (rank){
             case 1: return 1.0f;
-            case 2: return 5.0f;
+            case 2: return 2.5f;
             case 3: return 2.0f;
         }
         return 1.0f;
