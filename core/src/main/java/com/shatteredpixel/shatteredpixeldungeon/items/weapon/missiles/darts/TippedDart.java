@@ -60,12 +60,6 @@ import java.util.LinkedHashMap;
 
 public abstract class TippedDart extends Dart {
 	
-	{
-		tier = 2;
-
-		baseUses = 1f;
-	}
-	
 	private static final String AC_CLEAN = "CLEAN";
 	
 	@Override
@@ -75,8 +69,13 @@ public abstract class TippedDart extends Dart {
 		actions.add( AC_CLEAN );
 		return actions;
 	}
-	
-	@Override
+
+    @Override
+    public float baseUses(float lvl, int rank) {
+        return 1;
+    }
+
+    @Override
 	public void execute(final Hero hero, String action) {
 		super.execute(hero, action);
 		if (action.equals( AC_CLEAN )){
@@ -137,6 +136,7 @@ public abstract class TippedDart extends Dart {
 			//attempt to stick the dart to the enemy, just drop it if we can't.
 			Dart d = new Dart();
 			d.quantity(1);
+            d.rank(rank());
 			Catalog.countUse(getClass());
 			if (sticky && enemy != null && enemy.isAlive() && enemy.alignment != Char.Alignment.ALLY){
 				PinCushion p = Buff.affect(enemy, PinCushion.class);

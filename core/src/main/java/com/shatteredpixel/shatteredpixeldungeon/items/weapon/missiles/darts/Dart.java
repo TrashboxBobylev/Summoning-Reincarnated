@@ -57,8 +57,6 @@ public class Dart extends MissileWeapon {
 		hitSound = Assets.Sounds.HIT_ARROW;
 		hitSoundPitch = 1.3f;
 		
-		tier = 1;
-		
 		//infinite, even with penalties
 		baseUses = 1000;
 
@@ -82,42 +80,73 @@ public class Dart extends MissileWeapon {
 			GameScene.selectItem(itemSelector);
 		}
 	}
-	
-	@Override
-	public int min(int lvl) {
+
+    @Override
+    public float baseUses(float lvl, int rank) {
+        return 1000;
+    }
+
+    @Override
+	public float min(float lvl, int rank) {
+        float damage;
 		if (bow != null){
 			if (!(this instanceof TippedDart) && Dungeon.hero.buff(Crossbow.ChargedShot.class) != null){
 				//ability increases base dmg by 50%, scaling by 50%
-				return  8 +                     //8 base
-						2*bow.buffedLvl() + lvl;//+2 per bow level, +1 per level
+				damage = 8 +                     //8 base
+						2*bow.buffedLvl() + lvl/2f;//+2 per bow level, +0.5 per level
 			} else {
-				return  4 +                     //4 base
-						bow.buffedLvl() + lvl;  //+1 per level or bow level
+				damage = 4 +                     //4 base
+						bow.buffedLvl() + lvl/2f;  //+0.5 per level or bow level
 			}
 		} else {
-			return  1 +     //1 base, down from 2
-					lvl;    //scaling unchanged
+			damage = 1 +     //1 base, down from 2
+					lvl/2f;    //scaling unchanged
 		}
+        switch (rank){
+            case 2: damage *= 6;
+            case 3: damage *= 0.6f;
+        }
+        return damage;
 	}
 
 	@Override
-	public int max(int lvl) {
+    public float max(float lvl, int rank) {
+        float damage;
 		if (bow != null){
 			if (!(this instanceof TippedDart) && Dungeon.hero.buff(Crossbow.ChargedShot.class) != null){
 				//ability increases base dmg by 50%, scaling by 50%
-				return  16 +                       //16 base
-						4*bow.buffedLvl() + 2*lvl; //+4 per bow level, +2 per level
+                damage = 16 +                       //16 base
+						4*bow.buffedLvl() + 1.5f*lvl; //+4 per bow level, +1.5 per level
 			} else {
-				return  12 +                       //12 base
-						3*bow.buffedLvl() + 2*lvl; //+3 per bow level, +2 per level
+                damage = 12 +                       //12 base
+						3*bow.buffedLvl() + 1.5f*lvl; //+3 per bow level, +1.5 per level
 			}
 		} else {
-			return  2 +     //2 base, down from 5
-					2*lvl;  //scaling unchanged
+			damage = 2 +     //2 base, down from 5
+					1.5f*lvl;  //scaling unchanged
 		}
+        switch (rank){
+            case 2: damage *= 4;
+            case 3: damage *= 0.4f;
+        }
+        return damage;
 	}
-	
-	protected static Crossbow bow;
+
+    public float powerMultiplier(int rank){
+        switch (rank){
+            case 1: return 1.0f;
+            case 2: return 3.5f;
+            case 3: return 2.0f;
+        }
+        return 1.0f;
+    }
+
+    @Override
+    public String missileDescription(int rank) {
+        return Messages.get(this, "missile_desc" + rank, (int)(powerMultiplier(rank)*100), throwSpeed(rank));
+    }
+
+    protected static Crossbow bow;
 	
 	private void updateCrossbow(){
 		if (Dungeon.hero == null) {
@@ -151,6 +180,12 @@ public class Dart extends MissileWeapon {
 		if (bow != null && owner.buff(Crossbow.ChargedShot.class) != null){
 			return Char.INFINITE_ACCURACY;
 		} else {
+            if (rank() == 2){
+                return super.accuracyFactor(owner, target)*3;
+            }
+            if (rank() == 3){
+                return Char.INFINITE_ACCURACY;
+            }
 			return super.accuracyFactor(owner, target);
 		}
 	}
@@ -182,7 +217,21 @@ public class Dart extends MissileWeapon {
 		super.onThrow(cell);
 	}
 
-	protected boolean processingChargedShot = false;
+    public float throwSpeed(int rank){
+        switch (rank){
+            case 1: return 1.0f;
+            case 2: return 5.0f;
+            case 3: return 2.0f;
+        }
+        return 1.0f;
+    }
+
+    @Override
+    public float castDelay(Char user, int cell) {
+        return super.castDelay(user, cell)*throwSpeed(rank());
+    }
+
+    protected boolean processingChargedShot = false;
 	private int chargedShotPos;
 	protected void processChargedShot( Char target, int dmg ){
 		//don't update xbow here, as dart may be the active weapon atm

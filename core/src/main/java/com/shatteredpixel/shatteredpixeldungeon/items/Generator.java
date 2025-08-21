@@ -210,6 +210,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKn
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpike;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Tomahawk;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.Trident;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Blindweed;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Fadeleaf;
@@ -522,6 +523,7 @@ public class Generator {
                     ThrowingKnife.class,
                     ThrowingSpike.class,
                     ThrowingKnive2.class,
+                    Dart.class,
                     Javelin.class,
                     ThrowingHammer.class,
                     Shuriken.class,
@@ -532,7 +534,7 @@ public class Generator {
                     Trident.class,
                     ForceCube.class
             };
-			MISSILE.probs = new float[]{0, 0, 0, 2, 2, 1, 1, 1, 1, 1, 1, 1};
+			MISSILE.probs = new float[]{0, 0, 0, 0, 2, 2, 1, 1, 1, 1, 1, 1, 1};
 
 			//see Generator.randomStaff
 			STAFF.classes = new Class<?>[]{};
