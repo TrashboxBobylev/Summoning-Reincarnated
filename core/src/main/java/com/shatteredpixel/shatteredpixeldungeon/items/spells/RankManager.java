@@ -64,6 +64,11 @@ public class RankManager extends Spell {
         GameScene.selectItem( itemSelector );
     }
 
+    @Override
+    public int value() {
+        return 50 * quantity;
+    }
+
     protected WndBag.ItemSelector itemSelector = new WndBag.ItemSelector() {
 
         @Override
