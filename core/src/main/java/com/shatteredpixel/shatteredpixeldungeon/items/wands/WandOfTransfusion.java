@@ -34,6 +34,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LifeLink;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
@@ -226,18 +228,37 @@ public class WandOfTransfusion extends DamageWand {
 
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {
-		if (defender.buff(Charm.class) != null && defender.buff(Charm.class).object == attacker.id()){
-			//grants a free use of the staff and shields self
-			freeCharge = true;
-			int shieldToGive = Math.round((2*(5 + power()))*procChanceMultiplier(attacker));
-			Buff.affect(attacker, Barrier.class).setShield(shieldToGive);
-			attacker.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shieldToGive), FloatingText.SHIELDING);
-			GLog.p( Messages.get(this, "charged") );
-			attacker.sprite.emitter().burst(BloodParticle.BURST, 20);
-		}
+        if (rank() == 1 || rank() == 2) {
+            if (defender.buff(Charm.class) != null && defender.buff(Charm.class).object == attacker.id()) {
+                //grants a free use of the staff and shields self
+                freeCharge = true;
+                int shieldToGive = Math.round((2 * (5 + power())) * procChanceMultiplier(attacker));
+                Buff.affect(attacker, Barrier.class).setShield(shieldToGive);
+                attacker.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shieldToGive), FloatingText.SHIELDING);
+                GLog.p(Messages.get(this, "charged"));
+                attacker.sprite.emitter().burst(BloodParticle.BURST, 20);
+            }
+        }
 	}
 
-	@Override
+    @Override
+    public String battlemageDesc(int rank) {
+        if (rank() != 3){
+            return Messages.get(this, "rank_bm" + rank, Math.round((2 * (5 + power()))));
+        }
+        return super.battlemageDesc(rank);
+    }
+
+    @Override
+    public int proc(Char attacker, Char defender, int damage) {
+        if (attacker instanceof Hero && ((Hero)attacker).subClass == HeroSubClass.BATTLEMAGE && rank() == 3){
+            float difference = Math.abs(attacker.HP * 1f / attacker.HT - defender.HP * 1f / defender.HT);
+            damage = Math.round(damage*(1f + difference));
+        }
+        return super.proc(attacker, defender, damage);
+    }
+
+    @Override
 	public void fx(Ballistica beam, Callback callback) {
 		curUser.sprite.parent.add(
 				new Beam.HealthRay(curUser.sprite.center(), DungeonTilemap.raisedTileCenterToWorld(beam.collisionPos)));
