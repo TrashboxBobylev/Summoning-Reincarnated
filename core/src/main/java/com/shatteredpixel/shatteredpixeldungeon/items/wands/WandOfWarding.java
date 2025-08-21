@@ -333,10 +333,13 @@ public class WandOfWarding extends Wand {
         }
 		Sample.INSTANCE.play(Assets.Sounds.ZAP);
 	}
-
     private void placeWall( int pos, int knockbackDIR){
+        placeWall(pos, knockbackDIR, 15);
+    }
+
+    private void placeWall( int pos, int knockbackDIR, int duration){
         if (!Dungeon.level.solid[pos]) {
-            GameScene.add(Blob.seed(pos, 15, WallOfLight.LightWall.class));
+            GameScene.add(Blob.seed(pos, duration, WallOfLight.LightWall.class));
 
             Char ch = Actor.findChar(pos);
             if (ch != null && ch.alignment == Char.Alignment.ENEMY){
@@ -348,23 +351,52 @@ public class WandOfWarding extends Wand {
 
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {
-		float level = Math.max( 0, power() );
+        float level = Math.max(0, power());
 
-		// lvl 0 - 20%
-		// lvl 1 - 33%
-		// lvl 2 - 43%
-		float procChance = (level+1f)/(level+5f) * procChanceMultiplier(attacker);
-		if (Random.Float() < procChance) {
+        if (rank() == 1) {
+            // lvl 0 - 20%
+            // lvl 1 - 33%
+            // lvl 2 - 43%
+            float procChance = (level + 1f) / (level + 5f) * procChanceMultiplier(attacker);
+            if (Random.Float() < procChance) {
 
-			float powerMulti = Math.max(1f, procChance);
+                float powerMulti = Math.max(1f, procChance);
 
-			for (Char ch : Actor.chars()){
-				if (ch instanceof Ward){
-					((Ward) ch).wandHeal(power(), powerMulti);
-					ch.sprite.emitter().burst(MagicMissile.WardParticle.UP, ((Ward) ch).tier);
-				}
-			}
-		}
+                for (Char ch : Actor.chars()) {
+                    if (ch instanceof Ward) {
+                        ((Ward) ch).wandHeal(power(), powerMulti);
+                        ch.sprite.emitter().burst(MagicMissile.WardParticle.UP, ((Ward) ch).tier);
+                    }
+                }
+            }
+        }
+        if (rank() == 2) {
+            // lvl 0 - 14%
+            // lvl 1 - 25%
+            // lvl 2 - 33%
+            float procChance = (level + 1f) / (level + 7f) * procChanceMultiplier(attacker);
+            if (Random.Float() < procChance) {
+
+                float powerMulti = Math.max(1f, procChance);
+
+                for (int i: PathFinder.NEIGHBOURS8){
+                    placeWall(attacker.pos + i, i, (int) (5*powerMulti));
+                }
+            }
+        }
+        if (rank() == 3){
+            // lvl 0 - 14%
+            // lvl 1 - 25%
+            // lvl 2 - 33%
+            float procChance = (level + 1f) / (level + 7f) * procChanceMultiplier(attacker);
+            if (Random.Float() < procChance) {
+                for (Char ch : Actor.chars()) {
+                    if (ch instanceof Ward && ((Ward) ch).isBomb) {
+                        ((Ward) ch).explode();
+                    }
+                }
+            }
+        }
 	}
 
 	@Override
@@ -493,20 +525,24 @@ public class WandOfWarding extends Wand {
             super.damage(dmg, src);
             if (isBomb){
                 die(src);
-                Sample.INSTANCE.play(Assets.Sounds.BLAST, 1.5f);
-                PathFinder.buildDistanceMap( pos, BArray.not( Dungeon.level.solid, null ), tier );
-                for (int i = 0; i < PathFinder.distance.length; i++) {
-                    if (PathFinder.distance[i] < Integer.MAX_VALUE) {
-                        CellEmitter.center(i).burst(MagicMissile.WardParticle.FACTORY, 15);
-                        Char ch = Actor.findChar(i);
-                        if (ch != null && ch.alignment == Alignment.ENEMY) {
-                            Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC);
-                            int damage = Math.round(Hero.heroDamageIntRange((int) (4 + wandLevel), (int) (8 + 5.33f*wandLevel))*Math.max(1, tier*2f/3));
-                            damage *= 1f - (Dungeon.level.trueDistance(ch.pos, pos)-1)/tier;
-                            ch.damage(damage, this);
-                            if (ch.isAlive()){
-                                Wand.wandProc(ch, wandLevel, 1);
-                            }
+                explode();
+            }
+        }
+
+        public void explode() {
+            Sample.INSTANCE.play(Assets.Sounds.BLAST, 1.5f);
+            PathFinder.buildDistanceMap( pos, BArray.not( Dungeon.level.solid, null ), tier );
+            for (int i = 0; i < PathFinder.distance.length; i++) {
+                if (PathFinder.distance[i] < Integer.MAX_VALUE) {
+                    CellEmitter.center(i).burst(MagicMissile.WardParticle.FACTORY, 15);
+                    Char ch = Actor.findChar(i);
+                    if (ch != null && ch.alignment == Alignment.ENEMY) {
+                        Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC);
+                        int damage = Math.round(Hero.heroDamageIntRange((int) (4 + wandLevel), (int) (8 + 5.33f*wandLevel))*Math.max(1, tier*2f/3));
+                        damage *= 1f - (Dungeon.level.trueDistance(ch.pos, pos)-1)/tier;
+                        ch.damage(damage, this);
+                        if (ch.isAlive()){
+                            Wand.wandProc(ch, wandLevel, 1);
                         }
                     }
                 }
