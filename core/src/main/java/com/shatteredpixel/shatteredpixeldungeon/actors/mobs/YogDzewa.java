@@ -26,7 +26,6 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -133,7 +132,7 @@ public class YogDzewa extends Mob {
 
 	private ArrayList<Class> regularSummons = new ArrayList<>();
 	{
-		if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
+		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
 			for (int i = 0; i < 6; i++){
 				if (i >= 4){
 					regularSummons.add(YogRipper.class);
@@ -243,7 +242,7 @@ public class YogDzewa extends Mob {
 						}
 
 						if (hit(this, ch, true)) {
-							if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) {
+							if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL) {
 								ch.damage(Random.NormalIntRange(30, 50), new Eye.DeathGaze());
 							} else {
 								ch.damage(Random.NormalIntRange(20, 30), new Eye.DeathGaze());
@@ -465,7 +464,7 @@ public class YogDzewa extends Mob {
 
 			addFist((YogFist)Reflection.newInstance(fistSummons.remove(0)));
 
-			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
+			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
 				addFist((YogFist)Reflection.newInstance(challengeSummons.remove(0)));
 			}
 
@@ -480,7 +479,7 @@ public class YogDzewa extends Mob {
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
-			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmgTaken/3f);
+			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL)   lock.addTime(dmgTaken/3f);
 			else                                                    lock.addTime(dmgTaken/2f);
 		}
 
@@ -498,7 +497,7 @@ public class YogDzewa extends Mob {
 
 		int targetPos = Dungeon.level.exit() + Dungeon.level.width();
 
-		if (!Dungeon.isChallenged(Challenges.STRONGER_BOSSES)
+		if (Dungeon.mode != Dungeon.GameMode.NINE_CHAL
 				&& (Actor.findChar(targetPos) == null || Actor.findChar(targetPos) instanceof Sheep)){
 			fist.pos = targetPos;
 		} else if (Actor.findChar(targetPos-1) == null || Actor.findChar(targetPos-1) instanceof Sheep){
@@ -523,7 +522,7 @@ public class YogDzewa extends Mob {
 		if (phase > 1 && isAlive()){
 			viewDistance = Math.max(4 - (phase-1), 1);
 		}
-		if (Dungeon.isChallenged(Challenges.DARKNESS)) {
+		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL) {
 			viewDistance = Math.min(viewDistance, 2);
 		}
 		level.viewDistance = viewDistance;
@@ -581,7 +580,7 @@ public class YogDzewa extends Mob {
 
 		GameScene.bossSlain();
 
-		if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) && Statistics.spawnersAlive == 4){
+		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL && Statistics.spawnersAlive == 4){
 			Badges.validateBossChallengeCompleted();
 		} else {
 			Statistics.qualifiedForBossChallengeBadge = false;

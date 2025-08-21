@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
@@ -70,7 +69,7 @@ public class WellFed extends Buff {
 		//heals one HP every 18 turns for 1000 turns
 		//55 HP healed in total
 		left = (int)Hunger.STARVING;
-		if (Dungeon.isChallenged(Challenges.NO_FOOD)){
+		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
 			//150 turns if on diet is enabled
 			left /= 3;
 		}

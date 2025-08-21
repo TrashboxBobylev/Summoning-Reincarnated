@@ -85,7 +85,7 @@ public class Challenges {
 
 	public static boolean isItemBlocked( Item item ){
 
-		if (Dungeon.isChallenged(NO_HERBALISM) && item instanceof Dewdrop){
+		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL && item instanceof Dewdrop){
 			return true;
 		}
 		if (Dungeon.isChallenged(Conducts.Conduct.LIMITED_MONSTERS) && item instanceof PotionOfExperience){

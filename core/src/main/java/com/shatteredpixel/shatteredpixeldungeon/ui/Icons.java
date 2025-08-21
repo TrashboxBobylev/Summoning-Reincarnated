@@ -143,6 +143,7 @@ public enum Icons {
     ABYSS_START,
 	CAVES,
 	DARK_AMU,
+    NINE_CHAL,
 
 	//icons that appear in the about screen, variable spacing
 	LIBGDX,
@@ -466,6 +467,9 @@ public enum Icons {
 			case DARK_AMU:
 				icon.frame( icon.texture.uvRectBySize( 64, 192, 16, 16 ) );
 				break;
+            case NINE_CHAL:
+                icon.frame( icon.texture.uvRectBySize( 80, 192, 16, 16 ) );
+                break;
 
 			case LIBGDX:
 				icon.frame( icon.texture.uvRectBySize( 0, 96, 16, 13 ) );

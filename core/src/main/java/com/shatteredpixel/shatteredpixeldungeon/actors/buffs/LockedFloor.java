@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.utils.Bundle;
@@ -33,7 +32,7 @@ public class LockedFloor extends Buff {
 
 	//the amount of turns remaining before beneficial passive effects turn off
 	//starts at 50 turns normally, 20 with badder bosses
-	private float left = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 20 : 50;
+	private float left = Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 20 : 50;
 
 	@Override
 	public boolean act() {

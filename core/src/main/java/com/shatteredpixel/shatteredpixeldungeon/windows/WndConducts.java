@@ -51,9 +51,9 @@ public class WndConducts extends Window {
     private static final int BTN_HEIGHT    = 18;
     private static final int GAP        = 1;
 
-    private boolean editable;
+    private static boolean editable;
     private ArrayList<IconButton> infos = new ArrayList<>();
-    private ArrayList<ConduitBox> boxes = new ArrayList<>();
+    private static ArrayList<ConduitBox> boxes = new ArrayList<>();
     private ScrollPane pane;
 
     protected boolean yesToDebug(){
@@ -64,7 +64,7 @@ public class WndConducts extends Window {
 
         super();
 
-        this.editable = editable;
+        WndConducts.editable = editable;
         resize(WIDTH, HEIGHT);
 
         RenderedTextBlock title = PixelScene.renderTextBlock( Messages.get(this, "title"), 12 );
@@ -173,12 +173,16 @@ public class WndConducts extends Window {
         super.onBackPressed();
     }
 
-    public class ConduitBox extends CheckBox{
+    public static class ConduitBox extends CheckBox{
 
         public Conducts.Conduct conduct;
 
-        public ConduitBox(String label) {
-            super(label);
+        public ConduitBox(String label){
+            super(label, 9);
+        }
+
+        public ConduitBox(String label, int size) {
+            super(label, size);
         }
 
         @Override

@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.blobs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -49,7 +48,7 @@ public class HealGas extends Blob {
 			for (int j = area.top; j < area.bottom; j++){
 				cell = i + j*Dungeon.level.width();
 				if (cur[cell] > 0 && (ch = Actor.findChar( cell )) != null) {
-					if (!ch.isImmune(Healing.class) || (ch instanceof Hero && !Dungeon.isChallenged(Challenges.NO_HEALING))) {
+					if (!ch.isImmune(Healing.class) || (ch instanceof Hero && Dungeon.mode != Dungeon.GameMode.NINE_CHAL)) {
 						int heal = (Dungeon.chapterNumber()+1)*2;
 						if (ch.HP < ch.HT)
 							ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(heal), FloatingText.HEALING);

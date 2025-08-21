@@ -266,6 +266,7 @@ public class Dungeon {
 		SMALL("small", Icons.SHRINKING, 1.1f),
 		BIGGER("bigger", Icons.ENLARGEMENT, 1.2f),
 		EXPLORE( "explore", Icons.EXPLORE, 0f),
+        NINE_CHAL("9chal", Icons.NINE_CHAL, 7f),
 		ABYSS_START("abyss_start", Icons.ABYSS_START, 2.0f),
 		GAUNTLET("gauntlet", Icons.GAUNTLET, 1.33f),
 		CHAOS("chaos", Icons.CHAOS, 1.5f)

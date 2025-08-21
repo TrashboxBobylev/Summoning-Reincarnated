@@ -25,7 +25,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.armor;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -389,7 +388,7 @@ public class Armor extends EquipableItem implements StrengthItem {
 	}
 
 	public int DRMax(int lvl){
-		if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
+		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
 			return 1 + tier + lvl + augment.defenseFactor(lvl);
 		}
 
@@ -406,7 +405,7 @@ public class Armor extends EquipableItem implements StrengthItem {
 	}
 
 	public int DRMin(int lvl){
-		if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
+		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
 			return 0;
 		}
 

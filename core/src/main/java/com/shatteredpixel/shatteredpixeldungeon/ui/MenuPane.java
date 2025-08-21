@@ -25,7 +25,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
@@ -36,7 +35,6 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndChallenges;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndGame;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndJournal;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndKeyBindings;
@@ -121,29 +119,6 @@ public class MenuPane extends Component {
 			}
 		};
 		add(depthButton);
-
-		if (Challenges.activeChallenges() > 0){
-			challengeIcon = Icons.get(Icons.CHAL_COUNT);
-			add(challengeIcon);
-
-			challengeText = new BitmapText( Integer.toString( Challenges.activeChallenges() ), PixelScene.pixelFont);
-			challengeText.hardlight( 0xCACFC2 );
-			challengeText.measure();
-			add( challengeText );
-
-			challengeButton = new Button(){
-				@Override
-				protected void onClick() {
-					GameScene.show(new WndChallenges(Dungeon.challenges, false));
-				}
-
-				@Override
-				protected String hoverText() {
-					return Messages.get(WndChallenges.class, "title");
-				}
-			};
-			add(challengeButton);
-		}
 
 		btnJournal = new JournalButton();
 		add( btnJournal );

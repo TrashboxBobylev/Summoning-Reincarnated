@@ -220,7 +220,6 @@ public class Badges {
 		RESEARCHER_4                ( 107, BadgeType.JOURNAL ),
 		GAMES_PLAYED_4              ( 108, BadgeType.GLOBAL ),
 		HIGH_SCORE_4                ( 109 ),
-		CHAMPION_1                  ( 110 ),
 
 		//diamond
 		PACIFIST_ASCENT             ( 120 ),
@@ -229,7 +228,6 @@ public class Badges {
 		RESEARCHER_5                ( 123, BadgeType.JOURNAL ),
 		GAMES_PLAYED_5              ( 124, BadgeType.GLOBAL ),
 		HIGH_SCORE_5                ( 125 ),
-		CHAMPION_2                  ( 126 ),
 		CHAMPION_3                  ( 127 );
 
 		public boolean meta;
@@ -1191,24 +1189,6 @@ public class Badges {
 			displayBadge( Badge.PACIFIST_ASCENT );
 		}
 	}
-
-	public static void validateChampion( int challenges ) {
-		if (challenges == 0) return;
-		Badge badge = null;
-		if (challenges >= 1) {
-			badge = Badge.CHAMPION_1;
-		}
-		if (challenges >= 3){
-			unlock(badge);
-			badge = Badge.CHAMPION_2;
-		}
-		if (challenges >= 6){
-			unlock(badge);
-			badge = Badge.CHAMPION_3;
-		}
-		local.add(badge);
-		displayBadge( badge );
-	}
 	
 	private static void displayBadge( Badge badge ) {
 
@@ -1286,8 +1266,7 @@ public class Badges {
 			{Badge.BOSS_SLAIN_1, Badge.BOSS_SLAIN_2, Badge.BOSS_SLAIN_3, Badge.BOSS_SLAIN_4},
 			{Badge.RESEARCHER_1, Badge.RESEARCHER_2, Badge.RESEARCHER_3, Badge.RESEARCHER_4, Badge.RESEARCHER_5},
 			{Badge.HIGH_SCORE_1, Badge.HIGH_SCORE_2, Badge.HIGH_SCORE_3, Badge.HIGH_SCORE_4, Badge.HIGH_SCORE_5},
-			{Badge.GAMES_PLAYED_1, Badge.GAMES_PLAYED_2, Badge.GAMES_PLAYED_3, Badge.GAMES_PLAYED_4, Badge.GAMES_PLAYED_5},
-			{Badge.CHAMPION_1, Badge.CHAMPION_2, Badge.CHAMPION_3}
+			{Badge.GAMES_PLAYED_1, Badge.GAMES_PLAYED_2, Badge.GAMES_PLAYED_3, Badge.GAMES_PLAYED_4, Badge.GAMES_PLAYED_5}
 	};
 
 	//don't show the later badge if the earlier one isn't unlocked

@@ -26,7 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.QuickSlot;
 import com.shatteredpixel.shatteredpixeldungeon.Rankings;
@@ -38,20 +38,20 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.Trinket;
-import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BadgesGrid;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BadgesList;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Button;
-import com.shatteredpixel.shatteredpixeldungeon.ui.CheckBox;
 import com.shatteredpixel.shatteredpixeldungeon.ui.IconButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ItemSlot;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
+import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.TalentButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.TalentsPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
@@ -65,6 +65,7 @@ import com.watabou.noosa.ui.Component;
 import com.watabou.utils.DeviceCompat;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class WndRanking extends WndTabbed {
@@ -113,7 +114,7 @@ public class WndRanking extends WndTabbed {
 
 		if (Dungeon.hero != null) {
 			Icons[] icons =
-					{Icons.RANKINGS, Icons.TALENT, Icons.BACKPACK_LRG, Icons.BADGES, Icons.CHALLENGE_COLOR};
+					{Icons.RANKINGS, Icons.TALENT, Icons.BACKPACK_LRG, Icons.BADGES, Icons.CONDUCTS_COLOR};
 			Group[] pages =
 					{new StatsTab(), new TalentsTab(), new ItemsTab(), new BadgesTab(), null};
 
@@ -440,61 +441,81 @@ public class WndRanking extends WndTabbed {
 
 	private class ChallengesTab extends Group{
 
+        private ArrayList<IconButton> infos = new ArrayList<>();
+        private ArrayList<WndConducts.ConduitBox> boxes = new ArrayList<>();
+        private ScrollPane pane;
+
 		public ChallengesTab(){
 			super();
 
 			camera = WndRanking.this.camera;
 
-			float pos = 0;
+            ArrayList<Conducts.Conduct> allConducts = Dungeon.conducts.conducts;
 
-			if (Dungeon.conducts.isConductedAtAll()){
-				RedButton btnConducts = new RedButton( Messages.get(WndConducts.class, "title") ) {
-					@Override
-					protected void onClick() {
-						if (Dungeon.conducts.oneConduct()){
-							Game.scene().add( new WndTitledMessage(Dungeon.conduct().getIcon(),
-									Dungeon.conduct().toString(),
-									Dungeon.conduct().desc()));
-						} else
-							ShatteredPixelDungeon.scene().addToFront(new WndConducts(Dungeon.conducts, false));
-					}
-				};
-				float btnW = btnConducts.reqWidth() + 2;
-				btnConducts.setRect( 0, pos, Math.max(btnW, WIDTH) , btnConducts.reqHeight() + 2 );
-				add( btnConducts );
+            ScrollPane pane = new ScrollPane(new Component()) {
+                @Override
+                public void onClick(float x, float y) {
+                    int size = boxes.size();
+                    size = infos.size();
+                    for (int i = 1; i < size+1; i++) {
+                        if (infos.get(i-1).inside(x, y)) {
+                            int index = allConducts.contains(Conducts.Conduct.NULL) ? i : i-1;
 
-				pos = btnConducts.bottom();
-			}
+                            String message = allConducts.get(index).desc();
+                            String title = Messages.titleCase(Messages.get(Conducts.class, allConducts.get(index).name()));
+                            ShatteredPixelDungeon.scene().add(
+                                    new WndTitledMessage(
+                                            allConducts.get(index).getIcon(),
+                                            title, message)
+                            );
 
-			for (int i=0; i < Challenges.NAME_IDS.length; i++) {
+                            break;
+                        }
+                    }
+                }
+            };
+            add(pane);
+            pane.setRect(0, 0, WIDTH, HEIGHT);
+            Component content = pane.content();
 
-				final String challenge = Challenges.NAME_IDS[i];
+            float pos = 2;
+            for (Conducts.Conduct i : allConducts) {
 
-				CheckBox cb = new CheckBox( Messages.titleCase(Messages.get(Challenges.class, challenge)) );
-				cb.checked( (Dungeon.challenges & Challenges.MASKS[i]) != 0 );
-				cb.active = false;
+                if (!i.shouldAppear()) continue;
 
-				if (i > 0) {
-					pos += 1;
-				}
-				cb.setRect( 0, pos, WIDTH-16, 15 );
+                final String challenge = i.toString();
 
-				add( cb );
+                WndConducts.ConduitBox cb = new WndConducts.ConduitBox( i == Conducts.Conduct.NULL ? challenge : "       " + challenge, 7);
+                cb.checked(true);
+                cb.active = false;
+                cb.conduct = i;
 
-				IconButton info = new IconButton(Icons.get(Icons.INFO)){
-					@Override
-					protected void onClick() {
-						super.onClick();
-						ShatteredPixelDungeon.scene().add(
-								new WndMessage(Messages.get(Challenges.class, challenge+"_desc"))
-						);
-					}
-				};
-				info.setRect(cb.right(), pos, 16, 15);
-				add(info);
+                pos += 1;
+                cb.setRect(0, pos, WIDTH - 16, 18);
 
-				pos = cb.bottom();
-			}
+                content.add(cb);
+                boxes.add(cb);
+                if (i != Conducts.Conduct.NULL) {
+                    IconButton info = new IconButton(Icons.get(Icons.INFO)) {
+                        @Override
+                        protected void layout() {
+                            super.layout();
+                            hotArea.y = -5000;
+                        }
+                    };
+                    info.setRect(cb.right(), pos, 16, 18);
+                    content.add(info);
+                    infos.add(info);
+                    Image icon = i.getIcon();
+                    icon.x = cb.left()+1;
+                    icon.y = cb.top()+1;
+                    content.add(icon);
+                }
+
+                pos = cb.bottom();
+            }
+
+            content.setSize(WIDTH, pos);
 		}
 
 	}

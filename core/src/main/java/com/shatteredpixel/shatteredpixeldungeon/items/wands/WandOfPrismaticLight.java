@@ -25,7 +25,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.wands;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -114,7 +113,7 @@ public class WandOfPrismaticLight extends DamageWand {
                     modification = 3f;
                     break;
             }
-			if (Dungeon.isChallenged(Challenges.DARKNESS)){
+			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
 				Buff.prolong( curUser, Light.class, (2f + power())*modification);
 			} else {
 				Buff.prolong( curUser, Light.class, (10f+power()*5)*modification);
@@ -214,7 +213,7 @@ public class WandOfPrismaticLight extends DamageWand {
 
 	@Override
 	public String upgradeStat3(int level) {
-		if (Dungeon.isChallenged(Challenges.DARKNESS)){
+		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
 			return Integer.toString(2 + level);
 		} else {
 			return Integer.toString(10 + 5*level);

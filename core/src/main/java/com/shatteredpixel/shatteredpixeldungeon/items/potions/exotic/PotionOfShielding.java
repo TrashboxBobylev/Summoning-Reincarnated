@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic;
 
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
@@ -45,7 +44,7 @@ public class PotionOfShielding extends ExoticPotion {
 	public void apply(Hero hero) {
 		identify();
 
-		if (Dungeon.isChallenged(Challenges.NO_HEALING)){
+		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
 			PotionOfHealing.pharmacophobiaProc(hero);
 		} else {
 			//~75% of a potion of healing

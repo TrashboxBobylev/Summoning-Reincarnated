@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.blobs;
 
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -58,7 +57,7 @@ public class HoneyGas extends Blob {
                         if (ch.HP < ch.HT)
                             ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(heal), FloatingText.HEALING);
                         ch.HP = Math.min(ch.HT, ch.HP + heal);
-                    } else if (ch.isImmune(Healing.class) || (ch instanceof Hero && Dungeon.isChallenged(Challenges.NO_HEALING))){
+                    } else if (ch.isImmune(Healing.class) || (ch instanceof Hero && Dungeon.mode == Dungeon.GameMode.NINE_CHAL)){
                         Buff.affect(ch, Weakness.class, 3f);
                         Buff.affect(ch, Slow.class, 3f);
                         Buff.affect(ch, Vertigo.class, 3f);

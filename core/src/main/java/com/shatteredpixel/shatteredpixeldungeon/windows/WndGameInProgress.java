@@ -75,21 +75,6 @@ public class WndGameInProgress extends Window {
 		if (info.challenges > 0 || (info.conducts != null && info.conducts.isConductedAtAll())) GAP -= 2;
 		
 		pos = title.bottom() + GAP;
-		
-		if (info.challenges > 0) {
-			RedButton btnChallenges = new RedButton( Messages.get(this, "challenges") ) {
-				@Override
-				protected void onClick() {
-					Game.scene().add( new WndChallenges( info.challenges, false ) );
-				}
-			};
-			btnChallenges.icon(Icons.get(Icons.CHALLENGE_COLOR));
-			float btnW = btnChallenges.reqWidth() + 2;
-			btnChallenges.setRect( (WIDTH - btnW)/2, pos, btnW , 18 );
-			add( btnChallenges );
-			
-			pos = btnChallenges.bottom() + GAP;
-		}
 
 		if (info.conducts != null && info.conducts.isConductedAtAll()) {
 			RedButton btnConducts = new RedButton( Messages.get(WndConducts.class, "title") ) {

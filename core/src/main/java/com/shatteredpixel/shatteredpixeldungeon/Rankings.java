@@ -234,8 +234,7 @@ public enum Rankings {
 
 		}
 
-		Statistics.chalMultiplier = (float)Math.pow(1.25, Challenges.activeChallenges());
-		Statistics.chalMultiplier = Math.round(Statistics.chalMultiplier*20f)/20f;
+		Statistics.chalMultiplier = 1f;
 
 		Statistics.condMultiplier = Dungeon.conducts.scoreMod();
 

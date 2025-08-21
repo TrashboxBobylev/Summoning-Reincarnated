@@ -24,7 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor;
 
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
@@ -124,7 +123,7 @@ public class ScoutArmor extends Armor {
 
     @Override
     public int DRMax(int lvl){
-        if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
+        if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
             return 1 + tier + lvl + augment.defenseFactor(lvl);
         }
 
@@ -138,7 +137,7 @@ public class ScoutArmor extends Armor {
 
     @Override
     public int DRMin(int lvl){
-        if (Dungeon.isChallenged(Challenges.NO_ARMOR)){
+        if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
             return 0;
         }
 

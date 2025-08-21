@@ -27,7 +27,6 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -85,7 +84,7 @@ public class DwarfKing extends Mob {
 	{
 		spriteClass = KingSprite.class;
 
-		HP = HT = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 450 : 300;
+		HP = HT = Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 450 : 300;
 		EXP = 40;
 		defenseSkill = 22;
 
@@ -113,8 +112,8 @@ public class DwarfKing extends Mob {
 
 	private float summonCooldown = 0;
 	private float abilityCooldown = 0;
-	private final int MIN_COOLDOWN = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 8 : 10;
-	private final int MAX_COOLDOWN = Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 10 : 14;
+	private final int MIN_COOLDOWN = Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 8 : 10;
+	private final int MAX_COOLDOWN = Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 10 : 14;
 
 	private int lastAbility = 0;
 	private static final int NONE = 0;
@@ -161,7 +160,7 @@ public class DwarfKing extends Mob {
 
 		if (phase == 1) {
 
-			if (summonCooldown <= 0 && summonSubject(Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 2 : 3)){
+			if (summonCooldown <= 0 && summonSubject(Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 2 : 3)){
 				summonsMade++;
 				summonCooldown += Random.NormalIntRange(MIN_COOLDOWN, MAX_COOLDOWN);
 			} else if (summonCooldown > 0){
@@ -203,7 +202,7 @@ public class DwarfKing extends Mob {
 
 		} else if (phase == 2){
 
-			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
+			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
 				//challenge logic
 				if (summonsMade < 6){
 					if (summonsMade == 0) {
@@ -297,14 +296,14 @@ public class DwarfKing extends Mob {
 				}
 			}
 		} else if (phase == 3 && buffs(Summoning.class).size() < 4){
-			if (summonSubject(Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 2 : 3)) summonsMade++;
+			if (summonSubject(Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 2 : 3)) summonsMade++;
 		}
 
 		return super.act();
 	}
 
 	private boolean summonSubject( int delay ){
-		if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)) {
+		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL) {
 			//every 3rd summon is always a monk or warlock, otherwise ghoul
 			//except every 9th summon, which is a golem!
 			if (summonsMade % 3 == 2) {
@@ -483,7 +482,7 @@ public class DwarfKing extends Mob {
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
-			if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES))   lock.addTime(dmg/5f);
+			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL)   lock.addTime(dmg/5f);
 			else                                                    lock.addTime(dmg/3f);
 		}
 
@@ -491,8 +490,8 @@ public class DwarfKing extends Mob {
 			int dmgTaken = preHP - HP;
 			abilityCooldown -= dmgTaken/8f;
 			summonCooldown -= dmgTaken/8f;
-			if (HP <= (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 100 : 50)) {
-				HP = (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 100 : 50);
+			if (HP <= (Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 100 : 50)) {
+				HP = (Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 100 : 50);
 				sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "invulnerable"));
 				ScrollOfTeleportation.appear(this, CityBossLevel.throne);
 				properties.add(Property.IMMOVABLE);
@@ -709,7 +708,7 @@ public class DwarfKing extends Mob {
 					Char ch = Actor.findChar(pos);
 					ch.damage(Random.NormalIntRange(20, 40), this);
 					if (((DwarfKing)target).phase == 2){
-						if (Dungeon.isChallenged(Challenges.STRONGER_BOSSES)){
+						if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
 							target.damage(target.HT/18, new KingDamager());
 						} else {
 							target.damage(target.HT/12, new KingDamager());
@@ -789,7 +788,7 @@ public class DwarfKing extends Mob {
 			super.detach();
 			for (Mob m : Dungeon.level.mobs){
 				if (m instanceof DwarfKing){
-					int damage = m.HT / (Dungeon.isChallenged(Challenges.STRONGER_BOSSES) ? 18 : 12);
+					int damage = m.HT / (Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 18 : 12);
 					m.damage(damage, this);
 				}
 			}
