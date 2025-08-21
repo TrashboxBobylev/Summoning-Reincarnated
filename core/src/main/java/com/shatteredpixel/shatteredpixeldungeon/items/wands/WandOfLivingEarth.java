@@ -33,17 +33,23 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cleric.PowerOfMany;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.Stasis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.NPC;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.EarthGuardianSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -56,6 +62,8 @@ import com.watabou.utils.ColorMath;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+
+import java.util.ArrayList;
 
 public class WandOfLivingEarth extends DamageWand {
 	
@@ -260,23 +268,94 @@ public class WandOfLivingEarth extends DamageWand {
 	
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {
-		EarthGuardian guardian = null;
-		for (Mob m : Dungeon.level.mobs){
-			if (m instanceof EarthGuardian){
-				guardian = (EarthGuardian) m;
-				break;
-			}
-		}
-		
-		int armor = Math.round(damage*0.33f*procChanceMultiplier(attacker));
+        if (rank() == 1) {
+            EarthGuardian guardian = null;
+            for (Mob m : Dungeon.level.mobs) {
+                if (m instanceof EarthGuardian) {
+                    guardian = (EarthGuardian) m;
+                    break;
+                }
+            }
 
-		if (guardian != null){
-			guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
-			guardian.setInfo(Dungeon.hero, power(), rank(), armor);
-		} else {
-			attacker.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
-			Buff.affect(attacker, RockArmor.class).addArmor( power(), rank(), armor);
-		}
+            int armor = Math.round(damage * 0.33f * procChanceMultiplier(attacker));
+
+            if (guardian != null) {
+                guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
+                guardian.setInfo(Dungeon.hero, power(), rank(), armor);
+            } else {
+                attacker.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
+                Buff.affect(attacker, RockArmor.class).addArmor(power(), rank(), armor);
+            }
+        }
+        if (rank() == 2){
+            EarthGuardian guardian = null;
+            for (Mob m : Dungeon.level.mobs) {
+                if (m instanceof EarthGuardian) {
+                    guardian = (EarthGuardian) m;
+                    break;
+                }
+            }
+
+            if (guardian != null){
+                Buff.prolong(guardian, Empowered.class, power()-1);
+            }
+        }
+        if (rank() == 3 && curCharges > 0){
+            ConeAOE cone = new ConeAOE( new Ballistica(attacker.pos, defender.pos, Ballistica.WONT_STOP),
+                    5,
+                    60,
+                    Ballistica.STOP_TARGET | Ballistica.STOP_SOLID | Ballistica.IGNORE_SOFT_SOLID);
+
+            //cast to cells at the tip, rather than all cells, better performance.
+            Ballistica longestRay = null;
+            for (Ballistica ray : cone.outerRays){
+                if (longestRay == null || ray.dist > longestRay.dist){
+                    longestRay = ray;
+                }
+                ((MagicMissile)curUser.sprite.parent.recycle( MagicMissile.class )).reset(
+                        MagicMissile.EARTH_CONE,
+                        curUser.sprite,
+                        ray.path.get(ray.dist),
+                        null
+                );
+            }
+
+            //final zap at half distance of the longest ray, for timing of the actual wand effect
+            MagicMissile.boltFromChar( curUser.sprite.parent,
+                    MagicMissile.EARTH_CONE,
+                    curUser.sprite,
+                    longestRay.path.get(longestRay.dist/2),
+                    () -> {
+                        ArrayList<Char> affectedChars = new ArrayList<>();
+                        for( int cell : cone.cells ){
+
+                            //ignore caster cell
+                            if (cell == attacker.pos){
+                                continue;
+                            }
+
+                            CellEmitter.get( cell ).start(Speck.factory(Speck.ROCK), 0.07f, 10);
+                            Dungeon.level.pressCell(cell);
+
+                            Char ch = Actor.findChar( cell );
+                            if (ch != null && !(Dungeon.isChallenged(Conducts.Conduct.PACIFIST)) && ch.alignment != Char.Alignment.ALLY) {
+                                affectedChars.add(ch);
+                            }
+                        }
+
+                        for ( Char ch : affectedChars ){
+                            ch.damage(damageRoll()/3, this);
+                            if (ch.isAlive()) {
+                                Buff.affect(ch, Paralysis.class, 3f);
+                            }
+                        }
+
+                        PixelScene.shake(3, 0.7f);
+                    } );
+            Sample.INSTANCE.play( Assets.Sounds.ZAP );
+            Sample.INSTANCE.play( Assets.Sounds.ROCKS );
+            curCharges--;
+        }
 	}
 	
 	@Override
@@ -326,6 +405,16 @@ public class WandOfLivingEarth extends DamageWand {
         return 0f;
     }
 
+    @Override
+    public String battlemageDesc(int rank) {
+        if (rank == 2){
+           return Messages.get(this, "rank_bm" + rank, (int)(power()-1));
+        }
+        if (rank == 3){
+            return Messages.get(this, "rank_bm" + rank, GameMath.printAverage((int)(magicMin(power())*powerModifier(rank)/3), (int)(magicMax(power())*powerModifier(rank)/3)));
+        }
+        return super.battlemageDesc(rank);
+    }
 
     public static class RockArmor extends Buff {
 
