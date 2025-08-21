@@ -782,9 +782,6 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 		if (cursedKnown && (cursed || hasCurseEnchant())) {
 			price /= 2;
 		}
-		if (levelKnown && level() > 0) {
-			price *= (level() + 1);
-		}
 		if (price < 1) {
 			price = 1;
 		}

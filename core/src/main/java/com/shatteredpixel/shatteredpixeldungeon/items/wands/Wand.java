@@ -842,13 +842,6 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		if (cursed && cursedKnown) {
 			price /= 2;
 		}
-		if (levelKnown) {
-			if (level() > 0) {
-				price *= (level() + 1);
-			} else if (level() < 0) {
-				price /= (1 - level());
-			}
-		}
 		if (price < 1) {
 			price = 1;
 		}
