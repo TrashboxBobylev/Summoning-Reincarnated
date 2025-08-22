@@ -319,18 +319,18 @@ public class WndHeroInfo extends WndTabbed {
 			message = PixelScene.renderTextBlock(Messages.get(WndHeroInfo.class, "subclasses_msg"), 6);
 			add(message);
 
-			HeroSubClass[] subClasses = cls.subClasses();
+			ArrayList<HeroSubClass> subClasses = cls.subClasses();
 
-			subClsDescs = new RenderedTextBlock[subClasses.length];
-			subClsInfos = new IconButton[subClasses.length];
+			subClsDescs = new RenderedTextBlock[subClasses.size()];
+			subClsInfos = new IconButton[subClasses.size()];
 
-			for (int i = 0; i < subClasses.length; i++){
-				subClsDescs[i] = PixelScene.renderTextBlock(subClasses[i].shortDesc(), 6);
+			for (int i = 0; i < subClasses.size(); i++){
+				subClsDescs[i] = PixelScene.renderTextBlock(subClasses.get(i).shortDesc(), 6);
 				int finalI = i;
 				subClsInfos[i] = new IconButton( Icons.get(Icons.INFO) ){
 					@Override
 					protected void onClick() {
-						Game.scene().addToFront(new WndInfoSubclass(cls, subClasses[finalI]));
+						Game.scene().addToFront(new WndInfoSubclass(cls, subClasses.get(finalI)));
 					}
 				};
 				add(subClsDescs[i]);

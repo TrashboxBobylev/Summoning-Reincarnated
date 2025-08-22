@@ -41,12 +41,19 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class WndChooseAbility extends Window {
 
 	private static final int WIDTH		= 130;
 	private static final float GAP		= 2;
 
-	public WndChooseAbility(final KingsCrown crown, final Armor armor, final Hero hero){
+    public WndChooseAbility(final KingsCrown crown, final Armor armor, final Hero hero){
+        this(crown, armor, hero, new ArrayList<>(Arrays.asList(hero.heroClass.armorAbilities())));
+    }
+
+	public WndChooseAbility(final KingsCrown crown, final Armor armor, final Hero hero, ArrayList<ArmorAbility> armorAbilities){
 
 		super();
 
@@ -67,7 +74,7 @@ public class WndChooseAbility extends Window {
 		add( body );
 
 		float pos = body.bottom() + 3*GAP;
-		for (ArmorAbility ability : hero.heroClass.armorAbilities()) {
+		for (ArmorAbility ability : armorAbilities) {
 
 			String warn;
 			if (Dungeon.initialVersion < 821 && ability instanceof Trinity){

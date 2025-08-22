@@ -25,11 +25,15 @@
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.Ascension;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.NaturesPower;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
@@ -41,8 +45,10 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndChooseAbility;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class KingsCrown extends Item {
 	
@@ -73,7 +79,35 @@ public class KingsCrown extends Item {
 
 			curUser = hero;
 			if (hero.belongings.armor() != null){
-				GameScene.show( new WndChooseAbility(this, hero.belongings.armor(), hero));
+                if (Dungeon.mode == Dungeon.GameMode.RANDOM_HERO){
+                    ArrayList<ArmorAbility> heroArmorAbilities = new ArrayList<>();
+                    for (HeroClass heroClass: HeroClass.values()){
+                        if (heroClass != HeroClass.CLERIC)
+                            Collections.addAll(heroArmorAbilities, heroClass.armorAbilities());
+                    }
+                    if (hero.heroClass != HeroClass.HUNTRESS){
+                        heroArmorAbilities.removeIf((ability) -> ability instanceof NaturesPower);
+                    }
+                    if (hero.heroClass != HeroClass.CONJURER){
+                        heroArmorAbilities.removeIf((ability) -> ability instanceof Ascension);
+                    }
+
+                    ArrayList<ArmorAbility> armorAbilities = new ArrayList<>();
+                    while (armorAbilities.size() < 3) {
+                        ArmorAbility chosenAbility;
+                        do {
+                            chosenAbility = Random.element(heroArmorAbilities);
+                            if (!armorAbilities.contains(chosenAbility)) {
+                                armorAbilities.add(chosenAbility);
+                                break;
+                            }
+                        } while (true);
+                    }
+
+                    GameScene.show( new WndChooseAbility(this, hero.belongings.armor(), hero, armorAbilities));
+                } else {
+                    GameScene.show( new WndChooseAbility(this, hero.belongings.armor(), hero));
+                }
 			} else {
 				GLog.w( Messages.get(this, "naked"));
 			}

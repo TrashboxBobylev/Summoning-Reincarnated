@@ -66,6 +66,8 @@ import java.util.ArrayList;
 
 public class MeleeWeapon extends Weapon {
 
+    public boolean duelistStart = false;
+
 	public static String AC_ABILITY = "ABILITY";
 
 	@Override
@@ -413,6 +415,24 @@ public class MeleeWeapon extends Weapon {
 		}
 		return price;
 	}
+
+    private static final String DUELIST_START   = "dueliststart";
+
+    @Override
+    public void storeInBundle(Bundle bundle) {
+        super.storeInBundle(bundle);
+        bundle.put(DUELIST_START, duelistStart);
+    }
+
+    @Override
+    public void restoreFromBundle(Bundle bundle) {
+        super.restoreFromBundle(bundle);
+        if (bundle.contains(DUELIST_START)){
+            duelistStart = bundle.getBoolean(DUELIST_START);
+            if (duelistStart)
+                tier = 1;
+        }
+    }
 
 	public static class Charger extends Buff implements ActionIndicator.Action {
 

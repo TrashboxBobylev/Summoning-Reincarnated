@@ -26,10 +26,12 @@ package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Preparation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.GoatClone;
@@ -52,8 +54,12 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndChooseSubclass;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import static com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass.*;
 
 public class TengusMask extends Item {
 	
@@ -81,10 +87,43 @@ public class TengusMask extends Item {
 		super.execute( hero, action );
 
 		if (action.equals( AC_WEAR )) {
-			
-			curUser = hero;
 
-			GameScene.show( new WndChooseSubclass( this, hero ) );
+            curUser = hero;
+            ArrayList<HeroSubClass> subClasses;
+
+            if (Dungeon.mode == Dungeon.GameMode.RANDOM_HERO){
+                subClasses = new ArrayList<>();
+                ArrayList<HeroSubClass> heroSubClasses = new ArrayList<>(Arrays.asList(HeroSubClass.values()));
+                //remove unusable classes
+                heroSubClasses.remove(NONE);
+                if (curUser.heroClass != HeroClass.MAGE)
+                    heroSubClasses.remove(HeroSubClass.BATTLEMAGE);
+                if (curUser.heroClass != HeroClass.HUNTRESS)
+                    heroSubClasses.remove(HeroSubClass.SNIPER);
+                if (curUser.heroClass != HeroClass.ROGUE)
+                    heroSubClasses.remove(HeroSubClass.ASSASSIN);
+                heroSubClasses.remove(PALADIN);
+                heroSubClasses.remove(PRIEST);
+                if (curUser.heroClass != HeroClass.CONJURER) {
+                    heroSubClasses.remove(SOUL_WIELDER);
+                    heroSubClasses.remove(WILL_SORCERER);
+                }
+                heroSubClasses.remove(hero.subClass);
+                while (subClasses.size() < 3) {
+                    HeroSubClass chosenSub;
+                    do {
+                        chosenSub = Random.element(heroSubClasses);
+                        if (!subClasses.contains(chosenSub)) {
+                            subClasses.add(chosenSub);
+                            break;
+                        }
+                    } while (true);
+                }
+            } else {
+                subClasses = hero.heroClass.subClasses();
+            }
+
+            GameScene.show( new WndChooseSubclass( this, hero, subClasses ) );
 			
 		}
 	}

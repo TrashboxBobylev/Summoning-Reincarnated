@@ -110,6 +110,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 public enum Talent {
 
@@ -1620,6 +1621,71 @@ public enum Talent {
 		}
 		bundle.put("replacements", replacementsBundle);
 	}
+
+    public static void shuffleTalents(Hero hero){
+        Random.pushGenerator();
+        for (LinkedHashMap<Talent, Integer> tier : hero.talents){
+            int tierNum = hero.talents.indexOf(tier);
+            LinkedHashMap<Talent, Integer> newTier = new LinkedHashMap<>();
+            for (Talent oldTalent : tier.keySet()){
+                ArrayList<Talent> options = new ArrayList<>();
+                Set<Talent> curTalentsAtTier = tier.keySet();
+                for (HeroClass cls : HeroClass.values()){
+                    if (cls == HeroClass.CLERIC)
+                        continue;
+
+                    ArrayList<LinkedHashMap<Talent, Integer>> clsTalents = new ArrayList<>();
+                    initClassTalents(cls, clsTalents);
+
+                    Set<Talent> clsTalentsAtTier = clsTalents.get(tierNum).keySet();
+                    boolean replacingIsInSet = false;
+                    for (Talent talent : clsTalentsAtTier.toArray(new Talent[0])){
+                        if (talent == oldTalent){
+                            replacingIsInSet = true;
+                            break;
+                        } else {
+                            if (curTalentsAtTier.contains(talent) || newTier.containsKey(talent)){
+                                clsTalentsAtTier.remove(talent);
+                            }
+                            if (talent == STRONGMAN && hero.subClass == HeroSubClass.MONK) {
+                                // avoid redundancy
+                                clsTalentsAtTier.remove(talent);
+                            }
+
+                        }
+                    }
+                    if (!replacingIsInSet && !clsTalentsAtTier.isEmpty()) {
+                        options.add(Random.element(clsTalentsAtTier));
+                    }
+                }
+
+                Talent newTalent = Random.element(options);
+
+                newTier.put(newTalent, 0);
+
+                if (!hero.metamorphedTalents.containsValue(oldTalent)){
+                    hero.metamorphedTalents.put(oldTalent, newTalent);
+
+                    //if what we're replacing is already a value, we need to simplify the data structure
+                } else {
+                    //a->b->a, we can just remove the entry entirely
+                    if (hero.metamorphedTalents.get(newTalent) == oldTalent){
+                        hero.metamorphedTalents.remove(newTalent);
+
+                        //a->b->c, we need to simplify to a->c
+                    } else {
+                        for (Talent t2 : hero.metamorphedTalents.keySet()){
+                            if (hero.metamorphedTalents.get(t2) == oldTalent){
+                                hero.metamorphedTalents.put(t2, newTalent);
+                            }
+                        }
+                    }
+                }
+            }
+            hero.talents.set(tierNum, newTier);
+        }
+        Random.popGenerator();
+    }
 
 	private static final HashSet<String> removedTalents = new HashSet<>();
 	static{

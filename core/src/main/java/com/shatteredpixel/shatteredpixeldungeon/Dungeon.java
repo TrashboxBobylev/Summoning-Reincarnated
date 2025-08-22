@@ -270,7 +270,8 @@ public class Dungeon {
         NINE_CHAL("9chal", Icons.NINE_CHAL, 7f),
 		ABYSS_START("abyss_start", Icons.ABYSS_START, 2.0f),
 		GAUNTLET("gauntlet", Icons.GAUNTLET, 1.33f),
-		CHAOS("chaos", Icons.CHAOS, 1.5f)
+		CHAOS("chaos", Icons.CHAOS, 1.5f),
+        RANDOM_HERO("random_hero", Icons.RANDOM_HERO, 1.5f)
 /*		CAVES("caves", Icons.CAVES, 1.09f),
 		LOL("lol", Icons.GOLD, 0.33f),
 		HELL("hell", Icons.HELL_CHEST, 4.0f),

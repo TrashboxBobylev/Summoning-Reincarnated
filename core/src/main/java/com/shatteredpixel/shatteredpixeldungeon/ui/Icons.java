@@ -144,6 +144,7 @@ public enum Icons {
 	CAVES,
 	DARK_AMU,
     NINE_CHAL,
+    RANDOM_HERO,
 
 	//icons that appear in the about screen, variable spacing
 	LIBGDX,
@@ -469,6 +470,9 @@ public enum Icons {
 				break;
             case NINE_CHAL:
                 icon.frame( icon.texture.uvRectBySize( 80, 192, 16, 16 ) );
+                break;
+            case RANDOM_HERO:
+                icon.frame( icon.texture.uvRectBySize( 96, 192, 14, 15 ) );
                 break;
 
 			case LIBGDX:

@@ -54,6 +54,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.En
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.HeroicLeap;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Shockwave;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
+import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KingsCrown;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ropes;
@@ -63,6 +64,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScoutArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.SyntheticArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
@@ -93,6 +95,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.FroggitStaff;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Slingshot;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
@@ -100,15 +103,21 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cudgel;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Dagger2;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Gloves;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Rapier;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.WornShortsword;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnife;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingKnive2;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.ThrowingSpike;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public enum HeroClass {
 
@@ -131,6 +140,9 @@ public enum HeroClass {
 
 		hero.heroClass = this;
 		Talent.initClassTalents(hero);
+        if (Dungeon.mode == Dungeon.GameMode.RANDOM_HERO){
+            Talent.shuffleTalents(hero);
+        }
 
 		Item i = new ClothArmor().identify();
 		if (!Challenges.isItemBlocked(i)) hero.belongings.armor = (ClothArmor)i;
@@ -265,6 +277,53 @@ public enum HeroClass {
 			new TengusMask().collect();
 			new KingsCrown().collect();
 		}
+
+        if (Dungeon.mode == Dungeon.GameMode.RANDOM_HERO){
+
+            boolean wandIsMainWeapon = false;
+
+            if (hero.belongings.weapon instanceof Wand){
+                wandIsMainWeapon = true;
+            }
+
+            MeleeWeapon weapon = (MeleeWeapon) Generator.randomUsingDefaults(Random.oneOf(Generator.Category.WEP_T1, Generator.Category.WEP_T2, Generator.Category.WEP_T3, Generator.Category.WEP_T4, Generator.Category.WEP_T5));
+            if (weapon != null){
+                weapon.duelistStart = true;
+                weapon.tier = 1;
+                weapon.cursed = false;
+                weapon.level(0);
+                weapon.enchant(null);
+                (hero.belongings.weapon = weapon).identify();
+            }
+
+            if (wandIsMainWeapon){
+                Wand wand;
+                do {
+                    wand = (Wand) Reflection.newInstance(Random.element(Generator.Category.WAND.classes));
+                } while (wand instanceof WandOfMagicMissile);
+                wand.identify().collect();
+            }
+
+            for (Item item: hero.belongings){
+                if (item instanceof MissileWeapon){
+                    item.detachAll(hero.belongings.backpack);
+                    MissileWeapon randomThrowie;
+                    do {
+                        randomThrowie = (MissileWeapon) Reflection.newInstance(Random.element(Generator.Category.MISSILE.classes));
+                    } while (randomThrowie.getClass() == item.getClass());
+                    randomThrowie.identify().collect();
+                }
+                if (item instanceof Artifact){
+                    item.detachAll(hero.belongings.backpack);
+                    Random.pushGenerator();
+                    Artifact cloak = Generator.randomArtifact();
+                    (hero.belongings.artifact = cloak).identify();
+                    hero.belongings.artifact.activate(hero);
+                    Random.popGenerator();
+                    Dungeon.quickslot.setSlot(0, cloak);
+                }
+            }
+        }
 
 	}
 
@@ -450,9 +509,9 @@ public enum HeroClass {
 		return Messages.get(HeroClass.class, name()+"_desc_short");
 	}
 
-	public HeroSubClass[] subClasses() {
-		return subClasses;
-	}
+    public ArrayList<HeroSubClass> subClasses() {
+        return new ArrayList<>(Arrays.asList(subClasses));
+    }
 
 	public ArmorAbility[] armorAbilities(){
 		switch (this) {
