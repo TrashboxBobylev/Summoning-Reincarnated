@@ -25,10 +25,16 @@
 package com.shatteredpixel.shatteredpixeldungeon;
 
 import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
+import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
+import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.FacelessThing;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
+import com.watabou.utils.Random;
 
 public class Challenges {
 
@@ -79,6 +85,14 @@ public class Challenges {
 				}
 			}
 		}
+        if (Dungeon.isChallenged(Conducts.Conduct.NO_LOOT)){
+            if ((item instanceof EquipableItem || item instanceof Staff) && Random.Int(3) == 0){
+                return new Gold().random();
+            }
+            if ((item instanceof Potion || item instanceof Scroll) && Random.Int(2) == 0){
+                return new EnergyCrystal().quantity(Random.NormalIntRange(3, 6));
+            }
+        }
 
 		return item;
 	}

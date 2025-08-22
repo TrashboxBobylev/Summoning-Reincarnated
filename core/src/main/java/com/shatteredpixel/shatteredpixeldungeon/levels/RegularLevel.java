@@ -164,33 +164,31 @@ public abstract class RegularLevel extends Level {
 		if (Dungeon.shopOnLevel())
 			initRooms.add(new ShopRoom());
 
-		if (!Dungeon.isChallenged(Conducts.Conduct.NO_LOOT)){
-			//force max special rooms and add one more for large levels
-			int specials = specialRooms(isLarge());
-			if (isLarge()) {
-				specials++;
-			}
-			if (Dungeon.mode == Dungeon.GameMode.CHAOS) specials = Random.Int(specials, specials*2);
-			if (Dungeon.mode == Dungeon.GameMode.BIGGER){
-				specials *= 2;
-			}
-			SpecialRoom.initForFloor();
-			for (int i = 0; i < specials; i++) {
-				SpecialRoom s = SpecialRoom.createRoom();
-				if (s instanceof PitRoom) specials++;
-				if (s instanceof AttunementPotRoom) specials++;
-				initRooms.add(s);
-			}
+        //force max special rooms and add one more for large levels
+        int specials = specialRooms(isLarge());
+        if (isLarge()) {
+            specials++;
+        }
+        if (Dungeon.mode == Dungeon.GameMode.CHAOS) specials = Random.Int(specials, specials*2);
+        if (Dungeon.mode == Dungeon.GameMode.BIGGER){
+            specials *= 2;
+        }
+        SpecialRoom.initForFloor();
+        for (int i = 0; i < specials; i++) {
+            SpecialRoom s = SpecialRoom.createRoom();
+            if (s instanceof PitRoom) specials++;
+            if (s instanceof AttunementPotRoom) specials++;
+            initRooms.add(s);
+        }
 
-			int secrets = SecretRoom.secretsForFloor(Dungeon.depth);
-			//one additional secret for secret levels
-			if (feeling == Feeling.SECRETS) secrets++;
-			if (Dungeon.mode == Dungeon.GameMode.BIGGER) secrets++;
-			if (Dungeon.mode == Dungeon.GameMode.CHAOS) secrets = Random.Int(1, secrets);
-			for (int i = 0; i < secrets; i++) {
-				initRooms.add(SecretRoom.createRoom());
-			}
-		}
+        int secrets = SecretRoom.secretsForFloor(Dungeon.depth);
+        //one additional secret for secret levels
+        if (feeling == Feeling.SECRETS) secrets++;
+        if (Dungeon.mode == Dungeon.GameMode.BIGGER) secrets++;
+        if (Dungeon.mode == Dungeon.GameMode.CHAOS) secrets = Random.Int(1, secrets);
+        for (int i = 0; i < secrets; i++) {
+            initRooms.add(SecretRoom.createRoom());
+        }
 		
 		return initRooms;
 	}
@@ -432,10 +430,6 @@ public abstract class RegularLevel extends Level {
 		}
 
 		if (Dungeon.hero.heroClass == HeroClass.ADVENTURER) nItems *= 2;
-		if (Dungeon.isChallenged(Conducts.Conduct.NO_LOOT)){
-			nItems = 1;
-			if (Dungeon.hero.heroClass == HeroClass.ADVENTURER) nItems = 2;
-		}
 
 		if (Dungeon.mode == Dungeon.GameMode.BIGGER){
             nItems = Math.round(nItems * 1.75f);
