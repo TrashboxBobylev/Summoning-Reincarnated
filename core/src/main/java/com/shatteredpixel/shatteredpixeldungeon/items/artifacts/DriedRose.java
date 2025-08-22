@@ -784,10 +784,10 @@ public class DriedRose extends Artifact {
 
 			} else {
 
-				int depth = (Dungeon.depth - 1) / 5;
+				int depth = (Dungeon.depth - 1) / Dungeon.chapterSize();
 
 				//only some lines are said on the first floor of a depth
-				int variant = Dungeon.depth % 5 == 1 ? Random.IntRange(1, 3) : Random.IntRange(1, 6);
+				int variant = Dungeon.depth % Dungeon.chapterSize() == 1 ? Random.IntRange(1, 3) : Random.IntRange(1, 6);
 
 				if (Dungeon.branch == AbyssLevel.BRANCH){
 					depth = 10;
@@ -821,7 +821,7 @@ public class DriedRose extends Artifact {
 		}
 		
 		public void sayBoss(){
-			int depth = (Dungeon.depth - 1) / 5;
+			int depth = (Dungeon.depth - 1) / Dungeon.chapterSize();
 			
 			switch(depth){
 				case 0:
