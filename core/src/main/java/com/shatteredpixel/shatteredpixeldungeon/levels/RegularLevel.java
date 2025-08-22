@@ -504,6 +504,9 @@ public abstract class RegularLevel extends Level {
 				if (type == Heap.Type.SKELETON){
 					dropped.setHauntedIfCursed();
 				}
+                if (Dungeon.isChallenged(Conducts.Conduct.CAPITALISM) && dropped.type == Heap.Type.HEAP){
+                    dropped.type = Heap.Type.FOR_SALE;
+                }
 			}
 			
 		}
@@ -522,7 +525,11 @@ public abstract class RegularLevel extends Level {
 					losBlocking[keyCell] = false;
 				}
 			} else {
-				drop( Challenges.process(item), cell ).type = Heap.Type.HEAP;
+                Heap drop = drop(Challenges.process(item), cell);
+                drop.type = Heap.Type.HEAP;
+                if (Dungeon.isChallenged(Conducts.Conduct.CAPITALISM)){
+                    drop.type = Heap.Type.FOR_SALE;
+                }
 			}
 			if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {
 				map[cell] = Terrain.GRASS;
@@ -535,12 +542,16 @@ public abstract class RegularLevel extends Level {
 
 		Random.pushGenerator( Random.Long() );
 			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+                Heap.Type type = Heap.Type.HEAP;
+                if (Dungeon.isChallenged(Conducts.Conduct.CAPITALISM)){
+                    type = Heap.Type.FOR_SALE;
+                }
 				int cell = randomDropCell();
 				if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {
 					map[cell] = Terrain.GRASS;
 					losBlocking[cell] = false;
 				}
-				drop( Challenges.process(new Torch()), cell );
+				drop( Challenges.process(new Torch()), cell ).type = type;
 				//add a second torch to help with the larger floor
 				if (isLarge()){
 					cell = randomDropCell();
@@ -548,7 +559,7 @@ public abstract class RegularLevel extends Level {
 						map[cell] = Terrain.GRASS;
 						losBlocking[cell] = false;
 					}
-					drop( Challenges.process(new Torch()), cell );
+					drop( Challenges.process(new Torch()), cell ).type = type;
 				}
 			}
 		Random.popGenerator();

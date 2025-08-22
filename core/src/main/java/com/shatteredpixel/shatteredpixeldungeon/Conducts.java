@@ -53,6 +53,14 @@ public class Conducts {
         NO_STR(1.4f, 16),
 //        CHAMPS(1.7f),
         NO_REGEN(1.66f, 18),
+        CAPITALISM(1.33f, 27){
+            @Override
+            public float scoreMod() {
+                if (Dungeon.mode == Dungeon.GameMode.GAUNTLET)
+                    return 0.33f;
+                return super.scoreMod();
+            }
+        },
         CURSE(1.4f, 19),
         SHADOWS(1.4f, 26),
         ALLSIGHT(1.4f, 20),
@@ -82,7 +90,7 @@ public class Conducts {
         }
 
         Conduct(int icon){
-            this.scoreMod = 1f;
+            scoreMod = 1f;
             this.icon = icon;
         }
 
@@ -101,12 +109,17 @@ public class Conducts {
         }
 
         public String desc(){
-            return Messages.get(Conducts.class, name() + "_desc") + "\n\n" + Messages.get(Dungeon.class, "score", new DecimalFormat("#.##").format(scoreMod));
+            return Messages.get(Conducts.class, name() + "_desc") + "\n\n" + Messages.get(Dungeon.class, "score", new DecimalFormat("#.##").format(scoreMod()));
         }
 
         public Image getIcon(){
             return new Image(Assets.Interfaces.SUBCLASS_ICONS, ((icon-1) % 8) * 16, ((icon-1) / 8) * 16, 16, 16);
         }
+
+        public float scoreMod() {
+            return scoreMod;
+        }
+
     }
 
     public static class ConductStorage implements Bundlable {
@@ -164,7 +177,7 @@ public class Conducts {
         public float scoreMod(){
             float total = 1;
             for (Conduct conduct : conducts){
-                total *= conduct.scoreMod;
+                total *= conduct.scoreMod();
             }
             return total;
         }

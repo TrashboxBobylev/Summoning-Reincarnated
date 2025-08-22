@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -111,6 +112,9 @@ public class Heap implements Bundlable {
 		}
 
 		type = Type.HEAP;
+        if (Dungeon.isChallenged(Conducts.Conduct.CAPITALISM)){
+            type = Heap.Type.FOR_SALE;
+        }
 		ArrayList<Item> bonus = RingOfWealth.tryForBonusDrop(hero, 1);
 		if (bonus != null && !bonus.isEmpty()) {
 			items.addAll(0, bonus);
@@ -186,6 +190,10 @@ public class Heap implements Bundlable {
 			TippedDart.lostDarts = 0;
 			drop(d);
 		}
+
+        if (Dungeon.isChallenged(Conducts.Conduct.CAPITALISM)){
+            type = Heap.Type.FOR_SALE;
+        }
 	}
 	
 	public void replace( Item a, Item b ) {

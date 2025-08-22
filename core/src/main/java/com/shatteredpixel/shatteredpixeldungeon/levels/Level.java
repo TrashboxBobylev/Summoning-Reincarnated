@@ -1029,6 +1029,10 @@ public abstract class Level implements Bundlable {
 		if (Dungeon.level != null && ShatteredPixelDungeon.scene() instanceof GameScene) {
 			pressCell( cell );
 		}
+
+        if (Dungeon.isChallenged(Conducts.Conduct.CAPITALISM)){
+            heap.type = Heap.Type.FOR_SALE;
+        }
 		
 		return heap;
 	}

@@ -119,6 +119,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FrostfireParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
+import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerSet;
@@ -190,6 +191,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
 public abstract class Char extends Actor implements ManaSource {
 	
@@ -1067,6 +1070,13 @@ acuRoll *= accMulti;
             }
 			if (dmg < 0) dmg = 0;
 		}
+
+        if (Dungeon.isChallenged(Conducts.Conduct.CAPITALISM)){
+            Gold gold = new Gold();
+            gold.quantity(Math.max(1, Random.Int(25, 500)*dmg/100));
+            gold.doPickUp(hero, pos);
+            hero.spendAndNext( -1F );
+        }
 
 		if (buff( Paralysis.class ) != null && !(src instanceof GasterBlaster.Karma)) {
 			buff( Paralysis.class ).processDamage(dmg);
