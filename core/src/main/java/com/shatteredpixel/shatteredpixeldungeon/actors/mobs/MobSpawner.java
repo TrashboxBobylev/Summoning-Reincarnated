@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.RatSkull;
@@ -43,7 +44,7 @@ public class MobSpawner extends Actor {
 
 		if (Dungeon.level.mobCount() < Dungeon.level.mobLimit()) {
 
-			if (Dungeon.level.spawnMob(12)){
+			if (Dungeon.level.spawnMob(Dungeon.isChallenged(Conducts.Conduct.SHADOWS) ? 1 : 12)){
 				spend(Dungeon.level.respawnCooldown());
 			} else {
 				//try again in 1 turn

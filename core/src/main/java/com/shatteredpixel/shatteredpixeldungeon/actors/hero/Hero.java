@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.GonerField;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SacrificialFire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AdrenalineSurge;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AmnesiaBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Awareness;
@@ -547,6 +548,9 @@ public class Hero extends Char {
 		}
 		if (!Dungeon.isChallenged(Conducts.Conduct.NO_REGEN))
 			Buff.affect( this, Regeneration.class );
+
+        if (Dungeon.isChallenged(Conducts.Conduct.SHADOWS))
+            Buff.affect(this, AmnesiaBuff.class);
 		Buff.affect( this, Hunger.class );
 	}
 	

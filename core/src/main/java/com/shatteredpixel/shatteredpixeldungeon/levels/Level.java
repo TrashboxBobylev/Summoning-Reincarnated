@@ -162,7 +162,8 @@ public abstract class Level implements Bundlable {
 	public boolean[] mapped;
 	public boolean[] discoverable;
 
-	public int viewDistance = Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 2 : 8;
+	public int viewDistance = Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 2 :
+            (Dungeon.isChallenged(Conducts.Conduct.SHADOWS) ? 5 : 8);
 	
 	public boolean[] heroFOV;
 	
@@ -749,6 +750,9 @@ public abstract class Level implements Bundlable {
 		} else {
 			cooldown = TIME_TO_RESPAWN;
 		}
+        if (Dungeon.isChallenged(Conducts.Conduct.SHADOWS)){
+            cooldown *= 0.67f;
+        }
 		return cooldown / DimensionalSundial.spawnMultiplierAtCurrentTime();
 	}
 

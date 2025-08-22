@@ -54,6 +54,7 @@ public class Conducts {
 //        CHAMPS(1.7f),
         NO_REGEN(1.66f, 18),
         CURSE(1.4f, 19),
+        SHADOWS(1.4f, 26),
         ALLSIGHT(1.4f, 20),
         NO_LOOT(2f, 21),
         LIMITED_MONSTERS(1.5f, 22),
