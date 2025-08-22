@@ -511,7 +511,12 @@ public class ShopRoom extends SpecialRoom {
 			itemsToSpawn.add( additionalRare );
 		}
 
-		if (Dungeon.depth % 6 == 0) itemsToSpawn.add(ChooseBag(Dungeon.hero.belongings));
+		if (Dungeon.depth % 6 == 0){
+
+            Bag chosenBag = ChooseBag(Dungeon.hero.belongings);
+            if (chosenBag != null)
+                itemsToSpawn.add(chosenBag);
+        }
 
 		TimekeepersHourglass hourglass = Dungeon.hero.belongings.getItem(TimekeepersHourglass.class);
 		if (hourglass != null && hourglass.isIdentified() && !hourglass.cursed){
