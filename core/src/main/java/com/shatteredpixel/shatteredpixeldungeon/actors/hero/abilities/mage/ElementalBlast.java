@@ -55,6 +55,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
@@ -157,8 +158,16 @@ public class ElementalBlast extends ArmorAbility {
         }
 
 		if (wandCls == null){
-			GLog.w(Messages.get(this, "no_staff"));
-			return;
+            for (Item item: hero.belongings){
+                if (item instanceof Wand){
+                    wandCls = (Class<? extends Wand>) item.getClass();
+                    break;
+                }
+            }
+            if (wandCls == null) {
+                GLog.w(Messages.get(this, "no_staff"));
+                return;
+            }
 		}
 
 		int aoeSize = 4 + hero.pointsInTalent(Talent.BLAST_RADIUS);
@@ -451,7 +460,16 @@ public class ElementalBlast extends ArmorAbility {
                 Wand mainWand = (Wand) Dungeon.hero.belongings.weapon();
                 desc += "\n\n" + Messages.get(mainWand.getClass(), "eleblast_desc");
             } else {
-                desc += "\n\n" + Messages.get(this, "generic_desc");
+                boolean hasWand = false;
+                for (Item item: Dungeon.hero.belongings){
+                    if (item instanceof Wand){
+                        hasWand = true;
+                        desc += "\n\n" + Messages.get(item.getClass(), "eleblast_desc");
+                        break;
+                    }
+                }
+                if (!hasWand)
+                    desc += "\n\n" + Messages.get(this, "generic_desc");
             }
 		} else {
 			desc += "\n\n" + Messages.get(this, "generic_desc");
