@@ -457,7 +457,7 @@ public class ShopRoom extends SpecialRoom {
 		if (Dungeon.depth % 5 == 0) itemsToSpawn.add( new ElixirOfAttunement());
 		if (Dungeon.depth % 2 == 0) itemsToSpawn.add( Generator.random(Generator.Category.MISSILE).identify());
 		if (Dungeon.depth == Dungeon.chapterSize()*5+1) itemsToSpawn.add(new Amulet());
-		if (Dungeon.hero.lvl >= 12 && Dungeon.hero.subClass == HeroSubClass.NONE && Dungeon.hero.heroClass.subClasses().length > 0) itemsToSpawn.add( new TengusMask());
+		if (Dungeon.hero.lvl >= 12 && Dungeon.hero.subClass == HeroSubClass.NONE && Dungeon.hero.heroClass.subClasses().length > 1) itemsToSpawn.add( new TengusMask());
 		if (Dungeon.hero.lvl >= 21 && Dungeon.hero.belongings.armor != null &&
 				Dungeon.hero.armorAbility == null && Dungeon.hero.heroClass.armorAbilities().length > 0) itemsToSpawn.add( new KingsCrown());
 
