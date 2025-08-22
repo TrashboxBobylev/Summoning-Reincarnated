@@ -24,14 +24,19 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
-import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.watabou.noosa.Game;
+import com.shatteredpixel.shatteredpixeldungeon.ui.TargetHealthIndicator;
+import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Random;
+
+import java.util.ArrayList;
 
 public class ScrollOfPassage extends ExoticScroll {
 	
@@ -43,21 +48,34 @@ public class ScrollOfPassage extends ExoticScroll {
 	public void doRead() {
 
 		detach(curUser.belongings.backpack);
-		identify();
-		readAnimation();
-		
-		if (!Dungeon.interfloorTeleportAllowed()) {
-			
-			GLog.w( Messages.get(ScrollOfTeleportation.class, "no_tele") );
-			return;
-			
-		}
+        GameScene.flash( 0x60ba76ff );
+        ArrayList<Mob> targets = new ArrayList<>();
 
-		Level.beforeTransition();
-		InterlevelScene.mode = InterlevelScene.Mode.RETURN;
-		InterlevelScene.returnDepth = Math.max(1, (Dungeon.depth - 1 - (Dungeon.depth-2)%5));
-		InterlevelScene.returnBranch = Dungeon.branch;
-		InterlevelScene.returnPos = -1;
-		Game.switchScene( InterlevelScene.class );
+        //calculate targets first, in case damaging/blinding a target affects hero vision
+        for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
+            if (Dungeon.level.heroFOV[mob.pos] && !mob.isImmune(Dread.class) && mob.alignment != Char.Alignment.ALLY) {
+                targets.add(mob);
+            }
+        }
+
+        int amountToSpawn = 0;
+
+        for (Mob mob : targets){
+            amountToSpawn++;
+            mob.sprite.killAndErase();
+            Dungeon.level.mobs.remove(mob);
+            Actor.remove(mob);
+            Sample.INSTANCE.play(Assets.Sounds.TELEPORT, 1.0f, Random.Float(0.5f, 2f));
+        }
+
+        TargetHealthIndicator.instance.visible = false;
+
+        for (int i = 0; i < amountToSpawn; i++){
+            Dungeon.level.spawnMob(12);
+        }
+
+        identify();
+
+        readAnimation();
 	}
 }
