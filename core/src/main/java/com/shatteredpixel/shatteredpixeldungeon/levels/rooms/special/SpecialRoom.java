@@ -143,6 +143,10 @@ public abstract class SpecialRoom extends Room {
 			Dungeon.LimitedDrops.ATU_ROOM.count++;
 			floorSpecials.add(0, AttunementPotRoom.class);
 		}
+        if (Dungeon.mystMerchNeeded()){
+            Dungeon.LimitedDrops.MYSTMERCH_ROOM.count++;
+            floorSpecials.add(0, MysteryMerchantRoom.class);
+        }
 	}
 	
 	private static void useType( Class<?extends Room> type ) {
@@ -179,7 +183,12 @@ public abstract class SpecialRoom extends Room {
 			useType(AttunementPotRoom.class);
 			return new AttunementPotRoom();
 
-		} else {
+		} else if (floorSpecials.contains(MysteryMerchantRoom.class)) {
+
+            useType(MysteryMerchantRoom.class);
+            return new MysteryMerchantRoom();
+
+        } else {
 			
 			if (Dungeon.bossLevel(Dungeon.depth + 1)){
 				floorSpecials.remove(WeakFloorRoom.class);

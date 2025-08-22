@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Blacksmith;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.ImpShopkeeper;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MysteryMerchant;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.RatKing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Wandmaker;
@@ -54,6 +55,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.GhostSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ImpSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.MysteryMerchantSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatKingSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ShopkeeperSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SpawnerSprite;
@@ -141,6 +143,7 @@ public class Notes {
 		WANDMAKER,
 		TROLL,
 		IMP,
+        MYSTERY_MERCHANT,
 
 		DEMON_SPAWNER;
 	}
@@ -209,6 +212,8 @@ public class Notes {
 					return new Image(new BlacksmithSprite());
 				case IMP:
 					return new Image(new ImpSprite());
+                case MYSTERY_MERCHANT:
+                    return new Image(new MysteryMerchantSprite());
 
 				case DEMON_SPAWNER:
 					return new Image(new SpawnerSprite());
@@ -259,11 +264,12 @@ public class Notes {
 				case LOST_PACK:         return Messages.get(LostBackpack.class, "desc");
 				case BEACON_LOCATION:   return Messages.get(BeaconOfReturning.class, "desc");
 
-				case GHOST:         return Messages.get(Ghost.class, "desc");
-				case RAT_KING:      return new RatKing().description(); //variable description based on holiday/run state
-				case WANDMAKER:     return Messages.get(Wandmaker.class, "desc");
-				case TROLL:         return Messages.get(Blacksmith.class, "desc");
-				case IMP:           return Messages.get(Imp.class, "desc");
+				case GHOST:           return Messages.get(Ghost.class, "desc");
+				case RAT_KING:        return new RatKing().description(); //variable description based on holiday/run state
+				case WANDMAKER:       return Messages.get(Wandmaker.class, "desc");
+				case TROLL:           return Messages.get(Blacksmith.class, "desc");
+				case IMP:             return Messages.get(Imp.class, "desc");
+                case MYSTERY_MERCHANT:return Messages.get(MysteryMerchant.class, "desc");
 
 				case DEMON_SPAWNER: return Messages.get(DemonSpawner.class, "desc");
 			}

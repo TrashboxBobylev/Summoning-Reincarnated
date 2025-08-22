@@ -473,6 +473,20 @@ public class Hero extends Char {
 		Talent.onTalentUpgraded(this, talent);
 	}
 
+    public void degradeTalent( Talent talent ){
+        boolean isTalentGone = false;
+        for (LinkedHashMap<Talent, Integer> tier : talents){
+            for (Talent f : tier.keySet()){
+                if (f == talent) {
+                    tier.put(talent, Math.max(0, tier.get(talent)-1));
+                    if (tier.get(talent) == 0)
+                        isTalentGone = true;
+                }
+            }
+        }
+        Talent.onTalentDegraded(this, talent, isTalentGone);
+    }
+
 	public int talentPointsSpent(int tier){
 		int total = 0;
 		for (int i : talents.get(tier-1).values()){

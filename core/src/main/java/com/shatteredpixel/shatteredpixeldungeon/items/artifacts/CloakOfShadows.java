@@ -156,7 +156,7 @@ public class CloakOfShadows extends Artifact {
 	}
 
 	@Override
-	protected void onDetach() {
+    public void onDetach() {
 		if (passiveBuff != null){
 			passiveBuff.detach();
 			passiveBuff = null;

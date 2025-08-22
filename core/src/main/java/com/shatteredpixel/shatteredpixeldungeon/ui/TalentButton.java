@@ -27,7 +27,10 @@ package com.shatteredpixel.shatteredpixeldungeon.ui;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MysteryMerchant;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfMetamorphosis;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -61,7 +64,8 @@ public class TalentButton extends Button {
 		INFO,
 		UPGRADE,
 		METAMORPH_CHOOSE,
-		METAMORPH_REPLACE
+		METAMORPH_REPLACE,
+        MYSTERY_DEGRADE
 	}
 
 	public TalentButton(int tier, Talent talent, int points, Mode mode){
@@ -212,7 +216,30 @@ public class TalentButton extends Button {
 
 				}
 			});
-		} else {
+		} else if (mode == Mode.MYSTERY_DEGRADE && Dungeon.hero != null && Dungeon.hero.isAlive()){
+            toAdd = new WndInfoTalent(talent, pointsInTalent, new WndInfoTalent.TalentButtonCallback() {
+
+                @Override
+                public String prompt() {
+                    return Messages.titleCase(Messages.get(MysteryMerchant.class, "degrade_talent"));
+                }
+
+                @Override
+                public void call() {
+                    if (MysteryMerchant.WndDegradeChoose.INSTANCE != null){
+                        MysteryMerchant.WndDegradeChoose.INSTANCE.hide();
+                    }
+                    Dungeon.hero.degradeTalent(talent);
+                    Dungeon.hero.sprite.emitter().start(Speck.factory(Speck.CHANGE), 0.2f, 10);
+                    Sample.INSTANCE.play(Assets.Sounds.DEGRADE);
+                    for (Char ch : Actor.chars()){
+                        if (ch instanceof MysteryMerchant){
+                            ((MysteryMerchant) ch).yell( Messages.get(MysteryMerchant.class, "degrade_complete", talent.title() ));
+                        }
+                    }
+                }
+            });
+        } else {
 			toAdd = new WndInfoTalent(talent, pointsInTalent, null);
 		}
 

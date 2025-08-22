@@ -73,6 +73,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.Berry;
+import com.shatteredpixel.shatteredpixeldungeon.items.food.SupplyRation;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
@@ -753,6 +755,76 @@ public enum Talent {
 			Dungeon.hero.updateHT(false);
 		}
 	}
+
+    public static void onTalentDegraded(Hero hero, Talent talent, boolean isGone){
+        if (talent == HEIGHTENED_SENSES || talent == FARSIGHT || talent == DIVINE_SENSE){
+            Dungeon.observe();
+        }
+
+        if (talent == TWIN_UPGRADES || talent == DESPERATE_POWER
+                || talent == STRONGMAN || talent == DURABLE_PROJECTILES){
+            Item.updateQuickslot();
+        }
+
+        //if we happen to have spirit form applied with a ring of might
+        if (talent == SPIRIT_FORM){
+            Dungeon.hero.updateHT(false);
+        }
+
+        if (isGone){
+            if (talent == IRON_WILL && hero.heroClass != HeroClass.WARRIOR){
+                Buff.detach(hero, BrokenSeal.WarriorShield.class);
+            }
+            if (talent == UNIQUE_ATTENTION){
+                Buff.detach(hero, UniqueAttentionTracker.class);
+            }
+            if (talent == PROTECTIVE_SHADOWS){
+                Buff.detach(hero, Talent.ProtectiveShadowsTracker.class);
+            }
+            if (talent == CACHED_RATIONS){
+                Buff.detach(hero, CachedRationsDropped.class);
+                for (Item item: hero.belongings){
+                    if (item instanceof SupplyRation){
+                        item.detachAll(hero.belongings.backpack);
+                        break;
+                    }
+                }
+            }
+            if (talent == NATURES_BOUNTY){
+                Buff.detach(hero, NatureBerriesDropped.class);
+                for (Item item: hero.belongings){
+                    if (item instanceof Berry){
+                        item.detachAll(hero.belongings.backpack);
+                        break;
+                    }
+                }
+            }
+            if (talent == LIGHT_CLOAK && hero.heroClass == HeroClass.ROGUE){
+                for (Item item : Dungeon.hero.belongings.backpack){
+                    if (item instanceof CloakOfShadows){
+                        ((CloakOfShadows) item).onDetach();
+                    }
+                }
+            }
+            if (talent == LIGHT_READING && hero.heroClass == HeroClass.CLERIC){
+                for (Item item : Dungeon.hero.belongings.backpack){
+                    if (item instanceof HolyTome){
+                        ((HolyTome) item).onDetach();
+                    }
+                }
+            }
+            if (talent == ETERNAL_FRIENDSHIP){
+                Buff.detach(hero, EternalFriendshipTracker.class);
+            }
+            if (talent == SPIRITUAL_BARRIER){
+                for (Mob mob: Dungeon.level.mobs) {
+                    if (mob.alignment == Char.Alignment.ALLY) {
+                        Buff.detach(mob, Talent.SpiritualBarrierTracker.class);
+                    }
+                }
+            }
+        }
+    }
 
 	public static class CachedRationsDropped extends CounterBuff{{revivePersists = true;}};
 	public static class NatureBerriesDropped extends CounterBuff{{revivePersists = true;}};
