@@ -1170,7 +1170,7 @@ public abstract class Mob extends Char {
                     mobsAlive = true;
                 }
             }
-            if (!mobsAlive && Dungeon.level.entrance == 0){
+            if (!mobsAlive && Dungeon.level.locked){
                 Dungeon.level.drop(new SkeletonKey(Dungeon.depth), Dungeon.hero.pos).sprite.drop();
 
                 int amountOfGold = 0;
