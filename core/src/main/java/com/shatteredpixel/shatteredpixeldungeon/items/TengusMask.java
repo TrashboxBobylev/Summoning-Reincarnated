@@ -104,8 +104,13 @@ public class TengusMask extends Item {
 	public boolean isIdentified() {
 		return true;
 	}
-	
-	public void choose( HeroSubClass way ) {
+
+    @Override
+    public int value() {
+        return 75;
+    }
+
+    public void choose(HeroSubClass way ) {
 		
 		detach( curUser.belongings.backpack );
 		Catalog.countUse( getClass() );

@@ -54,6 +54,7 @@ public class KingsCrown extends Item {
 		defaultAction = AC_WEAR;
 
 		unique = true;
+        stackable = false;
 	}
 	
 	@Override
@@ -89,6 +90,11 @@ public class KingsCrown extends Item {
 	public boolean isIdentified() {
 		return true;
 	}
+
+    @Override
+    public int value() {
+        return 75;
+    }
 	
 	public void upgradeArmor(Hero hero, Armor armor, ArmorAbility ability) {
 
