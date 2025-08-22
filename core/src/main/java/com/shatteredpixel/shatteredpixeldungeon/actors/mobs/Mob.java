@@ -131,6 +131,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 public abstract class Mob extends Char {
 
 	{
@@ -1064,7 +1066,7 @@ public abstract class Mob extends Char {
 
 				AscensionChallenge.processEnemyKill(this);
 				
-				int exp = Dungeon.hero.lvl <= maxLvl ? EXP : 0;
+				int exp = Dungeon.hero.lvl <= maxLvl || Dungeon.isChallenged(Conducts.Conduct.LEVEL_DOWN) ? EXP : 0;
 
 				//during ascent, under-levelled enemies grant 10 xp each until level 30
 				// after this enemy kills which reduce the amulet curse still grant 10 effective xp
@@ -1076,8 +1078,10 @@ public abstract class Mob extends Char {
 				if (hordeHead != -1) exp = 0;
 
 				if (exp > 0) {
-					Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(exp), FloatingText.EXPERIENCE);
-				}
+                    hero.sprite.showStatusWithIcon(
+                            Dungeon.isChallenged(Conducts.Conduct.LEVEL_DOWN) ? CharSprite.NEGATIVE : CharSprite.POSITIVE,
+                            Integer.toString(exp), FloatingText.EXPERIENCE);
+                }
 				Dungeon.hero.earnExp(exp, getClass());
 
 				if (Dungeon.hero.subClass == HeroSubClass.MONK){
@@ -1232,7 +1236,7 @@ public abstract class Mob extends Char {
 			((Bomb)(new Bomb().random())).explode(pos);
 		}
 
-		if (Dungeon.hero.lvl > maxLvl + 2) return;
+		if (Dungeon.hero.lvl > maxLvl + 2 && !Dungeon.isChallenged(Conducts.Conduct.LEVEL_DOWN)) return;
 
 		MasterThievesArmband.StolenTracker stolen = buff(MasterThievesArmband.StolenTracker.class);
 		if (stolen == null || !stolen.itemWasStolen()) {

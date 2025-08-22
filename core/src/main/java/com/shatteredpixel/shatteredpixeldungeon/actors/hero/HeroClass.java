@@ -325,6 +325,12 @@ public enum HeroClass {
             }
         }
 
+        if (Dungeon.isChallenged(Conducts.Conduct.LEVEL_DOWN)){
+            hero.lvl = 24;
+            hero.exp += hero.maxExp()/2;
+            hero.updateStats();
+        }
+
 	}
 
 	public Badges.Badge masteryBadge() {

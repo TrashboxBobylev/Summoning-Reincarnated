@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.food;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -153,7 +154,9 @@ public class Pasty extends Food {
 			case PD_BIRTHDAY:
 				//gives 10% of level in exp, min of 2
 				int expToGive = Math.max(2, hero.maxExp()/10);
-				hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(expToGive), FloatingText.EXPERIENCE);
+                hero.sprite.showStatusWithIcon(
+                        Dungeon.isChallenged(Conducts.Conduct.LEVEL_DOWN) ? CharSprite.NEGATIVE : CharSprite.POSITIVE,
+                        Integer.toString(expToGive), FloatingText.EXPERIENCE);
 				hero.earnExp(expToGive, PotionOfExperience.class);
 				break;
 			case HALLOWEEN:

@@ -25,6 +25,8 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -73,9 +75,11 @@ public abstract class AllyBuff extends Buff {
 
 			AscensionChallenge.processEnemyKill(enemy);
 
-			int exp = hero.lvl <= enemy.maxLvl ? enemy.EXP : 0;
+			int exp = hero.lvl <= enemy.maxLvl || Dungeon.isChallenged(Conducts.Conduct.LEVEL_DOWN) ? enemy.EXP : 0;
 			if (exp > 0) {
-				hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(exp), FloatingText.EXPERIENCE);
+				hero.sprite.showStatusWithIcon(
+                        Dungeon.isChallenged(Conducts.Conduct.LEVEL_DOWN) ? CharSprite.NEGATIVE : CharSprite.POSITIVE,
+                        Integer.toString(exp), FloatingText.EXPERIENCE);
 			}
 			hero.earnExp(exp, enemy.getClass());
 

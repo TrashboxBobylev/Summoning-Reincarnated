@@ -2275,7 +2275,10 @@ public class Hero extends Char {
 
 		//xp granted by ascension challenge is only for on-exp gain effects
 		if (source != AscensionChallenge.class) {
-			this.exp += exp;
+            if (Dungeon.isChallenged(Conducts.Conduct.LEVEL_DOWN))
+                this.exp -= exp;
+            else
+                this.exp += exp;
 		}
 		float percent = exp/(float)maxExp();
 
@@ -2319,7 +2322,42 @@ public class Hero extends Char {
 		}
 		
 		boolean levelUp = false;
-		while (this.exp >= maxExp()) {
+        if (Dungeon.isChallenged(Conducts.Conduct.LEVEL_DOWN)){
+            while (this.exp < 0) {
+                if (lvl > 1) {
+                    lvl--;
+                    this.exp += maxExp();
+                    levelUp = true;
+
+                    if (buff(ElixirOfMight.HTBoost.class) != null){
+                        buff(ElixirOfMight.HTBoost.class).onLevelUp();
+                    }
+
+                    updateHT( true );
+                    attackSkill--;
+                    defenseSkill--;
+
+                } else {
+                    lvl--;
+                    die(new PotionOfExperience());
+                    break;
+                }
+
+                if (levelUp) {
+
+                    if (sprite != null) {
+                        GLog.newLine();
+                        GLog.n( Messages.get(this, "low_level") );
+                        sprite.showStatus( CharSprite.NEGATIVE, Messages.get(Hero.class, "level_down") );
+                        Sample.INSTANCE.play( Assets.Sounds.DEGRADE);
+                    }
+
+                    Item.updateQuickslot();
+
+                    Badges.validateLevelReached();
+                }
+            }
+        } else while (this.exp >= maxExp()) {
 			this.exp -= maxExp();
 
 			if (buff(Talent.WandPreservationCounter.class) != null
