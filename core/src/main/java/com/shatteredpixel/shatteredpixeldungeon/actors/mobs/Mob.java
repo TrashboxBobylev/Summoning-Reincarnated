@@ -82,6 +82,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
@@ -90,7 +91,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ExoticCrystals;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ShardOfOblivion;
@@ -1264,6 +1267,30 @@ public abstract class Mob extends Char {
 				Random.Int(10) < Dungeon.hero.pointsInTalent(Talent.SOUL_EATER)){
 			Talent.onFoodEaten(Dungeon.hero, 0, null);
 		}
+
+        if (Dungeon.hero.buff(ManaEmpower.class) != null && Dungeon.hero.heroClass != HeroClass.CONJURER){
+            ScrollOfRecharging.charge(Dungeon.hero);
+            //artifact recharge
+            for (Buff b : Dungeon.hero.buffs()) {
+                if (b instanceof Artifact.ArtifactBuff) {
+                    if (!((Artifact.ArtifactBuff) b).isCursed()) {
+                        ((Artifact.ArtifactBuff) b).charge(Dungeon.hero, 2f);
+                    }
+                }
+            }
+            //wand recharge
+            for (Wand.Charger c : Dungeon.hero.buffs(Wand.Charger.class)) {
+                c.gainCharge(0.5f);
+            }
+            for (Staff.Charger c : Dungeon.hero.buffs(Staff.Charger.class)) {
+                c.gainCharge(0.5f);
+            }
+            ManaEmpower empower = Dungeon.hero.buff(ManaEmpower.class);
+            empower.left--;
+            if (empower.left <= 0) {
+                empower.detach();
+            }
+        }
 
 	}
 	
