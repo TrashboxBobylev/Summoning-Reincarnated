@@ -135,9 +135,15 @@ public class YogDzewa extends Mob {
 		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
 			for (int i = 0; i < 6; i++){
 				if (i >= 4){
-					regularSummons.add(YogRipper.class);
+                    if (Random.Int(2) == 0)
+                        regularSummons.add(YogFroggit.class);
+                    else
+                        regularSummons.add(YogRipper.class);
 				} else if (i >= Statistics.spawnersAlive){
-					regularSummons.add(Larva.class);
+                    if (Random.Int(6) == 0)
+                        regularSummons.add(YogRipper.class);
+                    else
+                        regularSummons.add(Larva.class);
 				} else {
 					regularSummons.add( i % 2 == 0 ? YogEye.class : YogScorpio.class);
 				}
@@ -145,9 +151,15 @@ public class YogDzewa extends Mob {
 		} else {
 			for (int i = 0; i < 4; i++){
 				if (i >= Statistics.spawnersAlive){
-					regularSummons.add(Larva.class);
+                    if (Random.Int(6) == 0)
+                        regularSummons.add(YogRipper.class);
+                    else
+					    regularSummons.add(Larva.class);
 				} else {
-					regularSummons.add(YogRipper.class);
+                    if (Random.Int(2) == 0)
+                        regularSummons.add(YogFroggit.class);
+                    else
+					    regularSummons.add(YogRipper.class);
 				}
 			}
 		}
@@ -739,4 +751,10 @@ public class YogDzewa extends Mob {
 			properties.add(Property.BOSS_MINION);
 		}
 	}
+    public static class YogFroggit extends AttunementConstruct {
+        {
+            maxLvl = -2;
+            properties.add(Property.BOSS_MINION);
+        }
+    }
 }
