@@ -218,7 +218,7 @@ public class YogDzewa extends Mob {
 						for (int k : fenceBeams[i].path){
 							if (k == pos)
 								continue;
-							GameScene.add(Blob.seed(k, phase == 4 ? 6 : 8, YogWall.class));
+							GameScene.add(Blob.seed(k, phase == 5 ? 6 : 8, YogWall.class));
 							Char ch = Actor.findChar(k);
 							if (ch != null && ch.alignment == Alignment.ALLY){
 								int dmg = Random.NormalIntRange(50, 170);
@@ -334,7 +334,7 @@ public class YogDzewa extends Mob {
 
 				abilityCooldown += Random.NormalFloat(MIN_ABILITY_CD, MAX_ABILITY_CD);
 				abilityCooldown -= (phase - 1);
-				needCrossBeam = Random.Int( phase == 4 ? 3 : 2) == 0;
+				needCrossBeam = Random.Int( phase == 5 ? 3 : 2) == 0;
 				if (needCrossBeam){
 					GameScene.flash(0xFFFFFF);
 					for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++){
