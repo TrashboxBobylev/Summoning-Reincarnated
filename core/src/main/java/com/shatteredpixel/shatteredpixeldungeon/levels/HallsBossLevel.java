@@ -289,7 +289,7 @@ public class HallsBossLevel extends Level {
 	@Override
 	public void unseal() {
 		super.unseal();
-        for (int i = 3; i < 10; i++){
+        for (int i = 3; i < 18; i++){
             Level.set(exit() + width()*i, Terrain.EMPTY);
         }
         GameScene.updateMap();
