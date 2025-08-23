@@ -166,7 +166,7 @@ public class Bee extends Mob {
 				
 				//target closest potential enemy near the pot
 				Char closest = null;
-				for (Mob mob : Dungeon.level.mobs) {
+				for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
 					if (!(mob == this)
 							&& Dungeon.level.distance(mob.pos, potPos) <= 3
 							&& mob.alignment != Alignment.NEUTRAL
