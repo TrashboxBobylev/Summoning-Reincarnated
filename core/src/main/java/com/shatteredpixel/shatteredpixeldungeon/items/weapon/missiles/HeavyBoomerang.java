@@ -138,7 +138,7 @@ public class HeavyBoomerang extends MissileWeapon {
             if (boomerang.rank() == 2)
                 left = 0;
             else
-			    left = 4;
+			    left = 3;
 		}
 		
 		public int returnPos(){
