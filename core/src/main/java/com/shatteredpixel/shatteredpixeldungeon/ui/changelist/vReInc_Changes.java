@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ChaoticBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Firebomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMysticProwess;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.UpgradeClump;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.EnchantParchment;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.BlasterStaff;
@@ -62,7 +63,9 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.DogSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.MysteryMerchantSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.YogSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIcon;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
@@ -75,11 +78,123 @@ import java.util.ArrayList;
 
 public class vReInc_Changes {
     public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
+        add_v0_6_0_Changes(changeInfos);
         add_v0_5_0_Changes(changeInfos);
         add_v0_4_0_Changes(changeInfos);
         add_v0_3_0_Changes(changeInfos);
         add_v0_2_0_Changes(changeInfos);
         add_v0_1_0_Changes(changeInfos);
+    }
+
+    public static void add_v0_6_0_Changes( ArrayList<ChangeInfo> changeInfos ){
+        ChangeInfo changes = new ChangeInfo("vReInc-0.6.0", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBYLEV), "Developer Commentary",
+                "_-_ Released August 23th, 2025\n" +
+                        "_-_ 39 days after Reincarnated 0.5.3\n\n" +
+                        "Trying to bring those waiting times lower and lower...\n" +
+                        "This release implements ranks for thrown weapons and wands and making them automatically stale with their respective stats."));
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered Ports",
+                "Implemented Shattered v3.2.1 changes.\n\n" +
+                        "_-_ Some of thrown weapon nerfs have been reverted or negated by Summoning's own rework.\n" +
+                        "_-_ Added Summoning's effects to new floating text icon's acc/eva showcase.\n" +
+                        "_-_ Added journal discovery hints for Summoning's content."));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+        changes.hardlight(CharSprite.POSITIVE);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.WAND_MAGIC_MISSILE), "Wand Rework",
+                "_-_ Are no longer upgradeable. Instead they scale with player's attunement stat, +1 old system's level per 1 attunement. Offensive wand's damage has been slightly buffed to compensate for this.\n\n" +
+                        "_-_ Now can be equipped as melee weapon with Mage class to get the same effects as Mage's staff. Mage's staff has been fully removed from the game, with old saves getting staff's wand after being loaded.\n\n" +
+                        "_-_ Now use same ranking system as summoning staffs, essentially creating 3 variants of same item per each wand, including Battlemage's abilities. Some wand's ranks were ported straight from Legacy version, while other's have brand new effects, aiming at providing different experience from \"stronger wand, longer recharge\".\n\n" +
+                        "_-_ Removed variable recharge scaling and max charges increase. Now all wands are fixed at 5 max charges and 40 base turns to recharge 1 charge. This can vary from wand's recharge modifier, which changes with ranks.\n\n" +
+                        "_-_ Battlemage now gets additional melee damage from wands, in addition to previous effects like recharge and on-hit stuff.\n\n" +
+                        "_-_ Replaced _Wand Preservation_ talent with _Fighting Wizardry_ talent, which increases effective power of next wand's zap with each melee hit.\n\n" +
+                        "_-_ Arcane Resin is now always made in quantity of 2 and boosts attunement power of wand instead of its level."));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.JAVELIN), "Thrown Weapon Rework",
+                "_-_ Are no longer upgradeable. Instead they scale with player's strength stat, +1.5 old system's level per 2 strength.\n\n" +
+                        "_-_ Are no longer divided by tiers and are all usable from 10 starting strength. The generation of thrown weapons has been changed to feature all of them in same pool regardless of progression.\n\n" +
+                        "_-_ Changed the durability gain from levels to be a flat number.\n\n" +
+                        "_-_ Now use same ranking system as summoning staffs, essentially creating 3 variants of same item per each thrown weapon.\n\n" +
+                        "_-_ Some of thrown weapons have been visually redesigned to fit their new purpose as tierless weapons.\n\n" +
+                        "_-_ Ring of Sharpshooting has been nerfed by 33% both for durability and throwing level boost.\n\n" +
+                        "_-_ Replaced _Shared Upgrades_ talent with _Olympic Dedication_, which rewards Sniper for attacking with thrown weapons rapidly with special attack boost.\n\n" +
+                        "_-_ Liquid Metal is now always made and consumed in quantity of 10."));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.RANDOM_HERO), "New Game Modes and Conducts",
+                "Added two new gamemodes:\n\n" +
+                        "_-_ _Platinum Champion_ now replaces old challenge system, allowing to experience Shattered's 9 challenge runs in single package.\n\n" +
+                        "_-_ _Procedurally Generated Protagonist_ shuffles around most of hero's aspects, like starting equipment, talents and what subclasses and armor abilities they will get.",
+                        "Added three new conducts:\n\n" +
+                                "_-_ _Shadow Curse_ reduces the vision range and causes hero's memory of the stage to deteriorate over time, making it covered in fog of war again. In addition to that, mobs can spawn from any distance and will spawn more frequently.\n\n" +
+                                "_-_ _Oligarchic Paradise_ forces you to buy all items in dungeon, including ones dropped by enemies. Fortunately, hero can earn some gold by damaging enemies.\n\n" +
+                                "_-_ _Decline from Fame_ starts with a strong level 24 hero, but makes them lose experience instead of gaining it. If hero goes below level 1, they will die.\n\n" +
+                                "And one has been reworked:\n\n" +
+                                "_-_ _Starving for Items_ now turns some of equipment into gold and consumables into energy, while providing a chance for gold to be reduced to 1."));
+
+        changes.addButton(new ChangeButton(new ItemSprite(new ElixirOfMysticProwess()), "New/Reworked Items",
+                "_-_ Added the _Elixir of Mystic Prowess_, an item that increases attunement power of selected power by 2. It is made from Elixir of Attunement.\n\n" +
+                        "_-_ Tridents were reworked to be themed around water and being heavy, taking 2 turns to throw.\n\n" +
+                        "_-_ Reworked Scroll of Passage into _Scroll of Discord_, which teleports all enemies away into void, but spawns new ones to replace them in distance.\n\n" +
+                        "_-_ Scroll of Antimagic has been buffed to inflict anti-magic effect on enemies, which makes them unable to use their magical abilities."));
+
+        changes.addButton(new ChangeButton(new MysteryMerchantSprite(), "New Dungeon Additions",
+                "_-_ Reimplemented floor 20's shopkeeper sprite from Legacy version as brand new NPC, _mysterious merchant_! He can be met in every region behind secret door and offers the ability to either subtract a point from a talent to get it back, or transmute a talent into another talent. This costs 500 gold at the start plus 250 gold per each use.\n\n" +
+                        "_-_ Reimplemented gnoll tribe's room, spectral shaman's room and bombs maze room. All of them were slightly polished or changed for the newer Shattered's design."));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+        changes.hardlight(CharSprite.WARNING);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new YogSprite(), "Yog-Dzewa's fight",
+                "_-_ Added more rippers and attunement constructs into Yog-Dzewa's summon list.\n" +
+                        "_-_ Significantly reduced eradication walls spam during the final phase.\n" +
+                        "_-_ The Yog-Dzewa's arena now shrinks in size with each fist summoned."));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+                "_-_ Scaled down _Abyssal Crusade_'s initial level by reducing amount of treasure bags and rooms, but increasing amount of items they give.\n" +
+                        "_-_ Summoning staffs now have random rank instead of 50% to get either rank II or III.\n" +
+                        "_-_ Imported Abyss tileset improvements from RKA.\n" +
+                        "_-_ Reworked missing text message to display exact missing codename for the text.\n" +
+                        "_-_ Entrance and exit rooms are now also randomized in _Project Paradox_.\n" +
+                        "_-_ Reduced the efficiency of ally damage tag on low damage allies.\n" +
+                        "_-_ Removed the unidentified ranked items always being shown with rank I color.\n" +
+                        "_-_ Added ranks descriptions for Spirit Bow.\n" +
+                        "_-_ Added sell prices for rank manager, Tengu's mask and Dwarf King's crown.\n" +
+                        "_-_ Elemental Blast now works with any wand in inventory, not just equipped one.\n" +
+                        "_-_ Ranked items are now affected by degrade debuff."));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "Fixed the following bugs:\n" +
+                        "_-_ Shop weapons being one tier off from their placement\n" +
+                        "_-_ Good Night conduct making allies go to sleep instead of returning to hero\n" +
+                        "_-_ Corrupting or enthralling enemies not triggering Gauntlet Mode's floor completion money drops\n" +
+                        "_-_ Certain enemies spawning super-weakened in Abyss\n" +
+                        "_-_ Traps room crashing when going too far into Abyss\n" +
+                        "_-_ Incorrect formatting on pike's Duelist description\n" +
+                        "_-_ Conjurer not being able to obtain armor ability in normal modes\n" +
+                        "_-_ Saves being impossible to load on Android 12 or below devices, if loading the save with Scroll of Debug active\n" +
+                        "_-_ Fast Adventure's ascension deleting the imp shopkeeper\n" +
+                        "_-_ Interlevel scene cutscenes not using variable dungeon sizes\n" +
+                        "_-_ Gauntlet Mode's shop giving Tengu's mask to Adventurer\n" +
+                        "_-_ Sad Ghost ally displaying missing text, while in Abyss\n" +
+                        "_-_ Sad Ghost ally's lines not adhering to dungeon size\n" +
+                        "_-_ Occasional ghost items in shops, while playing as Adventurer\n" +
+                        "_-_ Rare crashes from bee's enemy choosing AI"));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "buffs"), false, null);
+        changes.hardlight(CharSprite.POSITIVE);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.TALENT), "Talent Changes",
+                "_-_ Added metamorphosis effect for _Attuned Meal_ talent.\n" +
+                        "_-_ _Manaburn_ talent no longer triggers above 50% mana.\n" +
+                        "_-_ Star Blazing spell can no longer damages the hero even with _Concentrated Support_ talent active."));
     }
 
     public static void add_v0_5_0_Changes( ArrayList<ChangeInfo> changeInfos ){
