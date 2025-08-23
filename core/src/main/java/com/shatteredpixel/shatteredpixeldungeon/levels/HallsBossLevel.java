@@ -295,6 +295,11 @@ public class HallsBossLevel extends Level {
 		set( exit(), Terrain.EXIT );
 		GameScene.updateMap( exit() );
 
+        for (int i = 0; i < 7; i++){
+            Level.set(exit() + width()*i, Terrain.EMPTY);
+        }
+        GameScene.updateMap();
+
 		CellEmitter.get(exit()-1).burst(ShadowParticle.UP, 25);
 		CellEmitter.get(exit()).burst(ShadowParticle.UP, 100);
 		CellEmitter.get(exit()+1).burst(ShadowParticle.UP, 25);

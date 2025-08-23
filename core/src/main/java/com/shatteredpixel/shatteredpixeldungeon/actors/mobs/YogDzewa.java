@@ -45,6 +45,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
+import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -486,6 +487,13 @@ public class YogDzewa extends Mob {
 
 			if (abilityCooldown < 5) abilityCooldown = 5;
 			if (summonCooldown < 5) summonCooldown = 5;
+
+            for (int i = 0; i < Dungeon.level.map.length; i++){
+                if (Dungeon.level.trueDistance(pos, i) > 16 - phase*2){
+                    Level.set(i, Terrain.WALL);
+                }
+            }
+            GameScene.updateMap();
 
 		}
 
