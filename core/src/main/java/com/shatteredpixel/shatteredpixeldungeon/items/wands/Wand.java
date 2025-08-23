@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
@@ -591,6 +592,8 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
             if (charger.target.buff(WildMagic.WildMagicTracker.class) != null){
                 base += 1 + 0.5f*((Hero)charger.target).pointsInTalent(Talent.WILD_POWER); // +2/+2.5/+3/+3.5/+4 at 0/1/2/3/4 talent points
             }
+            if (charger.target.buff(Degrade.class) != null)
+                base -= 1;
             WandOfMagicMissile.MagicCharge buff = charger.target.buff(WandOfMagicMissile.MagicCharge.class);
             if (buff != null && buff.wandJustApplied() != this){
                 return (base+1)*buff.wandJustApplied().powerModifier()-1;

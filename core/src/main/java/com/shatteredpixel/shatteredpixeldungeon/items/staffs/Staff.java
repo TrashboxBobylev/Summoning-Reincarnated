@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Empowered;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
@@ -218,7 +219,12 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
     }
 
     public float powerLevel(){
-        return Math.max(0, (Dungeon.hero == null ? 0 : Dungeon.hero.ATU()) - ATUReq());
+        float level = Math.max(0, (Dungeon.hero == null ? 0 : Dungeon.hero.ATU()) - ATUReq());
+        if (charger != null && charger.target != null) {
+            if (charger.target.buff(Degrade.class) != null)
+                level -= 1;
+        }
+        return level;
     }
 
     @Override
