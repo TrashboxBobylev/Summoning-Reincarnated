@@ -24,7 +24,7 @@ allprojects {
         appPackageName = 'com.trashboxbobylev.resummoningpixeldungeon'
 
         appVersionCode = 877
-        appVersionName = 'ReInc-0.6.0-' + details.gitHash.substring(0, 7)
+        appVersionName = 'ReInc-0.6.1-' + details.gitHash.substring(0, 7)
 
         appJavaCompatibility = JavaVersion.VERSION_11
 
