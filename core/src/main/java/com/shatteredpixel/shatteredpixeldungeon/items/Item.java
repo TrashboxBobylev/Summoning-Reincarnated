@@ -141,7 +141,7 @@ public class Item implements Bundlable {
 			GameScene.pickUp( this, pos );
 			Sample.INSTANCE.play( Assets.Sounds.ITEM );
 			Hunger.adjustHunger(-2f);
-			hero.spendAndNext( TIME_TO_PICK_UP );
+			hero.spendAndNext( pickupDelay() );
 			return true;
 			
 		} else {
@@ -745,7 +745,11 @@ public class Item implements Bundlable {
 	public float castDelay( Char user, int cell ){
 		return TIME_TO_THROW;
 	}
-	
+
+	public float pickupDelay(){
+		return TIME_TO_PICK_UP;
+	}
+
 	protected static Hero curUser = null;
 	protected static Item curItem = null;
 	public void setCurrent( Hero hero ){

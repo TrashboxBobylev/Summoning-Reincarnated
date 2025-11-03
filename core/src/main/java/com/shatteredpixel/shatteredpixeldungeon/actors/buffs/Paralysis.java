@@ -101,7 +101,7 @@ public class Paralysis extends FlavourBuff {
 		public boolean act() {
 			if (target.buff(Paralysis.class) == null) {
 				damage -= Math.ceil(damage / 10f);
-				if (damage >= 0) detach();
+				if (damage <= 0) detach();
 			}
 			spend(TICK);
 			return true;
@@ -112,13 +112,13 @@ public class Paralysis extends FlavourBuff {
 		@Override
 		public void storeInBundle(Bundle bundle) {
 			super.storeInBundle(bundle);
-			damage = bundle.getInt(DAMAGE);
+			bundle.put( DAMAGE, damage );
 		}
 		
 		@Override
 		public void restoreFromBundle(Bundle bundle) {
 			super.restoreFromBundle(bundle);
-			bundle.put( DAMAGE, damage );
+			damage = bundle.getInt(DAMAGE);
 		}
 	}
 }

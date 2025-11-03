@@ -43,12 +43,8 @@ public class ThrowingHammer extends MissileWeapon {
 	}
 
     @Override
-	public boolean doPickUp(Hero hero, int pos) {
-		if (super.doPickUp(hero, pos)){
-			hero.spendAndNext( -TIME_TO_PICK_UP );
-			return true;
-		}
-		return false;
+	public float pickupDelay() {
+		return 0; //picked up instantly
 	}
     @Override
     public float castDelay(Char user, int cell) {

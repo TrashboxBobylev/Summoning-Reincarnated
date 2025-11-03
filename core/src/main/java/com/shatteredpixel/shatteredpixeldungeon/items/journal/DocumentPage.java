@@ -67,7 +67,7 @@ public abstract class DocumentPage extends Item {
 		}
 		document().findPage(page);
 		Sample.INSTANCE.play( Assets.Sounds.ITEM );
-		hero.spendAndNext( TIME_TO_PICK_UP );
+		hero.spendAndNext( pickupDelay() );
 		return true;
 	}
 

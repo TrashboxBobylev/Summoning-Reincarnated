@@ -118,6 +118,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerSet;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Stone;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CapeOfThorns;
@@ -769,6 +770,11 @@ public class Hero extends Char {
 
 		if (belongings.armor() != null) {
 			evasion = belongings.armor().evasionFactor(this, evasion);
+
+			//stone specifically overrides to 0 always, guaranteed hit
+			if (belongings.armor().hasGlyph(Stone.class, this) && !Stone.testingEvasion()){
+				return 0;
+			}
 		}
 
 		return Math.max(1, Math.round(evasion));
@@ -779,7 +785,7 @@ public class Hero extends Char {
 		Combo.ParryTracker parry = buff(Combo.ParryTracker.class);
 		if (parry != null){
 			parry.parried = true;
-			if (buff(Combo.class).getComboCount() < 9 || pointsInTalent(Talent.ENHANCED_COMBO) < 2){
+			if (buff(Combo.class) == null || buff(Combo.class).getComboCount() < 9 || pointsInTalent(Talent.ENHANCED_COMBO) < 2){
 				parry.detach();
 			}
 			return Messages.get(Monk.class, "parried");
@@ -2046,7 +2052,7 @@ public class Hero extends Char {
 	private boolean walkingToVisibleTrapInFog = false;
 
     public boolean justMoved = false;
-	
+
 	private boolean getCloser( final int target ) {
 
 		if (target == pos)
@@ -2163,7 +2169,7 @@ public class Hero extends Char {
 
 			spend( delay );
             justMoved = true;
-			
+
 			search(false);
 
 			return true;

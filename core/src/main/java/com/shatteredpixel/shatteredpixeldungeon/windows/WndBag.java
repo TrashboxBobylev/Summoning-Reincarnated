@@ -137,6 +137,9 @@ public class WndBag extends WndTabbed {
 				BagTab tab = new BagTab( b, i++ );
 				add( tab );
 				tab.select( b == bag );
+				if  (b == bag){
+					selected = tab;
+				}
 			}
 		}
 

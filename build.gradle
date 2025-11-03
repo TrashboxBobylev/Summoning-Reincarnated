@@ -23,18 +23,16 @@ allprojects {
         appName = 'Summoning PD Reincarnated'
         appPackageName = 'com.trashboxbobylev.resummoningpixeldungeon'
 
-        appVersionCode = 861
+        appVersionCode = 877
         appVersionName = 'ReInc-0.6.0-' + details.gitHash.substring(0, 7)
 
-        appJavaCompatibility = JavaVersion.VERSION_1_8
+        appJavaCompatibility = JavaVersion.VERSION_11
 
-        appAndroidCompileSDK = 36   //Android 16
-        appAndroidMinSDK = 14       //Android 4.0
-        //significant layout management changes required for API 35+ as edge-to-edge is forced on
-        //will do this at the same time as dropping support for Android 4.4- (later in 2025)
-        appAndroidTargetSDK = 36    //Android 16
+        appAndroidCompileSDK = 35   //Android 15
+        appAndroidMinSDK = 21       //Android 5.0
+        appAndroidTargetSDK = 35    //Android 15
 
-        gdxVersion = '1.12.1'
+        gdxVersion = '1.13.6-SNAPSHOT' //using snapshot as 1.13.5 has issues with Android R8
         gdxControllersVersion = '2.2.4'
         robovmVersion = '2.3.23'
     }

@@ -77,7 +77,7 @@ public class Dewdrop extends Item {
 		}
 		
 		Sample.INSTANCE.play( Assets.Sounds.DEWDROP );
-		hero.spendAndNext( TIME_TO_PICK_UP );
+		hero.spendAndNext( pickupDelay() );
 		
 		return true;
 	}

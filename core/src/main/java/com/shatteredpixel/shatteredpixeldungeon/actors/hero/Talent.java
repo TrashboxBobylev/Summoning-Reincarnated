@@ -1048,7 +1048,7 @@ public enum Talent {
 				// 10/15%
 				if (Random.Int(20) < 1 + hero.pointsInTalent(RECALL_INSCRIPTION)){
 					Reflection.newInstance(cls).collect();
-					GLog.p("refunded!");
+					GLog.p(Messages.get(Talent.class, RECALL_INSCRIPTION.name() + ".refunded"));
 				}
 			}
 		}
@@ -1067,7 +1067,7 @@ public enum Talent {
 				// 10/15%
 				if (Random.Int(20) < 1 + hero.pointsInTalent(RECALL_INSCRIPTION)){
 					Reflection.newInstance(cls).collect();
-					GLog.p("refunded!");
+					GLog.p(Messages.get(Talent.class, RECALL_INSCRIPTION.name() + ".refunded"));
 				}
 			}
 		}
@@ -1116,8 +1116,18 @@ public enum Talent {
 			identify = true;
 		}
 
-		if (identify && !ShardOfOblivion.passiveIDDisabled()){
-			item.identify();
+		if (identify) {
+			if (ShardOfOblivion.passiveIDDisabled()) {
+				if (item instanceof Weapon){
+					((Weapon) item).setIDReady();
+				} else if (item instanceof Armor){
+					((Armor) item).setIDReady();
+				} else if (item instanceof Ring){
+					((Ring) item).setIDReady();
+				}
+			} else {
+				item.identify();
+			}
 		}
 		if (item instanceof EquipableItem) {
 			if (!((EquipableItem) item).equippedBefore && hero.hasTalent(PREPARED_TO_DEFEND)){
