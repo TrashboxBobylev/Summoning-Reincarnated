@@ -1,15 +1,8 @@
 package com.zrp200.scrollofdebug;
 
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.*;
-import static java.util.Arrays.copyOfRange;
-
-import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
-
-import com.badlogic.gdx.utils.IntMap;
-import com.badlogic.gdx.utils.StringBuilder;
+import com.badlogic.gdx.utils.CharArray;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-// Commands
+import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
@@ -20,36 +13,45 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
-// needed for HelpWindow
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
-
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
-// WndTextInput (added in v0.9.4)
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndTextInput;
-// Output
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndTextInput;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.ui.Component;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Reflection;
 
 import java.io.IOException;
-import java.lang.reflect.*;
-import java.util.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.*;
+import static java.util.Arrays.copyOfRange;
 
 /**
  * Scroll of Debug uses ClassLoader to get every class that can be directly created and provides a command interface with which to interact with them.
@@ -195,7 +197,7 @@ public class ScrollOfDebug extends Scroll {
                     if(storeLocation.length() == 1) {
                         if(initialInput.length > 1) GLog.w("warning: remaining arguments were discarded");
                         // list them all
-                        StringBuilder s = new StringBuilder();
+                        CharArray s = new CharArray();
                         for(Map.Entry<String,Variable> e : Variable.assigned.entrySet()) if(e.getValue().isActive()) {
                             s.append("\n_").append(e.getKey()).append("_ - ").append(e.getValue());
                         }
@@ -241,7 +243,7 @@ public class ScrollOfDebug extends Scroll {
                         else all = input[1].equalsIgnoreCase("all");
                     }
                     if (output == null) {
-                        StringBuilder builder = new StringBuilder();
+                        CharArray builder = new CharArray();
                         for (Command cmd : Command.values()) {
                             if (all) {
                                 // extensive. help is omitted because we are using help.
@@ -282,7 +284,7 @@ public class ScrollOfDebug extends Scroll {
                             if(c != null) cls = c.paramClass;
                         }
                         if(cls != null) {
-                            StringBuilder message = new StringBuilder();
+                            CharArray message = new CharArray();
                             for(Map.Entry<Class,Set<Method>> entry : hierarchy(cls).entrySet()) {
                                 Class inspecting = entry.getKey();
                                 String className = inspecting.getName();
@@ -331,7 +333,7 @@ public class ScrollOfDebug extends Scroll {
                                     Class[] types = m.getParameterTypes();
                                     int left = types.length;
                                     for(Class c : m.getParameterTypes()) {
-                                        StringBuilder param = new StringBuilder("<");
+                                        CharArray param = new CharArray("<");
                                         param.append(c.getSimpleName().toLowerCase());
                                         // varargs handling. Not supported, but...maybe someday?
                                         if(--left == 0 && m.isVarArgs()) param.append("..");
@@ -339,7 +341,8 @@ public class ScrollOfDebug extends Scroll {
                                         // optional handling, currently only hero is handled.
                                         // todo have similar methods be merged, with the offending parameters marked as optional.
                                         if(c == Hero.class || c != Object.class && c.isInstance(Dungeon.level)) {
-                                            param.insert(0,'[').append(']');
+                                            param.insert(0,'[');
+                                            param.append(']');
                                         }
                                         message.append(' ').append(param);
                                     }
@@ -626,7 +629,7 @@ public class ScrollOfDebug extends Scroll {
         return "Scroll of Debug";
     }
     @Override public String desc() {
-        StringBuilder builder = new StringBuilder();
+        CharArray builder = new CharArray();
         builder.appendLine("A scroll that gives you great power, letting you create virtually any item or mob in the game.")
                 .appendLine("\nSupported Commands:");
         for(Command cmd : Command.values()) builder.appendLine(
@@ -853,7 +856,7 @@ public class ScrollOfDebug extends Scroll {
         for(Class cls : trie.getAllClasses()) {
             if(parent.isAssignableFrom(cls)) names.put(cls.getSimpleName(), cls);
         }
-        StringBuilder result = new StringBuilder();
+        CharArray result = new CharArray();
         if(!names.isEmpty()) {
             for(String name : names.getNames()) if(canInstantiate(names.get(name))) result.append("\n_-_ ").append(name);
         }
