@@ -184,6 +184,11 @@ public class WndConducts extends Window {
                                 slot.checked(true);
                         }
                     }
+                } else {
+                    for (ConduitBox slot : boxes){
+                        if (slot.conduct == Conducts.Conduct.NULL && slot != this)
+                            slot.checked(false);
+                    }
                 }
                 if (this.conduct == Conducts.Conduct.NULL){
                     checked(true);
