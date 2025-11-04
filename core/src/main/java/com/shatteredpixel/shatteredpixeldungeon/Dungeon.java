@@ -268,8 +268,18 @@ public class Dungeon {
 		BIGGER("bigger", Icons.ENLARGEMENT, 1.2f),
 		EXPLORE( "explore", Icons.EXPLORE, 0f),
         NINE_CHAL("9chal", Icons.NINE_CHAL, 7f),
-		ABYSS_START("abyss_start", Icons.ABYSS_START, 2.0f),
-		GAUNTLET("gauntlet", Icons.GAUNTLET, 1.33f),
+		ABYSS_START("abyss_start", Icons.ABYSS_START, 2.0f){
+            @Override
+            public boolean noQuests() {
+                return true;
+            }
+        },
+		GAUNTLET("gauntlet", Icons.GAUNTLET, 1.33f){
+            @Override
+            public boolean noQuests() {
+                return true;
+            }
+        },
 		CHAOS("chaos", Icons.CHAOS, 1.5f),
         RANDOM_HERO("random_hero", Icons.RANDOM_HERO, 1.5f)
 /*		CAVES("caves", Icons.CAVES, 1.09f),
@@ -304,6 +314,10 @@ public class Dungeon {
 		public String toString() {
 			return Messages.get(Dungeon.class, "mode_name_" + saveName);
 		}
+
+        public boolean noQuests(){
+            return false;
+        }
 	}
 
 	public static GameMode mode;
