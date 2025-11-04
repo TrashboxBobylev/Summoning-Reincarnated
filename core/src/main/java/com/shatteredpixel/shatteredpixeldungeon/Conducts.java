@@ -75,7 +75,7 @@ public class Conducts {
         LEVEL_DOWN(1.5f, 28),
         FACE(2.25f, 25),
 //        HUGE(1.75f),
-        DEBUG_SCROLL(-1f){
+        DEBUG_SCROLL(-1f, 24){
             @Override
             public boolean shouldAppear() {
                 return DeviceCompat.isDebug() || !SPDSettings.oneConduct();
