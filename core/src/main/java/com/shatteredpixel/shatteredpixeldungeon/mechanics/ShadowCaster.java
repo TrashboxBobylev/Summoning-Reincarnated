@@ -129,6 +129,9 @@ public final class ShadowCaster {
 				if (col == end && inBlocking && (int)Math.ceil((row - 0.5) * rSlope - 0.499) != end){
 					break;
 				}
+
+                if (cell > fov.length || cell < 0)
+                    break;
 				
 				fov[cell] = true;
 				
