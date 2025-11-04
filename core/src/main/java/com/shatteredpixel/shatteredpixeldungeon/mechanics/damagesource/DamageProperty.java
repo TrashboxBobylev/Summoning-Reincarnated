@@ -24,12 +24,14 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource;
 
-import java.util.EnumSet;
+import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * All property tags a {@link DamageSource} can have.
  */
 public enum DamageProperty {
+    NONE,
     /**
      * Damage typically dealt by creatures.
      */
@@ -126,13 +128,13 @@ public enum DamageProperty {
     INSTANT_KILL(MAGICAL)
     ;
 
-    public final EnumSet<DamageProperty> children;
+    public HashSet<DamageProperty> children;
 
     DamageProperty(){
-        children = EnumSet.noneOf(DamageProperty.class);
+        children = new HashSet<>();
     }
 
     DamageProperty(DamageProperty... children){
-        this.children = EnumSet.of(children[0], children);
+        this.children = new HashSet<>(Arrays.asList(children));
     }
 }
