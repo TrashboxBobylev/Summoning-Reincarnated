@@ -380,6 +380,7 @@ public class WndSettings extends WndTabbed {
 		ColorBlock sep2;
 		CheckBox chkFont;
 		CheckBox chkVibrate;
+        CheckBox chkOneConduct;
 
 		@Override
 		protected void createChildren() {
@@ -613,6 +614,19 @@ public class WndSettings extends WndTabbed {
 				chkVibrate.checked(SPDSettings.vibration());
 			}
 			add(chkVibrate);
+
+            chkOneConduct = new CheckBox(Messages.get(this, "one_conduct")){
+                @Override
+                protected void onClick() {
+                    super.onClick();
+                    SPDSettings.oneConduct(checked());
+                }
+            };
+            chkOneConduct.enable(SPDSettings.oneConduct());
+            if (chkOneConduct.active) {
+                chkOneConduct.checked(SPDSettings.oneConduct());
+            }
+            add(chkOneConduct);
 		}
 
 		@Override
@@ -660,6 +674,8 @@ public class WndSettings extends WndTabbed {
 				chkVibrate.setRect(0, chkFont.bottom() + GAP, width, BTN_HEIGHT);
 				height = chkVibrate.bottom();
 			}
+            chkOneConduct.setRect(0, height + 1, width, BTN_HEIGHT);
+            height = chkOneConduct.bottom();
 		}
 
 	}
