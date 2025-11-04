@@ -53,9 +53,9 @@ public class Updates {
 		if (lastCheck != null && (new Date().getTime() - lastCheck.getTime()) < CHECK_DELAY) return;
 
 		//We do this so that automatically enabled beta checking (for users who DLed a beta) persists afterward
-//		if (SPDSettings.betas()){
-//			SPDSettings.betas(true);
-//		}
+		if (SPDSettings.betas()){
+			SPDSettings.betas(true);
+		}
 
 		service.checkForUpdate(!SPDSettings.WiFi(), SPDSettings.betas(), new UpdateService.UpdateResultCallback() {
 			@Override

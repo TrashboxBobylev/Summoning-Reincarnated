@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.scenes;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Chrome;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.Rankings;
@@ -223,7 +224,7 @@ public class GameScene extends PixelScene {
 
 		ScrollOfDebug debug = Dungeon.hero.belongings.getItem(ScrollOfDebug.class);
 		// by default only added in "indev" builds.
-		boolean supported = SPDSettings.betas();
+		boolean supported = Dungeon.isChallenged(Conducts.Conduct.DEBUG_SCROLL);
 		if(supported) {
 			if(debug == null) {
 				debug = new ScrollOfDebug();

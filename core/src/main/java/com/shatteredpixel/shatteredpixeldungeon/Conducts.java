@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.DeviceCompat;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -67,15 +68,14 @@ public class Conducts {
         NO_LOOT(2f, 21),
         LIMITED_MONSTERS(1.5f, 22),
         LEVEL_DOWN(1.5f, 28),
-        FACE(2.25f, 25)
+        FACE(2.25f, 25),
 //        HUGE(1.75f),
-//        DEBUG_SCROLL(-1f){
-//            @Override
-//            public boolean shouldAppear() {
-//                return DeviceCompat.isDebug() || !SPDSettings.oneConduct();
-//            }
-//        };
-        ;
+        DEBUG_SCROLL(-1f){
+            @Override
+            public boolean shouldAppear() {
+                return DeviceCompat.isDebug() || !SPDSettings.oneConduct();
+            }
+        };
 
         public float scoreMod;
         public int icon;
