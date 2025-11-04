@@ -425,7 +425,7 @@ public class Ghost extends NPC {
 		
 		public static boolean completed(){
 			//makes dried rose useful right out of the gate
-			if (Dungeon.mode.noQuests())
+			if (Dungeon.mode != null && Dungeon.mode.noQuests())
 				return true;
 			return processed() && weapon == null && armor == null && staff == null;
 		}
