@@ -66,6 +66,7 @@ public abstract class AllyBuff extends Buff {
 
 		if (enemy.buff(buffCls) != null && wasEnemy){
 			enemy.rollToDropLoot();
+            enemy.gauntletProcessing();
 
 			Statistics.enemiesSlain++;
 			Badges.validateMonstersSlain();
