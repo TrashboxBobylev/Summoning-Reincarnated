@@ -96,6 +96,8 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.traps.SummoningTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
@@ -117,11 +119,17 @@ import com.watabou.utils.Random;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 //helper class to contain all the cursed wand zapping logic, so the main wand class doesn't get huge.
-public class CursedWand {
+public class CursedWand implements DamageSource {
 
-	public static void cursedZap(final Item origin, final Char user, final Ballistica bolt, final Callback afterZap){
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL);
+    }
+
+    public static void cursedZap(final Item origin, final Char user, final Ballistica bolt, final Callback afterZap){
 
 		boolean positiveOnly = user == Dungeon.hero && Random.Float() < WondrousResin.positiveCurseEffectChance();
 		CursedEffect effect = randomValidEffect(origin, user, bolt, positiveOnly);

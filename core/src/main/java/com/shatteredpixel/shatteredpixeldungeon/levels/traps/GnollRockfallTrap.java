@@ -39,6 +39,8 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.MiningLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -49,8 +51,9 @@ import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
-public class GnollRockfallTrap extends RockfallTrap {
+public class GnollRockfallTrap extends RockfallTrap implements DamageSource {
 
 	@Override
 	public void activate() {
@@ -118,4 +121,8 @@ public class GnollRockfallTrap extends RockfallTrap {
 
 	}
 
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.TRAPPED, DamageProperty.PHYSICAL);
+    }
 }

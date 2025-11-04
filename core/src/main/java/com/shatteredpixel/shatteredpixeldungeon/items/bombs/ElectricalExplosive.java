@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
@@ -58,6 +59,7 @@ import com.watabou.utils.Random;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 public class ElectricalExplosive extends Bomb implements ChargingItem {
 
@@ -265,6 +267,15 @@ public class ElectricalExplosive extends Bomb implements ChargingItem {
 			}
 		}
 	}
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        EnumSet<DamageProperty> properties = super.initDmgProperties();
+        properties.remove(DamageProperty.PHYSICAL);
+        properties.add(DamageProperty.MAGICAL);
+        properties.add(DamageProperty.ELECTRIC);
+        return properties;
+    }
 
 	public class Charger extends Buff {
 

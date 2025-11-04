@@ -52,6 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Dart;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -64,7 +65,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 
-public class Heap implements Bundlable {
+public class Heap implements Bundlable, DamageSource {
 	
 	public enum Type {
 		HEAP,

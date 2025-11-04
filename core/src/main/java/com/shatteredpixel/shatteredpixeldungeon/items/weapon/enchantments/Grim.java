@@ -29,10 +29,14 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite.Glowing;
 
-public class Grim extends Weapon.Enchantment {
+import java.util.EnumSet;
+
+public class Grim extends Weapon.Enchantment implements DamageSource {
 	
 	private static ItemSprite.Glowing BLACK = new ItemSprite.Glowing( 0x000000 );
 	
@@ -67,7 +71,12 @@ public class Grim extends Weapon.Enchantment {
 		return BLACK;
 	}
 
-	public static class GrimTracker extends Buff {
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.INSTANT_KILL, DamageProperty.DARK);
+    }
+
+    public static class GrimTracker extends Buff {
 
 		{
 			actPriority = Actor.VFX_PRIO;

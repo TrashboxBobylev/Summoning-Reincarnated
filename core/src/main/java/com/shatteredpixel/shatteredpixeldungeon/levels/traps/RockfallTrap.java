@@ -36,6 +36,8 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -46,8 +48,9 @@ import com.watabou.utils.Point;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
-public class RockfallTrap extends Trap {
+public class RockfallTrap extends Trap implements DamageSource {
 
 	{
 		color = GREY;
@@ -122,4 +125,9 @@ public class RockfallTrap extends Trap {
 		}
 
 	}
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.TRAPPED, DamageProperty.PHYSICAL);
+    }
 }

@@ -32,6 +32,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor.Glyph;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -39,6 +41,8 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite.Glowing;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
+
+import java.util.EnumSet;
 
 public class Viscosity extends Glyph {
 	
@@ -103,7 +107,7 @@ public class Viscosity extends Glyph {
 		}
 	};
 	
-	public static class DeferedDamage extends Buff {
+	public static class DeferedDamage extends Buff implements DamageSource {
 		
 		{
 			type = buffType.NEGATIVE;
@@ -177,5 +181,10 @@ public class Viscosity extends Glyph {
 		public String desc() {
 			return Messages.get(this, "desc", damage);
 		}
+
+        @Override
+        public EnumSet<DamageProperty> initDmgProperties() {
+            return EnumSet.of(DamageProperty.DEFERRED);
+        }
 	}
 }

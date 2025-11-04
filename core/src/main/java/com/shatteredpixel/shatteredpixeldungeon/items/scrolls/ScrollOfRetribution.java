@@ -31,6 +31,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -38,8 +40,9 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
-public class ScrollOfRetribution extends Scroll {
+public class ScrollOfRetribution extends Scroll implements DamageSource {
 
 	{
 		icon = ItemSpriteSheet.Icons.SCROLL_RETRIB;
@@ -92,4 +95,9 @@ public class ScrollOfRetribution extends Scroll {
 	public int value() {
 		return isKnown() ? 40 * quantity : super.value();
 	}
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.PERCENTAGE_BASED);
+    }
 }

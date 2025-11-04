@@ -37,6 +37,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.PoisonDart;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -44,7 +46,9 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
-public class PoisonDartTrap extends Trap {
+import java.util.EnumSet;
+
+public class PoisonDartTrap extends Trap implements DamageSource {
 
 	{
 		color = GREEN;
@@ -148,4 +152,9 @@ public class PoisonDartTrap extends Trap {
 
 		});
 	}
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.TRAPPED, DamageProperty.PHYSICAL, DamageProperty.POISON);
+    }
 }

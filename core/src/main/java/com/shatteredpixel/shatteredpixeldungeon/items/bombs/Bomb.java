@@ -54,6 +54,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurs
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTerror;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPassage;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -70,10 +72,11 @@ import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public class Bomb extends Item {
+public class Bomb extends Item implements DamageSource {
 	
 	{
 		image = ItemSpriteSheet.BOMB;
@@ -274,7 +277,12 @@ public class Bomb extends Item {
 		return true;
 	}
 
-	private Class<? extends Bomb>[] enhancedBombs = new Class[] {
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.PHYSICAL, DamageProperty.EXPLOSIVE);
+    }
+
+    private Class<? extends Bomb>[] enhancedBombs = new Class[] {
 			Firebomb.class,
 			FrostBomb.class,
 			SupplyBomb.class,

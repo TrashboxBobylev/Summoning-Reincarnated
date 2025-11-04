@@ -38,6 +38,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.FrozenCarpaccio;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -48,8 +50,9 @@ import com.watabou.utils.Random;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.EnumSet;
 
-public class FrostBurn extends Buff implements Hero.Doom {
+public class FrostBurn extends Buff implements Hero.Doom, DamageSource {
 	
 	private static final float DURATION = 8f;
 	
@@ -215,4 +218,9 @@ public class FrostBurn extends Buff implements Hero.Doom {
 		Dungeon.fail( getClass() );
 		GLog.negative( Messages.get(this, "ondeath") );
 	}
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.FROST, DamageProperty.FIRE, DamageProperty.MAGICAL);
+    }
 }

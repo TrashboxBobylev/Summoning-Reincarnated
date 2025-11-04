@@ -39,6 +39,8 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.WeakFloorRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
@@ -52,7 +54,9 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
-public class Chasm implements Hero.Doom {
+import java.util.EnumSet;
+
+public class Chasm implements Hero.Doom, DamageSource {
 
 	public static boolean jumpConfirmed = false;
 	private static int heroPos;
@@ -162,8 +166,13 @@ public class Chasm implements Hero.Doom {
 		
 		if (mob.sprite != null) ((MobSprite)mob.sprite).fall();
 	}
-	
-	public static class Falling extends Buff {
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.PHYSICAL, DamageProperty.FALL);
+    }
+
+    public static class Falling extends Buff {
 		
 		{
 			actPriority = VFX_PRIO;

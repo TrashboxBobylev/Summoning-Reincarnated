@@ -59,6 +59,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLightning;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CityBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -77,6 +79,7 @@ import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashSet;
 
 public class DwarfKing extends Mob {
@@ -454,7 +457,7 @@ public class DwarfKing extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int dmg, DamageSource src) {
 		//hero counts as unarmed if they aren't attacking with a weapon and aren't benefiting from force
 		if (src == Dungeon.hero && (!RingOfForce.fightingUnarmed(Dungeon.hero) || Dungeon.hero.buff(RingOfForce.Force.class) != null)){
 			Statistics.qualifiedForBossChallengeBadge = false;
@@ -644,7 +647,7 @@ public class DwarfKing extends Mob {
 		}
 	}
 
-	public static class Summoning extends Buff {
+	public static class Summoning extends Buff implements DamageSource {
 
 		private int delay;
 		private int pos;
@@ -766,9 +769,14 @@ public class DwarfKing extends Mob {
 			pos = bundle.getInt(POS);
 			summon = bundle.getClass(SUMMON);
 		}
+
+        @Override
+        public EnumSet<DamageProperty> initDmgProperties() {
+            return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.DARK);
+        }
 	}
 
-	public static class KingDamager extends Buff {
+	public static class KingDamager extends Buff implements DamageSource {
 
 		{
 			revivePersists = true;
@@ -793,7 +801,12 @@ public class DwarfKing extends Mob {
 				}
 			}
 		}
-	}
+
+        @Override
+        public EnumSet<DamageProperty> initDmgProperties() {
+            return EnumSet.of(DamageProperty.CRUMBLING);
+        }
+    }
 
 	public static class DKBarrior extends Barrier{
 

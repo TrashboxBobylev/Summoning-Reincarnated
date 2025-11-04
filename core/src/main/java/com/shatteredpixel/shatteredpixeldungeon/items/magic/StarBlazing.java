@@ -36,6 +36,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
@@ -49,7 +51,9 @@ import com.watabou.utils.PathFinder;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
-public class StarBlazing extends ConjurerSpell {
+import java.util.EnumSet;
+
+public class StarBlazing extends ConjurerSpell implements DamageSource {
 
     {
         image = ItemSpriteSheet.STARS;
@@ -194,6 +198,11 @@ public class StarBlazing extends ConjurerSpell {
     @Override
     public String empowermentRankDesc(int rank) {
         return Messages.get(this, "rank_empower", heroLvl() / (rank == 1 ? 4 : 3));
+    }
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.SPIRIT);
     }
 
     public static class ProjectileStar extends Item {

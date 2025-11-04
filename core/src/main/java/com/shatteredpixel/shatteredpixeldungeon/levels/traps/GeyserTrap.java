@@ -35,6 +35,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
@@ -43,8 +45,9 @@ import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
-public class GeyserTrap extends Trap {
+public class GeyserTrap extends Trap implements DamageSource {
 
 	{
 		color = TEAL;
@@ -151,4 +154,9 @@ public class GeyserTrap extends Trap {
 			}
 		}
 	}
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.TRAPPED, DamageProperty.MAGICAL, DamageProperty.WATER);
+    }
 }

@@ -33,6 +33,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.EffectBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.ManaStealHost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -41,7 +43,9 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
-public class HolyAuraBuff extends EffectBuff implements ManaStealHost {
+import java.util.EnumSet;
+
+public class HolyAuraBuff extends EffectBuff implements ManaStealHost, DamageSource {
     @Override
     public int icon() {
         return BuffIndicator.SOUL_BUFF;
@@ -121,4 +125,8 @@ public class HolyAuraBuff extends EffectBuff implements ManaStealHost {
         return Messages.get(this, "desc", healingRate, shieldingRate, manaSteal, minDamage, maxDamage, dispTurns());
     }
 
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.SPIRIT);
+    }
 }

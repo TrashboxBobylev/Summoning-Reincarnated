@@ -26,10 +26,14 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 
-public class Corruption extends AllyBuff {
+import java.util.EnumSet;
+
+public class Corruption extends AllyBuff implements DamageSource {
 
 	{
 		type = buffType.NEGATIVE;
@@ -76,4 +80,8 @@ public class Corruption extends AllyBuff {
 		return BuffIndicator.CORRUPT;
 	}
 
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.DARK);
+    }
 }

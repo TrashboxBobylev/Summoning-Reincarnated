@@ -22,17 +22,31 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
-package com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic;
-
-import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
-import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
+package com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource;
 
 import java.util.EnumSet;
 
-// TODO: convert into damage source trait when that is done
-public interface InescapableDamage extends DamageSource {
-    @Override
-    default EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.IGNORES_INVULNERABILITY, DamageProperty.MAGICAL);
+public interface DamageSource {
+
+    /**
+     * @return initial set of damage properties before they are unfolded.
+     */
+    default EnumSet<DamageProperty> initDmgProperties(){
+        return EnumSet.noneOf(DamageProperty.class);
+    }
+
+    default EnumSet<DamageProperty> unfoldProperties(EnumSet<DamageProperty> properties){
+        for (DamageProperty property: properties){
+            properties.addAll(property.children);
+        }
+        return properties;
+    }
+
+    default EnumSet<DamageProperty> dmgProperties(){
+        return unfoldProperties(initDmgProperties());
+    }
+
+    default boolean hasProperty(DamageProperty property){
+        return dmgProperties().contains(property);
     }
 }

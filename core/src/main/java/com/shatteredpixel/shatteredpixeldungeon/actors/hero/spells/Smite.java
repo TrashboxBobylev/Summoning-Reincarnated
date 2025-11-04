@@ -33,6 +33,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.AttackIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
@@ -41,7 +43,9 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
-public class Smite extends TargetedClericSpell {
+import java.util.EnumSet;
+
+public class Smite extends TargetedClericSpell implements DamageSource {
 
 	public static Smite INSTANCE = new Smite();
 
@@ -126,6 +130,11 @@ public class Smite extends TargetedClericSpell {
 			return Random.NormalIntRange(min, max);
 		}
 	}
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.HOLY);
+    }
 
 	public static class SmiteTracker extends FlavourBuff {};
 

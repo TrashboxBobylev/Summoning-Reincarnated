@@ -32,6 +32,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.FrozenCarpaccio;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
@@ -40,8 +42,9 @@ import com.watabou.noosa.Image;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
-public class Frost extends FlavourBuff {
+public class Frost extends FlavourBuff implements DamageSource {
 
 	public static final float DURATION	= 10f;
 
@@ -138,6 +141,11 @@ public class Frost extends FlavourBuff {
 			if (target.paralysed <= 1) target.sprite.remove(CharSprite.State.PARALYSED);
 		}
 	}
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.FROST);
+    }
 
 	{
 		//can't chill what's frozen!

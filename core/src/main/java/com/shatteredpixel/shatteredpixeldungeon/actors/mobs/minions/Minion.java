@@ -52,6 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -372,7 +373,7 @@ public class Minion extends Mob implements ManaSource {
     }
 
     @Override
-    public void damage(int dmg, Object src) {
+    public void damage(int dmg, DamageSource src) {
         if (Dungeon.hero.belongings.armor instanceof ConjurerSet &&
                 ((ConjurerSet) Dungeon.hero.belongings.armor).rank() == 2)
             dmg *= 0.75f;

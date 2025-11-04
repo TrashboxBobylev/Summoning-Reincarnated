@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Door;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CausticSlimeSprite;
 import com.watabou.utils.Bundle;
@@ -87,7 +88,7 @@ public class DarkSlime extends Mob {
 	}
 
     @Override
-    public void damage(int dmg, Object src) {
+    public void damage(int dmg, DamageSource src) {
         for (Class c : RingOfElements.RESISTS){
             if (c.isAssignableFrom(src.getClass()) && src instanceof Wand){
                 dmg *= 3f;

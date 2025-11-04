@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -48,6 +49,7 @@ import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 public class ArcaneBomb extends Bomb.ConjuredBomb {
 
@@ -177,4 +179,12 @@ public class ArcaneBomb extends Bomb.ConjuredBomb {
 		//prices of ingredients
 		return quantity * (15 + 30);
 	}
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        EnumSet<DamageProperty> properties = super.initDmgProperties();
+        properties.remove(DamageProperty.PHYSICAL);
+        properties.add(DamageProperty.MAGICAL);
+        return properties;
+    }
 }

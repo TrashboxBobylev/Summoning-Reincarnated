@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfHaste;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfTenacity;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.watabou.utils.Random;
 
 public class TriadFighter extends BaseTriadAlly {
@@ -140,7 +141,7 @@ public class TriadFighter extends BaseTriadAlly {
     }
 
     @Override
-    public void damage(int dmg, Object src) {
+    public void damage(int dmg, DamageSource src) {
         if (Dungeon.hero.pointsInTalent(Talent.DURABILITY_OF_FIGHTER) > 3){
             dmg *= (int)Math.ceil(dmg * RingOfTenacity.damageMultiplier( Dungeon.hero ));
         }

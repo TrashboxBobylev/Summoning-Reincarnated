@@ -52,6 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.RatSkull;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.CursedWand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -193,7 +194,7 @@ public abstract class Elemental extends Mob {
 	@Override
 	public boolean add( Buff buff ) {
 		if (harmfulBuffs.contains( buff.getClass() )) {
-			damage( Random.NormalIntRange( HT/2, HT * 3/5 ), buff );
+			damage( Random.NormalIntRange( HT/2, HT * 3/5 ), (DamageSource) buff);
 			return false;
 		} else {
 			return super.add( buff );

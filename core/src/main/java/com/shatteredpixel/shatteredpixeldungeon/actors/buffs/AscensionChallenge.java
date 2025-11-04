@@ -60,15 +60,18 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Warlock;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
 
+import java.util.EnumSet;
 import java.util.HashMap;
 
-public class AscensionChallenge extends Buff {
+public class AscensionChallenge extends Buff implements DamageSource {
 
 	private static HashMap<Class<?extends Mob>, Float> modifiers = new HashMap<>();
 	static {
@@ -387,7 +390,12 @@ public class AscensionChallenge extends Buff {
 		return desc;
 	}
 
-	public static final String STACKS = "enemy_stacks";
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL);
+    }
+
+    public static final String STACKS = "enemy_stacks";
 	public static final String DAMAGE = "damage_inc";
 
 	public static final String STACKS_LOWERED = "stacks_lowered";

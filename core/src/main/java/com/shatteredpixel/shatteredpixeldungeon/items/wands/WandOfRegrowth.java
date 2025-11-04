@@ -51,6 +51,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
@@ -620,7 +621,7 @@ public class WandOfRegrowth extends Wand {
 		}
 
 		@Override
-		public void damage( int dmg, Object src ) {
+		public void damage(int dmg, DamageSource src ) {
 			//do nothing
 		}
 
@@ -784,7 +785,7 @@ public class WandOfRegrowth extends Wand {
         }
 
         @Override
-        public void damage(int dmg, Object src) {
+        public void damage(int dmg, DamageSource src) {
             if (src instanceof Burning) {
                 destroy();
                 sprite.die();

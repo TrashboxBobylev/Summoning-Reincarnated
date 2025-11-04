@@ -28,13 +28,17 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.WandEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.GameMath;
 
+import java.util.EnumSet;
+
 //for wands that directly damage a target
 //wands with AOE or circumstantial direct damage count here (e.g. fireblast, transfusion), but wands with indirect damage do not (e.g. corrosion)
-public abstract class DamageWand extends Wand{
+public abstract class DamageWand extends Wand implements DamageSource {
 
 	public float magicMin(){
 		return magicMin(power())*powerModifier();
@@ -88,5 +92,10 @@ public abstract class DamageWand extends Wand{
                 ),
                 getRechargeInfo(rank)
         );
+    }
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL);
     }
 }

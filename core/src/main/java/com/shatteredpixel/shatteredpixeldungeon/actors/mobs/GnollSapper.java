@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GnollSapperSprite;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.GameMath;
@@ -109,7 +110,7 @@ public class GnollSapper extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int dmg, DamageSource src) {
 		super.damage(dmg, src);
 		abilityCooldown -= dmg/10f;
 	}

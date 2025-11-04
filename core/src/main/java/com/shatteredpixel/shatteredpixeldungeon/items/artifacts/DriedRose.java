@@ -60,6 +60,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
@@ -87,6 +89,7 @@ import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 public class DriedRose extends Artifact {
 
@@ -620,7 +623,12 @@ public class DriedRose extends Artifact {
 			return super.act();
 		}
 
-		public static class NoRoseDamage{}
+		public static class NoRoseDamage implements DamageSource{
+            @Override
+            public EnumSet<DamageProperty> initDmgProperties() {
+                return EnumSet.of(DamageProperty.CRUMBLING);
+            }
+        }
 
 		@Override
 		public int attackSkill(Char target) {
@@ -685,7 +693,7 @@ public class DriedRose extends Artifact {
 		}
 		
 		@Override
-		public void damage(int dmg, Object src) {
+		public void damage(int dmg, DamageSource src) {
 			super.damage( dmg, src );
 			
 			//for the rose status indicator

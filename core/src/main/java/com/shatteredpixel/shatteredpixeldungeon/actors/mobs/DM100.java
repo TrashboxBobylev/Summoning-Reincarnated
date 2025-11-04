@@ -34,6 +34,8 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -41,6 +43,8 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.DM100Sprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
+
+import java.util.EnumSet;
 
 public class DM100 extends Mob implements Callback {
 
@@ -88,7 +92,12 @@ public class DM100 extends Mob implements Callback {
 	}
 	
 	//used so resistances can differentiate between melee and magical attacks
-	public static class LightningBolt{}
+	public static class LightningBolt implements DamageSource {
+        @Override
+        public EnumSet<DamageProperty> initDmgProperties() {
+            return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.ELECTRIC);
+        }
+    }
 	
 	@Override
 	protected boolean doAttack( Char enemy ) {

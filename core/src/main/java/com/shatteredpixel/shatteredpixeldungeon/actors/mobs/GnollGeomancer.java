@@ -48,6 +48,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -64,6 +66,7 @@ import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 public class GnollGeomancer extends Mob {
 
@@ -269,7 +272,7 @@ public class GnollGeomancer extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int dmg, DamageSource src) {
 		int hpBracket = HT / 3;
 
 		int curbracket = HP / hpBracket;
@@ -741,11 +744,16 @@ public class GnollGeomancer extends Mob {
 		rocksInFlight++;
 	}
 
-	public static class Boulder extends Item {
+	public static class Boulder extends Item implements DamageSource {
 		{
 			image = ItemSpriteSheet.GEO_BOULDER;
 		}
-	}
+
+        @Override
+        public EnumSet<DamageProperty> initDmgProperties() {
+            return EnumSet.of(DamageProperty.PHYSICAL);
+        }
+    }
 
 	//similar overall logic as DM-300's rock fall attack, but with more parameters
 	public static boolean prepRockFallAttack( Char target, Char source, int range, boolean avoidBarricades ){
@@ -810,7 +818,7 @@ public class GnollGeomancer extends Mob {
 		return true;
 	}
 
-	public static class GnollRockFall extends DelayedRockFall{
+	public static class GnollRockFall extends DelayedRockFall implements DamageSource{
 
 		@Override
 		public void affectChar(Char ch) {
@@ -836,7 +844,11 @@ public class GnollGeomancer extends Mob {
 			}
 		}
 
-	}
+        @Override
+        public EnumSet<DamageProperty> initDmgProperties() {
+            return EnumSet.of(DamageProperty.MAGICAL);
+        }
+    }
 
 	public static class RockArmor extends ShieldBuff { }
 

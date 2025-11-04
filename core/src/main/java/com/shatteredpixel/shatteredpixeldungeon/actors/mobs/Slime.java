@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SlimeSprite;
 import com.watabou.utils.Random;
 
@@ -58,7 +59,7 @@ public class Slime extends Mob {
 	}
 	
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int dmg, DamageSource src) {
 		float scaleFactor = AscensionChallenge.statModifier(this);
 		int scaledDmg = Math.round(dmg/scaleFactor);
 		if (scaledDmg >= 5){

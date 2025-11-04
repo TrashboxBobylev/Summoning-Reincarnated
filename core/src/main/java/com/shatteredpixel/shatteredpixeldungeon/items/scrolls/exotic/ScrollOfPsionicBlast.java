@@ -33,6 +33,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -40,8 +42,9 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
-public class ScrollOfPsionicBlast extends ExoticScroll {
+public class ScrollOfPsionicBlast extends ExoticScroll implements DamageSource {
 	
 	{
 		icon = ItemSpriteSheet.Icons.SCROLL_PSIBLAST;
@@ -93,4 +96,9 @@ public class ScrollOfPsionicBlast extends ExoticScroll {
 		
 	
 	}
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.PERCENTAGE_BASED);
+    }
 }

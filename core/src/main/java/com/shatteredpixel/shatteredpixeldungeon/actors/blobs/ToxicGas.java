@@ -31,10 +31,14 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
-public class ToxicGas extends Blob implements Hero.Doom {
+import java.util.EnumSet;
+
+public class ToxicGas extends Blob implements Hero.Doom, DamageSource {
 
 	@Override
 	protected void evolve() {
@@ -78,4 +82,9 @@ public class ToxicGas extends Blob implements Hero.Doom {
 		Dungeon.fail( this );
 		GLog.n( Messages.get(this, "ondeath") );
 	}
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.CRUMBLING, DamageProperty.ORGANIC);
+    }
 }

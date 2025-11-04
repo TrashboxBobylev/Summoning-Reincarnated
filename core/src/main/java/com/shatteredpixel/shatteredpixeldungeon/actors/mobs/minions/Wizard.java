@@ -42,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.WizardSprite;
 import com.watabou.utils.Callback;
@@ -96,7 +97,7 @@ public class Wizard extends Minion implements Callback {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int dmg, DamageSource src) {
 		for (Class c : AntiMagic.RESISTS){
 			if (c.isAssignableFrom(src.getClass())){
                 dmg = Math.round(dmg * 0.75f);

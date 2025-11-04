@@ -63,6 +63,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.PrisonBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -134,7 +135,7 @@ public class Tengu extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int dmg, DamageSource src) {
 		if (!Dungeon.level.mobs.contains(this)){
 			return;
 		}
@@ -644,7 +645,7 @@ public class Tengu extends Mob {
 							dmg -= ch.drRoll();
 
 							if (dmg > 0) {
-								ch.damage(dmg, Bomb.class);
+								ch.damage(dmg, new Bomb());
 							}
 
 							if (ch == Dungeon.hero){

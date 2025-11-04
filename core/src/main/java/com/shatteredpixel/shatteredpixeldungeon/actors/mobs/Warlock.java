@@ -39,6 +39,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.WarlockSprite;
@@ -46,6 +48,8 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
+
+import java.util.EnumSet;
 
 public class Warlock extends Mob implements Callback {
 	
@@ -111,7 +115,12 @@ public class Warlock extends Mob implements Callback {
 	}
 	
 	//used so resistances can differentiate between melee and magical attacks
-	public static class DarkBolt{}
+	public static class DarkBolt implements DamageSource {
+        @Override
+        public EnumSet<DamageProperty> initDmgProperties() {
+            return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.DARK);
+        }
+    }
 	
 	protected void zap() {
 		spend( TIME_TO_ZAP );

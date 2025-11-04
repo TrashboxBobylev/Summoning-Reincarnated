@@ -17,6 +17,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.RainbowParticl
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.SummoningTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.LostSpiritSprite;
 import com.watabou.utils.Callback;
@@ -55,7 +56,7 @@ public class LostSpirit extends AbyssalMob implements Callback {
     }
 
     @Override
-    public void damage(int dmg, Object src) {
+    public void damage(int dmg, DamageSource src) {
         int distance = Dungeon.level.distance(this.pos, Dungeon.hero.pos) - 1;
         float multiplier = Math.min(0.2f, 1 / (1.32f * (float)Math.pow(1.2f, distance)));
         dmg = Math.round(dmg * multiplier);

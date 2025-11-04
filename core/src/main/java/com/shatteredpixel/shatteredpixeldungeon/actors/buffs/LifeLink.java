@@ -28,11 +28,15 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
 
-public class LifeLink extends FlavourBuff {
+import java.util.EnumSet;
+
+public class LifeLink extends FlavourBuff implements DamageSource {
 
 	public int object = 0;
 
@@ -84,4 +88,8 @@ public class LifeLink extends FlavourBuff {
 		return Math.max(0, (duration - visualcooldown()) / duration);
 	}
 
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL);
+    }
 }

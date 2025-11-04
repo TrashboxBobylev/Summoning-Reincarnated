@@ -36,12 +36,16 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ElectricalExplosive;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
-public class Electricity extends Blob {
+import java.util.EnumSet;
+
+public class Electricity extends Blob implements DamageSource {
 	
 	{
 		//acts after mobs, to give them a chance to resist paralysis
@@ -131,5 +135,9 @@ public class Electricity extends Blob {
 	public String tileDesc() {
 		return Messages.get(this, "desc");
 	}
-	
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.ELECTRIC);
+    }
 }

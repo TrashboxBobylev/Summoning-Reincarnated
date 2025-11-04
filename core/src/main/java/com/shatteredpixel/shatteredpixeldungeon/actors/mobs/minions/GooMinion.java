@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GooMinionSprite;
@@ -244,7 +245,7 @@ public class GooMinion extends Minion {
     }
 
     @Override
-    public void damage(int dmg, Object src) {
+    public void damage(int dmg, DamageSource src) {
         if (rank == 3){
             dmg /= 10;
         } else {

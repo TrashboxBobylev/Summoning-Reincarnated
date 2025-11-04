@@ -42,6 +42,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfDisintegration;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.DisintegrationTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -50,6 +52,8 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+
+import java.util.EnumSet;
 
 public class Eye extends Mob {
 	
@@ -157,7 +161,7 @@ public class Eye extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int dmg, DamageSource src) {
 		if (beamCharged) dmg /= 4;
 		super.damage(dmg, src);
 	}
@@ -169,7 +173,12 @@ public class Eye extends Mob {
 	}
 	
 	//used so resistances can differentiate between melee and magical attacks
-	public static class DeathGaze{}
+	public static class DeathGaze implements DamageSource{
+        @Override
+        public EnumSet<DamageProperty> initDmgProperties() {
+            return EnumSet.of(DamageProperty.MAGICAL);
+        }
+    }
 
 	public void deathGaze(){
 		if (!beamCharged || beamCooldown > 0 || beam == null)

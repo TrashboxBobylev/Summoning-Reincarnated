@@ -31,6 +31,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Sacrificial;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Sickle;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -38,7 +40,9 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
-public class Bleeding extends Buff {
+import java.util.EnumSet;
+
+public class Bleeding extends Buff implements DamageSource {
 
 	{
 		type = buffType.NEGATIVE;
@@ -143,4 +147,9 @@ public class Bleeding extends Buff {
 	public String desc() {
 		return Messages.get(this, "desc", Math.round(level));
 	}
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.CRUMBLING, DamageProperty.ORGANIC);
+    }
 }

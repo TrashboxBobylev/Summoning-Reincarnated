@@ -87,6 +87,8 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -100,9 +102,10 @@ import com.watabou.utils.Random;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.HashMap;
 
-public class ElementalStrike extends ArmorAbility {
+public class ElementalStrike extends ArmorAbility implements DamageSource {
 
 	//TODO a few duplicates here (curse duplicates are fine)
 	private static final HashMap<Class<?extends Weapon.Enchantment>, Integer> effectTypes = new HashMap<>();
@@ -381,7 +384,7 @@ public class ElementalStrike extends ArmorAbility {
 			if (storedKineticDamage > 0) {
 				for (Char ch : affected) {
 					if (ch != primaryTarget) {
-						ch.damage(Math.round(storedKineticDamage * 0.4f * powerMulti), ench);
+						ch.damage(Math.round(storedKineticDamage * 0.4f * powerMulti), (Kinetic)ench);
 					}
 				}
 				storedKineticDamage = 0;
@@ -437,7 +440,7 @@ public class ElementalStrike extends ArmorAbility {
 		} else if (ench instanceof Projecting){
 			for (Char ch : affected){
 				if (ch != primaryTarget) {
-					ch.damage(Math.round(hero.damageRoll() * 0.3f * powerMulti), ench);
+					ch.damage(Math.round(hero.damageRoll() * 0.3f * powerMulti), this);
 				}
 			}
 
@@ -476,7 +479,7 @@ public class ElementalStrike extends ArmorAbility {
 					float hpMissing = 1f - (ch.HP / (float)ch.HT);
 					float chance = 0.06f + 0.24f*hpMissing; //6-30%
 					if (Random.Float() < chance*powerMulti){
-						ch.damage( ch.HP, Grim.class );
+						ch.damage( ch.HP, new Grim() );
 						ch.sprite.emitter().burst( ShadowParticle.UP, 5 );
 					}
 				}
@@ -583,4 +586,8 @@ public class ElementalStrike extends ArmorAbility {
 		return new Talent[]{Talent.ELEMENTAL_REACH, Talent.STRIKING_FORCE, Talent.DIRECTED_POWER, Talent.HEROIC_ENERGY};
 	}
 
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL);
+    }
 }

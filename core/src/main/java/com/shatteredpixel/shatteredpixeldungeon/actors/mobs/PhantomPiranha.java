@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.ClericSpell;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.PhantomMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.PhantomPiranhaSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -50,7 +51,7 @@ public class PhantomPiranha extends Piranha {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int dmg, DamageSource src) {
 		Char dmgSource = null;
 		if (src instanceof Char) dmgSource = (Char)src;
 		if (src instanceof Wand || src instanceof ClericSpell) dmgSource = Dungeon.hero;

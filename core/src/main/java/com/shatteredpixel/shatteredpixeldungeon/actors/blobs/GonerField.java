@@ -32,10 +32,14 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulCache;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulParalysis;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.watabou.utils.Random;
 
-public class GonerField extends Blob {
+import java.util.EnumSet;
+
+public class GonerField extends Blob implements DamageSource {
 	
 	{
 		//acts after mobs, to give them a chance to resist paralysis
@@ -84,5 +88,9 @@ public class GonerField extends Blob {
 	public String tileDesc() {
 		return Messages.get(this, "desc");
 	}
-	
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.SPIRIT);
+    }
 }

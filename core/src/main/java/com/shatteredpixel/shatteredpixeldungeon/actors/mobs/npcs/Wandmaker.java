@@ -47,6 +47,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.MassGraveRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.RitualSiteRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.RotGardenRoom;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Rotberry;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -89,7 +90,7 @@ public class Wandmaker extends NPC {
 	}
 
 	@Override
-	public void damage( int dmg, Object src ) {
+	public void damage(int dmg, DamageSource src ) {
 		//do nothing
 	}
 

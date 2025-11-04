@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Regrowth;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.FungalSpinnerSprite;
 import com.watabou.utils.PathFinder;
@@ -51,7 +52,7 @@ public class FungalSpinner extends Spinner {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int dmg, DamageSource src) {
 		int grassCells = 0;
 		for (int i : PathFinder.NEIGHBOURS9) {
 			if (Dungeon.level.map[pos+i] == Terrain.FURROWED_GRASS

@@ -12,6 +12,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.RedCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.UpgradeClump;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.AbyssalSpawnerSprite;
 import com.watabou.utils.Bundle;
@@ -89,7 +90,7 @@ public class AbyssalSpawner extends AbyssalMob {
     }
 
     @Override
-    public void damage(int dmg, Object src) {
+    public void damage(int dmg, DamageSource src) {
         spawnCooldown -= dmg / 2f;
         if (dmg >= HT / 4){
             dmg = HT/4 - 1 + (int)(Math.sqrt(8*(dmg - (HT/4f - 1)) + 1) - 1)/2;

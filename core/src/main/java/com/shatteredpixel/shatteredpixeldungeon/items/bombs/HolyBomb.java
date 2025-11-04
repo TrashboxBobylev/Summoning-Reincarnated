@@ -37,6 +37,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.EffectTarget;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -53,6 +55,7 @@ import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 public class HolyBomb extends Bomb.ConjuredBomb {
 
@@ -123,7 +126,12 @@ public class HolyBomb extends Bomb.ConjuredBomb {
 		Sample.INSTANCE.play( Assets.Sounds.BONG, 1, Random.Float(0.87f, 1.15f));
 	}
 
-	public static class HolyDamage{}
+	public static class HolyDamage implements DamageSource {
+        @Override
+        public EnumSet<DamageProperty> initDmgProperties() {
+            return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.HOLY);
+        }
+    }
 
 	@Override
 	public String desc() {

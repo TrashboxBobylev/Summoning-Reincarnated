@@ -40,6 +40,8 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Door;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.TenguDartTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -55,6 +57,8 @@ import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
+
+import java.util.EnumSet;
 
 public class WandOfBlastWave extends DamageWand {
 
@@ -259,7 +263,12 @@ public class WandOfBlastWave extends DamageWand {
         }
     }
 
-    public static class Knockback{}
+    public static class Knockback implements DamageSource {
+        @Override
+        public EnumSet<DamageProperty> initDmgProperties() {
+            return EnumSet.of(DamageProperty.PHYSICAL, DamageProperty.KNOCKBACK);
+        }
+    }
 
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {

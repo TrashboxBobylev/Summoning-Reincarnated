@@ -30,6 +30,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CrystalWispSprite;
@@ -37,7 +39,9 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
-public class CrystalWisp extends Mob{
+import java.util.EnumSet;
+
+public class CrystalWisp extends Mob implements DamageSource {
 
 	{
 		spriteClass = CrystalWispSprite.class;
@@ -124,7 +128,12 @@ public class CrystalWisp extends Mob{
 	}
 
 	//used so resistances can differentiate between melee and magical attacks
-	public static class LightBeam {}
+	public static class LightBeam implements DamageSource {
+        @Override
+        public EnumSet<DamageProperty> initDmgProperties() {
+            return EnumSet.of(DamageProperty.MAGICAL);
+        }
+    }
 
 	private void zap() {
 		spend( 1f );

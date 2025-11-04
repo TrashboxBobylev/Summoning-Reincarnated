@@ -39,6 +39,8 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -60,6 +62,7 @@ import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 public class RunicBlade extends MeleeWeapon {
 
@@ -158,6 +161,13 @@ public class RunicBlade extends MeleeWeapon {
 		return info;
 	}
 
+    public static class RunicDart implements DamageSource {
+        @Override
+        public EnumSet<DamageProperty> initDmgProperties() {
+            return EnumSet.of(DamageProperty.MAGICAL);
+        }
+    }
+
 	protected static CellSelector.Listener zapper = new  CellSelector.Listener() {
 
 		@Override
@@ -212,7 +222,7 @@ public class RunicBlade extends MeleeWeapon {
 												if (enemy != null && enemy != curUser) {
 													if (Char.hit(curUser, enemy, true)) {
 														int dmg = curBlade.damageRoll(curUser);
-														enemy.damage(dmg, curBlade);
+														enemy.damage(dmg, new RunicDart());
 														curBlade.proc(curUser, enemy, dmg);
 														Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC);
 													} else {

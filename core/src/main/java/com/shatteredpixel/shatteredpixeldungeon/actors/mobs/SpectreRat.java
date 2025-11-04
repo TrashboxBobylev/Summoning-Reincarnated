@@ -43,6 +43,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SpectreRatSprite;
@@ -52,6 +54,7 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 
 public class SpectreRat extends AbyssalMob implements Callback {
 
@@ -126,7 +129,12 @@ public class SpectreRat extends AbyssalMob implements Callback {
 	}
 
 	//used so resistances can differentiate between melee and magical attacks
-	public static class DarkBolt{}
+	public static class DarkBolt implements DamageSource {
+        @Override
+        public EnumSet<DamageProperty> initDmgProperties() {
+            return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.DARK);
+        }
+    }
 
 	private void zap() {
 		spend( TIME_TO_ZAP );

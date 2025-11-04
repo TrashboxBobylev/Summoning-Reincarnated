@@ -55,6 +55,8 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GeyserTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -63,6 +65,8 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+
+import java.util.EnumSet;
 
 public abstract class YogFist extends Mob {
 
@@ -148,7 +152,7 @@ public abstract class YogFist extends Mob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int dmg, DamageSource src) {
 		int preHP = HP;
 		super.damage(dmg, src);
 		int dmgTaken = preHP - HP;
@@ -325,7 +329,7 @@ public abstract class YogFist extends Mob {
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
+		public void damage(int dmg, DamageSource src) {
 			int grassCells = 0;
 			for (int i : PathFinder.NEIGHBOURS9) {
 				if (Dungeon.level.map[pos+i] == Terrain.FURROWED_GRASS
@@ -405,7 +409,7 @@ public abstract class YogFist extends Mob {
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
+		public void damage(int dmg, DamageSource src) {
 			if (!isInvulnerable(src.getClass())
 					&& !(src instanceof Bleeding)
 					&& buff(Sickle.HarvestBleedTracker.class) == null){
@@ -465,7 +469,7 @@ public abstract class YogFist extends Mob {
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
+		public void damage(int dmg, DamageSource src) {
 			if (!isInvulnerable(src.getClass()) && !(src instanceof Viscosity.DeferedDamage)){
 				dmg = Math.round( dmg * resist( src.getClass() ));
 				if (dmg >= 0) {
@@ -501,7 +505,12 @@ public abstract class YogFist extends Mob {
 		}
 
 		//used so resistances can differentiate between melee and magical attacks
-		public static class LightBeam{}
+		public static class LightBeam implements DamageSource{
+            @Override
+            public EnumSet<DamageProperty> initDmgProperties() {
+                return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.HOLY);
+            }
+        }
 
 		@Override
 		protected void zap() {
@@ -528,7 +537,7 @@ public abstract class YogFist extends Mob {
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
+		public void damage(int dmg, DamageSource src) {
 			int beforeHP = HP;
 			super.damage(dmg, src);
 			if (isAlive() && beforeHP > HT/2 && HP < HT/2){
@@ -567,7 +576,12 @@ public abstract class YogFist extends Mob {
 		}
 
 		//used so resistances can differentiate between melee and magical attacks
-		public static class DarkBolt{}
+		public static class DarkBolt implements DamageSource {
+            @Override
+            public EnumSet<DamageProperty> initDmgProperties() {
+                return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.DARK);
+            }
+        }
 
 		@Override
 		protected void zap() {
@@ -598,7 +612,7 @@ public abstract class YogFist extends Mob {
 		}
 
 		@Override
-		public void damage(int dmg, Object src) {
+		public void damage(int dmg, DamageSource src) {
 			int beforeHP = HP;
 			super.damage(dmg, src);
 			if (isAlive() && beforeHP > HT/2 && HP < HT/2){

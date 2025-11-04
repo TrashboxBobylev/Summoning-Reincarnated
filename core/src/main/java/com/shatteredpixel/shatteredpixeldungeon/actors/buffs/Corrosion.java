@@ -28,13 +28,17 @@ import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorrosion;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
 
-public class Corrosion extends Buff implements Hero.Doom {
+import java.util.EnumSet;
+
+public class Corrosion extends Buff implements Hero.Doom, DamageSource {
 
 	private float damage = 1;
 	protected float left;
@@ -132,4 +136,8 @@ public class Corrosion extends Buff implements Hero.Doom {
 		GLog.n(Messages.get(this, "ondeath"));
 	}
 
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.ACID);
+    }
 }

@@ -27,6 +27,8 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
@@ -34,7 +36,9 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
 
-public class EctoCharge extends Buff {
+import java.util.EnumSet;
+
+public class EctoCharge extends Buff implements DamageSource {
     public static final float MAXIMUM = 2.5f;
     public static final int RATE      = 40;
 
@@ -107,5 +111,10 @@ public class EctoCharge extends Buff {
     public void restoreFromBundle( Bundle bundle ) {
         super.restoreFromBundle( bundle );
         level = bundle.getInt( LEVEL );
+    }
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.DARK);
     }
 }

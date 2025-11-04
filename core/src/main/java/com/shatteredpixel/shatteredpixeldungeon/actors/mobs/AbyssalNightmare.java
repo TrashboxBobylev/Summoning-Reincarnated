@@ -92,6 +92,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.DisintegrationTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GrimTrap;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.AbyssalSprite;
 import com.watabou.utils.BArray;
@@ -243,7 +244,7 @@ public class AbyssalNightmare extends AbyssalMob {
 	}
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int dmg, DamageSource src) {
 		dmg *= GameMath.gate(0.33f, (1f - ((float)(HT-HP)/HT))*3, 3f );
 		super.damage(dmg, src);
 	}

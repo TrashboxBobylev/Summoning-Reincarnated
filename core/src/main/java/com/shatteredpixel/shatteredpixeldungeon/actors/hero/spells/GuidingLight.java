@@ -34,6 +34,8 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
@@ -46,7 +48,9 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
-public class GuidingLight extends TargetedClericSpell {
+import java.util.EnumSet;
+
+public class GuidingLight extends TargetedClericSpell implements DamageSource {
 
 	public static final GuidingLight INSTANCE = new GuidingLight();
 
@@ -125,7 +129,12 @@ public class GuidingLight extends TargetedClericSpell {
 		return desc + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}
 
-	public static class GuidingLightPriestCooldown extends FlavourBuff {
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.HOLY);
+    }
+
+    public static class GuidingLightPriestCooldown extends FlavourBuff {
 
 		@Override
 		public int icon() {

@@ -28,13 +28,17 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
 
-public class Kinetic extends Weapon.Enchantment {
+import java.util.EnumSet;
+
+public class Kinetic extends Weapon.Enchantment implements DamageSource {
 	
 	private static ItemSprite.Glowing YELLOW = new ItemSprite.Glowing( 0xFFFF00 );
 	
@@ -58,7 +62,12 @@ public class Kinetic extends Weapon.Enchantment {
 		return YELLOW;
 	}
 
-	public static class KineticTracker extends Buff {
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.PHYSICAL);
+    }
+
+    public static class KineticTracker extends Buff {
 
 		{
 			actPriority = Actor.VFX_PRIO;

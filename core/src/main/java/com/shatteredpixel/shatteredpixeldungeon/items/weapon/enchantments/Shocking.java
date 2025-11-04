@@ -31,15 +31,18 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
-import com.watabou.utils.BArray;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.BArray;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
-public class Shocking extends Weapon.Enchantment {
+public class Shocking extends Weapon.Enchantment implements DamageSource {
 
 	private static ItemSprite.Glowing WHITE = new ItemSprite.Glowing( 0xFFFFFF, 0.5f );
 
@@ -81,7 +84,12 @@ public class Shocking extends Weapon.Enchantment {
 		return WHITE;
 	}
 
-	private ArrayList<Char> affected = new ArrayList<>();
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.ELECTRIC);
+    }
+
+    private ArrayList<Char> affected = new ArrayList<>();
 
 	private ArrayList<Lightning.Arc> arcs = new ArrayList<>();
 	

@@ -169,6 +169,8 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.features.Door;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GeyserTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GnollRockfallTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GrimTrap;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Earthroot;
@@ -188,13 +190,14 @@ import org.apache.commons.lang3.ClassUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 
 import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
-public abstract class Char extends Actor implements ManaSource {
+public abstract class Char extends Actor implements ManaSource, DamageSource {
 	
 	public int pos = 0;
 	
@@ -927,7 +930,7 @@ acuRoll *= accMulti;
 		return cachedShield;
 	}
 	
-	public void damage( int dmg, Object src ) {
+	public void damage(int dmg, DamageSource src ) {
 		
 		if (!isAlive() || dmg < 0) {
 			return;
@@ -1641,7 +1644,12 @@ acuRoll *= accMulti;
 		return (ch != null && ch.properties().contains(p));
 	}
 
-	public interface CharacterizedCallback {
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.PHYSICAL);
+    }
+
+    public interface CharacterizedCallback {
 
 		void call(Char ch);
 	}

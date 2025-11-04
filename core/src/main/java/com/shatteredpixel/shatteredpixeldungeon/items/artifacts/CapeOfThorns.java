@@ -28,11 +28,15 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Random;
+
+import java.util.EnumSet;
 
 public class CapeOfThorns extends Artifact {
 
@@ -78,7 +82,7 @@ public class CapeOfThorns extends Artifact {
 		return desc;
 	}
 
-	public class Thorns extends ArtifactBuff{
+	public class Thorns extends ArtifactBuff implements DamageSource {
 
 		@Override
 		public boolean act(){
@@ -145,7 +149,11 @@ public class CapeOfThorns extends Artifact {
 			super.detach();
 		}
 
-	}
+        @Override
+        public EnumSet<DamageProperty> initDmgProperties() {
+            return EnumSet.of(DamageProperty.PHYSICAL);
+        }
+    }
 
 
 }

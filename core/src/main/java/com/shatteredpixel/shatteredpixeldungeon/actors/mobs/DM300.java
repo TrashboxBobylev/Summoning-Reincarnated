@@ -58,6 +58,8 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -77,6 +79,7 @@ import com.watabou.utils.Random;
 import com.watabou.utils.Rect;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 public class DM300 extends Mob {
 
@@ -469,7 +472,7 @@ public class DM300 extends Mob {
 	private boolean invulnWarned = false;
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int dmg, DamageSource src) {
 		if (!BossHealthBar.isAssigned()){
 			notice();
 		}
@@ -680,7 +683,7 @@ public class DM300 extends Mob {
 		resistances.add(Slow.class);
 	}
 
-	public static class FallingRockBuff extends DelayedRockFall {
+	public static class FallingRockBuff extends DelayedRockFall implements DamageSource {
 
 		@Override
 		public void affectChar(Char ch) {
@@ -699,5 +702,9 @@ public class DM300 extends Mob {
 			}
 		}
 
-	}
+        @Override
+        public EnumSet<DamageProperty> initDmgProperties() {
+            return EnumSet.of(DamageProperty.PHYSICAL);
+        }
+    }
 }

@@ -30,12 +30,16 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Enchanting;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
 import com.watabou.noosa.audio.Sample;
 
-public class HolyWeapon extends ClericSpell {
+import java.util.EnumSet;
+
+public class HolyWeapon extends ClericSpell implements DamageSource {
 
 	public static final HolyWeapon INSTANCE = new HolyWeapon();
 
@@ -72,7 +76,12 @@ public class HolyWeapon extends ClericSpell {
 		return desc + "\n\n" + Messages.get(this, "charge_cost", (int)chargeUse(Dungeon.hero));
 	}
 
-	public static class HolyWepBuff extends FlavourBuff {
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.HOLY);
+    }
+
+    public static class HolyWepBuff extends FlavourBuff {
 
 		public static final float DURATION	= 50f;
 

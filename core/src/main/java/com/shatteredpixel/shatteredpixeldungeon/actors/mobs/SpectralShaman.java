@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfDisintegration;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ShamanSprite;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
@@ -127,7 +128,7 @@ public class SpectralShaman extends Mob {
     }
 
     @Override
-    public void damage(int dmg, Object src ) {
+    public void damage(int dmg, DamageSource src ) {
 
         if (state == PASSIVE) {
             state = HUNTING;

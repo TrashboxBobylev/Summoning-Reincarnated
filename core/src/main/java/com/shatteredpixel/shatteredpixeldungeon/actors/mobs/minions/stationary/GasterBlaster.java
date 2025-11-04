@@ -32,10 +32,14 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BlasterSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.utils.Random;
+
+import java.util.EnumSet;
 
 public class GasterBlaster extends StationaryMinion {
     {
@@ -121,7 +125,15 @@ public class GasterBlaster extends StationaryMinion {
             useResource(1);
     }
 
-    public static class Karma extends Buff {
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        EnumSet<DamageProperty> damageProperties = super.initDmgProperties();
+        damageProperties.remove(DamageProperty.PHYSICAL);
+        damageProperties.add(DamageProperty.MAGICAL);
+        return damageProperties;
+    }
+
+    public static class Karma extends Buff implements DamageSource {
         {
             type = buffType.NEGATIVE;
             announced = true;
@@ -136,6 +148,11 @@ public class GasterBlaster extends StationaryMinion {
         public boolean act() {
             spend(Actor.TICK);
             return true;
+        }
+
+        @Override
+        public EnumSet<DamageProperty> initDmgProperties() {
+            return EnumSet.of(DamageProperty.MAGICAL);
         }
     }
 }
