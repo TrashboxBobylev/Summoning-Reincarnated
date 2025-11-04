@@ -99,6 +99,11 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
     }
 
     @Override
+    public boolean isUpgradable() {
+        return false;
+    }
+
+    @Override
     public int rank() {
         return level()+1;
     }
