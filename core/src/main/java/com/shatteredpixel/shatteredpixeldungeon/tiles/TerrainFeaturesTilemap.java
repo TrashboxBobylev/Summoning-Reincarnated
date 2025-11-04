@@ -70,7 +70,7 @@ public class TerrainFeaturesTilemap extends DungeonTilemap {
 			return plants.get(pos).image + 7*16;
 		}
 
-		int stage = (Dungeon.depth-1)/5;
+		int stage = (Dungeon.depth-1)/Dungeon.chapterSize();
 		if (Dungeon.depth == 21 && Dungeon.level instanceof LastShopLevel) stage--;
 		stage = Math.min(stage, 4);
 		if (Dungeon.branch == AbyssLevel.BRANCH) stage = 4;
