@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.noosa.Image;
+import com.watabou.noosa.PointerArea;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.ui.Component;
 
@@ -82,33 +83,7 @@ public class WndConducts extends Window {
 //        if (!(yesToDebug() && editable))
 //            allConducts.remove(Conducts.Conduct.DEBUG_SCROLL);
 
-        ScrollPane pane = new ScrollPane(new Component()) {
-            @Override
-            public void onClick(float x, float y) {
-                int size = boxes.size();
-                if (editable) {
-                    for (int i = 0; i < size; i++) {
-                        if (boxes.get(i).onClick(x, y)) break;
-                    }
-                }
-                size = infos.size();
-                for (int i = 1; i < size+1; i++) {
-                    if (infos.get(i-1).inside(x, y)) {
-                        int index = allConducts.contains(Conducts.Conduct.NULL) ? i : i-1;
-
-                        String message = allConducts.get(index).desc();
-                        String title = Messages.titleCase(Messages.get(Conducts.class, allConducts.get(index).name()));
-                        ShatteredPixelDungeon.scene().add(
-                                new WndTitledMessage(
-                                        allConducts.get(index).getIcon(),
-                                        title, message)
-                        );
-
-                        break;
-                    }
-                }
-            }
-        };
+        ScrollPane pane = new ScrollPane(new Component());
         add(pane);
         pane.setRect(0, title.bottom()+2, WIDTH, HEIGHT - title.bottom() - 2);
         Component content = pane.content();
@@ -135,11 +110,22 @@ public class WndConducts extends Window {
             content.add(cb);
             boxes.add(cb);
             if (i != Conducts.Conduct.NULL) {
-                IconButton info = new IconButton(Icons.get(Icons.INFO)) {
+                IconButton info = new IconButton(Icons.get(Icons.INFO)){
                     @Override
                     protected void layout() {
                         super.layout();
-                        hotArea.y = -5000;
+                        hotArea.blockLevel = PointerArea.NEVER_BLOCK;
+                    }
+
+                    @Override
+                    protected void onClick() {
+                        String message = i.desc();
+                        String title = Messages.titleCase(Messages.get(Conducts.class, i.name()));
+                        ShatteredPixelDungeon.scene().add(
+                                new WndTitledMessage(
+                                        i.getIcon(),
+                                        title, message)
+                        );
                     }
                 };
                 info.setRect(cb.right(), pos, 16, BTN_HEIGHT);
@@ -189,9 +175,18 @@ public class WndConducts extends Window {
         protected void onClick() {
             super.onClick();
             if (active){
-                boolean disableEverything = this.conduct == Conducts.Conduct.NULL || SPDSettings.oneConduct();
-                for (CheckBox slot : boxes){
-                    if (slot != this && disableEverything) slot.checked(false);
+                if (this.conduct == Conducts.Conduct.NULL || SPDSettings.oneConduct()){
+                    for (ConduitBox slot : boxes){
+                        if (slot != this) {
+                            if (checked())
+                                slot.checked(false);
+                            if (slot.conduct == Conducts.Conduct.NULL && !checked())
+                                slot.checked(true);
+                        }
+                    }
+                }
+                if (this.conduct == Conducts.Conduct.NULL){
+                    checked(true);
                 }
             }
         }
@@ -206,7 +201,7 @@ public class WndConducts extends Window {
         @Override
         protected void layout() {
             super.layout();
-            hotArea.width = hotArea.height = 0;
+            hotArea.blockLevel = PointerArea.NEVER_BLOCK;
             if (!editable) icon.alpha(0f);
         }
     }
