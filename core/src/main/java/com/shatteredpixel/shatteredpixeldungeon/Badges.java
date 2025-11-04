@@ -1193,7 +1193,7 @@ public class Badges {
 	
 	private static void displayBadge( Badge badge ) {
 
-		if (badge == null || (badge.type != BadgeType.JOURNAL && !Dungeon.customSeedText.isEmpty())) {
+		if (badge == null || (badge.type != BadgeType.JOURNAL && !Dungeon.isLegit())) {
 			return;
 		}
 		
@@ -1230,7 +1230,7 @@ public class Badges {
 	}
 	
 	public static void unlock( Badge badge ){
-		if (!isUnlocked(badge) && (badge.type == BadgeType.JOURNAL || Dungeon.customSeedText.isEmpty())){
+		if (!isUnlocked(badge) && (badge.type == BadgeType.JOURNAL || Dungeon.isLegit())){
 			global.add( badge );
 			saveNeeded = true;
 		}

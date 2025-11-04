@@ -46,7 +46,12 @@ public class Conducts {
         WRAITH(1.5f, 7),
         SLEEPY(0.35f, 8),
         KING(1.3f, 10),
-        EVERYTHING(0f, 11),
+        EVERYTHING(0f, 11){
+            @Override
+            public boolean isCheaty() {
+                return true;
+            }
+        },
         EXPLOSIONS(1.5f, 12),
 //        INVISIBLE(2f),
         REGENERATION(1.33f, 14),
@@ -74,6 +79,10 @@ public class Conducts {
             @Override
             public boolean shouldAppear() {
                 return DeviceCompat.isDebug() || !SPDSettings.oneConduct();
+            }
+            @Override
+            public boolean isCheaty() {
+                return true;
             }
         };
 
@@ -103,6 +112,8 @@ public class Conducts {
         public boolean shouldAppear(){
             return true;
         }
+
+        public boolean isCheaty(){return false;}
 
         @Override
         public String toString() {

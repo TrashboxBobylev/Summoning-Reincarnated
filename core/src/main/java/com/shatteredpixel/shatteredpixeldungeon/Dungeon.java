@@ -266,7 +266,12 @@ public class Dungeon {
 		NORMAL("normal", Icons.STAIRS),
 		SMALL("small", Icons.SHRINKING, 1.1f),
 		BIGGER("bigger", Icons.ENLARGEMENT, 1.2f),
-		EXPLORE( "explore", Icons.EXPLORE, 0f),
+		EXPLORE( "explore", Icons.EXPLORE, 0f){
+            @Override
+            public boolean isCheaty() {
+                return true;
+            }
+        },
         NINE_CHAL("9chal", Icons.NINE_CHAL, 7f),
 		ABYSS_START("abyss_start", Icons.ABYSS_START, 2.0f){
             @Override
@@ -316,6 +321,9 @@ public class Dungeon {
 		}
 
         public boolean noQuests(){
+            return false;
+        }
+        public boolean isCheaty(){
             return false;
         }
 	}
@@ -443,6 +451,18 @@ public class Dungeon {
 	public static boolean isChallenged( Conducts.Conduct mask ) {
 		return conducts.isConducted(mask);
 	}
+
+    public static boolean isLegit(){
+        if (!customSeedText.isEmpty())
+            return false;
+        for (Conducts.Conduct conduct: conducts.conducts){
+            if (conduct.isCheaty())
+                return false;
+        }
+        if (Dungeon.mode.isCheaty())
+            return false;
+        return true;
+    }
 
 	public static boolean levelHasBeenGenerated(int depth, int branch){
 		return generatedLevels.contains(depth + 1000*branch);
