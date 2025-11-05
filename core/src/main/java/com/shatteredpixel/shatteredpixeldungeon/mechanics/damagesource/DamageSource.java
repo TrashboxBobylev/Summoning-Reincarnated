@@ -24,6 +24,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource;
 
+import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.EnumSet;
 
 public interface DamageSource {
@@ -37,7 +39,12 @@ public interface DamageSource {
 
     static EnumSet<DamageProperty> unfoldProperties(EnumSet<DamageProperty> properties){
         for (DamageProperty property: properties){
-            properties.addAll(property.children);
+            ArrayDeque<DamageProperty> queue = new ArrayDeque<>(Arrays.asList(property));
+            while (!queue.isEmpty()){
+                DamageProperty prop = queue.poll();
+                queue.addAll(prop.children);
+                properties.add(prop);
+            }
         }
         return properties;
     }
