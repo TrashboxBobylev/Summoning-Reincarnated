@@ -35,7 +35,7 @@ public interface DamageSource {
         return EnumSet.noneOf(DamageProperty.class);
     }
 
-    default EnumSet<DamageProperty> unfoldProperties(EnumSet<DamageProperty> properties){
+    static EnumSet<DamageProperty> unfoldProperties(EnumSet<DamageProperty> properties){
         for (DamageProperty property: properties){
             properties.addAll(property.children);
         }

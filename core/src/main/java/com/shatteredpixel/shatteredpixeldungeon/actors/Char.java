@@ -1487,10 +1487,14 @@ acuRoll *= accMulti;
 	}
 	
 	protected final HashSet<Class> resistances = new HashSet<>();
+    protected final EnumSet<DamageProperty> propertyResistances = EnumSet.noneOf(DamageProperty.class);
 
 	public float resistanceValue(Class effect){
 		return 0.5f;
 	}
+    public float resistanceValue(DamageProperty effect){
+        return 0.5f;
+    }
 
 	//returns percent effectiveness after resistances
 	//TODO currently resistances reduce effectiveness by a static 50%, and do not stack.
@@ -1514,8 +1518,28 @@ acuRoll *= accMulti;
 		}
 		return result * RingOfElements.resist(this, effect);
 	}
+
+    public float resist( DamageSource damageSource ){
+        return resist(damageSource.dmgProperties());
+    }
+    public float resist( EnumSet<DamageProperty> dmgProperties ){
+        EnumSet<DamageProperty> damageProperties = EnumSet.copyOf(propertyResistances);
+        for (Property p : properties()){
+            damageProperties.addAll(p.resistProperties());
+        }
+        DamageSource.unfoldProperties(damageProperties);
+
+        float result = 1f;
+        for (DamageProperty property: dmgProperties){
+            if (damageProperties.contains(property)){
+                result *= resistanceValue(property);
+            }
+        }
+        return result;
+    }
 	
 	protected final HashSet<Class> immunities = new HashSet<>();
+    protected final EnumSet<DamageProperty> propertyImmunities = EnumSet.noneOf(DamageProperty.class);
 	
 	public boolean isImmune(Class effect ){
 		HashSet<Class> immunes = new HashSet<>(immunities);
@@ -1536,6 +1560,25 @@ acuRoll *= accMulti;
 		}
 		return false;
 	}
+
+    public boolean isImmune( DamageSource damageSource ){
+        return isImmune(damageSource.dmgProperties());
+    }
+    public boolean isImmune( EnumSet<DamageProperty> dmgProperties ){
+        EnumSet<DamageProperty> damageProperties = EnumSet.copyOf(propertyImmunities);
+        for (Property p : properties()){
+            damageProperties.addAll(p.immuneProperties());
+        }
+        DamageSource.unfoldProperties(damageProperties);
+
+        float result = 1f;
+        for (DamageProperty property: dmgProperties){
+            if (damageProperties.contains(property)){
+                return true;
+            }
+        }
+        return false;
+    }
 
 	//similar to isImmune, but only factors in damage.
 	//Is used in AI decision-making
@@ -1591,7 +1634,9 @@ acuRoll *= accMulti;
         ANIMAL;
 
 		private HashSet<Class> resistances;
+        private EnumSet<DamageProperty> resistProperties;
 		private HashSet<Class> immunities;
+        private EnumSet<DamageProperty> immuneProperties;
 		
 		Property(){
 			this(new HashSet<Class>(), new HashSet<Class>());
@@ -1600,7 +1645,16 @@ acuRoll *= accMulti;
 		Property( HashSet<Class> resistances, HashSet<Class> immunities){
 			this.resistances = resistances;
 			this.immunities = immunities;
+            this.immuneProperties = EnumSet.noneOf(DamageProperty.class);
+            this.resistProperties = EnumSet.noneOf(DamageProperty.class);
 		}
+
+        Property( HashSet<Class> resistances, EnumSet<DamageProperty> resistProperties, HashSet<Class> immunities, EnumSet<DamageProperty> immuneProperties){
+            this.resistances = resistances;
+            this.immunities = immunities;
+            this.immuneProperties = EnumSet.noneOf(DamageProperty.class);
+            this.resistProperties = EnumSet.noneOf(DamageProperty.class);
+        }
 		
 		public HashSet<Class> resistances(){
 			return new HashSet<>(resistances);
@@ -1609,6 +1663,14 @@ acuRoll *= accMulti;
 		public HashSet<Class> immunities(){
 			return new HashSet<>(immunities);
 		}
+
+        public EnumSet<DamageProperty> resistProperties(){
+            return EnumSet.copyOf(resistProperties);
+        }
+
+        public EnumSet<DamageProperty> immuneProperties(){
+            return EnumSet.copyOf(immuneProperties);
+        }
 
 	}
 
