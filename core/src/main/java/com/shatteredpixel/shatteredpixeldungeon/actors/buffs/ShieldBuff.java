@@ -28,6 +28,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.RunicShell;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.watabou.utils.Bundle;
 
 import java.util.ArrayList;
@@ -110,9 +112,9 @@ public abstract class ShieldBuff extends Buff {
 		return dmg;
 	}
 
-	public static int processDamage( Char target, int damage, Object src ){
+	public static int processDamage( Char target, int damage, DamageSource src ){
 		//hunger damage is not affected by shielding
-		if (src instanceof Hunger){
+		if (!src.hasProperty(DamageProperty.IGNORES_SHIELDING)){
 			return damage;
 		}
 

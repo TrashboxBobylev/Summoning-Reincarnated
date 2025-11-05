@@ -44,6 +44,14 @@ public enum DamageProperty {
      */
     IGNORES_INVULNERABILITY,
     /**
+     * Damage that doesn't trigger character's AI re-targeting.
+     */
+    IGNORES_AI_CHANGE,
+    /**
+     * Damage that ignores character's shielding.
+     */
+    IGNORES_SHIELDING,
+    /**
      * Damage that is amplified on undead/demonic creatures.
      */
     HOLY,
@@ -88,6 +96,10 @@ public enum DamageProperty {
      */
     PERCENTAGE_BASED,
     /**
+     * Damage that cannot spread through life link.
+     */
+    LIFE_LINK_IGNORE,
+    /**
      * Damage typically dealt by creatures.
      */
     PHYSICAL(ACKNOWLEDGES_ARMOR),
@@ -117,9 +129,29 @@ public enum DamageProperty {
      */
     KNOCKBACK,
     /**
+     * Damage that is dealt by bleeding out.
+     */
+    BLEEDING(ORGANIC),
+    /**
+     * Damage that is dealt by toxic gases.
+     */
+    TOXIC_GAS(ORGANIC),
+    /**
+     * Damage that is dealt by corrosion.
+     */
+    CORROSION(ACID),
+    /**
+     * Damage that is dealt by ascension's 5th phase.
+     */
+    ASCENSION(MAGICAL),
+    /**
      * Damage that is dealt by starvation or food poisoning.
      */
-    HUNGER,
+    HUNGER(IGNORES_SHIELDING),
+    /**
+     * Damage that is dealt by ectoplasmic charge.
+     */
+    ECTO(MAGICAL, DARK),
     /**
      * Physical damage that cannot be resisted by armor.
      */

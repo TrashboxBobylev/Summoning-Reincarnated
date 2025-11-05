@@ -85,6 +85,6 @@ public class ToxicGas extends Blob implements Hero.Doom, DamageSource {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.CRUMBLING, DamageProperty.ORGANIC);
+        return EnumSet.of(DamageProperty.CRUMBLING, DamageProperty.TOXIC_GAS);
     }
 }

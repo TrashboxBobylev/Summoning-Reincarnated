@@ -240,6 +240,6 @@ public class Hunger extends Buff implements Hero.Doom, DamageSource {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.HUNGER);
+        return EnumSet.of(DamageProperty.HUNGER, DamageProperty.LIFE_LINK_IGNORE);
     }
 }

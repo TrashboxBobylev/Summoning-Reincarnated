@@ -29,7 +29,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StormCloud;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Adrenaline;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
@@ -49,7 +48,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chungus;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corrosion;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Daze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
@@ -62,7 +60,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurn;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostImbue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Haste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hex;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invulnerability;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Levitation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LifeLink;
@@ -85,7 +82,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.InescapableDamage;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.Shrunken;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
@@ -166,7 +162,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.Shoc
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Door;
-import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GeyserTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GnollRockfallTrap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.GrimTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
@@ -936,12 +931,12 @@ acuRoll *= accMulti;
 			return;
 		}
 
-		if(isInvulnerable(src.getClass()) && !(src instanceof InescapableDamage)){
+		if(isInvulnerable(src.getClass()) && !src.hasProperty(DamageProperty.IGNORES_INVULNERABILITY)){
 			sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "invulnerable"));
 			return;
 		}
 
-		if (!(src instanceof LifeLink || src instanceof Hunger) && buff(LifeLink.class) != null){
+		if (!src.hasProperty(DamageProperty.LIFE_LINK_IGNORE) && buff(LifeLink.class) != null){
 			HashSet<LifeLink> links = buffs(LifeLink.class);
 			for (LifeLink link : links.toArray(new LifeLink[0])){
 				if (Actor.findById(link.object) == null){
@@ -986,11 +981,11 @@ acuRoll *= accMulti;
 			}
 		}
 
-        if (src instanceof Hunger && Dungeon.isChallenged(Conducts.Conduct.WRAITH)){
+        if (src.hasProperty(DamageProperty.HUNGER) && Dungeon.isChallenged(Conducts.Conduct.WRAITH)){
             dmg = 0;
         }
 
-        if (!(src instanceof GasterBlaster.Karma)) {
+        if (!src.hasProperty(DamageProperty.IGNORES_AI_CHANGE)) {
             Terror t = buff(Terror.class);
             if (t != null) {
                 t.recover();
@@ -1081,12 +1076,12 @@ acuRoll *= accMulti;
             hero.spendAndNext( -1F );
         }
 
-		if (buff( Paralysis.class ) != null && !(src instanceof GasterBlaster.Karma)) {
+		if (buff( Paralysis.class ) != null && !src.hasProperty(DamageProperty.IGNORES_AI_CHANGE)) {
 			buff( Paralysis.class ).processDamage(dmg);
 		}
 
 		BrokenSeal.WarriorShield shield = buff(BrokenSeal.WarriorShield.class);
-		if (!(src instanceof Hunger)
+		if (!src.hasProperty(DamageProperty.IGNORES_SHIELDING)
 				&& dmg > 0
 				//either HP is already half or below (ignoring shield)
 				// or the hit will reduce it to half or below
@@ -1132,7 +1127,7 @@ acuRoll *= accMulti;
 			}
 		}
 
-		if (HP < 0 && src instanceof Char && alignment == Alignment.ENEMY){
+		if (HP < 0 && src.hasProperty(DamageProperty.PHYSICAL) && alignment == Alignment.ENEMY){
 			if (((Char) src).buff(Kinetic.KineticTracker.class) != null){
 				int dmgToAdd = -HP;
 				dmgToAdd -= ((Char) src).buff(Kinetic.KineticTracker.class).conservedDamage;
@@ -1145,6 +1140,7 @@ acuRoll *= accMulti;
 		}
 		
 		if (sprite != null) {
+            EnumSet<DamageProperty> damageProperties = src.dmgProperties();
 			//defaults to normal damage icon if no other ones apply
 			int                                                         icon = FloatingText.PHYS_DMG;
 			if (NO_ARMOR_PHYSICAL_SOURCES.contains(src.getClass()))     icon = FloatingText.PHYS_DMG_NO_BLOCK;
@@ -1167,22 +1163,22 @@ acuRoll *= accMulti;
 
 
 
-			if (src instanceof Hunger)                                  icon = FloatingText.HUNGER;
-			if (src instanceof Burning)                                 icon = FloatingText.BURNING;
-			if (src instanceof Chill || src instanceof Frost)           icon = FloatingText.FROST;
-			if (src instanceof GeyserTrap || src instanceof StormCloud) icon = FloatingText.WATER;
-			if (src instanceof Burning)                                 icon = FloatingText.BURNING;
-			if (src instanceof Electricity)                             icon = FloatingText.SHOCKING;
-			if (src instanceof Bleeding)                                icon = FloatingText.BLEEDING;
-			if (src instanceof ToxicGas)                                icon = FloatingText.TOXIC;
-			if (src instanceof Corrosion)                               icon = FloatingText.CORROSION;
-			if (src instanceof Poison)                                  icon = FloatingText.POISON;
-			if (src instanceof Ooze)                                    icon = FloatingText.OOZE;
-			if (src instanceof Viscosity.DeferedDamage)                 icon = FloatingText.DEFERRED;
-			if (src instanceof Corruption)                              icon = FloatingText.CORRUPTION;
-			if (src instanceof AscensionChallenge)                      icon = FloatingText.AMULET;
-			if (src instanceof GasterBlaster.Karma)                     icon = FloatingText.KARMA;
-			if (src instanceof FrostBurn)								icon = FloatingText.FROSTBURN;
+			if (damageProperties.contains(DamageProperty.HUNGER))       icon = FloatingText.HUNGER;
+			if (damageProperties.contains(DamageProperty.FIRE))         icon = FloatingText.BURNING;
+			if (damageProperties.contains(DamageProperty.FROST))        icon = FloatingText.FROST;
+			if (damageProperties.contains(DamageProperty.WATER))        icon = FloatingText.WATER;
+			if (damageProperties.contains(DamageProperty.ELECTRIC))     icon = FloatingText.SHOCKING;
+			if (damageProperties.contains(DamageProperty.BLEEDING))     icon = FloatingText.BLEEDING;
+			if (damageProperties.contains(DamageProperty.TOXIC_GAS))    icon = FloatingText.TOXIC;
+			if (damageProperties.contains(DamageProperty.CORROSION))    icon = FloatingText.CORROSION;
+			if (damageProperties.contains(DamageProperty.POISON))       icon = FloatingText.POISON;
+			if (damageProperties.contains(DamageProperty.ACID))         icon = FloatingText.OOZE;
+			if (damageProperties.contains(DamageProperty.DEFERRED))     icon = FloatingText.DEFERRED;
+			if (damageProperties.contains(DamageProperty.DARK))         icon = FloatingText.CORRUPTION;
+			if (damageProperties.contains(DamageProperty.ASCENSION))    icon = FloatingText.AMULET;
+			if (damageProperties.contains(DamageProperty.IGNORES_AI_CHANGE)) icon = FloatingText.KARMA;
+			if (damageProperties.contains(DamageProperty.FIRE) && damageProperties.contains(DamageProperty.FROST))
+                icon = FloatingText.FROSTBURN;
 
 			if ((icon == FloatingText.PHYS_DMG || icon == FloatingText.PHYS_DMG_NO_BLOCK) && hitMissIcon != -1){
 				if (icon == FloatingText.PHYS_DMG_NO_BLOCK) hitMissIcon += 18; //extra row
@@ -1194,7 +1190,7 @@ acuRoll *= accMulti;
 		}
 
 		if (HP <= 0) {
-			if (this instanceof Hero && Dungeon.isChallenged(Conducts.Conduct.WRAITH) && !(src instanceof EctoCharge)){
+			if (this instanceof Hero && Dungeon.isChallenged(Conducts.Conduct.WRAITH) && !src.hasProperty(DamageProperty.ECTO)){
 				HP = 1;
 				Buff.affect(this, EctoCharge.class).increment();
 				if (sprite != null){

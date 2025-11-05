@@ -150,6 +150,6 @@ public class Bleeding extends Buff implements DamageSource {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.CRUMBLING, DamageProperty.ORGANIC);
+        return EnumSet.of(DamageProperty.CRUMBLING, DamageProperty.BLEEDING);
     }
 }

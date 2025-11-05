@@ -115,6 +115,6 @@ public class EctoCharge extends Buff implements DamageSource {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.DARK);
+        return EnumSet.of(DamageProperty.ECTO);
     }
 }
