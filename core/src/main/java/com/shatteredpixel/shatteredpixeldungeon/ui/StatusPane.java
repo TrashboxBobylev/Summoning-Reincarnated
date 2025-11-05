@@ -298,13 +298,11 @@ public class StatusPane extends Component {
 			busy.x = x + 1;
 			busy.y = y + 37;
 
-			mode.x = (width - mode.width) / 2;
-			mode.y = 5;
+			mode.x = 0;
+			mode.y = busy.y + busy.height() + 2;
 
 			if (conduct != null){
-				float axis = width / 2;
-				mode.x = axis - mode.width / 2;
-				conduct.x = axis + conduct.width / 2;
+				conduct.x = mode.x + mode.width();
 				conduct.y = mode.y;
 			}
 		}
