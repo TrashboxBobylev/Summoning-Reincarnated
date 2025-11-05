@@ -129,6 +129,6 @@ public class Ooze extends Buff implements DamageSource {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.ACID);
+        return EnumSet.of(DamageProperty.ACID);
     }
 }

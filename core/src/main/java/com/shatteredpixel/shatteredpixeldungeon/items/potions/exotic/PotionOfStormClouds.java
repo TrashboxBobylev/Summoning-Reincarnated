@@ -121,6 +121,6 @@ public class PotionOfStormClouds extends ExoticPotion implements DamageSource {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.WATER);
+        return EnumSet.of(DamageProperty.WATER);
     }
 }

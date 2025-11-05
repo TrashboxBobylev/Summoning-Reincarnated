@@ -130,6 +130,6 @@ public class Poison extends Buff implements Hero.Doom, DamageSource {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.POISON);
+        return EnumSet.of(DamageProperty.POISON);
     }
 }

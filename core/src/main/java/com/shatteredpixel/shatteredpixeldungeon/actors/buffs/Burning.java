@@ -245,6 +245,6 @@ public class Burning extends Buff implements Hero.Doom, DamageSource {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.FIRE);
+        return EnumSet.of(DamageProperty.FIRE);
     }
 }

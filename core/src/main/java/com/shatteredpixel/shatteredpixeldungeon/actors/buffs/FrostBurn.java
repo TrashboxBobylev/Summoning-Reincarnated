@@ -221,6 +221,6 @@ public class FrostBurn extends Buff implements Hero.Doom, DamageSource {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.FROST, DamageProperty.FIRE, DamageProperty.MAGICAL);
+        return EnumSet.of(DamageProperty.FROST, DamageProperty.FIRE);
     }
 }

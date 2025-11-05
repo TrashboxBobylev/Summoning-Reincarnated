@@ -32,9 +32,9 @@ import java.util.HashSet;
  */
 public enum DamageProperty {
     /**
-     * Damage typically dealt by creatures.
+     * Damage that accounts for armor.
      */
-    PHYSICAL,
+    ACKNOWLEDGES_ARMOR,
     /**
      * Damage that completely ignores armor.
      */
@@ -88,11 +88,14 @@ public enum DamageProperty {
      */
     PERCENTAGE_BASED,
     /**
+     * Damage typically dealt by creatures.
+     */
+    PHYSICAL(ACKNOWLEDGES_ARMOR),
+    /**
      * Damage typically dealt by magic; opposite of {@link DamageProperty#PHYSICAL}.
      *
      */
-    // TODO: Probably should stop overusing this...
-    MAGICAL(IGNORES_ARMOR),
+    MAGICAL,
     /**
      * Damage that only hurts organic enemies.
      */

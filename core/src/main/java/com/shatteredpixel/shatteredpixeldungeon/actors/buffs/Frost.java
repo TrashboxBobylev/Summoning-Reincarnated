@@ -144,7 +144,7 @@ public class Frost extends FlavourBuff implements DamageSource {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.FROST);
+        return EnumSet.of(DamageProperty.FROST);
     }
 
 	{

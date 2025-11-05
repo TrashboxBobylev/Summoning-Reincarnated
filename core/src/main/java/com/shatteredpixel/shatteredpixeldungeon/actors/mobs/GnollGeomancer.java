@@ -843,11 +843,6 @@ public class GnollGeomancer extends Mob {
 				GameScene.updateMap(cell);
 			}
 		}
-
-        @Override
-        public EnumSet<DamageProperty> initDmgProperties() {
-            return EnumSet.of(DamageProperty.MAGICAL);
-        }
     }
 
 	public static class RockArmor extends ShieldBuff { }

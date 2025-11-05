@@ -149,10 +149,5 @@ public class GasterBlaster extends StationaryMinion {
             spend(Actor.TICK);
             return true;
         }
-
-        @Override
-        public EnumSet<DamageProperty> initDmgProperties() {
-            return EnumSet.of(DamageProperty.MAGICAL);
-        }
     }
 }

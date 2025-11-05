@@ -138,6 +138,6 @@ public class Corrosion extends Buff implements Hero.Doom, DamageSource {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.ACID);
+        return EnumSet.of(DamageProperty.ACID);
     }
 }

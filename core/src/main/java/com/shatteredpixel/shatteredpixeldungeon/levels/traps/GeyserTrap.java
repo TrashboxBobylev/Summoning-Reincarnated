@@ -157,6 +157,6 @@ public class GeyserTrap extends Trap implements DamageSource {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.TRAPPED, DamageProperty.MAGICAL, DamageProperty.WATER);
+        return EnumSet.of(DamageProperty.TRAPPED, DamageProperty.WATER);
     }
 }

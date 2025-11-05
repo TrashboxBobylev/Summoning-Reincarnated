@@ -138,6 +138,6 @@ public class Electricity extends Blob implements DamageSource {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.ELECTRIC);
+        return EnumSet.of(DamageProperty.ELECTRIC);
     }
 }
