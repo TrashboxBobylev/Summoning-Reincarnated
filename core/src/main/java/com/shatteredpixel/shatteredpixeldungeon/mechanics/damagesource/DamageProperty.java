@@ -31,7 +31,6 @@ import java.util.HashSet;
  * All property tags a {@link DamageSource} can have.
  */
 public enum DamageProperty {
-    NONE,
     /**
      * Damage typically dealt by creatures.
      */
