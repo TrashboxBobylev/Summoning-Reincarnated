@@ -123,6 +123,6 @@ public class GnollRockfallTrap extends RockfallTrap implements DamageSource {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.TRAPPED, DamageProperty.PHYSICAL);
+        return EnumSet.of(DamageProperty.TRAPPED, DamageProperty.CRUMBLING);
     }
 }

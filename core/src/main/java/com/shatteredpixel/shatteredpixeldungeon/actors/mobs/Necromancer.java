@@ -260,7 +260,7 @@ public class Necromancer extends Mob {
 	public static class SummoningBlockDamage implements DamageSource {
         @Override
         public EnumSet<DamageProperty> initDmgProperties() {
-            return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.DARK);
+            return EnumSet.of(DamageProperty.CRUMBLING, DamageProperty.DARK);
         }
     }
 	

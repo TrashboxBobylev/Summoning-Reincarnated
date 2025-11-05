@@ -751,7 +751,7 @@ public class GnollGeomancer extends Mob {
 
         @Override
         public EnumSet<DamageProperty> initDmgProperties() {
-            return EnumSet.of(DamageProperty.PHYSICAL);
+            return EnumSet.of(DamageProperty.CRUMBLING);
         }
     }
 
@@ -843,6 +843,11 @@ public class GnollGeomancer extends Mob {
 				GameScene.updateMap(cell);
 			}
 		}
+
+        @Override
+        public EnumSet<DamageProperty> initDmgProperties() {
+            return EnumSet.of(DamageProperty.CRUMBLING);
+        }
     }
 
 	public static class RockArmor extends ShieldBuff { }

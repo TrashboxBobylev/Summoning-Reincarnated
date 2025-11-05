@@ -266,7 +266,7 @@ public class WandOfBlastWave extends DamageWand {
     public static class Knockback implements DamageSource {
         @Override
         public EnumSet<DamageProperty> initDmgProperties() {
-            return EnumSet.of(DamageProperty.PHYSICAL, DamageProperty.KNOCKBACK);
+            return EnumSet.of(DamageProperty.CRUMBLING, DamageProperty.KNOCKBACK);
         }
     }
 

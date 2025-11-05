@@ -90,6 +90,6 @@ public class LifeLink extends FlavourBuff implements DamageSource {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.LIFE_LINK_IGNORE);
+        return EnumSet.of(DamageProperty.CRUMBLING, DamageProperty.LIFE_LINK_IGNORE);
     }
 }

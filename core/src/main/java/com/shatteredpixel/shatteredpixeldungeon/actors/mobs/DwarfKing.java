@@ -772,7 +772,7 @@ public class DwarfKing extends Mob {
 
         @Override
         public EnumSet<DamageProperty> initDmgProperties() {
-            return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.DARK);
+            return EnumSet.of(DamageProperty.CRUMBLING, DamageProperty.DARK);
         }
 	}
 

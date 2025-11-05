@@ -169,7 +169,7 @@ public class Chasm implements Hero.Doom, DamageSource {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.PHYSICAL, DamageProperty.FALL);
+        return EnumSet.of(DamageProperty.CRUMBLING, DamageProperty.FALL);
     }
 
     public static class Falling extends Buff {
