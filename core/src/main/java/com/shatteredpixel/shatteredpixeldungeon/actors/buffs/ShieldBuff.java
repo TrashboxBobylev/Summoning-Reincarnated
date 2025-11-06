@@ -114,7 +114,7 @@ public abstract class ShieldBuff extends Buff {
 
 	public static int processDamage( Char target, int damage, DamageSource src ){
 		//hunger damage is not affected by shielding
-		if (!src.hasProperty(DamageProperty.IGNORES_SHIELDING)){
+		if (src.hasProperty(DamageProperty.IGNORES_SHIELDING)){
 			return damage;
 		}
 
