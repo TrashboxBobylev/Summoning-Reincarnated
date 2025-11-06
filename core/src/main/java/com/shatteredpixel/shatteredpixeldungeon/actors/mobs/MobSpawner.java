@@ -74,7 +74,7 @@ public class MobSpawner extends Actor {
 
 	//returns a rotation of standard mobs, unshuffled.
 	private static ArrayList<Class<? extends Mob>> standardMobRotation( int depth ){
-		if (Dungeon.branch == AbyssLevel.BRANCH){
+		if (Dungeon.branch == AbyssLevel.BRANCH || (Dungeon.mode == Dungeon.GameMode.GAUNTLET && Dungeon.depth > Dungeon.chapterSize()*5+1)){
 			return new ArrayList<>(Arrays.asList(
 					SpectreRat.class, DarkestElf.class, GhostChicken.class, Phantom.class, BlinkingMan.class, Trappet.class
 			));
