@@ -87,7 +87,46 @@ public class vReInc_Changes {
     }
 
     public static void add_v0_6_0_Changes( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo changes = new ChangeInfo("vReInc-0.6.0", true, "");
+        ChangeInfo  changes = new ChangeInfo("vReInc-0.6.1", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBYLEV), "Developer Commentary",
+                "_-_ Released November 7th, 2025\n" +
+                        "_-_ 76 days after Reincarnated 0.6.0"
+                ));
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered Ports",
+                "Implemented Shattered v3.2.5 changes.\n\n" +
+                        "_-_ Finally fixed the issue with fullscreen/navigation bar.\n" +
+                        "_-_ Moved mode/conduct icon to be under player avatar to account for new UI."));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+                "_-_ Added placeholder-ish Duelist ability to Adventurer's stabber.\n" +
+                        "_-_ Refactored conduct choosing screen to be more stable.\n" +
+                        "_-_ Reimplemented ability to choose multiple conducts through Balanced Conducts settings option.\n" +
+                        "_-_ Changed Scroll of Debug to be a conduct, that is only accessible upon disabling Balanced Conducts, instead of being a settings option.\n" +
+                        "_-_ Unified the rankings behavior of seeded runs and runs with \"cheaty\" modifiers, like Endless Potential conduct or Exploration mode.\n" +
+                        "_-_ Bones no longer transfer items from conducted runs.\n" +
+                        "_-_ Implemented experimental damage system. It consists of sources of damage being given properties, that are used to determine on-damage behavior. Currently it should not affect gameplay in any major ways, but will allow for more complex interactions in the future.\n" +
+                        "_-_ Added the Abyss's mobs to Gauntlet Mode's post-game."
+                        ));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "_Fixed the following bugs:_\n" +
+                        "_-_ Dried Rose not being usable in Abyssal Crusade mode\n" +
+                        "_-_ Holy Aura II's shielding going into infinity\n" +
+                        "_-_ Gauntlet Mode's rewards not being given, if last mobs were corrupted or enthralled\n" +
+                        "_-_ Conjurer's spells being possible to upgrade\n" +
+                        "_-_ Grass tile textures not being properly affected by dungeon size\n" +
+                        "_-_ Various cases of conducts being doubled or not being reset\n" +
+                        "_-_ Rare non-fatal crash with fog of war's implementation and conducts\n" +
+                        "_-_ Abyssal Crusade mode's Abyss shops being the same as the shop on setup floor\n" +
+                        "_-_ Missing text for entering the Abyss on loading screen\n" +
+                        "_-_ Missing tileset pieces in Abyssal Crusade mode's setup floor"
+                ));
+
+        changes = new ChangeInfo("vReInc-0.6.0", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
