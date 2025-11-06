@@ -25,7 +25,11 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.utils.GameMath;
 
 public class Dagger2 extends MeleeWeapon {
 
@@ -49,4 +53,40 @@ public class Dagger2 extends MeleeWeapon {
 		return  9*(tier-1) +    //12 base, down from 15
 				lvl*(tier);   //scaling down to +2
 	}
+
+    @Override
+    protected int baseChargeUse(Hero hero, Char target){
+        if (hero.buff(Sword.CleaveTracker.class) != null){
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    @Override
+    public String targetingPrompt() {
+        return Messages.get(this, "prompt");
+    }
+
+    @Override
+    public void duelistAbility(Hero hero, Integer target) {
+        //+(8+lvl*2) damage
+        int dmgBoost = augment.damageFactor(8 + buffedLvl()*2);
+        Sword.cleaveAbility(hero, target, 1, dmgBoost, this);
+    }
+
+    @Override
+    public String abilityInfo() {
+        int dmgBoost = levelKnown ? 8 + buffedLvl()*2 : 8;
+        if (levelKnown){
+            return Messages.get(this, "ability_desc", GameMath.printAverage(augment.damageFactor(min()+dmgBoost), augment.damageFactor(max()+dmgBoost)));
+        } else {
+            return Messages.get(this, "typical_ability_desc", GameMath.printAverage(min(0)+dmgBoost, max(0)+dmgBoost));
+        }
+    }
+
+    public String upgradeAbilityStat(int level){
+        int dmgBoost = 8 + level*2;
+        return GameMath.printAverage(augment.damageFactor(min(level)+dmgBoost), augment.damageFactor(max(level)+dmgBoost));
+    }
 }
