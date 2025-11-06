@@ -84,6 +84,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.Stabber;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.StoneHammer;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts.TippedDart;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.ArenaLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -273,7 +274,7 @@ public class ShopRoom extends SpecialRoom {
 
 		ArrayList<Item> itemsToSpawn = new ArrayList<>();
 
-		if (Dungeon.mode == Dungeon.GameMode.ABYSS_START){
+		if (Dungeon.mode == Dungeon.GameMode.ABYSS_START && Dungeon.branch != AbyssLevel.BRANCH){
 			//just spawn a couple of bags
 			for (int i = 0; i < 2; i++) {
 				itemsToSpawn.add(new SeedsBag());
