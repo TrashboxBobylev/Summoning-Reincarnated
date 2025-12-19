@@ -1141,7 +1141,8 @@ public abstract class Mob extends Char {
 			minion.beckon(target);
 		});
 
-        gauntletProcessing();
+        if (alignment == Alignment.ENEMY)
+            gauntletProcessing();
 
         super.die( cause );
 
@@ -1160,7 +1161,7 @@ public abstract class Mob extends Char {
 	}
 
     public void gauntletProcessing() {
-        if (Dungeon.mode == Dungeon.GameMode.GAUNTLET && alignment == Alignment.ENEMY){
+        if (Dungeon.mode == Dungeon.GameMode.GAUNTLET){
             if (this instanceof Thief){
                 if (((Thief) this).item != null) {
                     Dungeon.level.drop( ((Thief) this).item, pos ).sprite.drop();
