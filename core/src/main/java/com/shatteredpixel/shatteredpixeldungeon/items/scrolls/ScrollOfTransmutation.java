@@ -346,9 +346,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 			n = (Wand)Generator.randomUsingDefaults( Generator.Category.WAND );
 		} while ( Challenges.isItemBlocked(n) || n.getClass() == w.getClass());
 		
-		n.level( 0 );
-		int level = w.trueLevel();
-		n.upgrade( level );
+		n.rank( w.rank() );
 
 		n.levelKnown = w.levelKnown;
 		n.curChargeKnown = w.curChargeKnown;
