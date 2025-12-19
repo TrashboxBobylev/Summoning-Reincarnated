@@ -164,9 +164,11 @@ public class ScrollOfTransmutation extends InventoryScroll {
 			return changeStaff((MagesStaff) item);
 		}else if (item instanceof TippedDart){
 			return changeTippedDart( (TippedDart)item );
-		} else if (item instanceof MeleeWeapon || item instanceof MissileWeapon) {
+		} else if (item instanceof MeleeWeapon) {
 			return changeWeapon( (Weapon)item );
-		} else if (item instanceof Scroll) {
+		} else if (item instanceof MissileWeapon) {
+            return changeMissile( (MissileWeapon) item );
+        } else if (item instanceof Scroll) {
 			return changeScroll( (Scroll)item );
 		} else if (item instanceof Potion) {
 			return changePotion( (Potion)item );
@@ -237,12 +239,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 	
 	private static Weapon changeWeapon( Weapon w ) {
 		Weapon n;
-		Generator.Category c;
-		if (w instanceof MeleeWeapon) {
-			c = Generator.wepTiers[((MeleeWeapon)w).tier - 1];
-		} else {
-			c = Generator.Category.MISSILE;
-		}
+		Generator.Category c = Generator.wepTiers[((MeleeWeapon)w).tier - 1];
 		
 		do {
 			n = (Weapon)Generator.randomUsingDefaults(c);
@@ -265,13 +262,6 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		n.cursed = w.cursed;
 		n.augment = w.augment;
 		n.enchantHardened = w.enchantHardened;
-
-		//technically a new set, ensure old one is destroyed (except for darts)
-		if (w instanceof MissileWeapon && w.isUpgradable()){
-			Buff.affect(Dungeon.hero, MissileWeapon.UpgradedSetTracker.class).levelThresholds.put(((MissileWeapon) w).setID, Integer.MAX_VALUE);
-			//also extra missile weapon properties
-			((MissileWeapon) n).damage(100 - ((MissileWeapon)w).durabilityLeft());
-		}
 		
 		return n;
 		
@@ -361,6 +351,33 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		
 		return n;
 	}
+
+    private static MissileWeapon changeMissile( MissileWeapon w ) {
+        MissileWeapon n;
+        do {
+            n = (MissileWeapon)Generator.randomUsingDefaults( Generator.Category.MISSILE );
+        } while ( Challenges.isItemBlocked(n) || n.getClass() == w.getClass());
+
+        n.rank( w.rank() );
+
+        n.enchantment = w.enchantment;
+        n.curseInfusionBonus = w.curseInfusionBonus;
+        n.masteryPotionBonus = w.masteryPotionBonus;
+        n.levelKnown = w.levelKnown;
+        n.cursedKnown = w.cursedKnown;
+        n.cursed = w.cursed;
+        n.augment = w.augment;
+        n.enchantHardened = w.enchantHardened;
+
+        //technically a new set, ensure old one is destroyed (except for darts)
+        if (!(w instanceof Dart)){
+            Buff.affect(Dungeon.hero, MissileWeapon.UpgradedSetTracker.class).levelThresholds.put(w.setID, Integer.MAX_VALUE);
+            //also extra missile weapon properties
+            n.damage(100 - w.durabilityLeft());
+        }
+
+        return n;
+    }
 
     private static Staff changeSummon( Staff w ) {
         Staff n;
