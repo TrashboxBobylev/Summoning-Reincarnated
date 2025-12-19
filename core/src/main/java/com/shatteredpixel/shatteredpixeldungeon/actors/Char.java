@@ -1663,8 +1663,8 @@ acuRoll *= accMulti;
         Property( HashSet<Class> resistances, EnumSet<DamageProperty> resistProperties, HashSet<Class> immunities, EnumSet<DamageProperty> immuneProperties){
             this.resistances = resistances;
             this.immunities = immunities;
-            this.immuneProperties = EnumSet.noneOf(DamageProperty.class);
-            this.resistProperties = EnumSet.noneOf(DamageProperty.class);
+            this.immuneProperties = immuneProperties;
+            this.resistProperties = resistProperties;
         }
 		
 		public HashSet<Class> resistances(){
