@@ -120,7 +120,7 @@ public class ArcaneResin extends Item {
 					return;
 				}
 
-				int resinToUse = w.level()+1;
+				int resinToUse = w.resinBonus+1;
 
 				if (quantity() < resinToUse){
 					GLog.w(Messages.get(ArcaneResin.class, "not_enough"));
