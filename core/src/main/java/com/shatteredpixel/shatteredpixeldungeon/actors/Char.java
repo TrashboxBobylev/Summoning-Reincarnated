@@ -48,6 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chungus;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corrosion;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Daze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
@@ -1086,8 +1087,18 @@ acuRoll *= accMulti;
 
 		int shielded = dmg;
 		dmg = ShieldBuff.processDamage(this, dmg, src);
-		shielded -= dmg;
-		HP -= dmg;
+        if (buff(Corruption.class) != null && !(src.hasProperty(DamageProperty.DECAY) || src.hasProperty(DamageProperty.DEFERRED))){
+            if (dmg >= 0) {
+                Viscosity.DeferedDamage deferred = Buff.affect( this, Viscosity.DeferedDamage.class );
+                deferred.extend( dmg );
+
+                sprite.showStatus( CharSprite.WARNING, Messages.get(Viscosity.class, "deferred", dmg) );
+            }
+            return;
+        } else {
+            shielded -= dmg;
+            HP -= dmg;
+        }
 
 		if (HP > 0 && buff(Grim.GrimTracker.class) != null){
 

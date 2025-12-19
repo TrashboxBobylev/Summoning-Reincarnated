@@ -113,6 +113,11 @@ public enum DamageProperty {
      */
     ORGANIC,
     /**
+     * Damage suffered by decaying enemies, like ones inflicted with corruption.
+     * Decay damage does not awake enemies.
+     */
+    DECAY,
+    /**
      * Damage that is dealt by explosives.
      */
     EXPLOSIVE,
