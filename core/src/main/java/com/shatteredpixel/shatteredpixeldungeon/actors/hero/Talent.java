@@ -90,6 +90,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -107,6 +108,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -1181,7 +1183,7 @@ public enum Talent {
 		if (hero.hasTalent(Talent.PRECISE_STRIKE)
 				&& enemy.buff(PreciseStrikeTracker.class) == null){
 			dmg += enemy.drRoll();
-			if (hero.pointsInTalent(PRECISE_STRIKE) > 1 && enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)){
+			if (hero.pointsInTalent(PRECISE_STRIKE) > 1 && enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero) && !enemy.isImmune(EnumSet.of(DamageProperty.HP_REDUCTION))){
 				enemy.HT = Math.max(1, enemy.HT - 2);
 			}
 			Buff.affect(enemy, PreciseStrikeTracker.class);

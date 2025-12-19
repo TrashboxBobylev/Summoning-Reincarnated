@@ -1617,7 +1617,9 @@ acuRoll *= accMulti;
 
 	public enum Property{
 		BOSS ( new HashSet<Class>( Arrays.asList(Grim.class, GrimTrap.class, ScrollOfRetribution.class, ScrollOfPsionicBlast.class)),
-				new HashSet<Class>( Arrays.asList(AllyBuff.class, Dread.class, Shrunken.class, ScrollOfAntiMagic.EnemyBuff.class) )),
+                EnumSet.noneOf(DamageProperty.class),
+				new HashSet<Class>( Arrays.asList(AllyBuff.class, Dread.class, Shrunken.class, ScrollOfAntiMagic.EnemyBuff.class) ),
+                EnumSet.of(DamageProperty.HP_REDUCTION)),
 		MINIBOSS ( new HashSet<Class>(Arrays.asList(ScrollOfAntiMagic.EnemyBuff.class)),
 				new HashSet<Class>( Arrays.asList(AllyBuff.class, Dread.class) )),
 		BOSS_MINION,

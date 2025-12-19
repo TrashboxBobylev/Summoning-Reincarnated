@@ -134,6 +134,10 @@ public enum DamageProperty {
      */
     KNOCKBACK,
     /**
+     * Property used to determine, if enemy's HP can be reduced.
+     */
+    HP_REDUCTION,
+    /**
      * Damage that is dealt by bleeding out.
      */
     BLEEDING(ORGANIC),
