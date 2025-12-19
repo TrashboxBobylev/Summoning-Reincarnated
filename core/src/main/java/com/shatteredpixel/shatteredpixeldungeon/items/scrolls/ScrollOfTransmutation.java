@@ -48,6 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.Trinket;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
@@ -173,7 +174,9 @@ public class ScrollOfTransmutation extends InventoryScroll {
 			return changeRing( (Ring)item );
 		} else if (item instanceof Wand) {
 			return changeWand( (Wand)item );
-		} else if (item instanceof Plant.Seed) {
+		} else if (item instanceof Staff) {
+            return changeSummon( (Staff)item );
+        } else if (item instanceof Plant.Seed) {
 			return changeSeed((Plant.Seed) item);
 		} else if (item instanceof Runestone) {
 			return changeStone((Runestone) item);
@@ -360,6 +363,30 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		
 		return n;
 	}
+
+    private static Staff changeSummon( Staff w ) {
+        Staff n;
+        Generator.Category c = Generator.wepTiers[w.tier - 1];
+
+        do {
+            n = (Staff)Generator.randomUsingDefaults(c);
+        } while (Challenges.isItemBlocked(n) || n.getClass() == w.getClass());
+
+        n.rank(w.rank());
+        n.quantity(w.quantity());
+        w.minion().die(new Grim());
+
+        n.enchantment = w.enchantment;
+        n.masteryPotionBonus = w.masteryPotionBonus;
+        n.levelKnown = w.levelKnown;
+        n.cursedKnown = w.cursedKnown;
+        n.cursed = w.cursed;
+        n.augment = w.augment;
+        n.curCharges = w.curCharges;
+        n.partialCharge = w.partialCharge;
+
+        return n;
+    }
 	
 	private static Plant.Seed changeSeed( Plant.Seed s ) {
 		Plant.Seed n;
