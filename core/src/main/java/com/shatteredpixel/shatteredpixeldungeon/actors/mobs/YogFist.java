@@ -411,7 +411,7 @@ public abstract class YogFist extends Mob {
 		@Override
 		public void damage(int dmg, DamageSource src) {
 			if (!isInvulnerable(src.getClass())
-					&& !(src instanceof Bleeding)
+					&& !(src.hasProperty(DamageProperty.BLEEDING))
 					&& buff(Sickle.HarvestBleedTracker.class) == null){
 				dmg = Math.round( dmg * resist( src.getClass() ));
 				if (dmg < 0){
@@ -470,7 +470,7 @@ public abstract class YogFist extends Mob {
 
 		@Override
 		public void damage(int dmg, DamageSource src) {
-			if (!isInvulnerable(src.getClass()) && !(src instanceof Viscosity.DeferedDamage)){
+			if (!isInvulnerable(src.getClass()) && !(src.hasProperty(DamageProperty.DEFERRED))){
 				dmg = Math.round( dmg * resist( src.getClass() ));
 				if (dmg >= 0) {
 					Buff.affect(this, Viscosity.DeferedDamage.class).extend(dmg);

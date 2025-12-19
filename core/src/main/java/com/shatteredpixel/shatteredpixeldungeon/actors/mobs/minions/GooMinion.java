@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -249,7 +250,7 @@ public class GooMinion extends Minion {
         if (rank == 3){
             dmg /= 10;
         } else {
-            if (!(src instanceof Viscosity.DeferedDamage)) {
+            if (!(src.hasProperty(DamageProperty.DEFERRED))) {
                 float deferedDmgMulti = 0.5f;
                 if (pumping) {
                     dmg *= 2;

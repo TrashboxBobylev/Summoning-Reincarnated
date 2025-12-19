@@ -471,7 +471,7 @@ public class DwarfKing extends Mob {
 		if (isInvulnerable(src.getClass())){
 			super.damage(dmg, src);
 			return;
-		} else if (phase == 3 && !(src instanceof Viscosity.DeferedDamage)){
+		} else if (phase == 3 && !(src.hasProperty(DamageProperty.DEFERRED))){
 			if (dmg >= 0) {
 				Viscosity.DeferedDamage deferred = Buff.affect( this, Viscosity.DeferedDamage.class );
 				deferred.extend( dmg );
