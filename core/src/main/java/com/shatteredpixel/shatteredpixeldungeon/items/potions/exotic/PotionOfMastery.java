@@ -32,7 +32,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.StrengthItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -121,7 +120,7 @@ public class PotionOfMastery extends ExoticPotion {
 			} else if (item != null) {
 
 				if (item instanceof StrengthItem) {
-					((Weapon) item).giveMastery();
+					((StrengthItem) item).giveMastery();
 					GLog.p( Messages.get(PotionOfMastery.class, "item_easier") );
 				}
 				updateQuickslot();
