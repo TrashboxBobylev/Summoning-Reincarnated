@@ -53,8 +53,9 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
+import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.WndChangesTabbed;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndTypeInfo;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndJournalItem;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
@@ -187,7 +188,12 @@ public class Item implements Bundlable {
 			}
 			
 		} else if (action.equals(AC_TIERINFO)) {
-			ShatteredPixelDungeon.runOnRenderThread(() -> Game.scene().addToFront(new WndTypeInfo(Item.this)));
+			ShatteredPixelDungeon.runOnRenderThread(() -> Game.scene().addToFront(new WndChangesTabbed(
+                    new ItemSprite(this),
+                    Messages.titleCase(Messages.get(WndJournalItem.class, "types")),
+                    ((TypedItem) this).getTypeMessage(1),
+                    ((TypedItem) this).getTypeMessage(2),
+                    ((TypedItem) this).getTypeMessage(3))));
 		}
 	}
 
