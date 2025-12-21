@@ -49,17 +49,17 @@ public class HolyDart extends TippedDart {
 		}
 
 		if (attacker.alignment == defender.alignment){
-			Buff.affect(defender, Bless.class, Math.round(Bless.DURATION*powerMultiplier(rank())));
+			Buff.affect(defender, Bless.class, Math.round(Bless.DURATION*powerMultiplier(type())));
 			return 0;
 		}
 
 		if (Char.hasProp(defender, Char.Property.UNDEAD) || Char.hasProp(defender, Char.Property.DEMONIC)){
 			defender.sprite.emitter().start( ShadowParticle.UP, 0.05f, 10+buffedLvl() );
 			Sample.INSTANCE.play(Assets.Sounds.BURNING);
-			defender.damage(Random.NormalIntRange((int) (10 + Dungeon.scalingDepth()/3f*powerMultiplier(rank())), (int) ((20 + Dungeon.scalingDepth()/3f)*powerMultiplier(rank()))), this);
+			defender.damage(Random.NormalIntRange((int) (10 + Dungeon.scalingDepth()/3f*powerMultiplier(type())), (int) ((20 + Dungeon.scalingDepth()/3f)*powerMultiplier(type()))), this);
 		//also do not bless enemies if processing charged shot
 		} else if (!processingChargedShot){
-			Buff.affect(defender, Bless.class, Math.round(Bless.DURATION*powerMultiplier(rank())));
+			Buff.affect(defender, Bless.class, Math.round(Bless.DURATION*powerMultiplier(type())));
 		}
 		
 		return super.proc(attacker, defender, damage);

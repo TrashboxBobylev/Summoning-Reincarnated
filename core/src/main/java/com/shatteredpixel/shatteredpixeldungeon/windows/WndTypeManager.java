@@ -29,8 +29,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Enchanting;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
-import com.shatteredpixel.shatteredpixeldungeon.items.spells.RankManager;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.TypeManager;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
@@ -43,7 +43,7 @@ import com.watabou.noosa.audio.Sample;
 
 import java.util.ArrayList;
 
-public class WndRankManager extends WndTabbed {
+public class WndTypeManager extends WndTabbed {
 
     protected static final int WIDTH_MIN    = 120;
     protected static final int WIDTH_MAX    = 220;
@@ -53,27 +53,27 @@ public class WndRankManager extends WndTabbed {
     private ArrayList<RenderedTextBlock> texts = new ArrayList<>();
     private RedButton btnSwitch;
 
-    private static Item rankedItem;
-    private static Item ranker;
-    protected static int selectedRank;
+    private static Item typedItem;
+    private static Item typer;
+    protected static int selectedType;
 
-    public WndRankManager(RankManager rankManager, Item item){
+    public WndTypeManager(TypeManager typeManager, Item item){
         super();
 
-        rankedItem = item;
-        ranker = rankManager;
+        typedItem = item;
+        typer = typeManager;
 
         int width = WIDTH_MIN;
 
-        IconTitle titlebar = new IconTitle( new ItemSprite(item), Messages.titleCase(Messages.get(this, "rank", item.trueName())) );
+        IconTitle titlebar = new IconTitle( new ItemSprite(item), Messages.titleCase(Messages.get(this, "type", item.trueName())) );
         titlebar.setRect( 0, 0, width, 0 );
         add(titlebar);
 
         RenderedTextBlock largest = null;
         for (int i = 0; i < 3; i++){
             RenderedTextBlock text = PixelScene.renderTextBlock( 6 );
-            text.text( Messages.get(RankManager.class, "change_desc") + "\n\n"
-                    + ((Rankable)rankedItem).getRankMessage(i+1), width );
+            text.text( Messages.get(TypeManager.class, "change_desc") + "\n\n"
+                    + ((TypedItem) typedItem).getTypeMessage(i+1), width );
             text.setPos( titlebar.left(), titlebar.bottom() + 2*GAP );
             add( text );
             texts.add(text);
@@ -83,7 +83,7 @@ public class WndRankManager extends WndTabbed {
             }
 
             int finalI = i;
-            add(new LabeledTab(Messages.get(Rankable.class, "rank" + (finalI + 1))){
+            add(new LabeledTab(Messages.get(TypedItem.class, "type" + (finalI + 1))){
                 @Override
                 protected void select(boolean value) {
                     super.select( value );
@@ -110,61 +110,61 @@ public class WndRankManager extends WndTabbed {
 
         bringToFront(titlebar);
 
-        btnSwitch = new RedButton( Messages.get(this, "switch_rank") ) {
+        btnSwitch = new RedButton( Messages.get(this, "switch_type") ) {
             @Override
             protected void onClick() {
                 hide();
-                ((Rankable)rankedItem).rank(selectedRank);
-                GLog.p(Messages.get(RankManager.class, "switch", Rankable.getRankString(selectedRank)));
+                ((TypedItem) typedItem).type(selectedType);
+                GLog.p(Messages.get(TypeManager.class, "switch", TypedItem.getTypeString(selectedType)));
                 Invisibility.dispel();
                 Dungeon.hero.spend( 1f );
                 Dungeon.hero.busy();
                 ((HeroSprite)Dungeon.hero.sprite).read();
 
                 Sample.INSTANCE.play( Assets.Sounds.READ );
-                Dungeon.hero.sprite.burst(Rankable.getRankColor(selectedRank), 10);
-                ranker.detach(Dungeon.hero.belongings.backpack);
+                Dungeon.hero.sprite.burst(TypedItem.getTypeColor(selectedType), 10);
+                typer.detach(Dungeon.hero.belongings.backpack);
                 Enchanting.show(Dungeon.hero, new Item(){
                     @Override
                     public int image() {
-                        return rankedItem.image();
+                        return typedItem.image();
                     }
 
                     @Override
                     public ItemSprite.Glowing glowing() {
-                        return new ItemSprite.Glowing(Rankable.getRankColor(selectedRank));
+                        return new ItemSprite.Glowing(TypedItem.getTypeColor(selectedType));
                     }
                 });
                 Item.updateQuickslot();
 
-                rankedItem = null;
-                ranker = null;
+                typedItem = null;
+                typer = null;
             }
         };
         btnSwitch.setRect(0, largest.bottom()+2*GAP, width, BUTTON_HEIGHT);
         add(btnSwitch);
 
-        btnSwitch.icon(new ItemSprite(ItemSpriteSheet.RANK_MANAGER));
+        btnSwitch.icon(new ItemSprite(ItemSpriteSheet.TYPE_MANAGER));
         btnSwitch.enable(Dungeon.hero.ready);
 
         resize( width, (int)btnSwitch.bottom() + 2 );
 
         layoutTabs();
-        selectedRank = ((Rankable) rankedItem).rank();
+        selectedType = ((TypedItem) typedItem).type();
         btnSwitch.enable(false);
-        select(selectedRank-1);
+        select(selectedType -1);
     }
 
     @Override
     public void select(Tab tab) {
         super.select(tab);
-        selectedRank = tabs.indexOf(tab)+1;
-        btnSwitch.enable(((Rankable)rankedItem).rank() != selectedRank);
+        selectedType = tabs.indexOf(tab)+1;
+        btnSwitch.enable(((TypedItem) typedItem).type() != selectedType);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        ((RankManager)ranker).reShowSelector();
+        ((TypeManager) typer).reShowSelector();
     }
 }

@@ -46,8 +46,8 @@ public class Kunai extends MissileWeapon {
 		hitSoundPitch = 1.1f;
 	}
 
-    public float min(float lvl, int rank) {
-        switch (rank){
+    public float min(float lvl, int type) {
+        switch (type){
             case 1: return 4 + lvl;
             case 2: return 4 + lvl;
             case 3: return 8 + lvl*3;
@@ -55,8 +55,8 @@ public class Kunai extends MissileWeapon {
         return 0;
     }
 
-    public float max(float lvl, int rank) {
-        switch (rank){
+    public float max(float lvl, int type) {
+        switch (type){
             case 1: return 8 + lvl*3f;
             case 2: return 9 + lvl*4f;
             case 3: return 16 + lvl*6f;
@@ -64,8 +64,8 @@ public class Kunai extends MissileWeapon {
         return 0;
     }
 
-    public float baseUses(float lvl, int rank){
-        switch (rank){
+    public float baseUses(float lvl, int type){
+        switch (type){
             case 1: return 6 + lvl*1.5f;
             case 2: return 3 + lvl*1f;
             case 3: return 5 + lvl*1.33f;
@@ -76,19 +76,19 @@ public class Kunai extends MissileWeapon {
     //do not detach
     @Override
     protected void rangedHit(Char enemy, int cell) {
-        if (rank() != 2)
+        if (type() != 2)
             super.rangedHit(enemy, cell);
     }
 
     @Override
     protected void rangedMiss(int cell) {
-        if (rank() != 2)
+        if (type() != 2)
             super.rangedMiss(cell);
     }
 
     @Override
     public void cast(Hero user, int dst) {
-        if (rank() == 2) {
+        if (type() == 2) {
             if (Dungeon.hero.visibleEnemies() == 0) {
                 super.cast(user, dst);
                 return;
@@ -150,7 +150,7 @@ public class Kunai extends MissileWeapon {
 	@Override
 	public int damageRoll(Char owner) {
         if (owner instanceof Hero) {
-            if (rank() == 1) {
+            if (type() == 1) {
                 Hero hero = (Hero) owner;
                 Char enemy = hero.attackTarget();
                 if (enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)) {
@@ -165,7 +165,7 @@ public class Kunai extends MissileWeapon {
                     }
                     return damage;
                 }
-            } else if (rank() == 3){
+            } else if (type() == 3){
                 Hero hero = (Hero) owner;
                 Char enemy = hero.attackTarget();
                 if (enemy == null || Dungeon.level.heroFOV[enemy.pos]){

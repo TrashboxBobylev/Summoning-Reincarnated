@@ -46,8 +46,8 @@ public class ThrowingKnive2 extends MissileWeapon {
 		hitSoundPitch = 1f;
 	}
 
-    public float min(float lvl, int rank) {
-        switch (rank){
+    public float min(float lvl, int type) {
+        switch (type){
             case 1: return 2 + lvl*0.75f;
             case 2: return 3 + lvl*1;
             case 3: return 24 + lvl*5f;
@@ -55,8 +55,8 @@ public class ThrowingKnive2 extends MissileWeapon {
         return 0;
     }
 
-    public float max(float lvl, int rank) {
-        switch (rank){
+    public float max(float lvl, int type) {
+        switch (type){
             case 1: return 6 + lvl*3f;
             case 2: return 8 + lvl*3.5f;
             case 3: return 48 + lvl*11f;
@@ -64,8 +64,8 @@ public class ThrowingKnive2 extends MissileWeapon {
         return 0;
     }
 
-    public float baseUses(float lvl, int rank){
-        switch (rank){
+    public float baseUses(float lvl, int type){
+        switch (type){
             case 1: return 9 + lvl*1f;
             case 2: return 5 + lvl*0.75f;
             case 3: return 1;
@@ -75,29 +75,29 @@ public class ThrowingKnive2 extends MissileWeapon {
 
     @Override
     public float durabilityPerUse(float level) {
-        if (rank() == 3){
+        if (type() == 3){
             return MAX_DURABILITY;
         }
         return super.durabilityPerUse(level);
     }
 
     @Override
-    protected String generalRankMessage(int rank) {
-        if (rank == 3){
-            return Messages.get(this, "rank3",
-                    GameMath.printAverage(Math.round(min(powerLevel(), rank)), Math.round(max(powerLevel(), rank))),
-                    Math.round(baseUses(powerLevel(), rank))
+    protected String generalTypeMessage(int type) {
+        if (type == 3){
+            return Messages.get(this, "type3",
+                    GameMath.printAverage(Math.round(min(powerLevel(), type)), Math.round(max(powerLevel(), type))),
+                    Math.round(baseUses(powerLevel(), type))
             );
         }
-        return super.generalRankMessage(rank);
+        return super.generalTypeMessage(type);
     }
 
     @Override
     public int proc(Char attacker, Char defender, int damage) {
         int dmg = super.proc(attacker, defender, damage);
-        if (rank() == 2)
+        if (type() == 2)
             Buff.affect(defender, Lucky.LuckProc.class).ringLevel = -7;
-        if (rank() == 3){
+        if (type() == 3){
             ArrayList<Char> targets = new ArrayList<>();
             for (int i : PathFinder.NEIGHBOURS8){
                 if (Actor.findChar(defender.pos+ i) != null) targets.add(Actor.findChar(defender.pos + i));

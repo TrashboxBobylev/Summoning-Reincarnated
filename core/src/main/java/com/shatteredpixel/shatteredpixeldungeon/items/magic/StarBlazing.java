@@ -64,7 +64,7 @@ public class StarBlazing extends ConjurerSpell implements DamageSource {
 
     @Override
     public void effect(Ballistica trajectory) {
-        if (range(rank()) < 1){
+        if (range(type()) < 1){
             Char ch = Actor.findChar(trajectory.collisionPos);
             if (ch != null && (ch.alignment != Char.Alignment.ALLY || (Dungeon.hero.hasTalent(Talent.CONCENTRATED_SUPPORT) && !(ch instanceof Hero)))){
                 ch.damage(damageRoll(), this);
@@ -85,7 +85,7 @@ public class StarBlazing extends ConjurerSpell implements DamageSource {
             }
         }
         else {
-            PathFinder.buildDistanceMap(trajectory.collisionPos, BArray.not(Dungeon.level.solid, null), range(rank()));
+            PathFinder.buildDistanceMap(trajectory.collisionPos, BArray.not(Dungeon.level.solid, null), range(type()));
             for (int i = 0; i < PathFinder.distance.length; i++) {
                 if (PathFinder.distance[i] < Integer.MAX_VALUE) {
                     Char ch = Actor.findChar(i);
@@ -115,8 +115,8 @@ public class StarBlazing extends ConjurerSpell implements DamageSource {
     }
 
     @Override
-    public int manaCost(int rank) {
-        switch (rank){
+    public int manaCost(int type) {
+        switch (type){
             case 1: return 1;
             case 2: return 4;
             case 3: return 10;
@@ -151,8 +151,8 @@ public class StarBlazing extends ConjurerSpell implements DamageSource {
     }
 
     @Override
-    public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", range(rank)*2+1);
+    public String spellTypeMessage(int type) {
+        return Messages.get(this, "type", range(type)*2+1);
     }
 
     @Override
@@ -162,8 +162,8 @@ public class StarBlazing extends ConjurerSpell implements DamageSource {
             @Override
             public void call() {
                 Dungeon.hero.sprite.idle();
-                if (rank() == 3){
-                    PathFinder.buildDistanceMap(bolt.collisionPos, BArray.not(Dungeon.level.solid, null), range(rank()));
+                if (type() == 3){
+                    PathFinder.buildDistanceMap(bolt.collisionPos, BArray.not(Dungeon.level.solid, null), range(type()));
                     for (int i = 0; i < PathFinder.distance.length; i++) {
                         if (PathFinder.distance[i] < Integer.MAX_VALUE && i != bolt.collisionPos) {
                             Char ch = Actor.findChar(i);
@@ -192,12 +192,12 @@ public class StarBlazing extends ConjurerSpell implements DamageSource {
 
     @Override
     public String empowermentDesc() {
-        return Messages.get(this, "desc_empower", heroLvl() / (rank() == 1 ? 4 : 3));
+        return Messages.get(this, "desc_empower", heroLvl() / (type() == 1 ? 4 : 3));
     }
 
     @Override
-    public String empowermentRankDesc(int rank) {
-        return Messages.get(this, "rank_empower", heroLvl() / (rank == 1 ? 4 : 3));
+    public String empowermentTypeDesc(int type) {
+        return Messages.get(this, "type_empower", heroLvl() / (type == 1 ? 4 : 3));
     }
 
     @Override

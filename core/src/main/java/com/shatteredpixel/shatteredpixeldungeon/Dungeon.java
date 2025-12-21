@@ -1209,7 +1209,7 @@ public class Dungeon {
 			if (ch instanceof WandOfWarding.Ward
 					|| ch instanceof WandOfRegrowth.Lotus
 					|| ch instanceof SpiritHawk.HawkAlly
-					|| (ch instanceof Crow && ((Crow) ch).rank == 2)
+					|| (ch instanceof Crow && ((Crow) ch).type == 2)
 					|| ch.buff(PowerOfMany.PowerBuff.class) != null){
 				x = ch.pos % level.width();
 				y = ch.pos / level.width();

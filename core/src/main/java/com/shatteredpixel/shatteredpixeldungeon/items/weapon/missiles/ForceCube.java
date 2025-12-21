@@ -49,8 +49,8 @@ public class ForceCube extends MissileWeapon {
 		sticky = false;
 	}
 
-    public float min(float lvl, int rank) {
-        switch (rank){
+    public float min(float lvl, int type) {
+        switch (type){
             case 1: return 4 + lvl;
             case 2: return 3 + lvl*0.67f;
             case 3: return 1 + lvl*1.5f;
@@ -58,8 +58,8 @@ public class ForceCube extends MissileWeapon {
         return 0;
     }
 
-    public float max(float lvl, int rank) {
-        switch (rank){
+    public float max(float lvl, int type) {
+        switch (type){
             case 1: return 8 + lvl*3f;
             case 2: return 6 + lvl*2.25f;
             case 3: return 20 + lvl*8;
@@ -67,8 +67,8 @@ public class ForceCube extends MissileWeapon {
         return 0;
     }
 
-    public float baseUses(float lvl, int rank){
-        switch (rank){
+    public float baseUses(float lvl, int type){
+        switch (type){
             case 1: return 5 + lvl*1.25f;
             case 2: return 3 + lvl*1f;
             case 3: return 1 + lvl*0.25f;
@@ -107,7 +107,7 @@ public class ForceCube extends MissileWeapon {
 		ArrayList<Char> targets = new ArrayList<>();
 		if (Actor.findChar(cell) != null) targets.add(Actor.findChar(cell));
 
-        if (rank() != 3){
+        if (type() != 3){
             for (int i : PathFinder.NEIGHBOURS8){
                 if (!(Dungeon.level.traps.get(cell+i) instanceof TenguDartTrap)) Dungeon.level.pressCell(cell+i);
                 if (Actor.findChar(cell + i) != null) targets.add(Actor.findChar(cell + i));
@@ -129,7 +129,7 @@ public class ForceCube extends MissileWeapon {
 				Dungeon.fail(this);
 				GLog.n(Messages.get(this, "ondeath"));
 			}
-            if (rank() == 2){
+            if (type() == 2){
                 //do not push chars that are dieing over a pit, or that move due to the damage
                 if ((target.isAlive() || target.flying || !Dungeon.level.pit[target.pos])) {
                     //trace a ballistica to our target (which will also extend past them
@@ -143,7 +143,7 @@ public class ForceCube extends MissileWeapon {
 		}
 		
 		WandOfBlastWave.BlastWave.blast(cell);
-        if (rank() == 3){
+        if (type() == 3){
             for (int i : PathFinder.NEIGHBOURS8){
                 WandOfBlastWave.BlastWave.blast(cell+i);
             }
@@ -154,7 +154,7 @@ public class ForceCube extends MissileWeapon {
 
     @Override
     public int proc(Char attacker, Char defender, int damage) {
-        if (rank() == 3){
+        if (type() == 3){
             damage += defender.drRoll();
         }
         return super.proc(attacker, defender, damage);

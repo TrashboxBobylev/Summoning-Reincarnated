@@ -60,7 +60,7 @@ public class GrayRat extends Minion {
 
     @Override
     public int attackProc(Char enemy, int damage) {
-        if (rank == 2){
+        if (type == 2){
             if (HP < HT) {
                 HP = Math.min(HT, HP + HT/15);
                 sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(HT/15), FloatingText.HEALING);

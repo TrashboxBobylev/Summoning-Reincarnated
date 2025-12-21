@@ -40,7 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
@@ -70,7 +70,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-abstract public class MissileWeapon extends Weapon implements Rankable {
+abstract public class MissileWeapon extends Weapon implements TypedItem {
 
 	{
 		stackable = true;
@@ -116,11 +116,11 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
     }
 
     public float min(float lvl) {
-        return min(lvl, rank());
+        return min(lvl, type());
     }
 
-    public float min(float lvl, int rank) {
-        switch (rank){
+    public float min(float lvl, int type) {
+        switch (type){
             case 1: return 4 + lvl;
             case 2: return 4 + lvl;
             case 3: return 4 + lvl;
@@ -139,11 +139,11 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
     }
 
     public float max(float lvl) {
-        return max(lvl, rank());
+        return max(lvl, type());
     }
 
-    public float max(float lvl, int rank) {
-        switch (rank){
+    public float max(float lvl, int type) {
+        switch (type){
             case 1: return 10 + lvl*4.5f;
             case 2: return 10 + lvl*4.5f;
             case 3: return 10 + lvl*4.5f;
@@ -206,16 +206,14 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
         return false;
     }
 
-    int rank = 1;
-
     @Override
-    public int rank() {
-        return rank;
+    public int type() {
+        return type;
     }
 
     @Override
-    public void rank(int rank) {
-        this.rank = rank;
+    public void type(int type) {
+        this.type = type;
     }
 
 	public Item upgrade( boolean enchant ) {
@@ -441,7 +439,7 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 
 	@Override
 	public Item random() {
-        rank(Random.Int(1, 4));
+        type(Random.Int(1, 4));
 
 		//we use a separate RNG here so that variance due to things like parchment scrap
 		//does not affect levelgen
@@ -517,8 +515,8 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 	//classes that add steps onto durabilityPerUse can turn rounding off, to do their own rounding after more logic
 	protected boolean useRoundingInDurabilityCalc = true;
 
-    public float baseUses(float lvl, int rank){
-        switch (rank){
+    public float baseUses(float lvl, int type){
+        switch (type){
             case 1: return 8 + lvl*1.75f;
             case 2: return 8 + lvl*1.75f;
             case 3: return 8 + lvl*1.75f;
@@ -527,7 +525,7 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
     }
 
 	public float durabilityPerUse( float level ){
-		float usages = baseUses(level, rank);
+		float usages = baseUses(level, type);
 
 		//+33%/50% durability
 		if (Dungeon.hero != null && Dungeon.hero.hasTalent(Talent.DURABLE_PROJECTILES)){
@@ -725,7 +723,7 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 		}
 
 		info += "\n\n";
-		String statsInfo = Messages.get(this, "stats_desc" + rank);
+		String statsInfo = Messages.get(this, "stats_desc" + type);
 		if (statsInfo.equals("") || statsInfo.startsWith("!!")) {
             statsInfo = Messages.get(this, "stats_desc");
         }
@@ -767,22 +765,22 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
     }
 
     @Override
-    public String getRankMessage(int rank){
-        String rankMessage = generalRankMessage(rank);
-        if (!missileDescription(rank).startsWith("!!"))
-            rankMessage += "\n\n" + missileDescription(rank);
-        return rankMessage;
+    public String getTypeMessage(int type){
+        String typeMessage = generalTypeMessage(type);
+        if (!missileDescription(type).startsWith("!!"))
+            typeMessage += "\n\n" + missileDescription(type);
+        return typeMessage;
     }
 
-    protected String generalRankMessage(int rank) {
-        return Messages.get(this, "rank",
-                GameMath.printAverage(Math.round(min(powerLevel(), rank)), Math.round(max(powerLevel(), rank))),
-                Math.round(baseUses(powerLevel(), rank))
+    protected String generalTypeMessage(int type) {
+        return Messages.get(this, "type",
+                GameMath.printAverage(Math.round(min(powerLevel(), type)), Math.round(max(powerLevel(), type))),
+                Math.round(baseUses(powerLevel(), type))
         );
     }
 
-    public String missileDescription(int rank){
-        return Messages.get(this, "missile_desc" + rank);
+    public String missileDescription(int type){
+        return Messages.get(this, "missile_desc" + type);
     }
 	
 	@Override
@@ -805,7 +803,7 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 	private static final String SPAWNED = "spawned";
 	private static final String DURABILITY = "durability";
 	private static final String EXTRA_LEFT = "extra_left";
-    private static final String RANK = "rank";
+    private static final String TYPE = "rank";
 
 	@Override
 	public void storeInBundle(Bundle bundle) {
@@ -814,7 +812,7 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 		bundle.put(SPAWNED, spawnedForEffect);
 		bundle.put(DURABILITY, durability);
 		bundle.put(EXTRA_LEFT, extraThrownLeft);
-        bundle.put(RANK, rank);
+        bundle.put(TYPE, type);
 	}
 	
 	private static boolean bundleRestoring = false;
@@ -846,10 +844,10 @@ abstract public class MissileWeapon extends Weapon implements Rankable {
 		spawnedForEffect = bundle.getBoolean(SPAWNED);
 		durability = bundle.getFloat(DURABILITY);
 		extraThrownLeft = bundle.getBoolean(EXTRA_LEFT);
-        if (bundle.contains(RANK))
-            rank = bundle.getInt(RANK);
+        if (bundle.contains(TYPE))
+            type = bundle.getInt(TYPE);
         else
-            rank = 1;
+            type = 1;
 	}
 
 	public static class PlaceHolder extends MissileWeapon {

@@ -61,14 +61,14 @@ public class BeamOfAffection extends ConjurerSpell {
         Char ch = Actor.findChar(trajectory.collisionPos);
         if (ch != null && !(ch instanceof Hero)){
             if (ch.alignment == Char.Alignment.ALLY){
-                if (rank() != 3)
+                if (type() != 3)
                     ch.die( curUser );
-                if (rank() == 2 && ch instanceof Minion){
+                if (type() == 2 && ch instanceof Minion){
                     for (Staff.Charger charger : Dungeon.hero.buffs(Staff.Charger.class)){
                         if (charger.staff().getMinionID() == ch.id())
                             charger.gainCharge((ch.HP * 1f / ch.HT) / 2f);
                     }
-                } else if (rank() == 3){
+                } else if (type() == 3){
                     CellEmitter.center(ch.pos).start( Speck.factory( Speck.SCREAM ), 0.3f, 3 );
                     Buff.affect(ch, Fury.class);
                 }
@@ -99,8 +99,8 @@ public class BeamOfAffection extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost(int rank) {
-        switch (rank){
+    public int manaCost(int type) {
+        switch (type){
             case 1: return 0;
             case 2: return 5;
             case 3: return 7;

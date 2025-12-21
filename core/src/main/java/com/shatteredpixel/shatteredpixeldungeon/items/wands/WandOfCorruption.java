@@ -130,21 +130,21 @@ public class WandOfCorruption extends Wand {
 	}
 
     @Override
-    public float powerModifier(int rank) {
-        switch (rank){
+    public float powerModifier(int type) {
+        switch (type){
             case 2: return 0.8f;
         }
-        return super.powerModifier(rank);
+        return super.powerModifier(type);
     }
 
     @Override
-    public float rechargeModifier(int rank) {
-        switch (rank){
+    public float rechargeModifier(int type) {
+        switch (type){
             case 1: return 1f;
             case 2: return 1.33f;
             case 3: return 0.4f;
         }
-        return super.rechargeModifier(rank);
+        return super.rechargeModifier(type);
     }
 
     static final float RANK_3_MIN = 0.25f;
@@ -167,7 +167,7 @@ public class WandOfCorruption extends Wand {
 			}
 
 			float corruptingPower = corruptingPower();
-            if (rank() == 3){
+            if (type() == 3){
                 corruptingPower *= Random.Float(RANK_3_MIN, RANK_3_MAX);
             }
 			
@@ -224,14 +224,14 @@ public class WandOfCorruption extends Wand {
 
     @Override
     protected int chargesPerCast() {
-        if (rank() == 2){
+        if (type() == 2){
             return Math.max(1, curCharges);
         }
         return super.chargesPerCast();
     }
 
     private float corruptingPower(){
-        return corruptingPower(rank());
+        return corruptingPower(type());
     }
 
     private float corruptingPower(int rank) {
@@ -258,7 +258,7 @@ public class WandOfCorruption extends Wand {
 			 }
 		}
         float debuffDuration = debuffDuration();
-        if (rank() == 3){
+        if (type() == 3){
             debuffDuration *= Random.Float(RANK_3_MIN, RANK_3_MAX);
         }
 		
@@ -275,7 +275,7 @@ public class WandOfCorruption extends Wand {
 	}
 
     private float debuffDuration(){
-        return debuffDuration(rank());
+        return debuffDuration(type());
     }
 
     private float debuffDuration(int rank) {
@@ -313,10 +313,10 @@ public class WandOfCorruption extends Wand {
 		float procChance = (level+1f)/(level+6f) * procChanceMultiplier(attacker);
 		if (Random.Float() < procChance) {
             float powerMulti = Math.max(1f, procChance);
-            if (rank() == 1) {
+            if (type() == 1) {
                 Buff.prolong(defender, Amok.class, Math.round((4 + level * 2) * powerMulti));
             }
-            if (rank() == 2){
+            if (type() == 2){
                 if (damage >= defender.HP
                         && Random.Float() < procChance
                         && !defender.isImmune(Corruption.class)
@@ -337,24 +337,24 @@ public class WandOfCorruption extends Wand {
                     }
                 }
             }
-            if (rank() == 3){
+            if (type() == 3){
                 debuffEnemy((Mob) defender, MINOR_DEBUFFS);
             }
 		}
 	}
 
     @Override
-    public String generalRankDescription(int rank) {
-        if (rank == 3){
-            return Messages.get(this, "rank" + rank,
-                    getRechargeInfo(rank),
-                    corruptingPower(rank)*RANK_3_MIN, corruptingPower(rank)*RANK_3_MAX,
-                    debuffDuration(rank)*RANK_3_MIN, debuffDuration(rank)*RANK_3_MAX
+    public String generalTypeDescription(int type) {
+        if (type == 3){
+            return Messages.get(this, "type" + type,
+                    getRechargeInfo(type),
+                    corruptingPower(type)*RANK_3_MIN, corruptingPower(type)*RANK_3_MAX,
+                    debuffDuration(type)*RANK_3_MIN, debuffDuration(type)*RANK_3_MAX
             );
         }
-        return Messages.get(this, "rank" + rank,
-                getRechargeInfo(rank),
-                corruptingPower(rank), debuffDuration(rank)
+        return Messages.get(this, "type" + type,
+                getRechargeInfo(type),
+                corruptingPower(type), debuffDuration(type)
         );
     }
 

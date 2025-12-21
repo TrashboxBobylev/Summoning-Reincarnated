@@ -69,17 +69,17 @@ public class ShockerBreaker extends ConjurerSpell {
         if (ch != null && ch.alignment == Char.Alignment.ALLY && !(ch instanceof Hero)){
             Sample.INSTANCE.play(Assets.Sounds.ZAP);
             Sample.INSTANCE.play(Assets.Sounds.HEALTH_WARN);
-            ch.damage((int) (ch.HT * dmg(rank())), new NoHeal());
+            ch.damage((int) (ch.HT * dmg(type())), new NoHeal());
             Camera.main.shake(4f, 0.4f);
             GameScene.flash(0xFFFFFF);
-            Buff.affect(ch, Empowered.class, buff(rank()));
-            Buff.affect(ch, Haste.class, buff(rank()));
-            Buff.affect(ch, Adrenaline.class, buff(rank()));
-            Buff.affect(ch, Bless.class, buff(rank()));
-            if (rank() == 2){
-                Buff.affect(ch, Invulnerability.class, buff(rank()));
+            Buff.affect(ch, Empowered.class, buff(type()));
+            Buff.affect(ch, Haste.class, buff(type()));
+            Buff.affect(ch, Adrenaline.class, buff(type()));
+            Buff.affect(ch, Bless.class, buff(type()));
+            if (type() == 2){
+                Buff.affect(ch, Invulnerability.class, buff(type()));
             }
-            Buff.affect(ch, NoHeal.class, noheal(rank()));
+            Buff.affect(ch, NoHeal.class, noheal(type()));
 
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
         }
@@ -98,8 +98,8 @@ public class ShockerBreaker extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost(int rank) {
-        switch (rank){
+    public int manaCost(int type) {
+        switch (type){
             case 1: return 9;
             case 2: return 12;
             case 3: return 24;
@@ -137,14 +137,14 @@ public class ShockerBreaker extends ConjurerSpell {
 
     @Override
     public String spellDesc() {
-        return Messages.get(this, "desc" + rank(),
-                new DecimalFormat("#.##").format(dmg(rank())*100), buff(rank()), noheal(rank()));
+        return Messages.get(this, "desc" + type(),
+                new DecimalFormat("#.##").format(dmg(type())*100), buff(type()), noheal(type()));
     }
 
     @Override
-    public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank" + rank,
-                new DecimalFormat("#.##").format(dmg(rank)*100), buff(rank), noheal(rank));
+    public String spellTypeMessage(int type) {
+        return Messages.get(this, "type" + type,
+                new DecimalFormat("#.##").format(dmg(type)*100), buff(type), noheal(type));
     }
 
     public static class NoHeal extends FlavourBuff implements InescapableDamage {

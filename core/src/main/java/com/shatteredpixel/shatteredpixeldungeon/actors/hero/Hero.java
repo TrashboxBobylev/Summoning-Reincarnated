@@ -634,7 +634,7 @@ public class Hero extends Char {
 		knife.ranged = true;
 		boolean hit = false;
 		if (enemy.alignment != Alignment.ALLY)
-			hit = attack( enemy, knife.rank() == 2 ? 1.40f : 1f, 0f, 1f );
+			hit = attack( enemy, knife.type() == 2 ? 1.40f : 1f, 0f, 1f );
 		Invisibility.dispel();
 		belongings.thrownWeapon = null;
 
@@ -931,7 +931,7 @@ public class Hero extends Char {
 		if (RingOfForce.fightingUnarmed(this))  return true;
 		if (STR() < ((Weapon)w).STRReq())       return false;
 		if (w instanceof Flail || w instanceof Cleaver ||
-                (w instanceof WandOfMagicMissile && subClass == HeroSubClass.BATTLEMAGE && ((WandOfMagicMissile) w).rank() == 2)) return false;
+                (w instanceof WandOfMagicMissile && subClass == HeroSubClass.BATTLEMAGE && ((WandOfMagicMissile) w).type() == 2)) return false;
 
 		return super.canSurpriseAttack();
 	}
@@ -1722,7 +1722,7 @@ public class Hero extends Char {
 		}
 
         if (buff(WandOfLightning.LightningCharge.class) != null){
-            if (buff(WandOfLightning.LightningCharge.class).rank == 2){
+            if (buff(WandOfLightning.LightningCharge.class).effectType == 2){
                 ArrayList<Char> affected = new ArrayList<>();
 
                 ArrayList<Lightning.Arc> arcs = new ArrayList<>();
@@ -1895,7 +1895,7 @@ public class Hero extends Char {
 				damage *= 0.2f;
 			}
 			if (this.belongings.armor instanceof ConjurerSet &&
-					((ConjurerSet) this.belongings.armor).rank() == 3)
+					((ConjurerSet) this.belongings.armor).type() == 3)
 				damage *= 1.5f;
 		}
 

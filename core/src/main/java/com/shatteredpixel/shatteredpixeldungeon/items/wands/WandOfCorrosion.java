@@ -63,13 +63,13 @@ public class WandOfCorrosion extends Wand {
 	}
 
     @Override
-    public float rechargeModifier(int rank) {
-        switch (rank){
+    public float rechargeModifier(int type) {
+        switch (type){
             case 1: return 2.0f;
             case 2: return 0.8f;
             case 3: return 3.5f;
         }
-        return super.rechargeModifier(rank);
+        return super.rechargeModifier(type);
     }
 
     public int amountOfGas(int rank){
@@ -92,14 +92,14 @@ public class WandOfCorrosion extends Wand {
 
     @Override
 	public void onZap(Ballistica bolt) {
-        if (rank() == 2){
+        if (type() == 2){
             Char ch = Actor.findChar(bolt.collisionPos);
             if (ch != null){
-                Buff.affect(ch, CorrosiveImbue.class).set(gasPower(rank()), amountOfGas(rank()));
+                Buff.affect(ch, CorrosiveImbue.class).set(gasPower(type()), amountOfGas(type()));
             }
         } else {
-            CorrosiveGas gas = Blob.seed(bolt.collisionPos, amountOfGas(rank()), CorrosiveGas.class);
-            gas.setStrength(gasPower(rank()), getClass());
+            CorrosiveGas gas = Blob.seed(bolt.collisionPos, amountOfGas(type()), CorrosiveGas.class);
+            gas.setStrength(gasPower(type()), getClass());
             if (Dungeon.isChallenged(Conducts.Conduct.PACIFIST))
                 gas.setStrength(gas.volume/3);
             GameScene.add(gas);
@@ -146,15 +146,15 @@ public class WandOfCorrosion extends Wand {
 
 			float powerMulti = Math.max(1f, procChance);
 
-            if (rank() == 1) {
+            if (type() == 1) {
                 Buff.affect(defender, Ooze.class).set(Ooze.DURATION * powerMulti);
                 CellEmitter.center(defender.pos).burst(CorrosionParticle.SPLASH, 5);
             }
-            if (rank() == 2){
-                Buff.affect(defender, CorrosiveImbue.class).set(gasPower(rank())*2, amountOfGas(rank())*2);
+            if (type() == 2){
+                Buff.affect(defender, CorrosiveImbue.class).set(gasPower(type())*2, amountOfGas(type())*2);
             }
-            if (rank() == 3){
-                GameScene.add(Blob.seed(defender.pos, amountOfGas(rank())/20, Miasma.class));
+            if (type() == 3){
+                GameScene.add(Blob.seed(defender.pos, amountOfGas(type())/20, Miasma.class));
             }
 			
 		}
@@ -172,7 +172,7 @@ public class WandOfCorrosion extends Wand {
 
 	@Override
 	public String statsDesc() {
-        return Messages.get(this, "stats_desc" + rank(), gasPower(rank()));
+        return Messages.get(this, "stats_desc" + type(), gasPower(type()));
     }
 
 	@Override
@@ -186,10 +186,10 @@ public class WandOfCorrosion extends Wand {
 	}
 
     @Override
-    public String generalRankDescription(int rank) {
-        return Messages.get(this, "rank" + rank,
-                getRechargeInfo(rank),
-                gasPower(rank), amountOfGas(rank)
+    public String generalTypeDescription(int type) {
+        return Messages.get(this, "type" + type,
+                getRechargeInfo(type),
+                gasPower(type), amountOfGas(type)
         );
     }
 

@@ -60,29 +60,29 @@ public class WandOfMagicMissile extends DamageWand {
 	}
 
     @Override
-    public float powerModifier(int rank) {
-        switch (rank){
+    public float powerModifier(int type) {
+        switch (type){
             case 1: return 1f;
             case 2: return 3f;
             case 3: return 0f;
         }
-        return super.powerModifier(rank);
+        return super.powerModifier(type);
     }
 
     @Override
-    public float rechargeModifier(int rank) {
-        switch (rank){
+    public float rechargeModifier(int type) {
+        switch (type){
             case 1: return 1f;
             case 2: return 1.75f;
             case 3: return 1.33f;
         }
-        return super.rechargeModifier(rank);
+        return super.rechargeModifier(type);
     }
 
     @Override
     public int min(int lvl) {
         int min = super.min(lvl);
-        if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE && rank() == 2){
+        if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE && type() == 2){
             min *= 4;
         }
         return min;
@@ -91,7 +91,7 @@ public class WandOfMagicMissile extends DamageWand {
     @Override
     public int max(int lvl) {
         int max = super.max(lvl);
-        if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE && rank() == 2){
+        if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE && type() == 2){
             max *= 2;
         }
         return max;
@@ -100,7 +100,7 @@ public class WandOfMagicMissile extends DamageWand {
     @Override
     public float accuracyFactor(Char owner, Char target) {
         float acc = super.accuracyFactor(owner, target);
-        if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE && rank() == 2){
+        if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE && type() == 2){
             acc *= 0.8f;
         }
         return acc;
@@ -114,7 +114,7 @@ public class WandOfMagicMissile extends DamageWand {
             boolean hit = true;
 
 			if (!(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))) {
-                if (rank() == 2){
+                if (type() == 2){
                     hit = Char.hit( curUser, ch, 1.5f, true );
                 }
                 if (hit) {
@@ -128,7 +128,7 @@ public class WandOfMagicMissile extends DamageWand {
 			}
             if (hit) {
                 Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC, 1, Random.Float(0.87f, 1.15f));
-                if (rank() != 2) {
+                if (type() != 2) {
                     //apply the magic charge buff if we have another wand in inventory of a lower level, or already have the buff
                     for (Wand.Charger wandCharger : curUser.buffs(Wand.Charger.class)) {
                         if (wandCharger != charger) {
@@ -148,7 +148,7 @@ public class WandOfMagicMissile extends DamageWand {
 
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {
-        if (rank() == 1) {
+        if (type() == 1) {
             SpellSprite.show(attacker, SpellSprite.CHARGE);
             for (Wand.Charger c : attacker.buffs(Wand.Charger.class)) {
                 if (c.wand() != this) {
@@ -156,7 +156,7 @@ public class WandOfMagicMissile extends DamageWand {
                 }
             }
         }
-        if (rank() == 3){
+        if (type() == 3){
             Splash.at(defender.sprite.center(), 0xf84037, 10);
             Buff.count(defender, ArcaneDamageStack.class, Dungeon.hero.ATU()*2);
         }
@@ -206,7 +206,7 @@ public class WandOfMagicMissile extends DamageWand {
 		}
 
         public float powerModifier(){
-            if (wandJustApplied.rank() == 3){
+            if (wandJustApplied.type() == 3){
                 return 3f;
             }
             return 1.5f;

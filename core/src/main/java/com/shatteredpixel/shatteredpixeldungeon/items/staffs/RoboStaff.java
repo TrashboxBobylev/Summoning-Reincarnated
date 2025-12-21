@@ -55,7 +55,7 @@ public class RoboStaff extends Staff {
 
     @Override
     public int getRegenerationTurns() {
-        if (rank() == 3){
+        if (type() == 3){
             return super.getRegenerationTurns()*2;
         }
         return super.getRegenerationTurns();

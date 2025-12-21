@@ -29,7 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ConjurerSpell;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -171,8 +171,8 @@ public class ConjurerBook extends Bag {
 		@Override
 		public Visual secondaryVisual() {
 			BitmapText txt = new BitmapText(PixelScene.pixelFont);
-			txt.text(Rankable.getRankString(quickSpell.rank()));
-			txt.hardlight(Rankable.getRankColor(quickSpell.rank()));
+			txt.text(TypedItem.getTypeString(quickSpell.type()));
+			txt.hardlight(TypedItem.getTypeColor(quickSpell.type()));
 			txt.measure();
 			return txt;
 		}

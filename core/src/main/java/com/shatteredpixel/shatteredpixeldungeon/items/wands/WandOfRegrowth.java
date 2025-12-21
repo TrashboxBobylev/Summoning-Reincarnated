@@ -99,8 +99,8 @@ public class WandOfRegrowth extends Wand {
 	}
 
     @Override
-    public float rechargeModifier(int rank) {
-        switch (rank){
+    public float rechargeModifier(int type) {
+        switch (type){
             case 1:
                 return 1.333f;
             case 2:
@@ -108,7 +108,7 @@ public class WandOfRegrowth extends Wand {
             case 3:
                 return 2.5f;
         }
-        return super.rechargeModifier(rank);
+        return super.rechargeModifier(type);
     }
 
     public float grassPlaced(int rank, float power){
@@ -146,7 +146,7 @@ public class WandOfRegrowth extends Wand {
 		}
 
 		int chrgUsed = chargesPerCast();
-		int grassToPlace = Math.round((grassPlaced(rank(), power()))*chrgUsed);
+		int grassToPlace = Math.round((grassPlaced(type(), power()))*chrgUsed);
 
 		//ignore cells which can't have anything grow in them.
 		for (Iterator<Integer> i = cells.iterator(); i.hasNext();) {
@@ -170,7 +170,7 @@ public class WandOfRegrowth extends Wand {
 						Statistics.qualifiedForBossChallengeBadge = false;
 					}
 					wandProc(ch, chargesPerCast());
-					Buff.prolong( ch, Roots.class, rootPlaced(rank()) * chrgUsed );
+					Buff.prolong( ch, Roots.class, rootPlaced(type()) * chrgUsed );
 				}
 			}
 		}
@@ -268,7 +268,7 @@ public class WandOfRegrowth extends Wand {
 	}
 
     public Lotus getFlower(){
-        switch (rank()) {
+        switch (type()) {
             case 1: default:
                 return new Lotus();
             case 2:
@@ -280,7 +280,7 @@ public class WandOfRegrowth extends Wand {
 
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {
-        if (rank() == 1) {
+        if (type() == 1) {
             //like pre-nerf vampiric enchantment, except with herbal healing buff, only in grass
             boolean grass = false;
             int terr = Dungeon.level.map[attacker.pos];
@@ -303,7 +303,7 @@ public class WandOfRegrowth extends Wand {
                 Buff.affect(attacker, Sungrass.Health.class).boost(healing);
             }
         }
-        if (rank() == 2){
+        if (type() == 2){
             // lvl 0 - 33%
             // lvl 1 - 50%
             // lvl 2 - 60%
@@ -335,7 +335,7 @@ public class WandOfRegrowth extends Wand {
                 }
             }
         }
-        if (rank() == 1) {
+        if (type() == 1) {
             //like pre-nerf vampiric enchantment, except with herbal healing buff, only in grass
             boolean grass = false;
             int terr = Dungeon.level.map[attacker.pos];
@@ -361,14 +361,14 @@ public class WandOfRegrowth extends Wand {
 	}
 
     @Override
-    public String battlemageDesc(int rank) {
-        if (rank() == 1){
-            return Messages.get(this, "rank_bm" + rank, (int)(((power() + 2f) / (power() + 6f) / 2f)*100));
+    public String battlemageDesc(int type) {
+        if (type() == 1){
+            return Messages.get(this, "type_bm" + type, (int)(((power() + 2f) / (power() + 6f) / 2f)*100));
         }
-        if (rank() == 3){
-            return Messages.get(this, "rank_bm" + rank, (int)(((power() + 2f) / (power() + 6f))*100));
+        if (type() == 3){
+            return Messages.get(this, "type_bm" + type, (int)(((power() + 2f) / (power() + 6f))*100));
         }
-        return super.battlemageDesc(rank);
+        return super.battlemageDesc(type);
     }
 
     public void fx(Ballistica bolt, Callback callback) {
@@ -439,12 +439,12 @@ public class WandOfRegrowth extends Wand {
 	}
 
     @Override
-    public String generalRankDescription(int rank) {
-        return Messages.get(this, "rank",
-                getRechargeInfo(rank),
-                grassPlaced(rank, power()),
-                (int)rootPlaced(rank),
-                plantDescription(rank)
+    public String generalTypeDescription(int type) {
+        return Messages.get(this, "type",
+                getRechargeInfo(type),
+                grassPlaced(type, power()),
+                (int)rootPlaced(type),
+                plantDescription(type)
         );
     }
 

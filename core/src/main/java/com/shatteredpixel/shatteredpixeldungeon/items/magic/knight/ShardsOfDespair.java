@@ -72,15 +72,15 @@ public class ShardsOfDespair extends AdHocSpell {
                         Mob ch = targets.get(this);
                         if (ch != null) {
                             Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC);
-                            Buff.affect(ch, ToyKnife.SoulGain.class, buff(rank()));
+                            Buff.affect(ch, ToyKnife.SoulGain.class, buff(type()));
                             Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
                             if (level() >= 1) {
-                                ch.damage(damage(rank()), hero);
+                                ch.damage(damage(type()), hero);
                                 GoatClone clone = GoatClone.findClone();
                                 if (clone != null) {
                                     ch.aggro(clone);
                                 }
-                                if (rank() >= 3){
+                                if (type() >= 3){
                                     Buff.prolong(ch, SoulParalysis.class, 6f);
                                 }
                             }
@@ -152,9 +152,9 @@ public class ShardsOfDespair extends AdHocSpell {
     }
 
     @Override
-    public int manaCost(int rank) {
+    public int manaCost(int type) {
         int manaCost = 0;
-        switch (rank){
+        switch (type){
             case 1: manaCost = 8; break;
             case 2: manaCost = 15; break;
             case 3: manaCost = 35; break;
@@ -166,12 +166,12 @@ public class ShardsOfDespair extends AdHocSpell {
 
     @Override
     public String spellDesc() {
-        return Messages.get(this, "desc", new DecimalFormat("#.#").format(buff(rank())));
+        return Messages.get(this, "desc", new DecimalFormat("#.#").format(buff(type())));
     }
 
     @Override
-    public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank"+ (rank == 3 ? "3" : ""), new DecimalFormat("#.#").format(buff(rank)), GameMath.printAverage(minDamage(rank), maxDamage(rank)));
+    public String spellTypeMessage(int type) {
+        return Messages.get(this, "type"+ (type == 3 ? "3" : ""), new DecimalFormat("#.#").format(buff(type)), GameMath.printAverage(minDamage(type), maxDamage(type)));
     }
 
 }

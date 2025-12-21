@@ -51,18 +51,18 @@ public class DirectingPulse extends ConjurerSpell {
     public void effect(Ballistica trajectory) {
         Char ch = Actor.findChar(trajectory.collisionPos);
         if (ch != null && (ch.alignment == Char.Alignment.ENEMY || Dungeon.hero.hasTalent(Talent.SPIRITUAL_RESTOCK))) {
-            Buff.affect(ch, ToyKnife.SoulGain.class, buff(rank()));
+            Buff.affect(ch, ToyKnife.SoulGain.class, buff(type()));
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
             Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
             if (isEmpowered()){
-                Buff.affect(ch, Vulnerable.class, buff(rank()) / 2);
+                Buff.affect(ch, Vulnerable.class, buff(type()) / 2);
             }
         }
     }
 
     @Override
-    public int manaCost(int rank) {
-        switch (rank){
+    public int manaCost(int type) {
+        switch (type){
             case 1: return 5;
             case 2: return 3;
             case 3: return 0;
@@ -81,21 +81,21 @@ public class DirectingPulse extends ConjurerSpell {
 
     @Override
     public String spellDesc() {
-        return Messages.get(this, "desc", new DecimalFormat("#.#").format(buff(rank())));
+        return Messages.get(this, "desc", new DecimalFormat("#.#").format(buff(type())));
     }
 
     @Override
     public String empowermentDesc() {
-        return Messages.get(this, "desc_empower", new DecimalFormat("#.#").format(buff(rank())/2));
+        return Messages.get(this, "desc_empower", new DecimalFormat("#.#").format(buff(type())/2));
     }
 
     @Override
-    public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", new DecimalFormat("#.#").format(buff(rank)));
+    public String spellTypeMessage(int type) {
+        return Messages.get(this, "type", new DecimalFormat("#.#").format(buff(type)));
     }
 
     @Override
-    public String empowermentRankDesc(int rank) {
-        return Messages.get(this, "rank_empower", new DecimalFormat("#.#").format(buff(rank)));
+    public String empowermentTypeDesc(int type) {
+        return Messages.get(this, "type_empower", new DecimalFormat("#.#").format(buff(type)));
     }
 }

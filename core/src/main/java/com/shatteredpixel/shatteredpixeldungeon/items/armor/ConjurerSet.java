@@ -36,7 +36,7 @@ public interface ConjurerSet {
         return 0f;
     }
 
-    int rank();
+    int type();
 
     default int powerlevel() {
         return Dungeon.hero == null ? 0 : Dungeon.hero.ATU()-1;

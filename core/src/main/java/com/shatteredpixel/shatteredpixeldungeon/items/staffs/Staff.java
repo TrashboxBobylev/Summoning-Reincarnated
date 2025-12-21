@@ -46,7 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.items.AttunementItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
@@ -66,7 +66,7 @@ import com.watabou.utils.Random;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-public abstract class Staff extends Item implements AttunementItem, ChargingItem, Rankable, WeaponEnchantable {
+public abstract class Staff extends Item implements AttunementItem, ChargingItem, TypedItem, WeaponEnchantable {
 
     {
         stackable = false;
@@ -177,16 +177,16 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
         } else return -1;
     }
 
-    int rank = 1;
+    int type = 1;
 
     @Override
-    public int rank() {
-        return rank;
+    public int type() {
+        return type;
     }
 
     @Override
-    public void rank(int rank) {
-        this.rank = rank;
+    public void type(int type) {
+        this.type = type;
     }
 
     @Override
@@ -252,7 +252,7 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
     }
 
     public int minionMin() {
-        return Math.round(minionMin(rank()));
+        return Math.round(minionMin(type()));
     }
 
     public int minionMin(int lvl) {
@@ -267,7 +267,7 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
     }
 
     public int minionMax() {
-        return Math.round(minionMax(rank()));
+        return Math.round(minionMax(type()));
     }
 
     public int minionMax(int lvl) {
@@ -282,22 +282,22 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
     }
 
     @Override
-    public String getRankMessage(int rank){
-        String rankMessage = generalRankMessage(rank);
-        if (!minionDescription(rank).startsWith("!!"))
-            rankMessage += "\n\n" + minionDescription(rank);
-        return rankMessage;
+    public String getTypeMessage(int type){
+        String typeMessage = generalTypeMessage(type);
+        if (!minionDescription(type).startsWith("!!"))
+            typeMessage += "\n\n" + minionDescription(type);
+        return typeMessage;
     }
 
-    protected String generalRankMessage(int rank) {
-        return Messages.get(this, "rank" + rank,
-                hp(rank),
-                GameMath.printAverage(minionMin(rank), minionMax(rank))
+    protected String generalTypeMessage(int type) {
+        return Messages.get(this, "type" + type,
+                hp(type),
+                GameMath.printAverage(minionMin(type), minionMax(type))
         );
     }
 
-    public String minionDescription(int rank){
-        return Messages.get(this, "minion_desc" + rank);
+    public String minionDescription(int type){
+        return Messages.get(this, "minion_desc" + type);
     }
 
     @Override
@@ -396,9 +396,9 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
             this.onSummoningMinion(minion);
             minion.enchantment = enchantment;
             minion.augment = augment;
-            minion.rank = rank();
+            minion.type = type();
             minion.behaviorType = defaultBehaviorType();
-            minion.setMaxHP(hp(rank()));
+            minion.setMaxHP(hp(type()));
             this.customizeMinion(minion);
             if (owner.hasTalent(Talent.NEWBORN_MOTIVATION)){
                 Buff.affect(minion, Empowered.class, 25 * owner.pointsInTalent(Talent.NEWBORN_MOTIVATION));
@@ -450,7 +450,7 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
                         augment.damageFactor(Math.round(minionMin()*robeBonus)),
                         augment.damageFactor(Math.round(minionMax()*robeBonus))
                     ),
-                    (hp(rank())));
+                    (hp(type())));
         } else {
             info += "\n\n" + Messages.get(this, "stats_unknown", tier, ATUReq(0), GameMath.printAverage(minionMin(1), minionMax(1)), hp(1));
         }
@@ -499,7 +499,7 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
 
     @Override
     public Item random() {
-        rank(Random.Int(1, 4));
+        type(Random.Int(1, 4));
 
         //25% chance to be cursed
         //10% chance to be enchanted
@@ -546,7 +546,7 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
     private static final String CUR_CHARGES = "cur_changes";
     private static final String PARTIAL_CHARGE = "partial_change";
     private static final String MINION_ID = "minionID";
-    private static final String RANK = "rank";
+    private static final String TYPE = "rank";
     private static final String AUGMENT	        = "augment";
     private static final String ENCHANTMENT	    = "enchantment";
     private static final String MASTERY_POTION_BONUS = "mastery_potion_bonus";
@@ -558,7 +558,7 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
         bundle.put(CUR_CHARGES, curCharges);
         bundle.put(PARTIAL_CHARGE, partialCharge);
         bundle.put(MINION_ID, minionID);
-        bundle.put(RANK, rank);
+        bundle.put(TYPE, type);
         bundle.put(ENCHANTMENT, enchantment );
         bundle.put(AUGMENT, augment );
         bundle.put( MASTERY_POTION_BONUS, masteryPotionBonus );
@@ -570,7 +570,7 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
         curCharges = bundle.getInt(CUR_CHARGES);
         partialCharge = bundle.getFloat(PARTIAL_CHARGE);
         minionID = bundle.getInt(MINION_ID);
-        rank = bundle.getInt(RANK);
+        type = bundle.getInt(TYPE);
         augment = bundle.getEnum(AUGMENT, Weapon.Augment.class);
         enchantment = (Weapon.Enchantment)bundle.get( ENCHANTMENT );
         if (bundle.contains(MASTERY_POTION_BONUS))

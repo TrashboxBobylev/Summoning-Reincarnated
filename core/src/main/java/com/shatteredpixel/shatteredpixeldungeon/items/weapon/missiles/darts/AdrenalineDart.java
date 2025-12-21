@@ -42,10 +42,10 @@ public class AdrenalineDart extends TippedDart {
 		if (processingChargedShot && defender == attacker) {
 			//do nothing to the hero when processing charged shot
 		} else if (attacker.alignment == defender.alignment){
-			Buff.prolong( defender, Adrenaline.class, Adrenaline.DURATION*powerMultiplier(rank()));
+			Buff.prolong( defender, Adrenaline.class, Adrenaline.DURATION*powerMultiplier(type()));
 			return 0;
 		} else {
-			Buff.prolong( defender, Cripple.class, Cripple.DURATION/2*powerMultiplier(rank()));
+			Buff.prolong( defender, Cripple.class, Cripple.DURATION/2*powerMultiplier(type()));
 		}
 		
 		return super.proc(attacker, defender, damage);

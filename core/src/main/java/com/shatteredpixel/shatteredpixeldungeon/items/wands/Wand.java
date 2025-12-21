@@ -61,7 +61,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.RainbowParticl
 import com.shatteredpixel.shatteredpixeldungeon.items.AttunementItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
@@ -93,7 +93,7 @@ import com.watabou.utils.Random;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public abstract class Wand extends Weapon implements ChargingItem, AttunementItem, Rankable {
+public abstract class Wand extends Weapon implements ChargingItem, AttunementItem, TypedItem {
 
 	public static final String AC_ZAP	= "ZAP";
 
@@ -287,8 +287,8 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         charge(ch, 1.6f);
     }
 
-    public float rechargeModifier(int rank){
-        switch (rank){
+    public float rechargeModifier(int type){
+        switch (type){
             case 1: return 1.0f;
             case 2: return 1.0f;
             case 3: return 1.0f;
@@ -297,7 +297,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
     }
 
     public float rechargeModifier(){
-        float rechargeModifier = rechargeModifier(rank());
+        float rechargeModifier = rechargeModifier(type());
 //        if (Dungeon.hero.belongings.armor instanceof ClothArmor){
 //            ClothArmor armor = (ClothArmor) Dungeon.hero.belongings.armor;
 //            if (armor.level() == 1){
@@ -344,7 +344,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         }
 
         if (attacker instanceof Hero && ((Hero)attacker).subClass == HeroSubClass.BATTLEMAGE) {
-            if (curCharges < maxCharges) partialCharge += 0.5f/rechargeModifier(rank());
+            if (curCharges < maxCharges) partialCharge += 0.5f/rechargeModifier(type());
             ScrollOfRecharging.charge((Hero)attacker);
             onHit(attacker, defender, damage);
         }
@@ -497,8 +497,8 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         }
 
 		if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE){
-            String rankedBMageDesc = Messages.get(this, "bmage_desc" + rank());
-			desc += "\n\n" + (!rankedBMageDesc.startsWith("!!") ? rankedBMageDesc : Messages.get(this, "bmage_desc"));
+            String typedBMageDesc = Messages.get(this, "bmage_desc" + type());
+			desc += "\n\n" + (!typedBMageDesc.startsWith("!!") ? typedBMageDesc : Messages.get(this, "bmage_desc"));
 		}
 
         if (charger != null && curCharges < maxCharges){
@@ -511,9 +511,9 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 	}
 
 	public String statsDesc(){
-        String rankedStatsDesc = Messages.get(this, "stats_desc" + rank());
-        if (!rankedStatsDesc.startsWith("!!"))
-            return rankedStatsDesc;
+        String typedStatsDesc = Messages.get(this, "stats_desc" + type());
+        if (!typedStatsDesc.startsWith("!!"))
+            return typedStatsDesc;
 		return Messages.get(this, "stats_desc");
 	}
 
@@ -602,8 +602,8 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         return base;
     }
 
-    public float powerModifier(int rank){
-        switch (rank){
+    public float powerModifier(int type){
+        switch (type){
             case 1: return 1.0f;
             case 2: return 1.0f;
             case 3: return 1.0f;
@@ -612,7 +612,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
     }
 
     public float powerModifier(){
-        return powerModifier(rank());
+        return powerModifier(type());
     }
 
 	public void updateLevel() {
@@ -642,43 +642,41 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         return false;
     }
 
-    int rank = 1;
-
     @Override
-    public int rank() {
-        return rank;
+    public int type() {
+        return type;
     }
 
     @Override
-    public void rank(int rank) {
-        this.rank = rank;
+    public void type(int type) {
+        this.type = type;
     }
 
     @Override
-    public String getRankMessage(int rank) {
-        String desc = generalRankDescription(rank);
+    public String getTypeMessage(int type) {
+        String desc = generalTypeDescription(type);
         if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE){
-            String bmDesc = battlemageDesc(rank);
+            String bmDesc = battlemageDesc(type);
             if (!bmDesc.startsWith("!!")){
-                desc += "\n\n" + Messages.get(this, "rank_bm_generic", bmDesc);
+                desc += "\n\n" + Messages.get(this, "type_bm_generic", bmDesc);
             }
         }
         return desc;
     }
 
-    public String generalRankDescription(int rank){
-        return Messages.get(this, "rank" + rank,
-                getRechargeInfo(rank)
+    public String generalTypeDescription(int type){
+        return Messages.get(this, "type" + type,
+                getRechargeInfo(type)
         );
     }
 
-    public String battlemageDesc(int rank){
-        return Messages.get(this, "rank_bm" + rank);
+    public String battlemageDesc(int type){
+        return Messages.get(this, "type_bm" + type);
     }
 
-    public String getRechargeInfo(int rank) {
+    public String getRechargeInfo(int type) {
         return new DecimalFormat("#.##").format(
-                charger == null ? Math.round(Charger.BASE_CHARGE_DELAY*rechargeModifier(rank)) : charger.getTurnsToCharge(rank));
+                charger == null ? Math.round(Charger.BASE_CHARGE_DELAY*rechargeModifier(type)) : charger.getTurnsToCharge(type));
     }
 
     public void fx(Ballistica bolt, Callback callback) {
@@ -818,7 +816,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 	
 	@Override
 	public Item random() {
-		rank(Random.Int(1, 4));
+		type(Random.Int(1, 4));
 		
 		//30% chance to be cursed
 		if (Random.Float() < 0.3f) {
@@ -858,7 +856,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 	private static final String PARTIALCHARGE       = "partialCharge";
 	private static final String CURSE_INFUSION_BONUS= "curse_infusion_bonus";
 	private static final String RESIN_BONUS         = "resin_bonus";
-    private static final String RANK = "rank";
+    private static final String TYPE = "rank";
     private static final String MASTERY_POTION_BONUS = "mastery_potion_bonus";
 
 	@Override
@@ -871,7 +869,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		bundle.put( PARTIALCHARGE , partialCharge );
 		bundle.put( CURSE_INFUSION_BONUS, curseInfusionBonus );
 		bundle.put( RESIN_BONUS, resinBonus );
-        bundle.put(RANK, rank);
+        bundle.put(TYPE, type);
         bundle.put(MASTERY_POTION_BONUS, magicalPotionBonus);
 	}
 	
@@ -888,13 +886,13 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		curCharges = bundle.getInt( CUR_CHARGES );
 		curChargeKnown = bundle.getBoolean( CUR_CHARGE_KNOWN );
 		partialCharge = bundle.getFloat( PARTIALCHARGE );
-        if (bundle.contains(RANK)) {
-            rank = bundle.getInt(RANK);
-            if (rank < 1 || rank > 3)
-                rank = 1;
+        if (bundle.contains(TYPE)) {
+            type = bundle.getInt(TYPE);
+            if (type < 1 || type > 3)
+                type = 1;
         }
         else
-            rank = 1;
+            type = 1;
 
         if (bundle.contains(MASTERY_POTION_BONUS))
             magicalPotionBonus = bundle.getBoolean(MASTERY_POTION_BONUS);
@@ -1144,17 +1142,17 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 
 			for (Recharging bonus : target.buffs(Recharging.class)){
 				if (bonus != null && bonus.remainder() > 0f) {
-					partialCharge += CHARGE_BUFF_BONUS * bonus.remainder()/rechargeModifier(rank());
+					partialCharge += CHARGE_BUFF_BONUS * bonus.remainder()/rechargeModifier(type());
 				}
 			}
 		}
 
         public float getTurnsToCharge() {
-            return getTurnsToCharge(rank());
+            return getTurnsToCharge(type());
         }
 
-        public float getTurnsToCharge(int rank){
-            float charge = BASE_CHARGE_DELAY * rechargeModifier(rank) / scalingFactor;
+        public float getTurnsToCharge(int type){
+            float charge = BASE_CHARGE_DELAY * rechargeModifier(type) / scalingFactor;
             if (Regeneration.regenOn())
                 charge /= RingOfEnergy.wandChargeMultiplier(target);
             charge = Math.round(charge);

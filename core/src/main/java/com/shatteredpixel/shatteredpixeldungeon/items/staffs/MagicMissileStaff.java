@@ -39,18 +39,18 @@ public class MagicMissileStaff extends StationaryStaff {
     }
 
     @Override
-    public int maxActions(int rank) {
-        switch (rank){
+    public int maxActions(int type) {
+        switch (type){
             case 1: return 25;
             case 2: return 25;
             case 3: return 3;
         }
-        return super.maxActions(rank);
+        return super.maxActions(type);
     }
 
     @Override
     public int getChargeTurns() {
-        if (rank() == 3)
+        if (type() == 3)
             return 75;
         return super.getChargeTurns();
     }

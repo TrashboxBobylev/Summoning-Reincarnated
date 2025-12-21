@@ -53,8 +53,8 @@ public class Tomahawk extends MissileWeapon {
 		hitSoundPitch = 0.9f;
 	}
 
-    public float min(float lvl, int rank) {
-        switch (rank){
+    public float min(float lvl, int type) {
+        switch (type){
             case 1: return 3 + lvl*0.75f;
             case 2: return 4 + lvl*2f;
             case 3: return 2 + lvl;
@@ -62,8 +62,8 @@ public class Tomahawk extends MissileWeapon {
         return 0;
     }
 
-    public float max(float lvl, int rank) {
-        switch (rank){
+    public float max(float lvl, int type) {
+        switch (type){
             case 1: return 7 + lvl*3f;
             case 2: return 10 + lvl*4.5f;
             case 3: return 8 + lvl*2.25f;
@@ -71,8 +71,8 @@ public class Tomahawk extends MissileWeapon {
         return 0;
     }
 
-    public float baseUses(float lvl, int rank){
-        switch (rank){
+    public float baseUses(float lvl, int type){
+        switch (type){
             case 1: return 5 + lvl*1.5f;
             case 2: return 6 + lvl*2f;
             case 3: return 4 + lvl*1f;
@@ -82,7 +82,7 @@ public class Tomahawk extends MissileWeapon {
 
     @Override
     protected float adjacentAccFactor(Char owner, Char target) {
-        if (rank() == 2){
+        if (type() == 2){
             if (Dungeon.level.adjacent( owner.pos, target.pos )) {
                 if (owner instanceof Hero){
                     return (1.5f + 0.6f*((Hero) owner).pointsInTalent(Talent.POINT_BLANK));
@@ -98,12 +98,12 @@ public class Tomahawk extends MissileWeapon {
 
     @Override
 	public int proc( Char attacker, Char defender, int damage ) {
-        if (rank() == 1) {
+        if (type() == 1) {
             //40% damage roll as bleed, but ignores armor and str bonus
             Buff.affect(defender, Bleeding.class).set(Math.round(augment.damageFactor(Random.NormalIntRange(min(), max())) * 0.4f));
             return super.proc( attacker, defender, damage );
         }
-        if (rank() == 3 && defender.buff(Rank3TomahawkTracker.class) == null){
+        if (type() == 3 && defender.buff(Rank3TomahawkTracker.class) == null){
             int dmg = super.proc(attacker, defender, damage);
             if (defender.HP >= 2 + dmg && !Char.hasProp(defender, Char.Property.BOSS) && !Char.hasProp(defender, Char.Property.MINIBOSS)){
                 ArrayList<Integer> candidates = new ArrayList<>();
@@ -144,7 +144,7 @@ public class Tomahawk extends MissileWeapon {
 
     @Override
     protected String distanceInfo() {
-        if (rank() == 2){
+        if (type() == 2){
             return Messages.get(Tomahawk.class, "distance2");
         }
         return super.distanceInfo();

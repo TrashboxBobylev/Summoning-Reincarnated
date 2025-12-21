@@ -26,7 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -68,23 +68,23 @@ public class WndJournalItem extends WndTitledMessage {
 
 			float y = height;
 
-			RedButton btn = new RedButton(Messages.upperCase(Messages.get(WndJournalItem.class, "ranks")), 8 ) {
+			RedButton btn = new RedButton(Messages.upperCase(Messages.get(WndJournalItem.class, "types")), 8 ) {
 				@Override
 				protected void onClick() {
 					if (ShatteredPixelDungeon.scene() instanceof GameScene) {
 						GameScene.show(new WndChangesTabbed(
 								new ItemSprite(item),
-								Messages.titleCase(Messages.get(WndJournalItem.class, "ranks")),
-								((Rankable) item).getRankMessage(1),
-								((Rankable) item).getRankMessage(2),
-								((Rankable) item).getRankMessage(3)));
+								Messages.titleCase(Messages.get(WndJournalItem.class, "types")),
+								((TypedItem) item).getTypeMessage(1),
+								((TypedItem) item).getTypeMessage(2),
+								((TypedItem) item).getTypeMessage(3)));
 					} else {
 						ShatteredPixelDungeon.scene().addToFront(new WndChangesTabbed(
 								new ItemSprite(item),
-								Messages.titleCase(Messages.get(WndJournalItem.class, "ranks")),
-								((Rankable) item).getRankMessage(1),
-								((Rankable) item).getRankMessage(2),
-								((Rankable) item).getRankMessage(3)));
+								Messages.titleCase(Messages.get(WndJournalItem.class, "types")),
+								((TypedItem) item).getTypeMessage(1),
+								((TypedItem) item).getTypeMessage(2),
+								((TypedItem) item).getTypeMessage(3)));
 					}
 				}
 			};

@@ -72,7 +72,7 @@ public class FrostElemental extends Minion {
 
     @Override
     protected boolean act() {
-        if (rank == 2){
+        if (type == 2){
             rangedCooldown = Integer.MAX_VALUE;
         } else if (rangedCooldown == Integer.MAX_VALUE){
             rangedCooldown = Random.NormalIntRange( 3, 5 );
@@ -106,12 +106,12 @@ public class FrostElemental extends Minion {
     @Override
     public int attackProc( Char enemy, int damage ) {
         damage = super.attackProc( enemy, damage );
-        if (rank == 2) {
+        if (type == 2) {
             Freezing.freeze(enemy.pos);
-        } else if (rank == 3) {
+        } else if (type == 3) {
             Buff.affect(enemy, FrostBurn.class).reignite(enemy);
         }
-        if (rank == 2){
+        if (type == 2){
             damage += enemy.drRoll();
         }
 
@@ -120,7 +120,7 @@ public class FrostElemental extends Minion {
 
     @Override
     public float attackDelay() {
-        if (rank == 2){
+        if (type == 2){
             return super.attackDelay()/2f;
         }
         return super.attackDelay();
@@ -133,7 +133,7 @@ public class FrostElemental extends Minion {
         Char enemy = this.enemy;
         if (hit( this, enemy, true )) {
 
-            if (rank != 3) {
+            if (type != 3) {
                 Freezing.freeze(enemy.pos);
             } else {
                 Buff.affect(enemy, FrostBurn.class).reignite(enemy);

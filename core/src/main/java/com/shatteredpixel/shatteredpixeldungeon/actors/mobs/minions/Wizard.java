@@ -64,7 +64,7 @@ public class Wizard extends Minion implements Callback {
 	
 	@Override
 	protected boolean canAttack( Char enemy ) {
-		return rank != 3 && new Ballistica( pos, enemy.pos, Ballistica.FRIENDLY_MAGIC).collisionPos == enemy.pos;
+		return type != 3 && new Ballistica( pos, enemy.pos, Ballistica.FRIENDLY_MAGIC).collisionPos == enemy.pos;
 	}
 
 	private static final HashMap<Class<? extends Buff>, Float> DEBUFFS = new HashMap<>();
@@ -110,7 +110,7 @@ public class Wizard extends Minion implements Callback {
 	protected boolean act() {
 		boolean actResult = super.act();
 
-		if (paralysed <= 0 && rank == 3){
+		if (paralysed <= 0 && type == 3){
 			switch (behaviorType){
 				case REACTIVE:
 					for (Mob ch: Dungeon.level.mobs.toArray( new Mob[0] )){
@@ -161,7 +161,7 @@ public class Wizard extends Minion implements Callback {
 		spend( attackDelay() );
 		
 		if (hit( this, enemy, true )) {
-			if (rank == 2){
+			if (type == 2){
 				WandOfCorruption wand = new WandOfCorruption();
 				wand.level((int) (Dungeon.scalingDepth() / Dungeon.chapterSize() + Math.max(0, Dungeon.hero.ATU() - attunement)));
 				wand.onZap(new Ballistica( pos, enemy.pos, Ballistica.FRIENDLY_MAGIC));
@@ -192,7 +192,7 @@ public class Wizard extends Minion implements Callback {
 	@Override
 	public float attackDelay() {
 		float mod = 0;
-		switch (rank){
+		switch (type){
 			case 1: mod = 1; break;
 			case 2: mod = 0.75f; break;
 			case 3: mod = 1f; break;
@@ -204,7 +204,7 @@ public class Wizard extends Minion implements Callback {
 		public int query(){
 			int boost = 0;
 			for (Mob ch : Dungeon.level.mobs.toArray(new Mob[0])) {
-				if (ch instanceof Wizard && ((Wizard) ch).rank == 3 && ((Wizard) ch).behaviorType == Minion.BehaviorType.AGGRESSIVE) {
+				if (ch instanceof Wizard && ((Wizard) ch).type == 3 && ((Wizard) ch).behaviorType == Minion.BehaviorType.AGGRESSIVE) {
 					boost += 1;
 				}
 			}

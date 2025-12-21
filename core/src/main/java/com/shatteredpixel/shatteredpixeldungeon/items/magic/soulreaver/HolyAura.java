@@ -47,14 +47,14 @@ public class HolyAura extends AdHocSpell {
     @Override
     public boolean effect(Hero hero) {
         Sample.INSTANCE.play(Assets.Sounds.READ);
-        HolyAuraBuff aura = Buff.affect(hero, HolyAuraBuff.class, duration(rank()));
-        aura.healingRate = healingRate(rank());
-        aura.shieldingRate = shieldingRate(rank());
-        aura.cd = cooldown(rank());
-        aura.minDamage = minDamage(rank());
-        aura.maxDamage = maxDamage(rank());
-        aura.manaSteal = manaSteal(rank());
-        if (shieldingRate(rank()) != 0) Buff.affect(hero, ConstantShielding.class);
+        HolyAuraBuff aura = Buff.affect(hero, HolyAuraBuff.class, duration(type()));
+        aura.healingRate = healingRate(type());
+        aura.shieldingRate = shieldingRate(type());
+        aura.cd = cooldown(type());
+        aura.minDamage = minDamage(type());
+        aura.maxDamage = maxDamage(type());
+        aura.manaSteal = manaSteal(type());
+        if (shieldingRate(type()) != 0) Buff.affect(hero, ConstantShielding.class);
         Buff.affect(hero, ManaStealing.class);
         hero.spendAndNext(1f);
         return true;
@@ -124,8 +124,8 @@ public class HolyAura extends AdHocSpell {
     }
 
     @Override
-    public int manaCost(int rank) {
-        switch (rank){
+    public int manaCost(int type) {
+        switch (type){
             case 1: return 25;
             case 2: return 40;
             case 3: return 20;
@@ -147,12 +147,12 @@ public class HolyAura extends AdHocSpell {
     }
 
     public String spellDesc() {
-        return Messages.get(this, "desc", shieldingRate(rank()), healingRate(rank()), duration(rank()));
+        return Messages.get(this, "desc", shieldingRate(type()), healingRate(type()), duration(type()));
     }
 
     @Override
-    public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank"+ (rank == 3 ? "3" : ""),
-                shieldingRate(rank), healingRate(rank), manaSteal(rank), minDamage(rank), maxDamage(rank), duration(rank), cooldown(rank));
+    public String spellTypeMessage(int type) {
+        return Messages.get(this, "type"+ (type == 3 ? "3" : ""),
+                shieldingRate(type), healingRate(type), manaSteal(type), minDamage(type), maxDamage(type), duration(type), cooldown(type));
     }
 }

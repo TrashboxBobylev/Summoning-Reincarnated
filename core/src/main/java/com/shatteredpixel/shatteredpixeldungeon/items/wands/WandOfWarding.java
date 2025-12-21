@@ -87,20 +87,20 @@ public class WandOfWarding extends Wand {
 	}
 
     @Override
-    public float rechargeModifier(int rank) {
-        switch (rank){
+    public float rechargeModifier(int type) {
+        switch (type){
             case 1: return 0.75f;
             case 2: return 2f;
             case 3: return 0.8f;
         }
-        return super.rechargeModifier(rank);
+        return super.rechargeModifier(type);
     }
 
     private boolean wardAvailable = true;
 	
 	@Override
 	public boolean tryToZap(Hero owner, int target) {
-        if (rank() == 2){
+        if (type() == 2){
             return super.tryToZap(owner, target);
         }
 		
@@ -145,7 +145,7 @@ public class WandOfWarding extends Wand {
 	@Override
 	public void onZap(Ballistica bolt) {
 
-        if (rank() == 2){
+        if (type() == 2){
             int closest = curUser.pos;
             int closestIdx = -1;
 
@@ -289,7 +289,7 @@ public class WandOfWarding extends Wand {
                         ((Ward) ch).wandHeal(power());
                     }
                     ch.sprite.emitter().burst(MagicMissile.WardParticle.UP, ((Ward) ch).tier);
-                    if (rank() == 3)
+                    if (type() == 3)
                         ((Ward) ch).isBomb = true;
                 } else {
                     GLog.w(Messages.get(this, "bad_location"));
@@ -310,7 +310,7 @@ public class WandOfWarding extends Wand {
                 Dungeon.level.occupyCell(ward);
                 ward.sprite.emitter().burst(MagicMissile.WardParticle.UP, ward.tier);
                 Dungeon.level.pressCell(target);
-                if (rank() == 3)
+                if (type() == 3)
                     ward.isBomb = true;
 
             }
@@ -319,7 +319,7 @@ public class WandOfWarding extends Wand {
 
 	@Override
 	public void fx(Ballistica bolt, Callback callback) {
-        if (rank() == 2){
+        if (type() == 2){
             callback.call();
         } else {
             MagicMissile m = MagicMissile.boltFromChar(curUser.sprite.parent,
@@ -354,7 +354,7 @@ public class WandOfWarding extends Wand {
 	public void onHit(Char attacker, Char defender, int damage) {
         float level = Math.max(0, power());
 
-        if (rank() == 1) {
+        if (type() == 1) {
             // lvl 0 - 20%
             // lvl 1 - 33%
             // lvl 2 - 43%
@@ -371,7 +371,7 @@ public class WandOfWarding extends Wand {
                 }
             }
         }
-        if (rank() == 2) {
+        if (type() == 2) {
             // lvl 0 - 14%
             // lvl 1 - 25%
             // lvl 2 - 33%
@@ -385,7 +385,7 @@ public class WandOfWarding extends Wand {
                 }
             }
         }
-        if (rank() == 3){
+        if (type() == 3){
             // lvl 0 - 14%
             // lvl 1 - 25%
             // lvl 2 - 33%
@@ -412,35 +412,35 @@ public class WandOfWarding extends Wand {
 
 	@Override
 	public String statsDesc() {
-		if (rank() == 1)
+		if (type() == 1)
 			return Messages.get(this, "stats_desc1", (int)Math.ceil(power()*1.5f+3));
-        if (rank() == 2)
+        if (type() == 2)
             return Messages.get(this, "stats_desc2", (int)(power()/3+2));
         else
             return Messages.get(this, "stats_desc3", (int)Math.ceil(power()*1.5f+3));
 	}
 
     @Override
-    public String generalRankDescription(int rank) {
-        if (rank == 1)
-            return Messages.get(this, "rank" + rank,
+    public String generalTypeDescription(int type) {
+        if (type == 1)
+            return Messages.get(this, "type" + type,
                     GameMath.printAverage(Math.round(4 + power()),
                     Math.round(Math.round(8 + 5.33f*power()))),
-                    getRechargeInfo(rank),
+                    getRechargeInfo(type),
                     (int)Math.ceil(power()*1.5f)+3
             );
-        if (rank == 2)
-            return Messages.get(this, "rank" + rank,
-                    getRechargeInfo(rank),
+        if (type == 2)
+            return Messages.get(this, "type" + type,
+                    getRechargeInfo(type),
                     Math.round(2+power()/3),
                     1 + Dungeon.depth/5
             );
-        return Messages.get(this, "rank" + rank,
+        return Messages.get(this, "type" + type,
                 GameMath.printAverage(Math.round(4 + power()),
                 Math.round(8 + 5.33f*power())),
                 GameMath.printAverage(Math.round((2 + power())*4),
                 Math.round((8 + 5.33f*power())*4)),
-                getRechargeInfo(rank),
+                getRechargeInfo(type),
                 (int)Math.ceil(power()*1.5f)+3
         );
     }

@@ -44,7 +44,7 @@ public class Chicken extends Minion {
                 Math.round(attunement*3));
         enchantment = staff.enchantment;
         augment = staff.augment;
-        rank = staff.rank();
+        type = staff.type();
         staff.customizeMinion(this);
     }
 

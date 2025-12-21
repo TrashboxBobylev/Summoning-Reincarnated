@@ -50,8 +50,8 @@ public class HeavyBoomerang extends MissileWeapon {
 		sticky = false;
 	}
 
-    public float min(float lvl, int rank) {
-        switch (rank){
+    public float min(float lvl, int type) {
+        switch (type){
             case 1: return 4 + lvl;
             case 2: return 4 + lvl*2;
             case 3: return 2 + lvl;
@@ -59,8 +59,8 @@ public class HeavyBoomerang extends MissileWeapon {
         return 0;
     }
 
-    public float max(float lvl, int rank) {
-        switch (rank){
+    public float max(float lvl, int type) {
+        switch (type){
             case 1: return 8 + lvl*3f;
             case 2: return 7 + lvl*3.5f;
             case 3: return 5 + lvl*2f;
@@ -68,8 +68,8 @@ public class HeavyBoomerang extends MissileWeapon {
         return 0;
     }
 
-    public float baseUses(float lvl, int rank){
-        switch (rank){
+    public float baseUses(float lvl, int type){
+        switch (type){
             case 1: return 7 + lvl*1.5f;
             case 2: return 4 + lvl*1f;
             case 3: return 5 + lvl*1.25f;
@@ -95,13 +95,13 @@ public class HeavyBoomerang extends MissileWeapon {
 
     @Override
     public int proc(Char attacker, Char defender, int damage) {
-        if (rank() == 2){
+        if (type() == 2){
             Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC, 1, Random.Float(0.87f, 1.15f));
             int dmg = super.proc(attacker, defender, damage);
             defender.damage(dmg, new WandOfMagicMissile());
             return 0;
         }
-        if (rank() == 3){
+        if (type() == 3){
             Buff.prolong(attacker, ThrowieBoost.class, ThrowieBoost.DURATION).boost(1);
         }
         return super.proc(attacker, defender, damage);
@@ -141,7 +141,7 @@ public class HeavyBoomerang extends MissileWeapon {
 			this.returnPos = returnPos;
 			this.returnDepth = returnDepth;
 			this.returnBranch = returnBranch;
-            if (boomerang.rank() == 2)
+            if (boomerang.type() == 2)
                 left = 0;
             else
 			    left = 3;

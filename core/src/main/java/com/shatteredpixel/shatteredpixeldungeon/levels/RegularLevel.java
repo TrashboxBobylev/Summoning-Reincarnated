@@ -56,7 +56,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.journal.RegionLorePage;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.CrystalKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.Key;
-import com.shatteredpixel.shatteredpixeldungeon.items.spells.RankManager;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.TypeManager;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.MimicTooth;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.TrinketCatalyst;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
@@ -512,7 +512,7 @@ public abstract class RegularLevel extends Level {
 		}
 
 		if (Random.Int(10) < 2) itemsToSpawn.add(new Ropes().quantity(Random.Int(1, 3)));
-		if (Dungeon.depth % (Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 4 : 2) == 0) itemsToSpawn.add(new RankManager());
+		if (Dungeon.depth % (Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 4 : 2) == 0) itemsToSpawn.add(new TypeManager());
 
 		for (Item item : itemsToSpawn) {
 			int cell = randomDropCell();

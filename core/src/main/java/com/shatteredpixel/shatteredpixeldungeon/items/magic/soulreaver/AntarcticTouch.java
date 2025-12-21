@@ -60,18 +60,18 @@ public class AntarcticTouch extends ConjurerSpell {
         Char ch = Actor.findChar(trajectory.collisionPos);
 
         if (ch != null){
-            Buff.affect(ch, FrostBurn.class).reignite(ch, frostburn(rank()));
+            Buff.affect(ch, FrostBurn.class).reignite(ch, frostburn(type()));
             if (isEmpowered()){
                 for (int offset : PathFinder.NEIGHBOURS9){
                     if (!Dungeon.level.solid[trajectory.collisionPos+offset]) {
-                        GameScene.add(Blob.seed(trajectory.collisionPos + offset, Math.round(frostburn(rank())/3), FrostFire.class));
+                        GameScene.add(Blob.seed(trajectory.collisionPos + offset, Math.round(frostburn(type())/3), FrostFire.class));
                     }
                 }
             }
             Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
             Buff.affect(ch, Minion.UniversalTargeting.class, 15f);
             for (Mob mob : Dungeon.level.mobs.toArray( new Mob[0] )) {
-                if (mob instanceof Minion && rank() < 3){
+                if (mob instanceof Minion && type() < 3){
                     mob.aggro(ch);
                     mob.beckon(trajectory.collisionPos);
                 }
@@ -109,8 +109,8 @@ public class AntarcticTouch extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost(int rank) {
-        switch (rank){
+    public int manaCost(int type) {
+        switch (type){
             case 1: return 5;
             case 2: return 10;
             case 3: return 20;
@@ -119,22 +119,22 @@ public class AntarcticTouch extends ConjurerSpell {
     }
 
     public String spellDesc() {
-        return Messages.get(this, "desc", new DecimalFormat("#.#").format(frostburn(rank())));
+        return Messages.get(this, "desc", new DecimalFormat("#.#").format(frostburn(type())));
     }
 
     @Override
     public String empowermentDesc() {
-        return Messages.get(this, "desc_empower", new DecimalFormat("#.#").format(frostburn(rank())/3));
+        return Messages.get(this, "desc_empower", new DecimalFormat("#.#").format(frostburn(type())/3));
     }
 
     @Override
-    public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank"+ (rank == 3 ? "3" : ""), new DecimalFormat("#.#").format(frostburn(rank)), manaCost());
+    public String spellTypeMessage(int type) {
+        return Messages.get(this, "type"+ (type == 3 ? "3" : ""), new DecimalFormat("#.#").format(frostburn(type)), manaCost());
     }
 
     @Override
-    public String empowermentRankDesc(int rank) {
-        return Messages.get(this, "rank_empower", new DecimalFormat("#.#").format(frostburn(rank())/3));
+    public String empowermentTypeDesc(int type) {
+        return Messages.get(this, "type_empower", new DecimalFormat("#.#").format(frostburn(type())/3));
     }
 
     @Override

@@ -73,8 +73,8 @@ public class WandOfFrost extends DamageWand {
 	}
 
     @Override
-    public float rechargeModifier(int rank) {
-        switch (rank){
+    public float rechargeModifier(int type) {
+        switch (type){
             case 1: return 1.0f;
             case 2: return 3.25f;
             case 3: return 2.25f;
@@ -83,19 +83,19 @@ public class WandOfFrost extends DamageWand {
     }
 
     @Override
-    public float powerModifier(int rank) {
-        switch (rank){
+    public float powerModifier(int type) {
+        switch (type){
             case 1: return 1.0f;
             case 3: return 0.33f;
         }
-        return super.powerModifier(rank);
+        return super.powerModifier(type);
     }
 
     ConeAOE cone;
 
 	@Override
 	public void onZap(Ballistica bolt) {
-        if (rank() == 2){
+        if (type() == 2){
             ArrayList<Char> affectedChars = new ArrayList<>();
             for( int cell : cone.cells ){
 
@@ -168,7 +168,7 @@ public class WandOfFrost extends DamageWand {
                         float mod = 1f;
                         if (Dungeon.level.water[ch.pos])
                             mod *= 2f;
-                        if (rank() == 3){
+                        if (type() == 3){
                             mod *= 2f;
                             if (!ch.isImmune(Frost.class)) {
                                 Buff.affect(ch, Frost.class, (2 + power())*mod);
@@ -187,7 +187,7 @@ public class WandOfFrost extends DamageWand {
 
     @Override
     public String statsDesc() {
-        if (rank() != 2) {
+        if (type() != 2) {
             if (levelKnown)
                 return Messages.get(this, "stats_desc", GameMath.printAverage((int) magicMin(), (int) magicMax()));
             else
@@ -205,7 +205,7 @@ public class WandOfFrost extends DamageWand {
 
 	@Override
 	public void fx(Ballistica bolt, Callback callback) {
-        if (rank() == 2){
+        if (type() == 2){
             //need to perform flame spread logic here so we can determine what cells to put flames in.
             int maxDist = 8;
             int dist = Math.min(bolt.dist, maxDist);
@@ -245,29 +245,29 @@ public class WandOfFrost extends DamageWand {
 	}
 
     @Override
-    public String generalRankDescription(int rank) {
-        if (rank == 2) {
-            return Messages.get(this, "rank2",
-                    getRechargeInfo(rank)
+    public String generalTypeDescription(int type) {
+        if (type == 2) {
+            return Messages.get(this, "type2",
+                    getRechargeInfo(type)
             );
         }
         float mod = 1f;
-        if (rank == 3){
+        if (type == 3){
             mod = 2f;
         }
-        return Messages.get(this, "rank" + rank,
+        return Messages.get(this, "type" + type,
                 GameMath.printAverage(
-                        Math.round(magicMin(power())*powerModifier(rank)),
-                        Math.round(magicMax(power())*powerModifier(rank))
+                        Math.round(magicMin(power())*powerModifier(type)),
+                        Math.round(magicMax(power())*powerModifier(type))
                 ),
-                getRechargeInfo(rank),
+                getRechargeInfo(type),
                 Math.round((2 + power())*mod)
         );
     }
 
     @Override
 	public void onHit(Char attacker, Char defender, int damage) {
-        if (rank() == 1) {
+        if (type() == 1) {
             Chill chill = defender.buff(Chill.class);
 
             if (chill != null) {
@@ -294,7 +294,7 @@ public class WandOfFrost extends DamageWand {
                 }
             }
         }
-        if (rank() == 2){
+        if (type() == 2){
             for (int i: PathFinder.NEIGHBOURS9){
                 Char target = Actor.findChar(defender.pos + i);
                 if ((target instanceof Mob && target.alignment != Char.Alignment.ALLY) ||
@@ -303,17 +303,17 @@ public class WandOfFrost extends DamageWand {
                 }
             }
         }
-        if (rank() == 3){
+        if (type() == 3){
             Buff.affect(defender, FrostBurn.class).reignite(defender, (6 + power()*3)*Math.max(1f, procChanceMultiplier(attacker)));
         }
 	}
 
     @Override
-    public String battlemageDesc(int rank) {
-        if (rank == 3){
-            return Messages.get(this, "rank_bm" + rank, (int)(6 + power()*3));
+    public String battlemageDesc(int type) {
+        if (type == 3){
+            return Messages.get(this, "type_bm" + type, (int)(6 + power()*3));
         }
-        return super.battlemageDesc(rank);
+        return super.battlemageDesc(type);
     }
 
     @Override

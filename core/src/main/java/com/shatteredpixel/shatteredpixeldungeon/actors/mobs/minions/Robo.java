@@ -48,7 +48,7 @@ public class Robo extends Minion{
     @Override
     public float attackDelay() {
         float mod = 0;
-        switch (rank){
+        switch (type){
             case 1: mod = 2f; break;
             case 2: mod = 1.5f; break;
             case 3: mod = 1f; break;
@@ -67,7 +67,7 @@ public class Robo extends Minion{
     }
 
     private void attemptToHeal(int healAmount) {
-        if (rank == 3){
+        if (type == 3){
             if (HP < HT) {
                 HP = Math.min(HT, HP + healAmount);
                 sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(healAmount), FloatingText.HEALING);
@@ -84,7 +84,7 @@ public class Robo extends Minion{
 
     @Override
     public float targetPriority() {
-        if (rank == 3){
+        if (type == 3){
             return super.targetPriority()*5f;
         }
         return super.targetPriority()*2f;
@@ -92,7 +92,7 @@ public class Robo extends Minion{
 
     @Override
     public int drRoll() {
-        if (rank == 3){
+        if (type == 3){
             return super.drRoll() / 3;
         }
         return super.drRoll();
@@ -139,7 +139,7 @@ public class Robo extends Minion{
     }
 
     private boolean isChainable(Char enemy) {
-        return enemy.properties().contains(Property.RANGED) || rank == 2;
+        return enemy.properties().contains(Property.RANGED) || type == 2;
     }
 
     protected boolean doAttack(Char enemy ) {

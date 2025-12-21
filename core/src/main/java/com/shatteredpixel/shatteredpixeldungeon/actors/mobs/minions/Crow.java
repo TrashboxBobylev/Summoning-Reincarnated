@@ -57,10 +57,10 @@ public class Crow extends Minion {
 
     @Override
     protected boolean canAttack(Char enemy) {
-        if (rank == 1){
+        if (type == 1){
             return super.canAttack(enemy) && enemy.buff(AllyDamageTag.class) == null;
         }
-        if (rank == 2){
+        if (type == 2){
             return false;
         }
         return super.canAttack(enemy);
@@ -68,10 +68,10 @@ public class Crow extends Minion {
 
     @Override
     public int attackProc(Char enemy, int damage) {
-        if (rank == 1){
+        if (type == 1){
             Buff.affect(enemy, AllyDamageTag.class, 5f).setMult(1.25f);
         }
-        if (rank == 3){
+        if (type == 3){
             WandOfCorruption corruption = new WandOfCorruption();
             corruption.level(3 + Math.max(0, (int)(attunement - Dungeon.hero.ATU())));
             corruption.onZap(new Ballistica(pos, enemy.pos, Ballistica.STOP_TARGET));
@@ -83,7 +83,7 @@ public class Crow extends Minion {
 
     @Override
     public float evasionModifier() {
-        switch (rank){
+        switch (type){
             case 1:
                 return 3f;
             case 2:
@@ -96,7 +96,7 @@ public class Crow extends Minion {
 
     @Override
     protected boolean act() {
-        if (rank == 2) {
+        if (type == 2) {
             if (fieldOfView != null)
                 Dungeon.level.updateFieldOfView(this, fieldOfView);
             GameScene.updateFog(pos, viewDistance + (int) Math.ceil(speed()));
@@ -179,7 +179,7 @@ public class Crow extends Minion {
 
                 enemySeen = false;
                 int oldPos = pos;
-                target = defendingPos != -1 && rank == 2 ? defendingPos : Dungeon.hero.pos;
+                target = defendingPos != -1 && type == 2 ? defendingPos : Dungeon.hero.pos;
                 //always move towards the target when wandering
                 if (getCloser( target)) {
                     spend( 1 / speed() );

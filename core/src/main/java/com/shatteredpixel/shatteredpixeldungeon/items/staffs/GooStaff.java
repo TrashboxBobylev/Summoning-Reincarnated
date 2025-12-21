@@ -41,7 +41,7 @@ public class GooStaff extends Staff {
 
     @Override
     public int getChargeTurns() {
-        if (rank() == 3) {
+        if (type() == 3) {
             return super.getChargeTurns() / 2;
         }
         return super.getChargeTurns();
@@ -49,7 +49,7 @@ public class GooStaff extends Staff {
 
     @Override
     public Minion.BehaviorType defaultBehaviorType() {
-        if (rank() == 3)
+        if (type() == 3)
             return Minion.BehaviorType.AGGRESSIVE;
         else
             return super.defaultBehaviorType();
@@ -59,7 +59,7 @@ public class GooStaff extends Staff {
 
     @Override
     public Minion.BehaviorType[] availableBehaviorTypes() {
-        if (rank() == 3)
+        if (type() == 3)
             return behaviorTypes;
         else
             return super.availableBehaviorTypes();

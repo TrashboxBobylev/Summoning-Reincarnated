@@ -54,8 +54,8 @@ public class RunicShell extends ConjurerSpell {
         Char ch = Actor.findChar(trajectory.collisionPos);
         if (ch != null && ch.alignment == Char.Alignment.ALLY && !(ch instanceof Hero)){
             Sample.INSTANCE.play(Assets.Sounds.ATK_SPIRITBOW);
-            if (rank() < 3) {
-                int healing = heal(ch, rank());
+            if (type() < 3) {
+                int healing = heal(ch, type());
                 Buff.affect(ch, Barrier.class).setShield(healing);
                 ch.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(healing), FloatingText.SHIELDING );
                 if (isEmpowered())
@@ -73,8 +73,8 @@ public class RunicShell extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost(int rank) {
-        switch (rank){
+    public int manaCost(int type) {
+        switch (type){
             case 1: return 6;
             case 2: return 8;
             case 3: return 4;
@@ -113,29 +113,29 @@ public class RunicShell extends ConjurerSpell {
 
     @Override
     public String spellDesc() {
-        return Messages.get(this, "desc", intHeal(rank()), partialHeal(rank()));
+        return Messages.get(this, "desc", intHeal(type()), partialHeal(type()));
     }
 
     @Override
     public String empowermentDesc() {
-        if (rank() == 3)
+        if (type() == 3)
             return Messages.get(this, "desc_empower_rank3");
         return super.empowermentDesc();
     }
 
     @Override
-    public String spellRankMessage(int rank) {
-        if (rank == 3){
-            return Messages.get(this, "rank3", BLOCK_DURATION);
+    public String spellTypeMessage(int type) {
+        if (type == 3){
+            return Messages.get(this, "type3", BLOCK_DURATION);
         }
-        return Messages.get(this, "rank", intHeal(rank), new DecimalFormat("#.##").format( partialHeal(rank)));
+        return Messages.get(this, "type", intHeal(type), new DecimalFormat("#.##").format( partialHeal(type)));
     }
 
-    public String empowermentRankDesc(int rank){
-        if (rank == 3){
-            return Messages.get(this, "rank3_empower");
+    public String empowermentTypeDesc(int type){
+        if (type == 3){
+            return Messages.get(this, "type3_empower");
         }
-        return Messages.get(this, "rank_empower");
+        return Messages.get(this, "type_empower");
     }
 
     public static class EmpowerTracker extends Buff {}

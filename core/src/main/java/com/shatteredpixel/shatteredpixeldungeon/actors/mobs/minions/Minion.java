@@ -45,7 +45,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerSet;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
@@ -78,7 +78,7 @@ public class Minion extends Mob implements ManaSource {
     public int maxDamage = 0;
     public Weapon.Enchantment enchantment;
     public Weapon.Augment augment = Weapon.Augment.NONE;
-    public int rank;
+    public int type;
     public float attunement;
     public BehaviorType behaviorType;
     protected Staff staff = null;
@@ -86,7 +86,7 @@ public class Minion extends Mob implements ManaSource {
     public int maxDefense;
     private float partialHealing;
 
-    private static final String RANK	= "rank";
+    private static final String TYPE = "rank";
     private static final String ATTUNEMENT = "attunement";
     private static final String ENCHANTMENT	= "enchantment";
     private static final String MIN_DAMAGE = "minDamage";
@@ -101,7 +101,7 @@ public class Minion extends Mob implements ManaSource {
     public void storeInBundle(Bundle bundle) {
         super.storeInBundle(bundle);
 
-        bundle.put(RANK, rank);
+        bundle.put(TYPE, type);
         bundle.put(ATTUNEMENT, attunement);
 
         bundle.put(MIN_DAMAGE, minDamage);
@@ -122,7 +122,7 @@ public class Minion extends Mob implements ManaSource {
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
 
-        rank = bundle.getInt(RANK);
+        type = bundle.getInt(TYPE);
         attunement = bundle.getFloat(ATTUNEMENT);
 
         minDamage = bundle.getInt(MIN_DAMAGE);
@@ -161,14 +161,14 @@ public class Minion extends Mob implements ManaSource {
 
     public void updateStats() {
         defenseSkill = Math.round((Dungeon.hero.lvl+4)*evasionModifier());
-        HT = staff.hp(rank);
+        HT = staff.hp(type);
         HP = Math.min(HP, HT);
         setDamage(
                 staff.minionMin(),
                 staff.minionMax());
         enchantment = staff.enchantment;
         augment = staff.augment;
-        rank = staff.rank();
+        type = staff.type();
         staff.customizeMinion(this);
     }
 
@@ -347,7 +347,7 @@ public class Minion extends Mob implements ManaSource {
                         augment.damageFactor(Math.round(minDamage * empowering)),
                         augment.damageFactor(Math.round(maxDamage * empowering))
                 ),
-                HP, HT, Messages.titleCase(Messages.get(Rankable.class, "rank" + (rank)))), Messages.get(Minion.class, "behavior", Messages.get(Minion.class, "behavior_" + Messages.lowerCase(behaviorType.toString()))), Messages.get(Minion.class, "behavior_" + Messages.lowerCase(behaviorType.toString()) + "_desc"));
+                HP, HT, Messages.titleCase(Messages.get(TypedItem.class, "type" + (type)))), Messages.get(Minion.class, "behavior", Messages.get(Minion.class, "behavior_" + Messages.lowerCase(behaviorType.toString()))), Messages.get(Minion.class, "behavior_" + Messages.lowerCase(behaviorType.toString()) + "_desc"));
     }
 
     @Override
@@ -375,7 +375,7 @@ public class Minion extends Mob implements ManaSource {
     @Override
     public void damage(int dmg, DamageSource src) {
         if (Dungeon.hero.belongings.armor instanceof ConjurerSet &&
-                ((ConjurerSet) Dungeon.hero.belongings.armor).rank() == 2)
+                ((ConjurerSet) Dungeon.hero.belongings.armor).type() == 2)
             dmg *= 0.75f;
         if (buff(Fury.class) != null)
             dmg *= 1.6f;

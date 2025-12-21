@@ -81,28 +81,28 @@ public class WandOfLivingEarth extends DamageWand {
 	}
 
     @Override
-    public float powerModifier(int rank) {
-        switch (rank){
+    public float powerModifier(int type) {
+        switch (type){
             case 1: return 1.0f;
             case 2: return 2.0f;
             case 3: return 9.0f;
         }
-        return super.powerModifier(rank);
+        return super.powerModifier(type);
     }
 
     @Override
-    public float rechargeModifier(int rank) {
-        switch (rank){
+    public float rechargeModifier(int type) {
+        switch (type){
             case 1: return 1.0f;
             case 2: return 2.5f;
             case 3: return 25000f;
         }
-        return super.powerModifier(rank);
+        return super.powerModifier(type);
     }
 
     @Override
     protected int chargesPerCast() {
-        if (rank() == 3){
+        if (type() == 3){
             return maxCharges;
         }
         return super.chargesPerCast();
@@ -133,30 +133,30 @@ public class WandOfLivingEarth extends DamageWand {
 				|| ch.alignment == Char.Alignment.NEUTRAL && !(ch instanceof Mimic))){
 			armorToAdd = 0;
 		} else {
-            if (rank() == 3){
+            if (type() == 3){
                 armorToAdd = (int) (curUser.HT*4.5f);
             }
 			if (buff == null && guardian == null) {
 				buff = Buff.affect(curUser, RockArmor.class);
 			}
 			if (buff != null) {
-				buff.addArmor( power(), rank(), armorToAdd);
+				buff.addArmor( power(), type(), armorToAdd);
 			}
 		}
 
 		//shooting at the guardian
 		if (guardian != null && guardian == ch){
 			guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
-			guardian.setInfo(curUser, power(), rank(), armorToAdd);
+			guardian.setInfo(curUser, power(), type(), armorToAdd);
 			wandProc(guardian, chargesPerCast());
 			Sample.INSTANCE.play( Assets.Sounds.HIT_MAGIC, 1, 0.9f * Random.Float(0.87f, 1.15f) );
 
 		//shooting the guardian at a location
-		} else if ( guardian == null && buff != null && (buff.armor >= buff.armorToGuardian() && rank() != 3)){
+		} else if ( guardian == null && buff != null && (buff.armor >= buff.armorToGuardian() && type() != 3)){
 
 			//create a new guardian
 			guardian = new EarthGuardian();
-			guardian.setInfo(curUser, power(), rank(), buff.armor);
+			guardian.setInfo(curUser, power(), type(), buff.armor);
 
 			if (buff.powerOfManyTurns > 0){
 				Buff.affect(guardian, PowerOfMany.PowerBuff.class, buff.powerOfManyTurns);
@@ -228,7 +228,7 @@ public class WandOfLivingEarth extends DamageWand {
 					if (guardian.sprite != null) { //may be in stasis
 						guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
 					}
-					guardian.setInfo(curUser, power(), rank(), armorToAdd);
+					guardian.setInfo(curUser, power(), type(), armorToAdd);
 					if (ch.alignment == Char.Alignment.ENEMY || ch.buff(Amok.class) != null) {
 						guardian.aggro(ch);
 					}
@@ -267,7 +267,7 @@ public class WandOfLivingEarth extends DamageWand {
 	
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {
-        if (rank() == 1) {
+        if (type() == 1) {
             EarthGuardian guardian = null;
             for (Mob m : Dungeon.level.mobs) {
                 if (m instanceof EarthGuardian) {
@@ -280,13 +280,13 @@ public class WandOfLivingEarth extends DamageWand {
 
             if (guardian != null) {
                 guardian.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
-                guardian.setInfo(Dungeon.hero, power(), rank(), armor);
+                guardian.setInfo(Dungeon.hero, power(), type(), armor);
             } else {
                 attacker.sprite.centerEmitter().burst(MagicMissile.EarthParticle.ATTRACT, (int) (8 + power() / 2));
-                Buff.affect(attacker, RockArmor.class).addArmor(power(), rank(), armor);
+                Buff.affect(attacker, RockArmor.class).addArmor(power(), type(), armor);
             }
         }
-        if (rank() == 2){
+        if (type() == 2){
             EarthGuardian guardian = null;
             for (Mob m : Dungeon.level.mobs) {
                 if (m instanceof EarthGuardian) {
@@ -299,7 +299,7 @@ public class WandOfLivingEarth extends DamageWand {
                 Buff.prolong(guardian, Empowered.class, power()-1);
             }
         }
-        if (rank() == 3 && curCharges > 0){
+        if (type() == 3 && curCharges > 0){
             ConeAOE cone = new ConeAOE( new Ballistica(attacker.pos, defender.pos, Ballistica.WONT_STOP),
                     5,
                     60,
@@ -374,16 +374,16 @@ public class WandOfLivingEarth extends DamageWand {
 	}
 
     @Override
-    public String generalRankDescription(int rank) {
-        return Messages.get(this, "rank" + rank,
+    public String generalTypeDescription(int type) {
+        return Messages.get(this, "type" + type,
                 GameMath.printAverage(
-                        Math.round(magicMin(power())*powerModifier(rank)),
-                        Math.round(magicMax(power())*powerModifier(rank))
+                        Math.round(magicMin(power())*powerModifier(type)),
+                        Math.round(magicMax(power())*powerModifier(type))
                 ),
-                getRechargeInfo(rank),
-                neededArmor(rank, power()),
-                Math.round(damageRatio(rank)*100),
-                Math.round(16 + 8 * power())*rank
+                getRechargeInfo(type),
+                neededArmor(type, power()),
+                Math.round(damageRatio(type)*100),
+                Math.round(16 + 8 * power())* type
         );
     }
 
@@ -405,14 +405,14 @@ public class WandOfLivingEarth extends DamageWand {
     }
 
     @Override
-    public String battlemageDesc(int rank) {
-        if (rank == 2){
-           return Messages.get(this, "rank_bm" + rank, (int)(power()-1));
+    public String battlemageDesc(int type) {
+        if (type == 2){
+           return Messages.get(this, "type_bm" + type, (int)(power()-1));
         }
-        if (rank == 3){
-            return Messages.get(this, "rank_bm" + rank, GameMath.printAverage((int)(magicMin(power())*powerModifier(rank)/3), (int)(magicMax(power())*powerModifier(rank)/3)));
+        if (type == 3){
+            return Messages.get(this, "type_bm" + type, GameMath.printAverage((int)(magicMin(power())*powerModifier(type)/3), (int)(magicMax(power())*powerModifier(type)/3)));
         }
-        return super.battlemageDesc(rank);
+        return super.battlemageDesc(type);
     }
 
     public static class RockArmor extends Buff {
@@ -503,7 +503,7 @@ public class WandOfLivingEarth extends DamageWand {
 
 		private static final String WAND_LEVEL = "wand_level";
 		private static final String ARMOR = "armor";
-        private static final String RANK = "rank";
+        private static final String RANK = "type";
 		private static final String POWER_TURNS = "power_turns";
 
 		@Override
@@ -641,7 +641,7 @@ public class WandOfLivingEarth extends DamageWand {
 
 		private static final String DEFENSE = "defense";
 		private static final String WAND_LEVEL = "wand_level";
-        private static final String RANK = "rank";
+        private static final String RANK = "type";
 
 		@Override
 		public void storeInBundle(Bundle bundle) {

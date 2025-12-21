@@ -45,8 +45,8 @@ public class ThrowingSpike extends MissileWeapon {
 		bones = false;
 	}
 
-    public float min(float lvl, int rank) {
-        switch (rank){
+    public float min(float lvl, int type) {
+        switch (type){
             case 1: return 2 + lvl*0.75f;
             case 2: return 2 + lvl*0.75f;
             case 3: return 2 + lvl*0.75f;
@@ -54,8 +54,8 @@ public class ThrowingSpike extends MissileWeapon {
         return 0;
     }
 
-    public float max(float lvl, int rank) {
-        switch (rank){
+    public float max(float lvl, int type) {
+        switch (type){
             case 1: return 5 + lvl*3f;
             case 2: return 5 + lvl*3f;
             case 3: return 5 + lvl*3f;
@@ -63,8 +63,8 @@ public class ThrowingSpike extends MissileWeapon {
         return 0;
     }
 
-    public float baseUses(float lvl, int rank){
-        switch (rank){
+    public float baseUses(float lvl, int type){
+        switch (type){
             case 1: return 12 + lvl*2.5f;
             case 2: return 6 + lvl*1.5f;
             case 3: return 8 + lvl*2f;
@@ -74,12 +74,12 @@ public class ThrowingSpike extends MissileWeapon {
 
     @Override
     public int proc(Char attacker, Char defender, int damage) {
-        if (rank() == 2 && defender.buff(Rank2StrikeTracker.class) == null){
+        if (type() == 2 && defender.buff(Rank2StrikeTracker.class) == null){
             Buff.affect(defender, Rank2StrikeTracker.class);
             Buff.affect( attacker, MeleeWeapon.Charger.class ).gainCharge(0.75f);
             ScrollOfRecharging.charge( attacker );
         }
-        if (rank() == 3 && attacker instanceof Hero){
+        if (type() == 3 && attacker instanceof Hero){
             Hero hero = (Hero) attacker;
             MeleeWeapon wep = (MeleeWeapon) hero.belongings.weapon;
             //do nothing

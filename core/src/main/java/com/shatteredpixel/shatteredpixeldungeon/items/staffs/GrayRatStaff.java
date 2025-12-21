@@ -43,14 +43,14 @@ public class GrayRatStaff extends Staff {
 
     @Override
     public void onSummoningMinion(Minion minion) {
-        if (rank() == 3){
+        if (type() == 3){
             Buff.affect(minion, Adrenaline.class, 7.5f);
         }
     }
 
     @Override
     public int getChargeTurns() {
-        if (rank() == 3){
+        if (type() == 3){
             return 100;
         }
         return super.getChargeTurns();

@@ -53,8 +53,8 @@ public class Trident extends MissileWeapon {
 		hitSoundPitch = 0.9f;
 	}
 
-    public float min(float lvl, int rank) {
-        switch (rank){
+    public float min(float lvl, int type) {
+        switch (type){
             case 1: return 8 + lvl*2;
             case 2: return 8 + lvl*2;
             case 3: return 4 + lvl*1.5f;
@@ -62,8 +62,8 @@ public class Trident extends MissileWeapon {
         return 0;
     }
 
-    public float max(float lvl, int rank) {
-        switch (rank){
+    public float max(float lvl, int type) {
+        switch (type){
             case 1: return 15 + lvl*5.5f;
             case 2: return 15 + lvl*5.5f;
             case 3: return 10 + lvl*4;
@@ -71,8 +71,8 @@ public class Trident extends MissileWeapon {
         return 0;
     }
 
-    public float baseUses(float lvl, int rank){
-        switch (rank){
+    public float baseUses(float lvl, int type){
+        switch (type){
             case 1: return 8 + lvl*1.75f;
             case 2: return 4 + lvl*0.875f;
             case 3: return 6 + lvl*1.25f;
@@ -82,7 +82,7 @@ public class Trident extends MissileWeapon {
 
     @Override
     public int proc(Char attacker, Char defender, int damage) {
-        if (rank() == 1){
+        if (type() == 1){
             if (defender.isWet())
                 damage *= 1.5f;
         }
@@ -96,7 +96,7 @@ public class Trident extends MissileWeapon {
 
     @Override
     protected int collisionProperties() {
-        if (rank() == 2){
+        if (type() == 2){
             return Ballistica.STOP_TARGET | Ballistica.STOP_SOLID;
         }
         return super.collisionProperties();
@@ -105,7 +105,7 @@ public class Trident extends MissileWeapon {
     @Override
     public void cast(Hero user, int dst) {
         super.cast(user, dst);
-        if (rank() == 2){
+        if (type() == 2){
             Ballistica path = new Ballistica(user.pos, dst, collisionProperties());
             ArrayList<Char> targets = new ArrayList<>();
 
@@ -129,7 +129,7 @@ public class Trident extends MissileWeapon {
                 decrementDurability();
             }
         }
-        if (rank() == 3){
+        if (type() == 3){
             if (user.rooted){
                 PixelScene.shake( 1, 1f );
                 return;

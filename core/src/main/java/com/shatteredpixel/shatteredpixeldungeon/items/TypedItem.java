@@ -29,26 +29,26 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.ItemSlot;
 
 import java.util.Collections;
 
-public interface Rankable {
-    default String getRankMessage(int rank) {
-        return Messages.get(this, "rank" + rank);
+public interface TypedItem {
+    default String getTypeMessage(int type) {
+        return Messages.get(this, "type" + type);
     }
 
-    int rank();
+    int type();
 
-    void rank(int rank);
+    void type(int type);
 
-    static int getRankColor(int rank){
-        switch (rank){
+    static int getTypeColor(int type){
+        switch (type){
             default: return 0xFFFFFF;
 
-            case 1: return ItemSlot.RANK1;
-            case 2: return ItemSlot.RANK2;
-            case 3: return ItemSlot.RANK3;
+            case 1: return ItemSlot.TYPE1;
+            case 2: return ItemSlot.TYPE2;
+            case 3: return ItemSlot.TYPE3;
         }
     }
 
-    static String getRankString(int rank){
-        return String.join("", Collections.nCopies(rank, "I"));
+    static String getTypeString(int type){
+        return String.join("", Collections.nCopies(type, "I"));
     }
 }

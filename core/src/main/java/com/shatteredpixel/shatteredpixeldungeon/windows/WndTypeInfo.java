@@ -25,14 +25,14 @@
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 
-public class WndRankInfo extends Window {
+public class WndTypeInfo extends Window {
     private static final float GAP	= 2;
     private int rank = 1;
 
@@ -41,7 +41,7 @@ public class WndRankInfo extends Window {
     private static RedButton btnForward;
     private static RedButton btnBack;
 
-    public WndRankInfo(Item item ) {
+    public WndTypeInfo(Item item ) {
         super();
 
         fillFields( item );
@@ -50,13 +50,13 @@ public class WndRankInfo extends Window {
     private void fillFields( Item item ) {
 
         int color = TITLE_COLOR;
-        color = Rankable.getRankColor(rank);
+        color = TypedItem.getTypeColor(rank);
 
         IconTitle titlebar = new IconTitle( item );
-        titlebar.label(Messages.get(this, "rank", Rankable.getRankString(rank), Messages.titleCase(item.trueName())));
+        titlebar.label(Messages.get(this, "type", TypedItem.getTypeString(rank), Messages.titleCase(item.trueName())));
         titlebar.color( color );
 
-        final RenderedTextBlock[] txtInfo = {PixelScene.renderTextBlock(getTierInfo(item), 6)};
+        final RenderedTextBlock[] txtInfo = {PixelScene.renderTextBlock(getTypeInfo(item), 6)};
 
         layoutFields(titlebar, txtInfo[0]);
 
@@ -85,20 +85,20 @@ public class WndRankInfo extends Window {
 
     }
 
-    private String getTierInfo(Item item) {
-        if (item instanceof Rankable){
-            return ((Rankable) item).getRankMessage(rank);
+    private String getTypeInfo(Item item) {
+        if (item instanceof TypedItem){
+            return ((TypedItem) item).getTypeMessage(rank);
         }
-        return Messages.get(item, "rank" + rank);
+        return Messages.get(item, "type" + rank);
     }
 
     private void rerender(RenderedTextBlock[] txtInfo, IconTitle titlebar, Item item){
         txtInfo[0].clear();
-        txtInfo[0] = PixelScene.renderTextBlock(getTierInfo(item), 6);
+        txtInfo[0] = PixelScene.renderTextBlock(getTypeInfo(item), 6);
         int color = TITLE_COLOR;
-        color = Rankable.getRankColor(rank);
+        color = TypedItem.getTypeColor(rank);
         titlebar.color( color );
-        titlebar.label(Messages.get(this, "rank", Rankable.getRankString(rank), Messages.titleCase(item.trueName())));
+        titlebar.label(Messages.get(this, "type", TypedItem.getTypeString(rank), Messages.titleCase(item.trueName())));
         layoutFields(titlebar, txtInfo[0]);
         btnForward.setRect(0, txtInfo[0].bottom() + GAP,  width / 2 - 15, 16 );
         btnBack.setRect(width - width / 2 + 15, txtInfo[0].bottom() + GAP, width / 2 - 15, 16 );

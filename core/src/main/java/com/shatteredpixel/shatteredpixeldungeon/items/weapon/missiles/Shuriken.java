@@ -56,8 +56,8 @@ public class Shuriken extends MissileWeapon {
 
     boolean bounced = false;
 
-    public float min(float lvl, int rank) {
-        switch (rank){
+    public float min(float lvl, int type) {
+        switch (type){
             case 1: return 4 + lvl;
             case 2: return 2 + lvl/2f;
             case 3: return 5 + lvl*2;
@@ -65,8 +65,8 @@ public class Shuriken extends MissileWeapon {
         return 0;
     }
 
-    public float max(float lvl, int rank) {
-        switch (rank){
+    public float max(float lvl, int type) {
+        switch (type){
             case 1: return 8 + lvl*3f;
             case 2: return 7 + lvl*2.5f;
             case 3: return 12 + lvl*4.5f;
@@ -74,8 +74,8 @@ public class Shuriken extends MissileWeapon {
         return 0;
     }
 
-    public float baseUses(float lvl, int rank){
-        switch (rank){
+    public float baseUses(float lvl, int type){
+        switch (type){
             case 1: return 6 + lvl*1.5f;
             case 2: return 4 + lvl*1.25f;
             case 3: return 8 + lvl*1.75f;
@@ -88,12 +88,12 @@ public class Shuriken extends MissileWeapon {
         boolean hitGround = Actor.findChar(cell) == null;
 		super.onThrow(cell);
         bounced = false;
-        if (rank() == 1) {
+        if (type() == 1) {
             if (curUser.buff(ShurikenInstantTracker.class) == null) {
                 //1 less turn as the attack will be instant
                 FlavourBuff.affect(curUser, ShurikenInstantTracker.class, ShurikenInstantTracker.DURATION - 1);
             }
-        } else if (rank() == 2){
+        } else if (type() == 2){
             Char enemy = Actor.findChar( cell );
             if (!bounced && !hitGround) {
                 Mob[] mobs = Dungeon.level.mobs.toArray(new Mob[0]);
@@ -163,7 +163,7 @@ public class Shuriken extends MissileWeapon {
 
     @Override
     public int proc(Char attacker, Char defender, int damage) {
-        if (rank() == 3) {
+        if (type() == 3) {
             damage = super.proc(attacker, defender, damage);
             Buff.affect(defender, Viscosity.DeferedDamage.class).extend(damage);
             return 0;
@@ -174,9 +174,9 @@ public class Shuriken extends MissileWeapon {
 
     @Override
 	public float castDelay(Char user, int cell) {
-        if (rank() == 3 && user instanceof Hero && ((Hero) user).justMoved)  return 0;
+        if (type() == 3 && user instanceof Hero && ((Hero) user).justMoved)  return 0;
         if (bounced) return 0f;
-		return (rank() != 1 || user.buff(ShurikenInstantTracker.class) != null) ? super.castDelay(user, cell) : 0;
+		return (type() != 1 || user.buff(ShurikenInstantTracker.class) != null) ? super.castDelay(user, cell) : 0;
 	}
 
 	public static class ShurikenInstantTracker extends FlavourBuff {

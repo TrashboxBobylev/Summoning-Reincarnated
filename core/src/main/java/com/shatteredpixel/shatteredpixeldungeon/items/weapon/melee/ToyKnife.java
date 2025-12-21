@@ -39,7 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.WhiteWound;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Projecting;
@@ -52,7 +52,7 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
-public class ToyKnife extends MeleeWeapon implements Rankable, ManaSource {
+public class ToyKnife extends MeleeWeapon implements TypedItem, ManaSource {
 
     public boolean ranged;
 	
@@ -73,12 +73,12 @@ public class ToyKnife extends MeleeWeapon implements Rankable, ManaSource {
 
     @Override
     public int min(int lvl) {
-        return Math.round(damageMod(rank())* (1 + 2*lvl));
+        return Math.round(damageMod(type())* (1 + 2*lvl));
     }
 
     @Override
     public int max(int lvl) {
-        return Math.round(damageMod(rank())* (7*(tier) + 4*lvl));
+        return Math.round(damageMod(type())* (7*(tier) + 4*lvl));
     }
 
     @Override
@@ -125,7 +125,7 @@ public class ToyKnife extends MeleeWeapon implements Rankable, ManaSource {
 
     @Override
     protected float baseDelay(Char owner) {
-        return super.baseDelay(owner)*delayMod(rank());
+        return super.baseDelay(owner)*delayMod(type());
     }
 
     @Override
@@ -150,8 +150,8 @@ public class ToyKnife extends MeleeWeapon implements Rankable, ManaSource {
     @Override
     public int proc(Char attacker, Char defender, int damage ) {
 	    int modifier = ranged ? 8 : 4;
-        modifier *= soulGainMod(rank);
-        if (rank() == 2)
+        modifier *= soulGainMod(type);
+        if (type() == 2)
             modifier *= 1.40f;
         Buff.prolong( defender, SoulGain.class, /*speedModifier(attacker) **/ modifier );
         WhiteWound.hit(defender);
@@ -198,7 +198,7 @@ public class ToyKnife extends MeleeWeapon implements Rankable, ManaSource {
 
     @Override
     public float castDelay(Char user, int dst) {
-        return super.castDelay(user, dst)*augment.delayFactor(delayMod(rank()));
+        return super.castDelay(user, dst)*augment.delayFactor(delayMod(type()));
     }
 
     public static void processSoulsBurst(Item source, int pos){
@@ -240,46 +240,46 @@ public class ToyKnife extends MeleeWeapon implements Rankable, ManaSource {
         return reachFactor;
     }
 
-    int rank = 1;
+    int type = 1;
 
     @Override
-    public int rank() {
-        return rank;
+    public int type() {
+        return type;
     }
 
     @Override
-    public void rank(int rank) {
-        this.rank = rank;
+    public void type(int type) {
+        this.type = type;
     }
 
     @Override
-    public String getRankMessage(int rank){
-        String rankMessage = generalRankMessage(rank);
-        if (!Messages.get(this, "rank" + rank).startsWith("!!"))
-            rankMessage += "\n\n" + Messages.get(this, "rank" + rank);
+    public String getTypeMessage(int type){
+        String rankMessage = generalRankMessage(type);
+        if (!Messages.get(this, "type" + type).startsWith("!!"))
+            rankMessage += "\n\n" + Messages.get(this, "type" + type);
         return rankMessage;
     }
 
     protected String generalRankMessage(int rank) {
-        return Messages.get(this, "rank_info",
+        return Messages.get(this, "type_info",
                 Math.round(damageMod(rank)* (1 + 2*buffedLvl())), Math.round(damageMod(rank)* (7*(tier) + 4*buffedLvl())),
                 Math.round(4*soulGainMod(rank)), Math.round(8*soulGainMod(rank)*(rank == 2 ? 1.40f : 1f)),
                 Messages.decimalFormat("#.##", 1.0f/delayMod(rank))
         );
     }
 
-    private static final String RANK = "rank";
+    private static final String TYPE = "rank";
 
     @Override
     public void storeInBundle(Bundle bundle) {
         super.storeInBundle(bundle);
-        bundle.put(RANK, rank);
+        bundle.put(TYPE, type);
     }
 
     @Override
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
-        rank = bundle.getInt(RANK);
+        type = bundle.getInt(TYPE);
     }
 
     public static class SoulGain extends FlavourBuff{

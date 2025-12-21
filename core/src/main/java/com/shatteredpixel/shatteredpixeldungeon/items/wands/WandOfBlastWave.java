@@ -77,23 +77,23 @@ public class WandOfBlastWave extends DamageWand {
 	}
 
     @Override
-    public float powerModifier(int rank) {
-        switch (rank){
+    public float powerModifier(int type) {
+        switch (type){
             case 1: return 1.0f;
             case 2: return 2f;
             case 3: return 1.75f;
         }
-        return super.powerModifier(rank);
+        return super.powerModifier(type);
     }
 
     @Override
-    public float rechargeModifier(int rank) {
-        switch (rank){
+    public float rechargeModifier(int type) {
+        switch (type){
             case 1: return 2.0f;
             case 2: return 1.5f;
             case 3: return 3.25f;
         }
-        return super.rechargeModifier(rank);
+        return super.rechargeModifier(type);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class WandOfBlastWave extends DamageWand {
 
 		//presses all tiles in the AOE first, with the exception of tengu dart traps
 		for (int i : PathFinder.NEIGHBOURS9){
-            if (rank() == 3 && i != 0)
+            if (type() == 3 && i != 0)
                 continue;
 			if (!(Dungeon.level.traps.get(bolt.collisionPos+i) instanceof TenguDartTrap)) {
 				Dungeon.level.pressCell(bolt.collisionPos + i);
@@ -111,7 +111,7 @@ public class WandOfBlastWave extends DamageWand {
 		}
 
 		//throws other chars around the center.
-        if (rank() != 3) {
+        if (type() != 3) {
             for (int i : PathFinder.NEIGHBOURS8) {
                 Char ch = Actor.findChar(bolt.collisionPos + i);
 
@@ -122,9 +122,9 @@ public class WandOfBlastWave extends DamageWand {
 
                     //do not push chars that are dieing over a pit, or that move due to the damage
                     if (((ch.isAlive() || ch.flying || !Dungeon.level.pit[ch.pos])
-                            && ch.pos == bolt.collisionPos + i) && rank() != 2) {
+                            && ch.pos == bolt.collisionPos + i) && type() != 2) {
                         Ballistica trajectory = new Ballistica(ch.pos, ch.pos + i, Ballistica.MAGIC_BOLT);
-                        int strength = sideKnockback(rank());
+                        int strength = sideKnockback(type());
                         throwChar(ch, trajectory, strength, false, true, this);
                     }
 
@@ -140,9 +140,9 @@ public class WandOfBlastWave extends DamageWand {
 
 			//do not push chars that are dieing over a pit, or that move due to the damage
 			if (((ch.isAlive() || ch.flying || !Dungeon.level.pit[ch.pos])
-					&& bolt.path.size() > bolt.dist+1 && ch.pos == bolt.collisionPos) && rank() != 2) {
+					&& bolt.path.size() > bolt.dist+1 && ch.pos == bolt.collisionPos) && type() != 2) {
 				Ballistica trajectory = new Ballistica(ch.pos, bolt.path.get(bolt.dist + 1), Ballistica.MAGIC_BOLT);
-				int strength = Math.round(mainKnockback(rank()));
+				int strength = Math.round(mainKnockback(type()));
 				throwChar(ch, trajectory, strength, false, true, this);
 			}
 		}
@@ -243,23 +243,23 @@ public class WandOfBlastWave extends DamageWand {
 	}
 
     @Override
-    public String generalRankDescription(int rank){
-        return Messages.get(this, "rank" + rank,
+    public String generalTypeDescription(int type){
+        return Messages.get(this, "type" + type,
                 GameMath.printAverage(
-                        Math.round(magicMin(power())*powerModifier(rank)),
-                        Math.round(magicMax(power())*powerModifier(rank))
+                        Math.round(magicMin(power())*powerModifier(type)),
+                        Math.round(magicMax(power())*powerModifier(type))
                 ),
-                getRechargeInfo(rank),
-                mainKnockback(rank), sideKnockback(rank)
+                getRechargeInfo(type),
+                mainKnockback(type), sideKnockback(type)
         );
     }
 
     @Override
-    public String battlemageDesc(int rank) {
-        if (rank == 2){
-            return Messages.get(this, "rank_bm" + rank, GameMath.printAverage((int) (16+4*power()), (int) (24+6*power())));
+    public String battlemageDesc(int type) {
+        if (type == 2){
+            return Messages.get(this, "type_bm" + type, GameMath.printAverage((int) (16+4*power()), (int) (24+6*power())));
         } else {
-            return Messages.get(this, "rank_bm" + rank, GameMath.printAverage((int) (8+2*power()), (int) (12+3*power())));
+            return Messages.get(this, "type_bm" + type, GameMath.printAverage((int) (8+2*power()), (int) (12+3*power())));
         }
     }
 
@@ -276,10 +276,10 @@ public class WandOfBlastWave extends DamageWand {
 		if (defender.buff(Paralysis.class) != null && defender.buff(BWaveOnHitTracker.class) == null){
 			defender.buff(Paralysis.class).detach();
 			int dmg = Random.NormalIntRange((int) (8+2*power()), (int) (12+3*power()));
-            if (rank() == 2)
+            if (type() == 2)
                 dmg *= 2;
 			defender.damage(Math.round(procChanceMultiplier(attacker) * dmg), this);
-            if (rank() == 3){
+            if (type() == 3){
                 PathFinder.buildDistanceMap( defender.pos, BArray.not( Dungeon.level.solid, null ), 2 );
                 for (int i = 0; i < PathFinder.distance.length; i++) {
                     if (PathFinder.distance[i] < Integer.MAX_VALUE) {
@@ -296,9 +296,9 @@ public class WandOfBlastWave extends DamageWand {
 
 			//brief immunity, to prevent stacking absurd damage with it with things like para gas
             float cooldown = 3f;
-            if (rank() == 2)
+            if (type() == 2)
                 cooldown = 9999999f;
-            if (rank() == 3)
+            if (type() == 3)
                 cooldown = 8f;
 			Buff.prolong(defender, BWaveOnHitTracker.class,  cooldown);
 		}

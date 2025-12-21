@@ -64,28 +64,28 @@ public class WandOfDisintegration extends DamageWand {
 	}
 
     @Override
-    public float powerModifier(int rank) {
-        switch (rank){
+    public float powerModifier(int type) {
+        switch (type){
             case 1: return 1.0f;
             case 2: return 0.75f;
             case 3: return 3.25f;
         }
-        return super.powerModifier(rank);
+        return super.powerModifier(type);
     }
 
     @Override
-    public float rechargeModifier(int rank) {
-        switch (rank){
+    public float rechargeModifier(int type) {
+        switch (type){
             case 1: return 1.0f;
             case 2: return 1.5f;
             case 3: return 1.75f;
         }
-        return super.rechargeModifier(rank);
+        return super.rechargeModifier(type);
     }
 
     @Override
     protected int chargesPerCast() {
-        switch (rank()){
+        switch (type()){
             case 3: return 2;
         }
         return super.chargesPerCast();
@@ -108,7 +108,7 @@ public class WandOfDisintegration extends DamageWand {
 		float level = power();
 		
 		int maxDistance = Math.min(distance(), beam.dist);
-        if (rank() == 2){
+        if (type() == 2){
             maxDistance = beam.path.size();
         }
 		
@@ -157,7 +157,7 @@ public class WandOfDisintegration extends DamageWand {
 		}
 		
 		float lvl = level + (chars.size()-1) + terrainBonus;
-        if (rank() == 3){
+        if (type() == 3){
             lvl -= terrainBonus + (chars.size()-1);
         }
 		for (Char ch : chars) {
@@ -170,7 +170,7 @@ public class WandOfDisintegration extends DamageWand {
 
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {
-        if (rank() == 3){
+        if (type() == 3){
             defender.damage((int) (damage*0.75f), this);
         }
 	}
@@ -178,7 +178,7 @@ public class WandOfDisintegration extends DamageWand {
     @Override
     public int proc(Char attacker, Char defender, int damage) {
         int dmg = super.proc(attacker, defender, damage);
-        if (rank() == 2)
+        if (type() == 2)
             dmg *= Math.min(5f, 5f - (Dungeon.level.trueDistance(attacker.pos, defender.pos))) / 5f;
         return dmg;
     }
@@ -187,9 +187,9 @@ public class WandOfDisintegration extends DamageWand {
     public int reachFactor(Char owner) {
         int reach = super.reachFactor(owner);
         if (owner instanceof Hero && ((Hero) owner).subClass == HeroSubClass.BATTLEMAGE){
-            if (rank() == 1)
+            if (type() == 1)
                 reach += Math.round(Wand.procChanceMultiplier(owner));
-            if (rank() == 2)
+            if (type() == 2)
                 reach += 6;
         }
         return reach;
@@ -205,20 +205,20 @@ public class WandOfDisintegration extends DamageWand {
 	}
 
     @Override
-    public String generalRankDescription(int rank) {
-        return Messages.get(this, "rank" + rank,
+    public String generalTypeDescription(int type) {
+        return Messages.get(this, "type" + type,
                 GameMath.printAverage(
-                        Math.round(magicMin(power())*powerModifier(rank)),
-                        Math.round(magicMax(power())*powerModifier(rank))
+                        Math.round(magicMin(power())*powerModifier(type)),
+                        Math.round(magicMax(power())*powerModifier(type))
                 ),
-                getRechargeInfo(rank),
+                getRechargeInfo(type),
                 distance()
         );
     }
 
     @Override
     public int collisionProperties(int target) {
-        if (rank() == 2){
+        if (type() == 2){
             return Ballistica.STOP_SOLID | Ballistica.REFLECT;
         }
         return super.collisionProperties(target);
@@ -226,7 +226,7 @@ public class WandOfDisintegration extends DamageWand {
 
     @Override
 	public void fx(Ballistica beam, Callback callback) {
-        if (rank() == 2) {
+        if (type() == 2) {
             if (beam.reflectPositions.isEmpty()) {
                 curUser.sprite.parent.add(
                         new Beam.DeathRay(curUser.sprite.center(),

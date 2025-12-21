@@ -52,11 +52,11 @@ public class Concentration extends AdHocSpell {
         hero.sprite.operate(hero.pos, new Callback() {
             @Override
             public void call() {
-                hero.spendAndNext(paralyse(rank()));
+                hero.spendAndNext(paralyse(type()));
                 hero.sprite.idle();
                 hero.sprite.emitter().burst(WhiteParticle.UP, 8);
                 Sample.INSTANCE.play(Assets.Sounds.LULLABY);
-                Regeneration.regenerate(hero, intHeal(rank()));
+                Regeneration.regenerate(hero, intHeal(type()));
                 new Flare(10, 64).color(0xFFFFFF, true).show(Dungeon.hero.sprite.parent, DungeonTilemap.tileCenterToWorld(hero.pos), 1.5f);
                 if (isEmpowered())
                     Buff.affect(hero, MonkEnergy.MonkAbility.Meditate.MeditateResistance.class, hero.cooldown());
@@ -88,16 +88,16 @@ public class Concentration extends AdHocSpell {
     }
 
     @Override
-    public int manaCost(int rank) {
+    public int manaCost(int type) {
         return 15;
     }
 
     public String spellDesc() {
-        return Messages.get(this, "desc", intHeal(rank()), new DecimalFormat("#.#").format(paralyse(rank())));
+        return Messages.get(this, "desc", intHeal(type()), new DecimalFormat("#.#").format(paralyse(type())));
     }
 
     @Override
-    public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", intHeal(rank), new DecimalFormat("#.#").format(paralyse(rank)));
+    public String spellTypeMessage(int type) {
+        return Messages.get(this, "type", intHeal(type), new DecimalFormat("#.#").format(paralyse(type)));
     }
 }

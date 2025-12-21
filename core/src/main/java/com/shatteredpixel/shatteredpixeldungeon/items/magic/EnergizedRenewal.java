@@ -52,9 +52,9 @@ public class EnergizedRenewal extends ConjurerSpell {
         Char ch = Actor.findChar(trajectory.collisionPos);
         if (ch != null && ch.alignment == Char.Alignment.ALLY && !(ch instanceof Hero)){
             Sample.INSTANCE.play(Assets.Sounds.DRINK);
-            int healing = heal(ch, rank());
+            int healing = heal(ch, type());
 
-            if (rank() == 3){
+            if (type() == 3){
                 Buff.affect(ch, Healing.class).setHeal(healing, 0, 1);
             } else {
                 Regeneration.regenerate(ch, healing, true, false);
@@ -70,8 +70,8 @@ public class EnergizedRenewal extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost(int rank) {
-        switch (rank){
+    public int manaCost(int type) {
+        switch (type){
             case 1: return 2;
             case 2: return 4;
             case 3: return 10;
@@ -110,15 +110,15 @@ public class EnergizedRenewal extends ConjurerSpell {
 
     @Override
     public String spellDesc() {
-        return Messages.get(this, "desc", intHeal(rank()), new DecimalFormat("#.##").format( partialHeal(rank())));
+        return Messages.get(this, "desc", intHeal(type()), new DecimalFormat("#.##").format( partialHeal(type())));
     }
 
     @Override
-    public String spellRankMessage(int rank) {
-        if (rank == 3){
-            return Messages.get(this, "rank3", new DecimalFormat("#.##").format( partialHeal(rank)));
+    public String spellTypeMessage(int type) {
+        if (type == 3){
+            return Messages.get(this, "type3", new DecimalFormat("#.##").format( partialHeal(type)));
         }
-        return Messages.get(this, "rank", intHeal(rank), new DecimalFormat("#.##").format( partialHeal(rank)));
+        return Messages.get(this, "type", intHeal(type), new DecimalFormat("#.##").format( partialHeal(type)));
     }
 
 }

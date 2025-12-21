@@ -102,7 +102,7 @@ public class DisplacingDart extends TippedDart {
 					Dungeon.observe();
 					GameScene.updateFog();
 				} else if (!Dungeon.level.heroFOV[chosenPos]){
-					Buff.append(attacker, TalismanOfForesight.CharAwareness.class, 5f*powerMultiplier(rank())).charID = defender.id();
+					Buff.append(attacker, TalismanOfForesight.CharAwareness.class, 5f*powerMultiplier(type())).charID = defender.id();
 				}
 			}
 		

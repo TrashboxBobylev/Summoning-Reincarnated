@@ -78,7 +78,7 @@ public class ArtemisBridge extends ConjurerSpell {
                 return false;
             } else {
                 for (int dir: PathFinder.NEIGHBOURS8) {
-                    if (Dungeon.level.distance(chPos + dir, Dungeon.hero.pos) > distance(rank())){
+                    if (Dungeon.level.distance(chPos + dir, Dungeon.hero.pos) > distance(type())){
                         possibleCells.remove((Integer)(chPos + dir));
                     }
                 }
@@ -99,7 +99,7 @@ public class ArtemisBridge extends ConjurerSpell {
             for (int dir: PathFinder.NEIGHBOURS8){
                 if (Actor.findChar(pos + dir) == null &&
                         Dungeon.level.passable[pos+dir]    &&
-                        Dungeon.level.distance(pos + dir, Dungeon.hero.pos) <= distance(rank())){
+                        Dungeon.level.distance(pos + dir, Dungeon.hero.pos) <= distance(type())){
                     curUser.busy();
                     curUser.sprite.emitter().burst(WhiteParticle.UP, 8);
                     curUser.sprite.operate(curUser.pos, new Callback() {
@@ -132,8 +132,8 @@ public class ArtemisBridge extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost(int rank) {
-        switch (rank){
+    public int manaCost(int type) {
+        switch (type){
             case 1: return 3;
             case 2: return 5;
             case 3: return 10;
@@ -142,11 +142,11 @@ public class ArtemisBridge extends ConjurerSpell {
     }
 
     public String spellDesc() {
-        return Messages.get(this, "desc", distance(rank()));
+        return Messages.get(this, "desc", distance(type()));
     }
 
     @Override
-    public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", distance(rank));
+    public String spellTypeMessage(int type) {
+        return Messages.get(this, "type", distance(type));
     }
 }

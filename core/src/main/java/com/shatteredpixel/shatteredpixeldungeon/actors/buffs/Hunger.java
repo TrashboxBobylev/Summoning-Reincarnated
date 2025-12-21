@@ -102,7 +102,7 @@ public class Hunger extends Buff implements Hero.Doom, DamageSource {
 
 		float ratMod = 1.0f;
 		for (Mob mob: Dungeon.level.mobs){
-			if (mob instanceof GrayRat && ((GrayRat) mob).rank == 2 && ((GrayRat) mob).behaviorType == Minion.BehaviorType.PASSIVE){
+			if (mob instanceof GrayRat && ((GrayRat) mob).type == 2 && ((GrayRat) mob).behaviorType == Minion.BehaviorType.PASSIVE){
 				ratMod += 1.25f;
 			}
 		}

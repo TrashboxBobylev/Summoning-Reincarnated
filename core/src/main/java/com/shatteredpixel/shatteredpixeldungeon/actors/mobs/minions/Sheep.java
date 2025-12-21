@@ -39,7 +39,7 @@ public class Sheep extends Minion {
 
     @Override
     protected boolean act() {
-        if (rank == 3){
+        if (type == 3){
             Buff.affect(this, StoneOfAggression.Aggression.class, 2f);
         }
         return super.act();
@@ -47,7 +47,7 @@ public class Sheep extends Minion {
 
     @Override
     public int defenseProc(Char enemy, int damage) {
-        if (rank == 2){
+        if (type == 2){
             int effectiveDamage = Random.NormalIntRange(0, (int) Math.floor(damage*3/4f));
 
             if (enemy.sprite != null) {

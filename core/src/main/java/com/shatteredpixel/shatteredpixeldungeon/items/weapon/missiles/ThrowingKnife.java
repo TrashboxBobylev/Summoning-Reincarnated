@@ -43,8 +43,8 @@ public class ThrowingKnife extends MissileWeapon {
 		bones = false;
 	}
 
-    public float min(float lvl, int rank) {
-        switch (rank){
+    public float min(float lvl, int type) {
+        switch (type){
             case 1: return 2 + lvl/2;
             case 2: return 4 + lvl;
             case 3: return 8 + lvl*2;
@@ -52,8 +52,8 @@ public class ThrowingKnife extends MissileWeapon {
         return 0;
     }
 
-    public float max(float lvl, int rank) {
-        switch (rank){
+    public float max(float lvl, int type) {
+        switch (type){
             case 1: return 6 + lvl*2f;
             case 2: return 10 + lvl*3.33f;
             case 3: return 16 + lvl*6.5f;
@@ -61,8 +61,8 @@ public class ThrowingKnife extends MissileWeapon {
         return 0;
     }
 
-    public float baseUses(float lvl, int rank){
-        switch (rank){
+    public float baseUses(float lvl, int type){
+        switch (type){
             case 1: return 6 + lvl*1.25f;
             case 2: return 1 + lvl*0.5f;
             case 3: return 3 + lvl*1f;
@@ -72,7 +72,7 @@ public class ThrowingKnife extends MissileWeapon {
 
     @Override
     public float castDelay(Char user, int cell) {
-        if (rank() == 3){
+        if (type() == 3){
             return super.castDelay(user, cell)*2;
         }
         return super.castDelay(user, cell);
@@ -80,7 +80,7 @@ public class ThrowingKnife extends MissileWeapon {
 
     @Override
     protected void decrementDurability() {
-        if (rank() == 2 && Dungeon.hero.attackTarget() != null && !((Mob)Dungeon.hero.attackTarget()).enemySeen){
+        if (type() == 2 && Dungeon.hero.attackTarget() != null && !((Mob)Dungeon.hero.attackTarget()).enemySeen){
 
         } else {
             super.decrementDurability();
@@ -93,7 +93,7 @@ public class ThrowingKnife extends MissileWeapon {
 			Hero hero = (Hero)owner;
 			Char enemy = hero.attackTarget();
 			if (enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)) {
-                if (rank() != 3) {
+                if (type() != 3) {
                     //deals 75% toward max to max on surprise, instead of min to max.
                     int diff = max() - min();
                     int damage = augment.damageFactor(Hero.heroDamageIntRange(

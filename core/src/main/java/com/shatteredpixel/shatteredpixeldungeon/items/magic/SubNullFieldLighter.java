@@ -59,12 +59,12 @@ public class SubNullFieldLighter extends ConjurerSpell {
             }
         }
         for (int i: cells)
-            GameScene.add(Blob.seed(i, resource(rank()) / cells.size(), GonerField.class));
+            GameScene.add(Blob.seed(i, resource(type()) / cells.size(), GonerField.class));
     }
 
     @Override
-    public int manaCost(int rank) {
-        switch (rank){
+    public int manaCost(int type) {
+        switch (type){
             case 1: return 20;
             case 2: return 30;
             case 3: return 40;
@@ -87,11 +87,11 @@ public class SubNullFieldLighter extends ConjurerSpell {
 
     @Override
     public String spellDesc() {
-        return Messages.get(this, "desc", resource(rank()));
+        return Messages.get(this, "desc", resource(type()));
     }
 
     @Override
-    public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", resource(rank));
+    public String spellTypeMessage(int type) {
+        return Messages.get(this, "type", resource(type));
     }
 }

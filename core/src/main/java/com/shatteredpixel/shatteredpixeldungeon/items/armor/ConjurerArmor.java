@@ -25,14 +25,14 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.armor;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.GameMath;
 
 import java.util.ArrayList;
 
-public class ConjurerArmor extends Armor implements Rankable, ConjurerSet {
+public class ConjurerArmor extends Armor implements TypedItem, ConjurerSet {
 	
 	{
 		image = ItemSpriteSheet.ARMOR_CONJURER;
@@ -46,20 +46,20 @@ public class ConjurerArmor extends Armor implements Rankable, ConjurerSet {
 
     @Override
     public int DRMax(int lvl) {
-        return DRMax(powerlevel(), rank());
+        return DRMax(powerlevel(), type());
     }
 
     @Override
     public int DRMin(int lvl) {
-        return DRMin(powerlevel(), rank());
+        return DRMin(powerlevel(), type());
     }
 
-    public int DRMax(int lvl, int rank) {
-        return (int) (super.DRMax(lvl)*defenseLevel(rank-1));
+    public int DRMax(int lvl, int type) {
+        return (int) (super.DRMax(lvl)*defenseLevel(type-1));
     }
 
-    public int DRMin(int lvl, int rank) {
-        return (int) (super.DRMin(lvl)*defenseLevel(rank-1));
+    public int DRMin(int lvl, int type) {
+        return (int) (super.DRMin(lvl)*defenseLevel(type-1));
     }
 
     @Override
@@ -71,13 +71,13 @@ public class ConjurerArmor extends Armor implements Rankable, ConjurerSet {
     }
 
     @Override
-    public int rank() {
+    public int type() {
         return level()+1;
     }
 
     @Override
-    public void rank(int rank) {
-        level(rank-1);
+    public void type(int type) {
+        level(type -1);
     }
 
     //    @Override
@@ -115,7 +115,7 @@ public class ConjurerArmor extends Armor implements Rankable, ConjurerSet {
         return false;
     }
 
-    public String getRankMessage(int rank) {
-        return Messages.get(this, "rank" + rank, GameMath.printAverage(DRMin(powerlevel(), rank), DRMax(powerlevel(), rank)));
+    public String getTypeMessage(int type) {
+        return Messages.get(this, "type" + type, GameMath.printAverage(DRMin(powerlevel(), type), DRMax(powerlevel(), type)));
     }
 }

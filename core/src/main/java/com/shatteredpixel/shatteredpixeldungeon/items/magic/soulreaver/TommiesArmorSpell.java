@@ -49,8 +49,8 @@ public class TommiesArmorSpell extends ConjurerSpell {
         if (ch != null && ch.alignment == Char.Alignment.ALLY) {
             if (ch.buff(ArmoredShielding.class) == null) {
                 Buff.affect(ch, ArmoredShielding.class, 1000000f);
-                Buff.affect(ch, Barkskin.class).set(defenseEarthValue(rank()), defenseEarthTime(rank()));
-                Buff.affect(ch, ArcaneArmor.class).set(defenseArcaneValue(rank()), defenseArcaneTime(rank()));
+                Buff.affect(ch, Barkskin.class).set(defenseEarthValue(type()), defenseEarthTime(type()));
+                Buff.affect(ch, ArcaneArmor.class).set(defenseArcaneValue(type()), defenseArcaneTime(type()));
             } else {
                 ch.buff(ArmoredShielding.class).detach();
                 Buff.affect(ch, Barkskin.class).detach();
@@ -97,8 +97,8 @@ public class TommiesArmorSpell extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost(int rank) {
-        switch (rank){
+    public int manaCost(int type) {
+        switch (type){
             case 1: return 15;
             case 2: return 20;
             case 3: return 4;
@@ -107,11 +107,11 @@ public class TommiesArmorSpell extends ConjurerSpell {
     }
 
     public String spellDesc() {
-        return Messages.get(this, "desc", defenseEarthValue(rank()), defenseArcaneValue(rank()));
+        return Messages.get(this, "desc", defenseEarthValue(type()), defenseArcaneValue(type()));
     }
 
     @Override
-    public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", defenseEarthValue(rank), defenseEarthTime(rank), defenseArcaneValue(rank), defenseArcaneTime(rank));
+    public String spellTypeMessage(int type) {
+        return Messages.get(this, "type", defenseEarthValue(type), defenseEarthTime(type), defenseArcaneValue(type), defenseArcaneTime(type));
     }
 }

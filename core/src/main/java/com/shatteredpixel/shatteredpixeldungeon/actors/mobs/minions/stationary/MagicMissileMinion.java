@@ -69,19 +69,19 @@ public class MagicMissileMinion extends StationaryMinion {
     public void zap() {
         spend(1f);
         int accuracyMod = 2;
-        if (rank == 3) accuracyMod = INFINITE_ACCURACY / 10;
-        if (rank == 2) accuracyMod = 1;
+        if (type == 3) accuracyMod = INFINITE_ACCURACY / 10;
+        if (type == 2) accuracyMod = 1;
 
-        if (hit(this, enemy, accuracyMod, rank != 2)) {
+        if (hit(this, enemy, accuracyMod, type != 2)) {
             int dmg = damageRoll();
-            if (rank == 2)
+            if (type == 2)
                 dmg -= enemy.drRoll()*2;
             enemy.damage(dmg, this);
             EffectHalo shield = new EffectHalo(enemy.sprite);
             GameScene.effect(shield);
             shield.putOut();
             useResource(1);
-            if (rank == 3){
+            if (type == 3){
                 for (Wand.Charger c : Dungeon.hero.buffs(Wand.Charger.class)){
                     c.gainCharge(1.0f / 3.0f);
                 }

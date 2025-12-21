@@ -74,7 +74,7 @@ public class WandOfFireblast extends DamageWand {
 
 	//2/8/18 base damage with 2/4/6 scaling based on charges used
     public float magicMax(float lvl) {
-        return magicMax(lvl, rank());
+        return magicMax(lvl, type());
     }
     public float magicMax(float lvl, int rank) {
 		switch (rank){
@@ -88,8 +88,8 @@ public class WandOfFireblast extends DamageWand {
 	}
 
     @Override
-    public float rechargeModifier(int level) {
-        switch (level){
+    public float rechargeModifier(int type) {
+        switch (type){
             case 1: return 1.33f;
             case 2: return 3f;
             case 3: return 6f;
@@ -173,7 +173,7 @@ public class WandOfFireblast extends DamageWand {
 
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {
-        int range = rank();
+        int range = type();
 
 		//proc chance is initially 0..
 		float procChance = 0;
@@ -204,7 +204,7 @@ public class WandOfFireblast extends DamageWand {
 			Blob fire = Dungeon.level.blobs.get(Fire.class);
 
 			//explode, dealing damage to enemies in 3x3, and clearing all fire
-			CellEmitter.center(defender.pos).burst(BlastParticle.FACTORY, 10 + rank()*20);
+			CellEmitter.center(defender.pos).burst(BlastParticle.FACTORY, 10 + type()*20);
 			if (fire != null) {
                 for (int i = 0; i < PathFinder.distance.length; i++) {
                     if (PathFinder.distance[i] < Integer.MAX_VALUE) {
@@ -281,22 +281,22 @@ public class WandOfFireblast extends DamageWand {
 //	}
 
     protected int imaginableChargePerCast() {
-        return rank();
+        return type();
     }
 
     @Override
-    public String generalRankDescription(int rank){
-        return Messages.get(this, "rank" + rank,
+    public String generalTypeDescription(int type){
+        return Messages.get(this, "type" + type,
                 GameMath.printAverage(
-                        Math.round(magicMin(power(),rank)),
-                        Math.round(magicMax(power(),rank))
+                        Math.round(magicMin(power(), type)),
+                        Math.round(magicMax(power(), type))
                 ),
-                getRechargeInfo(rank)
+                getRechargeInfo(type)
         );
     }
 
-    public String battlemageDesc(int rank){
-        return Messages.get(this, "rank_bm" + rank, GameMath.printAverage((int) (2 + 2 * power()), (int) (8 + 4 * power())));
+    public String battlemageDesc(int type){
+        return Messages.get(this, "type_bm" + type, GameMath.printAverage((int) (2 + 2 * power()), (int) (8 + 4 * power())));
     }
 
 	@Override

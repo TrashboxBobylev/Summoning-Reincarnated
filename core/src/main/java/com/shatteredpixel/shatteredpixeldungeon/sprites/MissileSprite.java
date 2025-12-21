@@ -190,7 +190,7 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 		} else if (item instanceof StarBlazing.ProjectileStar){
 			speed *= 1.6f;
 		}
-        if (item instanceof Kunai && ((Kunai) item).rank() == 2){
+        if (item instanceof Kunai && ((Kunai) item).type() == 2){
             speed *= Random.Float(0.5f, 1.5f);
         }
         if (item instanceof Trident.invisproj){

@@ -52,21 +52,21 @@ public class TransmogrificationWand extends ConjurerSpell {
         if (ch != null && !(ch instanceof Hero)) {
             CellEmitter.center( trajectory.collisionPos ).burst( MagicMissile.WardParticle.UP, Random.IntRange( 8, 15 ) );
             if (ch.alignment == Char.Alignment.ALLY) {
-                Buff.affect(ch, Chungus.class, enlargement(rank()));
+                Buff.affect(ch, Chungus.class, enlargement(type()));
             } else if (ch.alignment == Char.Alignment.ENEMY) {
-                Buff.affect(ch, TimedShrink.class, shrinking(rank()));
+                Buff.affect(ch, TimedShrink.class, shrinking(type()));
             }
         }
     }
 
     @Override
-    public Alignment alignment(int rank) {
-        switch (rank){
+    public Alignment alignment(int type) {
+        switch (type){
             case 1: return Alignment.NEUTRAL;
             case 2: return Alignment.BENEFICIAL;
             case 3: return Alignment.OFFENSIVE;
         }
-        return super.alignment(rank);
+        return super.alignment(type);
     }
 
     private int enlargement(int rank){
@@ -102,8 +102,8 @@ public class TransmogrificationWand extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost(int rank) {
-        switch (rank){
+    public int manaCost(int type) {
+        switch (type){
             case 1: return 5;
             case 2: return 8;
             case 3: return 11;
@@ -117,12 +117,12 @@ public class TransmogrificationWand extends ConjurerSpell {
     }
 
     public String spellDesc() {
-        return Messages.get(this, "desc", shrinking(rank()), enlargement(rank()));
+        return Messages.get(this, "desc", shrinking(type()), enlargement(type()));
     }
 
     @Override
-    public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", shrinking(rank), enlargement(rank));
+    public String spellTypeMessage(int type) {
+        return Messages.get(this, "type", shrinking(type), enlargement(type));
     }
 
 }

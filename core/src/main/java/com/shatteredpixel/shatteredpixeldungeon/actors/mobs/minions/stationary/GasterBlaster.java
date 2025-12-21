@@ -50,13 +50,13 @@ public class GasterBlaster extends StationaryMinion {
     @Override
     protected boolean canAttack( Char enemy ) {
         Ballistica ballistica = new Ballistica(pos, enemy.pos, Ballistica.STOP_SOLID);
-        if (ballistica.subPath(1, ballistica.dist).contains(enemy.pos) && (enemy.buffs(Karma.class).isEmpty() || rank != 3)) return true;
+        if (ballistica.subPath(1, ballistica.dist).contains(enemy.pos) && (enemy.buffs(Karma.class).isEmpty() || type != 3)) return true;
         return false;
     }
 
     @Override
     public boolean canBeIgnored(Char ch){
-        if (rank == 3 && !ch.buffs(Karma.class).isEmpty())
+        if (type == 3 && !ch.buffs(Karma.class).isEmpty())
             return true;
         else
             return super.canBeIgnored(ch);
@@ -65,7 +65,7 @@ public class GasterBlaster extends StationaryMinion {
     @Override
     public float attackDelay() {
         float mod = 0;
-        switch (rank){
+        switch (type){
             case 1: mod = 2f; break;
             case 2: mod = 1/3f; break;
             case 3: mod = 2.5f; break;
@@ -105,12 +105,12 @@ public class GasterBlaster extends StationaryMinion {
             if (hit(this, ch, true)){
                 hitAmount++;
                 int damage = damageRoll();
-                if (rank == 2 && hitAmount > 1){
+                if (type == 2 && hitAmount > 1){
                     damage *= 1.25f * (hitAmount-1);
                 }
 //                if (buff(MagicPower.class) != null) damage *= Random.NormalFloat(1.5f, 3.4f);
-                ch.damage(damage, (rank == 3 ? new Karma() : this));
-                if (rank == 3)
+                ch.damage(damage, (type == 3 ? new Karma() : this));
+                if (type == 3)
                     Buff.affect(ch, Karma.class);
 
                 if (Dungeon.level.heroFOV[ch.pos]){

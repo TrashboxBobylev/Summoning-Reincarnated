@@ -43,7 +43,7 @@ public class SoulSparking extends Buff{
     public static float empowering(){
         float value = 1.0f;
         if (Dungeon.hero.belongings.armor instanceof ConjurerSet){
-            switch (((ConjurerSet) Dungeon.hero.belongings.armor).rank()){
+            switch (((ConjurerSet) Dungeon.hero.belongings.armor).type()){
                 case 1: default:
                     value = 0.75f; break;
                 case 2:

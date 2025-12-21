@@ -336,7 +336,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 			n = (Wand)Generator.randomUsingDefaults( Generator.Category.WAND );
 		} while ( Challenges.isItemBlocked(n) || n.getClass() == w.getClass());
 		
-		n.rank( w.rank() );
+		n.type( w.type() );
 
 		n.levelKnown = w.levelKnown;
 		n.curChargeKnown = w.curChargeKnown;
@@ -358,7 +358,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
             n = (MissileWeapon)Generator.randomUsingDefaults( Generator.Category.MISSILE );
         } while ( Challenges.isItemBlocked(n) || n.getClass() == w.getClass());
 
-        n.rank( w.rank() );
+        n.type( w.type() );
 
         n.enchantment = w.enchantment;
         n.curseInfusionBonus = w.curseInfusionBonus;
@@ -387,7 +387,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
             n = (Staff)Generator.randomUsingDefaults(c);
         } while (Challenges.isItemBlocked(n) || n.getClass() == w.getClass());
 
-        n.rank(w.rank());
+        n.type(w.type());
         n.quantity(w.quantity());
         w.minion().die(new Grim());
 

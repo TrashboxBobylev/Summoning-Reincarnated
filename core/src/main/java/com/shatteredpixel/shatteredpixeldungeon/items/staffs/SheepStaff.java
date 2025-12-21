@@ -45,7 +45,7 @@ public class SheepStaff extends Staff {
 
     @Override
     public int getChargeTurns() {
-        if (rank() == 3){
+        if (type() == 3){
             return Math.round(super.getChargeTurns()*1.5f);
         }
         return super.getChargeTurns();
@@ -77,16 +77,16 @@ public class SheepStaff extends Staff {
     @Override
     public void customizeMinion(Minion minion) {
         float difference = (Dungeon.hero != null ? Dungeon.hero.ATU() : 0) - minion.attunement;
-        Point minDefense = minDefense(rank());
-        Point maxDefense = maxDefense(rank());
+        Point minDefense = minDefense(type());
+        Point maxDefense = maxDefense(type());
         minion.minDefense = minDefense.x + Math.round(minDefense.y*difference);
         minion.maxDefense = maxDefense.x + Math.round(maxDefense.y*difference);
     }
 
-    public String minionDescription(int rank){
+    public String minionDescription(int type){
         float difference = Math.max(0, (Dungeon.hero != null ? Dungeon.hero.ATU() : 0) - ATUReq());
-        Point minDefense = minDefense(rank);
-        Point maxDefense = maxDefense(rank);
-        return Messages.get(this, "minion_desc" + rank, minDefense.x + Math.round(minDefense.y*difference), Math.round(maxDefense.x + maxDefense.y*difference));
+        Point minDefense = minDefense(type);
+        Point maxDefense = maxDefense(type);
+        return Messages.get(this, "minion_desc" + type, minDefense.x + Math.round(minDefense.y*difference), Math.round(maxDefense.x + maxDefense.y*difference));
     }
 }

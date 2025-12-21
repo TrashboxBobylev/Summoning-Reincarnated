@@ -814,7 +814,7 @@ public class ItemSpriteSheet {
 	public static final int RECLAIM_TRAP    = SPELLS+10;
 	public static final int RETURN_BEACON   = SPELLS+11;
 	public static final int SUMMON_ELE      = SPELLS+12;
-	public static final int RANK_MANAGER    = SPELLS+14;
+	public static final int TYPE_MANAGER = SPELLS+14;
 	public static final int ENCHANT_TRANSFER= SPELLS+15;
 
 	static{
@@ -832,7 +832,7 @@ public class ItemSpriteSheet {
 		assignItemRect(RETURN_BEACON,    8, 16);
 		assignItemRect(SUMMON_ELE,       8, 16);
 
-		assignItemRect(RANK_MANAGER,     8, 16);
+		assignItemRect(TYPE_MANAGER,     8, 16);
 		assignItemRect(ENCHANT_TRANSFER,15, 14);
 	}
 	

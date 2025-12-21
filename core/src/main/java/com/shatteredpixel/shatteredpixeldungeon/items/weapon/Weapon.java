@@ -127,7 +127,7 @@ abstract public class Weapon extends KindOfWeapon implements StrengthItem, Weapo
 	}
 	
 	public Augment augment = Augment.NONE;
-    protected int rank = 1;
+    protected int type = 1;
 
 	protected int usesToID(){
 		return 20;
@@ -237,7 +237,7 @@ abstract public class Weapon extends KindOfWeapon implements StrengthItem, Weapo
 	private static final String CURSE_INFUSION_BONUS = "curse_infusion_bonus";
 	private static final String MASTERY_POTION_BONUS = "mastery_potion_bonus";
 	private static final String AUGMENT	        = "augment";
-	private static final String RANK            = "rank";
+	private static final String RANK            = "type";
 
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -249,7 +249,7 @@ abstract public class Weapon extends KindOfWeapon implements StrengthItem, Weapo
 		bundle.put( CURSE_INFUSION_BONUS, curseInfusionBonus );
 		bundle.put( MASTERY_POTION_BONUS, masteryPotionBonus );
 		bundle.put( AUGMENT, augment );
-		bundle.put( RANK, rank );
+		bundle.put( RANK, type);
 	}
 	
 	@Override
@@ -264,7 +264,7 @@ abstract public class Weapon extends KindOfWeapon implements StrengthItem, Weapo
 
 		if (bundle.contains(AUGMENT))
             augment = bundle.getEnum(AUGMENT, Augment.class);
-		rank = bundle.getInt(RANK);
+		type = bundle.getInt(RANK);
 	}
 	
 	@Override
@@ -558,13 +558,13 @@ abstract public class Weapon extends KindOfWeapon implements StrengthItem, Weapo
 
 		protected float procChanceMultiplier(Weapon wep, Char attacker ){
 			float multiplier = genericProcChanceMultiplier(attacker);
-			if (wep instanceof SpiritBow && ((SpiritBow) wep).rank() == 3){
+			if (wep instanceof SpiritBow && ((SpiritBow) wep).type() == 3){
 				multiplier *= 2;
 			}
-            if (wep instanceof HeavyBoomerang && ((HeavyBoomerang) wep).rank() == 1){
+            if (wep instanceof HeavyBoomerang && ((HeavyBoomerang) wep).type() == 1){
                 multiplier *= 1.67f;
             }
-			if (attacker instanceof GnollHunter && ((GnollHunter) attacker).rank == 2){
+			if (attacker instanceof GnollHunter && ((GnollHunter) attacker).type == 2){
 				if (this instanceof Unstable)
 					multiplier += 0.25f;
 				else if (!(this instanceof Grim))
@@ -602,7 +602,7 @@ abstract public class Weapon extends KindOfWeapon implements StrengthItem, Weapo
 					&& ((Hero)attacker).pointsInTalent(Talent.STRIKING_WAVE) == 4){
 				multi += 0.2f;
 			}
-			if (attacker instanceof Froggit && ((Froggit) attacker).rank == 2){
+			if (attacker instanceof Froggit && ((Froggit) attacker).type == 2){
 				multi += 0.25f;
 			}
 

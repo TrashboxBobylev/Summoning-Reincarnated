@@ -41,7 +41,7 @@ public class FroggitStaff extends Staff {
     }
 
     @Override
-    public String minionDescription(int rank) {
-        return super.minionDescription(rank);
+    public String minionDescription(int type) {
+        return super.minionDescription(type);
     }
 }

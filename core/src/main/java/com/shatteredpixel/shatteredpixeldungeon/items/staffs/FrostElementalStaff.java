@@ -41,7 +41,7 @@ public class FrostElementalStaff extends Staff {
 
     @Override
     public int getChargeTurns() {
-        if (rank() == 2) {
+        if (type() == 2) {
             return 200;
         }
         return super.getChargeTurns();

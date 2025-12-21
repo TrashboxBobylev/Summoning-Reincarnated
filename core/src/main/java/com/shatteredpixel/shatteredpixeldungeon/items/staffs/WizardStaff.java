@@ -40,7 +40,7 @@ public class WizardStaff extends Staff{
 
     @Override
     public int getChargeTurns() {
-        switch (rank){
+        switch (type){
             case 1: return 600;
             case 2: return 800;
             case 3: return 750;

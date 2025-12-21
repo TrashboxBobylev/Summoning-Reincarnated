@@ -44,8 +44,8 @@ public class Bolas extends MissileWeapon {
 		hitSoundPitch = 1f;
 	}
 
-    public float min(float lvl, int rank) {
-        switch (rank){
+    public float min(float lvl, int type) {
+        switch (type){
             case 1: return 2 + lvl;
             case 2: return 1 + lvl/2f;
             case 3: return 2 + lvl;
@@ -53,8 +53,8 @@ public class Bolas extends MissileWeapon {
         return 0;
     }
 
-    public float max(float lvl, int rank) {
-        switch (rank){
+    public float max(float lvl, int type) {
+        switch (type){
             case 1: return 5 + lvl*2f;
             case 2: return 4 + lvl*2.25f;
             case 3: return 5 + lvl*1.75f;
@@ -62,8 +62,8 @@ public class Bolas extends MissileWeapon {
         return 0;
     }
 
-    public float baseUses(float lvl, int rank){
-        switch (rank){
+    public float baseUses(float lvl, int type){
+        switch (type){
             case 1: return 6 + lvl*1.5f;
             case 2: return 4 + lvl*1f;
             case 3: return 6 + lvl*1.5f;
@@ -74,9 +74,9 @@ public class Bolas extends MissileWeapon {
 	@Override
 	public int proc( Char attacker, Char defender, int damage ) {
         int dmg = super.proc(attacker, defender, damage);
-        if (rank() == 1){
+        if (type() == 1){
             Buff.prolong( defender, Cripple.class, Cripple.DURATION/2 );
-        } else if (rank() == 2){
+        } else if (type() == 2){
             for (Mob mob : Dungeon.level.mobs) {
                 if (mob.paralysed <= 0
                         && Dungeon.level.distance(defender.pos, mob.pos) <= 4
@@ -87,7 +87,7 @@ public class Bolas extends MissileWeapon {
                 }
             }
             Buff.affect(defender, AllyDamageTag.class, 4f).setFlat(dmg);
-        } else if (rank() == 3){
+        } else if (type() == 3){
             Buff.prolong( defender, Vertigo.class, Cripple.DURATION / 2);
             Buff.prolong( defender, Haste.class, Cripple.DURATION / 2 );
         }

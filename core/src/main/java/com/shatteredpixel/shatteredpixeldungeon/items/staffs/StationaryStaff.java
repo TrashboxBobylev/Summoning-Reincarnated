@@ -59,7 +59,7 @@ public class StationaryStaff extends Staff {
         chargeTurns = 550;
     }
 
-    public int maxActions(int rank){
+    public int maxActions(int type){
         return 1;
     }
 
@@ -100,12 +100,12 @@ public class StationaryStaff extends Staff {
     }
 
     @Override
-    protected String generalRankMessage(int rank) {
-        return Messages.get(this, "rank" + rank,
-                hp(rank),
-                minionMin(rank),
-                minionMax(rank),
-                maxActions(rank)
+    protected String generalTypeMessage(int type) {
+        return Messages.get(this, "type" + type,
+                hp(type),
+                minionMin(type),
+                minionMax(type),
+                maxActions(type)
         );
     }
 
@@ -234,17 +234,17 @@ public class StationaryStaff extends Staff {
             this.customizeMinion(minion);
             minion.enchantment = enchantment;
             minion.augment = augment;
-            minion.rank = rank();
+            minion.type = type();
             StationaryStaff.DecayTracker resource = Buff.affect(minion, StationaryStaff.DecayTracker.class);
             if (firstSummon) {
                 minion.behaviorType = defaultBehaviorType();
-                minion.setMaxHP(hp(rank()));
-                resource.init(maxActions(rank()), maxActions(rank()));
+                minion.setMaxHP(hp(type()));
+                resource.init(maxActions(type()), maxActions(type()));
                 if (owner.hasTalent(Talent.NEWBORN_MOTIVATION)){
                     Buff.affect(minion, Empowered.class, 25 * owner.pointsInTalent(Talent.NEWBORN_MOTIVATION));
                 }
             } else {
-                minion.HT = hp(rank());
+                minion.HT = hp(type());
                 ((StationaryMinion)minion).useResource(1);
             }
         } else GLog.warning( Messages.get(Wand.class, "fizzles") );

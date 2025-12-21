@@ -29,8 +29,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.AttunementItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
 import com.shatteredpixel.shatteredpixeldungeon.items.StrengthItem;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
@@ -54,9 +54,9 @@ public class ItemSlot extends Button {
 	public static final int ENHANCED	= 0x3399FF;
 	public static final int MASTERED	= 0xFFFF44;
 	public static final int CURSE_INFUSED	= 0x8800FF;
-	public static final int RANK1      = 0xFF7B00;
-	public static final int RANK2      = 0x57AEFF;
-	public static final int RANK3      = 0x2FED2F;
+	public static final int TYPE1 = 0xFF7B00;
+	public static final int TYPE2 = 0x57AEFF;
+	public static final int TYPE3 = 0x2FED2F;
 	public static final int DEGRADED_ATU	= 0x9C3B8D;
 	public static final int WARNING_ATU		= 0x3239A1;
 	public static final int NORMAL_ATU		= 0x2E4CE6;
@@ -320,10 +320,10 @@ public class ItemSlot extends Button {
 
 		}
 
-		if (item instanceof Rankable){
-			level.text(Rankable.getRankString(((Rankable) item).rank()));
+		if (item instanceof TypedItem){
+			level.text(TypedItem.getTypeString(((TypedItem) item).type()));
 			level.measure();
-            level.hardlight(Rankable.getRankColor(((Rankable) item).rank()));
+            level.hardlight(TypedItem.getTypeColor(((TypedItem) item).type()));
 		} else {
 			int trueLvl = item.visiblyUpgraded();
 			int buffedLvl = item.buffedVisiblyUpgraded();

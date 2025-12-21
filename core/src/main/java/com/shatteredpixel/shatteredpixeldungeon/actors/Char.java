@@ -434,7 +434,7 @@ public abstract class Char extends Actor implements ManaSource, DamageSource {
 				}
 			}
 
-			if (this instanceof GnollHunter && ((GnollHunter) this).rank == 3 && this.buff(GnollHunter.GnollSnipingCooldown.class) == null)
+			if (this instanceof GnollHunter && ((GnollHunter) this).type == 3 && this.buff(GnollHunter.GnollSnipingCooldown.class) == null)
 				dr /= 2;
 
 			//we use a float here briefly so that we don't have to constantly round while
@@ -518,7 +518,7 @@ public abstract class Char extends Actor implements ManaSource, DamageSource {
 			if (enemy.buff(Shrunken.class) != null) dmg *= 1.4f;
 
 			if (this instanceof Hero && ((Hero) this).belongings.armor instanceof ConjurerSet &&
-					((ConjurerSet)((Hero) this).belongings.armor).rank() == 3)
+					((ConjurerSet)((Hero) this).belongings.armor).type() == 3)
 				dmg *= 1.5f;
 
 			//characters influenced by aggression deal 1/2 damage to bosses

@@ -77,7 +77,7 @@ public class GnollHunter extends Minion {
     @Override
     public float attackDelay() {
         float delay = super.attackDelay();
-        switch (rank){
+        switch (type){
             case 1: return delay * 1f;
             case 2: return delay / 3f;
             case 3: return delay * (buff(GnollSnipingCooldown.class) != null ? 1f : 2f);
@@ -96,7 +96,7 @@ public class GnollHunter extends Minion {
 
     @Override
     public int attackSkill(Char target) {
-        if (rank == 3){
+        if (type == 3){
             return Math.round(super.attackSkill(target)*2.5f);
         }
         return super.attackSkill(target);
@@ -104,7 +104,7 @@ public class GnollHunter extends Minion {
 
     @Override
     public int attackProc(Char enemy, int damage) {
-        if (rank == 3){
+        if (type == 3){
             if (buff(GnollSnipingCooldown.class) == null) {
                 Talent.Cooldown.affectChar(this, GnollSnipingCooldown.class);
                 Ballistica trajectory = new Ballistica(pos, enemy.pos, Ballistica.STOP_TARGET);

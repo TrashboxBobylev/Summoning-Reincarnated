@@ -78,28 +78,28 @@ public class WandOfTransfusion extends DamageWand {
 	private boolean freeCharge = false;
 
     @Override
-    public float powerModifier(int rank) {
-        switch (rank){
+    public float powerModifier(int type) {
+        switch (type){
             case 1: return 1.0f;
             case 2: return 0.4f*chargesPerCast();
             case 3: return 0f;
         }
-        return super.powerModifier(rank);
+        return super.powerModifier(type);
     }
 
     @Override
-    public float rechargeModifier(int rank) {
-        switch (rank){
+    public float rechargeModifier(int type) {
+        switch (type){
             case 1: return 1.2f;
             case 2: return 0.5f;
             case 3: return 4f;
         }
-        return super.rechargeModifier(rank);
+        return super.rechargeModifier(type);
     }
 
     @Override
     protected int chargesPerCast() {
-        switch (rank()){
+        switch (type()){
             case 2: return Math.max(1, curCharges);
             case 3: return 2;
         }
@@ -123,7 +123,7 @@ public class WandOfTransfusion extends DamageWand {
 			//this wand does different things depending on the target.
 
             //on rank III, swap health states
-            if (rank() == 3 && !ch.properties().contains(Char.Property.BOSS) && !ch.properties().contains(Char.Property.UNDEAD)) {
+            if (type() == 3 && !ch.properties().contains(Char.Property.BOSS) && !ch.properties().contains(Char.Property.UNDEAD)) {
                 int myHealth = curUser.HP;
                 int enemyHealth = ch.HP;
                 float myHP = curUser.HP * 1f / curUser.HT;
@@ -150,7 +150,7 @@ public class WandOfTransfusion extends DamageWand {
 
                 //heals/shields an ally or a charmed enemy while damaging self
                 if (ch.alignment == Char.Alignment.ALLY || ch.buff(Charm.class) != null) {
-                    if (rank() == 2){
+                    if (type() == 2){
                         Buff.prolong(ch, LifeLink.class, chargesPerCast()*(5 + power())).object = curUser.id();
                         Buff.prolong(curUser, LifeLink.class, chargesPerCast()*(5 + power())).object = ch.id();
                     } else {
@@ -189,13 +189,13 @@ public class WandOfTransfusion extends DamageWand {
                 } else if ((ch.alignment == Char.Alignment.ENEMY || ch instanceof Mimic) && !(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))) {
 
                     //grant a self-shield, and...
-                    int shield = (int) ((5 + power())*powerModifier(rank()));
+                    int shield = (int) ((5 + power())*powerModifier(type()));
                     Buff.affect(curUser, Barrier.class).setShield(shield);
                     curUser.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shield), FloatingText.SHIELDING);
 
                     //charms living enemies
                     if (!ch.properties().contains(Char.Property.UNDEAD)) {
-                        Charm charm = Buff.affect(ch, Charm.class, (Charm.DURATION / 2f)*powerModifier(rank()));
+                        Charm charm = Buff.affect(ch, Charm.class, (Charm.DURATION / 2f)*powerModifier(type()));
                         charm.object = curUser.id();
                         charm.ignoreHeroAllies = true;
                         ch.sprite.centerEmitter().start(Speck.factory(Speck.HEART), 0.2f, 3);
@@ -228,7 +228,7 @@ public class WandOfTransfusion extends DamageWand {
 
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {
-        if (rank() == 1 || rank() == 2) {
+        if (type() == 1 || type() == 2) {
             if (defender.buff(Charm.class) != null && defender.buff(Charm.class).object == attacker.id()) {
                 //grants a free use of the staff and shields self
                 freeCharge = true;
@@ -242,16 +242,16 @@ public class WandOfTransfusion extends DamageWand {
 	}
 
     @Override
-    public String battlemageDesc(int rank) {
-        if (rank() != 3){
-            return Messages.get(this, "rank_bm" + rank, Math.round((2 * (5 + power()))));
+    public String battlemageDesc(int type) {
+        if (type() != 3){
+            return Messages.get(this, "type_bm" + type, Math.round((2 * (5 + power()))));
         }
-        return super.battlemageDesc(rank);
+        return super.battlemageDesc(type);
     }
 
     @Override
     public int proc(Char attacker, Char defender, int damage) {
-        if (attacker instanceof Hero && ((Hero)attacker).subClass == HeroSubClass.BATTLEMAGE && rank() == 3){
+        if (attacker instanceof Hero && ((Hero)attacker).subClass == HeroSubClass.BATTLEMAGE && type() == 3){
             float difference = Math.abs(attacker.HP * 1f / attacker.HT - defender.HP * 1f / defender.HT);
             damage = Math.round(damage*(1f + difference));
         }
@@ -278,35 +278,35 @@ public class WandOfTransfusion extends DamageWand {
 	@Override
 	public String statsDesc() {
 		int selfDMG = Dungeon.hero != null ? Math.round(Dungeon.hero.HT*0.05f): 1;
-        switch (rank()){
-            case 2: return Messages.get(this, "stats_desc" + rank(), selfDMG, (int)(5+power())*chargesPerCast(), (int)(Charm.DURATION*powerModifier(rank())), (int)((5+power())*powerModifier(rank())), GameMath.printAverage((int) magicMin(), (int) magicMax()));
+        switch (type()){
+            case 2: return Messages.get(this, "stats_desc" + type(), selfDMG, (int)(5+power())*chargesPerCast(), (int)(Charm.DURATION*powerModifier(type())), (int)((5+power())*powerModifier(type())), GameMath.printAverage((int) magicMin(), (int) magicMax()));
         }
-        return Messages.get(this, "stats_desc" + rank(), selfDMG, selfDMG + (int)(3*power()), (int)(5+power()), GameMath.printAverage((int) magicMin(), (int) magicMax()));
+        return Messages.get(this, "stats_desc" + type(), selfDMG, selfDMG + (int)(3*power()), (int)(5+power()), GameMath.printAverage((int) magicMin(), (int) magicMax()));
 	}
 
     @Override
-    public String generalRankDescription(int rank) {
-        if (rank == 2){
-            return Messages.get(this, "rank" + rank,
+    public String generalTypeDescription(int type) {
+        if (type == 2){
+            return Messages.get(this, "type" + type,
                     GameMath.printAverage(
-                            Math.round(magicMin(power())*powerModifier(rank)),
-                            Math.round(magicMax(power())*powerModifier(rank))
+                            Math.round(magicMin(power())*powerModifier(type)),
+                            Math.round(magicMax(power())*powerModifier(type))
                     ),
-                    getRechargeInfo(rank),
-                    (int)(Charm.DURATION*powerModifier(rank)),
-                    (int)((5+power())*powerModifier(rank)),
+                    getRechargeInfo(type),
+                    (int)(Charm.DURATION*powerModifier(type)),
+                    (int)((5+power())*powerModifier(type)),
                     Dungeon.hero != null ? Dungeon.hero.HT / 20 : 1,
                     (int)((5+power())*chargesPerCast())
             );
         }
-        return Messages.get(this, "rank" + rank,
+        return Messages.get(this, "type" + type,
                 GameMath.printAverage(
-                        Math.round(magicMin(power())*powerModifier(rank)),
-                        Math.round(magicMax(power())*powerModifier(rank))
+                        Math.round(magicMin(power())*powerModifier(type)),
+                        Math.round(magicMax(power())*powerModifier(type))
                 ),
-                getRechargeInfo(rank),
-                (int)(Charm.DURATION*powerModifier(rank)),
-                (int)((5+power())*powerModifier(rank)),
+                getRechargeInfo(type),
+                (int)(Charm.DURATION*powerModifier(type)),
+                (int)((5+power())*powerModifier(type)),
                 Dungeon.hero != null ? Dungeon.hero.HT / 20 : 1,
                 (int)((Dungeon.hero != null ? Dungeon.hero.HT / 20f : 1) + 3 * power())
         );

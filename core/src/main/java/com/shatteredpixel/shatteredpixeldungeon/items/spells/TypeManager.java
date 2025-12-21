@@ -27,23 +27,23 @@ package com.shatteredpixel.shatteredpixeldungeon.items.spells;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndRankManager;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndTypeManager;
 
 // it is not an inventory spell code-wise, but it is usable like one;
 // we just need for it to behave like enchantment scroll, which means
 // creating our own item selector without spending turn right away
 // and such
-public class RankManager extends Spell {
+public class TypeManager extends Spell {
 
     {
-        image = ItemSpriteSheet.RANK_MANAGER;
+        image = ItemSpriteSheet.TYPE_MANAGER;
         unique = true;
     }
 
@@ -73,7 +73,7 @@ public class RankManager extends Spell {
 
         @Override
         public String textPrompt() {
-            return Messages.get(RankManager.class, "inv_title");
+            return Messages.get(TypeManager.class, "inv_title");
         }
 
         @Override
@@ -83,14 +83,14 @@ public class RankManager extends Spell {
 
         @Override
         public boolean itemSelectable(Item item) {
-            return item instanceof Rankable;
+            return item instanceof TypedItem;
         }
 
         @Override
         public void onSelect(final Item item) {
 
-            if (item instanceof Rankable){
-                GameScene.show(new WndRankManager(((RankManager)curItem), item));
+            if (item instanceof TypedItem){
+                GameScene.show(new WndTypeManager(((TypeManager)curItem), item));
             }
         }
     };

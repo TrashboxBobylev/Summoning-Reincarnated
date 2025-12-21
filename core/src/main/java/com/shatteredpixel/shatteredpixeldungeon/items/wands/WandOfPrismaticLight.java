@@ -73,7 +73,7 @@ public class WandOfPrismaticLight extends DamageWand {
 
     @Override
     public int collisionProperties(int target) {
-        if (rank() == 2){
+        if (type() == 2){
             if ((Dungeon.level.passable[target] || Dungeon.level.avoid[target] || Actor.findChar(target) != null)
                     && Dungeon.level.distance(Dungeon.hero.pos, target) <= 6)
                 return Ballistica.STOP_TARGET;
@@ -82,33 +82,33 @@ public class WandOfPrismaticLight extends DamageWand {
     }
 
     @Override
-    public float rechargeModifier(int rank) {
-        switch (rank){
+    public float rechargeModifier(int type) {
+        switch (type){
             case 1: return 1.0f;
             case 2: return 1.6f;
             case 3: return 2.0f;
         }
-        return super.rechargeModifier(rank);
+        return super.rechargeModifier(type);
     }
 
     @Override
-    public float powerModifier(int rank) {
-        switch (rank){
+    public float powerModifier(int type) {
+        switch (type){
             case 1: return 1.0f;
             case 2: return 0.1f;
             case 3: return 1.4f;
         }
-        return super.powerModifier(rank);
+        return super.powerModifier(type);
     }
 
     @Override
 	public void onZap(Ballistica beam) {
-        if (rank() != 3)
+        if (type() != 3)
 		    affectMap(beam);
 		
-		if (Dungeon.level.viewDistance < 6 && rank() != 3){
+		if (Dungeon.level.viewDistance < 6 && type() != 3){
             float modification = 1f;
-            switch (rank()){
+            switch (type()){
                 case 2:
                     modification = 3f;
                     break;
@@ -119,7 +119,7 @@ public class WandOfPrismaticLight extends DamageWand {
 				Buff.prolong( curUser, Light.class, (10f+power()*5)*modification);
 			}
 		}
-        if (rank() != 2){
+        if (type() != 2){
             Char ch = Actor.findChar(beam.collisionPos);
             if (ch != null && !(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))){
                 wandProc(ch, chargesPerCast());
@@ -132,16 +132,16 @@ public class WandOfPrismaticLight extends DamageWand {
 		int dmg = damageRoll();
 
 		//three in (5+lvl) chance of failing
-		if (Random.Float((5+power())) >= 3 || (rank() == 3)) {
-			Buff.prolong(ch, Blindness.class, (2f + (power() * 0.333f)) * ((rank() == 3) ? 2 : 1f));
-            if (rank() == 3){
+		if (Random.Float((5+power())) >= 3 || (type() == 3)) {
+			Buff.prolong(ch, Blindness.class, (2f + (power() * 0.333f)) * ((type() == 3) ? 2 : 1f));
+            if (type() == 3){
                 Buff.prolong(ch, Cripple.class, (4f + (power() * 0.666f)));
             }
 			ch.sprite.emitter().burst(Speck.factory(Speck.LIGHT), 6 );
 		}
 
 		if (ch.properties().contains(Char.Property.DEMONIC) || ch.properties().contains(Char.Property.UNDEAD)){
-            if (rank() == 3){
+            if (type() == 3){
                 ch.sprite.emitter().start( ShadowParticle.UP, 0.01f, 100);
                 Sample.INSTANCE.play(Assets.Sounds.BURNING);
                 Sample.INSTANCE.play(Assets.Sounds.CURSED);
@@ -188,7 +188,7 @@ public class WandOfPrismaticLight extends DamageWand {
 					noticed = true;
 				}
 			}
-            if (rank() == 2) {
+            if (type() == 2) {
                 Char ch = Actor.findChar(c);
                 if (ch != null && ch.alignment == Char.Alignment.ENEMY && !(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))) {
                     wandProc(ch, chargesPerCast());
@@ -229,11 +229,11 @@ public class WandOfPrismaticLight extends DamageWand {
 
 	@Override
 	public void onHit(Char attacker, Char defender, int damage) {
-        if (rank() == 1) {
+        if (type() == 1) {
             //cripples enemy
             Buff.prolong(defender, Cripple.class, Math.round((1 + power()) * procChanceMultiplier(attacker)));
         }
-        if (rank() == 3) {
+        if (type() == 3) {
             //cripples enemy
             if (Char.hasProp(defender, Char.Property.DEMONIC) || Char.hasProp(defender, Char.Property.UNDEAD))
                 defender.damage(damage, this);
@@ -242,7 +242,7 @@ public class WandOfPrismaticLight extends DamageWand {
 
     @Override
     public float accuracyFactor(Char owner, Char target) {
-        if (rank() == 3){
+        if (type() == 3){
             if (Char.hasProp(target, Char.Property.DEMONIC) || Char.hasProp(target, Char.Property.UNDEAD))
                 return Char.INFINITE_ACCURACY;
         }
@@ -250,11 +250,11 @@ public class WandOfPrismaticLight extends DamageWand {
     }
 
     @Override
-    public String battlemageDesc(int rank) {
-        if (rank == 1){
-            return Messages.get(this, "rank_bm" + rank, (int)(1 + power()));
+    public String battlemageDesc(int type) {
+        if (type == 1){
+            return Messages.get(this, "type_bm" + type, (int)(1 + power()));
         }
-        return super.battlemageDesc(rank);
+        return super.battlemageDesc(type);
     }
 
     @Override

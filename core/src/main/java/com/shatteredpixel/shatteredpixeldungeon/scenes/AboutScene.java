@@ -29,9 +29,9 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ExitButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ItemSlot;
-import com.shatteredpixel.shatteredpixeldungeon.ui.TitleBackground;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ScrollPane;
+import com.shatteredpixel.shatteredpixeldungeon.ui.TitleBackground;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
 import com.watabou.input.PointerEvent;
 import com.watabou.noosa.Camera;
@@ -68,7 +68,7 @@ public class AboutScene extends PixelScene {
 		Component content = list.content();
 		content.clear();
 
-		CreditsBlock tb = new CreditsBlock(true, ItemSlot.RANK2,
+		CreditsBlock tb = new CreditsBlock(true, ItemSlot.TYPE2,
 				"Summoning PD: Reincarnated",
 				Icons.BOBYLEV.get(),
 				"Developed by: _Trashbox Bobylev_\nThe remaster of original Summoning PD\nBased on ShatteredPD's open source",

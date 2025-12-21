@@ -42,9 +42,9 @@ public class ChillingDart extends TippedDart {
 		//when processing charged shot, only chill enemies
 		if (!processingChargedShot || attacker.alignment != defender.alignment) {
 			if (Dungeon.level.water[defender.pos]) {
-				Buff.prolong(defender, Chill.class, Chill.DURATION*powerMultiplier(rank()));
+				Buff.prolong(defender, Chill.class, Chill.DURATION*powerMultiplier(type()));
 			} else {
-				Buff.prolong(defender, Chill.class, 6f*powerMultiplier(rank()));
+				Buff.prolong(defender, Chill.class, 6f*powerMultiplier(type()));
 			}
 		}
 		

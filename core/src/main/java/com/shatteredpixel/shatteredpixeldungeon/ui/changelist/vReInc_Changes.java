@@ -926,7 +926,7 @@ public class vReInc_Changes {
         changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.ELIXIR_DRAGON), "Elemental Elixirs/Brews",
                 "Reimplemented merge of Blizzard Brew/Elixir of Icy Touch and Inferno Brew/Elixir of Dragon's Blood."));
 
-        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.RANK_MANAGER), "New way to obtain Ranks",
+        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.TYPE_MANAGER), "New way to obtain Ranks",
                 "Changed ranking from being changed with upgrades to to be managed by new item, Rank Manager.\n\n" +
                         "_-_ Rank managers spawn every 2 depths, but not on boss depths, meaning there is 10 rank managers in entire game.\n" +
                         "_-_ Rank managers allow to switch applicable item's rank to any of three, from I to III, and preview rank's effects on item."));

@@ -26,7 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ItemSlot;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
@@ -92,8 +92,8 @@ public class WndInfoItem extends Window {
 	private void fillFields( Item item ) {
 		
 		int color = TITLE_COLOR;
-		if (item instanceof Rankable){
-			color = Rankable.getRankColor(((Rankable) item).rank());
+		if (item instanceof TypedItem){
+			color = TypedItem.getTypeColor(((TypedItem) item).type());
 		} else {
 			if (item.levelKnown && item.level() > 0) {
 				color = ItemSlot.UPGRADED;

@@ -48,7 +48,7 @@ public class MotionBloom extends ConjurerSpell {
 
     @Override
     public void effect(Ballistica trajectory) {
-        if (rank() == 2){
+        if (type() == 2){
             Char ch = Actor.findChar(trajectory.collisionPos);
             if (ch != null && !(ch instanceof Hero) && ch.alignment == Char.Alignment.ALLY){
                 Buff.affect(ch, Haste.class, 5f);
@@ -60,7 +60,7 @@ public class MotionBloom extends ConjurerSpell {
                     && Dungeon.level.traps.get(pos) == null))
                 Dungeon.level.plant(new Swiftthistle.Seed(), pos);
         }
-        Buff.affect(Dungeon.hero, FlowersCD.class, cooldown(rank()));
+        Buff.affect(Dungeon.hero, FlowersCD.class, cooldown(type()));
     }
 
     private int cooldown(int rank){
@@ -77,8 +77,8 @@ public class MotionBloom extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost(int rank) {
-        switch (rank){
+    public int manaCost(int type) {
+        switch (type){
             case 1: return 10;
             case 2: return 13;
             case 3: return 25;
@@ -96,12 +96,12 @@ public class MotionBloom extends ConjurerSpell {
     }
 
     public String spellDesc() {
-        return Messages.get(this, "desc" + (rank() == 2 ? "2" : ""), cooldown(rank()));
+        return Messages.get(this, "desc" + (type() == 2 ? "2" : ""), cooldown(type()));
     }
 
     @Override
-    public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank" + (rank == 2 ? "2" : ""), cooldown(rank));
+    public String spellTypeMessage(int type) {
+        return Messages.get(this, "type" + (type == 2 ? "2" : ""), cooldown(type));
     }
 
 }

@@ -39,7 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
@@ -56,7 +56,7 @@ import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
 
-public abstract class ConjurerSpell extends Item implements Rankable, ManaSource {
+public abstract class ConjurerSpell extends Item implements TypedItem, ManaSource {
 
     public enum Alignment {
         OFFENSIVE, BENEFICIAL, NEUTRAL
@@ -104,32 +104,32 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
     }
 
     @Override
-    public int rank() {
+    public int type() {
         return level()+1;
     }
 
     @Override
-    public void rank(int rank) {
-        level(rank-1);
+    public void type(int type) {
+        level(type -1);
     }
 
     public int manaCost() {
-        int manaCost = manaCost(rank());
+        int manaCost = manaCost(type());
         if (Dungeon.hero != null && Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.pointsInTalent(Talent.MALICE) > 3){
             manaCost *= 0.67f;
         }
         return manaCost;
     }
 
-    public int manaCost(int rank){
+    public int manaCost(int type){
         return 0;
     }
 
     public Alignment alignment(){
-        return alignment(rank());
+        return alignment(type());
     }
 
-    public Alignment alignment(int rank){
+    public Alignment alignment(int type){
         return alignment;
     }
 
@@ -267,19 +267,19 @@ public abstract class ConjurerSpell extends Item implements Rankable, ManaSource
     }
 
     @Override
-    public String getRankMessage(int rank) {
-        String message = Messages.get(this, "mana_cost", manaCost(rank)) + "\n" + spellRankMessage(rank);
-        if (!empowermentRankDesc(rank).startsWith("!!") && Dungeon.hero != null && Dungeon.hero.armorAbility instanceof Ascension)
-            message += "\n\n" + empowermentRankDesc(rank);
+    public String getTypeMessage(int type) {
+        String message = Messages.get(this, "mana_cost", manaCost(type)) + "\n" + spellTypeMessage(type);
+        if (!empowermentTypeDesc(type).startsWith("!!") && Dungeon.hero != null && Dungeon.hero.armorAbility instanceof Ascension)
+            message += "\n\n" + empowermentTypeDesc(type);
         return message;
     }
 
-    public String spellRankMessage(int rank){
-        return Messages.get(this, "rank" + rank);
+    public String spellTypeMessage(int type){
+        return Messages.get(this, "type" + type);
     }
 
-    public String empowermentRankDesc(int rank){
-        return Messages.get(this, "rank_empower");
+    public String empowermentTypeDesc(int type){
+        return Messages.get(this, "type_empower");
     }
 
     private  static CellSelector.Listener targeter = new  CellSelector.Listener(){

@@ -57,7 +57,7 @@ public abstract class DamageWand extends Wand implements DamageSource {
 	}
 
 	public int damageRoll(float lvl){
-		int dmg = Hero.heroDamageIntRange((int) (magicMin(lvl)*powerModifier(rank())), (int) (magicMax(lvl)*powerModifier(rank())));
+		int dmg = Hero.heroDamageIntRange((int) (magicMin(lvl)*powerModifier(type())), (int) (magicMax(lvl)*powerModifier(type())));
 		WandEmpower emp = Dungeon.hero.buff(WandEmpower.class);
 		if (emp != null){
 			dmg += emp.dmgBoost;
@@ -84,13 +84,13 @@ public abstract class DamageWand extends Wand implements DamageSource {
 	}
 
     @Override
-    public String generalRankDescription(int rank){
-        return Messages.get(this, "rank" + rank,
+    public String generalTypeDescription(int type){
+        return Messages.get(this, "type" + type,
                 GameMath.printAverage(
-                        Math.round(magicMin(power())*powerModifier(rank)),
-                        Math.round(magicMax(power())*powerModifier(rank))
+                        Math.round(magicMin(power())*powerModifier(type)),
+                        Math.round(magicMax(power())*powerModifier(type))
                 ),
-                getRechargeInfo(rank)
+                getRechargeInfo(type)
         );
     }
 

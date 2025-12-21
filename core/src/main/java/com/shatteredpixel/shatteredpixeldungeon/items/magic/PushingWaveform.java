@@ -85,7 +85,7 @@ public class PushingWaveform extends ConjurerSpell {
                 Ballistica trajectory = new Ballistica(Dungeon.hero.pos, ch.pos, Ballistica.STOP_TARGET);
                 //trim it to just be the part that goes past them
                 trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size() - 1), Ballistica.FRIENDLY_PROJECTILE);
-                WandOfBlastWave.throwChar(ch, trajectory, 3 + rank(), true, true, this);
+                WandOfBlastWave.throwChar(ch, trajectory, 3 + type(), true, true, this);
                 Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
                 if (isEmpowered()){
                     Buff.affect(ch, SoulParalysis.class, 3f);
@@ -118,12 +118,12 @@ public class PushingWaveform extends ConjurerSpell {
         //need to perform flame spread logic here so we can determine what cells to put flames in.
 
         // unlimited distance
-        int d = 5 + rank()*2;
+        int d = 5 + type()*2;
         int dist = Math.min(bolt.dist, d);
 
         cone = new ConeAOE( bolt,
                 d,
-                (float) (Math.pow(2, rank()-1)*90),
+                (float) (Math.pow(2, type()-1)*90),
                 Ballistica.STOP_SOLID);
 
         //cast to cells at the tip, rather than all cells, better performance.
@@ -147,8 +147,8 @@ public class PushingWaveform extends ConjurerSpell {
     }
 
     @Override
-    public int manaCost(int rank) {
-        switch (rank){
+    public int manaCost(int type) {
+        switch (type){
             case 1: return 5;
             case 2: return 9;
             case 3: return 16;
@@ -158,12 +158,12 @@ public class PushingWaveform extends ConjurerSpell {
 
     @Override
     public String spellDesc() {
-        return Messages.get(this, "desc", 5 + rank()*3);
+        return Messages.get(this, "desc", 5 + type()*3);
     }
 
     @Override
-    public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", 3 + rank, 5 + rank*2, (int)(Math.pow(2, rank-1)*90));
+    public String spellTypeMessage(int type) {
+        return Messages.get(this, "type", 3 + type, 5 + type *2, (int)(Math.pow(2, type -1)*90));
     }
 
 }

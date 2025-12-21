@@ -29,7 +29,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Daze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class ThrowingHammer extends MissileWeapon {
@@ -49,14 +48,14 @@ public class ThrowingHammer extends MissileWeapon {
     @Override
     public float castDelay(Char user, int cell) {
         float delay = super.castDelay(user, cell);
-        if (rank() == 3) {
+        if (type() == 3) {
             delay /= 3f;
         }
         return delay;
     }
 
-    public float min(float lvl, int rank) {
-        switch (rank){
+    public float min(float lvl, int type) {
+        switch (type){
             case 1: return 4 + lvl;
             case 2: return 1 + lvl*0.4f;
             case 3: return 0 + lvl*0.2f;
@@ -64,8 +63,8 @@ public class ThrowingHammer extends MissileWeapon {
         return 0;
     }
 
-    public float max(float lvl, int rank) {
-        switch (rank){
+    public float max(float lvl, int type) {
+        switch (type){
             case 1: return 8 + lvl*3.5f;
             case 2: return 5 + lvl*2.5f;
             case 3: return 3 + lvl*1.75f;
@@ -73,8 +72,8 @@ public class ThrowingHammer extends MissileWeapon {
         return 0;
     }
 
-    public float baseUses(float lvl, int rank){
-        switch (rank){
+    public float baseUses(float lvl, int type){
+        switch (type){
             case 1: return 12 + lvl*2.5f;
             case 2: return 16 + lvl*3.25f;
             case 3: return 20 + lvl*4f;
@@ -84,10 +83,10 @@ public class ThrowingHammer extends MissileWeapon {
 
     @Override
     public int proc(Char attacker, Char defender, int damage) {
-        if (rank() == 2){
+        if (type() == 2){
             Buff.affect(defender, Daze.class, 5f);
         }
-        if (rank() == 3){
+        if (type() == 3){
             Buff.prolong(defender, Paralysis.class, 2f);
             damage += defender.drRoll();
         }

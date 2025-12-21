@@ -40,7 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.S
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
-import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -67,7 +67,7 @@ import com.watabou.utils.Reflection;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-public class SpiritBow extends Weapon implements Rankable {
+public class SpiritBow extends Weapon implements TypedItem {
 	
 	public static final String AC_SHOOT		= "SHOOT";
 	
@@ -158,7 +158,7 @@ public class SpiritBow extends Weapon implements Rankable {
 			info += " " + Messages.get(Weapon.class, "too_heavy");
 		} else if (Dungeon.hero.STR() > STRReq()){
 			int strBoost = Dungeon.hero.STR() - STRReq();
-			if (rank() == 3){
+			if (type() == 3){
 				strBoost *= 2;
 			}
 			info += " " + Messages.get(Weapon.class, "excess_str", strBoost);
@@ -196,13 +196,13 @@ public class SpiritBow extends Weapon implements Rankable {
 	}
 
 	@Override
-	public int rank() {
-		return rank;
+	public int type() {
+		return type;
 	}
 
 	@Override
-	public void rank(int rank) {
-		this.rank = rank;
+	public void type(int type) {
+		this.type = type;
 	}
 
 	@Override
@@ -217,14 +217,14 @@ public class SpiritBow extends Weapon implements Rankable {
 
     @Override
 	public int min(int lvl) {
-		return minRanked(rank());
+		return minTyped(type());
 	}
 
-	private int minRanked(int rank) {
+	private int minTyped(int type) {
 		int dmg = 1 + Dungeon.hero.lvl/5
 				+ RingOfSharpshooting.levelDamageBonus(Dungeon.hero)
 				+ (curseInfusionBonus ? 1 + Dungeon.hero.lvl/30 : 0);
-		switch (rank){
+		switch (type){
 			case 2:
 				dmg = 1 + Dungeon.hero.lvl/8
 						+ (int)(RingOfSharpshooting.levelDamageBonus(Dungeon.hero)*0.75f)
@@ -239,14 +239,14 @@ public class SpiritBow extends Weapon implements Rankable {
 
 	@Override
 	public int max(int lvl) {
-		return maxRanked(rank());
+		return maxTyped(type());
 	}
 
-	private int maxRanked(int rank) {
+	private int maxTyped(int type) {
 		int dmg = 6 + (int)(Dungeon.hero.lvl/2.5f)
 				+ 2*RingOfSharpshooting.levelDamageBonus(Dungeon.hero)
 				+ (curseInfusionBonus ? 2 + Dungeon.hero.lvl/15 : 0);
-		switch (rank){
+		switch (type){
 			case 2:
 				dmg = 5 + (int)(Dungeon.hero.lvl/3.75f
 						+ (1.5f*RingOfSharpshooting.levelDamageBonus(Dungeon.hero))
@@ -272,7 +272,7 @@ public class SpiritBow extends Weapon implements Rankable {
 		
 		if (owner instanceof Hero) {
 			int exStr = ((Hero)owner).STR() - STRReq();
-			if (rank() == 3) exStr *= 2;
+			if (type() == 3) exStr *= 2;
 			if (exStr > 0) {
 				damage += Hero.heroDamageIntRange( 0, exStr );
 			}
@@ -301,8 +301,8 @@ public class SpiritBow extends Weapon implements Rankable {
 		return damage;
 	}
 
-	public float speedMod(int rank){
-		switch (rank){
+	public float speedMod(int type){
+		switch (type){
 			case 1: default:
 				return 1f;
 			case 3:
@@ -325,7 +325,7 @@ public class SpiritBow extends Weapon implements Rankable {
 		} else {
 			delay = super.baseDelay(owner);
 		}
-		return delay / speedMod(rank());
+		return delay / speedMod(type());
 	}
 
 	@Override
@@ -357,10 +357,10 @@ public class SpiritBow extends Weapon implements Rankable {
 	}
 
 	@Override
-	public String getRankMessage(int rank){
-		return Messages.get(this, "rank" + rank,
-				GameMath.printAverage(minRanked(rank), maxRanked(rank)),
-				Math.round(speedMod(rank)*100)
+	public String getTypeMessage(int type){
+		return Messages.get(this, "type" + type,
+				GameMath.printAverage(minTyped(type), maxTyped(type)),
+				Math.round(speedMod(type)*100)
 		);
 	}
 
@@ -444,7 +444,7 @@ public class SpiritBow extends Weapon implements Rankable {
 				e.fillTarget = false;
 				e.pour(LeafParticle.GENERAL, 0.01f);
 				return e;
-			} else if (rank() == 3){
+			} else if (type() == 3){
 				Emitter e = new Emitter();
 				e.pos(5, 5);
 				e.fillTarget = false;
@@ -481,7 +481,7 @@ public class SpiritBow extends Weapon implements Rankable {
 				return Float.POSITIVE_INFINITY;
 			} else {
 				float multiplier = 1f;
-				if (rank() == 3){
+				if (type() == 3){
 					multiplier = 1.25f;
 				}
 				return super.accuracyFactor(owner, target)*multiplier;
@@ -624,7 +624,7 @@ public class SpiritBow extends Weapon implements Rankable {
 		@Override
 		public void onSelect( Integer target ) {
 			if (target != null) {
-				if (rank() == 2){
+				if (type() == 2){
 					Ballistica b = new Ballistica(curUser.pos, target, Ballistica.WONT_STOP);
 					final HashSet<Char> targets = new HashSet<>();
 					Char enemy = SpectralBlades.findChar(b, curUser, 0, targets);

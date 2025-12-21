@@ -323,7 +323,7 @@ public class Potion extends Item {
 				Dungeon.level.pressCell( cell );
 			}
 			Char ch = Actor.findChar(cell);
-			if (ch instanceof GooMinion && ((GooMinion) ch).rank == 2){
+			if (ch instanceof GooMinion && ((GooMinion) ch).type == 2){
 				((GooMinion) ch).infusedPotion = getClass();
 				((GooMinion) ch).potionUses = gooInfuseUses();
 				((GooMinion) ch).potionColor = splashColor();
@@ -412,7 +412,7 @@ public class Potion extends Item {
 		String desc = isKnown() ? super.desc() : Messages.get(this, "unknown_desc");
 		if (Dungeon.hero != null) {
 			for (Item item : Dungeon.hero.belongings) {
-				if (item instanceof GooStaff && ((GooStaff) item).rank() == 2) {
+				if (item instanceof GooStaff && ((GooStaff) item).type() == 2) {
 					desc += "\n\n" + Messages.get(this, "goo_minion_effect");
 					break;
 				}

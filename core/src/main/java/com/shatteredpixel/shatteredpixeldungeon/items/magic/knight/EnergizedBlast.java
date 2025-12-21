@@ -69,7 +69,7 @@ public class EnergizedBlast extends AdHocSpell {
                 CellEmitter.get(pos).burst(MagicMissile.WhiteParticle.FACTORY, 12);
                 Char ch = Actor.findChar(pos);
                 if (ch != null && ch != Dungeon.hero){
-                    ch.damage((int) (Bomb.damageRoll()*damage(rank())), clone);
+                    ch.damage((int) (Bomb.damageRoll()*damage(type())), clone);
                     Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
                 }
             }
@@ -89,8 +89,8 @@ public class EnergizedBlast extends AdHocSpell {
     }
 
     @Override
-    public int manaCost(int rank) {
-        switch (rank){
+    public int manaCost(int type) {
+        switch (type){
             case 1: return 30;
             case 2: return 18;
             case 3: return 10;
@@ -99,11 +99,11 @@ public class EnergizedBlast extends AdHocSpell {
     }
 
     public String spellDesc() {
-        return Messages.get(this, "desc", GameMath.printAverage((int)(damage(rank())*Bomb.minDamage()), (int)(damage(rank())*Bomb.maxDamage())));
+        return Messages.get(this, "desc", GameMath.printAverage((int)(damage(type())*Bomb.minDamage()), (int)(damage(type())*Bomb.maxDamage())));
     }
 
     @Override
-    public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank", GameMath.printAverage((int)(damage(rank)*Bomb.minDamage()), (int)(damage(rank)*Bomb.maxDamage())));
+    public String spellTypeMessage(int type) {
+        return Messages.get(this, "type", GameMath.printAverage((int)(damage(type)*Bomb.minDamage()), (int)(damage(type)*Bomb.maxDamage())));
     }
 }

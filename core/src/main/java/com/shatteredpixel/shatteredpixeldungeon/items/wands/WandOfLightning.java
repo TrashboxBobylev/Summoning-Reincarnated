@@ -81,35 +81,35 @@ public class WandOfLightning extends DamageWand {
 
     @Override
     public float timeToZap() {
-        if (rank() == 2){
+        if (type() == 2){
             return 5f;
         }
         return super.timeToZap();
     }
 
     @Override
-    public float powerModifier(int rank) {
-        switch (rank){
+    public float powerModifier(int type) {
+        switch (type){
             case 1: return 1.0f;
             case 2: return 4.5f;
             case 3: return 0.66f;
         }
-        return super.powerModifier(rank);
+        return super.powerModifier(type);
     }
 
     @Override
-    public float rechargeModifier(int rank) {
-        switch (rank){
+    public float rechargeModifier(int type) {
+        switch (type){
             case 1: return 1.0f;
             case 2: return 3f;
             case 3: return 1.5f;
         }
-        return super.rechargeModifier(rank);
+        return super.rechargeModifier(type);
     }
 
     @Override
     public int collisionProperties(int target) {
-        if (rank() == 2){
+        if (type() == 2){
             return Ballistica.STOP_TARGET;
         }
         return super.collisionProperties(target);
@@ -121,14 +121,14 @@ public class WandOfLightning extends DamageWand {
 		for (Char ch : affected.toArray(new Char[0])){
 			if (ch != curUser && ch.alignment == curUser.alignment && ch.pos != bolt.collisionPos){
 				affected.remove(ch);
-			} else if (ch.buff(LightningCharge.class) != null && ch.buff(LightningCharge.class).rank == 1){
+			} else if (ch.buff(LightningCharge.class) != null && ch.buff(LightningCharge.class).effectType == 1){
 				affected.remove(ch);
 			}
 		}
 
 		//lightning deals less damage per-target, the more targets that are hit.
         float[] ratios = new float[]{0.4f, 0.6f};
-        switch (rank()){
+        switch (type()){
             case 2:
                 ratios[0] = 0.9f;
                 ratios[1] = 0.1f;
@@ -136,7 +136,7 @@ public class WandOfLightning extends DamageWand {
         }
 		float multiplier = ratios[0] + (ratios[1]/affected.size());
 		//if the main target is in water, all affected take full damage
-		if ((Dungeon.level.water[bolt.collisionPos] || rank() == 3) && rank() != 2) multiplier = 1f;
+		if ((Dungeon.level.water[bolt.collisionPos] || type() == 3) && type() != 2) multiplier = 1f;
 
 		for (Char ch : affected){
 			if (!(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))) {
@@ -156,7 +156,7 @@ public class WandOfLightning extends DamageWand {
 				} else {
 					ch.damage(Math.round(damageRoll() * multiplier), this);
 				}
-                if (rank() == 3){
+                if (type() == 3){
                     Buff.affect(ch, Paralysis.class, 2f);
                     if (!ch.isAlive()){
                         GameScene.add(Blob.seed(ch.pos, 5, Electricity.class));
@@ -177,7 +177,7 @@ public class WandOfLightning extends DamageWand {
 
 			float powerMulti = Math.min(1f, procChance);
 
-			FlavourBuff.prolong(attacker, LightningCharge.class, powerMulti*LightningCharge.DURATION).rank = rank();
+			FlavourBuff.prolong(attacker, LightningCharge.class, powerMulti*LightningCharge.DURATION).effectType = type();
 			attacker.sprite.centerEmitter().burst( SparkParticle.FACTORY, 10 );
 			attacker.sprite.flash();
 			Sample.INSTANCE.play( Assets.Sounds.LIGHTNING );
@@ -203,12 +203,12 @@ public class WandOfLightning extends DamageWand {
 			icon.hardlight(1, 1, 0);
 		}
 
-        public int rank = 1;
+        public int effectType = 1;
 
         @Override
         public HashSet<Class> immunities() {
             HashSet<Class> immunitiesList = super.immunities();
-            if (rank == 3){
+            if (effectType == 3){
                 immunitiesList.add(WandOfLightning.class);
                 immunitiesList.add(Electricity.class);
                 immunitiesList.add(Elemental.ShockElemental.class);
@@ -218,35 +218,35 @@ public class WandOfLightning extends DamageWand {
 
         @Override
         public String desc() {
-            return Messages.get(this, "desc" + rank, dispTurns());
+            return Messages.get(this, "desc" + effectType, dispTurns());
         }
 
-        private static final String RANK = "rank";
+        private static final String RANK = "type";
 
         @Override
         public void storeInBundle(Bundle bundle) {
             super.storeInBundle(bundle);
-            bundle.put(RANK, rank);
+            bundle.put(RANK, effectType);
         }
 
         @Override
         public void restoreFromBundle(Bundle bundle) {
             super.restoreFromBundle(bundle);
-            rank = bundle.getInt(RANK);
+            effectType = bundle.getInt(RANK);
         }
     }
 
 	private void arc( Char ch ) {
 
 		int dist = Dungeon.level.water[ch.pos] ? 2 : 1;
-        if (rank() == 3){
+        if (type() == 3){
             dist *= 2;
         }
-        if (rank() == 2){
+        if (type() == 2){
             dist = 1;
         }
 
-		if (curUser.buff(LightningCharge.class) != null && curUser.buff(LightningCharge.class).rank == 1){
+		if (curUser.buff(LightningCharge.class) != null && curUser.buff(LightningCharge.class).effectType == 1){
 			dist++;
 		}
 
@@ -267,7 +267,7 @@ public class WandOfLightning extends DamageWand {
 		affected.addAll(hitThisArc);
 		for (Char hit : hitThisArc){
 			arcs.add(new Lightning.Arc(ch.sprite.center(), hit.sprite.center()));
-            if (rank() != 2)
+            if (type() != 2)
 			    arc(hit);
 		}
 	}
@@ -280,7 +280,7 @@ public class WandOfLightning extends DamageWand {
 
 		int cell = bolt.collisionPos;
         PointF source = curUser.sprite.center();
-        if (rank() == 2){
+        if (type() == 2){
             source = DungeonTilemap.raisedTileCenterToWorld(cell);
             source.y -= source.y*5;
         }
@@ -292,7 +292,7 @@ public class WandOfLightning extends DamageWand {
 			}
 
 			affected.add( ch );
-            if (rank() == 2){
+            if (type() == 2){
                 for (int i = 0; i < 5; i++){
                     PointF dest = ch.sprite.center();
                     dest.x += Random.Int(-4, 4);
@@ -303,7 +303,7 @@ public class WandOfLightning extends DamageWand {
             }
 			arc(ch);
 		} else {
-            if (rank() == 2){
+            if (type() == 2){
                 for (int i = 0; i < 5; i++){
                     PointF dest = DungeonTilemap.raisedTileCenterToWorld(bolt.collisionPos);
                     dest.x += Random.Int(-4, 4);
@@ -315,7 +315,7 @@ public class WandOfLightning extends DamageWand {
 			CellEmitter.center( cell ).burst( SparkParticle.FACTORY, 3 );
 		}
 
-        if (rank() == 2){
+        if (type() == 2){
             curUser.sprite.parent.add(new Lightning(cell - 1, cell + 1, null));
             curUser.sprite.parent.add(new Lightning(cell - Dungeon.level.width(), cell + Dungeon.level.width(), null));
             curUser.sprite.parent.add(new Lightning(cell - 1 - Dungeon.level.width(), cell + 1 + Dungeon.level.width(), null));
@@ -324,7 +324,7 @@ public class WandOfLightning extends DamageWand {
 
 		//don't want to wait for the effect before processing damage.
 		curUser.sprite.parent.addToFront( new Lightning( arcs, null ) );
-		Sample.INSTANCE.play( rank() == 2 ? Assets.Sounds.LIGHTNING_BOLT : Assets.Sounds.LIGHTNING );
+		Sample.INSTANCE.play( type() == 2 ? Assets.Sounds.LIGHTNING_BOLT : Assets.Sounds.LIGHTNING );
 		callback.call();
 	}
 

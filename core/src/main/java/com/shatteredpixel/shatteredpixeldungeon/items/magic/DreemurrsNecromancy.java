@@ -51,15 +51,15 @@ public class DreemurrsNecromancy extends ConjurerSpell {
         if (ch != null && ch.isAlive() && ch.alignment != Char.Alignment.NEUTRAL && !(ch instanceof Hero)){
             Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
             ch.sprite.emitter().burst(Speck.factory(Speck.STEAM), 20);
-            Buff.affect(ch, NecromancyStat.class).level = rank();
+            Buff.affect(ch, NecromancyStat.class).level = type();
 
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
         }
     }
 
     @Override
-    public int manaCost(int rank) {
-        switch (rank){
+    public int manaCost(int type) {
+        switch (type){
             case 1: return 8;
             case 2: return 16;
             case 3: return 0;
@@ -92,12 +92,12 @@ public class DreemurrsNecromancy extends ConjurerSpell {
 
     @Override
     public String spellDesc() {
-        return Messages.get(this, "desc" + (rank() == 3 ? "3" : ""), new DecimalFormat("#.##").format(passiveManaDrain(rank())), new DecimalFormat("#.##").format(activeManaDrain(rank())));
+        return Messages.get(this, "desc" + (type() == 3 ? "3" : ""), new DecimalFormat("#.##").format(passiveManaDrain(type())), new DecimalFormat("#.##").format(activeManaDrain(type())));
     }
 
     @Override
-    public String spellRankMessage(int rank) {
-        return Messages.get(this, "rank" + (rank == 3 ? "3" : ""), new DecimalFormat("#.##").format(passiveManaDrain(rank)), new DecimalFormat("#.##").format(activeManaDrain(rank)));
+    public String spellTypeMessage(int type) {
+        return Messages.get(this, "type" + (type == 3 ? "3" : ""), new DecimalFormat("#.##").format(passiveManaDrain(type)), new DecimalFormat("#.##").format(activeManaDrain(type)));
     }
 
 }

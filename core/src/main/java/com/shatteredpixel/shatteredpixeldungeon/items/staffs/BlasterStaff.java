@@ -39,18 +39,18 @@ public class BlasterStaff extends StationaryStaff {
 
     @Override
     public int getChargeTurns() {
-        if (rank == 3)
+        if (type == 3)
             return 700;
         return super.getChargeTurns();
     }
 
     @Override
-    public int maxActions(int rank) {
-        switch (rank){
+    public int maxActions(int type) {
+        switch (type){
             case 1: return 18;
             case 2: return 50;
             case 3: return 12;
         }
-        return super.maxActions(rank);
+        return super.maxActions(type);
     }
 }

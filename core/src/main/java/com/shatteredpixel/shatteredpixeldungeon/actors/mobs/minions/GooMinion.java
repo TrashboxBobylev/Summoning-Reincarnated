@@ -78,7 +78,7 @@ public class GooMinion extends Minion {
     }
 
     private int chargeTurns(){
-        switch (rank){
+        switch (type){
             case 1: return 2;
             case 2: return 1;
             case 3: return 2;
@@ -131,7 +131,7 @@ public class GooMinion extends Minion {
             return true;
         }
         else {
-            if (Random.Int(3) <= 1 && rank != 3)
+            if (Random.Int(3) <= 1 && type != 3)
                 return super.doAttack(enemy);
             else {
                 pumpedUp = chargeTurns();
@@ -152,7 +152,7 @@ public class GooMinion extends Minion {
     public void elementalAttack(){
         pumpedUp = 0;
         int min = 0, max = 0;
-        switch (rank) {
+        switch (type) {
             case 1:
                 min = Math.round(minDamage*1.5f);
                 max = Math.round(maxDamage*1.5f);
@@ -176,7 +176,7 @@ public class GooMinion extends Minion {
 
                 Char ch = Actor.findChar(i);
                 if (ch != null) {
-                    if (rank != 2) {
+                    if (type != 2) {
                         if (ch.alignment == Alignment.ENEMY)
                             ch.damage(Random.NormalIntRange(min, max), Dungeon.hero);
                     }
@@ -201,21 +201,21 @@ public class GooMinion extends Minion {
                 ((GooMinionSprite)sprite).spray(potionColor);
             }
         }
-        if (rank == 3){
+        if (type == 3){
             die(null);
         }
     }
 
     private int elementalRange() {
         int range = 2;
-        if (rank == 2)
+        if (type == 2)
             range = 3;
         return range;
     }
 
     @Override
     public String description() {
-        if (rank == 2 && infusedPotion != null){
+        if (type == 2 && infusedPotion != null){
             return super.description() + "\n\n" +
                     Messages.get(this, "potion_desc",
                             Reflection.newInstance(infusedPotion).name(),
@@ -247,7 +247,7 @@ public class GooMinion extends Minion {
 
     @Override
     public void damage(int dmg, DamageSource src) {
-        if (rank == 3){
+        if (type == 3){
             dmg /= 10;
         } else {
             if (!(src.hasProperty(DamageProperty.DEFERRED))) {

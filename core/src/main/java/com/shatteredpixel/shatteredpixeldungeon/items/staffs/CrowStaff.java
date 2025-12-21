@@ -51,7 +51,7 @@ public class CrowStaff extends Staff {
 
     @Override
     public int getChargeTurns() {
-        switch (rank()) {
+        switch (type()) {
             case 2:
                 return 200;
             case 3:
@@ -62,7 +62,7 @@ public class CrowStaff extends Staff {
 
     @Override
     public Minion.BehaviorType defaultBehaviorType() {
-        if (rank() == 2){
+        if (type() == 2){
             return Minion.BehaviorType.PASSIVE;
         }
         return super.defaultBehaviorType();
@@ -70,7 +70,7 @@ public class CrowStaff extends Staff {
 
     @Override
     public Minion.BehaviorType[] availableBehaviorTypes() {
-        if (rank() == 2){
+        if (type() == 2){
             return new Minion.BehaviorType[]{Minion.BehaviorType.PASSIVE};
         }
         return super.availableBehaviorTypes();
@@ -78,7 +78,7 @@ public class CrowStaff extends Staff {
 
     @Override
     public void customizeMinion(Minion minion) {
-        if (rank() == 2){
+        if (type() == 2){
             minion.behaviorType = Minion.BehaviorType.PASSIVE;
             minion.viewDistance = 5;
         }
@@ -86,7 +86,7 @@ public class CrowStaff extends Staff {
 
     @Override
     public void execute(Hero hero, String action) {
-        if (action.equals(AC_BEHAVIOR) && rank() == 2){
+        if (action.equals(AC_BEHAVIOR) && type() == 2){
             if (minion != null){
                 GameScene.selectCell(minionDirector);
             }
@@ -97,7 +97,7 @@ public class CrowStaff extends Staff {
 
     @Override
     protected String statsDesc() {
-        return super.statsDesc() + "\n" + Messages.get(this, "stats_desc" + rank() );
+        return super.statsDesc() + "\n" + Messages.get(this, "stats_desc" + type() );
     }
 
     public CellSelector.Listener minionDirector = new CellSelector.Listener(){

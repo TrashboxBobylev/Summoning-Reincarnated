@@ -40,7 +40,7 @@ public class Froggit extends Minion {
     @Override
     public float attackDelay() {
         float attackMod = 1f;
-        if (rank == 2)
+        if (type == 2)
             attackMod = 0.25f;
         return super.attackDelay()*attackMod;
     }
@@ -48,16 +48,16 @@ public class Froggit extends Minion {
     @Override
     public float speed() {
         float speedMod = 1f;
-        if (rank == 3)
+        if (type == 3)
             speedMod = 4f;
         return super.speed()*speedMod;
     }
 
     @Override
     public int attackProc(Char enemy, int damage) {
-        if (rank == 2)
+        if (type == 2)
             damage += enemy.drRoll();
-        if (rank == 3){
+        if (type == 3){
             if (++counter == 3){
                 counter = 0;
                 Dungeon.hero.changeMana(1);
@@ -82,7 +82,7 @@ public class Froggit extends Minion {
 
     @Override
     public float targetPriority() {
-        if (rank == 3)
+        if (type == 3)
             return super.targetPriority()*0.5f;
         return super.targetPriority();
     }

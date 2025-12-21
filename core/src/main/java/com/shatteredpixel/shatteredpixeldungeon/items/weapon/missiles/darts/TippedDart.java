@@ -71,7 +71,7 @@ public abstract class TippedDart extends Dart {
 	}
 
     @Override
-    public float baseUses(float lvl, int rank) {
+    public float baseUses(float lvl, int type) {
         return 1;
     }
 
@@ -136,7 +136,7 @@ public abstract class TippedDart extends Dart {
 			//attempt to stick the dart to the enemy, just drop it if we can't.
 			Dart d = new Dart();
 			d.quantity(1);
-            d.rank(rank());
+            d.type(type());
 			Catalog.countUse(getClass());
 			if (sticky && enemy != null && enemy.isAlive() && enemy.alignment != Char.Alignment.ALLY){
 				PinCushion p = Buff.affect(enemy, PinCushion.class);

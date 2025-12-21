@@ -367,7 +367,7 @@ public class Ghost extends NPC {
 				}
 				weapon.upgrade(itemLevel);
 				armor.upgrade(itemLevel);
-				staff.rank(Random.IntRange(1, 3));
+				staff.type(Random.IntRange(1, 3));
 
 				// 20% base chance to be enchanted, stored separately so status isn't revealed early
 				//we generate first so that the outcome doesn't affect the number of RNG rolls

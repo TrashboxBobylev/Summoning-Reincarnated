@@ -82,12 +82,12 @@ public class Dart extends MissileWeapon {
 	}
 
     @Override
-    public float baseUses(float lvl, int rank) {
+    public float baseUses(float lvl, int type) {
         return 1000;
     }
 
     @Override
-	public float min(float lvl, int rank) {
+	public float min(float lvl, int type) {
         float damage;
 		if (bow != null){
 			if (!(this instanceof TippedDart) && Dungeon.hero.buff(Crossbow.ChargedShot.class) != null){
@@ -102,7 +102,7 @@ public class Dart extends MissileWeapon {
 			damage = 1 +     //1 base, down from 2
 					lvl/2f;    //scaling unchanged
 		}
-        switch (rank){
+        switch (type){
             case 2: damage *= 3;
             case 3: damage *= 0.6f;
         }
@@ -110,7 +110,7 @@ public class Dart extends MissileWeapon {
 	}
 
 	@Override
-    public float max(float lvl, int rank) {
+    public float max(float lvl, int type) {
         float damage;
 		if (bow != null){
 			if (!(this instanceof TippedDart) && Dungeon.hero.buff(Crossbow.ChargedShot.class) != null){
@@ -125,7 +125,7 @@ public class Dart extends MissileWeapon {
 			damage = 2 +     //2 base, down from 5
 					1.5f*lvl;  //scaling unchanged
 		}
-        switch (rank){
+        switch (type){
             case 2: damage *= 2;
             case 3: damage *= 0.4f;
         }
@@ -142,8 +142,8 @@ public class Dart extends MissileWeapon {
     }
 
     @Override
-    public String missileDescription(int rank) {
-        return Messages.get(this, "missile_desc" + rank, (int)(powerMultiplier(rank)*100), throwSpeed(rank));
+    public String missileDescription(int type) {
+        return Messages.get(this, "missile_desc" + type, (int)(powerMultiplier(type)*100), throwSpeed(type));
     }
 
     protected static Crossbow bow;
@@ -180,10 +180,10 @@ public class Dart extends MissileWeapon {
 		if (bow != null && owner.buff(Crossbow.ChargedShot.class) != null){
 			return Char.INFINITE_ACCURACY;
 		} else {
-            if (rank() == 2){
+            if (type() == 2){
                 return super.accuracyFactor(owner, target)*3;
             }
-            if (rank() == 3){
+            if (type() == 3){
                 return Char.INFINITE_ACCURACY;
             }
 			return super.accuracyFactor(owner, target);
@@ -228,7 +228,7 @@ public class Dart extends MissileWeapon {
 
     @Override
     public float castDelay(Char user, int cell) {
-        return super.castDelay(user, cell)*throwSpeed(rank());
+        return super.castDelay(user, cell)*throwSpeed(type());
     }
 
     protected boolean processingChargedShot = false;

@@ -38,7 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Pylon;
 import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.Rankable;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
@@ -772,7 +772,7 @@ public class WndJournal extends WndTabbed {
 					}
 				}
 
-				if (item instanceof Rankable && seen)
+				if (item instanceof TypedItem && seen)
 					rankedItem = item.getClass();
 
 				sprite = new ItemSprite(item.image, seen ? item.glowing() : null);

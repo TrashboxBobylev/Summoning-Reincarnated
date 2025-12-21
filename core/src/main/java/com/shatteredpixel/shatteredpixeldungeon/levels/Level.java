@@ -1465,7 +1465,7 @@ public abstract class Level implements Bundlable {
 				}
                 if (((Hero) c).subClass == HeroSubClass.BATTLEMAGE &&
                         ((Hero) c).belongings.weapon() instanceof WandOfPrismaticLight &&
-                        ((WandOfPrismaticLight) ((Hero) c).belongings.weapon()).rank() == 2){
+                        ((WandOfPrismaticLight) ((Hero) c).belongings.weapon()).type() == 2){
                     mindVisRange += 2;
                 }
 				mindVisRange = Math.max(mindVisRange, EyeOfNewt.mindVisionRange());
@@ -1537,7 +1537,7 @@ public abstract class Level implements Bundlable {
 				if (m instanceof WandOfWarding.Ward
 						|| m instanceof WandOfRegrowth.Lotus
 						|| m instanceof SpiritHawk.HawkAlly
-						|| (m instanceof Crow && ((Crow) m).rank == 2)
+						|| (m instanceof Crow && ((Crow) m).type == 2)
 						|| m.buff(PowerOfMany.PowerBuff.class) != null){
 					if (m.fieldOfView == null || m.fieldOfView.length != length()){
 						m.fieldOfView = new boolean[length()];

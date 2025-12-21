@@ -38,8 +38,8 @@ public class Javelin extends MissileWeapon {
 		hitSoundPitch = 1f;
 	}
 
-    public float min(float lvl, int rank) {
-        switch (rank){
+    public float min(float lvl, int type) {
+        switch (type){
             case 1: return 4 + lvl;
             case 2: return 3 + lvl*0.67f;
             case 3: return 8 + lvl*2;
@@ -47,8 +47,8 @@ public class Javelin extends MissileWeapon {
         return 0;
     }
 
-    public float max(float lvl, int rank) {
-        switch (rank){
+    public float max(float lvl, int type) {
+        switch (type){
             case 1: return 10 + lvl*4.5f;
             case 2: return 7 + lvl*3;
             case 3: return 20 + lvl*6;
@@ -56,8 +56,8 @@ public class Javelin extends MissileWeapon {
         return 0;
     }
 
-    public float baseUses(float lvl, int rank){
-        switch (rank){
+    public float baseUses(float lvl, int type){
+        switch (type){
             case 1: return 8 + lvl*1.75f;
             case 2: return 6 + lvl*1.5f;
             case 3: return 3 + lvl*0.5f;
@@ -68,7 +68,7 @@ public class Javelin extends MissileWeapon {
     @Override
     public float accuracyFactor(Char owner, Char target) {
         float accuracyFactor = super.accuracyFactor(owner, target);
-        if (rank() == 3){
+        if (type() == 3){
             accuracyFactor *= 2f;
         }
         return accuracyFactor;
@@ -77,7 +77,7 @@ public class Javelin extends MissileWeapon {
     @Override
     public float castDelay(Char user, int cell) {
         float delay = super.castDelay(user, cell);
-        if (rank() == 3){
+        if (type() == 3){
             delay *= 3f;
         }
         return delay;
@@ -88,10 +88,10 @@ public class Javelin extends MissileWeapon {
         if (owner instanceof Hero) {
             Hero hero = (Hero)owner;
             Char enemy = hero.attackTarget();
-            if (rank() == 2 && Char.hasProp(enemy, Char.Property.ANIMAL)) {
+            if (type() == 2 && Char.hasProp(enemy, Char.Property.ANIMAL)) {
                 return super.damageRoll(owner)*2;
             }
-            if (rank() == 3 && enemy != null){
+            if (type() == 3 && enemy != null){
                 //as distance increases so does damage, capping at 3x:
                 //1.20x|1.35x|1.52x|1.71x|1.92x|2.16x|2.43x|2.74x|3.00x
                 int distance = Dungeon.level.distance(owner.pos, enemy.pos) - 1;

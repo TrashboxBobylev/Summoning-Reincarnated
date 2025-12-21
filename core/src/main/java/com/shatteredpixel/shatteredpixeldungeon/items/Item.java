@@ -54,7 +54,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
-import com.shatteredpixel.shatteredpixeldungeon.windows.WndRankInfo;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndTypeInfo;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
@@ -121,7 +121,7 @@ public class Item implements Bundlable {
 		ArrayList<String> actions = new ArrayList<>();
 		actions.add( AC_DROP );
 		actions.add( AC_THROW );
-		if (this instanceof Rankable){
+		if (this instanceof TypedItem){
 			actions.add( AC_TIERINFO );
 		}
 		return actions;
@@ -187,7 +187,7 @@ public class Item implements Bundlable {
 			}
 			
 		} else if (action.equals(AC_TIERINFO)) {
-			ShatteredPixelDungeon.runOnRenderThread(() -> Game.scene().addToFront(new WndRankInfo(Item.this)));
+			ShatteredPixelDungeon.runOnRenderThread(() -> Game.scene().addToFront(new WndTypeInfo(Item.this)));
 		}
 	}
 
@@ -518,8 +518,8 @@ public class Item implements Bundlable {
 
 		String name = name();
 
-		if (this instanceof Rankable)
-			name += " " + Rankable.getRankString(((Rankable) this).rank());
+		if (this instanceof TypedItem)
+			name += " " + TypedItem.getTypeString(((TypedItem) this).type());
 		else {
 			if (visiblyUpgraded() != 0)
 				name = Messages.format(TXT_TO_STRING_LVL, name, visiblyUpgraded());

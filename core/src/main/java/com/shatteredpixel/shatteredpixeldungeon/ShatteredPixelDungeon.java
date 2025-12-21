@@ -49,6 +49,11 @@ public class ShatteredPixelDungeon extends Game {
 	public ShatteredPixelDungeon( PlatformSupport platform ) {
 		super( sceneClass == null ? TitleScene.class : sceneClass, platform );
 
+        //renaming rank manager to type manager to reflect new status quo
+        com.watabou.utils.Bundle.addAlias(
+                com.shatteredpixel.shatteredpixeldungeon.items.spells.TypeManager.class,
+                "com.shatteredpixel.shatteredpixeldungeon.items.spells.RankManager" );
+
 		//renaming soul sparking to reflect its in-game name
 		com.watabou.utils.Bundle.addAlias(
 				com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulSparking.class,
