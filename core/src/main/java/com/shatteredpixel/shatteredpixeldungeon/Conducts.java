@@ -69,6 +69,7 @@ public class Conducts {
         },
         CURSE(1.4f, 19),
         SHADOWS(1.4f, 26),
+        HORDES(1.75f, 29),
         ALLSIGHT(1.4f, 20),
         NO_LOOT(2f, 21),
         LIMITED_MONSTERS(1.5f, 22),

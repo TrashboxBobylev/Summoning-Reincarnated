@@ -347,9 +347,9 @@ public abstract class Mob extends Char {
 	}
 
 	public void hordeSpawnAttempt(Level level){
-		if (!hordeSpawned && hordeException() && Random.Int(5) == 0 && !Dungeon.bossLevel() && alignment == Alignment.ENEMY){
+		if (!hordeSpawned && hordeException() && (Random.Int(5) == 0 || Dungeon.isChallenged(Conducts.Conduct.HORDES)) && !Dungeon.bossLevel() && alignment == Alignment.ENEMY){
 
-			int hordeSize = Math.min(3, Random.IntRange(1, Dungeon.depth / 8));
+			int hordeSize = Math.min(Dungeon.isChallenged(Conducts.Conduct.HORDES) ? 4 : 3, Random.IntRange(1, Dungeon.depth / (Dungeon.isChallenged(Conducts.Conduct.HORDES) ? 6 : 8)));
 			for (int i = 0; i < hordeSize; i++) {
 
 				ArrayList<Integer> candidates = new ArrayList<>();
