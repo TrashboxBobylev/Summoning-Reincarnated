@@ -154,6 +154,7 @@ public class FloatingText extends RenderedTextBlock {
     public static int MISS_SHRINK = 126;
     public static int MISS_EXPLORE= 127;
     public static int MISS_WRAITH = 128;
+    public static int MISS_COINFLIP = 129;
 
 	private Image icon;
 	private boolean iconLeft;

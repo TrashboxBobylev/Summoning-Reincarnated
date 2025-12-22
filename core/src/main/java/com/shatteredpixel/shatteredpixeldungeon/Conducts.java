@@ -59,6 +59,7 @@ public class Conducts {
         NO_STR(1.4f, 16),
 //        CHAMPS(1.7f),
         NO_REGEN(1.66f, 18),
+        COINFLIP(1.66f, 30),
         CAPITALISM(1.33f, 27){
             @Override
             public float scoreMod() {

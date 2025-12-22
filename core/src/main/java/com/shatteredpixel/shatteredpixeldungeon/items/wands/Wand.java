@@ -78,6 +78,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
@@ -1058,7 +1059,13 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 						} else {
 							curWand.fx(shot, new Callback() {
 								public void call() {
-									curWand.onZap(shot);
+                                    if (Dungeon.isChallenged(Conducts.Conduct.COINFLIP) && Random.Int(2) == 0){
+                                        PointF point = DungeonTilemap.tileCenterToWorld(shot.collisionPos);
+                                        FloatingText.show( point.x, point.y, shot.collisionPos, curUser.defenseVerb(), CharSprite.NEUTRAL, FloatingText.MISS_COINFLIP, true );
+                                        Buff.detach(curUser, Talent.FightingWizardryTracker.class);
+                                    } else {
+                                        curWand.onZap(shot);
+                                    }
 									wondrousProc(curWand, target);
 								}
 							});

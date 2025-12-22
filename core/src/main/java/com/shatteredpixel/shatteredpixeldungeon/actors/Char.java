@@ -711,6 +711,16 @@ public abstract class Char extends Actor implements ManaSource, DamageSource {
 			((Hero) defender).interrupt();
 		}
 
+        if (Dungeon.isChallenged(Conducts.Conduct.COINFLIP)){
+            if (Random.Int(2) == 0){
+                hitMissIcon = FloatingText.MISS_COINFLIP;
+                return false;
+            } else {
+                hitMissIcon = FloatingText.MISS_COINFLIP;
+                return true;
+            }
+        }
+
 		//invisible chars always hit (for the hero this is surprise attacking)
 		if (attacker.invisible > 0 && attacker.canSurpriseAttack()){
 			acuStat = INFINITE_ACCURACY;
