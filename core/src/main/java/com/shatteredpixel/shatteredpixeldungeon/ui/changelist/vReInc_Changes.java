@@ -87,7 +87,47 @@ public class vReInc_Changes {
     }
 
     public static void add_v0_6_0_Changes( ArrayList<ChangeInfo> changeInfos ){
-        ChangeInfo  changes = new ChangeInfo("vReInc-0.6.1", true, "");
+        ChangeInfo changes = new ChangeInfo("vReInc-0.6.2", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBYLEV), "Developer Commentary",
+                "_-_ Released December 24th, 2025\n" +
+                        "_-_ 47 days after Reincarnated 0.6.1\n" +
+                        "_-_ 123 days after Reincarnated 0.6.0"
+        ));
+
+        changes.addButton(new ChangeButton(Conducts.Conduct.COINFLIP.getIcon(), "New Conducts",
+                "Added two new conducts:\n\n" +
+                        "_-_ _Double or Nothing_ makes all hit checks depend on coin flip, either it hit or it doesn't. This includes wands and surprise attacks.\n" +
+                        "_-_ _Chambers of Gang War_ makes all mobs spawn as horde leaders, creating followers for every foe."
+        ));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.TYPE_MANAGER), "Ranking -> item type",
+                "Changed all mentions of Summoning-exclusive rank system with item type system, therefore rank manager is now type manager and item's ranks are now item's types.\n\n" +
+                        "\"Ranking\" system was initial attempt to distance the gameplay system from word \"tier\", as it was used in Project ECLISE, due to it being already used in Pixel Dungeon as measure for item's power.\n" +
+                        "However, it didn't really do its job, replacing the word with its synonym, therefore still meaning that some \"ranks\" are better than others. But I only realized the extend of this very recently and decided to change the word again.\n" +
+                        "The new term, type, conveys the essence of system far better and still allows for shorthand of T1/T2/T3 to be used (just meaning type 1 instead of tier 1)."
+        ));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+                "_-_ Bosses are now immune to HP reduction effects, like one from Precise Strike talent.\n" +
+                        "_-_ Summoning staffs can now be transmutated.\n" +
+                        "_-_ Removed legacy item type info screen and replaced it with catalog's tabbed representation.\n" +
+                        "_-_ Made minions benefit from Silent Steps talent."
+        ));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "_Fixed the following bugs:_\n" +
+                        "_-_ Corruption missing its deferred damage effect\n" +
+                        "_-_ Crash on using Potion of Mastery on armor\n" +
+                        "_-_ Item typing not being transferred on transmutations\n" +
+                        "_-_ Enemy to ally conversions not actually giving Gauntlet Mode reward\n" +
+                        "_-_ Prison cell room crashing on Project Paradox\n" +
+                        "_-_ Arcane Resin scaling from hero's attunement instead of wand's"
+        ));
+
+        changes = new ChangeInfo("vReInc-0.6.1", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
