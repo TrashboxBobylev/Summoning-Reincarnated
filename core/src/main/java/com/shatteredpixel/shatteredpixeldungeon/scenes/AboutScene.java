@@ -74,7 +74,7 @@ public class AboutScene extends PixelScene {
 				"Developed by: _Trashbox Bobylev_\nThe remaster of original Summoning PD\nBased on ShatteredPD's open source",
 				"reddit.com/u/TrashboxBobylev",
 				"https://reddit.com/u/TrashboxBobylev");
-		tb.setRect((w - fullWidth)/2f, 6, 120, 0);
+		tb.setRect((w - fullWidth)/2f, insets.top + 10, 120, 0);
 		content.add(tb);
 
 		CreditsBlock zachary = new CreditsBlock(false, 0xE8D906,
@@ -174,12 +174,12 @@ public class AboutScene extends PixelScene {
 				"Developed by: _Evan Debenham_\nBased on Pixel Dungeon's open source",
 				"ShatteredPixel.com",
 				"https://ShatteredPixel.com");
-		shpx.setRect((w - fullWidth)/2f, 6, 120, 0);
+		shpx.setRect((w - fullWidth)/2f, libs.bottom()+12, 120, 0);
 		content.add(shpx);
 		if (landscape()){
-			shpx.setRect((w - fullWidth)/2f - 6, insets.top + 10, 120, 0);
+			shpx.setRect((w - fullWidth)/2f - 6, libs.bottom() + 12, 120, 0);
 		} else {
-			shpx.setRect((w - fullWidth)/2f, insets.top + 6, 120, 0);
+			shpx.setRect((w - fullWidth)/2f, libs.bottom() + 12, 120, 0);
 		}
 		content.add(shpx);
 

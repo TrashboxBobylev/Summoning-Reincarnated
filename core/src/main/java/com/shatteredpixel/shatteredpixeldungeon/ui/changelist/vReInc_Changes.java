@@ -124,7 +124,8 @@ public class vReInc_Changes {
                         "_-_ Item typing not being transferred on transmutations\n" +
                         "_-_ Enemy to ally conversions not actually giving Gauntlet Mode reward\n" +
                         "_-_ Prison cell room crashing on Project Paradox\n" +
-                        "_-_ Arcane Resin scaling from hero's attunement instead of wand's"
+                        "_-_ Arcane Resin scaling from hero's attunement instead of wand's\n" +
+                        "_-_ About scene getting completely scrambled"
         ));
 
         changes = new ChangeInfo("vReInc-0.6.1", true, "");
