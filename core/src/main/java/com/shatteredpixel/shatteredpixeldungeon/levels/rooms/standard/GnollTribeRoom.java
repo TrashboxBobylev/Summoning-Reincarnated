@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.TribeGnoll;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -81,7 +82,7 @@ public class GnollTribeRoom extends StandardRoom {
         }
 
         for (int i = 0; i < 3; i++) {
-            Item prize = Generator.random(Generator.Category.MISSILE);
+            Item prize = Challenges.process(Generator.random(Generator.Category.MISSILE));
             level.drop(prize, (center.x + center.y * level.width()));
         }
     }

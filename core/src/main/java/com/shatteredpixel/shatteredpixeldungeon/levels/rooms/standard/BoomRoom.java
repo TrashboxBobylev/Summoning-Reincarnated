@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard;
 
+import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ArcaneBomb;
@@ -127,7 +128,7 @@ public class BoomRoom extends StandardRoom {
                     ArcaneBomb.class,
                     ShrapnelBomb.class
             ));
-            level.drop(prize, dropPos).type = Heap.Type.HEAP;
+            level.drop(Challenges.process(prize), dropPos).type = Heap.Type.HEAP;
             level.map[dropPos] = Terrain.TRAP;
             level.setTrap(new ExplosiveTrap().reveal(), dropPos);
         }
