@@ -381,7 +381,7 @@ public class ScrollOfTransmutation extends InventoryScroll {
 
     private static Staff changeSummon( Staff w ) {
         Staff n;
-        Generator.Category c = Generator.wepTiers[w.tier - 1];
+        Generator.Category c = Generator.staffTiers[w.tier - 1];
 
         do {
             n = (Staff)Generator.randomUsingDefaults(c);
