@@ -165,7 +165,7 @@ public class GoatClone extends NPC implements ManaSource {
             Buff.affect(enemy, Daze.class, 5f);
         }
         if (Dungeon.hero.belongings.weapon != null){
-            return Dungeon.hero.belongings.weapon.proc( enemy, this, damage );
+            return Dungeon.hero.belongings.weapon.proc( this, enemy, damage );
         } else {
             return damage;
         }
