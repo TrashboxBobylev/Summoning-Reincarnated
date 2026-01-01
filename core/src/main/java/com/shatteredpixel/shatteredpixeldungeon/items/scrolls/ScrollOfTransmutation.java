@@ -90,15 +90,15 @@ public class ScrollOfTransmutation extends InventoryScroll {
 		} else if (item instanceof Scroll) {
 			return item != this || item.quantity() > 1 || identifiedByUse;
 
-		//all non-unique artifacts (no holy tome or cloak of shadows, basically)
-		} else if (item instanceof Artifact) {
-			return !item.unique;
+		//all non-unique artifacts or staffs (no holy tome, frog staff or cloak of shadows, basically)
+		} else if (item instanceof Artifact || item instanceof Staff) {
+            return !item.unique;
 
-		//all rings, wands, trinkets, seeds, and runestones
-		} else {
-			return item instanceof Ring || item instanceof Wand || item instanceof Staff || item instanceof Trinket
-					|| item instanceof Plant.Seed || item instanceof Runestone;
-		}
+        //all rings, wands, trinkets, seeds, and runestones
+        } else {
+            return item instanceof Ring || item instanceof Wand || item instanceof Trinket
+                    || item instanceof Plant.Seed || item instanceof Runestone;
+        }
 	}
 	
 	@Override
