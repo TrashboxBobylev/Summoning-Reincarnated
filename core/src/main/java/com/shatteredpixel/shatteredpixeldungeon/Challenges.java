@@ -76,8 +76,8 @@ public class Challenges {
 	}
 
 	public static Item process( Item item){
-		if (Dungeon.isChallenged(Conducts.Conduct.FACE)){
-			if (item.value() > 0 || !item.unique){
+		if (Dungeon.isChallenged(Conducts.Conduct.FACE) && !(item instanceof Gold)){
+			if (item.value() > 0 && !item.unique && !item.isFaceProtected()){
 				if (item.energyVal() > 0){
 					return FacelessThing.init(item);
 				} else {
