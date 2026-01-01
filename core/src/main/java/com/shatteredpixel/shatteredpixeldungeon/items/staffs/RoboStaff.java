@@ -45,7 +45,7 @@ public class RoboStaff extends Staff {
 
     @Override
     public int getChargeTurns() {
-        switch (level()){
+        switch (type()){
             case 0: return 600;
             case 1: return 800;
             case 2: return 1500;
