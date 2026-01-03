@@ -61,7 +61,7 @@ public class ArtemisBridge extends ConjurerSpell {
     @Override
     public boolean validateCell(int pos){
         Char ch = Actor.findChar(pos);
-        if (!(ch != null && ch.alignment != Char.Alignment.ALLY)){
+        if (ch == null || ch.alignment != Char.Alignment.ALLY){
             GLog.i( Messages.get(this, "no_minion"));
             return false;
         } else {
