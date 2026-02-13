@@ -107,26 +107,26 @@ public class TelekineticGrab extends TargetedSpell {
 				GLog.w(Messages.get(this, "cant_grab"));
 				hero.spend(Actor.TICK);
 				h.sprite.drop();
-				return;
-			}
+			} else {
 
-			while (!h.isEmpty()) {
-				Item item = h.peek();
-				if (item.doPickUp(hero, h.pos)) {
-					h.pickUp();
-					totalpickupTime += item.pickupDelay();
-					GLog.i( Messages.capitalize(Messages.get(hero, "you_now_have", item.name())) );
+				while (!h.isEmpty()) {
+					Item item = h.peek();
+					if (item.doPickUp(hero, h.pos)) {
+						h.pickUp();
+						totalpickupTime += item.pickupDelay();
+						GLog.i(Messages.capitalize(Messages.get(hero, "you_now_have", item.name())));
 
-				} else {
-					GLog.w(Messages.get(this, "cant_grab"));
-					h.sprite.drop();
-					break;
+					} else {
+						GLog.w(Messages.get(this, "cant_grab"));
+						h.sprite.drop();
+						break;
+					}
 				}
-			}
 
-			//casting the spell takes at most 1 turn
-			if (totalpickupTime > 1){
-				hero.spend(-(totalpickupTime-1));
+				//casting the spell takes at most 1 turn
+				if (totalpickupTime > 1) {
+					hero.spend(-(totalpickupTime - 1));
+				}
 			}
 
 		} else {
