@@ -227,7 +227,7 @@ public class Shopkeeper extends NPC {
 
 		@Override
 		public void onSelect( Item item ) {
-			if (item != null) {
+			if (item != null && Dungeon.hero != null && Dungeon.hero.isAlive()) {
 				WndBag parentWnd = sell();
 				GameScene.show( new WndTradeItem( item, parentWnd ) );
 			}
