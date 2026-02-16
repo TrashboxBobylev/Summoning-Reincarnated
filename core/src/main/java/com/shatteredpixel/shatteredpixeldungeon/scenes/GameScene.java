@@ -1363,7 +1363,7 @@ public class GameScene extends PixelScene {
 				if (lastOffset != null) {
 					offsetToInherit = lastOffset;
 				}
-				if (offsetToInherit != null) {
+				if (offsetToInherit != null && !offsetToInherit.isZero()) {
 					wnd.offset(offsetToInherit);
 					wnd.boundOffsetWithMargin(3);
 				}

@@ -173,17 +173,21 @@ public class Window extends Group implements Signal.Listener<KeyEvent> {
 		Camera sceneCam = PixelScene.uiCamera.visible ? PixelScene.uiCamera : Camera.main;
 
 		int newXOfs = xOffset;
-		if (x < margin){
-			newXOfs += margin - x;
-		} else if (x + camera.width > sceneCam.width - margin){
-			newXOfs += (sceneCam.width - margin) - (x + camera.width);
+		if (newXOfs != 0) {
+			if (x < margin) {
+				newXOfs += margin - x;
+			} else if (x + camera.width > sceneCam.width - margin) {
+				newXOfs += (sceneCam.width - margin) - (x + camera.width);
+			}
 		}
 
 		int newYOfs = yOffset;
-		if (y < margin){
-			newYOfs += margin - y;
-		} else if (y + camera.height > sceneCam.height - margin){
-			newYOfs += (sceneCam.height - margin) - (y + camera.height);
+		if (newYOfs != 0) {
+			if (y < margin) {
+				newYOfs += margin - y;
+			} else if (y + camera.height > sceneCam.height - margin) {
+				newYOfs += (sceneCam.height - margin) - (y + camera.height);
+			}
 		}
 
 		offset(newXOfs, newYOfs);
