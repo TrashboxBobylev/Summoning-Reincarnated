@@ -123,7 +123,7 @@ public class Smite extends TargetedClericSpell {
 		if (Char.hasProp(defender, Char.Property.UNDEAD) || Char.hasProp(defender, Char.Property.DEMONIC)){
 			return max;
 		} else {
-			return Random.NormalIntRange(min, max);
+			return Hero.heroDamageIntRange(min, max);
 		}
 	}
 
