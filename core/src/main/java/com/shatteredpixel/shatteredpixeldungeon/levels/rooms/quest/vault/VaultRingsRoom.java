@@ -33,7 +33,7 @@ public class VaultRingsRoom extends StandardRoom {
 		VaultRat rat = new VaultRat();
 		do {
 			rat.pos = level.pointToCell(random(1));
-		} while (level.solid[rat.pos]);
+		} while (level.map[rat.pos] == Terrain.WALL);
 		rat.state = rat.WANDERING;
 		level.mobs.add(rat);
 
