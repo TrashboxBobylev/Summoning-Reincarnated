@@ -1592,6 +1592,8 @@ public class GameScene extends PixelScene {
 
 	@Override
 	public synchronized void saveWindows() {
+		if (members == null) return;
+
 		super.saveWindows();
 		if (scene != null && scene.inventory != null && scene.inventory.getSelector() != null){
 			savedSelector = scene.inventory.getSelector();
