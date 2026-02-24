@@ -31,7 +31,7 @@ public class AlternatingTrapsRoom extends StandardRoom {
 			for (int y = top+1; y <= bottom-1; y++){
 				cell = x + y*level.width();
 
-				VaultLevel.VaultFlameTrap.setupTrap(level, cell, alternate ? 2 : 1, 2);
+				VaultLevel.VaultFlameTrap.setupTrap(level, cell, alternate ? 1 : 0, 2, 1);
 				alternate = !alternate;
 			}
 		}

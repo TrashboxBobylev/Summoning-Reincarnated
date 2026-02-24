@@ -46,6 +46,9 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultEn
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultFinalRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultLasersRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultLongRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultBookcaseTreasureRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultFlamePathRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultManyScansRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultQuadrantsRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultRingRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultRingsRoom;
@@ -74,6 +77,10 @@ public class VaultLevel extends CityLevel {
 			initRooms.add(new AlternatingTrapsRoom());
 			initRooms.add(new VaultLasersRoom());
 		}
+
+		initRooms.add(new VaultManyScansRoom());
+		initRooms.add(new VaultFlamePathRoom());
+		initRooms.add(new VaultBookcaseTreasureRoom());
 
 		initRooms.add(new VaultLongRoom());
 		initRooms.add(new VaultLongRoom());
@@ -167,10 +174,11 @@ public class VaultLevel extends CityLevel {
 			//does nothing, this trap is just decoration and is always deactivated
 		}
 
-		public static void setupTrap(Level level, int cell, int initialDelay, int cooldown){
+		public static void setupTrap(Level level, int cell, int initialDelay, int cooldown, int triggers){
 			VaultFlameTraps traps = Blob.seed(0, 0, VaultFlameTraps.class, level);
 			traps.initialCooldowns[cell] = cooldown;
 			traps.cooldowns[cell] = initialDelay;
+			traps.triggers[cell] = triggers;
 			level.setTrap(new VaultLevel.VaultFlameTrap().reveal(), cell);
 			Painter.set(level, cell, Terrain.INACTIVE_TRAP);
 		}

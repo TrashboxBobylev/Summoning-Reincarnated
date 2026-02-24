@@ -26,19 +26,22 @@ public class VaultFlameTraps extends Blob {
 
 	public int[] initialCooldowns;
 	public int[] cooldowns;
+	public int[] triggers;
 
 	@Override
 	public boolean act() {
 		super.act();
 
-		for (int i = 0; i < initialCooldowns.length; i++){
-			if (initialCooldowns[i] > -1){
-				if (cooldowns[i] <= 0){
-					cooldowns[i] = initialCooldowns[i];
-				}
-				cooldowns[i]--;
-				if (cooldowns[i] <= 0){
-					seed(Dungeon.level, i, 1);
+		if (initialCooldowns != null) {
+			for (int i = 0; i < initialCooldowns.length; i++) {
+				if (initialCooldowns[i] > -1) {
+					if (cooldowns[i] <= 0) {
+						cooldowns[i] = initialCooldowns[i];
+					}
+					cooldowns[i]--;
+					if (cooldowns[i] <= 0) {
+						seed(Dungeon.level, i, triggers[i]);
+					}
 				}
 			}
 		}
@@ -84,7 +87,10 @@ public class VaultFlameTraps extends Blob {
 					if (Dungeon.level.heroFOV[cell]){
 						CellEmitter.get(cell).start(ElmoParticle.FACTORY, 0.02f, 10);
 					}
-
+					off[cell] = cur[cell] - 1;
+					volume += off[cell];
+				} else {
+					off[cell] = 0;
 				}
 			}
 		}
@@ -99,23 +105,33 @@ public class VaultFlameTraps extends Blob {
 		if (cooldowns == null){
 			cooldowns = new int[level.length()];
 		}
+		if (triggers == null){
+			triggers = new int[level.length()];
+		}
 	}
 
-	private static final String ONE	= "one";
-	private static final String TWO	= "two";
+	private static final String INITIAL_CDS	= "initial_cds";
+	private static final String COOLDOWNS	= "cooldowns";
+	private static final String TRIGGERS	= "triggers";
 
 	@Override
 	public void storeInBundle(Bundle bundle) {
 		super.storeInBundle(bundle);
-		bundle.put(ONE, initialCooldowns);
-		bundle.put(TWO, cooldowns);
+		if (initialCooldowns != null) {
+			bundle.put(INITIAL_CDS, initialCooldowns);
+			bundle.put(COOLDOWNS, cooldowns);
+			bundle.put(TRIGGERS, triggers);
+		}
 	}
 
 	@Override
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
-		initialCooldowns = bundle.getIntArray(ONE);
-		cooldowns = bundle.getIntArray(TWO);
+		if (bundle.contains(INITIAL_CDS)){
+			initialCooldowns = bundle.getIntArray(INITIAL_CDS);
+			cooldowns = bundle.getIntArray(COOLDOWNS);
+			triggers = bundle.getIntArray(TRIGGERS);
+		}
 	}
 
 	@Override
