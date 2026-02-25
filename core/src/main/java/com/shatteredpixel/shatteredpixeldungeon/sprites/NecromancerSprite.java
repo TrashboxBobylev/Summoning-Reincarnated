@@ -136,7 +136,8 @@ public class NecromancerSprite extends MobSprite {
 
 	@Override
 	public void onComplete(Animation anim) {
-		if (anim == zap && animCallback == null){
+		super.onComplete(anim);
+		if (anim == zap){
 			if (ch instanceof Necromancer){
 				if (((Necromancer) ch).summoning){
 					charge();
@@ -148,6 +149,5 @@ public class NecromancerSprite extends MobSprite {
 				idle();
 			}
 		}
-		super.onComplete(anim);
 	}
 }

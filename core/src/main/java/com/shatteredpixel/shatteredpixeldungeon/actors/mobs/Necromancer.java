@@ -239,17 +239,21 @@ public class Necromancer extends Mob {
 
 		summoning = firstSummon = false;
 
-		mySkeleton = new NecroSkeleton();
-		mySkeleton.pos = summoningPos;
-		GameScene.add( mySkeleton );
-		Dungeon.level.occupyCell( mySkeleton );
-		((NecromancerSprite)sprite).finishSummoning();
+		if (mySkeleton == null || !mySkeleton.isActive()) {
+			mySkeleton = new NecroSkeleton();
+			mySkeleton.pos = summoningPos;
+			GameScene.add(mySkeleton);
+			Dungeon.level.occupyCell(mySkeleton);
 
-		for (Buff b : buffs()){
-			if (b.revivePersists) {
-				Buff.affect(mySkeleton, b.getClass());
+			for (Buff b : buffs()){
+				if (b.revivePersists) {
+					Buff.affect(mySkeleton, b.getClass());
+				}
 			}
+		} else {
+			ScrollOfTeleportation.appear(mySkeleton, summoningPos);
 		}
+		((NecromancerSprite)sprite).finishSummoning();
 	}
 
 	public static class SummoningBlockDamage{}
@@ -359,18 +363,13 @@ public class Necromancer extends Mob {
 						if (telePos != -1){
 
 							if (sprite != null && sprite.visible) {
-								int finalTelePos = telePos;
-								sprite.zap(finalTelePos, new Callback() {
-									@Override
-									public void call() {
-										ScrollOfTeleportation.appear(mySkeleton, finalTelePos);
-										mySkeleton.teleportSpend();
-										sprite.idle();
-									}
-								});
-							} else {
-								ScrollOfTeleportation.appear(mySkeleton, telePos);
-								mySkeleton.teleportSpend();
+								summoning = true;
+								summoningPos = telePos;
+								sprite.zap(telePos);
+								if (Dungeon.level.heroFOV[pos] || Dungeon.level.heroFOV[summoningPos]) {
+									Dungeon.hero.interrupt();
+								}
+								spend(TICK); //2 ticks total, it can't be the first summon
 							}
 						}
 					}
@@ -419,10 +418,6 @@ public class Necromancer extends Mob {
 			return 0;
 		}
 
-		private void teleportSpend(){
-			spend(TICK);
-		}
-		
 		public static class NecroSkeletonSprite extends SkeletonSprite{
 			
 			public NecroSkeletonSprite(){
