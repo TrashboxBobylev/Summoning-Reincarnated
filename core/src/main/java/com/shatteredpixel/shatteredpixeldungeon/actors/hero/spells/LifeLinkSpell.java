@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -36,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
+import com.watabou.noosa.audio.Sample;
 
 public class LifeLinkSpell extends ClericSpell {
 
@@ -74,6 +76,7 @@ public class LifeLinkSpell extends ClericSpell {
 			hero.sprite.zap(ally.pos);
 			hero.sprite.parent.add(
 					new Beam.HealthRay(hero.sprite.center(), ally.sprite.center()));
+			Sample.INSTANCE.play( Assets.Sounds.RAY );
 
 			Buff.prolong(hero, LifeLink.class, duration).object = ally.id();
 		} else {
@@ -81,6 +84,7 @@ public class LifeLinkSpell extends ClericSpell {
 			hero.sprite.operate(hero.pos);
 			hero.sprite.parent.add(
 					new Beam.HealthRay(DungeonTilemap.tileCenterToWorld(hero.pos), hero.sprite.center()));
+			Sample.INSTANCE.play( Assets.Sounds.RAY );
 		}
 
 		Buff.prolong(ally, LifeLink.class, duration).object = hero.id();

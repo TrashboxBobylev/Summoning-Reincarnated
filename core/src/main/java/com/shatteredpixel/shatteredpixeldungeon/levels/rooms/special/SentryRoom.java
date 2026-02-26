@@ -389,6 +389,7 @@ public class SentryRoom extends SpecialRoom {
 			} else {
 				parent.add(new Beam.DeathRay(center(), DungeonTilemap.raisedTileCenterToWorld(pos)));
 			}
+			Sample.INSTANCE.play( Assets.Sounds.RAY );
 			((Sentry)ch).onZapComplete();
 		}
 

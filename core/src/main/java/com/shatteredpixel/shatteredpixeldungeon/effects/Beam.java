@@ -49,8 +49,6 @@ public class Beam extends Image {
 		angle = (float)(Math.atan2( dy, dx ) * A);
 		scale.x = (float)Math.sqrt( dx * dx + dy * dy ) / width;
 		
-		Sample.INSTANCE.play( Assets.Sounds.RAY );
-		
 		timeLeft = this.duration = duration;
 	}
 

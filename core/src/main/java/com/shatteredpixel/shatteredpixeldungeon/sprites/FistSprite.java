@@ -270,6 +270,7 @@ public abstract class FistSprite extends MobSprite {
 
 			((YogFist)ch).onZapComplete();
 			parent.add( new Beam.LightRay(center(), DungeonTilemap.raisedTileCenterToWorld(cell)));
+			Sample.INSTANCE.play( Assets.Sounds.RAY );
 		}
 		@Override
 		public int blood() {

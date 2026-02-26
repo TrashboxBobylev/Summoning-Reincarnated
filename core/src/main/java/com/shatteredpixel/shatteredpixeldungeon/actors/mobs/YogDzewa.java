@@ -52,6 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
+import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.GameMath;
@@ -209,6 +210,7 @@ public class YogDzewa extends Mob {
 						}
 					}
 				}
+				Sample.INSTANCE.play( Assets.Sounds.RAY );
 				if (terrainAffected) {
 					Dungeon.observe();
 				}

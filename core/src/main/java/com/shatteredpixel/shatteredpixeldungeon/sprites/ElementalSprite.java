@@ -210,6 +210,7 @@ public abstract class ElementalSprite extends MobSprite {
 			
 			((Elemental)ch).onZapComplete();
 			parent.add( new Beam.LightRay(center(), DungeonTilemap.raisedTileCenterToWorld(cell)));
+			Sample.INSTANCE.play( Assets.Sounds.RAY );
 		}
 		
 		@Override
