@@ -174,11 +174,11 @@ public class VaultLevel extends CityLevel {
 			//does nothing, this trap is just decoration and is always deactivated
 		}
 
-		public static void setupTrap(Level level, int cell, int initialDelay, int cooldown, int triggers){
+		public static void setupTrap(Level level, int cell, int initialCD, int afterTriggerCD, int triggers){
 			VaultFlameTraps traps = Blob.seed(0, 0, VaultFlameTraps.class, level);
-			traps.initialCooldowns[cell] = cooldown;
-			traps.cooldowns[cell] = initialDelay;
-			traps.triggers[cell] = triggers;
+			traps.curCooldowns[cell] = initialCD;
+			traps.afterTriggerCooldowns[cell] = afterTriggerCD;
+			traps.triggersAfterCooldown[cell] = triggers;
 			level.setTrap(new VaultLevel.VaultFlameTrap().reveal(), cell);
 			Painter.set(level, cell, Terrain.INACTIVE_TRAP);
 		}

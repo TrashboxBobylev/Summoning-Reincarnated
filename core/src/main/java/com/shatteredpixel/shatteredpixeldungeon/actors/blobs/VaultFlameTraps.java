@@ -45,23 +45,25 @@ import java.util.Arrays;
 //contains both blob logic and logic for seeding itself
 public class VaultFlameTraps extends Blob {
 
-	public int[] initialCooldowns;
-	public int[] cooldowns;
-	public int[] triggers;
+	public int[] afterTriggerCooldowns;
+	public int[] curCooldowns;
+	public int[] triggersAfterCooldown;
+
+	//always gives a warning, via the blob
 
 	@Override
 	public boolean act() {
 		super.act();
 
-		if (initialCooldowns != null) {
-			for (int i = 0; i < initialCooldowns.length; i++) {
-				if (initialCooldowns[i] > -1) {
-					if (cooldowns[i] <= 0) {
-						cooldowns[i] = initialCooldowns[i];
+		if (afterTriggerCooldowns != null) {
+			for (int i = 0; i < afterTriggerCooldowns.length; i++) {
+				if (afterTriggerCooldowns[i] > -1) {
+					if (curCooldowns[i] <= 0) {
+						curCooldowns[i] = afterTriggerCooldowns[i];
 					}
-					cooldowns[i]--;
-					if (cooldowns[i] <= 0) {
-						seed(Dungeon.level, i, triggers[i]);
+					curCooldowns[i]--;
+					if (curCooldowns[i] <= 0) {
+						seed(Dungeon.level, i, triggersAfterCooldown[i]);
 					}
 				}
 			}
@@ -119,39 +121,39 @@ public class VaultFlameTraps extends Blob {
 
 	public void seed(Level level, int cell, int amount ) {
 		super.seed(level, cell, amount);
-		if (initialCooldowns == null) {
-			initialCooldowns = new int[level.length()];
-			Arrays.fill(initialCooldowns, -1);
+		if (afterTriggerCooldowns == null) {
+			afterTriggerCooldowns = new int[level.length()];
+			Arrays.fill(afterTriggerCooldowns, -1);
 		}
-		if (cooldowns == null){
-			cooldowns = new int[level.length()];
+		if (curCooldowns == null){
+			curCooldowns = new int[level.length()];
 		}
-		if (triggers == null){
-			triggers = new int[level.length()];
+		if (triggersAfterCooldown == null){
+			triggersAfterCooldown = new int[level.length()];
 		}
 	}
 
-	private static final String INITIAL_CDS	= "initial_cds";
-	private static final String COOLDOWNS	= "cooldowns";
-	private static final String TRIGGERS	= "triggers";
+	private static final String AFTER_TRIGGER_CDS	= "after_trigger_cds";
+	private static final String CUR_COOLDOWNS	    = "cur_cooldowns";
+	private static final String TRIGGERS	        = "triggers";
 
 	@Override
 	public void storeInBundle(Bundle bundle) {
 		super.storeInBundle(bundle);
-		if (initialCooldowns != null) {
-			bundle.put(INITIAL_CDS, initialCooldowns);
-			bundle.put(COOLDOWNS, cooldowns);
-			bundle.put(TRIGGERS, triggers);
+		if (afterTriggerCooldowns != null) {
+			bundle.put(AFTER_TRIGGER_CDS, afterTriggerCooldowns);
+			bundle.put(CUR_COOLDOWNS, curCooldowns);
+			bundle.put(TRIGGERS, triggersAfterCooldown);
 		}
 	}
 
 	@Override
 	public void restoreFromBundle(Bundle bundle) {
 		super.restoreFromBundle(bundle);
-		if (bundle.contains(INITIAL_CDS)){
-			initialCooldowns = bundle.getIntArray(INITIAL_CDS);
-			cooldowns = bundle.getIntArray(COOLDOWNS);
-			triggers = bundle.getIntArray(TRIGGERS);
+		if (bundle.contains(AFTER_TRIGGER_CDS)){
+			afterTriggerCooldowns = bundle.getIntArray(AFTER_TRIGGER_CDS);
+			curCooldowns = bundle.getIntArray(CUR_COOLDOWNS);
+			triggersAfterCooldown = bundle.getIntArray(TRIGGERS);
 		}
 	}
 

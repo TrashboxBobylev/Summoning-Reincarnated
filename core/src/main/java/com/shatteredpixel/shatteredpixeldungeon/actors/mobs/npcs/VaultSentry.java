@@ -25,12 +25,14 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CheckedCell;
+import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.WardSprite;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Random;
 
 public class VaultSentry extends NPC {
 
@@ -45,28 +47,69 @@ public class VaultSentry extends NPC {
 	public int[][] scanDirs;
 	public int scanDirIdx;
 
+	//defaults to scanning every turn
+	public int curCooldown = 1;
+	public int afterScanCooldown = 1;
+
+	public int scansAfterCooldown = 1;
+	private int scansMade = 0;
+
+	//warning is unnecessary in some configurations where patterns are obvious.
+	public boolean giveWarning = false;
+
 	@Override
 	protected boolean act() {
 
-		int[] scanDirsThisTurn = scanDirs[scanDirIdx];
-		scanDirIdx++;
-		if (scanDirIdx >= scanDirs.length){
-			scanDirIdx = 0;
+		curCooldown--;
+
+		if (curCooldown <= 0) {
+			int[] scanDirsThisTurn = scanDirs[scanDirIdx];
+
+			for (int scanDir : scanDirsThisTurn) {
+				ConeAOE scan = new ConeAOE(
+						new Ballistica(pos, scanDir, Ballistica.STOP_SOLID),
+						scanLength,
+						scanWidth,
+						Ballistica.STOP_SOLID | Ballistica.STOP_TARGET);
+
+				for (int cell : scan.cells) {
+					if (Actor.findChar(cell) == Dungeon.hero) {
+						Dungeon.hero.sprite.showStatus(CharSprite.NEGATIVE, "!!!");
+					}
+					if (Dungeon.level.heroFOV[cell]) {
+						GameScene.effect(new CheckedCell(cell, pos));
+					}
+				}
+			}
+
+			scanDirIdx++;
+			if (scanDirIdx >= scanDirs.length) {
+				scanDirIdx = 0;
+			}
+
+			scansMade++;
+			if (scansMade < scansAfterCooldown){
+				curCooldown = 1;
+			} else {
+				scansMade = 0;
+				curCooldown = afterScanCooldown;
+			}
+
 		}
 
-		for (int scanDir : scanDirsThisTurn) {
-			ConeAOE scan = new ConeAOE(
-					new Ballistica(pos, scanDir, Ballistica.STOP_SOLID),
-					scanLength,
-					scanWidth,
-					Ballistica.STOP_SOLID | Ballistica.STOP_TARGET);
+		if (curCooldown == 1 && giveWarning){
+			int[] scanDirsNextTurn = scanDirs[scanDirIdx];
+			for (int scanDir : scanDirsNextTurn) {
+				ConeAOE scan = new ConeAOE(
+						new Ballistica(pos, scanDir, Ballistica.STOP_SOLID),
+						scanLength,
+						scanWidth,
+						Ballistica.STOP_SOLID | Ballistica.STOP_TARGET);
 
-			for (int cell : scan.cells) {
-				if (Actor.findChar(cell) == Dungeon.hero){
-					Dungeon.hero.sprite.showStatus(CharSprite.NEGATIVE, "!!!");
-				}
-				if (Dungeon.level.heroFOV[cell]) {
-					GameScene.effect(new CheckedCell(cell, pos));
+				for (int cell : scan.cells) {
+					if (Dungeon.level.heroFOV[cell]) {
+						sprite.parent.add(new TargetedCell(cell, 0xFF0000));
+					}
 				}
 			}
 		}
@@ -103,6 +146,14 @@ public class VaultSentry extends NPC {
 	private static final String SCAN_DIRS = "scan_dirs_";
 	private static final String SCAN_DIRS_LEN = "scan_dirs_len";
 
+	private static final String AFTER_SCAN_COOLDOWN = "after_shot_cooldown";
+	private static final String CUR_COOLDOWN = "cur_cooldown";
+
+	private static final String SCANS = "shots";
+	private static final String SCANS_MADE = "shots_fired";
+
+	private static final String WARNING = "warning";
+
 	@Override
 	public void storeInBundle(Bundle bundle) {
 		super.storeInBundle(bundle);
@@ -113,6 +164,12 @@ public class VaultSentry extends NPC {
 		for (int i = 0; i < scanDirs.length; i++){
 			bundle.put(SCAN_DIRS+i, scanDirs[i]);
 		}
+
+		bundle.put(AFTER_SCAN_COOLDOWN, afterScanCooldown);
+		bundle.put(CUR_COOLDOWN, curCooldown);
+		bundle.put(SCANS, scansAfterCooldown);
+		bundle.put(SCANS_MADE, scansMade);
+		bundle.put(WARNING, giveWarning);
 	}
 
 	@Override
@@ -124,6 +181,15 @@ public class VaultSentry extends NPC {
 		scanDirs = new int[bundle.getInt(SCAN_DIRS_LEN)][];
 		for (int i = 0; i < scanDirs.length; i++){
 			scanDirs[i] = bundle.getIntArray(SCAN_DIRS+i);
+		}
+
+		//3.3.X saves
+		if (bundle.contains(AFTER_SCAN_COOLDOWN)){
+			afterScanCooldown = bundle.getInt(AFTER_SCAN_COOLDOWN);
+			curCooldown = bundle.getInt(CUR_COOLDOWN);
+			scansAfterCooldown = bundle.getInt(SCANS);
+			scansMade = bundle.getInt(SCANS_MADE);
+			giveWarning = bundle.getBoolean(WARNING);
 		}
 	}
 
