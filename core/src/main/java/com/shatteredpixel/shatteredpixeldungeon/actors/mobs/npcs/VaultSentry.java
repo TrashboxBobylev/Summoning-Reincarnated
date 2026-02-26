@@ -21,7 +21,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CheckedCell;
@@ -31,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.WardSprite;
+import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
@@ -57,6 +60,9 @@ public class VaultSentry extends NPC {
 	//warning is unnecessary in some configurations where patterns are obvious.
 	public boolean giveWarning = false;
 
+	//scan sentries will collectively play a SFX at most every 80 ms
+	private static long SFXLastPlayed = 0;
+
 	@Override
 	protected boolean act() {
 
@@ -65,6 +71,7 @@ public class VaultSentry extends NPC {
 		if (curCooldown <= 0) {
 			int[] scanDirsThisTurn = scanDirs[scanDirIdx];
 
+			boolean visible = false;
 			for (int scanDir : scanDirsThisTurn) {
 				ConeAOE scan = new ConeAOE(
 						new Ballistica(pos, scanDir, Ballistica.STOP_SOLID),
@@ -75,11 +82,19 @@ public class VaultSentry extends NPC {
 				for (int cell : scan.cells) {
 					if (Actor.findChar(cell) == Dungeon.hero) {
 						Dungeon.hero.sprite.showStatus(CharSprite.NEGATIVE, "!!!");
+						Sample.INSTANCE.play(Assets.Sounds.ZAP);
+						SFXLastPlayed = ShatteredPixelDungeon.realTime;
 					}
 					if (Dungeon.level.heroFOV[cell]) {
 						GameScene.effect(new CheckedCell(cell, pos));
+						visible = true;
 					}
 				}
+			}
+
+			if (visible && SFXLastPlayed+80 < ShatteredPixelDungeon.realTime) {
+				Sample.INSTANCE.play(Assets.Sounds.ZAP, 0.5f);
+				SFXLastPlayed = ShatteredPixelDungeon.realTime;
 			}
 
 			scanDirIdx++;

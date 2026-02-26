@@ -23,22 +23,17 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.blobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
-import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
-import com.watabou.utils.GameMath;
 
 import java.util.Arrays;
 
@@ -72,10 +67,14 @@ public class VaultFlameTraps extends Blob {
 		return true;
 	}
 
+	//flame traps will collectively play a SFX at most every 80 ms
+	private static long SFXLastPlayed = 0;
+
 	@Override
 	protected void evolve() {
 		int cell;
 
+		boolean playSfx = false;
 		for (int i = area.left; i < area.right; i++) {
 			for (int j = area.top; j < area.bottom; j++) {
 				cell = i + j* Dungeon.level.width();
@@ -85,6 +84,7 @@ public class VaultFlameTraps extends Blob {
 					Char ch = Actor.findChar( cell );
 					if (ch == Dungeon.hero){
 						Sample.INSTANCE.play(Assets.Sounds.BURNING);
+						SFXLastPlayed = ShatteredPixelDungeon.realTime;
 						ch.sprite.showStatus(CharSprite.NEGATIVE, "!!!");
 					}
 					/*if (ch != null && !ch.isImmune(Fire.class)) {
@@ -109,6 +109,7 @@ public class VaultFlameTraps extends Blob {
 
 					if (Dungeon.level.heroFOV[cell]){
 						CellEmitter.get(cell).start(ElmoParticle.FACTORY, 0.02f, 10);
+						playSfx = true;
 					}
 					off[cell] = cur[cell] - 1;
 					volume += off[cell];
@@ -116,6 +117,11 @@ public class VaultFlameTraps extends Blob {
 					off[cell] = 0;
 				}
 			}
+		}
+
+		if (playSfx && SFXLastPlayed +80 < ShatteredPixelDungeon.realTime) {
+			Sample.INSTANCE.play(Assets.Sounds.BURNING, 0.5f);
+			SFXLastPlayed = ShatteredPixelDungeon.realTime;
 		}
 	}
 

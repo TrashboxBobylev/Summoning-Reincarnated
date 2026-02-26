@@ -23,6 +23,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
@@ -56,6 +57,9 @@ public class VaultLaser extends NPC {
 	//warning is unnecessary in some configurations where patterns are obvious.
 	public boolean giveWarning = true;
 
+	//laser sentries will collectively play a SFX at most every 80 ms
+	private static long SFXLastPlayed = 0;
+
 	@Override
 	protected boolean act() {
 
@@ -70,11 +74,16 @@ public class VaultLaser extends NPC {
 				}
 				if (Actor.findChar(cell) == Dungeon.hero){
 					Dungeon.hero.sprite.showStatus(CharSprite.NEGATIVE, "!!!");
+					Sample.INSTANCE.play( Assets.Sounds.RAY );
+					SFXLastPlayed = ShatteredPixelDungeon.realTime;
 				}
 			}
 			if (visible){
 				sprite.parent.add(new Beam.DeathRay(sprite.center(), DungeonTilemap.raisedTileCenterToWorld(beam.collisionPos)));
-				Sample.INSTANCE.play( Assets.Sounds.RAY );
+				if (SFXLastPlayed+80 < ShatteredPixelDungeon.realTime) {
+					Sample.INSTANCE.play(Assets.Sounds.RAY, 0.5f);
+					SFXLastPlayed = ShatteredPixelDungeon.realTime;
+				}
 			}
 
 			laserDirIdx++;
