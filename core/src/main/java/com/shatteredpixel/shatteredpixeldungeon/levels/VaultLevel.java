@@ -48,11 +48,14 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultLa
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultLongRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultBookcaseTreasureRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultFlamePathRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultLaserTreasureRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultManyScansRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultQuadrantsRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultRingRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultRingsRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultSimpleEnemyTreasureRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultMultipleEnemyTreasureRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultSingleEnemyTreasureRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.watabou.utils.Random;
 
@@ -66,21 +69,31 @@ public class VaultLevel extends CityLevel {
 
 		initRooms.add(roomEntrance = new VaultEntranceRoom());
 
-		for (int i = 0; i < 2; i++){
-			initRooms.add(new VaultRingRoom());
-			initRooms.add(new VaultCircleRoom());
-			initRooms.add(new VaultCrossRoom());
-			initRooms.add(new VaultQuadrantsRoom());
-			initRooms.add(new VaultEnemyCenterRoom());
-			initRooms.add(new VaultRingsRoom());
-			initRooms.add(new VaultSimpleEnemyTreasureRoom());
-			initRooms.add(new AlternatingTrapsRoom());
-			initRooms.add(new VaultLasersRoom());
-		}
+		initRooms.add(new VaultRingRoom());
+		initRooms.add(new VaultRingRoom());
+		initRooms.add(new VaultCircleRoom());
+		initRooms.add(new VaultCircleRoom());
+		initRooms.add(new VaultCrossRoom());
+		initRooms.add(new VaultCrossRoom());
+		initRooms.add(new VaultQuadrantsRoom());
+		initRooms.add(new VaultQuadrantsRoom());
+		initRooms.add(new VaultRingsRoom());
+		initRooms.add(new VaultRingsRoom());
 
-		initRooms.add(new VaultManyScansRoom());
+		initRooms.add(new VaultEnemyCenterRoom());
+		initRooms.add(new VaultEnemyCenterRoom());
+		initRooms.add(new VaultSimpleEnemyTreasureRoom());
+		initRooms.add(new AlternatingTrapsRoom());
+		initRooms.add(new VaultLasersRoom());
+
+		initRooms.add(new VaultLaserTreasureRoom());
 		initRooms.add(new VaultFlamePathRoom());
+
 		initRooms.add(new VaultBookcaseTreasureRoom());
+		initRooms.add(new VaultSingleEnemyTreasureRoom());
+
+		initRooms.add(new VaultMultipleEnemyTreasureRoom());
+		initRooms.add(new VaultManyScansRoom());
 
 		initRooms.add(new VaultLongRoom());
 		initRooms.add(new VaultLongRoom());
