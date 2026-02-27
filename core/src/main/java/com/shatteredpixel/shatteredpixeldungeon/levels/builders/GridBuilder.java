@@ -22,6 +22,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.builders;
 
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultTreasureRoom;
 import com.watabou.utils.Point;
 import com.watabou.utils.Random;
 import com.watabou.utils.Rect;
@@ -61,13 +62,27 @@ public class GridBuilder extends Builder {
 		}
 		entrance.setPos(0, 0);
 
-		ArrayList<Room> toPlace = new ArrayList<>(rooms);
+		ArrayList<Room> toPlace = new ArrayList<>();
+
+		//treasure rooms are placed last
+		for (Room r : rooms){
+			if (r instanceof VaultTreasureRoom){
+				toPlace.add(r);
+			} else {
+				toPlace.add(0, r);
+			}
+		}
 		toPlace.remove(entrance);
 
-		//move the exit to the back
+		//move the exit to the back of normal rooms
 		if (exit != null) {
 			toPlace.remove(exit);
-			toPlace.add(exit);
+			for (int i = 0; i < toPlace.size(); i++){
+				if (toPlace.get(i) instanceof VaultTreasureRoom){
+					toPlace.add(i, exit);
+					break;
+				}
+			}
 		}
 
 		ArrayList<Room> placed = new ArrayList<>();
@@ -104,7 +119,17 @@ public class GridBuilder extends Builder {
 				r.neigbours.clear();
 				tries++;
 				if (tries > 30) {
-					toPlace.add(r); //can't place for now, put it into the back of to place list
+					//can't place for now, put it into the back of to place list
+					if (r instanceof VaultTreasureRoom){
+						toPlace.add(r);
+					} else {
+						for (int i = 0; i < toPlace.size(); i++){
+							if (toPlace.get(i) instanceof VaultTreasureRoom){
+								toPlace.add(i, r);
+								break;
+							}
+						}
+					}
 					break;
 				}
 				int[] keys = gridCells.keyArray();
@@ -153,6 +178,11 @@ public class GridBuilder extends Builder {
 				} else {
 					valid = false;
 				}
+
+				//ensures level generally goes up and to the right
+				/*if (x < -1 || y > 1){
+					valid = false;
+				}*/
 
 				if (valid){
 					r.setPos(x*(ROOM_SIZE-1), y*(ROOM_SIZE-1));
