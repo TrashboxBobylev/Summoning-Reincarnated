@@ -64,4 +64,9 @@ public class AlternatingTrapsRoom extends StandardRoom {
 		return false;
 	}
 
+	@Override
+	public boolean canPlaceItem(Point p, Level l) {
+		return false;
+	}
+
 }

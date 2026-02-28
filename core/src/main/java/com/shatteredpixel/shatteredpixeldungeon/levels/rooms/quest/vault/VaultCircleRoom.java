@@ -55,8 +55,8 @@ public class VaultCircleRoom extends StandardRoom {
 
 		int w = level.width();
 
-		switch (Random.Int(3)){
-			case 0:
+		switch (Random.Int(6)){
+			case 0: case 1: case 2:
 				sentry.scanWidth = 90f;
 
 				sentry.scanDirs = new int[][]{
@@ -69,7 +69,7 @@ public class VaultCircleRoom extends StandardRoom {
 						new int[]{sentry.pos+w},
 						new int[]{sentry.pos+w-1},
 				};
-			case 1:
+			case 3: case 4:
 				sentry.scanWidth = 45f;
 				sentry.scanDirs = new int[][]{
 						new int[]{sentry.pos-2, sentry.pos+2},
@@ -82,7 +82,7 @@ public class VaultCircleRoom extends StandardRoom {
 						new int[]{sentry.pos+2-level.width(), sentry.pos-2+level.width()},
 				};
 				break;
-			case 2:
+			case 5:
 				sentry.scanWidth = 22.5f;
 
 				sentry.scanDirs = new int[][]{

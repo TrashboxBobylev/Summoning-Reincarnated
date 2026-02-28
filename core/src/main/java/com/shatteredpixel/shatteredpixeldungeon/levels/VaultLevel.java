@@ -133,9 +133,9 @@ public class VaultLevel extends CityLevel {
 
 	@Override
 	protected void createItems() {
-		for (int i = 0; i < 20; i++){
+		for (int i = 0; i < 6; i++){
 			Item item = Generator.randomUsingDefaults(Random.oneOf(
-					Generator.Category.WEAPON, Generator.Category.WEAPON, Generator.Category.WEAPON,
+					Generator.Category.WEP_T2,
 					Generator.Category.ARMOR,
 					Generator.Category.WAND,
 					Generator.Category.RING));
