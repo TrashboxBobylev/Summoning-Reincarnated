@@ -529,7 +529,7 @@ public abstract class YogFist extends Mob {
 		public void damage(int dmg, Object src) {
 			int beforeHP = HP;
 			super.damage(dmg, src);
-			if (isAlive() && beforeHP > HT/2 && HP < HT/2){
+			if (isAlive() && beforeHP > HT/2 && HP <= HT/2){
 				HP = HT/2;
 				Buff.prolong( Dungeon.hero, Blindness.class, Blindness.DURATION*1.5f );
 				int i;
@@ -599,7 +599,7 @@ public abstract class YogFist extends Mob {
 		public void damage(int dmg, Object src) {
 			int beforeHP = HP;
 			super.damage(dmg, src);
-			if (isAlive() && beforeHP > HT/2 && HP < HT/2){
+			if (isAlive() && beforeHP > HT/2 && HP <= HT/2){
 				HP = HT/2;
 				Light l = Dungeon.hero.buff(Light.class);
 				if (l != null){
