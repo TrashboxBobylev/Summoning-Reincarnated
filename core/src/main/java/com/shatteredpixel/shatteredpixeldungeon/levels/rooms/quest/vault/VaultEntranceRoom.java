@@ -22,7 +22,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.VaultLaser;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
@@ -67,8 +66,8 @@ public class VaultEntranceRoom extends StandardRoom {
 
 	@Override
 	public int maxConnections(int direction) {
-		//only up and right right now
-		if (direction == LEFT || direction == BOTTOM) return 0;
+		//max of two connections
+		if (direction == ALL) return 2;
 		return super.maxConnections(direction);
 	}
 
