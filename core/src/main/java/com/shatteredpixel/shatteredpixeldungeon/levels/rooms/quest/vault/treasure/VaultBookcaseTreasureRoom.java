@@ -24,6 +24,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasu
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -71,9 +72,12 @@ public class VaultBookcaseTreasureRoom extends VaultTreasureRoom {
 		Painter.set(level, firstItem, Terrain.PEDESTAL);
 		Painter.set(level, secondItem, Terrain.PEDESTAL);
 
-		//TODO first item (low value consumable, can't be fire-based?
+		Item treasureItem = level.findPrizeItem();
+		if (treasureItem != null){
+			level.drop(treasureItem, firstItem);
+		}
 
-		Item treasureItem = Generator.randomUsingDefaults(Generator.Category.WEP_T4);
+		treasureItem = Generator.randomUsingDefaults(Generator.Category.WEP_T4);
 		if (treasureItem.cursed){
 			treasureItem.cursed = false;
 			if (((MeleeWeapon) treasureItem).hasCurseEnchant()){
@@ -84,7 +88,7 @@ public class VaultBookcaseTreasureRoom extends VaultTreasureRoom {
 		treasureItem.levelKnown = treasureItem.cursedKnown = true;
 		level.drop(treasureItem,secondItem).type = Heap.Type.CHEST;
 
-		//TODO add solution item to item spawn pool (potion of invisibility?)
+		level.addItemToSpawn(new PotionOfLiquidFlame());
 
 		Painter.drawInside(level, this, entrance, 2, Terrain.EMPTY_SP);
 

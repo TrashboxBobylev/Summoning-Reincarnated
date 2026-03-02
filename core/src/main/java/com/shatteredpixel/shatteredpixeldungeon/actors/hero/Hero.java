@@ -1583,6 +1583,11 @@ public class Hero extends Char {
 			return;
 		}
 
+		//TODO hero cannot take damage in the vault tester area
+		if (Dungeon.depth > 15 && Dungeon.branch == 1){
+			dmg = 0;
+		}
+
 		//regular damage interrupt, triggers on any damage except specific mild DOT effects
 		// unless the player recently hit 'continue moving', in which case this is ignored
 		if (!(src instanceof Hunger || src instanceof Viscosity.DeferedDamage) && damageInterrupt) {

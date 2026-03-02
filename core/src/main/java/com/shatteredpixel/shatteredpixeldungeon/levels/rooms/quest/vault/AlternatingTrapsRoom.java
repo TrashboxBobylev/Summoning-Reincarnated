@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault;
 
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.VaultLevel;
@@ -45,6 +46,14 @@ public class AlternatingTrapsRoom extends StandardRoom {
 			door.set(Room.Door.Type.REGULAR);
 		}
 
+		Point c = center();
+		Painter.set(level, c, Terrain.PEDESTAL);
+
+		Item i = level.findPrizeItem();
+		if (i != null){
+			level.drop( i, level.pointToCell(c) );
+		}
+
 		int cell;
 		boolean alternate = false;
 		for (int x = left+1; x <= right-1; x++){
@@ -52,7 +61,9 @@ public class AlternatingTrapsRoom extends StandardRoom {
 			for (int y = top+1; y <= bottom-1; y++){
 				cell = x + y*level.width();
 
-				VaultLevel.VaultFlameTrap.setupTrap(level, cell, alternate ? 1 : 0, 2, 1);
+				if (level.map[cell] != Terrain.PEDESTAL) {
+					VaultLevel.VaultFlameTrap.setupTrap(level, cell, alternate ? 1 : 0, 2, 1);
+				}
 				alternate = !alternate;
 			}
 		}
@@ -66,7 +77,7 @@ public class AlternatingTrapsRoom extends StandardRoom {
 
 	@Override
 	public boolean canPlaceItem(Point p, Level l) {
-		return false;
+		return super.canPlaceItem(p, l) && p == center();
 	}
 
 }

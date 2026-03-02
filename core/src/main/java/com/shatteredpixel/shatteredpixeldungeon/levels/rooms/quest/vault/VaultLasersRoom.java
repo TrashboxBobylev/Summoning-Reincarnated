@@ -56,13 +56,11 @@ public class VaultLasersRoom extends StandardRoom {
 					Painter.set(level, cell, Terrain.PEDESTAL);
 					laser.laserDirs = new int[]{cell+level.width()};
 					laser.pos = cell;
-					Painter.set(level, x + level.width()*(bottom-1), Terrain.PEDESTAL);
 				} else {
 					int cell = x + level.width()*(bottom-1);
 					Painter.set(level, cell, Terrain.PEDESTAL);
 					laser.laserDirs = new int[]{cell-level.width()};
 					laser.pos = cell;
-					Painter.set(level, x + level.width()*(top+1), Terrain.PEDESTAL);
 				}
 				laser.afterShotCooldown = Random.IntRange(3, 7);
 				laser.curCooldown = Random.IntRange(1, laser.afterShotCooldown);
@@ -79,13 +77,11 @@ public class VaultLasersRoom extends StandardRoom {
 					Painter.set(level, cell, Terrain.PEDESTAL);
 					laser.laserDirs = new int[]{cell+1};
 					laser.pos = cell;
-					Painter.set(level, right-1 + level.width()*y, Terrain.PEDESTAL);
 				} else {
 					int cell = right-1 + level.width()*y;
 					Painter.set(level, cell, Terrain.PEDESTAL);
 					laser.laserDirs = new int[]{cell-1};
 					laser.pos = cell;
-					Painter.set(level, left+1 + level.width()*y, Terrain.PEDESTAL);
 				}
 				laser.afterShotCooldown = Random.IntRange(3, 7);
 				laser.curCooldown = Random.IntRange(1, laser.afterShotCooldown);
@@ -93,11 +89,6 @@ public class VaultLasersRoom extends StandardRoom {
 			}
 		}
 
-	}
-
-	@Override
-	public boolean canPlaceItem(Point p, Level l) {
-		return false;
 	}
 
 }

@@ -21,6 +21,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault;
 
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.VaultLaser;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
@@ -46,7 +47,11 @@ public class VaultQuadrantsRoom extends StandardRoom {
 		Painter.drawInside( level, this, new Point(c.x, top), 3, Terrain.WALL);
 		Painter.drawInside( level, this, new Point(c.x, bottom), 3, Terrain.WALL);
 
+		//TODO 4x laser?
 		Painter.set( level, c, Terrain.STATUE);
+
+		VaultLaser laser = new VaultLaser();
+		//laser.laserDirs = new int[];
 
 		for (Room.Door door : connected.values()) {
 			door.set( Room.Door.Type.REGULAR );

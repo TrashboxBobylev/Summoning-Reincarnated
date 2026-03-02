@@ -82,7 +82,7 @@ public class VaultMultipleEnemyTreasureRoom extends VaultTreasureRoom {
 			level.mobs.add(rat);
 
 			rat = new VaultRat();
-			if (entrance.x == left){
+			if (entrance.y == top){
 				rat.pos = areaLeft+2 + (c.y+1)*level.width();
 				treasurePos = rat.pos + 2*level.width();
 			} else {

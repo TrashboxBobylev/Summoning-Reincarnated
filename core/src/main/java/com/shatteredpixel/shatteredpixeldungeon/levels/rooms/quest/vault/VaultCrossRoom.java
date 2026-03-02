@@ -53,6 +53,8 @@ public class VaultCrossRoom extends StandardRoom {
 		sentry.scanLength = 4;
 		sentry.scanWidth = 90;
 
+		sentry.afterScanCooldown = 2;
+
 		sentry.scanDirs = new int[][]{
 				new int[]{sentry.pos-1},
 				new int[]{sentry.pos-level.width()},

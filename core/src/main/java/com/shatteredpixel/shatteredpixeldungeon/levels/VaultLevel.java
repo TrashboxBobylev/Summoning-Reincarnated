@@ -64,6 +64,36 @@ import java.util.ArrayList;
 public class VaultLevel extends CityLevel {
 
 	@Override
+	protected boolean build() {
+		itemsToSpawn.clear();
+
+		for (int i = 0; i < 10; i++){
+			Item item = Generator.randomUsingDefaults(Random.oneOf(
+					Generator.Category.WEP_T2, Generator.Category.WEP_T2,
+					Generator.Category.ARMOR, Generator.Category.ARMOR,
+					Generator.Category.WAND,
+					Generator.Category.RING));
+			//regrowth is disallowed as it can be used to farm HP regen
+			if (item instanceof WandOfRegrowth){
+				continue;
+			}
+			if (item.cursed){
+				item.cursed = false;
+				if (item instanceof MeleeWeapon && ((MeleeWeapon) item).hasCurseEnchant()){
+					((MeleeWeapon) item).enchant(null);
+				} else if (item instanceof Armor && ((Armor) item).hasCurseGlyph()){
+					((Armor) item).inscribe(null);
+				}
+			}
+			//not true ID, prevents extra info about rings leaking to main game
+			item.levelKnown = item.cursedKnown = true;
+			addItemToSpawn(item);
+		}
+
+		return super.build();
+	}
+
+	@Override
 	protected ArrayList<Room> initRooms() {
 		ArrayList<Room> initRooms = new ArrayList<>();
 
@@ -133,29 +163,6 @@ public class VaultLevel extends CityLevel {
 
 	@Override
 	protected void createItems() {
-		for (int i = 0; i < 6; i++){
-			Item item = Generator.randomUsingDefaults(Random.oneOf(
-					Generator.Category.WEP_T2,
-					Generator.Category.ARMOR,
-					Generator.Category.WAND,
-					Generator.Category.RING));
-			//regrowth is disallowed as it can be used to farm HP regen
-			if (item instanceof WandOfRegrowth){
-				continue;
-			}
-			if (item.cursed){
-				item.cursed = false;
-				if (item instanceof MeleeWeapon && ((MeleeWeapon) item).hasCurseEnchant()){
-					((MeleeWeapon) item).enchant(null);
-				} else if (item instanceof Armor && ((Armor) item).hasCurseGlyph()){
-					((Armor) item).inscribe(null);
-				}
-			}
-			//not true ID, prevents extra info about rings leaking to main game
-			item.levelKnown = item.cursedKnown = true;
-			addItemToSpawn(item);
-		}
-
 		//copypasta from super.createItems
 		for (Item item : itemsToSpawn) {
 			int cell = randomDropCell();

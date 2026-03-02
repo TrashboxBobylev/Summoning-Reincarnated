@@ -68,12 +68,12 @@ public class VaultFlamePathRoom extends VaultTreasureRoom {
 		} else if (entrance.y == top){
 			if (entrance.x < c.x){
 				fillGroup(level, rightSide, DOWN);
-				fillGroup(level, bottomSide, RIGHT);
+				fillGroup(level, bottomSide, LEFT);
 				fillGroup(level, leftSide, UP);
 				Painter.set(level, (left+6) + level.width()*(top+1), Terrain.EMPTY_SP);
 			} else {
 				fillGroup(level, leftSide, DOWN);
-				fillGroup(level, bottomSide, LEFT);
+				fillGroup(level, bottomSide, RIGHT);
 				fillGroup(level, rightSide, UP);
 				Painter.set(level, (left+4) + level.width()*(top+1), Terrain.EMPTY_SP);
 			}
@@ -118,6 +118,14 @@ public class VaultFlamePathRoom extends VaultTreasureRoom {
 		//not true ID
 		treasureItem.levelKnown = treasureItem.cursedKnown = true;
 		level.drop(treasureItem, treasurePos).type = Heap.Type.CHEST;
+
+		treasureItem = level.findPrizeItem();
+		if (treasureItem != null){
+			do {
+				treasurePos = level.pointToCell(Random.element(treasure.getPoints()));
+			} while (level.heaps.get(treasurePos) != null);
+			level.drop(treasureItem, treasurePos);
+		}
 
 	}
 

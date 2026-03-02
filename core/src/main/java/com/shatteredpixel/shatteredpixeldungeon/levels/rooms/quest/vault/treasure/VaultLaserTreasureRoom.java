@@ -155,5 +155,13 @@ public class VaultLaserTreasureRoom extends VaultTreasureRoom{
 		treasureItem.levelKnown = treasureItem.cursedKnown = true;
 		level.drop(treasureItem, treasurePos).type = Heap.Type.CHEST;
 
+		treasureItem = level.findPrizeItem();
+		if (treasureItem != null){
+			do {
+				treasurePos = level.pointToCell(Random.element(itemPlace.getPoints()));
+			} while (level.heaps.get(treasurePos) != null);
+			level.drop(treasureItem, treasurePos);
+		}
+
 	}
 }

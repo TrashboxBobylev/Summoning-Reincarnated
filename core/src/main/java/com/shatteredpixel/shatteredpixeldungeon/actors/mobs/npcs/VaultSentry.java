@@ -80,7 +80,7 @@ public class VaultSentry extends NPC {
 						Ballistica.STOP_SOLID | Ballistica.STOP_TARGET);
 
 				for (int cell : scan.cells) {
-					if (Actor.findChar(cell) == Dungeon.hero) {
+					if (Actor.findChar(cell) == Dungeon.hero && Dungeon.hero.invisible == 0) {
 						Dungeon.hero.sprite.showStatus(CharSprite.NEGATIVE, "!!!");
 						Sample.INSTANCE.play(Assets.Sounds.ZAP);
 						SFXLastPlayed = ShatteredPixelDungeon.realTime;

@@ -25,6 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.VaultSentry;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -81,7 +82,7 @@ public class VaultManyScansRoom extends VaultTreasureRoom {
 		treasureItem.levelKnown = treasureItem.cursedKnown = true;
 		level.drop(treasureItem, c.x + w*c.y).type = Heap.Type.CHEST;
 
-		//TODO add solution item to item spawn pool (potion of invisibility?)
+		level.addItemToSpawn(new PotionOfInvisibility());
 
 	}
 
