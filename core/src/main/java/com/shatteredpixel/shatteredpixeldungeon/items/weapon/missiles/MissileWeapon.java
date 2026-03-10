@@ -331,8 +331,8 @@ abstract public class MissileWeapon extends Weapon {
 			parent.identify();
 		}
 
-		if (!isIdentified() && ShardOfOblivion.passiveIDDisabled()){
-			Buff.prolong(curUser, ShardOfOblivion.ThrownUseTracker.class, 50f);
+		if (attacker == Dungeon.hero && !isIdentified() && ShardOfOblivion.passiveIDDisabled()){
+			Buff.prolong(Dungeon.hero, ShardOfOblivion.ThrownUseTracker.class, 50f);
 		}
 
 		return result;
