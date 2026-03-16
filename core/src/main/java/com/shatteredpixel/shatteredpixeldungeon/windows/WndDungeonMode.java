@@ -53,8 +53,11 @@ public class WndDungeonMode extends Window {
     private Dungeon.GameMode chosenGameMode;
     private float timer;
 
-
     public WndDungeonMode( ){
+        this(Dungeon.GameMode.values());
+    }
+
+    public WndDungeonMode(Dungeon.GameMode... possibleModes){
         super();
 
         int width = PixelScene.landscape() ? WIDTH_L : WIDTH_P;
@@ -73,7 +76,7 @@ public class WndDungeonMode extends Window {
         Component content = modeList.content();
         int positem = 0;
 
-        for (Dungeon.GameMode mode : Dungeon.GameMode.values()) {
+        for (Dungeon.GameMode mode : possibleModes) {
             Image ic = Icons.get(mode.icon);
 
             ModeButton moveBtn = new ModeButton(mode.desc(), 6, mode);

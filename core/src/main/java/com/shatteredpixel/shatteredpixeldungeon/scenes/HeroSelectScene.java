@@ -101,6 +101,7 @@ public class HeroSelectScene extends PixelScene {
 
 	private static boolean heroWasRandomized = true;
 	private static boolean chalWasRandomized = false;
+    private static boolean modeWasRandomized = false;
 
 	@Override
 	public void create() {
@@ -157,7 +158,12 @@ public class HeroSelectScene extends PixelScene {
 			protected void onClick() {
 				super.onClick();
 
-				ShatteredPixelDungeon.scene().addToFront(new WndDungeonMode());
+                Dungeon.GameMode[] modes = Dungeon.GameMode.values();
+
+				ShatteredPixelDungeon.scene().addToFront(modeWasRandomized ?
+                        new WndDungeonMode(Random.oneOf(modes)) :
+                        new WndDungeonMode());
+                modeWasRandomized = false;
 			}
 		};
 		startBtn.icon(Icons.get(Icons.ENTER));
@@ -861,6 +867,7 @@ public class HeroSelectScene extends PixelScene {
 
 			CheckBox chkHero;
 			CheckBox chkChals;
+            CheckBox chkMode;
 
 			public WndRandomize(){
 				super();
@@ -887,6 +894,18 @@ public class HeroSelectScene extends PixelScene {
 				add(chkChals);
 
 				chkChals.checked(chalWasRandomized);
+
+                chkMode = new CheckBox(Messages.get(HeroSelectScene.class, "randomize_mode")){
+                    @Override
+                    public void checked(boolean value) {
+                        super.checked(value);
+                        modeWasRandomized = value;
+                    }
+                };
+                chkMode.setRect(0, 40, 120, 16);
+                add(chkMode);
+
+                chkMode.checked(modeWasRandomized);
 
 				RedButton btnCancel = new RedButton(Messages.get(HeroSelectScene.class, "randomize_cancel")){
 					@Override
