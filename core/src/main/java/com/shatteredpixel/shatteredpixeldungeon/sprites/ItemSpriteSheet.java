@@ -638,7 +638,7 @@ public class ItemSpriteSheet {
 		assignItemRect(SPYGLASS,        15, 15);
 	}
 
-	private static final int SUMM_MISCS     =                               xy(1, 26);
+	private static final int SUMM_MISCS     =                               xy(1, 40);
 	public static final int ROPES           = SUMM_MISCS+1;
 	public static final int RUNIC_SHOT      = SPIRIT_DART+1;
 	public static final int CLEAN_WATER     = SUMM_MISCS+0;
