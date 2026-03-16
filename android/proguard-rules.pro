@@ -3,6 +3,7 @@
 -keepnames class com.watabou.** { *; }
 
 # keep classes that are instantiated via reflection
+-keep class * extends com.watabou.noosa.Gizmo { *; }
 -keep class * extends com.watabou.glscripts.Script { *; }
 -keep class * implements com.watabou.utils.Bundlable { *; }
 
