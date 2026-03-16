@@ -3,8 +3,8 @@
 -keepnames class com.watabou.** { *; }
 
 # keep classes that are instantiated via reflection
--keep class * extends com.watabou.glscripts.Script
--keep class * implements com.watabou.utils.Bundlable
+-keep class * extends com.watabou.glscripts.Script { *; }
+-keep class * implements com.watabou.utils.Bundlable { *; }
 
 # retained to support meaningful stack traces
 # note that the mapping file must be referenced in order to make sense of line numbers
