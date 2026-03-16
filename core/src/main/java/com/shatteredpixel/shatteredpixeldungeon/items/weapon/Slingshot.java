@@ -100,7 +100,7 @@ public class Slingshot extends Weapon {
     @Override
     public boolean doPickUp(Hero hero, int pos) {
         Stone.slingshot = this;
-        return super.doPickUp(hero);
+        return super.doPickUp(hero, pos);
     }
 
     @Override
