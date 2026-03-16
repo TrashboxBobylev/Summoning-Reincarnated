@@ -41,7 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SupplyRation;
-import com.shatteredpixel.shatteredpixeldungeon.items.keys.SkeletonKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.keys.WornKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Chaosstone;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.MimicTooth;
 import com.shatteredpixel.shatteredpixeldungeon.levels.builders.Builder;
@@ -204,7 +204,7 @@ public class ArenaLevel extends RegularLevel {
         for (Heap heap : Dungeon.level.heaps.valueList().toArray(new Heap[0])){
             if (heap.pos == cell){
                 for (Item item : heap.items){
-                    if (item instanceof SkeletonKey){
+                    if (item instanceof WornKey){
                         keyDropped = true;
                     }
                 }

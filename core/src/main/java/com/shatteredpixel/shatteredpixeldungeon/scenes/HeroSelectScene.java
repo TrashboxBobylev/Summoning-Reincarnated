@@ -932,7 +932,7 @@ public class HeroSelectScene extends PixelScene {
 							}
 							SPDSettings.challenges(mask);
 							challengeButton.icon(Icons.get(SPDSettings.challenges() > 0 ? Icons.CHALLENGE_COLOR : Icons.CHALLENGE_GREY));
-							ShatteredPixelDungeon.scene().addToFront(new WndChallenges(mask, false));
+//							ShatteredPixelDungeon.scene().addToFront(new WndChallenges(mask, false));
 						}
 
 						if (chkHero.checked()){
