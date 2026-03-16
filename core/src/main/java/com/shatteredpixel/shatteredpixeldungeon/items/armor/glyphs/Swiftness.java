@@ -27,9 +27,11 @@ package com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
 
 public class Swiftness extends Armor.Glyph {
 
@@ -47,7 +49,7 @@ public class Swiftness extends Armor.Glyph {
 		}
 
 		boolean enemyNear = false;
-		//for each enemy, check if they are adjacent, or within 2 tiles and an adjacent cell is open
+		//for each enemy, check if they are adjacent, or within 2 tiles and an adjacent cell is open or a door
 		for (Char ch : Actor.chars()){
 			if ( Dungeon.level.distance(ch.pos, owner.pos) <= 2 && owner.alignment != ch.alignment && ch.alignment != Char.Alignment.NEUTRAL){
 				if (Dungeon.level.adjacent(ch.pos, owner.pos)){
@@ -55,7 +57,7 @@ public class Swiftness extends Armor.Glyph {
 					break;
 				} else {
 					for (int i : PathFinder.NEIGHBOURS8){
-						if (Dungeon.level.adjacent(owner.pos+i, ch.pos) && !Dungeon.level.solid[owner.pos+i]){
+						if (Dungeon.level.adjacent(owner.pos+i, ch.pos) && (!Dungeon.level.solid[owner.pos+i] || Dungeon.level.passable[owner.pos+i])){
 							enemyNear = true;
 							break;
 						}
@@ -66,6 +68,10 @@ public class Swiftness extends Armor.Glyph {
 		if (enemyNear){
 			return 1;
 		} else {
+			if (owner.sprite != null){
+				int particles = 1 + (int)Random.Float(1+level/5f);
+				owner.sprite.emitter().startDelayed(Speck.factory(Speck.YELLOW_LIGHT), 0.02f, particles, 0.05f);
+			}
 			return (1.2f + 0.04f * level) * genericProcChanceMultiplier(owner);
 		}
 	}

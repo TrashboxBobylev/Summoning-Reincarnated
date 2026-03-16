@@ -1571,9 +1571,6 @@ public abstract class Mob extends Char {
 
 		public static final String TAG	= "HUNTING";
 
-		//prevents rare infinite loop cases
-		protected boolean recursing = false;
-
 		@Override
 		public boolean act( boolean enemyInFOV, boolean justAlerted ) {
 			enemySeen = enemyInFOV;
@@ -1587,23 +1584,8 @@ public abstract class Mob extends Char {
 
 				//if we cannot attack our target, but were hit by something else that
 				// is visible and attackable or closer, swap targets
-				if (!recentlyAttackedBy.isEmpty()){
-					boolean swapped = false;
-					for (Char ch : recentlyAttackedBy){
-						if (ch != null && ch.isActive() && Actor.chars().contains(ch) && alignment != ch.alignment && fieldOfView[ch.pos] && ch.invisible == 0 && !isCharmedBy(ch)) {
-							if (canAttack(ch) || enemy == null ||  modifyPriority(ch, ch.targetPriority()*Dungeon.level.distance(pos, ch.pos)) < modifyPriority(enemy, enemy.targetPriority()*Dungeon.level.distance(pos, enemy.pos))) {
-								enemy = ch;
-								target = ch.pos;
-								enemyInFOV = true;
-								swapped = true;
-							}
-						}
-					}
-					recentlyAttackedBy.clear();
-					if (swapped){
-						showCurrentTarget();
-						return act( enemyInFOV, justAlerted );
-					}
+				if (handleRecentAttackers()){
+					return act( true, justAlerted );
 				}
 
 				if (enemyInFOV) {
@@ -1627,30 +1609,54 @@ public abstract class Mob extends Char {
 
 				} else {
 
-					//if moving towards an enemy isn't possible, try to switch targets to another enemy that is closer
-					//unless we have already done that and still can't move toward them, then move on.
-					if (!recursing) {
-						Char oldEnemy = enemy;
-						enemy = null;
-						enemy = chooseEnemy();
-						if (enemy != null && enemy != oldEnemy) {
-							recursing = true;
-							showCurrentTarget();
+					return handleUnreachableTarget(enemyInFOV, justAlerted);
+				}
+			}
+		}
+
+		protected boolean handleRecentAttackers(){
+			boolean swapped = false;
+			if (!recentlyAttackedBy.isEmpty()){
+				for (Char ch : recentlyAttackedBy){
+					if (ch != null && ch.isActive() && Actor.chars().contains(ch) && alignment != ch.alignment && fieldOfView[ch.pos] && ch.invisible == 0 && !isCharmedBy(ch)) {
+						if (canAttack(ch) || enemy == null || Dungeon.level.distance(pos, ch.pos) < Dungeon.level.distance(pos, enemy.pos)) {
+							enemy = ch;
+							target = ch.pos;
+							swapped = true;
+						}
+					}
+				}
+				recentlyAttackedBy.clear();
+			}
+			return swapped;
+		}
+
+		//prevents rare infinite loop cases
+		protected boolean recursing = false;
+
+		//Try to switch targets to another enemy that is closer or reachable
+		//unless we have already done that and still can't move toward them, then move on.
+		protected boolean handleUnreachableTarget(boolean enemyInFOV, boolean justAlerted){
+			if (!recursing) {
+				Char oldEnemy = enemy;
+				enemy = null;
+				enemy = chooseEnemy();
+				if (enemy != null && enemy != oldEnemy) {
+					recursing = true;
+					showCurrentTarget();
 							boolean result = act(enemyInFOV, justAlerted);
 							recursing = false;
 							return result;
 						}
 					}
 
-					spend( TICK );
-					if (!enemyInFOV) {
-						sprite.showLost();
-						state = WANDERING;
-						target = ((Mob.Wandering)WANDERING).randomDestination();
-					}
-					return true;
-				}
+			spend( TICK );
+			if (!enemyInFOV) {
+				sprite.showLost();
+				state = WANDERING;
+				target = ((Mob.Wandering)WANDERING).randomDestination();
 			}
+			return true;
 		}
 	}
 

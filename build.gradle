@@ -8,7 +8,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.11.1'
+        classpath 'com.android.tools.build:gradle:8.13.1'
         classpath "com.palantir.gradle.gitversion:gradle-git-version:0.12.3"
     }
 }
@@ -23,7 +23,7 @@ allprojects {
         appName = 'Summoning PD Reincarnated'
         appPackageName = 'com.trashboxbobylev.resummoningpixeldungeon'
 
-        appVersionCode = 879
+        appVersionCode = 884
         appVersionName = 'ReInc-0.6.2-' + details.gitHash.substring(0, 7)
 
         appJavaCompatibility = JavaVersion.VERSION_11
@@ -32,9 +32,9 @@ allprojects {
         appAndroidMinSDK = 21       //Android 5.0
         appAndroidTargetSDK = 35    //Android 15
 
-        gdxVersion = '1.14.0' //using snapshot as 1.13.5 has issues with Android R8
+        gdxVersion = '1.14.0'
         gdxControllersVersion = '2.2.4'
-        robovmVersion = '2.3.23'
+        robovmVersion = '2.3.24'
     }
     version = appVersionName
 

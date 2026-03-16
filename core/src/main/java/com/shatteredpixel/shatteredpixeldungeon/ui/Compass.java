@@ -60,9 +60,7 @@ public class Compass extends Image {
 			return;
 		}
 		
-		if (!visible) {
-			visible = Dungeon.level.visited[cell] || Dungeon.level.mapped[cell];
-		}
+		visible = Dungeon.level.visited[cell] || Dungeon.level.mapped[cell];
 		
 		if (visible) {
 			PointF scroll = Camera.main.scroll;

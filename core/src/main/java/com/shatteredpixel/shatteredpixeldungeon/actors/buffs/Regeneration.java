@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ChaoticCenser;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.SaltCube;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
+import com.shatteredpixel.shatteredpixeldungeon.levels.VaultLevel;
 import com.watabou.utils.Bundle;
 
 public class Regeneration extends Buff {
@@ -158,6 +159,9 @@ public class Regeneration extends Buff {
         }
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null && !lock.regenOn()){
+			return false;
+		}
+		if (Dungeon.level instanceof VaultLevel){
 			return false;
 		}
 		return true;

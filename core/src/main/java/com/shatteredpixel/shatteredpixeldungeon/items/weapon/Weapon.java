@@ -117,6 +117,10 @@ abstract public class Weapon extends KindOfWeapon implements StrengthItem, Weapo
 			return Math.round(dmg * factor);
 		}
 
+		public float damageFactor(float dmg){
+			return dmg * damageFactor;
+		}
+
 		public float delayFactor(float dly){
 			float factor = delayFactor;
 			if (factor != 1.0f){

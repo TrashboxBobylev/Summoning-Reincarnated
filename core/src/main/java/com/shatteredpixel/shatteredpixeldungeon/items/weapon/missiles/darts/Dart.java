@@ -56,7 +56,7 @@ public class Dart extends MissileWeapon {
 		image = ItemSpriteSheet.DART;
 		hitSound = Assets.Sounds.HIT_ARROW;
 		hitSoundPitch = 1.3f;
-		
+
 		//infinite, even with penalties
 		baseUses = 1000;
 

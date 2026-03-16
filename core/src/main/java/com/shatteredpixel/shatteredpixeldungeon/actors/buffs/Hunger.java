@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssChallengeLevel;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
+import com.shatteredpixel.shatteredpixeldungeon.levels.VaultLevel;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
@@ -93,7 +94,8 @@ public class Hunger extends Buff implements Hero.Doom, DamageSource {
 				|| target.buff(WellFed.class) != null
 				|| SPDSettings.intro()
 				|| target.buff(ScrollOfChallenge.ChallengeArena.class) != null
-				|| Dungeon.level instanceof AbyssChallengeLevel){
+				|| Dungeon.level instanceof AbyssChallengeLevel
+                || Dungeon.level instanceof VaultLevel){
 			return;
 		}
 //		if (Dungeon.hero.heroClass == HeroClass.WARRIOR && energy != -50 && energy < 0) energy *= 0.75f;

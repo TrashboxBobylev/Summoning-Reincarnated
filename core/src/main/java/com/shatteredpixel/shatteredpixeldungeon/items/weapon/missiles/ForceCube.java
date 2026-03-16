@@ -40,6 +40,8 @@ import com.watabou.utils.BArray;
 import com.watabou.utils.PathFinder;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ForceCube extends MissileWeapon {
 	
@@ -121,6 +123,12 @@ public class ForceCube extends MissileWeapon {
                 }
             }
         }
+        Collections.sort(targets, new Comparator<Char>() {
+            @Override
+            public int compare(Char a, Char b) {
+                return Float.compare(Dungeon.level.trueDistance(b.pos, curUser.pos), Dungeon.level.trueDistance(a.pos, curUser.pos));
+            }
+        });
 		
 		for (Char target : targets){
 			curUser.shoot(target, this);

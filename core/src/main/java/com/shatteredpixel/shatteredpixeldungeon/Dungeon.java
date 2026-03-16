@@ -83,6 +83,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.PrisonLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SewerBossLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.SewerLevel;
+import com.shatteredpixel.shatteredpixeldungeon.levels.VaultLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret.SecretRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special.SpecialRoom;
@@ -331,7 +332,7 @@ public class Dungeon {
 	public static GameMode mode;
 
 	public static int challenges;
-	public static int mobsToChampion;
+	public static float mobsToChampion;
 
 	public static Hero hero;
 	public static Level level;
@@ -386,7 +387,7 @@ public class Dungeon {
 		initialVersion = version = Game.versionCode;
 		challenges = SPDSettings.challenges();
 		conducts = new Conducts.ConductStorage(SPDSettings.conducts());
-		mobsToChampion = -1;
+		mobsToChampion = 1;
 
 		Actor.clear();
 		Actor.resetNextID();
@@ -505,7 +506,9 @@ public class Dungeon {
 		} else if (branch == 1) {
 			if (Dungeon.depth > Dungeon.chapterSize()*2 && Dungeon.depth < Dungeon.chapterSize()*3) {
 				level = new MiningLevel();
-			} else {
+			} else if (Dungeon.depth > Dungeon.chapterSize()*3 && Dungeon.depth < Dungeon.chapterSize()*4) {
+                level = new VaultLevel();
+            } else {
 				level = new DeadEndLevel();
 			}
 		} else if (branch == AbyssLevel.BRANCH) {
@@ -517,8 +520,8 @@ public class Dungeon {
 			level = new ArenaLevel();
 		}
 
-		//dead end levels get cleared, don't count as generated
-		if (!(level instanceof DeadEndLevel)){
+		//dead end levels (and vault levels for now!) get cleared, don't count as generated
+		if (!(level instanceof DeadEndLevel || level instanceof VaultLevel)){
 			//this assumes that we will never have a depth value outside the range 0 to 999
 			// or -500 to 499, etc.
 			if (!generatedLevels.contains(depth + 1000*branch)) {
@@ -940,7 +943,7 @@ public class Dungeon {
 
 		Dungeon.challenges = bundle.getInt( CHALLENGES );
 		conducts.restoreFromBundle(bundle);
-		Dungeon.mobsToChampion = bundle.getInt( MOBS_TO_CHAMPION );
+		Dungeon.mobsToChampion = bundle.getFloat( MOBS_TO_CHAMPION );
 
 		if (bundle.contains(MODE))
 			Dungeon.mode = GameMode.valueOf(bundle.getString(MODE));

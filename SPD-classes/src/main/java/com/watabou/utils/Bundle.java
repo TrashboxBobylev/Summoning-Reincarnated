@@ -24,9 +24,6 @@
 
 package com.watabou.utils;
 
-import com.badlogic.gdx.utils.JsonReader;
-import com.badlogic.gdx.utils.JsonValue;
-import com.badlogic.gdx.utils.JsonWriter;
 import com.watabou.noosa.Game;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,7 +41,6 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -519,25 +515,16 @@ public class Bundle {
 			}
 			String jsonString = jsonBuilder.toString();
 
-			Object json;
-			try {
-				json = new JSONTokener(jsonString).nextValue();
-			} catch (Exception e){
-				//TODO support for v1.1.X saves has been dropped, can probably remove this soon
-				//if the string can't be tokenized, it may be written by v1.1.X, which used libGDX JSON.
-				// Some of these are written in a 'minified' format, some have duplicate keys.
-				// We read them in with the libGDX JSON code, fix duplicates, write as full JSON
-				// and then try to read again with org.json
-				Game.reportException(e);
-				JsonValue gdxJSON = new JsonReader().parse(jsonString);
-				killDuplicateKeysInLibGDXJSON(gdxJSON);
-				json = new JSONTokener(gdxJSON.prettyPrint(JsonWriter.OutputType.json, 0)).nextValue();
-			}
+			Object json = new JSONTokener(jsonString).nextValue();
 			reader.close();
 
 			//if the data is an array, put it in a fresh object with the default key
 			if (json instanceof JSONArray){
 				json = new JSONObject().put( DEFAULT_KEY, json );
+			}
+
+			if (!(json instanceof JSONObject)){
+				throw new JSONException("Malformed JSON Object: " + jsonString);
 			}
 
 			return new Bundle( (JSONObject) json );

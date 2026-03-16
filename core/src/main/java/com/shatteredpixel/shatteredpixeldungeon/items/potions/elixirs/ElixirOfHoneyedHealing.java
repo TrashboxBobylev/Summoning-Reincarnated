@@ -96,14 +96,25 @@ public class ElixirOfHoneyedHealing extends Elixir {
 			ch.HP = Math.min(ch.HT, ch.HP + heal);
 		}
 	}
-	
+
+	//lower values, as it's cheaper to make
+	@Override
+	public int value() {
+		return quantity * 40;
+	}
+
+	@Override
+	public int energyVal() {
+		return 8;
+	}
+
 	public static class Recipe extends com.shatteredpixel.shatteredpixeldungeon.items.Recipe.SimpleRecipe {
 		
 		{
 			inputs =  new Class[]{PotionOfHealing.class, Honeypot.ShatteredPot.class};
 			inQuantity = new int[]{1, 1};
 			
-			cost = 4;
+			cost = 2;
 			
 			output = ElixirOfHoneyedHealing.class;
 			outQuantity = 1;

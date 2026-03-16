@@ -163,6 +163,9 @@ public class Berserk extends ShieldBuff implements ActionIndicator.Action, Damag
 	@Override
 	public void detach() {
 		super.detach();
+		if (state == State.BERSERK) {
+			state = State.RECOVERING;
+		}
 		ActionIndicator.clearAction(this);
 	}
 

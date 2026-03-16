@@ -36,7 +36,7 @@ public class Albino extends Rat {
 	{
 		spriteClass = AlbinoSprite.class;
 		
-		HP = HT = 15;
+		HP = HT = 12;
 		EXP = 2;
 		
 		loot = MysteryMeat.class;
@@ -47,7 +47,7 @@ public class Albino extends Rat {
 	public int attackProc( Char enemy, int damage ) {
 		damage = super.attackProc( enemy, damage );
 		if (damage > 0 && Random.Int( 2 ) == 0) {
-			Buff.affect( enemy, Bleeding.class ).set( damage );
+			Buff.affect( enemy, Bleeding.class ).set( Random.NormalFloat(2, 3) );
 		}
 		
 		return damage;
