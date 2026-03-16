@@ -25,8 +25,8 @@
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Chrome;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.Rankings;
@@ -40,7 +40,6 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.CheckBox;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ExitButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.IconButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
-import com.shatteredpixel.shatteredpixeldungeon.ui.OptionSlider;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.StyledButton;
@@ -627,7 +626,7 @@ public class HeroSelectScene extends PixelScene {
 		private ArrayList<StyledButton> buttons;
 		private ArrayList<ColorBlock> spacers;
 
-		protected StyledButton challengeButton;
+		protected StyledButton conductsButton;
 
 		@Override
 		protected void createChildren() {
@@ -796,7 +795,7 @@ public class HeroSelectScene extends PixelScene {
 			add(dailyButton);
 			buttons.add(dailyButton);
 
-            StyledButton conductsButton = new StyledButton(Chrome.Type.BLANK, Messages.get(WndConducts.class, "title"), 6){
+            conductsButton = new StyledButton(Chrome.Type.BLANK, Messages.get(WndConducts.class, "title"), 6){
 				@Override
 				protected void onClick() {
 					if (!Badges.isUnlocked(Badges.Badge.VICTORY) && !DeviceCompat.isDebug()){
@@ -862,7 +861,6 @@ public class HeroSelectScene extends PixelScene {
 
 			CheckBox chkHero;
 			CheckBox chkChals;
-			OptionSlider optChals;
 
 			public WndRandomize(){
 				super();
@@ -882,24 +880,11 @@ public class HeroSelectScene extends PixelScene {
 					@Override
 					public void checked(boolean value) {
 						super.checked(value);
-						optChals.enable(value);
 						chalWasRandomized = value;
 					}
 				};
 				chkChals.setRect(0, 20, 120, 16);
 				add(chkChals);
-
-				int max = Challenges.MAX_CHALS;
-				optChals = new OptionSlider(Messages.get(HeroSelectScene.class, "randomize_chals_title"), "0", Integer.toString(max), 0, max) {
-					@Override
-					protected void onChange() {
-						//do nothing immediately
-					}
-				};
-				optChals.enable(false);
-				optChals.setSelectedValue(Challenges.activeChallenges(SPDSettings.challenges()));
-				optChals.setRect(0, 38, 120, 22);
-				add(optChals);
 
 				chkChals.checked(chalWasRandomized);
 
@@ -920,19 +905,10 @@ public class HeroSelectScene extends PixelScene {
 						hide();
 
 						if (chkChals.checked()){
-							int chals = optChals.getSelectedValue();
-							ArrayList<Integer> chalMasks = new ArrayList<>();
-							for (int i = 0; i < Challenges.MAX_CHALS; i++){
-								chalMasks.add((int)Math.pow(2, i));
-							}
-							Random.shuffle(chalMasks);
-							int mask = 0;
-							for (int i = 0; i < chals; i++){
-								mask += chalMasks.remove(0);
-							}
-							SPDSettings.challenges(mask);
-							challengeButton.icon(Icons.get(SPDSettings.challenges() > 0 ? Icons.CHALLENGE_COLOR : Icons.CHALLENGE_GREY));
-//							ShatteredPixelDungeon.scene().addToFront(new WndChallenges(mask, false));
+                            Conducts.ConductStorage storage = new Conducts.ConductStorage(Random.oneOf(Conducts.Conduct.values()));
+                            SPDSettings.conducts(storage);
+							conductsButton.icon(Icons.get(SPDSettings.conducts().size() > 0 ? Icons.CONDUCTS_COLOR : Icons.CONDUCTS_GREY));
+							ShatteredPixelDungeon.scene().addToFront(new WndConducts(storage, false));
 						}
 
 						if (chkHero.checked()){
