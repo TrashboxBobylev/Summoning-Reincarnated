@@ -27,9 +27,9 @@ package com.shatteredpixel.shatteredpixeldungeon.ui;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
+import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MysteryMerchant;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -239,6 +239,7 @@ public class TalentButton extends Button {
                             ((MysteryMerchant) ch).yell( Messages.get(MysteryMerchant.class, "degrade_complete", talent.title() ));
                         }
                     }
+                    Statistics.qualifiedForRandomVictoryBadge = false;
                 }
             });
         } else {
