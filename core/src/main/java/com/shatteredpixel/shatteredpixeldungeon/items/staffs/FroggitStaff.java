@@ -33,9 +33,9 @@ public class FroggitStaff extends Staff {
         minionType = Froggit.class;
         tier = 1;
         table = new BalanceTable(
-                15, 3, 8,
-                15, 1, 2,
-                30, 0, 0);
+                12, 3, 8,
+                12, 1, 2,
+                25, 0, 0);
 
         unique = true;
     }
