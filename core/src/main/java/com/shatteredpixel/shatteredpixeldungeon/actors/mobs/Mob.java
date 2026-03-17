@@ -1585,6 +1585,7 @@ public abstract class Mob extends Char {
 				//if we cannot attack our target, but were hit by something else that
 				// is visible and attackable or closer, swap targets
 				if (handleRecentAttackers()){
+                    showCurrentTarget();
 					return act( true, justAlerted );
 				}
 
@@ -1619,7 +1620,7 @@ public abstract class Mob extends Char {
 			if (!recentlyAttackedBy.isEmpty()){
 				for (Char ch : recentlyAttackedBy){
 					if (ch != null && ch.isActive() && Actor.chars().contains(ch) && alignment != ch.alignment && fieldOfView[ch.pos] && ch.invisible == 0 && !isCharmedBy(ch)) {
-						if (canAttack(ch) || enemy == null || Dungeon.level.distance(pos, ch.pos) < Dungeon.level.distance(pos, enemy.pos)) {
+						if (canAttack(ch) || enemy == null || modifyPriority(ch, ch.targetPriority()*Dungeon.level.distance(pos, ch.pos)) < modifyPriority(enemy, enemy.targetPriority()*Dungeon.level.distance(pos, enemy.pos))) {
 							enemy = ch;
 							target = ch.pos;
 							swapped = true;
@@ -1644,11 +1645,11 @@ public abstract class Mob extends Char {
 				if (enemy != null && enemy != oldEnemy) {
 					recursing = true;
 					showCurrentTarget();
-							boolean result = act(enemyInFOV, justAlerted);
-							recursing = false;
-							return result;
-						}
-					}
+                    boolean result = act(enemyInFOV, justAlerted);
+                    recursing = false;
+                    return result;
+                }
+            }
 
 			spend( TICK );
 			if (!enemyInFOV) {
