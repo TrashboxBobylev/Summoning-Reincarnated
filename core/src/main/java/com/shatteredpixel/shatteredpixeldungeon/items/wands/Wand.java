@@ -1143,6 +1143,9 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		}
 
 		private void recharge(){
+            if (!Regeneration.regenOn())
+                return;
+
 			float turnsToCharge = getTurnsToCharge();
 
 			partialCharge += (1f/turnsToCharge);
