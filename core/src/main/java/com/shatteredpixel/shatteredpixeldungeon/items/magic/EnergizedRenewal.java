@@ -91,7 +91,7 @@ public class EnergizedRenewal extends ConjurerSpell {
 
     private int intHeal(int rank){
         switch (rank){
-            case 1: return 8;
+            case 1: return 6;
             case 2: return 0;
             case 3: return 0;
         }
