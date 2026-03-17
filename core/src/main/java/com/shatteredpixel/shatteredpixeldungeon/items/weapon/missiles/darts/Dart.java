@@ -92,11 +92,10 @@ public class Dart extends MissileWeapon {
 		if (bow != null){
 			if (!(this instanceof TippedDart) && Dungeon.hero.buff(Crossbow.ChargedShot.class) != null){
 				//ability increases base dmg by 50%, scaling by 50%
-				damage = 8 +                     //8 base
+				damage = bow.dartMin() + 4 +                     //8 base
 						2*bow.buffedLvl() + lvl/2f;//+2 per bow level, +0.5 per level
 			} else {
-				damage = 4 +                     //4 base
-						bow.buffedLvl() + lvl/2f;  //+0.5 per level or bow level
+				damage = bow.dartMin() + lvl/2f;  //+0.5 per level or bow level
 			}
 		} else {
 			damage = 1 +     //1 base, down from 2
@@ -115,11 +114,9 @@ public class Dart extends MissileWeapon {
 		if (bow != null){
 			if (!(this instanceof TippedDart) && Dungeon.hero.buff(Crossbow.ChargedShot.class) != null){
 				//ability increases base dmg by 50%, scaling by 50%
-                damage = 16 +                       //16 base
-						4*bow.buffedLvl() + 1.5f*lvl; //+4 per bow level, +1.5 per level
+                damage = bow.dartMax() + 4 + bow.buffedLvl() + 1.5f*lvl; //+4 per bow level, +1.5 per level
 			} else {
-                damage = 12 +                       //12 base
-						3*bow.buffedLvl() + 1.5f*lvl; //+3 per bow level, +1.5 per level
+                damage = bow.dartMax() + 1.5f*lvl; //+3 per bow level, +1.5 per level
 			}
 		} else {
 			damage = 2 +     //2 base, down from 5
