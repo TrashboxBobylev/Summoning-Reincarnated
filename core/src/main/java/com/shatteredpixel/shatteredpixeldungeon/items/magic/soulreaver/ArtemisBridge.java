@@ -135,8 +135,8 @@ public class ArtemisBridge extends ConjurerSpell {
     public int manaCost(int type) {
         switch (type){
             case 1: return 3;
-            case 2: return 5;
-            case 3: return 10;
+            case 2: return 4;
+            case 3: return 8;
         }
         return 0;
     }

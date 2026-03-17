@@ -99,9 +99,9 @@ public class TommiesArmorSpell extends ConjurerSpell {
     @Override
     public int manaCost(int type) {
         switch (type){
-            case 1: return 15;
-            case 2: return 20;
-            case 3: return 4;
+            case 1: return 12;
+            case 2: return 16;
+            case 3: return 3;
         }
         return 0;
     }
