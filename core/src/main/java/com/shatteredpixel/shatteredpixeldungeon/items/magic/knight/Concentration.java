@@ -89,7 +89,7 @@ public class Concentration extends AdHocSpell {
 
     @Override
     public int manaCost(int type) {
-        return 15;
+        return 12;
     }
 
     public String spellDesc() {

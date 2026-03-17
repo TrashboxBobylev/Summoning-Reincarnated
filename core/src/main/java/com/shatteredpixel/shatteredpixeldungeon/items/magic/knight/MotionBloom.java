@@ -79,9 +79,9 @@ public class MotionBloom extends ConjurerSpell {
     @Override
     public int manaCost(int type) {
         switch (type){
-            case 1: return 10;
-            case 2: return 13;
-            case 3: return 25;
+            case 1: return 8;
+            case 2: return 11;
+            case 3: return 20;
         }
         return 0;
     }
