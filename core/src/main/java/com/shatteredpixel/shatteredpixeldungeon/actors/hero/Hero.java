@@ -302,8 +302,8 @@ public class Hero extends Char {
 	public void updateHT( boolean boostHP ){
 		int curHT = HT;
 
-		int baseHP = heroClass == HeroClass.CONJURER ? 13 : 20;
-		int adjustScaling = heroClass == HeroClass.CONJURER ? 3 : 5;
+		int baseHP = 20;
+		int adjustScaling = 5;
 		if (heroClass == HeroClass.ADVENTURER){
 			baseHP = 30;
 		}
