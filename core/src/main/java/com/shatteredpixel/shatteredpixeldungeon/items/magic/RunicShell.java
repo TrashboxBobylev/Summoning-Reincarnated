@@ -84,7 +84,7 @@ public class RunicShell extends ConjurerSpell {
 
     private int heal(Char ch, int rank){
         switch (rank){
-            case 1: return 10 + ch.HT / 3;
+            case 1: return 8 + ch.HT / 3;
             case 2: return 35;
 //            case 3: return (int) (40 + ch.HT * 1.25f);
         }
@@ -103,7 +103,7 @@ public class RunicShell extends ConjurerSpell {
 
     private int intHeal(int rank){
         switch (rank){
-            case 1: return 10;
+            case 1: return 8;
             case 2: return 30;
             case 3: return 0;
         }
