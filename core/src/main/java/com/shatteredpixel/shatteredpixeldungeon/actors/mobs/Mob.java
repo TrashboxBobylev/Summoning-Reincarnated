@@ -1202,8 +1202,6 @@ public abstract class Mob extends Char {
 			}
 			Sample.INSTANCE.play(Assets.Sounds.CHARGEUP, 0.75f, 1.33f);
 		}
-		if (Dungeon.hero.subClass == HeroSubClass.SOUL_WIELDER)
-			gain += 1;
 		Dungeon.hero.changeMana(gain);
 	}
 

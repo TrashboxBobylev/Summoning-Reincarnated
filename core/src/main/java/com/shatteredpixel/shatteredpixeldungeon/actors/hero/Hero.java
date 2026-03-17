@@ -880,7 +880,6 @@ public class Hero extends Char {
 				&& (buff(Recharging.class) != null || buff(ArtifactRecharge.class) != null)){
 			dmg = Math.round(dmg * 1.025f + (.025f*pointsInTalent(Talent.WEAPON_RECHARGING)));
 		}
-		if (subClass == HeroSubClass.SOUL_WIELDER) dmg *= 0.66f;
 
 		if (dmg < 0) dmg = 0;
 		return dmg;
