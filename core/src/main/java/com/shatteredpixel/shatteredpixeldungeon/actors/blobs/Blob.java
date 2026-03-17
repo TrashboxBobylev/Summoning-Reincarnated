@@ -30,6 +30,8 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Rect;
 import com.watabou.utils.Reflection;
 
+import java.util.ArrayList;
+
 public class Blob extends Actor {
 
 	{
@@ -103,6 +105,8 @@ public class Blob extends Actor {
 
 		}
 	}
+
+	protected ArrayList<Integer> cellsToFlagUpdate = new ArrayList<>();
 	
 	@Override
 	public boolean act() {
@@ -120,6 +124,11 @@ public class Blob extends Actor {
 			int[] tmp = off;
 			off = cur;
 			cur = tmp;
+
+			for (int i : cellsToFlagUpdate){
+				Dungeon.level.updateCellFlags(i);
+			}
+			cellsToFlagUpdate.clear();
 			
 		} else {
 			if (!area.isEmpty()) {
@@ -222,6 +231,10 @@ public class Blob extends Actor {
 
 	public void onBuildFlagMaps( Level l ){
 		//do nothing by default, only some blobs affect flags
+	}
+
+	public void onUpdateCellFlags( Level l, int cell){
+		//applies terrain flags to just one cell (e.g. right after terrain changes)
 	}
 
 	//some blobs have an associated landmark entry, which is added when the hero sees them

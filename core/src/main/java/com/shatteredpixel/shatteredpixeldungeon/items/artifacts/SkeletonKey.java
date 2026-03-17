@@ -496,11 +496,9 @@ public class SkeletonKey extends Artifact {
 
 					volume += off[cell];
 
-					l.losBlocking[cell] = off[cell] > 0 || (Terrain.flags[l.map[cell]] & Terrain.LOS_BLOCKING) != 0;
-					l.solid[cell] = off[cell] > 0 || (Terrain.flags[l.map[cell]] & Terrain.SOLID) != 0;
-					l.passable[cell] = off[cell] == 0 && (Terrain.flags[l.map[cell]] & Terrain.PASSABLE) != 0;
-					l.avoid[cell] = off[cell] == 0 && (Terrain.flags[l.map[cell]] & Terrain.AVOID) != 0;
-					l.updateOpenSpace(cell);
+					if (off[cell] == 0 && cur[cell] > 0){
+						cellsToFlagUpdate.add(cell);
+					}
 				}
 			}
 
@@ -512,23 +510,14 @@ public class SkeletonKey extends Artifact {
 		@Override
 		public void seed(Level level, int cell, int amount) {
 			super.seed(level, cell, amount);
-			level.losBlocking[cell] = cur[cell] > 0 || (Terrain.flags[level.map[cell]] & Terrain.LOS_BLOCKING) != 0;
-			level.solid[cell] = cur[cell] > 0 || (Terrain.flags[level.map[cell]] & Terrain.SOLID) != 0;
-			level.passable[cell] = cur[cell] == 0 && (Terrain.flags[level.map[cell]] & Terrain.PASSABLE) != 0;
-			level.avoid[cell] = cur[cell] == 0 && (Terrain.flags[level.map[cell]] & Terrain.AVOID) != 0;
-			level.updateOpenSpace(cell);
+			level.updateCellFlags(cell);
 		}
 
 		@Override
 		public void clear(int cell) {
 			super.clear(cell);
 			if (cur == null) return;
-			Level l = Dungeon.level;
-			l.losBlocking[cell] = cur[cell] > 0 || (Terrain.flags[l.map[cell]] & Terrain.LOS_BLOCKING) != 0;
-			l.solid[cell] = cur[cell] > 0 || (Terrain.flags[l.map[cell]] & Terrain.SOLID) != 0;
-			l.passable[cell] = cur[cell] == 0 && (Terrain.flags[l.map[cell]] & Terrain.PASSABLE) != 0;
-			l.avoid[cell] = cur[cell] == 0 && (Terrain.flags[l.map[cell]] & Terrain.AVOID) != 0;
-			l.updateOpenSpace(cell);
+			Dungeon.level.updateCellFlags(cell);
 		}
 
 		@Override
@@ -541,13 +530,18 @@ public class SkeletonKey extends Artifact {
 		public void onBuildFlagMaps(Level l) {
 			if (volume > 0){
 				for (int i=0; i < l.length(); i++) {
-					l.losBlocking[i] = l.losBlocking[i] || cur[i] > 0;
-					l.solid[i] = l.solid[i] || cur[i] > 0;
-					l.passable[i] = l.passable[i] && cur[i] == 0;
-					l.avoid[i] = l.avoid[i] && cur[i] == 0;
-					//openSpace will be updated as part of building flap maps
+					onUpdateCellFlags(l, i);
 				}
 			}
+		}
+
+		@Override
+		public void onUpdateCellFlags(Level l, int cell) {
+			l.losBlocking[cell] = l.losBlocking[cell] || cur[cell] > 0;
+			l.solid[cell] = l.solid[cell] || cur[cell] > 0;
+			l.passable[cell] = l.passable[cell] && cur[cell] == 0;
+			l.avoid[cell] = l.avoid[cell] && cur[cell] == 0;
+			//openSpace will be updated as part of building flap maps
 		}
 
 		@Override
