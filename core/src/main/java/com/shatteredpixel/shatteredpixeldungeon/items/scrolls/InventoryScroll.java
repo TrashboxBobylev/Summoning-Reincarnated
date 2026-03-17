@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -53,14 +53,21 @@ public abstract class InventoryScroll extends Scroll {
 	}
 	
 	private void confirmCancelation() {
-		GameScene.show( new WndOptions(new ItemSprite(this),
-				Messages.titleCase(name()),
-				Messages.get(this, "warning"),
-				Messages.get(this, "yes"),
-				Messages.get(this, "no") ) {
-			@Override
-			protected void onSelect( int index ) {
-				switch (index) {
+		GameScene.show( new WndConfirmCancel() );
+	}
+
+	public class WndConfirmCancel extends WndOptions{
+
+		public WndConfirmCancel(){
+			super(new ItemSprite(InventoryScroll.this),
+					Messages.titleCase(name()),
+					Messages.get(InventoryScroll.this, "warning"),
+					Messages.get(InventoryScroll.this, "yes"),
+					Messages.get(InventoryScroll.this, "no") );
+		}
+		@Override
+		protected void onSelect( int index ) {
+			switch (index) {
 				case 0:
 					curUser.spendAndNext( TIME_TO_READ );
 					identifiedByUse = false;
@@ -68,10 +75,14 @@ public abstract class InventoryScroll extends Scroll {
 				case 1:
 					GameScene.selectItem( itemSelector );
 					break;
-				}
 			}
-			public void onBackPressed() {}
-		} );
+		}
+		public void onBackPressed() {}
+
+		public WndBag.ItemSelector getItemSelector(){
+			return itemSelector;
+		}
+
 	}
 
 	private String inventoryTitle(){

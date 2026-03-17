@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bless;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
@@ -39,7 +40,17 @@ public class HolyDart extends TippedDart {
 	{
 		image = ItemSpriteSheet.HOLY_DART;
 	}
-	
+
+	@Override
+	public int damageRoll(Char owner) {
+		if (owner instanceof Hero) {
+			if (((Hero) owner).attackTarget().alignment == owner.alignment){
+				return 0; //does not deal damage to allies
+			}
+		}
+		return super.damageRoll(owner);
+	}
+
 	@Override
 	public int proc(Char attacker, Char defender, int damage) {
 
@@ -50,7 +61,6 @@ public class HolyDart extends TippedDart {
 
 		if (attacker.alignment == defender.alignment){
 			Buff.affect(defender, Bless.class, Math.round(Bless.DURATION*powerMultiplier(type())));
-			return 0;
 		}
 
 		if (Char.hasProp(defender, Char.Property.UNDEAD) || Char.hasProp(defender, Char.Property.DEMONIC)){

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -176,17 +176,21 @@ public class Window extends Group implements Signal.Listener<KeyEvent> {
 		Camera sceneCam = PixelScene.uiCamera.visible ? PixelScene.uiCamera : Camera.main;
 
 		int newXOfs = xOffset;
-		if (x < margin){
-			newXOfs += margin - x;
-		} else if (x + camera.width > sceneCam.width - margin){
-			newXOfs += (sceneCam.width - margin) - (x + camera.width);
+		if (newXOfs != 0) {
+			if (x < margin) {
+				newXOfs += margin - x;
+			} else if (x + camera.width > sceneCam.width - margin) {
+				newXOfs += (sceneCam.width - margin) - (x + camera.width);
+			}
 		}
 
 		int newYOfs = yOffset;
-		if (y < margin){
-			newYOfs += margin - y;
-		} else if (y + camera.height > sceneCam.height - margin){
-			newYOfs += (sceneCam.height - margin) - (y + camera.height);
+		if (newYOfs != 0) {
+			if (y < margin) {
+				newYOfs += margin - y;
+			} else if (y + camera.height > sceneCam.height - margin) {
+				newYOfs += (sceneCam.height - margin) - (y + camera.height);
+			}
 		}
 
 		offset(newXOfs, newYOfs);

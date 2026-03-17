@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.ShadowBox;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.LostBackpack;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Document;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
@@ -152,7 +153,7 @@ public class InterlevelScene extends PixelScene {
 						loadingBranch = curTransition.destBranch;
 					}
 					else {
-						loadingDepth = Dungeon.depth+1;
+						loadingDepth = Dungeon.depth;
 						loadingBranch = Dungeon.branch;
 					}
 					if (Statistics.deepestFloor >= loadingDepth) {
@@ -163,7 +164,8 @@ public class InterlevelScene extends PixelScene {
 				}
 				break;
 			case FALL:
-				loadingDepth = Dungeon.depth+1;
+				//not accurate, but you can't ever fall into a new region
+				loadingDepth = Dungeon.depth;
 				loadingBranch = Dungeon.branch;
 				break;
 			case ASCEND:
@@ -173,7 +175,7 @@ public class InterlevelScene extends PixelScene {
 					loadingBranch = curTransition.destBranch;
 				}
 				else {
-					loadingDepth = Dungeon.depth-1;
+					loadingDepth = Dungeon.depth;
 					loadingBranch = Dungeon.branch;
 				}
 				break;
@@ -811,6 +813,11 @@ public class InterlevelScene extends PixelScene {
 			int pos = level.randomRespawnCell(null);
 			if (pos == -1) pos = level.entrance();
 			level.drop(new LostBackpack(), pos);
+
+			//need to reset key replacement tracking as well
+			if (Dungeon.hero.buff(SkeletonKey.KeyReplacementTracker.class) != null){
+				Dungeon.hero.buff(SkeletonKey.KeyReplacementTracker.class).clearDepth();
+			}
 
 		} else {
 			level = Dungeon.level;

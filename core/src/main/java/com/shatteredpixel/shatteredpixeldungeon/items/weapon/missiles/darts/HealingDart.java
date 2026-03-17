@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.darts;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
@@ -36,7 +37,17 @@ public class HealingDart extends TippedDart {
 		image = ItemSpriteSheet.HEALING_DART;
 		usesTargeting = false; //you never want to throw this at an enemy
 	}
-	
+
+	@Override
+	public int damageRoll(Char owner) {
+		if (owner instanceof Hero) {
+			if (((Hero) owner).attackTarget().alignment == owner.alignment){
+				return 0; //does not deal damage to allies
+			}
+		}
+		return super.damageRoll(owner);
+	}
+
 	@Override
 	public int proc(Char attacker, Char defender, int damage) {
 
@@ -48,11 +59,6 @@ public class HealingDart extends TippedDart {
 		//heals 30 hp at base, scaling with enemy HT
 		PotionOfHealing.cure( defender );
 		Buff.affect( defender, Healing.class ).setHeal((int)((0.5f*defender.HT + 30)*powerMultiplier(type())), 0.25f, 0);
-		
-		if (attacker.alignment == defender.alignment){
-			return 0;
-		}
-		
 		return super.proc(attacker, defender, damage);
 	}
 	

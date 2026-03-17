@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -309,7 +310,7 @@ public class SpiritBow extends Weapon implements TypedItem {
 				return 0.4f;
 		}
 	}
-	
+
 	@Override
 	protected float baseDelay(Char owner) {
 		float delay;
@@ -408,7 +409,7 @@ public class SpiritBow extends Weapon implements TypedItem {
 			super.onThrow(cell);
 		}
 	}
-	
+
 	public class SpiritArrow extends MissileWeapon {
 		
 		{
@@ -417,6 +418,16 @@ public class SpiritBow extends Weapon implements TypedItem {
 			hitSound = Assets.Sounds.HIT_ARROW;
 
 			setID = 0;
+		}
+
+		@Override
+		public ArrayList<String> actions(Hero hero) {
+			return new ArrayList<>();
+		}
+
+		@Override
+		public String defaultAction() {
+			return null;
 		}
 
 		@Override
@@ -509,6 +520,11 @@ public class SpiritBow extends Weapon implements TypedItem {
 				}
 				if (sniperSpecial && SpiritBow.this.augment != Augment.SPEED) sniperSpecial = false;
 			}
+		}
+
+		@Override
+		public Item split(int amount) {
+			return null;
 		}
 
 		@Override

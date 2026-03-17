@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,12 +21,10 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Bones;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.VaultFlameTraps;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
@@ -35,185 +33,113 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.levels.builders.Builder;
+import com.shatteredpixel.shatteredpixeldungeon.levels.builders.GridBuilder;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.EmptyRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.RegionDecoLineRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.SegmentedRoom;
-import com.watabou.noosa.audio.Music;
-import com.watabou.utils.Point;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.AlternatingTrapsRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultCircleRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultCrossRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultEnemyCenterRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultEntranceRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultFinalRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultLasersRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultLongRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultBookcaseTreasureRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultFlamePathRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultLaserTreasureRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultManyScansRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultQuadrantsRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultRingRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultRingsRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultSimpleEnemyTreasureRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultMultipleEnemyTreasureRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultSingleEnemyTreasureRoom;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.watabou.utils.Random;
-import com.watabou.utils.Rect;
 
 import java.util.ArrayList;
 
-public class VaultLevel extends Level { //for now
-
-	{
-		color1 = 0x4b6636;
-		color2 = 0xf2f2f2;
-	}
-
-	@Override
-	public void playLevelMusic() {
-		Music.INSTANCE.playTracks(CityLevel.CITY_TRACK_LIST, CityLevel.CITY_TRACK_CHANCES, false);
-	}
-
-	@Override
-	public String tilesTex() {
-		return Assets.Environment.TILES_CITY;
-	}
-
-	@Override
-	public String waterTex() {
-		return Assets.Environment.WATER_CITY;
-	}
+public class VaultLevel extends CityLevel {
 
 	@Override
 	protected boolean build() {
-		setSize(34, 34);
+		itemsToSpawn.clear();
 
-		ArrayList<Room> rooms = new ArrayList<>();
-
-		Room finalRoom = null;
-		Room entryRoom = null;
-
-		for (int x = 0; x < 4; x++){
-			for (int y = 0; y < 4; y++){
-
-				if (x == 3 && y <= 1){
-					if (y == 1) {
-						continue;
-					} else {
-						Room r = new RegionDecoLineRoom();
-						r.set(1+8*x, 1+8*y, 9+8*x, 17);
-						rooms.add(r);
-						finalRoom = r;
-						continue;
-					}
-				}
-
-				if (x == 0 && y == 3){
-					Room r = new EmptyRoom();
-					r.set(1+8*x, 1+8*y, 9+8*x, 9+8*y);
-					rooms.add(r);
-					entryRoom = r;
-				} else {
-					Room r = new SegmentedRoom();
-					r.set(1+8*x, 1+8*y, 9+8*x, 9+8*y);
-					rooms.add(r);
+		for (int i = 0; i < 10; i++){
+			Item item = Generator.randomUsingDefaults(Random.oneOf(
+					Generator.Category.WEP_T2, Generator.Category.WEP_T2,
+					Generator.Category.ARMOR, Generator.Category.ARMOR,
+					Generator.Category.WAND,
+					Generator.Category.RING));
+			//regrowth is disallowed as it can be used to farm HP regen
+			if (item instanceof WandOfRegrowth){
+				continue;
+			}
+			if (item.cursed){
+				item.cursed = false;
+				if (item instanceof MeleeWeapon && ((MeleeWeapon) item).hasCurseEnchant()){
+					((MeleeWeapon) item).enchant(null);
+				} else if (item instanceof Armor && ((Armor) item).hasCurseGlyph()){
+					((Armor) item).inscribe(null);
 				}
 			}
+			//not true ID, prevents extra info about rings leaking to main game
+			item.levelKnown = item.cursedKnown = true;
+			addItemToSpawn(item);
 		}
 
-		//builder.findneighbnours
-		Room[] ra = rooms.toArray( new Room[0] );
-		for (int i=0; i < ra.length-1; i++) {
-			for (int j=i+1; j < ra.length; j++) {
-				ra[i].addNeigbour( ra[j] );
-			}
-		}
+		return super.build();
+	}
 
-		for (Room n : rooms){
-			for (Room p : n.neigbours){
-				if (p.height() > 10){
-					continue;
-				}
-				if (n.height() > 10){
-					if (n.canConnect(p)){
-						if (n.bottom == p.top){
-							n.connect(p);
-						}
-					}
-				} else if (n.canConnect(p)) {
-					n.connect(p);
-				}
-			}
-		}
+	@Override
+	protected ArrayList<Room> initRooms() {
+		ArrayList<Room> initRooms = new ArrayList<>();
 
-		//Painter.placedoors
-		for (Room r : rooms){
-			for (Room n : r.connected.keySet()) {
-				Room.Door door = r.connected.get( n );
-				if (door == null) {
+		initRooms.add(roomEntrance = new VaultEntranceRoom());
 
-					Rect i = r.intersect( n );
-					ArrayList<Point> doorSpots = new ArrayList<>();
-					for (Point p : i.getPoints()){
-						if (r.canConnect(p) && n.canConnect(p))
-							doorSpots.add(p);
-					}
-					if (doorSpots.isEmpty()){
-						ShatteredPixelDungeon.reportException(
-								new RuntimeException("Could not place a door! " +
-										"r=" + r.getClass().getSimpleName() +
-										" n=" + n.getClass().getSimpleName()));
-						continue;
-					}
-					door = new Room.Door(Random.element(doorSpots));
+		initRooms.add(new VaultRingRoom());
+		initRooms.add(new VaultRingRoom());
+		initRooms.add(new VaultCircleRoom());
+		initRooms.add(new VaultCircleRoom());
+		initRooms.add(new VaultCrossRoom());
+		initRooms.add(new VaultCrossRoom());
+		initRooms.add(new VaultQuadrantsRoom());
+		initRooms.add(new VaultQuadrantsRoom());
+		initRooms.add(new VaultRingsRoom());
+		initRooms.add(new VaultRingsRoom());
 
-					r.connected.put( n, door );
-					n.connected.put( r, door );
-				}
-			}
-		}
+		initRooms.add(new VaultEnemyCenterRoom());
+		initRooms.add(new VaultEnemyCenterRoom());
+		initRooms.add(new VaultSimpleEnemyTreasureRoom());
+		initRooms.add(new AlternatingTrapsRoom());
+		initRooms.add(new VaultLasersRoom());
 
-		for (Room n : rooms){
-			n.paint(this);
-			if (n instanceof RegionDecoLineRoom){
-				Painter.fill(this, n, 1, Terrain.EMPTY_SP);
-				Painter.fill(this, n.left+1, n.top+1, 7, 1, Terrain.REGION_DECO_ALT);
-				Painter.fill(this, n.left+1, n.top+1, 1, 14, Terrain.REGION_DECO_ALT);
-				Painter.fill(this, n.right-1, n.top+1, 1, 14, Terrain.REGION_DECO_ALT);
-			}
-			for (Point door : n.connected.values()){
-				Painter.set(this, door, Terrain.DOOR);
-			}
-		}
+		initRooms.add(new VaultLaserTreasureRoom());
+		initRooms.add(new VaultFlamePathRoom());
 
-		entrance = pointToCell(entryRoom.random());
-		transitions.add(new LevelTransition(this,
-				entrance,
-				LevelTransition.Type.BRANCH_ENTRANCE,
-				Dungeon.depth,
-				0,
-				LevelTransition.Type.BRANCH_EXIT));
+		initRooms.add(new VaultBookcaseTreasureRoom());
+		initRooms.add(new VaultSingleEnemyTreasureRoom());
 
-		rooms.remove(entryRoom);
-		rooms.remove(finalRoom);
+		initRooms.add(new VaultMultipleEnemyTreasureRoom());
+		initRooms.add(new VaultManyScansRoom());
 
-		for (Room n : rooms){
-			if (Random.Int(5) != 0){
-				Item item = Generator.randomUsingDefaults(Random.oneOf(
-						Generator.Category.WEAPON, Generator.Category.WEAPON,
-						Generator.Category.ARMOR,
-						Generator.Category.WAND,
-						Generator.Category.RING));
+		initRooms.add(new VaultLongRoom());
+		initRooms.add(new VaultLongRoom());
 
-				//regrowth is disallowed as it can be used to farm HP regen
-				if (item instanceof WandOfRegrowth){
-					continue;
-				}
+		initRooms.add(new VaultFinalRoom());
+		return initRooms;
+	}
 
-				int pos;
-				do {
-					pos = pointToCell(n.random());
-				} while (map[pos] != Terrain.EMPTY);
-				if (item.cursed){
-					item.cursed = false;
-					if (item instanceof MeleeWeapon && ((MeleeWeapon) item).hasCurseEnchant()){
-						((MeleeWeapon) item).enchant(null);
-					} else if (item instanceof Armor && ((Armor) item).hasCurseGlyph()){
-						((Armor) item).inscribe(null);
-					}
-				}
-				item.identify();
-				drop(item, pos);
-			}
-		}
+	@Override
+	protected Builder builder() {
+		return new GridBuilder();
+	}
 
-		return true;
+	@Override
+	protected int nTraps() {
+		return 0;
 	}
 
 	@Override
@@ -237,18 +163,46 @@ public class VaultLevel extends Level { //for now
 
 	@Override
 	protected void createItems() {
-		Random.pushGenerator(Random.Long());
-		ArrayList<Item> bonesItems = Bones.get();
-		if (bonesItems != null) {
-			for (Item i : bonesItems) {
-				drop(i, entrance()-width()).setHauntedIfCursed().type = Heap.Type.REMAINS;
+		//copypasta from super.createItems
+		for (Item item : itemsToSpawn) {
+			int cell = randomDropCell();
+			drop( item, cell ).type = Heap.Type.HEAP;
+			if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {
+				map[cell] = Terrain.GRASS;
+				losBlocking[cell] = false;
 			}
 		}
-		Random.popGenerator();
 	}
 
 	@Override
 	public int randomRespawnCell( Char ch ) {
 		return entrance()-width();
 	}
+
+	public static class VaultFlameTrap extends Trap {
+
+		{
+			color = BLACK;
+			shape = DOTS;
+
+			canBeHidden = false;
+			active = false;
+		}
+
+		@Override
+		public void activate() {
+			//does nothing, this trap is just decoration and is always deactivated
+		}
+
+		public static void setupTrap(Level level, int cell, int initialCD, int afterTriggerCD, int triggers){
+			VaultFlameTraps traps = Blob.seed(0, 0, VaultFlameTraps.class, level);
+			traps.curCooldowns[cell] = initialCD;
+			traps.afterTriggerCooldowns[cell] = afterTriggerCD;
+			traps.triggersAfterCooldown[cell] = triggers;
+			level.setTrap(new VaultLevel.VaultFlameTrap().reveal(), cell);
+			Painter.set(level, cell, Terrain.INACTIVE_TRAP);
+		}
+
+	}
+
 }

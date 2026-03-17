@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -235,7 +235,7 @@ public class Shopkeeper extends NPC {
 
 		@Override
 		public void onSelect( Item item ) {
-			if (item != null) {
+			if (item != null && Dungeon.hero != null && Dungeon.hero.isAlive()) {
 				WndBag parentWnd = sell();
 				GameScene.show( new WndTradeItem( item, parentWnd ) );
 			}

@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -58,6 +58,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
+import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.GameMath;
@@ -208,48 +209,32 @@ public class YogDzewa extends Mob {
 			return true;
 		} else {
 
-			boolean terrainAffected = false;
-			HashSet<Char> affected = new HashSet<>();
 			//delay fire on a rooted hero
-			if (!Dungeon.hero.rooted) {
-				if (needCrossBeam){
-					Ballistica[] fenceBeams = new Ballistica[8];
-					for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++){
-						fenceBeams[i] = new Ballistica(pos, pos + PathFinder.NEIGHBOURS8[i], Ballistica.STOP_SOLID);
-						for (int k : fenceBeams[i].path){
-							if (k == pos)
-								continue;
-							GameScene.add(Blob.seed(k, phase == 5 ? 6 : 8, YogWall.class));
-							Char ch = Actor.findChar(k);
-							if (ch != null && ch.alignment == Alignment.ALLY){
-								int dmg = Random.NormalIntRange(50, 170);
-								ch.damage(dmg, new Eye.DeathGaze());
-							}
+			if (!targetedCells.isEmpty() && !Dungeon.hero.rooted) {
+				boolean terrainAffected = false;
+				HashSet<Char> affected = new HashSet<>();
+				for (int i : targetedCells) {
+					Ballistica b = new Ballistica(pos, i, Ballistica.WONT_STOP);
+					//shoot beams
+					sprite.parent.add(new Beam.DeathRay(sprite.center(), DungeonTilemap.raisedTileCenterToWorld(b.collisionPos)));
+					for (int p : b.path) {
+						Char ch = Actor.findChar(p);
+						if (ch != null && (ch.alignment != alignment || ch instanceof Bee)) {
+							affected.add(ch);
 						}
-						needCrossBeam = false;
-					}
-				} else {
-					for (int i : targetedCells) {
-						Ballistica b = new Ballistica(pos, i, Ballistica.WONT_STOP);
-						//shoot beams
-						sprite.parent.add(new Beam.DeathRay(sprite.center(), DungeonTilemap.raisedTileCenterToWorld(b.collisionPos)));
-						for (int p : b.path) {
-							Char ch = Actor.findChar(p);
-							if (ch != null && (ch.alignment != alignment || ch instanceof Bee)) {
-								affected.add(ch);
-							}
-							if (Dungeon.level.flamable[p]) {
-								Dungeon.level.destroy(p);
-								GameScene.updateMap(p);
-								terrainAffected = true;
-							}
+						if (Dungeon.level.flamable[p]) {
+							Dungeon.level.destroy(p);
+							GameScene.updateMap(p);
+							terrainAffected = true;
 						}
 					}
-					if (terrainAffected) {
-						Dungeon.observe();
-					}
-					Invisibility.dispel(this);
-					for (Char ch : affected) {
+				}
+				Sample.INSTANCE.play( Assets.Sounds.RAY );
+				if (terrainAffected) {
+					Dungeon.observe();
+				}
+				Invisibility.dispel(this);
+				for (Char ch : affected) {
 
 						if (ch == Dungeon.hero) {
 							Statistics.bossScores[4] -= 500;

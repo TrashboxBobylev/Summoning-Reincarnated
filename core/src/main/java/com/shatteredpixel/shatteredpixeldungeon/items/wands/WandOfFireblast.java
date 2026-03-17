@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -35,6 +35,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage.WildMagic;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
@@ -222,7 +224,7 @@ public class WandOfFireblast extends DamageWand {
                             }
                             if (ch.alignment == Char.Alignment.ENEMY) {
                                 //damage of a 2-charge zap
-                                ch.damage(Math.round(powerMulti * Random.NormalIntRange((int) (2 + 2 * power()), (int) (8 + 4 * power()))), this);
+                                ch.damage(Math.round(powerMulti * Hero.heroDamageIntRange((int) (2 + 2 * power()), (int) (8 + 4 * power()))), this);
                             }
                         }
                     }

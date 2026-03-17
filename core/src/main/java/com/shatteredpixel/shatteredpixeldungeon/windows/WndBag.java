@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -145,8 +145,12 @@ public class WndBag extends WndTabbed {
 
 		layoutTabs();
 	}
-	
-	public static WndBag lastBag( ItemSelector selector ) {
+
+	public ItemSelector getSelector() {
+		return selector;
+	}
+
+	public static WndBag lastBag(ItemSelector selector ) {
 		
 		if (lastBag != null && Dungeon.hero.belongings.backpack.contains( lastBag )) {
 			

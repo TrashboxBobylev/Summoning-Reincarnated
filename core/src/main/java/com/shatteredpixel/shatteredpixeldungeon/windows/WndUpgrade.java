@@ -3,7 +3,7 @@
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * Shattered Pixel Dungeon
- * Copyright (C) 2014-2025 Evan Debenham
+ * Copyright (C) 2014-2026 Evan Debenham
  *
  * Summoning Pixel Dungeon Reincarnated
  * Copyright (C) 2023-2025 Trashbox Bobylev
@@ -522,6 +522,15 @@ public class WndUpgrade extends Window {
 		} else if (upgrader instanceof MagicalInfusion){
 			((MagicalInfusion)upgrader).reShowSelector();
 		}
+	}
+
+	public WndBag.ItemSelector getItemSelector(){
+		if (upgrader instanceof ScrollOfUpgrade) {
+			return ((ScrollOfUpgrade) upgrader).getSelector(force);
+		} else if (upgrader instanceof MagicalInfusion){
+			return ((MagicalInfusion)upgrader).getSelector();
+		}
+		return null;
 	}
 
 	private float fillFields(String title, String msg1, String msg2, float bottom){
