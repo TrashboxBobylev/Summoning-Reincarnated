@@ -100,9 +100,11 @@ public class Web extends Blob {
 
 	@Override
 	public void onUpdateCellFlags(Level l, int cell) {
-		l.solid[cell] = l.solid[cell] || cur[cell] > 0;
-		l.flamable[cell] = l.flamable[cell] || cur[cell] > 0;
-		//openSpace will be updated as part of updating flags in Level
+		if (volume > 0 && cur[cell] > 0) {
+			l.solid[cell] = true;
+			l.flamable[cell] = true;
+			//openSpace will be updated as part of updating flags in Level
+		}
 	}
 
 	@Override

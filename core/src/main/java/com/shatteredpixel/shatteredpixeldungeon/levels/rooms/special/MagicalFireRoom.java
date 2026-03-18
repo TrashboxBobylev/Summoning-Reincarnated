@@ -279,7 +279,10 @@ public class MagicalFireRoom extends SpecialRoom {
 
 		@Override
 		public void onUpdateCellFlags(Level l, int cell) {
-			l.passable[cell] = l.passable[cell] && cur[cell] == 0;
+			if(volume > 0 && cur[cell] > 0) {
+				l.passable[cell] = false;
+				l.avoid[cell] = false;
+			}
 		}
 	}
 

@@ -293,10 +293,12 @@ public class WallOfLight extends TargetedClericSpell {
 
 		@Override
 		public void onUpdateCellFlags(Level l, int cell) {
-			l.solid[cell] = l.solid[cell] || cur[cell] > 0;
-			l.passable[cell] = l.passable[cell] && cur[cell] == 0;
-			l.avoid[cell] = l.avoid[cell] && cur[cell] == 0;
-			//openSpace will be updated as part of building flap maps
+			if (volume > 0 && cur[cell] > 0) {
+				l.solid[cell] = true;
+				l.passable[cell] = false;
+				l.avoid[cell] = false;
+				//openSpace will be updated as part of updating flags in Level
+			}
 		}
 
 		@Override
