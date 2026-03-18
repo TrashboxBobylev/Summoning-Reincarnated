@@ -30,6 +30,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.YogWall;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
@@ -209,30 +211,47 @@ public class YogDzewa extends Mob {
 
 			//delay fire on a rooted hero
 			if (!targetedCells.isEmpty() && !Dungeon.hero.rooted) {
-				boolean terrainAffected = false;
-				HashSet<Char> affected = new HashSet<>();
-				for (int i : targetedCells) {
-					Ballistica b = new Ballistica(pos, i, Ballistica.WONT_STOP);
-					//shoot beams
-					sprite.parent.add(new Beam.DeathRay(sprite.center(), DungeonTilemap.raisedTileCenterToWorld(b.collisionPos)));
-					for (int p : b.path) {
-						Char ch = Actor.findChar(p);
-						if (ch != null && (ch.alignment != alignment || ch instanceof Bee)) {
-							affected.add(ch);
+				if (needCrossBeam) {
+					Ballistica[] fenceBeams = new Ballistica[8];
+					for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
+						fenceBeams[i] = new Ballistica(pos, pos + PathFinder.NEIGHBOURS8[i], Ballistica.STOP_SOLID);
+						for (int k : fenceBeams[i].path) {
+							if (k == pos)
+								continue;
+							GameScene.add(Blob.seed(k, phase == 5 ? 6 : 8, YogWall.class));
+							Char ch = Actor.findChar(k);
+							if (ch != null && ch.alignment == Alignment.ALLY) {
+								int dmg = Random.NormalIntRange(50, 170);
+								ch.damage(dmg, new Eye.DeathGaze());
+							}
 						}
-						if (Dungeon.level.flamable[p]) {
-							Dungeon.level.destroy(p);
-							GameScene.updateMap(p);
-							terrainAffected = true;
+						needCrossBeam = false;
+					}
+				} else {
+					boolean terrainAffected = false;
+					HashSet<Char> affected = new HashSet<>();
+					for (int i : targetedCells) {
+						Ballistica b = new Ballistica(pos, i, Ballistica.WONT_STOP);
+						//shoot beams
+						sprite.parent.add(new Beam.DeathRay(sprite.center(), DungeonTilemap.raisedTileCenterToWorld(b.collisionPos)));
+						for (int p : b.path) {
+							Char ch = Actor.findChar(p);
+							if (ch != null && (ch.alignment != alignment || ch instanceof Bee)) {
+								affected.add(ch);
+							}
+							if (Dungeon.level.flamable[p]) {
+								Dungeon.level.destroy(p);
+								GameScene.updateMap(p);
+								terrainAffected = true;
+							}
 						}
 					}
-				}
-				Sample.INSTANCE.play( Assets.Sounds.RAY );
-				if (terrainAffected) {
-					Dungeon.observe();
-				}
-				Invisibility.dispel(this);
-				for (Char ch : affected) {
+					Sample.INSTANCE.play(Assets.Sounds.RAY);
+					if (terrainAffected) {
+						Dungeon.observe();
+					}
+					Invisibility.dispel(this);
+					for (Char ch : affected) {
 
 						if (ch == Dungeon.hero) {
 							Statistics.bossScores[4] -= 500;
@@ -260,128 +279,129 @@ public class YogDzewa extends Mob {
 					targetedCells.clear();
 				}
 			}
+		}
 
-			if (abilityCooldown <= 0){
+		if (abilityCooldown <= 0){
 
-				HashSet<Integer> affectedCells = new HashSet<>();
+			HashSet<Integer> affectedCells = new HashSet<>();
 
-				if (needCrossBeam){
-					targetedCells.clear();
-					Ballistica[] fenceBeams = new Ballistica[8];
-					for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++){
-						fenceBeams[i] = new Ballistica(pos, pos + PathFinder.NEIGHBOURS8[i], Ballistica.STOP_SOLID);
-						targetedCells.add(pos+PathFinder.NEIGHBOURS8[i]);
-						affectedCells.addAll(fenceBeams[i].path);
-					}
-				} else {
-
-					int beams = 1 + (HT - HP) / 400;
-
-					for (int i = 0; i < beams; i++) {
-
-						int targetPos = Dungeon.hero.pos;
-						if (i != 0) {
-							do {
-								targetPos = Dungeon.hero.pos + PathFinder.NEIGHBOURS8[Random.Int(8)];
-							} while (Dungeon.level.trueDistance(pos, Dungeon.hero.pos)
-									> Dungeon.level.trueDistance(pos, targetPos));
-						}
-						targetedCells.add(targetPos);
-						Ballistica b = new Ballistica(pos, targetPos, Ballistica.WONT_STOP);
-						affectedCells.addAll(b.path);
-
-					}
+			if (needCrossBeam){
+				targetedCells.clear();
+				Ballistica[] fenceBeams = new Ballistica[8];
+				for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++){
+					fenceBeams[i] = new Ballistica(pos, pos + PathFinder.NEIGHBOURS8[i], Ballistica.STOP_SOLID);
+					targetedCells.add(pos+PathFinder.NEIGHBOURS8[i]);
+					affectedCells.addAll(fenceBeams[i].path);
 				}
+			} else {
 
-				//remove one beam if multiple shots would cause every cell next to the hero to be targeted
-				boolean allAdjTargeted = true;
-				for (int i : PathFinder.NEIGHBOURS9){
-					if (!affectedCells.contains(Dungeon.hero.pos + i) && Dungeon.level.passable[Dungeon.hero.pos + i]){
-						allAdjTargeted = false;
-						break;
+				int beams = 1 + (HT - HP) / 400;
+
+				for (int i = 0; i < beams; i++) {
+
+					int targetPos = Dungeon.hero.pos;
+					if (i != 0) {
+						do {
+							targetPos = Dungeon.hero.pos + PathFinder.NEIGHBOURS8[Random.Int(8)];
+						} while (Dungeon.level.trueDistance(pos, Dungeon.hero.pos)
+								> Dungeon.level.trueDistance(pos, targetPos));
 					}
+					targetedCells.add(targetPos);
+					Ballistica b = new Ballistica(pos, targetPos, Ballistica.WONT_STOP);
+					affectedCells.addAll(b.path);
+
 				}
-				if (allAdjTargeted){
-					targetedCells.remove(targetedCells.size()-1);
+			}
+
+			//remove one beam if multiple shots would cause every cell next to the hero to be targeted
+			boolean allAdjTargeted = true;
+			for (int i : PathFinder.NEIGHBOURS9){
+				if (!affectedCells.contains(Dungeon.hero.pos + i) && Dungeon.level.passable[Dungeon.hero.pos + i]){
+					allAdjTargeted = false;
+					break;
 				}
-				for (int i : targetedCells){
-					Ballistica b = new Ballistica(pos, i, Ballistica.WONT_STOP);
+			}
+			if (allAdjTargeted){
+				targetedCells.remove(targetedCells.size()-1);
+			}
+			for (int i : targetedCells){
+				Ballistica b = new Ballistica(pos, i, Ballistica.WONT_STOP);
+				for (int p : b.path){
+					sprite.parent.add(new TargetedCell(p, needCrossBeam ? 0xFFFFFF : 0xFF0000));
+					affectedCells.add(p);
+				}
+			}
+
+			//don't want to overly punish players with slow move or attack speed
+			spend(GameMath.gate(TICK, (int)Math.ceil(Dungeon.hero.cooldown()), 3*TICK));
+			Dungeon.hero.interrupt();
+
+			abilityCooldown += Random.NormalFloat(MIN_ABILITY_CD, MAX_ABILITY_CD);
+			abilityCooldown -= (phase - 1);
+			needCrossBeam = Random.Int( phase == 5 ? 3 : 2) == 0;
+			if (needCrossBeam){
+				GameScene.flash(0xFFFFFF);
+				for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++){
+					Ballistica b = new Ballistica(pos, pos + PathFinder.NEIGHBOURS8[i], Ballistica.STOP_SOLID);
 					for (int p : b.path){
-						sprite.parent.add(new TargetedCell(p, needCrossBeam ? 0xFFFFFF : 0xFF0000));
+						TargetedCell targetedCell = new TargetedCell(p, 0xFF0000);
+						targetedCell.alpha = 2f;
+						sprite.parent.add(targetedCell);
 						affectedCells.add(p);
 					}
 				}
-
-				//don't want to overly punish players with slow move or attack speed
-				spend(GameMath.gate(TICK, (int)Math.ceil(Dungeon.hero.cooldown()), 3*TICK));
-				Dungeon.hero.interrupt();
-
-				abilityCooldown += Random.NormalFloat(MIN_ABILITY_CD, MAX_ABILITY_CD);
-				abilityCooldown -= (phase - 1);
-				needCrossBeam = Random.Int( phase == 5 ? 3 : 2) == 0;
-				if (needCrossBeam){
-					GameScene.flash(0xFFFFFF);
-					for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++){
-						Ballistica b = new Ballistica(pos, pos + PathFinder.NEIGHBOURS8[i], Ballistica.STOP_SOLID);
-						for (int p : b.path){
-							TargetedCell targetedCell = new TargetedCell(p, 0xFF0000);
-							targetedCell.alpha = 2f;
-							sprite.parent.add(targetedCell);
-							affectedCells.add(p);
-						}
-					}
-					spend(TICK);
-				}
-
-			} else {
 				spend(TICK);
 			}
 
-			while (summonCooldown <= 0){
+		} else {
+			spend(TICK);
+		}
 
-				Class<?extends Mob> cls = regularSummons.remove(0);
-				Mob summon = Reflection.newInstance(cls);
-				regularSummons.add(cls);
+		while (summonCooldown <= 0){
 
-				int spawnPos = -1;
+			Class<?extends Mob> cls = regularSummons.remove(0);
+			Mob summon = Reflection.newInstance(cls);
+			regularSummons.add(cls);
+
+			int spawnPos = -1;
+			for (int i : PathFinder.NEIGHBOURS8){
+				if (Actor.findChar(pos+i) == null){
+					if (spawnPos == -1 || Dungeon.level.trueDistance(Dungeon.hero.pos, spawnPos) > Dungeon.level.trueDistance(Dungeon.hero.pos, pos+i)){
+						spawnPos = pos + i;
+					}
+				}
+			}
+
+			//if no other valid spawn spots exist, try to kill an adjacent sheep to spawn anyway
+			if (spawnPos == -1){
 				for (int i : PathFinder.NEIGHBOURS8){
-					if (Actor.findChar(pos+i) == null){
+					if (Actor.findChar(pos+i) instanceof Sheep){
 						if (spawnPos == -1 || Dungeon.level.trueDistance(Dungeon.hero.pos, spawnPos) > Dungeon.level.trueDistance(Dungeon.hero.pos, pos+i)){
 							spawnPos = pos + i;
 						}
 					}
 				}
-
-				//if no other valid spawn spots exist, try to kill an adjacent sheep to spawn anyway
-				if (spawnPos == -1){
-					for (int i : PathFinder.NEIGHBOURS8){
-						if (Actor.findChar(pos+i) instanceof Sheep){
-							if (spawnPos == -1 || Dungeon.level.trueDistance(Dungeon.hero.pos, spawnPos) > Dungeon.level.trueDistance(Dungeon.hero.pos, pos+i)){
-								spawnPos = pos + i;
-							}
-						}
-					}
-					if (spawnPos != -1){
-						Actor.findChar(spawnPos).die(null);
-					}
-				}
-
-				if (spawnPos != -1) {
-					summon.pos = spawnPos;
-					GameScene.add( summon );
-					Actor.add( new Pushing( summon, pos, summon.pos ) );
-					summon.beckon(Dungeon.hero.pos);
-					Dungeon.level.occupyCell(summon);
-
-					summonCooldown += Random.NormalFloat(MIN_SUMMON_CD, MAX_SUMMON_CD);
-					summonCooldown -= (phase - 1);
-					if (findFist() != null){
-						summonCooldown += MIN_SUMMON_CD - (phase - 1);
-					}
-				} else {
-					break;
+				if (spawnPos != -1){
+					Actor.findChar(spawnPos).die(null);
 				}
 			}
+
+			if (spawnPos != -1) {
+				summon.pos = spawnPos;
+				GameScene.add( summon );
+				Actor.add( new Pushing( summon, pos, summon.pos ) );
+				summon.beckon(Dungeon.hero.pos);
+				Dungeon.level.occupyCell(summon);
+
+				summonCooldown += Random.NormalFloat(MIN_SUMMON_CD, MAX_SUMMON_CD);
+				summonCooldown -= (phase - 1);
+				if (findFist() != null){
+					summonCooldown += MIN_SUMMON_CD - (phase - 1);
+				}
+			} else {
+				break;
+			}
+		}
 
 		if (summonCooldown > 0) summonCooldown--;
 		if (abilityCooldown > 0) abilityCooldown--;
