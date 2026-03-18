@@ -30,7 +30,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
-import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.GooWarn;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Miasma;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Web;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -77,17 +76,6 @@ public class ArcaneBomb extends Bomb.ConjuredBomb {
 	}
 
 	@Override
-	protected void onThrow(int cell) {
-		super.onThrow(cell);
-		if (fuse != null){
-			ArrayList<Integer> aoe = getAreaOfEffect(cell);
-			for (int i : aoe) {
-				GameScene.add(Blob.seed(i, fuseDelay+1, GooWarn.class));
-			}
-		}
-	}
-
-	@Override
 	protected int explosionRange() {
 		return 5;
 	}
@@ -123,9 +111,7 @@ public class ArcaneBomb extends Bomb.ConjuredBomb {
 			}
 		}
 		for (int i : aoe) {
-            if (Dungeon.level.heroFOV[i]) {
-                CellEmitter.get(i).burst(ShadowParticle.UP, 10);
-            }
+			CellEmitter.get(i).burst(ShadowParticle.UP, 10);
 
             if (Dungeon.level.losBlocking[i] && !Dungeon.bossLevel()) {
                 float chance = 1.2f - Dungeon.level.distance(cell, i) * 0.2f;
@@ -219,8 +205,7 @@ public class ArcaneBomb extends Bomb.ConjuredBomb {
 						}
 					}
 					if (bombPos != -1) {
-						PathFinder.buildDistanceMap(bombPos, BArray.not(Dungeon.level.solid, null), bomb.explosionRange());
-						for (int i = 0; i < PathFinder.distance.length; i++) {
+						for (int i: getAreaOfEffect(bombPos)) {
 							if (PathFinder.distance[i] < Integer.MAX_VALUE) {
 								Emitter e = CellEmitter.get(i);
 								if (e != null) {
