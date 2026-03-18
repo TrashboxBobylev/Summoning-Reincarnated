@@ -27,7 +27,6 @@ package com.shatteredpixel.shatteredpixeldungeon.items.bombs;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
@@ -36,22 +35,20 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Miasma;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Web;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.DoomCloud;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GooSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.GameMath;
-import com.watabou.noosa.Game;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.BArray;
-import com.watabou.utils.Callback;
+import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
@@ -101,7 +98,7 @@ public class ArcaneBomb extends Bomb.ConjuredBomb {
 
 	@Override
 	protected Fuse createFuse() {
-		return new ArcaneBombFuse();
+        return new ArcaneBombFuse();
     }
 
 	@Override
@@ -126,25 +123,25 @@ public class ArcaneBomb extends Bomb.ConjuredBomb {
 			}
 		}
 		for (int i : aoe) {
-			if (Dungeon.level.heroFOV[i]) {
-				CellEmitter.get(i).burst(ShadowParticle.UP, 10);
-			}
+            if (Dungeon.level.heroFOV[i]) {
+                CellEmitter.get(i).burst(ShadowParticle.UP, 10);
+            }
 
-			if (Dungeon.level.losBlocking[i] && !Dungeon.bossLevel()){
-				float chance = 1.2f - Dungeon.level.distance(cell, i)*0.2f;
-				if (Random.Float() < chance && Dungeon.level.insideMap(i)){
-					if (Dungeon.level.exit() != i && Dungeon.level.entrance() != i)
-						Level.set( i, Terrain.EMBERS );
-					Blob web = Dungeon.level.blobs.get(Web.class);
-					if (web != null){
-						web.clear(i);
-					}
-				}
-			}
-			GameScene.updateMap( i );
-			Char ch = Actor.findChar(i);
-			if (ch != null){
-				affected.add(ch);
+            if (Dungeon.level.losBlocking[i] && !Dungeon.bossLevel()) {
+                float chance = 1.2f - Dungeon.level.distance(cell, i) * 0.2f;
+                if (Random.Float() < chance && Dungeon.level.insideMap(i)) {
+                    if (Dungeon.level.exit() != i && Dungeon.level.entrance() != i)
+                        Level.set(i, Terrain.EMBERS);
+                    Blob web = Dungeon.level.blobs.get(Web.class);
+                    if (web != null) {
+                        web.clear(i);
+                    }
+                }
+            }
+            GameScene.updateMap(i);
+            Char ch = Actor.findChar(i);
+            if (ch != null) {
+                affected.add(ch);
             }
         }
 

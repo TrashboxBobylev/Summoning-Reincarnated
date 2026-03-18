@@ -570,13 +570,15 @@ public class MobSpawner extends Actor {
 		RARE_ALTS.put(Monk.class,           Senior.class);
 		//swapping to chaos elemental actually happens in Elemental.random
 		RARE_ALTS.put(Elemental.class,      Elemental.ChaosElemental.class);
-                else if (cl == GhostChicken.class || cl == DarkestElf.class){
-                    cl = AbyssalNightmare.class;
-                } else if (cl == BlinkingMan.class || cl == Trappet.class){
-                    cl = Dragon.class;
-                } else if (cl == Phantom.class || cl == SpectreRat.class){
-                    cl = LostSpirit.class;
-                }
+
+        RARE_ALTS.put(GhostChicken.class,   AbyssalNightmare.class);
+        RARE_ALTS.put(DarkestElf.class,     AbyssalNightmare.class);
+
+        RARE_ALTS.put(BlinkingMan.class,    Dragon.class);
+        RARE_ALTS.put(Trappet.class,        Dragon.class);
+
+        RARE_ALTS.put(Phantom.class,        LostSpirit.class);
+        RARE_ALTS.put(SpectreRat.class,     LostSpirit.class);
 
 		RARE_ALTS.put(Scorpio.class,        Acidic.class);
 	}
