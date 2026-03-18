@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -40,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 
@@ -107,6 +109,7 @@ public class ArtemisBridge extends ConjurerSpell {
                         public void call() {
                             curUser.sprite.parent.add(
                                     new Beam.LightRay(curUser.sprite.center(), DungeonTilemap.raisedTileCenterToWorld(pos+dir)));
+                            Sample.INSTANCE.play(Assets.Sounds.RAY);
                             ScrollOfTeleportation.appear(Dungeon.hero, pos+dir);
                             Dungeon.hero.sprite.idle();
                             Dungeon.hero.pos = pos+dir;

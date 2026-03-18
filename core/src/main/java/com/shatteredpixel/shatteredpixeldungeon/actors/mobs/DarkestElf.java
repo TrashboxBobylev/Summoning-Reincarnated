@@ -187,6 +187,7 @@ public class DarkestElf extends AbyssalMob {
 
 			if (sprite.visible || mySkeleton.sprite.visible) {
 				sprite.parent.add(new Beam.HealthRay(sprite.center(), mySkeleton.sprite.center()));
+				Sample.INSTANCE.play(Assets.Sounds.RAY);
 			}
 
 			mySkeleton.HP = Math.min(mySkeleton.HP + 20 + abyssLevel()*10, mySkeleton.HT);
@@ -197,6 +198,7 @@ public class DarkestElf extends AbyssalMob {
 
 			if (sprite.visible || mySkeleton.sprite.visible) {
 				sprite.parent.add(new Beam.HealthRay(sprite.center(), mySkeleton.sprite.center()));
+				Sample.INSTANCE.play(Assets.Sounds.RAY);
 			}
 
 			Buff.affect(mySkeleton, Adrenaline.class, 3f + abyssLevel()*3f);
