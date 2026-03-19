@@ -1127,6 +1127,7 @@ public class ItemSpriteSheet {
 		public static final int SCROLL_PSIBLAST = EXOTIC_SCROLLS+9;
 		public static final int SCROLL_DREAD    = EXOTIC_SCROLLS+10;
 		public static final int SCROLL_METAMORPH= EXOTIC_SCROLLS+11;
+		public static final int SCROLL_ATTUNED  = SCROLL_SIREN+16;
 		static {
 			assignIconRect( SCROLL_ENCHANT,     7, 7 );
 			assignIconRect( SCROLL_DIVINATE,    7, 6 );
@@ -1140,6 +1141,7 @@ public class ItemSpriteSheet {
 			assignIconRect( SCROLL_PSIBLAST,    5, 6 );
 			assignIconRect( SCROLL_DREAD,       5, 7 );
 			assignIconRect( SCROLL_METAMORPH,   7, 7 );
+			assignIconRect( SCROLL_ATTUNED,     5, 7 );
 		}
 
 		                                                                                //16 free slots

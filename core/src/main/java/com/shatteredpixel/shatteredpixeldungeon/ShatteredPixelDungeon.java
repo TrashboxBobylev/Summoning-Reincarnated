@@ -49,6 +49,11 @@ public class ShatteredPixelDungeon extends Game {
 	public ShatteredPixelDungeon( PlatformSupport platform ) {
 		super( sceneClass == null ? TitleScene.class : sceneClass, platform );
 
+		//replacing siren's song with attunement
+		com.watabou.utils.Bundle.addAlias(
+				com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAttunement.class,
+				"com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfSirensSong" );
+
         //renaming rank manager to type manager to reflect new status quo
         com.watabou.utils.Bundle.addAlias(
                 com.shatteredpixel.shatteredpixeldungeon.items.spells.TypeManager.class,
