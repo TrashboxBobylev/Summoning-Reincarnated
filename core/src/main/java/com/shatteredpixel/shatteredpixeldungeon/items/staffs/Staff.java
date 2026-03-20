@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.A
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Chicken;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.items.AttunementItem;
+import com.shatteredpixel.shatteredpixeldungeon.items.AugmentedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
@@ -66,7 +67,7 @@ import com.watabou.utils.Random;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-public abstract class Staff extends Item implements AttunementItem, ChargingItem, TypedItem, WeaponEnchantable {
+public abstract class Staff extends Item implements AttunementItem, AugmentedItem, ChargingItem, TypedItem, WeaponEnchantable {
 
     {
         stackable = false;
@@ -527,6 +528,16 @@ public abstract class Staff extends Item implements AttunementItem, ChargingItem
             price = 1;
         }
         return price;
+    }
+
+    @Override
+    public AugmentedItem.Augment getAugment() {
+        return augment;
+    }
+
+    @Override
+    public void applyAugment(AugmentedItem.Augment augment) {
+        this.augment = (Weapon.Augment) augment;
     }
 
     @Override

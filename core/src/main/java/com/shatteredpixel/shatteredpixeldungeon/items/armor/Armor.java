@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.HolyWard;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.LifeLinkSpell;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.PrismaticImage;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.AugmentedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -90,11 +91,11 @@ import com.watabou.utils.Reflection;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Armor extends EquipableItem implements StrengthItem {
+public class Armor extends EquipableItem implements StrengthItem, AugmentedItem {
 
 	protected static final String AC_DETACH       = "DETACH";
 	
-	public enum Augment {
+	public enum Augment implements AugmentedItem.Augment {
 		EVASION (2f , -1f),
 		DEFENSE (-2f, 1f),
 		NONE	(0f   ,  0f);
@@ -741,6 +742,16 @@ public class Armor extends EquipableItem implements StrengthItem {
 			price = 1;
 		}
 		return price;
+	}
+
+	@Override
+	public AugmentedItem.Augment getAugment() {
+		return augment;
+	}
+
+	@Override
+	public void applyAugment(AugmentedItem.Augment augment) {
+		this.augment = (Augment) augment;
 	}
 
 	public Armor inscribe( Glyph glyph ) {

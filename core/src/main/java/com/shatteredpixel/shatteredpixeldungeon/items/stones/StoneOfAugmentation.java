@@ -26,11 +26,12 @@ package com.shatteredpixel.shatteredpixeldungeon.items.stones;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.items.AugmentedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
-import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponEnchantable;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -50,7 +51,7 @@ public class StoneOfAugmentation extends InventoryStone {
 
 	@Override
 	protected boolean usableOnItem(Item item) {
-		return ScrollOfEnchantment.enchantable(item);
+		return item instanceof AugmentedItem;
 	}
 
 	@Override
@@ -60,21 +61,8 @@ public class StoneOfAugmentation extends InventoryStone {
 		
 	}
 	
-	public void apply( Weapon weapon, Weapon.Augment augment ) {
-		
-		weapon.augment = augment;
-		useAnimation();
-		ScrollOfUpgrade.upgrade(curUser);
-		if (!anonymous) {
-			curItem.detach(curUser.belongings.backpack);
-			Catalog.countUse(getClass());
-			Talent.onRunestoneUsed(curUser, curUser.pos, getClass());
-		}
-	}
-	
-	public void apply( Armor armor, Armor.Augment augment ) {
-		
-		armor.augment = augment;
+	public void apply(AugmentedItem item, AugmentedItem.Augment augment ) {
+		item.applyAugment(augment);
 		useAnimation();
 		ScrollOfUpgrade.upgrade(curUser);
 		if (!anonymous) {
@@ -115,14 +103,14 @@ public class StoneOfAugmentation extends InventoryStone {
 			
 			float pos = tfMesage.top() + tfMesage.height();
 			
-			if (toAugment instanceof Weapon){
+			if (toAugment instanceof WeaponEnchantable){
 				for (final Weapon.Augment aug : Weapon.Augment.values()){
-					if (((Weapon) toAugment).augment != aug){
+					if (((AugmentedItem) toAugment).getAugment() != aug){
 						RedButton btnSpeed = new RedButton( Messages.get(this, aug.name()) ) {
 							@Override
 							protected void onClick() {
 								hide();
-								StoneOfAugmentation.this.apply( (Weapon)toAugment, aug );
+								StoneOfAugmentation.this.apply((AugmentedItem) toAugment, aug );
 							}
 						};
 						btnSpeed.setRect( MARGIN, pos + MARGIN, BUTTON_WIDTH, BUTTON_HEIGHT );
@@ -134,12 +122,12 @@ public class StoneOfAugmentation extends InventoryStone {
 				
 			} else if (toAugment instanceof Armor){
 				for (final Armor.Augment aug : Armor.Augment.values()){
-					if (((Armor) toAugment).augment != aug){
+					if (((AugmentedItem) toAugment).getAugment() != aug){
 						RedButton btnSpeed = new RedButton( Messages.get(this, aug.name()) ) {
 							@Override
 							protected void onClick() {
 								hide();
-								StoneOfAugmentation.this.apply( (Armor) toAugment, aug );
+								StoneOfAugmentation.this.apply( (AugmentedItem) toAugment, aug );
 							}
 						};
 						btnSpeed.setRect( MARGIN, pos + MARGIN, BUTTON_WIDTH, BUTTON_HEIGHT );

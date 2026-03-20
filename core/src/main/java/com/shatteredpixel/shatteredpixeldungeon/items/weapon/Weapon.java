@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Froggit;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.GnollHunter;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.MirrorImage;
+import com.shatteredpixel.shatteredpixeldungeon.items.AugmentedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.StrengthItem;
@@ -90,13 +91,13 @@ import com.watabou.utils.Reflection;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-abstract public class Weapon extends KindOfWeapon implements StrengthItem, WeaponEnchantable {
+abstract public class Weapon extends KindOfWeapon implements StrengthItem, WeaponEnchantable, AugmentedItem {
 
 	public float    ACC = 1f;	// Accuracy modifier
 	public float	DLY	= 1f;	// Speed modifier
 	public int      RCH = 1;    // Reach modifier (only applies to melee hits)
 
-	public enum Augment {
+	public enum Augment implements AugmentedItem.Augment {
 		SPEED   (0.7f, 2/3f),
 		DAMAGE  (1.5f, 5/3f),
 		NONE	(1.0f, 1f);
@@ -477,6 +478,16 @@ abstract public class Weapon extends KindOfWeapon implements StrengthItem, Weapo
 		Random.popGenerator();
 
 		return this;
+	}
+
+	@Override
+	public AugmentedItem.Augment getAugment() {
+		return augment;
+	}
+
+	@Override
+	public void applyAugment(AugmentedItem.Augment augment) {
+		this.augment = (Augment) augment;
 	}
 
 	@Override
