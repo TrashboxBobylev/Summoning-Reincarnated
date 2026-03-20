@@ -476,7 +476,7 @@ public enum HeroClass {
 
 		(hero.belongings.armor = new ConjurerArmor()).identify();
 
-		hero.HP = hero.HT = 13;
+		hero.HP = hero.HT = 20;
 		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
 			StarBlazing star = new StarBlazing();
 			star.collect();
