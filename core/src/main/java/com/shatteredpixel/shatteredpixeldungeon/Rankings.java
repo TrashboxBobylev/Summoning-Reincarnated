@@ -238,7 +238,7 @@ public enum Rankings {
 
 		Statistics.chalMultiplier = 1f;
 
-		Statistics.condMultiplier = Dungeon.conducts.scoreMod();
+		Statistics.condMultiplier = Dungeon.conductScoreMod();
 
 		Statistics.modeMultiplier = Dungeon.mode.scoreMod;
 
@@ -333,6 +333,10 @@ public enum Rankings {
 		
 		//save challenges
 		rec.gameData.put( CHALLENGES, Dungeon.challenges );
+		if (Dungeon.mode == Dungeon.GameMode.RANDOM_CONDUCT){
+			Conducts.Conduct[] allConducts = Dungeon.randomConducts.values().toArray(new Conducts.Conduct[0]);
+			Dungeon.conducts = new Conducts.ConductStorage(allConducts);
+		}
 		Dungeon.conducts.storeInBundle(rec.gameData);
 
 		rec.gameData.put( MODE, Dungeon.mode );

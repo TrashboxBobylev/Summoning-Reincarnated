@@ -89,13 +89,13 @@ public class WndGame extends Window {
 			curBtn.icon(Icons.get(Icons.RANKINGS));
 		}
 
-		if (Dungeon.conducts.isConductedAtAll()) {
-			addButton( curBtn = new RedButton( Dungeon.conducts.oneConduct() ?
+		if (Dungeon.conducts.isConductedAtAll() || Dungeon.mode == Dungeon.GameMode.RANDOM_CONDUCT) {
+			addButton( curBtn = new RedButton( (Dungeon.conducts.oneConduct() || Dungeon.mode == Dungeon.GameMode.RANDOM_CONDUCT) ?
 					Dungeon.conduct().toString() : Messages.get(WndConducts.class, "title"), 7 ) {
 				@Override
 				protected void onClick() {
 					hide();
-					if (!Dungeon.conducts.oneConduct()) {
+					if (!Dungeon.conducts.oneConduct() && Dungeon.mode != Dungeon.GameMode.RANDOM_CONDUCT) {
 						ShatteredPixelDungeon.scene().addToFront(new WndConducts(Dungeon.conducts, false));
 					} else
 						GameScene.show( new WndTitledMessage(Dungeon.conduct().getIcon(),
@@ -103,7 +103,7 @@ public class WndGame extends Window {
 								Dungeon.conduct().desc()) );
 				}
 			} );
-			curBtn.icon(Dungeon.conducts.oneConduct() ?
+			curBtn.icon((Dungeon.conducts.oneConduct() || Dungeon.mode == Dungeon.GameMode.RANDOM_CONDUCT) ?
 					Dungeon.conduct().getIcon() :
 					Icons.get(Icons.CONDUCTS_COLOR));
 		}

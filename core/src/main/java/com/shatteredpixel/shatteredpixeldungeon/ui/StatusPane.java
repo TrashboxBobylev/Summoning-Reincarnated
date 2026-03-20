@@ -137,7 +137,7 @@ public class StatusPane extends Component {
 
 		mode = new Image(Icons.get(Dungeon.mode.icon));
 		add( mode );
-		if (Dungeon.conducts.isConductedAtAll()){
+		if (Dungeon.conducts.isConductedAtAll() || Dungeon.mode == Dungeon.GameMode.RANDOM_CONDUCT){
 			conduct = Dungeon.conduct().getIcon();
 			add( conduct );
 		}

@@ -102,14 +102,17 @@ import com.watabou.utils.FileUtils;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 import com.watabou.utils.SparseArray;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -256,11 +259,22 @@ public class Dungeon {
 	}
 
 	public static Conducts.ConductStorage conducts = new Conducts.ConductStorage();
+	public static HashMap<Integer, Conducts.Conduct> randomConducts = new HashMap<>();
 
 	public static Conducts.Conduct conduct() {
+		if (mode == GameMode.RANDOM_CONDUCT){
+			return randomConducts.get(Dungeon.depth + Dungeon.branch*1000);
+		}
 		if (conducts.isConductedAtAll())
 			return conducts.getFirst();
 		return null;
+	}
+
+	public static float conductScoreMod(){
+		if (mode == GameMode.RANDOM_CONDUCT){
+			return 1.0f;
+		}
+		return conducts.scoreMod();
 	}
 
 	public enum GameMode {
@@ -287,7 +301,8 @@ public class Dungeon {
             }
         },
 		CHAOS("chaos", Icons.CHAOS, 1.5f),
-        RANDOM_HERO("random_hero", Icons.RANDOM_HERO, 1.5f)
+        RANDOM_HERO("random_hero", Icons.RANDOM_HERO, 1.5f),
+		RANDOM_CONDUCT("random_conduct", Icons.RANDOM_CONDUCT, 1.5f),
 /*		CAVES("caves", Icons.CAVES, 1.09f),
 		LOL("lol", Icons.GOLD, 0.33f),
 		HELL("hell", Icons.HELL_CHEST, 4.0f),
@@ -386,7 +401,8 @@ public class Dungeon {
 
 		initialVersion = version = Game.versionCode;
 		challenges = SPDSettings.challenges();
-		conducts = new Conducts.ConductStorage(SPDSettings.conducts());
+		if (mode != GameMode.RANDOM_CONDUCT)
+			conducts = new Conducts.ConductStorage(SPDSettings.conducts());
 		mobsToChampion = 1;
 
 		Actor.clear();
@@ -450,6 +466,9 @@ public class Dungeon {
 	}
 
 	public static boolean isChallenged( Conducts.Conduct mask ) {
+		if (mode == GameMode.RANDOM_CONDUCT){
+			return randomConducts.get(depth + 1000 * branch) == mask;
+		}
 		return conducts.isConducted(mask);
 	}
 
@@ -537,6 +556,15 @@ public class Dungeon {
 					Statistics.completedWithNoKilling = false;
 				}
 			}
+		}
+
+		if (mode == GameMode.RANDOM_CONDUCT){
+			Conducts.Conduct[] validConducts = Arrays.stream(Conducts.Conduct.values())
+					.filter(conduct1 -> !conduct1.isCheaty() && conduct1 != Conducts.Conduct.NULL)
+					.toArray(Conducts.Conduct[]::new);
+			do {
+				randomConducts.put(depth + 1000 * branch, Random.oneOf(validConducts));
+			} while (depth != 0 && randomConducts.get(depth + 1000 * branch-1) == randomConducts.get(depth + 1000 * branch));
 		}
 
 		Statistics.qualifiedForBossRemainsBadge = false;
@@ -799,6 +827,7 @@ public class Dungeon {
 	private static final String DAILY_REPLAY= "daily_replay";
 	private static final String LAST_PLAYED = "last_played";
 	private static final String CHALLENGES	= "challenges";
+	private static final String RNG_CONDUCTS	= "rng_conducts";
 	private static final String MODE        = "mode";
 	private static final String MOBS_TO_CHAMPION	= "mobs_to_champion";
 	private static final String HERO		= "hero";
@@ -834,6 +863,10 @@ public class Dungeon {
 			bundle.put( DEPTH, depth );
 			bundle.put( BRANCH, branch );
 			bundle.put( MODE, mode);
+			if (mode == GameMode.RANDOM_CONDUCT){
+				bundle.put(RNG_CONDUCTS + "keys", ArrayUtils.toPrimitive(randomConducts.keySet().toArray(new Integer[0])));
+				bundle.put(RNG_CONDUCTS + "values", randomConducts.values().stream().map(Enum::name).toArray(String[]::new));
+			}
 
 			bundle.put( GOLD, gold );
 			bundle.put( ENERGY, energy );
@@ -949,6 +982,13 @@ public class Dungeon {
 			Dungeon.mode = GameMode.valueOf(bundle.getString(MODE));
 		else
 			Dungeon.mode = GameMode.NORMAL;
+		if (mode == GameMode.RANDOM_CONDUCT){
+			int[] keys = bundle.getIntArray(RNG_CONDUCTS + "keys");
+			String[] values = bundle.getStringArray(RNG_CONDUCTS + "values");
+			for (int i = 0; i < keys.length; i++){
+				randomConducts.put(keys[i], Enum.valueOf(Conducts.Conduct.class, values[i]));
+			}
+		}
 		
 		Dungeon.level = null;
 		Dungeon.depth = -1;
