@@ -71,6 +71,7 @@ public class ItemSlot extends Button {
 	protected Item       item;
 	protected BitmapText status;
 	protected BitmapText extra;
+	protected BitmapText type;
 	protected Image      itemIcon;
 	protected BitmapText level;
 	
@@ -135,6 +136,9 @@ public class ItemSlot extends Button {
 		
 		level = new BitmapText( PixelScene.pixelFont);
 		add(level);
+
+		type = new BitmapText( PixelScene.pixelFont);
+		add(type);
 	}
 	
 	@Override
@@ -196,6 +200,22 @@ public class ItemSlot extends Button {
 			PixelScene.align(level);
 		}
 
+		if (type != null) {
+			type.measure();
+			if (type.width + level.width > width - (margin.left + margin.right)){
+				type.scale.set(PixelScene.align(0.8f));
+			} else {
+				type.scale.set(1f);
+			}
+            if (item instanceof TypedItem && ((TypedItem) item).canHaveLevels()) {
+                type.x = x - margin.left;
+            } else {
+                type.x = x + (width - type.width()) - margin.right;
+            }
+            type.y = y + (height - type.baseLine() - 1) - margin.bottom;
+			PixelScene.align(type);
+		}
+
 	}
 
 	public void alpha( float value ){
@@ -205,6 +225,7 @@ public class ItemSlot extends Button {
 		if (status != null)     status.alpha(value);
 		if (itemIcon != null)   itemIcon.alpha(value);
 		if (level != null)      level.alpha(value);
+		if (type != null)      type.alpha(value);
 	}
 
 	public void clear(){
@@ -251,10 +272,10 @@ public class ItemSlot extends Button {
 		}
 
 		if (item == null){
-			status.visible = extra.visible = level.visible = false;
+			status.visible = extra.visible = level.visible = type.visible = false;
 			return;
 		} else {
-			status.visible = extra.visible = level.visible = true;
+			status.visible = extra.visible = level.visible = type.visible = true;
 		}
 
 		status.text( item.status() );
@@ -321,39 +342,46 @@ public class ItemSlot extends Button {
 		}
 
 		if (item instanceof TypedItem){
-			level.text(TypedItem.getTypeString(((TypedItem) item).type()));
-			level.measure();
-            level.hardlight(TypedItem.getTypeColor(((TypedItem) item).type()));
-		} else {
-			int trueLvl = item.visiblyUpgraded();
-			int buffedLvl = item.buffedVisiblyUpgraded();
-
-			if (trueLvl != 0 || buffedLvl != 0) {
-				level.text(Messages.format(TXT_LEVEL, buffedLvl));
-				level.measure();
-				if (trueLvl == buffedLvl || buffedLvl <= 0) {
-					if (buffedLvl > 0) {
-						if ((item instanceof Weapon && ((Weapon) item).curseInfusionBonus)
-								|| (item instanceof Armor && ((Armor) item).curseInfusionBonus)
-								|| (item instanceof Wand && ((Wand) item).curseInfusionBonus)) {
-							level.hardlight(CURSE_INFUSED);
-						} else {
-							level.hardlight(UPGRADED);
-						}
-					} else {
-						level.hardlight(DEGRADED);
-					}
-				} else {
-					level.hardlight(buffedLvl > trueLvl ? ENHANCED : WARNING);
-				}
-			} else {
-				level.text(null);
+			if (((TypedItem) item).canHaveLevels()){
+				showLevel(level);
 			}
+			type.text(TypedItem.getTypeString(((TypedItem) item).type()));
+			type.hardlight(TypedItem.getTypeColor(((TypedItem) item).type()));
+		} else {
+			type.text(null);
+			showLevel(level);
 		}
 
 		layout();
 	}
-	
+
+	private void showLevel(BitmapText extra) {
+		int trueLvl = item.visiblyUpgraded();
+		int buffedLvl = item.buffedVisiblyUpgraded();
+
+		if (trueLvl != 0 || buffedLvl != 0) {
+			extra.text(Messages.format(TXT_LEVEL, buffedLvl));
+			extra.measure();
+			if (trueLvl == buffedLvl || buffedLvl <= 0) {
+				if (buffedLvl > 0) {
+					if ((item instanceof Weapon && ((Weapon) item).curseInfusionBonus)
+							|| (item instanceof Armor && ((Armor) item).curseInfusionBonus)
+							|| (item instanceof Wand && ((Wand) item).curseInfusionBonus)) {
+						extra.hardlight(CURSE_INFUSED);
+					} else {
+						extra.hardlight(UPGRADED);
+					}
+				} else {
+					extra.hardlight(DEGRADED);
+				}
+			} else {
+				extra.hardlight(buffedLvl > trueLvl ? ENHANCED : WARNING);
+			}
+		} else {
+			extra.text(null);
+		}
+	}
+
 	public void enable( boolean value ) {
 		
 		active = value;
@@ -370,6 +398,7 @@ public class ItemSlot extends Button {
 		status.alpha( alpha );
 		extra.alpha( alpha );
 		level.alpha( alpha );
+		type.alpha( alpha );
 		if (itemIcon != null) itemIcon.alpha( alpha );
 	}
 
@@ -388,10 +417,12 @@ public class ItemSlot extends Button {
 			add(status);
 			add(extra);
 			add(level);
+			add(type);
 		} else {
 			remove(status);
 			remove(extra);
 			remove(level);
+			remove(type);
 		}
 	}
 

@@ -51,4 +51,8 @@ public interface TypedItem {
     static String getTypeString(int type){
         return String.join("", Collections.nCopies(type, "I"));
     }
+
+    default boolean canHaveLevels(){
+        return false;
+    }
 }

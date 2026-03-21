@@ -527,10 +527,9 @@ public class Item implements Bundlable {
 
 		if (this instanceof TypedItem)
 			name += " " + TypedItem.getTypeString(((TypedItem) this).type());
-		else {
-			if (visiblyUpgraded() != 0)
-				name = Messages.format(TXT_TO_STRING_LVL, name, visiblyUpgraded());
-		}
+
+		if (visiblyUpgraded() != 0 && (!(this instanceof TypedItem) || ((TypedItem) this).canHaveLevels()))
+			name = Messages.format(TXT_TO_STRING_LVL, name, visiblyUpgraded());
 
 		if (quantity > 1)
 			name = Messages.format( TXT_TO_STRING_X, name, quantity );
