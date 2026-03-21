@@ -36,12 +36,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.GuidingLight;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindofMisc;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
-public class Artifact extends KindofMisc {
+public class Artifact extends KindofMisc implements TypedItem {
 
 	protected Buff passiveBuff;
 	protected Buff activeBuff;
@@ -120,6 +121,23 @@ public class Artifact extends KindofMisc {
 	@Override
 	public boolean isUpgradable() {
 		return false;
+	}
+
+	int type = 1;
+
+	@Override
+	public int type() {
+		return type;
+	}
+
+	@Override
+	public void type(int type) {
+		this.type = type;
+	}
+
+	@Override
+	public boolean canHaveLevels() {
+		return true;
 	}
 
 	@Override
@@ -284,6 +302,7 @@ public class Artifact extends KindofMisc {
 	private static final String EXP = "exp";
 	private static final String CHARGE = "charge";
 	private static final String PARTIALCHARGE = "partialcharge";
+	private static final String TYPE = "rank";
 
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -291,6 +310,7 @@ public class Artifact extends KindofMisc {
 		bundle.put( EXP , exp );
 		bundle.put( CHARGE , charge );
 		bundle.put( PARTIALCHARGE , partialCharge );
+		bundle.put( TYPE , type );
 	}
 
 	@Override
@@ -300,5 +320,7 @@ public class Artifact extends KindofMisc {
 		if (chargeCap > 0)  charge = Math.min( chargeCap, bundle.getInt( CHARGE ));
 		else                charge = bundle.getInt( CHARGE );
 		partialCharge = bundle.getFloat( PARTIALCHARGE );
+		if (bundle.contains(TYPE))
+			type = bundle.getInt(TYPE);
 	}
 }
