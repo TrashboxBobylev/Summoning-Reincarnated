@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
@@ -68,6 +69,12 @@ public abstract class KindofMisc extends EquipableItem {
 			}
 		}
 
+		if (Dungeon.isChallenged(Conducts.Conduct.CANDI_18) && (
+				(this instanceof Artifact && hero.belongings.artifact != null) ||
+				(this instanceof Ring && hero.belongings.ring != null))){
+			equipFull = true;
+		}
+
 		if (equipFull) {
 
 			final KindofMisc[] miscs = new KindofMisc[3];
@@ -79,6 +86,10 @@ public abstract class KindofMisc extends EquipableItem {
 			enabled[0] = miscs[0] != null;
 			enabled[1] = miscs[1] != null;
 			enabled[2] = miscs[2] != null;
+
+			if (Dungeon.isChallenged(Conducts.Conduct.CANDI_18)){
+				enabled[1] = false;
+			}
 
 			//force swapping with the same type of item if 2x of that type is already present
 			if (this instanceof Ring && hero.belongings.misc instanceof Ring){

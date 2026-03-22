@@ -30,10 +30,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.FacelessThing;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.KingsCrown;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ParchmentScrap;
 import com.watabou.utils.Random;
 
 public class Challenges {
@@ -108,6 +110,10 @@ public class Challenges {
 			return true;
 		}
 		if (Dungeon.isChallenged(Conducts.Conduct.LIMITED_MONSTERS) && item instanceof PotionOfExperience){
+			return true;
+		}
+		if (Dungeon.isChallenged(Conducts.Conduct.CANDI_18) &&
+				(item instanceof ParchmentScrap || item instanceof KingsCrown)){
 			return true;
 		}
 

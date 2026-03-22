@@ -500,15 +500,19 @@ public class Hero extends Char {
 	}
 
 	public int talentPointsAvailable(int tier){
+		int points;
 		if (lvl < (Talent.tierLevelThresholds[tier] - 1)
 			|| (tier == 3 && (subClass == HeroSubClass.NONE && heroClass != HeroClass.ADVENTURER))
 			|| (tier == 4 && armorAbility == null)) {
-			return 0;
+			points = 0;
 		} else if (lvl >= Talent.tierLevelThresholds[tier+1]){
-			return Talent.tierLevelThresholds[tier+1] - Talent.tierLevelThresholds[tier] - talentPointsSpent(tier) + bonusTalentPoints(tier);
+			points = Talent.tierLevelThresholds[tier+1] - Talent.tierLevelThresholds[tier] - talentPointsSpent(tier) + bonusTalentPoints(tier);
 		} else {
-			return 1 + lvl - Talent.tierLevelThresholds[tier] - talentPointsSpent(tier) + bonusTalentPoints(tier);
+			points = 1 + lvl - Talent.tierLevelThresholds[tier] - talentPointsSpent(tier) + bonusTalentPoints(tier);
 		}
+		if (Dungeon.isChallenged(Conducts.Conduct.CANDI_18))
+			points = Math.max(0, points-1);
+		return points;
 	}
 
 	public int bonusTalentPoints(int tier){

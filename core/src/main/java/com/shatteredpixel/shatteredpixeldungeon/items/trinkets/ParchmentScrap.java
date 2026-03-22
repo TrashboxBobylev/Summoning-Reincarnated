@@ -24,6 +24,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.trinkets;
 
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
@@ -49,6 +51,9 @@ public class ParchmentScrap extends Trinket {
 	}
 
 	public static float enchantChanceMultiplier(){
+		if (Dungeon.isChallenged(Conducts.Conduct.CANDI_18)){
+			return 0f;
+		}
 		return enchantChanceMultiplier(trinketLevel(ParchmentScrap.class));
 	}
 

@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SacrificialFire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SmokeScreen;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Web;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.WellWater;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Awareness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
@@ -109,12 +110,14 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.CustomTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndMessage;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Group;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.BArray;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Callback;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Point;
@@ -576,6 +579,17 @@ public abstract class Level implements Bundlable {
 	//returns true if we immediately transition, false otherwise
 	public boolean activateTransition(Hero hero, LevelTransition transition){
 		if (locked){
+			return false;
+		}
+		if ((transition.type == LevelTransition.Type.REGULAR_ENTRANCE || transition.type == LevelTransition.Type.BRANCH_ENTRANCE) &&
+			Dungeon.isChallenged(Conducts.Conduct.CANDI_18) && transition.destDepth % Dungeon.chapterSize() == Dungeon.chapterSize()-1 &&
+				Dungeon.hero.buff(AscensionChallenge.class) == null){
+			Game.runOnRenderThread(new Callback() {
+				@Override
+				public void call() {
+					GameScene.show( new WndMessage( Messages.get(hero, "leave") ) );
+				}
+			});
 			return false;
 		}
 
@@ -1365,7 +1379,7 @@ public abstract class Level implements Bundlable {
 			}
 
 			//allies and specific enemies can see through shrouding fog
-			if ((c.alignment != Char.Alignment.ALLY && !(c instanceof GnollGeomancer))
+			if (((c.alignment != Char.Alignment.ALLY || Dungeon.isChallenged(Conducts.Conduct.CANDI_18)) && !(c instanceof GnollGeomancer))
 					&& Dungeon.level.blobs.containsKey(SmokeScreen.class)
 					&& Dungeon.level.blobs.get(SmokeScreen.class).volume > 0) {
 				if (blocking == null) {

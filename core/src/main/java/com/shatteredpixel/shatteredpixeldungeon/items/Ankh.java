@@ -25,9 +25,13 @@
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite.Glowing;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -100,6 +104,20 @@ public class Ankh extends Item {
 		else
 			return super.desc();
 	}
+
+	@Override
+	public boolean collect(Bag container) {
+		if (super.collect(container)) {
+			if (Dungeon.isChallenged(Conducts.Conduct.CANDI_18)){
+				Buff.affect(Dungeon.hero, AnkhPurchaseTracker.class);
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public class AnkhPurchaseTracker extends Buff {}
 
 	public boolean isBlessed(){
 		return blessed;

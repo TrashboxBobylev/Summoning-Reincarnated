@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -41,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Eye;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Ghoul;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Gnoll;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Golem;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Goo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Guard;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
@@ -65,10 +67,13 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Image;
+import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.PathFinder;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -106,6 +111,8 @@ public class AscensionChallenge extends Buff implements DamageSource {
 		modifiers.put(Succubus.class,       1.2f);
 		modifiers.put(Eye.class,            1.1f);
 		modifiers.put(Scorpio.class,        1.1f);
+
+		modifiers.put(Goo.class,            3f);
 	}
 
 	public static float statModifier(Char ch){
@@ -268,8 +275,26 @@ public class AscensionChallenge extends Buff implements DamageSource {
 			Statistics.highestAscent = Dungeon.depth;
 			justAscended = true;
 			if (Dungeon.bossLevel()){
-				Dungeon.hero.buff(Hunger.class).satisfy(Hunger.STARVING);
-				Buff.affect(Dungeon.hero, Healing.class).setHeal(Dungeon.hero.HT, 0, 20);
+				if (Dungeon.isChallenged(Conducts.Conduct.CANDI_18)){
+					PathFinder.buildDistanceMap(Dungeon.hero.pos, BArray.or(Dungeon.level.passable, Dungeon.level.avoid, null));
+
+					Mob mob = new Goo();
+					mob.state = mob.WANDERING;
+					int tries = 30;
+					do {
+						mob.pos = Dungeon.level.randomRespawnCell(mob);
+						tries--;
+					} while ((mob.pos == -1 || PathFinder.distance[mob.pos] < 12) && tries > 0);
+
+					if (Dungeon.hero.isAlive() && mob.pos != -1 && PathFinder.distance[mob.pos] >= 12) {
+						GameScene.add( mob );
+					}
+
+					stacks += 2f;
+				} else {
+					Dungeon.hero.buff(Hunger.class).satisfy(Hunger.STARVING);
+					Buff.affect(Dungeon.hero, Healing.class).setHeal(Dungeon.hero.HT, 0, 20);
+				}
 			} else {
 				stacks += 2f;
 
@@ -307,10 +332,15 @@ public class AscensionChallenge extends Buff implements DamageSource {
 	public void saySwitch(){
 		if (Dungeon.bossLevel()){
 			if (justAscended) {
-				GLog.p(Messages.get(this, "break"));
-				for (Char ch : Actor.chars()){
-					if (ch instanceof DriedRose.GhostHero){
-						((DriedRose.GhostHero) ch).sayAppeared();
+				if (Dungeon.isChallenged(Conducts.Conduct.CANDI_18)){
+					GLog.newLine();
+					GLog.n( "%s: \"%s\" ", Messages.titleCase("Candice"), Messages.get(this, "no_break") );
+				} else {
+					GLog.p(Messages.get(this, "break"));
+					for (Char ch : Actor.chars()) {
+						if (ch instanceof DriedRose.GhostHero) {
+							((DriedRose.GhostHero) ch).sayAppeared();
+						}
 					}
 				}
 			}

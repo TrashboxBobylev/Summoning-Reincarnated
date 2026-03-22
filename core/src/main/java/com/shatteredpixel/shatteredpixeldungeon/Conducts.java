@@ -76,6 +76,7 @@ public class Conducts {
         LIMITED_MONSTERS(1.5f, 22),
         LEVEL_DOWN(1.5f, 28),
         FACE(2.25f, 25),
+        CANDI_18(2f, 31),
 //        HUGE(1.75f),
         DEBUG_SCROLL(-1f, 24){
             @Override

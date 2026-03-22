@@ -24,6 +24,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms;
 
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.watabou.utils.Bundlable;
@@ -467,6 +469,8 @@ public abstract class Room extends Rect implements Graph.Node, Bundlable {
 		}
 
 		public void set( Type type ) {
+			if (Dungeon.isChallenged(Conducts.Conduct.CANDI_18) && type == Type.HIDDEN)
+				type = Type.WALL;
 			if (!typeLocked && type.compareTo( this.type ) > 0) {
 				this.type = type;
 			}

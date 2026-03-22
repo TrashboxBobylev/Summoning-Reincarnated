@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.special;
 
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
@@ -394,7 +395,9 @@ public class ShopRoom extends SpecialRoom {
 		itemsToSpawn.add(new SmallRation());
 		itemsToSpawn.add(new SmallRation());
 
-		itemsToSpawn.add(new Ankh());
+		if (!Dungeon.isChallenged(Conducts.Conduct.CANDI_18) || Dungeon.hero.buff(Ankh.AnkhPurchaseTracker.class) == null) {
+			itemsToSpawn.add(new Ankh());
+		}
 		itemsToSpawn.add(new StoneOfAugmentation());
 		itemsToSpawn.add(new CleanWater());
 

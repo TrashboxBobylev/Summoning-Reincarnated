@@ -25,11 +25,15 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
@@ -210,7 +214,8 @@ public class Goo extends Mob {
 
 		} else {
 
-			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL ||
+					(Dungeon.isChallenged(Conducts.Conduct.CANDI_18) && Dungeon.hero.buff(AscensionChallenge.class) != null)){
 				pumpedUp += 2;
 				//don't want to overly punish players with slow move or attack speed
 				spend(GameMath.gate(attackDelay(), (int)Math.ceil(enemy.cooldown()), 3*attackDelay()));
@@ -277,7 +282,8 @@ public class Goo extends Mob {
 		}
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
-			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL)   lock.addTime(dmg);
+			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL ||
+				(Dungeon.isChallenged(Conducts.Conduct.CANDI_18) && Dungeon.hero.buff(AscensionChallenge.class) != null))   lock.addTime(dmg);
 			else                                                    lock.addTime(dmg*1.5f);
 		}
 	}
@@ -290,25 +296,37 @@ public class Goo extends Mob {
 		Dungeon.level.unseal();
 		
 		GameScene.bossSlain();
-		Dungeon.level.drop( new WornKey( Dungeon.depth ), pos ).sprite.drop();
-		
-		//60% chance of 2 blobs, 30% chance of 3, 10% chance for 4. Average of 2.5
-		int blobs = Random.chances(new float[]{0, 0, 6, 3, 1});
-		for (int i = 0; i < blobs; i++){
-			int ofs;
-			do {
-				ofs = PathFinder.NEIGHBOURS8[Random.Int(8)];
-			} while (!Dungeon.level.passable[pos + ofs]);
-			Dungeon.level.drop( new GooBlob(), pos + ofs ).sprite.drop( pos );
-		}
-		
-		Badges.validateBossSlain();
-		if (Statistics.qualifiedForBossChallengeBadge){
-			Badges.validateBossChallengeCompleted();
-		}
-		Statistics.bossScores[0] += 1000;
-		
-		yell( Messages.get(this, "defeated") );
+
+        if (Dungeon.isChallenged(Conducts.Conduct.CANDI_18) && Dungeon.hero.buff(AscensionChallenge.class) != null) {
+			Dungeon.hero.buff(Hunger.class).satisfy(Hunger.STARVING);
+			Buff.affect(Dungeon.hero, Healing.class).setHeal(Dungeon.hero.HT, 0, 20);
+			GLog.p(Messages.get(AscensionChallenge.class, "break"));
+			for (Char ch : Actor.chars()) {
+				if (ch instanceof DriedRose.GhostHero) {
+					((DriedRose.GhostHero) ch).sayAppeared();
+				}
+			}
+        } else {
+            Dungeon.level.drop( new WornKey( Dungeon.depth ), pos ).sprite.drop();
+
+            //60% chance of 2 blobs, 30% chance of 3, 10% chance for 4. Average of 2.5
+            int blobs = Random.chances(new float[]{0, 0, 6, 3, 1});
+            for (int i = 0; i < blobs; i++){
+                int ofs;
+                do {
+                    ofs = PathFinder.NEIGHBOURS8[Random.Int(8)];
+                } while (!Dungeon.level.passable[pos + ofs]);
+                Dungeon.level.drop( new GooBlob(), pos + ofs ).sprite.drop( pos );
+            }
+
+            Badges.validateBossSlain();
+            if (Statistics.qualifiedForBossChallengeBadge) {
+                Badges.validateBossChallengeCompleted();
+            }
+            Statistics.bossScores[0] += 1000;
+        }
+
+        yell( Messages.get(this, "defeated") );
 	}
 	
 	@Override
