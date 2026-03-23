@@ -40,6 +40,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.Ascension;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.Silent;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfCleansing;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
@@ -74,10 +76,10 @@ public class GoatClone extends NPC implements ManaSource {
     @Override
     public Char chooseEnemy() {
 
-//        if ((Dungeon.hero.buff(CloakOfShadows.cloakStealth.class) != null &&
-//                Dungeon.hero.buff(CloakOfShadows.cloakStealth.class).glyph() instanceof Silent)
-//        )
-//            return null;
+        if ((Dungeon.hero.buff(CloakOfShadows.cloakStealth.class) != null &&
+                Dungeon.hero.buff(CloakOfShadows.cloakStealth.class).glyph() instanceof Silent)
+        )
+            return null;
 
         boolean newEnemy = false;
         if ( enemy == null || !enemy.isAlive() || !Actor.chars().contains(enemy) || state == WANDERING) {

@@ -302,6 +302,7 @@ public class Artifact extends KindofMisc implements TypedItem {
 	private static final String EXP = "exp";
 	private static final String CHARGE = "charge";
 	private static final String PARTIALCHARGE = "partialcharge";
+	private static final String CHARGE_CAP = "charge_cap";
 	private static final String TYPE = "rank";
 
 	@Override
@@ -309,6 +310,7 @@ public class Artifact extends KindofMisc implements TypedItem {
 		super.storeInBundle(bundle);
 		bundle.put( EXP , exp );
 		bundle.put( CHARGE , charge );
+		bundle.put( CHARGE_CAP , chargeCap );
 		bundle.put( PARTIALCHARGE , partialCharge );
 		bundle.put( TYPE , type );
 	}
@@ -317,6 +319,9 @@ public class Artifact extends KindofMisc implements TypedItem {
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle(bundle);
 		exp = bundle.getInt( EXP );
+		if (bundle.contains(CHARGE_CAP) ) {
+			chargeCap = bundle.getInt( CHARGE_CAP );
+		}
 		if (chargeCap > 0)  charge = Math.min( chargeCap, bundle.getInt( CHARGE ));
 		else                charge = bundle.getInt( CHARGE );
 		partialCharge = bundle.getFloat( PARTIALCHARGE );

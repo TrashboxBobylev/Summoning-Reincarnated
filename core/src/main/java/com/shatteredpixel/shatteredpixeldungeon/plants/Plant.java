@@ -35,6 +35,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.Aromatic;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
@@ -94,6 +96,14 @@ public abstract class Plant implements Bundlable {
 				if (l.inRange(pos)){
 					seedChance = Math.max(seedChance, l.seedPreservation());
 				}
+			}
+		}
+
+		if (Dungeon.hero.buff(CloakOfShadows.cloakStealth.class) != null &&
+				Dungeon.hero.buff(CloakOfShadows.cloakStealth.class).glyph() instanceof Aromatic){
+			Aromatic glyph = (Aromatic) Dungeon.hero.buff(CloakOfShadows.cloakStealth.class).glyph();
+			if (glyph.inRange(Dungeon.hero, pos)){
+				seedChance = Math.max(seedChance, glyph.seedPreservation());
 			}
 		}
 

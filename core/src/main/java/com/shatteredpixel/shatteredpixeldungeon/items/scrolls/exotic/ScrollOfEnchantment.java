@@ -30,7 +30,10 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Enchanting;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.CloakGlyph;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.InventoryScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
@@ -46,6 +49,7 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTitledMessage;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Random;
 
 public class ScrollOfEnchantment extends ExoticScroll {
 	
@@ -72,7 +76,7 @@ public class ScrollOfEnchantment extends ExoticScroll {
 	}
 
 	public static boolean enchantable( Item item ){
-		return !Dungeon.isChallenged(Conducts.Conduct.CANDI_18) && (item instanceof WeaponEnchantable || item instanceof Armor);
+		return !Dungeon.isChallenged(Conducts.Conduct.CANDI_18) && (item instanceof WeaponEnchantable || (item instanceof Stylus.Inscribable && ((Stylus.Inscribable) item).isInscribable()));
 	}
 
 	private void confirmCancelation() {
@@ -146,6 +150,17 @@ public class ScrollOfEnchantment extends ExoticScroll {
 				glyphs[2] = Armor.Glyph.random( existing, glyphs[0].getClass(), glyphs[1].getClass());
 				
 				GameScene.show(new WndGlyphSelect((Armor) item, glyphs[0], glyphs[1], glyphs[2]));
+			} else if (item instanceof CloakOfShadows) {
+
+				final CloakGlyph glyphs[] = new CloakGlyph[3];
+
+				Class<? extends CloakGlyph> existing = ((CloakOfShadows) item).glyph != null ? ((CloakOfShadows) item).glyph.getClass() : null;
+				glyphs[0] = CloakGlyph.randomCommon( existing );
+				glyphs[1] = Random.Float() < 0.5f ? CloakGlyph.randomCommon( existing, glyphs[0].getClass() ) :
+						CloakGlyph.randomRare( existing );
+				glyphs[2] = CloakGlyph.random( existing, glyphs[0].getClass(), glyphs[1].getClass());
+
+				GameScene.show(new WndCloakSelect((CloakOfShadows) item, glyphs[0], glyphs[1], glyphs[2]));
 			} else if (identifiedByUse){
 				((ScrollOfEnchantment)curItem).confirmCancelation();
 			}
@@ -240,6 +255,7 @@ public class ScrollOfEnchantment extends ExoticScroll {
 			glyphs[2] = glyph3;
 
 			WndEnchantSelect.wep = null;
+			WndCloakSelect.cloak = null;
 		}
 
 		@Override
@@ -251,6 +267,69 @@ public class ScrollOfEnchantment extends ExoticScroll {
 
 				Sample.INSTANCE.play(Assets.Sounds.READ);
 				Enchanting.show(curUser, arm);
+			} else {
+				GameScene.show(new WndConfirmCancel());
+			}
+		}
+
+		@Override
+		protected boolean hasInfo(int index) {
+			return index < 3;
+		}
+
+		@Override
+		protected void onInfo(int index) {
+			GameScene.show(new WndTitledMessage(
+					Icons.get(Icons.INFO),
+					Messages.titleCase(glyphs[index].name()),
+					glyphs[index].desc()));
+		}
+
+		@Override
+		public void onBackPressed() {
+			//do nothing, reader has to cancel
+		}
+
+	}
+
+	public static class WndCloakSelect extends WndOptions {
+
+		private static CloakOfShadows cloak;
+		private static CloakGlyph[] glyphs;
+
+		//used in PixelScene.restoreWindows
+		public WndCloakSelect() {
+			this(cloak, glyphs[0], glyphs[1], glyphs[2]);
+		}
+
+		public WndCloakSelect(CloakOfShadows cloak, CloakGlyph glyph1,
+		                      CloakGlyph glyph2, CloakGlyph glyph3) {
+			super(new ItemSprite(new ScrollOfEnchantment()),
+					Messages.titleCase(new ScrollOfEnchantment().name()),
+					Messages.get(ScrollOfEnchantment.class, "cloak"),
+					glyph1.name(),
+					glyph2.name(),
+					glyph3.name(),
+					Messages.get(ScrollOfEnchantment.class, "cancel"));
+			this.cloak = cloak;
+			glyphs = new CloakGlyph[3];
+			glyphs[0] = glyph1;
+			glyphs[1] = glyph2;
+			glyphs[2] = glyph3;
+
+			WndEnchantSelect.wep = null;
+			WndCloakSelect.cloak = null;
+		}
+
+		@Override
+		protected void onSelect(int index) {
+			if (index < 3) {
+				cloak.inscribe(glyphs[index]);
+				GLog.p(Messages.get(StoneOfEnchantment.class, "cloak"));
+				((ScrollOfEnchantment) curItem).readAnimation();
+
+				Sample.INSTANCE.play(Assets.Sounds.READ);
+				Enchanting.show(curUser, cloak);
 			} else {
 				GameScene.show(new WndConfirmCancel());
 			}

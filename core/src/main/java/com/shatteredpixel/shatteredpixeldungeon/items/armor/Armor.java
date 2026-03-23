@@ -48,6 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.StrengthItem;
+import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.AntiEntropy;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.Bulk;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.curses.Corrosion;
@@ -91,7 +92,7 @@ import com.watabou.utils.Reflection;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Armor extends EquipableItem implements StrengthItem, AugmentedItem {
+public class Armor extends EquipableItem implements StrengthItem, AugmentedItem, Stylus.Inscribable {
 
 	protected static final String AC_DETACH       = "DETACH";
 	
@@ -800,6 +801,11 @@ public class Armor extends EquipableItem implements StrengthItem, AugmentedItem 
 		}
 	}
 
+	@Override
+	public boolean isInscribable() {
+		return true;
+	}
+
 	//these are not used to process specific glyph effects, so magic immune doesn't affect them
 	public boolean hasGoodGlyph(){
 		return glyph != null && !glyph.curse();
@@ -807,6 +813,16 @@ public class Armor extends EquipableItem implements StrengthItem, AugmentedItem 
 
 	public boolean hasCurseGlyph(){
 		return glyph != null && glyph.curse();
+	}
+
+	@Override
+	public boolean isCursed() {
+		return cursed;
+	}
+
+	@Override
+	public boolean isCursedKnown() {
+		return cursedKnown;
 	}
 
 	private static ItemSprite.Glowing HOLY = new ItemSprite.Glowing( 0xFFFF00 );

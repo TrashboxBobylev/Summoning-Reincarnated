@@ -29,7 +29,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Enchanting;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponEnchantable;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
@@ -63,7 +65,7 @@ public class StoneOfEnchantment extends InventoryStone {
 			
 			((WeaponEnchantable)item).enchant();
 			
-		} else {
+		} else if (item instanceof Stylus.Inscribable && ((Stylus.Inscribable) item).isInscribable()) {
 			
 			((Armor)item).inscribe();
 			
@@ -74,6 +76,8 @@ public class StoneOfEnchantment extends InventoryStone {
 		
 		if (item instanceof WeaponEnchantable) {
 			GLog.p(Messages.get(this, "weapon"));
+		} else if (item instanceof CloakOfShadows) {
+			GLog.positive(Messages.get(this, "cloak"));
 		} else {
 			GLog.p(Messages.get(this, "armor"));
 		}

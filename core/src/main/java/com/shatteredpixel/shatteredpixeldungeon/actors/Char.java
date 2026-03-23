@@ -83,6 +83,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Wet;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.Shrunken;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
@@ -124,7 +125,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Obfuscation;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Potential;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Swiftness;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.CloakGlyph;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.Crumbling;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.FrostBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.DreemurrsNecromancy;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
@@ -827,6 +831,9 @@ acuRoll *= accMulti;
 			}
 		}
 
+		if (buff(Crumbling.ZeroDefense.class) != null)
+			return 0;
+
 		return dr;
 	}
 	
@@ -1440,7 +1447,7 @@ acuRoll *= accMulti;
 	}
 
 	public boolean isWet(){
-		return Dungeon.level.water[pos];
+		return Dungeon.level.water[pos] || buff(Wet.class) != null;
 	}
 
 	public float stealth() {
@@ -1527,6 +1534,12 @@ acuRoll *= accMulti;
 		for (Buff b : buffs()){
 			resists.addAll(b.resistances());
 		}
+		if (this instanceof Hero && buff(CloakOfShadows.cloakStealth.class) != null){
+			CloakGlyph glyph = buff(CloakOfShadows.cloakStealth.class).glyph();
+			if (glyph != null){
+				resists.addAll(glyph.resistances());
+			}
+		}
 		
 		float result = 1f;
 		for (Class c : resists){
@@ -1572,6 +1585,12 @@ acuRoll *= accMulti;
 		}
 		if (glyphLevel(Brimstone.class) >= 0){
 			immunes.add(Burning.class);
+		}
+		if (this instanceof Hero && buff(CloakOfShadows.cloakStealth.class) != null){
+			CloakGlyph glyph = buff(CloakOfShadows.cloakStealth.class).glyph();
+			if (glyph != null){
+				immunes.addAll(glyph.immunities());
+			}
 		}
 
 		for (Class c : immunes){

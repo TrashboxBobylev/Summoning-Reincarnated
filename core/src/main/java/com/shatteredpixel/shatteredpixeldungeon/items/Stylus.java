@@ -29,7 +29,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Enchanting;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -87,12 +86,12 @@ public class Stylus extends Item {
 		return true;
 	}
 	
-	private void inscribe( Armor armor ) {
+	private void inscribe( Inscribable inscribable ) {
 
-		if (!armor.cursedKnown){
+		if (!inscribable.isCursedKnown()){
 			GLog.w( Messages.get(this, "identify"));
 			return;
-		} else if (armor.cursed || armor.hasCurseGlyph()){
+		} else if (inscribable.isCursed() || inscribable.hasCurseGlyph()){
 			GLog.w( Messages.get(this, "cursed"));
 			return;
 		}
@@ -102,11 +101,11 @@ public class Stylus extends Item {
 
 		GLog.w( Messages.get(this, "inscribed"));
 
-		armor.inscribe();
+		inscribable.inscribe();
 		
 		curUser.sprite.operate(curUser.pos);
 		curUser.sprite.centerEmitter().start(PurpleParticle.BURST, 0.05f, 10);
-		Enchanting.show(curUser, armor);
+		Enchanting.show(curUser, (Item)inscribable);
 		Sample.INSTANCE.play(Assets.Sounds.BURNING);
 		
 		curUser.spend(TIME_TO_INSCRIBE);
@@ -132,14 +131,24 @@ public class Stylus extends Item {
 
 		@Override
 		public boolean itemSelectable(Item item) {
-			return item instanceof Armor;
+			return item instanceof Inscribable && ((Inscribable) item).isInscribable();
 		}
 
 		@Override
 		public void onSelect( Item item ) {
 			if (item != null) {
-				Stylus.this.inscribe( (Armor)item );
+				Stylus.this.inscribe( (Inscribable) item );
 			}
 		}
+	};
+
+	public interface Inscribable {
+		boolean isCursedKnown();
+		Inscribable inscribe();
+		boolean hasCurseGlyph();
+		boolean isCursed();
+		boolean isInscribable();
+
+		String name();
 	};
 }

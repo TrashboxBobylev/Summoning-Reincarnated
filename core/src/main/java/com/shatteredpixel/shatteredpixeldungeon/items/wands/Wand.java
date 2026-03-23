@@ -30,6 +30,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Electricity;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
@@ -58,11 +60,15 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.ShieldHalo;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.RainbowParticle;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.AttunementItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.CloakGlyph;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.Sparking;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
@@ -72,6 +78,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.WondrousResin;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -93,6 +101,7 @@ import com.watabou.utils.Random;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 public abstract class Wand extends Weapon implements ChargingItem, AttunementItem, TypedItem {
 
@@ -1056,6 +1065,48 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 										Wand.wondrousProc(curWand, shot.collisionPos);
 									});
 							Sample.INSTANCE.play( Assets.Sounds.ZAP );
+						} if (curUser.buff(CloakOfShadows.cloakStealth.class) != null &&
+								curUser.buff(CloakOfShadows.cloakStealth.class).glyph() instanceof Sparking){
+							new WandOfLightning().fx(shot, () -> {
+								ArrayList<Char> affected = new ArrayList<>();
+								for (int n : PathFinder.NEIGHBOURS9) {
+									int c = cell + n;
+									if (c >= 0 && c < Dungeon.level.length()) {
+										if (Dungeon.level.heroFOV[c]) {
+											CellEmitter.get(c).burst(SparkParticle.FACTORY, 4);
+										}
+
+										GameScene.add(Blob.seed(c, Math.round(12* CloakGlyph.efficiency()), Electricity.class));
+
+										Char ch = Actor.findChar(c);
+										if (ch != null && !(ch instanceof Hero)) {
+											affected.add(ch);
+										}
+									}
+								}
+
+								for (Char ch: affected){
+									int dmg = Math.round(Random.NormalIntRange(5 + Dungeon.scalingDepth(), 10 + Dungeon.scalingDepth()*2)*CloakGlyph.efficiency());
+
+									if (ch.pos != cell){
+										dmg = Math.round(dmg*0.8f);
+									}
+
+									dmg -= ch.drRoll();
+
+									if (dmg > 0) {
+										if (!(Dungeon.isChallenged(Conducts.Conduct.PACIFIST)) || ch.alignment == Char.Alignment.ALLY)
+											ch.damage(dmg, new DamageSource() {
+												@Override
+												public EnumSet<DamageProperty> initDmgProperties() {
+													return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.ELECTRIC);
+												}
+											});
+									}
+								}
+
+								curWand.wandUsed();
+							});
 						} else {
 							curWand.fx(shot, new Callback() {
 								public void call() {

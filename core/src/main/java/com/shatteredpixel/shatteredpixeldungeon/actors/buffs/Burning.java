@@ -90,6 +90,7 @@ public class Burning extends Buff implements Hero.Doom, DamageSource {
 	@Override
 	public boolean attachTo(Char target) {
 		Buff.detach( target, Chill.class);
+		Buff.detach( target, Wet.class);
 
 		return super.attachTo(target);
 	}
@@ -173,7 +174,8 @@ public class Burning extends Buff implements Hero.Doom, DamageSource {
 		
 		if (left <= 0 ||
 			(Dungeon.level.water[target.pos] && !target.flying)) {
-			
+			Buff.detach(target, Wet.class);
+
 			detach();
 		}
 		

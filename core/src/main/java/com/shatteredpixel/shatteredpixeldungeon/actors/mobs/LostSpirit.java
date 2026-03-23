@@ -38,6 +38,8 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.RainbowParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.Silent;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.SummoningTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -156,6 +158,11 @@ public class LostSpirit extends AbyssalMob implements Callback {
     }
 
     public Char chooseEnemy() {
+
+        if ((Dungeon.hero.buff(CloakOfShadows.cloakStealth.class) != null &&
+                Dungeon.hero.buff(CloakOfShadows.cloakStealth.class).glyph() instanceof Silent)
+        )
+            return null;
 
         //find a new enemy if..
         boolean newEnemy = false;

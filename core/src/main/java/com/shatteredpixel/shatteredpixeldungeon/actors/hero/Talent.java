@@ -52,6 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ScrollEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulSparking;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TieringEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.WandEmpower;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Wet;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.ManaStealHost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
@@ -73,6 +74,8 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.CloakGlyph;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.Victide;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Berry;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.SupplyRation;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
@@ -1245,6 +1248,24 @@ public enum Talent {
                 Buff.prolong(hero, AttunementBoost.class, 10f).boost(0.3f*hero.pointsInTalent(FIGHTING_WIZARDRY));
             }
         }
+
+		if (hero.buff(CloakOfShadows.cloakStealth.class) != null
+				&& enemy instanceof Mob && ((Mob) enemy).surprisedBy(hero)
+				&& enemy.isWet()
+				&& hero.buff(CloakOfShadows.cloakStealth.class).glyph() instanceof Victide){
+			float bonus = 0f;
+			if (Dungeon.level.water[enemy.pos]){
+				bonus = 1f;
+				if (enemy.buff(Wet.class) != null)
+					bonus = 2f;
+			}
+			if (enemy.buff(Wet.class) != null){
+				bonus = 1f;
+				if (Dungeon.level.water[enemy.pos])
+					bonus = 2f;
+			}
+			dmg *= Math.max(1f, Math.pow(1.3f, bonus* CloakGlyph.efficiency()));
+		}
 
 		return dmg;
 	}

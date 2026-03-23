@@ -81,8 +81,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.Silent;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.WornKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
@@ -491,6 +493,11 @@ public abstract class Mob extends Char {
 				}
 			}
 		}
+
+		if ((Dungeon.hero.buff(CloakOfShadows.cloakStealth.class) != null &&
+				Dungeon.hero.buff(CloakOfShadows.cloakStealth.class).glyph() instanceof Silent)
+		)
+			return null;
 
 		HashMap<Char, Float> enemies = lookForEnemies();
 
