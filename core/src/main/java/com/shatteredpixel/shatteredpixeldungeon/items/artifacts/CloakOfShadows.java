@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Preparation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
@@ -102,6 +103,7 @@ public class CloakOfShadows extends Artifact implements Stylus.Inscribable {
 				if (!isEquipped(hero) && !hero.hasTalent(Talent.LIGHT_CLOAK)) GLog.i( Messages.get(Artifact.class, "need_to_equip") );
 				else if (cursed)       GLog.i( Messages.get(this, "cursed") );
 				else if (charge <= 0)  GLog.i( Messages.get(this, "no_charge") );
+				else if (hero.buff(CloakT3Cooldown.class) != null)  GLog.i( Messages.get(this, "cooldown") );
 				else {
 					hero.spend( 1f );
 					hero.busy();
@@ -202,7 +204,7 @@ public class CloakOfShadows extends Artifact implements Stylus.Inscribable {
 			case 2:
 				return 0.666f;
 			case 3:
-				return 3.5f;
+				return 4f;
 		}
 		return 1;
 	}
@@ -277,7 +279,7 @@ public class CloakOfShadows extends Artifact implements Stylus.Inscribable {
 	public String getTypeMessage(int type) {
 		return Messages.get(this, "type",
 				Math.round(100*rechargeModifier(type)),
-				Math.round(100*maxChargesModifier(type))) + "\n\n" + super.getTypeMessage(type);
+				Math.round(maxChargesModifier(type))) + "\n\n" + super.getTypeMessage(type);
 	}
 
 	public CloakOfShadows inscribe(CloakGlyph glyph ) {
@@ -371,7 +373,7 @@ public class CloakOfShadows extends Artifact implements Stylus.Inscribable {
 		public boolean act() {
 			if (charge < chargeCap && !cursed && target.buff(MagicImmune.class) == null) {
 				if (activeBuff == null && Regeneration.regenOn()) {
-					float missing = (chargeCap - charge);
+					float missing = (chargeCap - charge)/maxChargesModifier();
 					if (level() > 7) missing += 5*(level() - 7)/3f;
 					float turnsToCharge = (45 - missing);
 					turnsToCharge /= RingOfEnergy.artifactChargeMultiplier(target);
@@ -415,6 +417,16 @@ public class CloakOfShadows extends Artifact implements Stylus.Inscribable {
 		
 		int turnsToCost = 0;
 
+		public int turnsToCostBase(){
+			switch (type()) {
+				case 1: case 2:
+					return 4;
+				case 3:
+					return 1;
+			}
+			return 1;
+		}
+
 		@Override
 		public int icon() {
 			return BuffIndicator.INVISIBLE;
@@ -427,7 +439,7 @@ public class CloakOfShadows extends Artifact implements Stylus.Inscribable {
 
 		@Override
 		public float iconFadePercent() {
-			return (4f - turnsToCost) / 4f;
+			return (((float)turnsToCostBase()) - turnsToCost) / ((float)turnsToCostBase());
 		}
 
 		@Override
@@ -487,7 +499,7 @@ public class CloakOfShadows extends Artifact implements Stylus.Inscribable {
 						GLog.p(Messages.get(this, "levelup"));
 						
 					}
-					turnsToCost = 4;
+					turnsToCost = turnsToCostBase();
 				}
 				updateQuickslot();
 			}
@@ -538,6 +550,9 @@ public class CloakOfShadows extends Artifact implements Stylus.Inscribable {
 			if (target.invisible > 0)   target.invisible--;
 			if (glyph != null)
 				glyph.onDetaching(CloakOfShadows.this, target);
+			if (type() == 3){
+				Buff.affect(target, CloakT3Cooldown.class, 6 - level()/3);
+			}
 
 			updateQuickslot();
 			super.detach();
@@ -559,5 +574,14 @@ public class CloakOfShadows extends Artifact implements Stylus.Inscribable {
 			
 			turnsToCost = bundle.getInt( TURNSTOCOST );
 		}
+	}
+
+	public static class CloakT3Cooldown extends FlavourBuff {
+		@Override
+		public int icon() {
+			return BuffIndicator.TIME;
+		}
+		public void tintIcon(Image icon) { icon.hardlight(0f, 0.2f, 1f); }
+		public float iconFadePercent() { return Math.max(0, visualcooldown() / 6); }
 	}
 }
