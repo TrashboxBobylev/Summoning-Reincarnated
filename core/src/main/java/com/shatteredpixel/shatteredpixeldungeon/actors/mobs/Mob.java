@@ -82,6 +82,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.Silent;
@@ -1281,7 +1282,12 @@ public abstract class Mob extends Char {
 		//soul eater talent
 		if (buff(SoulMark.class) != null &&
 				Random.Int(10) < Dungeon.hero.pointsInTalent(Talent.SOUL_EATER)){
-			Talent.onFoodEaten(Dungeon.hero, 0, null);
+			Talent.onFoodEaten(Dungeon.hero, 1, null);
+		}
+
+		HornOfPlenty.PowerTracker powerTracker;
+		if ((powerTracker = hero.buff(HornOfPlenty.PowerTracker.class)) != null){
+			powerTracker.reward();
 		}
 
         if (Dungeon.hero.buff(ManaEmpower.class) != null && Dungeon.hero.heroClass != HeroClass.CONJURER){

@@ -27,10 +27,13 @@ package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.WellFed;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.GenericEffect;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -43,12 +46,17 @@ import com.shatteredpixel.shatteredpixeldungeon.items.food.MeatPie;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Pasty;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.PhantomMeat;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssChallengeLevel;
+import com.shatteredpixel.shatteredpixeldungeon.levels.VaultLevel;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
+import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 
@@ -106,10 +114,13 @@ public class HornOfPlenty extends Artifact {
 				if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
 					satietyPerCharge /= 3;
 				}
+				if (type() == 3){
+					satietyPerCharge *= 2;
+				}
 
 				Hunger hunger = Buff.affect(Dungeon.hero, Hunger.class);
 				int chargesToUse = Math.max( 1, hunger.hunger() / satietyPerCharge);
-				if (chargesToUse > charge) chargesToUse = charge;
+				if (chargesToUse > charge || type() == 2) chargesToUse = charge;
 
 				//always use 1 charge if snacking
 				if (action.equals(AC_SNACK)){
@@ -120,9 +131,30 @@ public class HornOfPlenty extends Artifact {
 			}
 
 		} else if (action.equals(AC_STORE)){
-
-			GameScene.selectItem(itemSelector);
-
+			if (type() != 2){
+				GameScene.selectItem(itemSelector);
+			} else {
+				if (Dungeon.level.locked
+						|| hero.buff(WellFed.class) != null
+						|| SPDSettings.intro()
+						|| hero.buff(ScrollOfChallenge.ChallengeArena.class) != null
+						|| Dungeon.level instanceof AbyssChallengeLevel
+						|| Dungeon.level instanceof VaultLevel){
+					GLog.w( Messages.get(this, "not_possible_to_drain") );
+				} else {
+					hero.sprite.operate(hero.pos);
+					hero.busy();
+					SpellSprite.show(hero, SpellSprite.FOOD, 1.0f, 0.0f, 0.0f);
+					Sample.INSTANCE.play(Assets.Sounds.EAT, 1.0f, 0.5f);
+					float satiety = Hunger.STARVING - hero.buff(Hunger.class).hunger();
+					gainFoodValue(new Food(){
+						{
+							energy = satiety;
+						}
+					});
+					hero.buff(Hunger.class).affectHunger(-satiety);
+				}
+			}
 		}
 	}
 
@@ -131,8 +163,15 @@ public class HornOfPlenty extends Artifact {
 		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
 			satietyPerCharge /= 3;
 		}
+		if (type() == 3){
+			satietyPerCharge *= 2;
+		}
 
-		Buff.affect(hero, Hunger.class).satisfy(satietyPerCharge * chargesToUse);
+		if (type() != 2)
+			Buff.affect(hero, Hunger.class).satisfy(satietyPerCharge * chargesToUse);
+		else {
+			Buff.affect(hero, DamageBoost.class, chargesToUse*4+Food.TIME_TO_EAT);
+		}
 
 		Statistics.foodEaten++;
 
@@ -143,7 +182,13 @@ public class HornOfPlenty extends Artifact {
 		hero.busy();
 		SpellSprite.show(hero, SpellSprite.FOOD);
 		Sample.INSTANCE.play(Assets.Sounds.EAT);
-		GLog.i( Messages.get(this, "eat") );
+		if (type() != 2)
+			GLog.i( Messages.get(this, "eat") );
+		else {
+			GLog.i( Messages.get(this, "empower") );
+			Sample.INSTANCE.play(Assets.Sounds.CHALLENGE, 1.0f, 1.5f);
+			SpellSprite.show(hero, SpellSprite.BERSERK);
+		}
 
 		if (Dungeon.hero.hasTalent(Talent.IRON_STOMACH)
 				|| Dungeon.hero.hasTalent(Talent.ENERGIZING_MEAL)
@@ -156,7 +201,8 @@ public class HornOfPlenty extends Artifact {
 			hero.spend(Food.TIME_TO_EAT);
 		}
 
-		Talent.onFoodEaten(hero, satietyPerCharge * chargesToUse, this);
+		if (type() != 2)
+			Talent.onFoodEaten(hero, type() == 3 ? 2 : 1, this);
 
 		Badges.validateFoodEaten();
 
@@ -172,11 +218,38 @@ public class HornOfPlenty extends Artifact {
 	protected ArtifactBuff passiveBuff() {
 		return new hornRecharge();
 	}
-	
+
+	@Override
+	public void type(int type) {
+		if (type() == 2 && type != 2){
+			Buff.detach(Dungeon.hero, PowerTracker.class);
+		}
+		super.type(type);
+		if (type() == 2){
+			Buff.affect(Dungeon.hero, PowerTracker.class);
+		}
+	}
+
+	public float rechargeModifier(){
+		return rechargeModifier(type());
+	}
+
+	public float rechargeModifier(int type){
+		switch (type){
+			case 1:
+				return 1.0f;
+			case 2:
+				return 0.66f;
+			case 3:
+				return 0.66f;
+		}
+		return 1;
+	}
+
 	@Override
 	public void charge(Hero target, float amount) {
 		if (charge < chargeCap && !cursed && target.buff(MagicImmune.class) == null){
-			partialCharge += 0.25f*amount;
+			partialCharge += 0.25f*amount*rechargeModifier();
 			while (partialCharge >= 1){
 				partialCharge--;
 				charge++;
@@ -198,7 +271,7 @@ public class HornOfPlenty extends Artifact {
 	
 	@Override
 	public String desc() {
-		String desc = super.desc();
+		String desc = Messages.get(this, "desc" + type());
 
 		if ( isEquipped( Dungeon.hero ) ){
 			if (!cursed) {
@@ -210,6 +283,12 @@ public class HornOfPlenty extends Artifact {
 		}
 
 		return desc;
+	}
+
+	@Override
+	public String getTypeMessage(int type) {
+		return Messages.get(this, "type",
+				Math.round(100*rechargeModifier(type))) + "\n" + super.getTypeMessage(type);
 	}
 
 	@Override
@@ -227,14 +306,17 @@ public class HornOfPlenty extends Artifact {
 	
 	public void gainFoodValue( Food food ){
 		if (level() >= 10) return;
-		
-		storedFoodEnergy += food.energy;
+
+		float energy = food.energy;
 		//Pasties and phantom meat are worth two upgrades instead of 1.5, meat pies are worth 4 instead of 3!
 		if (food instanceof Pasty || food instanceof PhantomMeat){
-			storedFoodEnergy += Hunger.HUNGRY/2;
+			energy += Hunger.HUNGRY/2;
 		} else if (food instanceof MeatPie){
-			storedFoodEnergy += Hunger.HUNGRY;
+			energy += Hunger.HUNGRY;
 		}
+		if (type() == 3)
+			energy /= 1.5f;
+		storedFoodEnergy += energy;
 		if (storedFoodEnergy >= Hunger.HUNGRY){
 			int upgrades = storedFoodEnergy / (int)Hunger.HUNGRY;
 			upgrades = Math.min(upgrades, 10 - level());
@@ -283,6 +365,13 @@ public class HornOfPlenty extends Artifact {
 				//This means that a standard ration will be recovered in ~5.333 hero levels
 				float chargeGain = Hunger.STARVING * levelPortion * (0.25f + (0.125f*level()));
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
+				chargeGain *= rechargeModifier();
+				if (type() == 2){
+					PowerTracker tracker;
+					if ((tracker = target.buff(PowerTracker.class)) != null){
+						chargeGain *= tracker.multiplier;
+					}
+				}
 
 				//each charge is equal to 1/5 the max hunger value
 				chargeGain /= Hunger.STARVING/5;
@@ -347,4 +436,43 @@ public class HornOfPlenty extends Artifact {
 			}
 		}
 	};
+
+	public static class DamageBoost extends GenericEffect {
+		{
+			type = buffType.POSITIVE;
+		}
+
+		@Override
+		public int icon() {return BuffIndicator.OFFENSE_BUFF;}
+
+		@Override
+		public void tintIcon(Image icon) {icon.hardlight(1f, 0f, 0f);}
+	}
+
+	public static class PowerTracker extends Buff {
+
+		private float multiplier = 1;
+
+		public void reward(){
+			multiplier += 1/2f;
+		}
+
+		public void punish(){
+			multiplier = Math.max(1, multiplier*0.75f);
+		}
+
+		private static final String MULTIPLIER = "multiplier";
+
+		@Override
+		public void storeInBundle(Bundle bundle) {
+			super.storeInBundle(bundle);
+			bundle.put(MULTIPLIER, multiplier);
+		}
+
+		@Override
+		public void restoreFromBundle(Bundle bundle) {
+			super.restoreFromBundle(bundle);
+			multiplier = bundle.getFloat(MULTIPLIER);
+		}
+	}
 }

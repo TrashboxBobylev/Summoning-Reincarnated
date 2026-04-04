@@ -48,6 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Stone;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEvasion;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.FerretTuft;
@@ -136,6 +137,7 @@ public class FloatingText extends RenderedTextBlock {
     public static int HIT_EXPLORE=92;
     public static int HIT_KING   =93;
     public static int HIT_WRAITH =94;
+	public static int HIT_BOOST  =95;
 
 	//extra row for hit icons that are armor-piercing
 
@@ -387,6 +389,7 @@ public class FloatingText extends RenderedTextBlock {
 		}
 		if (blessBoost > 1f) hitReasons.put(HIT_BLS, blessBoost);
 		if (RingOfAccuracy.accuracyMultiplier(attacker) > 1)    hitReasons.put(HIT_ACC, RingOfAccuracy.accuracyMultiplier(attacker));
+		if (attacker.buff(HornOfPlenty.DamageBoost.class) != null) hitReasons.put(HIT_BOOST, 2f);
 		if (attacker.buff(Scimitar.SwordDance.class) != null)   hitReasons.put(HIT_DANCE, 1.5f);
 		if (!(wep instanceof MissileWeapon)) {
 			if (attacker instanceof Hero && ((Hero) attacker).hasTalent(Talent.PRECISE_ASSAULT) && ((Hero) attacker).heroClass != HeroClass.DUELIST){

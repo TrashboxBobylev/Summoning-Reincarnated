@@ -228,6 +228,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 import static com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking.arc;
 
 public class Hero extends Char {
@@ -725,6 +726,10 @@ public class Hero extends Char {
 
 		if (Dungeon.isChallenged(Conducts.Conduct.WRAITH)) accuracy *= 1.25f;
 
+		if (buff(HornOfPlenty.DamageBoost.class) != null){
+			accuracy *= 2f;
+		}
+
 		if (!RingOfForce.fightingUnarmed(this)) {
 			return Math.max(1, Math.round(attackSkill * accuracy * wep.accuracyFactor( this, target )));
 		} else {
@@ -884,6 +889,9 @@ public class Hero extends Char {
 				&& hasTalent(Talent.WEAPON_RECHARGING)
 				&& (buff(Recharging.class) != null || buff(ArtifactRecharge.class) != null)){
 			dmg = Math.round(dmg * 1.025f + (.025f*pointsInTalent(Talent.WEAPON_RECHARGING)));
+		}
+		if (buff(HornOfPlenty.DamageBoost.class) != null){
+			dmg *= 2;
 		}
 
 		if (dmg < 0) dmg = 0;
@@ -1856,6 +1864,11 @@ public class Hero extends Char {
 			damage = rockArmor.absorb(damage);
 		}
 
+		HornOfPlenty.PowerTracker powerTracker;
+		if ((powerTracker = hero.buff(HornOfPlenty.PowerTracker.class)) != null){
+			powerTracker.punish();
+		}
+
 		//we will have to do with that for now
 		//will need to port sourced magical attacks from summoning to implement the full idea
 		Buff.affect(enemy, Minion.ProtectiveTargeting.class, 10f);
@@ -2474,7 +2487,7 @@ public class Hero extends Char {
 	public boolean isStarving() {
 		return Buff.affect(this, Hunger.class).isStarving();
 	}
-	
+
 	@Override
 	public boolean add( Buff buff ) {
 

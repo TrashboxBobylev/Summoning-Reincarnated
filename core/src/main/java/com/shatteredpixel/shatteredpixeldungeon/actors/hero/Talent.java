@@ -840,6 +840,7 @@ public enum Talent {
 			//4/6 HP healed, when hero is below 33% health (with a little rounding up)
 			if (hero.HP/(float)hero.HT < 0.334f) {
 				int healing = 2 + 2 * hero.pointsInTalent(HEARTY_MEAL);
+				healing *= foodVal;
 				hero.HP = Math.min(hero.HP + healing, hero.HT);
 				hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(healing), FloatingText.HEALING);
 
@@ -847,16 +848,16 @@ public enum Talent {
 		}
 		if (hero.hasTalent(DECENT_MEAL)){
 			//2/3 shielding given
-			Buff.affect(hero, Barrier.class).setShield(1 + hero.pointsInTalent(DECENT_MEAL));
+			Buff.affect(hero, Barrier.class).setShield((int) ((1 + hero.pointsInTalent(DECENT_MEAL))*foodVal));
 		}
 		if (hero.hasTalent(IRON_STOMACH)){
 			if (hero.cooldown() > 0) {
-				Buff.affect(hero, WarriorFoodImmunity.class, hero.cooldown());
+				Buff.affect(hero, WarriorFoodImmunity.class, hero.cooldown()*foodVal);
 			}
 		}
 		if (hero.hasTalent(EMPOWERING_MEAL)){
 			//2/3 bonus wand damage for next 3 zaps
-			Buff.affect( hero, WandEmpower.class).set(1 + hero.pointsInTalent(EMPOWERING_MEAL), 3);
+			Buff.affect( hero, WandEmpower.class).set(1 + hero.pointsInTalent(EMPOWERING_MEAL), (int) (3*foodVal));
 			ScrollOfRecharging.charge( hero );
 		}
 		int wandChargeTurns = 0;
@@ -871,32 +872,32 @@ public enum Talent {
 		}
 		if (hero.hasTalent(INVIGORATING_MEAL)){
 			//effectively 1/2 turns of haste
-			Buff.prolong( hero, Haste.class, 0.67f+hero.pointsInTalent(INVIGORATING_MEAL));
+			Buff.prolong( hero, Haste.class, (0.67f+hero.pointsInTalent(INVIGORATING_MEAL))*foodVal);
 		}
 		if (hero.hasTalent(STRENGTHENING_MEAL)){
 			//3 bonus physical damage for next 2/3 attacks
-			Buff.affect( hero, PhysicalEmpower.class).set(3, 1 + hero.pointsInTalent(STRENGTHENING_MEAL));
+			Buff.affect( hero, PhysicalEmpower.class).set(3, (int) ((1 + hero.pointsInTalent(STRENGTHENING_MEAL))*foodVal));
 		}
 		if (hero.hasTalent(UPGRADING_MEAL)){
 			//+1 effective tier for next 3/5 attacks
-			Buff.affect( hero, TieringEmpower.class).set(1 + hero.pointsInTalent(UPGRADING_MEAL)*2);
+			Buff.affect( hero, TieringEmpower.class).set((int) ((1 + hero.pointsInTalent(UPGRADING_MEAL)*2)*foodVal));
 		}
 		if (hero.hasTalent(FOCUSED_MEAL)){
 			if (hero.heroClass == HeroClass.DUELIST){
 				//0.67/1 charge for the duelist
-				Buff.affect( hero, MeleeWeapon.Charger.class ).gainCharge((hero.pointsInTalent(FOCUSED_MEAL)+1)/3f);
+				Buff.affect( hero, MeleeWeapon.Charger.class ).gainCharge(((hero.pointsInTalent(FOCUSED_MEAL)+1)/3f)*foodVal);
 				ScrollOfRecharging.charge( hero );
 			} else {
 				// lvl/3 / lvl/2 bonus dmg on next hit for other classes
-				Buff.affect( hero, PhysicalEmpower.class).set(Math.round(hero.lvl / (4f - hero.pointsInTalent(FOCUSED_MEAL))), 1);
+				Buff.affect( hero, PhysicalEmpower.class).set(Math.round(hero.lvl / (4f - hero.pointsInTalent(FOCUSED_MEAL))), (int) (1*foodVal));
 			}
 		}
 		if (hero.hasTalent(ATTUNED_MEAL)){
 			// +1 mana on next 3/5 kills
-			Buff.affect( hero, ManaEmpower.class).set(1, 1 + hero.pointsInTalent(ATTUNED_MEAL)*2);
+			Buff.affect( hero, ManaEmpower.class).set(1, (int) ((1 + hero.pointsInTalent(ATTUNED_MEAL)*2)*foodVal));
 		}
 		if (hero.hasTalent(INSPIRING_MEAL)){
-			int turns = (1 + hero.pointsInTalent(INSPIRING_MEAL))*2;
+			int turns = (int) (((1 + hero.pointsInTalent(INSPIRING_MEAL))*2)*foodVal);
 			for (Mob mob: Dungeon.level.mobs){
 				if (mob.alignment == Char.Alignment.ALLY && Dungeon.level.heroFOV[mob.pos]){
 					Buff.affect(mob, Empowered.class, turns);
@@ -923,7 +924,7 @@ public enum Talent {
 				HolyTome tome = hero.belongings.getItem(HolyTome.class);
 				if (tome != null) {
 					// 2/3 of a charge at +1, 1 full charge at +2
-					tome.directCharge( (1+hero.pointsInTalent(ENLIGHTENING_MEAL))/3f );
+					tome.directCharge( (1+hero.pointsInTalent(ENLIGHTENING_MEAL))/3f*foodVal );
 					ScrollOfRecharging.charge(hero);
 				}
 			} else {
@@ -935,14 +936,14 @@ public enum Talent {
 
 		//we process these at the end as they can stack together from some talents
 		if (wandChargeTurns > 0){
-			Buff.prolong( hero, Recharging.class, wandChargeTurns );
+			Buff.prolong( hero, Recharging.class, wandChargeTurns*foodVal );
 			ScrollOfRecharging.charge( hero );
 			SpellSprite.show(hero, SpellSprite.CHARGE);
 		}
 		if (artifactChargeTurns > 0){
 			ArtifactRecharge buff = Buff.affect( hero, ArtifactRecharge.class);
 			if (buff.left() < artifactChargeTurns){
-				buff.set(artifactChargeTurns).ignoreHornOfPlenty = foodSource instanceof HornOfPlenty;
+				buff.set(artifactChargeTurns*foodVal).ignoreHornOfPlenty = foodSource instanceof HornOfPlenty;
 			}
 			ScrollOfRecharging.charge( hero );
 			SpellSprite.show(hero, SpellSprite.CHARGE, 0, 1, 1);
