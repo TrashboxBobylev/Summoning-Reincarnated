@@ -289,6 +289,10 @@ public class Artifact extends KindofMisc implements TypedItem {
 			return level();
 		}
 
+		public int itemType() {
+			return type();
+		}
+
 		public boolean isCursed() {
 			return target.buff(MagicImmune.class) == null && cursed;
 		}
