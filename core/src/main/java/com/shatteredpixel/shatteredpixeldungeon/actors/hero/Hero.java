@@ -121,6 +121,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerSet;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Stone;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CapeOfThorns;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EtherealChains;
@@ -1915,6 +1916,10 @@ public class Hero extends Char {
 		//temporarily assign to a float to avoid rounding a bunch
 		float damage = dmg;
 
+		if (buff(ChaliceOfBlood.DefenseDamage.class) != null && (src.hasProperty(DamageProperty.PHYSICAL) || src.hasProperty(DamageProperty.MAGICAL))){
+			damage += buff(ChaliceOfBlood.DefenseDamage.class).cooldown() / ChaliceOfBlood.DefenseDamage.RATE;
+		}
+
 		Endure.EndureTracker endure = buff(Endure.EndureTracker.class);
 		if (!(src.hasProperty(DamageProperty.PHYSICAL))){
 			//reduce damage here if it isn't coming from a character (if it is we already reduced it)
@@ -1966,11 +1971,26 @@ public class Hero extends Char {
 		if (src instanceof Hunger) postHP -= shielding();
 		int effectiveDamage = preHP - postHP;
 
+		if (buff(ChaliceOfBlood.chaliceRegen.class) != null && (src.hasProperty(DamageProperty.PHYSICAL) || src.hasProperty(DamageProperty.MAGICAL))){
+			ChaliceOfBlood.chaliceRegen chalice = buff(ChaliceOfBlood.chaliceRegen.class);
+			if (chalice.itemType() == 2){
+				int healing = chalice.itemLevel();
+				if (!chalice.isCursed())
+					Regeneration.regenerate(this, healing, true);
+				Buff.affect(this, ChaliceOfBlood.DefenseDamage.class, healing*ChaliceOfBlood.DefenseDamage.RATE*(chalice.isCursed() ? 4 : 0.5f));
+				sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString((int) (healing*(chalice.isCursed() ? 4 : 0.5f))), FloatingText.SHIELDING);
+			} else if (chalice.itemType() == 3 && !chalice.isCursed()){
+				chalice.upgrade(effectiveDamage);
+			}
+		}
+
 		if (effectiveDamage <= 0) return;
 
 		if (buff(Challenge.DuelParticipant.class) != null){
 			buff(Challenge.DuelParticipant.class).addDamage(effectiveDamage);
 		}
+
+
 
 		//flash red when hit for serious damage.
 		float percentDMG = effectiveDamage / (float)preHP; //percent of current HP that was taken

@@ -96,7 +96,7 @@ public class Regeneration extends Buff {
 				boolean chaliceCursed = false;
 				int chaliceLevel = -1;
 				if (target.buff(MagicImmune.class) == null) {
-					if (Dungeon.hero.buff(ChaliceOfBlood.chaliceRegen.class) != null) {
+					if (Dungeon.hero.buff(ChaliceOfBlood.chaliceRegen.class) != null && Dungeon.hero.buff(ChaliceOfBlood.chaliceRegen.class).itemType() == 1) {
 						chaliceCursed = Dungeon.hero.buff(ChaliceOfBlood.chaliceRegen.class).isCursed();
 						chaliceLevel = Dungeon.hero.buff(ChaliceOfBlood.chaliceRegen.class).itemLevel();
 					} else if (Dungeon.hero.buff(SpiritForm.SpiritFormBuff.class) != null
