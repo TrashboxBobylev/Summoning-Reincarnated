@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImag
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTerror;
 
@@ -70,7 +71,8 @@ public abstract class WondrousScroll extends Scroll {
         regToWon.put(ScrollOfIdentify.class, ScrollOfDiscovery.class);
         wonToReg.put(ScrollOfDiscovery.class, ScrollOfIdentify.class);
 
-
+        regToWon.put(ScrollOfRetribution.class, ScrollOfViolence.class);
+        wonToReg.put(ScrollOfViolence.class, ScrollOfRetribution.class);
     }
 
     @Override

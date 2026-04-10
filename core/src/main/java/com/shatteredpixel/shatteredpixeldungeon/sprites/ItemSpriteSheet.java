@@ -1229,6 +1229,7 @@ public class ItemSpriteSheet {
 		public static final int SCROLL_MORPHEUS      = WONDOROUS_SCROLLS+6;
 		public static final int SCROLL_OMNISCIENCE   = WONDOROUS_SCROLLS+7;
 		public static final int SCROLL_RALLYING      = WONDOROUS_SCROLLS+8;
+		public static final int SCROLL_VIOLENCE      = WONDOROUS_SCROLLS+9;
 		public static final int SCROLL_PETRIFICATION = WONDOROUS_SCROLLS+10;
 		static {
 			assignItemRect(SCROLL_DISCOVERY,     7, 5);
@@ -1240,6 +1241,7 @@ public class ItemSpriteSheet {
 			assignItemRect(SCROLL_OMNISCIENCE,   7, 7);
 			assignItemRect(SCROLL_PETRIFICATION, 5, 7);
 			assignItemRect(SCROLL_RALLYING,      6, 6);
+			assignItemRect(SCROLL_VIOLENCE,      6, 6);
 		}
 
 	}
