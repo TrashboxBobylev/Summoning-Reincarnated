@@ -1026,6 +1026,24 @@ public class ItemSpriteSheet {
 			assignItemRect(i, 14, 15);
 	}
 
+	private static final int WONDOROUS_SCROLLS =                               xy(1, 41);  //16 slots
+	public static final int WONDOROUS_KAUNAN   = WONDOROUS_SCROLLS+0;
+	public static final int WONDOROUS_SOWILO   = WONDOROUS_SCROLLS+1;
+	public static final int WONDOROUS_LAGUZ    = WONDOROUS_SCROLLS+2;
+	public static final int WONDOROUS_YNGVI    = WONDOROUS_SCROLLS+3;
+	public static final int WONDOROUS_GYFU     = WONDOROUS_SCROLLS+4;
+	public static final int WONDOROUS_RAIDO    = WONDOROUS_SCROLLS+5;
+	public static final int WONDOROUS_ISAZ     = WONDOROUS_SCROLLS+6;
+	public static final int WONDOROUS_MANNAZ   = WONDOROUS_SCROLLS+7;
+	public static final int WONDOROUS_NAUDIZ   = WONDOROUS_SCROLLS+8;
+	public static final int WONDOROUS_BERKANAN = WONDOROUS_SCROLLS+9;
+	public static final int WONDOROUS_ODAL     = WONDOROUS_SCROLLS+10;
+	public static final int WONDOROUS_TIWAZ    = WONDOROUS_SCROLLS+11;
+	static {
+		for (int i = WONDOROUS_SCROLLS; i < WONDOROUS_SCROLLS+16; i++)
+			assignItemRect(i, 15, 14);
+	}
+
 	//for smaller 8x8 icons that often accompany an item sprite
 	public static class Icons {
 
@@ -1202,7 +1220,27 @@ public class ItemSpriteSheet {
 			assignIconRect( POTION_DIVINE,      7, 7 );
 		}
 
-		                                                                                //16 free slots
+		private static final int WONDOROUS_SCROLLS =                        xy(1, 8);  //16 slots
+		public static final int SCROLL_DISCOVERY     = WONDOROUS_SCROLLS+1;
+		public static final int SCROLL_ENLIGHTEMENT  = WONDOROUS_SCROLLS+2;
+		public static final int SCROLL_SHADOW_LEGION = WONDOROUS_SCROLLS+3;
+		public static final int SCROLL_OVERCHARGE    = WONDOROUS_SCROLLS+4;
+		public static final int SCROLL_WARP          = WONDOROUS_SCROLLS+5;
+		public static final int SCROLL_MORPHEUS      = WONDOROUS_SCROLLS+6;
+		public static final int SCROLL_OMNISCIENCE   = WONDOROUS_SCROLLS+7;
+		public static final int SCROLL_RALLYING      = WONDOROUS_SCROLLS+8;
+		public static final int SCROLL_PETRIFICATION = WONDOROUS_SCROLLS+10;
+		static {
+			assignItemRect(SCROLL_DISCOVERY,     7, 5);
+			assignItemRect(SCROLL_ENLIGHTEMENT,  8, 8);
+			assignItemRect(SCROLL_MORPHEUS,      6, 6);
+			assignItemRect(SCROLL_SHADOW_LEGION, 8, 8);
+			assignItemRect(SCROLL_OVERCHARGE,    7, 5);
+			assignItemRect(SCROLL_WARP,          8, 8);
+			assignItemRect(SCROLL_OMNISCIENCE,   7, 7);
+			assignItemRect(SCROLL_PETRIFICATION, 5, 7);
+			assignItemRect(SCROLL_RALLYING,      6, 6);
+		}
 
 	}
 

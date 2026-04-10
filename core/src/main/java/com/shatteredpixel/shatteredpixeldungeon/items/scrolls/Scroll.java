@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Recipe;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.UnstableSpellbook;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.wondrous.WondrousScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
@@ -304,7 +305,9 @@ public abstract class Scroll extends Item {
 		@Override
 		public boolean isSimilar(Item item) {
 			return ExoticScroll.regToExo.containsKey(item.getClass())
-					|| ExoticScroll.regToExo.containsValue(item.getClass());
+					|| ExoticScroll.regToExo.containsValue(item.getClass())
+					|| WondrousScroll.regToWon.containsKey(item.getClass())
+					|| WondrousScroll.regToWon.containsValue(item.getClass());
 		}
 		
 		@Override
