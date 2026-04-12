@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.scrolls.wondrous;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -34,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Sample;
 
 public class ScrollOfWarp extends WondrousScroll {
@@ -49,20 +51,33 @@ public class ScrollOfWarp extends WondrousScroll {
             return;
         }
 
-        GameScene.selectCell(new CellSelector.Listener() {
-            @Override
-            public void onSelect(Integer target) {
-                if (target != null) {
-                    //time isn't spent
-                    ((HeroSprite)curUser.sprite).read();
-                    if (ScrollOfTeleportation.teleportToLocation(curUser, target))
-                        GLog.i( Messages.get(ScrollOfTeleportation.class, "tele") );
-                }
+        Actor.add(new Actor() {
+            {
+                actPriority = VFX_PRIO;
             }
-
             @Override
-            public String prompt() {
-                return Messages.get(ScrollOfTeleportation.class, "prompt");
+            protected boolean act() {
+                Game.runOnRenderThread(() -> {
+                    GameScene.selectCell(new CellSelector.Listener() {
+                        @Override
+                        public void onSelect(Integer target) {
+                            if (target != null) {
+                                //time isn't spent
+                                ((HeroSprite)curUser.sprite).read();
+                                if (ScrollOfTeleportation.teleportToLocation(curUser, target))
+                                    GLog.i( Messages.get(ScrollOfTeleportation.class, "tele") );
+                            }
+                        }
+
+                        @Override
+                        public String prompt() {
+                            return Messages.get(ScrollOfTeleportation.class, "prompt");
+                        }
+                    });
+                });
+
+                Actor.remove(this);
+                return true;
             }
         });
 
