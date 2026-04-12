@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.journal;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.triadallies.TriadFighter;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.triadallies.TriadMagician;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.triadallies.TriadRanger;
@@ -132,6 +133,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Wandmaker;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.UnstableSpellbook;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.CorpseDust;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfLivingEarth;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfRegrowth;
@@ -366,6 +368,12 @@ public enum Bestiary {
 					cat.encounterCount.put(cls, Integer.MAX_VALUE);
 				}
 				Journal.saveNeeded = true;
+			}
+		}
+		if (Dungeon.hero != null){
+			UnstableSpellbook.bookRecharge book;
+			if ((book = Dungeon.hero.buff(UnstableSpellbook.bookRecharge.class)) != null){
+				book.processKills(cls);
 			}
 		}
 	}

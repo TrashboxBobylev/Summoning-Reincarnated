@@ -139,6 +139,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.remains.CloakScrap;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.SealShard;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.SpellPage;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ExoticScroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.wondrous.WondrousScroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.Alchemize;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.BeaconOfReturning;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.CurseInfusion;
@@ -189,6 +190,7 @@ public enum Catalog {
 	FOOD,
 	EXOTIC_POTIONS,
 	EXOTIC_SCROLLS,
+	WONDOROUS_SCROLLS,
 	BOMBS,
 	TIPPED_DARTS,
 	BREWS_ELIXIRS,
@@ -289,6 +291,8 @@ public enum Catalog {
 
 		EXOTIC_SCROLLS.addItems(ExoticScroll.exoToReg.keySet().toArray(new Class[0]));
 
+		WONDOROUS_SCROLLS.addItems(WondrousScroll.wonToReg.keySet().toArray(new Class[0]));
+
 		BOMBS.addItems( Bomb.class, FrostBomb.class, Firebomb.class, SmokeBomb.class, RegrowthBomb.class,
 				WoollyBomb.class, Noisemaker.class, ElectricalExplosive.class, HolyBomb.class, ArcaneBomb.class, ShrapnelBomb.class,
 				ShrinkingBomb.class, Webbomb.class, SupplyBomb.class, ChaoticBomb.class);
@@ -357,6 +361,7 @@ public enum Catalog {
 		consumableCatalogs.add(FOOD);
 		consumableCatalogs.add(EXOTIC_POTIONS);
 		consumableCatalogs.add(EXOTIC_SCROLLS);
+		consumableCatalogs.add(WONDOROUS_SCROLLS);
 		consumableCatalogs.add(BOMBS);
 		consumableCatalogs.add(TIPPED_DARTS);
 		consumableCatalogs.add(BREWS_ELIXIRS);
