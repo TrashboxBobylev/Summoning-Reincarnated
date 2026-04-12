@@ -35,7 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
 public class ScrollOfMorpheus extends WondrousScroll {
     {
-        image = ItemSpriteSheet.Icons.SCROLL_MORPHEUS;
+        icon = ItemSpriteSheet.Icons.SCROLL_MORPHEUS;
     }
 
     @Override

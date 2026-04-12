@@ -126,6 +126,10 @@ public abstract class Scroll extends Item {
 				if (!classes.contains(ExoticScroll.exoToReg.get(i.getClass()))){
 					classes.add(ExoticScroll.exoToReg.get(i.getClass()));
 				}
+			} if (i instanceof WondrousScroll){
+				if (!classes.contains(WondrousScroll.wonToReg.get(i.getClass()))){
+					classes.add(WondrousScroll.wonToReg.get(i.getClass()));
+				}
 			} else if (i instanceof Scroll){
 				if (!classes.contains(i.getClass())){
 					classes.add(i.getClass());

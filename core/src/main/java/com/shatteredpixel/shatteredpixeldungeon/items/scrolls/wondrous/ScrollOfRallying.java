@@ -39,7 +39,7 @@ import com.watabou.noosa.audio.Sample;
 
 public class ScrollOfRallying extends WondrousScroll {
     {
-        image = ItemSpriteSheet.Icons.SCROLL_RALLYING;
+        icon = ItemSpriteSheet.Icons.SCROLL_RALLYING;
     }
 
     @Override

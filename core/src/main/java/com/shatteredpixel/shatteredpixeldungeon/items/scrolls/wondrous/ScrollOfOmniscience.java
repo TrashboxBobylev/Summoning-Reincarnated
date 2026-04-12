@@ -40,7 +40,7 @@ import com.watabou.noosa.audio.Sample;
 
 public class ScrollOfOmniscience extends WondrousScroll {
     {
-        image = ItemSpriteSheet.Icons.SCROLL_OMNISCIENCE;
+        icon = ItemSpriteSheet.Icons.SCROLL_OMNISCIENCE;
     }
 
     @Override

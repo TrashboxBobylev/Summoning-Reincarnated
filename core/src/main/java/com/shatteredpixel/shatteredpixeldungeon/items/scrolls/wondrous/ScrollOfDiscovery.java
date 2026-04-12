@@ -36,7 +36,7 @@ import com.watabou.utils.Random;
 
 public class ScrollOfDiscovery extends WondrousScroll {
     {
-        image = ItemSpriteSheet.Icons.SCROLL_DISCOVERY;
+        icon = ItemSpriteSheet.Icons.SCROLL_DISCOVERY;
     }
 
     @Override

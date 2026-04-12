@@ -253,6 +253,8 @@ public class ItemSpriteSheet {
 		assignItemRect(PIKE, 16, 16);
 		assignItemRect(STABBER, 12, 13);
 		assignItemRect(JJANGO, 15, 16);
+		assignItemRect(CANE, 15, 16);
+		assignItemRect(GONG, 16, 16);
 	}
 
 	private static final int WEP_TIER1      =                               xy(1, 7);   //8 slots
@@ -1232,16 +1234,16 @@ public class ItemSpriteSheet {
 		public static final int SCROLL_VIOLENCE      = WONDOROUS_SCROLLS+9;
 		public static final int SCROLL_PETRIFICATION = WONDOROUS_SCROLLS+10;
 		static {
-			assignItemRect(SCROLL_DISCOVERY,     7, 5);
-			assignItemRect(SCROLL_ENLIGHTEMENT,  8, 8);
-			assignItemRect(SCROLL_MORPHEUS,      6, 6);
-			assignItemRect(SCROLL_SHADOW_LEGION, 8, 8);
-			assignItemRect(SCROLL_OVERCHARGE,    7, 5);
-			assignItemRect(SCROLL_WARP,          8, 8);
-			assignItemRect(SCROLL_OMNISCIENCE,   7, 7);
-			assignItemRect(SCROLL_PETRIFICATION, 5, 7);
-			assignItemRect(SCROLL_RALLYING,      6, 6);
-			assignItemRect(SCROLL_VIOLENCE,      6, 6);
+			assignIconRect(SCROLL_DISCOVERY,     7, 5);
+			assignIconRect(SCROLL_ENLIGHTEMENT,  8, 8);
+			assignIconRect(SCROLL_MORPHEUS,      6, 6);
+			assignIconRect(SCROLL_SHADOW_LEGION, 8, 8);
+			assignIconRect(SCROLL_OVERCHARGE,    7, 5);
+			assignIconRect(SCROLL_WARP,          8, 8);
+			assignIconRect(SCROLL_OMNISCIENCE,   7, 7);
+			assignIconRect(SCROLL_PETRIFICATION, 5, 7);
+			assignIconRect(SCROLL_RALLYING,      6, 6);
+			assignIconRect(SCROLL_VIOLENCE,      6, 6);
 		}
 
 	}

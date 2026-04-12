@@ -33,7 +33,7 @@ import com.watabou.noosa.audio.Sample;
 
 public class ScrollOfEnlightement extends WondrousScroll {
     {
-        image = ItemSpriteSheet.Icons.SCROLL_ENLIGHTEMENT;
+        icon = ItemSpriteSheet.Icons.SCROLL_ENLIGHTEMENT;
     }
 
     @Override

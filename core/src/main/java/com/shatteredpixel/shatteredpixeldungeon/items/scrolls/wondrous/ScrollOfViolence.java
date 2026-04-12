@@ -34,7 +34,7 @@ import com.watabou.noosa.audio.Sample;
 
 public class ScrollOfViolence extends WondrousScroll {
     {
-        image = ItemSpriteSheet.Icons.SCROLL_VIOLENCE;
+        icon = ItemSpriteSheet.Icons.SCROLL_VIOLENCE;
     }
 
     @Override

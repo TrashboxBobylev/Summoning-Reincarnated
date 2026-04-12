@@ -36,7 +36,7 @@ import com.watabou.utils.Bundle;
 
 public class ScrollOfShadowLegion extends WondrousScroll {
     {
-        image = ItemSpriteSheet.Icons.SCROLL_SHADOW_LEGION;
+        icon = ItemSpriteSheet.Icons.SCROLL_SHADOW_LEGION;
     }
 
     @Override
