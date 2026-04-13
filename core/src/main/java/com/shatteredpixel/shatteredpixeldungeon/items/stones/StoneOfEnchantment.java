@@ -30,7 +30,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Enchanting;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfEnchantment;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponEnchantable;
@@ -67,7 +66,7 @@ public class StoneOfEnchantment extends InventoryStone {
 			
 		} else if (item instanceof Stylus.Inscribable && ((Stylus.Inscribable) item).isInscribable()) {
 			
-			((Armor)item).inscribe();
+			((Stylus.Inscribable)item).inscribe();
 			
 		}
 		
