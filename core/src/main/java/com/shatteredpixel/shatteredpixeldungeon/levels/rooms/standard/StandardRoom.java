@@ -66,6 +66,10 @@ public abstract class StandardRoom extends Room {
 		return new float[]{1, 0, 0};
 	}
 
+	protected boolean enforceSizeCat(int index){
+		return true;
+	}
+
 	private static float[] chaosSizeCatProbs = new float[]{1, 1, 0};
 
 	public boolean setSizeCat(){
@@ -88,7 +92,7 @@ public abstract class StandardRoom extends Room {
 		for (int i = maxOrdinal+1; i < categories.length; i++)  probs[i] = 0;
 		
 		int ordinal = Random.chances(probs);
-		if (Dungeon.mode == Dungeon.GameMode.CHAOS){
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS && !enforceSizeCat(ordinal)){
 			ordinal = Random.chances(chaosSizeCatProbs);
 		}
 

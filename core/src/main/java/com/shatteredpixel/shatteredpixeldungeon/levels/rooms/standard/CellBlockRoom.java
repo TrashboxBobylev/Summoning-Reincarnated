@@ -38,6 +38,11 @@ public class CellBlockRoom extends StandardRoom {
 	}
 
 	@Override
+	protected boolean enforceSizeCat(int index) {
+        return index == 0 || super.enforceSizeCat(index);
+    }
+
+	@Override
 	public void paint(Level level) {
 		Painter.fill( level, this, Terrain.WALL );
 		Painter.fill( level, this, 1, Terrain.EMPTY );
