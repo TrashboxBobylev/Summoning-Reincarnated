@@ -344,7 +344,7 @@ public class Dungeon {
         }
 	}
 
-	public static GameMode mode;
+	public static GameMode mode = GameMode.NORMAL;
 
 	public static int challenges;
 	public static float mobsToChampion;
