@@ -875,14 +875,14 @@ public abstract class Level implements Bundlable {
 		
 		for (int i=0; i < length(); i++) {
 			int flags = Terrain.flags[map[i]];
-			passable[i]		= (flags & Terrain.PASSABLE) != 0;
-			losBlocking[i]	= (flags & Terrain.LOS_BLOCKING) != 0;
-			flamable[i]		= (flags & Terrain.FLAMABLE) != 0;
-			secret[i]		= (flags & Terrain.SECRET) != 0;
-			solid[i]		= (flags & Terrain.SOLID) != 0;
-			avoid[i]		= (flags & Terrain.AVOID) != 0;
-			water[i]		= (flags & Terrain.LIQUID) != 0;
-			pit[i]			= (flags & Terrain.PIT) != 0;
+			passable[i]     = (flags & Terrain.PASSABLE) != 0;
+			losBlocking[i]  = (flags & Terrain.LOS_BLOCKING) != 0;
+			flamable[i]     = (flags & Terrain.FLAMABLE) != 0;
+			secret[i]       = (flags & Terrain.SECRET) != 0;
+			solid[i]        = (flags & Terrain.SOLID) != 0;
+			avoid[i]        = (flags & Terrain.AVOID) != 0;
+			water[i]        = (flags & Terrain.LIQUID) != 0;
+			pit[i]          = (flags & Terrain.PIT) != 0;
 		}
 
 		for (Blob b : blobs.values()){
@@ -981,46 +981,39 @@ public abstract class Level implements Bundlable {
 	}
 	
 	public static void set( int cell, int terrain, Level level ) {
-		Painter.set( level, cell, terrain );
+		Painter.set(level, cell, terrain);
 
-		if (terrain != Terrain.TRAP && terrain != Terrain.SECRET_TRAP && terrain != Terrain.INACTIVE_TRAP){
-			level.traps.remove( cell );
+		if (terrain != Terrain.TRAP && terrain != Terrain.SECRET_TRAP && terrain != Terrain.INACTIVE_TRAP) {
+			level.traps.remove(cell);
 		}
 
-		int flags = Terrain.flags[terrain];
-		level.passable[cell]		= (flags & Terrain.PASSABLE) != 0;
-		level.losBlocking[cell]	    = (flags & Terrain.LOS_BLOCKING) != 0;
-		level.flamable[cell]		= (flags & Terrain.FLAMABLE) != 0;
-		level.secret[cell]		    = (flags & Terrain.SECRET) != 0;
-		level.solid[cell]			= (flags & Terrain.SOLID) != 0;
-		level.avoid[cell]			= (flags & Terrain.AVOID) != 0;
-		level.pit[cell]			    = (flags & Terrain.PIT) != 0;
-		level.water[cell]			= terrain == Terrain.WATER;
+		level.updateCellFlags(cell);
+	}
 
-		if (level instanceof SewerLevel){
-			if (level.map[cell] == Terrain.REGION_DECO || level.map[cell] == Terrain.REGION_DECO_ALT){
-				level.flamable[cell] = true;
+	public void updateCellFlags( int cell ){
+		int terrain = map[cell];
+
+		int flags = Terrain.flags[terrain];
+		passable[cell]      = (flags & Terrain.PASSABLE) != 0;
+		losBlocking[cell]   = (flags & Terrain.LOS_BLOCKING) != 0;
+		flamable[cell]      = (flags & Terrain.FLAMABLE) != 0;
+		secret[cell]        = (flags & Terrain.SECRET) != 0;
+		solid[cell]         = (flags & Terrain.SOLID) != 0;
+		avoid[cell]         = (flags & Terrain.AVOID) != 0;
+		pit[cell]           = (flags & Terrain.PIT) != 0;
+		water[cell]         = terrain == Terrain.WATER;
+
+		if (this instanceof SewerLevel){
+			if (map[cell] == Terrain.REGION_DECO || map[cell] == Terrain.REGION_DECO_ALT){
+				flamable[cell] = true;
 			}
 		}
 
-		for (int i : PathFinder.NEIGHBOURS9){
-			i = cell + i;
-            if (i >= 0 && i < level.map.length) {
-                if (level.solid[i]) {
-                    level.openSpace[i] = false;
-                } else {
-                    for (int j = 1; j < PathFinder.CIRCLE8.length; j += 2) {
-                        if (level.solid[i + PathFinder.CIRCLE8[j]]) {
-                            level.openSpace[i] = false;
-                        } else if (!level.solid[i + PathFinder.CIRCLE8[(j + 1) % 8]]
-                                && !level.solid[i + PathFinder.CIRCLE8[(j + 2) % 8]]) {
-                            level.openSpace[i] = true;
-                            break;
-                        }
-                    }
-                }
-            }
+		for (Blob b : blobs.values()){
+			b.onUpdateCellFlags(this, cell);
 		}
+
+		updateOpenSpace(cell);
 	}
 	
 	public Heap drop( Item item, int cell ) {
@@ -1070,7 +1063,7 @@ public abstract class Level implements Bundlable {
         if (Dungeon.isChallenged(Conducts.Conduct.CAPITALISM)){
             heap.type = Heap.Type.FOR_SALE;
         }
-		
+
 		return heap;
 	}
 	
@@ -1117,7 +1110,7 @@ public abstract class Level implements Bundlable {
 				return null;
 			}
 		}
-		
+
 		return plant;
 	}
 	
@@ -1673,7 +1666,7 @@ public abstract class Level implements Bundlable {
 
 		return respawnPoints;
 	}
-	
+
 	public String tileName( int tile ) {
 		
 		switch (tile) {

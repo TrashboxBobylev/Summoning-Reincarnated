@@ -261,17 +261,16 @@ public class WallOfLight extends TargetedClericSpell {
 
 					volume += off[cell];
 
-					l.solid[cell] = off[cell] > 0 || (Terrain.flags[l.map[cell]] & Terrain.SOLID) != 0;
-					l.passable[cell] = off[cell] == 0 && (Terrain.flags[l.map[cell]] & Terrain.PASSABLE) != 0;
-					l.avoid[cell] = off[cell] == 0 && (Terrain.flags[l.map[cell]] & Terrain.AVOID) != 0;
-					l.updateOpenSpace(cell);
+					if (off[cell] == 0 && cur[cell] > 0){
+						cellsToFlagUpdate.add(cell);
+					}
 
-                    for (int c: PathFinder.NEIGHBOURS4){
-                        Char target;
-                        if ((target = Actor.findChar(c + cell)) != null && target.alignment == Char.Alignment.ENEMY){
-                            target.damage(Random.NormalIntRange(0, 1 + Dungeon.scalingDepth() / 5), new WandOfWarding());
-                        }
-                    }
+					for (int c: PathFinder.NEIGHBOURS4){
+						Char target;
+						if ((target = Actor.findChar(c + cell)) != null && target.alignment == Char.Alignment.ENEMY){
+							target.damage(Random.NormalIntRange(0, 1 + Dungeon.scalingDepth() / 5), new WandOfWarding());
+						}
+					}
 				}
 			}
 		}
@@ -279,21 +278,14 @@ public class WallOfLight extends TargetedClericSpell {
 		@Override
 		public void seed(Level level, int cell, int amount) {
 			super.seed(level, cell, amount);
-			level.solid[cell] = cur[cell] > 0 || (Terrain.flags[level.map[cell]] & Terrain.SOLID) != 0;
-			level.passable[cell] = cur[cell] == 0 && (Terrain.flags[level.map[cell]] & Terrain.PASSABLE) != 0;
-			level.avoid[cell] = cur[cell] == 0 && (Terrain.flags[level.map[cell]] & Terrain.AVOID) != 0;
-			level.updateOpenSpace(cell);
+			level.updateCellFlags(cell);
 		}
 
 		@Override
 		public void clear(int cell) {
 			super.clear(cell);
 			if (cur == null) return;
-			Level l = Dungeon.level;
-			l.solid[cell] = cur[cell] > 0 || (Terrain.flags[l.map[cell]] & Terrain.SOLID) != 0;
-			l.passable[cell] = cur[cell] == 0 && (Terrain.flags[l.map[cell]] & Terrain.PASSABLE) != 0;
-			l.avoid[cell] = cur[cell] == 0 && (Terrain.flags[l.map[cell]] & Terrain.AVOID) != 0;
-			l.updateOpenSpace(cell);
+			Dungeon.level.updateCellFlags(cell);
 		}
 
 		@Override
@@ -306,11 +298,18 @@ public class WallOfLight extends TargetedClericSpell {
 		public void onBuildFlagMaps(Level l) {
 			if (volume > 0){
 				for (int i=0; i < l.length(); i++) {
-					l.solid[i] = l.solid[i] || cur[i] > 0;
-					l.passable[i] = l.passable[i] && cur[i] == 0;
-					l.avoid[i] = l.avoid[i] && cur[i] == 0;
-					//openSpace will be updated as part of building flap maps
+					onUpdateCellFlags(l, i);
 				}
+			}
+		}
+
+		@Override
+		public void onUpdateCellFlags(Level l, int cell) {
+			if (volume > 0 && cur[cell] > 0) {
+				l.solid[cell] = true;
+				l.passable[cell] = false;
+				l.avoid[cell] = false;
+				//openSpace will be updated as part of updating flags in Level
 			}
 		}
 

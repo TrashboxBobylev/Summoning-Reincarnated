@@ -204,7 +204,7 @@ public class Necromancer extends Mob {
 	}
 
 	public void summonMinion(){
-		if (Actor.findChar(summoningPos) != null) {
+		if (Actor.findChar(summoningPos) != null || !Dungeon.level.passable[summoningPos]) {
 
 			int pushPos = pos;
 			for (int c : PathFinder.NEIGHBOURS8) {
@@ -219,11 +219,11 @@ public class Necromancer extends Mob {
 			//push enemy, or wait a turn if there is no valid pushing position
 			if (pushPos != pos) {
 
+				Char ch = Actor.findChar(summoningPos);
 				//no push if char is immovable, move our skeleton instead
-				if (Char.hasProp(Actor.findChar(summoningPos), Property.IMMOVABLE)){
+				if (ch == null || Char.hasProp(ch, Property.IMMOVABLE)){
 					summoningPos = pushPos;
 				} else {
-					Char ch = Actor.findChar(summoningPos);
 					Actor.add(new Pushing(ch, ch.pos, pushPos));
 
 					ch.pos = pushPos;
@@ -234,7 +234,7 @@ public class Necromancer extends Mob {
 
 				//attempt to damage the blocker in addition to waiting
 				Char blocker = Actor.findChar(summoningPos);
-				if (blocker.alignment != alignment){
+				if (blocker != null && blocker.alignment != alignment){
 					blocker.damage( Random.NormalIntRange(2, 10), new SummoningBlockDamage() );
 					if (blocker == Dungeon.hero && !blocker.isAlive()){
 						Badges.validateDeathFromEnemyMagic();
