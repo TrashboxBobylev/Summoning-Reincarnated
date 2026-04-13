@@ -110,7 +110,7 @@ public class Statue extends Mob {
 
 	@Override
 	protected boolean canAttack(Char enemy) {
-		return super.canAttack(enemy) || weapon.canReach(this, enemy.pos);
+		return super.canAttack(enemy) || weapon == null || weapon.canReach(this, enemy.pos);
 	}
 
 	@Override
