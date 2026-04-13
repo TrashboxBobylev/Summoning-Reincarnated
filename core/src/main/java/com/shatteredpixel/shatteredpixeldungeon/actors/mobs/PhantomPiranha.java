@@ -51,7 +51,7 @@ public class PhantomPiranha extends Piranha {
 	@Override
 	public void damage(int dmg, DamageSource src) {
 		Char dmgSource = null;
-		if (src.hasProperty(DamageProperty.PHYSICAL)) dmgSource = (Char)src;
+		if (src instanceof Char) dmgSource = (Char)src;
 		if (src.hasProperty(DamageProperty.MAGICAL)) dmgSource = Dungeon.hero;
 
 		if (dmgSource == null || !Dungeon.level.adjacent(pos, dmgSource.pos)){
