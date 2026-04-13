@@ -131,7 +131,8 @@ public class Regeneration extends Buff {
 					partialRegen -= (int)partialRegen;
 					if (target.HP >= regencap()) {
 						target.HP = regencap();
-						((Hero) target).resting = false;
+						if (target instanceof Hero)
+							((Hero) target).resting = false;
 					}
 				}
 
