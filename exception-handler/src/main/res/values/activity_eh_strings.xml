@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="activity_eh_name">EH</string>
+	<string name="activity_eh_title_0">META INFORMATION</string>
+	<string name="activity_eh_title_1">ACTIVITY LOG</string>
+	<string name="activity_eh_title_2">STACK TRACE</string>
+	<string name="activity_eh_options_menu_copy">Copy</string>
+	<string name="activity_eh_options_menu_share">Share</string>
+	<string name="activity_eh_options_menu_save">Save</string>
+	<string name="activity_eh_options_menu_exit">Exit</string>
+	<string name="activity_eh_send_to_developers">SEND CRASH LOG TO DEVELOPERS</string>
+	<string name="activity_eh_crash_message">The application has crashed due to an unexpected error. Please help the developers by sending them the crash log.\nThank you for your support.</string>
+	<string name="activity_eh_email_message">Dear dev team,\n
+		<p>Application %s has crashed due to an uncaught exception. View the error log for more details.</p>
+		<p>\n\n\t\tYours sincerely EH.</p>
+	</string>
+	<string name="activity_eh_copyright_message">
+		<p>\nEH\nCopyright © 2021 Jore</p>
+	</string>
+</resources>

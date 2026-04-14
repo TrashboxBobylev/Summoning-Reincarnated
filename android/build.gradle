@@ -74,7 +74,8 @@ dependencies {
     natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86"
     natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
     implementation "com.badlogicgames.gdx-controllers:gdx-controllers-android:$gdxControllersVersion"
-    implementation "com.github.RohitSurwase.UCE-Handler:uce_handler:1.4"
+    //implementation "com.github.RohitSurwase.UCE-Handler:uce_handler:1.4"
+    api project(":exception-handler")
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.1.2"
 }
 

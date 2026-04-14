@@ -6,6 +6,7 @@ include ':core'
 
 //platform modules
 include ':android'
+include ':exception-handler'
 include ':ios'
 include ':desktop'
 

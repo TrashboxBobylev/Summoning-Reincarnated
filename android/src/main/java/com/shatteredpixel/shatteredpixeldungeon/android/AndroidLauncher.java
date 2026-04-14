@@ -43,7 +43,7 @@ import com.badlogic.gdx.backends.android.AndroidAudio;
 import com.badlogic.gdx.backends.android.AsynchronousAndroidAudio;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
 import com.badlogic.gdx.utils.GdxNativesLoader;
-import com.rohitss.uceh.UCEHandler;
+import com.jorexdeveloper.eh.EH;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.services.news.News;
@@ -69,7 +69,9 @@ public class AndroidLauncher extends AndroidApplication {
 		try {
 			GdxNativesLoader.load();
 			FreeType.initFreeType();
-			new UCEHandler.Builder(this).setUCEHEnabled(true).build();
+			new EH.Builder (this)
+					.addEmailAddresses ("trashbox.bobylev@gmail.com")
+					.init ();
 		} catch (Exception e){
 			GdxNativesLoader.disableNativesLoading = true;
 			AndroidMissingNativesHandler.error = e;

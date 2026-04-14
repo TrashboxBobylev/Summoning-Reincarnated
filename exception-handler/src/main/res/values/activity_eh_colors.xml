@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="activity_eh_color_primary_dark">#000000</color>
+	<color name="activity_eh_color_primary">#000000</color>
+	<color name="activity_eh_color_accent">#23f963</color>
+	<color name="activity_eh_activity_log_color">#007EFF</color>
+	<color name="activity_eh_meta_inf_color">#FF8F44</color>
+	<color name="activity_eh_stack_color">#FF4F44</color>
+	<color name="activity_eh_text_color">#FFFFFF</color>
+</resources>

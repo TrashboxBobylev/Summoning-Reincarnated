@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<style name="EHTheme" parent="@android:style/Theme.Material">
+		<item name="android:colorPrimaryDark">@color/activity_eh_color_primary_dark</item>
+		<item name="android:colorPrimary">@color/activity_eh_color_primary</item>
+		<item name="android:colorAccent">@color/activity_eh_color_accent</item>
+		<item name="android:fontFamily">monospace</item>
+	</style>
+</resources>

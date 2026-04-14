@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<dimen name="activity_eh_view_padding">8dp</dimen>
+	<dimen name="activity_eh_layout_padding">16dp</dimen>
+	<dimen name="activity_eh_highlight_margin">2dp</dimen>
+	<dimen name="activity_eh_layout_title_height">44dp</dimen>
+	<dimen name="activity_eh_layout_details_min_height">312dp</dimen>
+</resources>
