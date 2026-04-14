@@ -128,7 +128,7 @@ public class UnstableSpellbook extends Artifact {
 		while (!scrolls.isEmpty() && scrolls.size() > (levelCap-1-level())) {
 			scrolls.remove(0);
 		}
-		while (mobs.size() < (level()+1)*5){
+		while (mobs.size() < (level()+1)*4){
 			mobs.add(Random.element(Random.element(
 					EnumSet.of(Bestiary.REGIONAL, Bestiary.BOSSES, Bestiary.RARE, Bestiary.QUEST)
 			).entities()));
@@ -608,7 +608,7 @@ public class UnstableSpellbook extends Artifact {
 				}
 				if (isValid) {
 					mobs.add(mobType);
-					if (mobs.size() == 5 * (level() + 1)) {
+					if (mobs.size() == 4 * (level() + 1)) {
 						Sample.INSTANCE.play(Assets.Sounds.BURNING);
 						target.sprite.emitter().burst(ElmoParticle.FACTORY, 12);
 
