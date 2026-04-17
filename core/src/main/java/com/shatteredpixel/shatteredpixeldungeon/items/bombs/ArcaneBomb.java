@@ -100,7 +100,8 @@ public class ArcaneBomb extends Bomb.ConjuredBomb {
 			ArrayList<Integer> mainCraterCells = new ArrayList<>();
 			mainCraterCells.add(cell);
 			for (int k : PathFinder.NEIGHBOURS4){
-				mainCraterCells.add(cell+k);
+				if (Dungeon.level.insideMap(cell+k))
+					mainCraterCells.add(cell+k);
 			}
 			for (int c : mainCraterCells){
 				if (Dungeon.level.getTransition(c) == null) Level.set(c, Terrain.CHASM);
