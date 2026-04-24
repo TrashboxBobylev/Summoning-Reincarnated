@@ -60,6 +60,7 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
@@ -631,35 +632,32 @@ public class SkeletonKey extends Artifact {
 		}
 
 		public void processExcessKeys(){
-			int keysNeeded = ironKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000);
 			boolean removed = false;
-			if (keysNeeded >= 0) {
-				while (Notes.keyCount(new IronKey(Dungeon.depth)) > keysNeeded) {
+			if (ironKeysNeeded.containsKey(Dungeon.depth + Dungeon.branch*1000)) {
+				while (Notes.keyCount(new IronKey(Dungeon.depth)) > ironKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000)) {
 					Notes.remove(new IronKey(Dungeon.depth));
 					removed = true;
 				}
 			}
-			if (ironKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000) <= 0) {
+			if (ironKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000) < 0) {
 				ironKeysNeeded.remove(Dungeon.depth + Dungeon.branch*1000);
 			}
-			keysNeeded = goldenKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000);
-			if (keysNeeded >= 0) {
-				while (Notes.keyCount(new GoldenKey(Dungeon.depth)) > keysNeeded) {
+			if (goldenKeysNeeded.containsKey(Dungeon.depth + Dungeon.branch*1000)) {
+				while (Notes.keyCount(new GoldenKey(Dungeon.depth)) > goldenKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000)) {
 					Notes.remove(new GoldenKey(Dungeon.depth));
 					removed = true;
 				}
 			}
-			if (goldenKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000) <= 0) {
+			if (goldenKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000) < 0) {
 				goldenKeysNeeded.remove(Dungeon.depth + Dungeon.branch*1000);
 			}
-			keysNeeded = crystalKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000);
-			if (keysNeeded >= 0) {
-				while (Notes.keyCount(new CrystalKey(Dungeon.depth)) > keysNeeded) {
+			if (crystalKeysNeeded.containsKey(Dungeon.depth + Dungeon.branch*1000)) {
+				while (Notes.keyCount(new CrystalKey(Dungeon.depth)) > crystalKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000)) {
 					Notes.remove(new CrystalKey(Dungeon.depth));
 					removed = true;
 				}
 			}
-			if (crystalKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000) <= 0) {
+			if (crystalKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000) < 0) {
 				crystalKeysNeeded.remove(Dungeon.depth + Dungeon.branch*1000);
 			}
 			if (removed){
