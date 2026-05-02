@@ -238,6 +238,7 @@ public class Artifact extends KindofMisc implements TypedItem {
 	@Override
 	public Item random() {
 		//always +0
+		type(Random.IntRange(1, 4));
 		
 		//30% chance to be cursed
 		if (Random.Float() < 0.3f) {
