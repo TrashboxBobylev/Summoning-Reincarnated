@@ -24,6 +24,9 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+import static com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking.arc;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Bones;
@@ -228,9 +231,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
-import static com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking.arc;
 
 public class Hero extends Char {
 
@@ -1957,6 +1957,19 @@ public class Hero extends Char {
 		if (buff(Talent.WarriorFoodImmunity.class) != null){
 			if (pointsInTalent(Talent.IRON_STOMACH) == 1)       damage /= 4f;
 			else if (pointsInTalent(Talent.IRON_STOMACH) == 2)  damage = 0;
+		}
+
+		if (buff(AlchemistsToolkit.kitEnergy.class) != null && !src.hasProperty(DamageProperty.IGNORES_SHIELDING)){
+			AlchemistsToolkit.kitEnergy toolkit = buff(AlchemistsToolkit.kitEnergy.class);
+			if (toolkit.itemType() == 3){
+				int dmgReduction = (int) GameMath.gate(0, dmg/2f, toolkit.charge());
+				if (dmgReduction > 0){
+					toolkit.depleteCharge(dmgReduction);
+					damage -= dmgReduction;
+					sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(dmgReduction), FloatingText.SHIELDING);
+					Item.updateQuickslot();
+				}
+			}
 		}
 
 		dmg = Math.round(damage);
