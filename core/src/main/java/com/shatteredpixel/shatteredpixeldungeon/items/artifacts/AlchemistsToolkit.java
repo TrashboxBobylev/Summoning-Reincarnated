@@ -415,6 +415,7 @@ public class AlchemistsToolkit extends Artifact {
 					charge++;
 				}
 				if (charge >= chargeCap) {
+					charge = chargeCap;
 					partialCharge = 0;
 				}
 				updateQuickslot();
@@ -473,6 +474,7 @@ public class AlchemistsToolkit extends Artifact {
 		preparePotions();
 		if (type == 2){
 			chargeCap = (int)((level()+1)*0.6f)+2;
+			charge = Math.min(charge, chargeCap);
 		}
 	}
 
@@ -560,7 +562,8 @@ public class AlchemistsToolkit extends Artifact {
 						charge ++;
 						updateQuickslot();
 
-						if (charge == chargeCap){
+						if (charge >= chargeCap){
+							charge = chargeCap;
 							partialCharge = 0;
 						}
 					}
