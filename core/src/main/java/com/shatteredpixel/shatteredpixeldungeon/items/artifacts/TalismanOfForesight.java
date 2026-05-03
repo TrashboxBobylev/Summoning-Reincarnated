@@ -24,6 +24,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -32,13 +34,19 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.GuidingLight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CheckedCell;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Identification;
+import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -50,6 +58,7 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 
@@ -91,8 +100,18 @@ public class TalismanOfForesight extends Artifact {
 
 		if (action.equals(AC_SCRY)){
 			if (!isEquipped(hero))  GLog.i( Messages.get(Artifact.class, "need_to_equip") );
-			else if (charge < 5)    GLog.i( Messages.get(this, "low_charge") );
-			else                    GameScene.selectCell(scry);
+			else if (charge < (type() == 3 ? 20 : 5))    GLog.i( Messages.get(this, "low_charge") );
+			else {
+				switch (type()){
+					case 1: case 2:
+						GameScene.selectCell(scry);
+						break;
+					case 3:
+						GameScene.selectItem(itemSelector);
+						break;
+				}
+
+			}
 		}
 	}
 
@@ -100,12 +119,28 @@ public class TalismanOfForesight extends Artifact {
 	protected ArtifactBuff passiveBuff() {
 		return new Foresight();
 	}
+
+	public float rechargeModifier(){
+		return rechargeModifier(type());
+	}
+
+	public float rechargeModifier(int type){
+		switch (type){
+			case 1:
+				return 1.0f;
+			case 2:
+				return 0.75f;
+			case 3:
+				return 3f;
+		}
+		return 1.0f;
+	}
 	
 	@Override
 	public void charge(Hero target, float amount) {
 		if (cursed || target.buff(MagicImmune.class) != null) return;
 		if (charge < chargeCap){
-			partialCharge += 2*amount;
+			partialCharge += 2*amount*rechargeModifier();
 			while (partialCharge >= 1f){
 				charge++;
 				partialCharge--;
@@ -121,11 +156,11 @@ public class TalismanOfForesight extends Artifact {
 
 	@Override
 	public String desc() {
-		String desc = super.desc();
+		String desc = getTypeBasedString("desc", type());
 
-		if ( isEquipped( Dungeon.hero ) ){
+		if ( isEquipped( hero ) ){
 			if (!cursed) {
-				desc += "\n\n" + Messages.get(this, "desc_worn");
+				desc += "\n\n" + getTypeBasedString("desc_worn", type());
 
 			} else {
 				desc += "\n\n" + Messages.get(this, "desc_cursed");
@@ -133,6 +168,12 @@ public class TalismanOfForesight extends Artifact {
 		}
 
 		return desc;
+	}
+
+	@Override
+	public String getTypeMessage(int type) {
+		return Messages.get(this, "type",
+				Math.round(100*rechargeModifier(type))) + "\n" + super.getTypeMessage(type);
 	}
 
 	private float maxDist(){
@@ -165,51 +206,83 @@ public class TalismanOfForesight extends Artifact {
 
 				//starts at 200 degrees, loses 8% per tile of distance
 				float angle = Math.round(200*(float)Math.pow(0.92, dist));
-				ConeAOE cone = new ConeAOE(new Ballistica(curUser.pos, target, Ballistica.STOP_TARGET), angle);
+				int ballisticaParams = type() == 2 ? (Ballistica.STOP_TARGET | Ballistica.STOP_SOLID | Ballistica.IGNORE_SOFT_SOLID) : Ballistica.STOP_TARGET;
+				ConeAOE cone = new ConeAOE(new Ballistica(curUser.pos, target, ballisticaParams), angle);
+				if (type() == 2){
+					for (Ballistica ray : cone.outerRays){
+						((MagicMissile)curUser.sprite.parent.recycle( MagicMissile.class )).reset(
+								MagicMissile.LIGHT_MISSILE,
+								curUser.sprite,
+								ray.path.get(ray.dist),
+								null
+						);
+					}
+				}
 
 				int earnedExp = 0;
 				boolean noticed = false;
 				for (int cell : cone.cells){
-					GameScene.effectOverFog(new CheckedCell( cell, curUser.pos ));
-					if (Dungeon.level.discoverable[cell] && !(Dungeon.level.mapped[cell] || Dungeon.level.visited[cell])){
-						Dungeon.level.mapped[cell] = true;
-						earnedExp++;
-					}
+					Char ch;
+					switch (type()) {
+						case 1:
+							GameScene.effectOverFog(new CheckedCell(cell, curUser.pos));
+							if (Dungeon.level.discoverable[cell] && !(Dungeon.level.mapped[cell] || Dungeon.level.visited[cell])) {
+								Dungeon.level.mapped[cell] = true;
+								earnedExp++;
+							}
 
-					if (Dungeon.level.secret[cell]) {
-						int oldValue = Dungeon.level.map[cell];
-						GameScene.discoverTile(cell, oldValue);
-						Dungeon.level.discover( cell );
-						ScrollOfMagicMapping.discover(cell);
-						noticed = true;
+							if (Dungeon.level.secret[cell]) {
+								int oldValue = Dungeon.level.map[cell];
+								GameScene.discoverTile(cell, oldValue);
+								Dungeon.level.discover(cell);
+								ScrollOfMagicMapping.discover(cell);
+								noticed = true;
 
-						if (oldValue == Terrain.SECRET_TRAP){
-							earnedExp += 10;
-						} else if (oldValue == Terrain.SECRET_DOOR){
-							earnedExp += 100;
-						}
-					}
+								if (oldValue == Terrain.SECRET_TRAP) {
+									earnedExp += 10;
+								} else if (oldValue == Terrain.SECRET_DOOR) {
+									earnedExp += 100;
+								}
+							}
 
-					Char ch = Actor.findChar(cell);
-					if (ch != null
-							&& (ch.alignment != Char.Alignment.NEUTRAL || ch instanceof Mimic)
-							&& ch.alignment != curUser.alignment){
-						Buff.append(curUser, CharAwareness.class, 5 + 2*level()).charID = ch.id();
+							ch = Actor.findChar(cell);
+							if (ch != null
+									&& (ch.alignment != Char.Alignment.NEUTRAL || ch instanceof Mimic)
+									&& ch.alignment != curUser.alignment) {
+								Buff.append(curUser, CharAwareness.class, 5 + 2 * level()).charID = ch.id();
 
-						artifactProc(ch, visiblyUpgraded(), (int)(3 + dist*1.08f));
+								artifactProc(ch, visiblyUpgraded(), (int) (3 + dist * 1.08f));
 
-						if (!curUser.fieldOfView[ch.pos]){
-							earnedExp += 10;
-						}
-					}
+								if (!curUser.fieldOfView[ch.pos]) {
+									earnedExp += 10;
+								}
+							}
 
-					Heap h = Dungeon.level.heaps.get(cell);
-					if (h != null){
-						Buff.append(curUser, HeapAwareness.class, 5 + 2*level()).pos = h.pos;
+							Heap h = Dungeon.level.heaps.get(cell);
+							if (h != null) {
+								Buff.append(curUser, HeapAwareness.class, 5 + 2 * level()).pos = h.pos;
 
-						if (!h.seen){
-							earnedExp += 10;
-						}
+								if (!h.seen) {
+									earnedExp += 10;
+								}
+							}
+							break;
+						case 2:
+                            ch = Actor.findChar(cell);
+							if (ch != null && ch.alignment != Char.Alignment.ALLY){
+								if (ch.buff(GuidingLight.Illuminated.class) != null){
+									ch.damage(hero.lvl+5, GuidingLight.INSTANCE);
+									earnedExp += 60;
+								} else {
+									artifactProc(ch, visiblyUpgraded(), (int) (3 + dist * 1.08f));
+									Buff.affect(ch, GuidingLight.Illuminated.class);
+									Buff.affect(ch, GuidingLight.WasIlluminatedTracker.class);
+									earnedExp += 30;
+								}
+								if (ch.isActive()) {
+									Buff.affect(ch, Paralysis.class, 2f);
+								}
+							}
 					}
 
 				}
@@ -235,10 +308,10 @@ public class TalismanOfForesight extends Artifact {
 					partialCharge--;
 				}
 				Invisibility.dispel(curUser);
-				Talent.onArtifactUsed(Dungeon.hero);
+				Talent.onArtifactUsed(hero);
 				updateQuickslot();
 				Dungeon.observe();
-				Dungeon.hero.checkVisibleMobs();
+				hero.checkVisibleMobs();
 				GameScene.updateFog();
 
 				curUser.sprite.zap(target);
@@ -287,6 +360,7 @@ public class TalismanOfForesight extends Artifact {
 				//fully charges in 2000 turns at +0, scaling to 1000 turns at +10.
 				float chargeGain = (0.05f+(level()*0.005f));
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
+				chargeGain *= rechargeModifier();
 				partialCharge += chargeGain;
 
 				while (partialCharge >= 1){
@@ -304,6 +378,9 @@ public class TalismanOfForesight extends Artifact {
 		}
 
 		public void checkAwareness(){
+			if (type() == 3)
+				return;
+
 			boolean smthFound = false;
 
 			int distance = 3;
@@ -357,7 +434,7 @@ public class TalismanOfForesight extends Artifact {
 
 		public void charge(int boost){
 			if (!cursed && target.buff(MagicImmune.class) == null) {
-				charge = Math.min((charge + boost), chargeCap);
+				charge = (int) Math.min((charge + boost)*rechargeModifier(), chargeCap);
 				updateQuickslot();
 			}
 		}
@@ -431,5 +508,35 @@ public class TalismanOfForesight extends Artifact {
 			bundle.put(BRANCH, branch);
 		}
 	}
+
+	protected WndBag.ItemSelector itemSelector = new WndBag.ItemSelector() {
+
+		@Override
+		public String textPrompt() {
+			return Messages.get(TalismanOfForesight.class, "prompt_identify");
+		}
+
+		@Override
+		public boolean itemSelectable(Item item) {
+			return !item.isIdentified();
+		}
+
+		@Override
+		public void onSelect(Item item) {
+			if (item != null){
+				charge -= 20;
+				hero.sprite.parent.add( new Identification( hero.sprite.center().offset( 0, -16 ) ) );
+
+				ScrollOfIdentify.IDItem(item);
+				exp += 100;
+				if (exp >= 100 + 50*level() && level() < levelCap) {
+					exp -= 100 + 50*level();
+					upgrade();
+					Catalog.countUse(TalismanOfForesight.class);
+					GLog.p( Messages.get(TalismanOfForesight.class, "levelup") );
+				}
+			}
+		}
+	};
 
 }

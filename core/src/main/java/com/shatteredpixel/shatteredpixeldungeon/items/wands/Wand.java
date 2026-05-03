@@ -389,7 +389,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		if (target != Dungeon.hero) {
 			Buff.affect(target, Minion.ReactiveTargeting.class, 10f);
 
-		if (Dungeon.hero.subClass == HeroSubClass.PRIEST && target.buff(GuidingLight.Illuminated.class) != null) {
+		if (target.buff(GuidingLight.Illuminated.class) != null) {
 			target.buff(GuidingLight.Illuminated.class).detach();
 			target.damage(Dungeon.hero.lvl+5, GuidingLight.INSTANCE);
 		}

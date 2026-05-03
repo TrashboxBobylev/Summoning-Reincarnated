@@ -25,9 +25,11 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.scrolls;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Identification;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ShardOfOblivion;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
@@ -35,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.utils.Random;
 
 public class ScrollOfIdentify extends InventoryScroll {
 
@@ -58,6 +61,12 @@ public class ScrollOfIdentify extends InventoryScroll {
 	}
 
 	public static void IDItem( Item item ){
+		TalismanOfForesight.Foresight talisman = Dungeon.hero.buff( TalismanOfForesight.Foresight.class );
+		if (talisman != null && talisman.isCursed() && talisman.itemType() == 3 && Random.Int(2) == 0){
+			GLog.n(Messages.get(TalismanOfForesight.class, "curse_t3"));
+			return;
+		}
+
 		if (ShardOfOblivion.passiveIDDisabled()) {
 			if (item instanceof Weapon){
 				((Weapon) item).setIDReady();

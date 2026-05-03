@@ -3040,7 +3040,7 @@ public class Hero extends Char {
 							
 							if (fieldOfView[curr]) smthFound = true;
 	
-							if (talisman != null){
+							if (talisman != null && talisman.itemType() != 3){
 								if (oldValue == Terrain.SECRET_TRAP){
 									talisman.charge(2);
 								} else if (oldValue == Terrain.SECRET_DOOR){
