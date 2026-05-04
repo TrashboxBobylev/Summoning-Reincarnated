@@ -45,7 +45,6 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Callback;
 import com.watabou.utils.GameMath;
-import com.watabou.utils.Random;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -146,7 +145,7 @@ public class ShardsOfDespair extends AdHocSpell {
 
     private int damage(int rank){
         switch (rank){
-            case 2: case 3: return Random.NormalIntRange(minDamage(rank), maxDamage(rank));
+            case 2: case 3: return Hero.heroDamageIntRange(minDamage(rank), maxDamage(rank));
         }
         return 0;
     }

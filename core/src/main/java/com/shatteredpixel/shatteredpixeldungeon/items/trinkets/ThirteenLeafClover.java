@@ -24,6 +24,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.trinkets;
 
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.Random;
@@ -50,6 +52,8 @@ public class ThirteenLeafClover extends Trinket {
 	}
 
 	public static float alterHeroDamageChance(){
+		if (Dungeon.isChallenged(Conducts.Conduct.CLOVER))
+			return 1.0f;
 		return alterHeroDamageChance(trinketLevel(ThirteenLeafClover.class));
 	}
 
@@ -61,7 +65,7 @@ public class ThirteenLeafClover extends Trinket {
 		}
 	}
 
-	private static float MAX_CHANCE = 0.6f;
+	private static float MAX_CHANCE = 0.5f;
 
 	public static int alterDamageRoll(int min, int max){
 		if (Random.Float() < MAX_CHANCE){

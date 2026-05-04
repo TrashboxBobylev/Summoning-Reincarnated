@@ -142,7 +142,7 @@ public class StarBlazing extends ConjurerSpell implements DamageSource {
     }
 
     private int damageRoll() {
-        return Random.NormalIntRange(min(), max());
+        return Hero.heroDamageIntRange(min(), max());
     }
 
     @Override

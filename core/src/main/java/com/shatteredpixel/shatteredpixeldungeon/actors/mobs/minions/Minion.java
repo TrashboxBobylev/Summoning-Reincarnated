@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulSparking;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.ArmoredShielding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.HolyAuraBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.Ascension;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -223,7 +224,7 @@ public class Minion extends Mob implements ManaSource {
 
     @Override
     public int damageRoll() {
-        int i = Random.NormalIntRange(minDamage, maxDamage);
+        int i = Hero.heroDamageIntRange(minDamage, maxDamage);
         if (Dungeon.hero.buff(SoulSparking.class) != null) i *= SoulSparking.empowering();
         if (buff(Chungus.class) != null) i*=1.4f;
         if (buff(Fury.class) != null) i*=1.5f;

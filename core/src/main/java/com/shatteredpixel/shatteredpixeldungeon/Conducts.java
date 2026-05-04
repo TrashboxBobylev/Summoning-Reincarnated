@@ -69,6 +69,7 @@ public class Conducts {
             }
         },
         CURSE(1.4f, 19),
+        CLOVER(1.15f, 32),
         SHADOWS(1.4f, 26),
         HORDES(1.75f, 29),
         ALLSIGHT(1.4f, 20),
