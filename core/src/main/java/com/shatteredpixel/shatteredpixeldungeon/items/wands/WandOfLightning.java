@@ -42,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -59,6 +60,7 @@ import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.HashSet;
 
 public class WandOfLightning extends DamageWand {
@@ -341,6 +343,11 @@ public class WandOfLightning extends DamageWand {
 		float dst = Random.Float(1f);
 		particle.x -= dst;
 		particle.y += dst;
+	}
+
+	@Override
+	public EnumSet<DamageProperty> initDmgProperties() {
+		return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.ELECTRIC);
 	}
 	
 }

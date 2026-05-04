@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -55,6 +56,7 @@ import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
 public class WandOfFireblast extends DamageWand {
 
@@ -331,6 +333,11 @@ public class WandOfFireblast extends DamageWand {
 		particle.acc.set(0, -40);
 		particle.setSize( 0f, 3f);
 		particle.shuffleXY( 1.5f );
+	}
+
+	@Override
+	public EnumSet<DamageProperty> initDmgProperties() {
+		return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.FIRE);
 	}
 
 }
