@@ -977,7 +977,7 @@ acuRoll *= accMulti;
 		float damage = dmg;
 
 		//if dmg is from a character we already reduced it in Char.attack
-		if (!(src instanceof Char)) {
+		if (!src.hasProperty(DamageProperty.PHYSICAL)) {
 			if (Dungeon.hero.alignment == alignment
 					&& Dungeon.hero.buff(AuraOfProtection.AuraBuff.class) != null
 					&& (Dungeon.level.distance(pos, Dungeon.hero.pos) <= 2 || buff(LifeLinkSpell.LifeLinkSpellBuff.class) != null)) {
@@ -1149,7 +1149,7 @@ acuRoll *= accMulti;
 			}
 		}
 
-		if (HP < 0 && src instanceof Char && alignment == Alignment.ENEMY){
+		if (HP < 0 && src.hasProperty(DamageProperty.PHYSICAL) && alignment == Alignment.ENEMY){
 			if (((Char) src).buff(Kinetic.KineticTracker.class) != null){
 				int dmgToAdd = -HP;
 				dmgToAdd -= ((Char) src).buff(Kinetic.KineticTracker.class).conservedDamage;

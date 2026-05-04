@@ -1898,7 +1898,7 @@ public class Hero extends Char {
 		}
 
 		//TODO hero cannot take damage in the vault tester area
-		if (Dungeon.depth > 15 && Dungeon.branch == 1){
+		if (Dungeon.chapterNumber() >= 3 && Dungeon.branch == 1){
 			dmg = 0;
 		}
 
@@ -1978,10 +1978,10 @@ public class Hero extends Char {
 		dmg = (int)Math.ceil(dmg * RingOfTenacity.damageMultiplier( this ));
 
 		int preHP = HP + shielding();
-		if (src instanceof Hunger) preHP -= shielding();
+		if (!src.hasProperty(DamageProperty.IGNORES_SHIELDING)) preHP -= shielding();
 		super.damage( dmg, src );
 		int postHP = HP + shielding();
-		if (src instanceof Hunger) postHP -= shielding();
+		if (!src.hasProperty(DamageProperty.IGNORES_SHIELDING)) postHP -= shielding();
 		int effectiveDamage = preHP - postHP;
 
 		if (buff(ChaliceOfBlood.chaliceRegen.class) != null && (src.hasProperty(DamageProperty.PHYSICAL) || src.hasProperty(DamageProperty.MAGICAL))){
