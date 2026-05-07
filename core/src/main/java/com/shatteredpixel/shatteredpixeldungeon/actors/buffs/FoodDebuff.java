@@ -101,6 +101,10 @@ public class FoodDebuff extends Buff implements Hero.Doom  {
 		return Integer.toString(fullHP);
 	}
 
+	public void extend(float extension){
+		left = (int) Math.max(left - extension, 0);
+	}
+
 	@Override
 	public void onDeath() {
 		Dungeon.fail( getClass() );

@@ -176,6 +176,10 @@ public class FrostBurn extends Buff implements Hero.Doom, DamageSource {
 		if (left <= duration)
 			left = duration;
 	}
+
+	public void extend( float duration ) {
+		left += duration;
+	}
 	
 	@Override
 	public int icon() {

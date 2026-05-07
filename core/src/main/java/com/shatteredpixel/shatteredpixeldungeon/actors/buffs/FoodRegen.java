@@ -65,6 +65,10 @@ public class FoodRegen extends Buff {
 	public void set(int health){
 		fullHP = health;
 	}
+
+	public void extend(float extension){
+		left = (int) Math.max(left - extension, 0);
+	}
 	
 	@Override
 	public int icon() {

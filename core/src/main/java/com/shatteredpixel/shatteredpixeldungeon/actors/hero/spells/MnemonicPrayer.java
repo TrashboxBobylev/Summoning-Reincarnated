@@ -39,11 +39,15 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corrosion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FireImbue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FoodDebuff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FoodRegen;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurn;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.GreaterHaste;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LifeLink;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Poison;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RageShield;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ShieldBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ToxicImbue;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.WellFed;
@@ -159,6 +163,8 @@ public class MnemonicPrayer extends TargetedClericSpell {
 				else if (b instanceof ShieldBuff)               ((ShieldBuff) b).delay(extension);
 				else if (b instanceof Kinetic.ConservedDamage)  ((Kinetic.ConservedDamage) b).delay(extension);
 				else if (b instanceof Sungrass.Health)          ((Sungrass.Health) b).boost((int) extension);
+				else if (b instanceof FoodRegen)          ((FoodRegen) b).extend(extension);
+				else if (b instanceof RageShield)          ((RageShield) b).extend(extension);
 
 				b.mnemonicExtended = true;
 
@@ -185,6 +191,8 @@ public class MnemonicPrayer extends TargetedClericSpell {
 				else if (b instanceof Ooze)         ((Ooze) b).extend( extension );
 				else if (b instanceof Poison)       ((Poison) b).extend( extension );
 				else if (b instanceof Viscosity.DeferedDamage)  ((Viscosity.DeferedDamage) b).extend( extension );
+				else if (b instanceof FrostBurn)      ((FrostBurn) b).extend( extension );
+				else if (b instanceof FoodDebuff)      ((FoodDebuff) b).extend( extension );
 
 				b.mnemonicExtended = true;
 

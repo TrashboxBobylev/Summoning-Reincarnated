@@ -95,6 +95,11 @@ public class RageShield extends Buff implements DamageSource {
         this.max = (int) left;
     }
 
+    public void extend(float extension){
+        left = (int) Math.max(left + extension, 0);
+        max = (int) Math.max(max + extension, 0);
+    }
+
     @Override
     public boolean act() {
         if (target.isAlive()) {
