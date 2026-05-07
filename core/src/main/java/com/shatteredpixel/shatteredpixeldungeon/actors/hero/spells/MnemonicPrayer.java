@@ -125,7 +125,7 @@ public class MnemonicPrayer extends TargetedClericSpell {
 
 	}
 
-	private void affectChar( Char ch, float extension ){
+	public static void affectChar(Char ch, float extension){
 		if (ch.alignment == Char.Alignment.ALLY){
 
 			Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);

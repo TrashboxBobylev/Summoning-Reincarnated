@@ -35,14 +35,17 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CounterBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.MnemonicPrayer;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Surprise;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
+import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
@@ -107,7 +110,10 @@ public class MasterThievesArmband extends Artifact {
 
 			} else {
 				usesTargeting = true;
-				GameScene.selectCell(targeter);
+				if (type() != 3)
+					GameScene.selectCell(targeter);
+				else
+					GameScene.selectCell(targeter_mnemonic);
 			}
 
 		}
@@ -149,6 +155,8 @@ public class MasterThievesArmband extends Artifact {
 								debuffDuration += 2;
 								exp += 2;
 							}
+							if (type() == 2)
+								lootMultiplier *= 2;
 
 							float lootChance = ((Mob) ch).lootChance() * lootMultiplier;
 
@@ -175,6 +183,16 @@ public class MasterThievesArmband extends Artifact {
 									} else {
 										Dungeon.level.drop(loot, curUser.pos).sprite.drop();
 									}
+									if (type() == 2){
+										if (Random.Float() < 0.25f + 0.05f*level()){
+											Item bonus;
+											do {
+												bonus = RingOfWealth.genConsumableDrop(level());
+											} while (Challenges.isItemBlocked(bonus));
+											Dungeon.level.drop(Challenges.process(bonus), target).sprite.drop();
+											RingOfWealth.showFlareForBonusDrop(ch.sprite);
+										}
+									}
 									GLog.i(Messages.get(MasterThievesArmband.class, "stole_item", loot.name()));
 									Buff.affect(ch, StolenTracker.class).setItemStolen(true);
 								}
@@ -183,13 +201,18 @@ public class MasterThievesArmband extends Artifact {
 								Buff.affect(ch, StolenTracker.class).setItemStolen(false);
 							}
 
-							Buff.prolong(ch, Blindness.class, debuffDuration);
-							Buff.prolong(ch, Cripple.class, debuffDuration);
+							if (type() == 1){
+								Buff.prolong(ch, Blindness.class, debuffDuration);
+								Buff.prolong(ch, Cripple.class, debuffDuration);
+							} else {
+								Buff.prolong(ch, Vertigo.class, debuffDuration);
+							}
 
 							artifactProc(ch, visiblyUpgraded(), 1);
 
 							charge--;
 							exp += 3;
+                            exp = (int) (exp / rechargeModifier());
 							Talent.onArtifactUsed(Dungeon.hero);
 							while (exp >= (10 + Math.round(3.33f * level())) && level() < levelCap) {
 								exp -= 10 + Math.round(3.33f * level());
@@ -213,6 +236,33 @@ public class MasterThievesArmband extends Artifact {
 		}
 	};
 
+	public CellSelector.Listener targeter_mnemonic = new CellSelector.Listener() {
+
+		@Override
+		public void onSelect(Integer target) {
+			if (target == null) {
+				return;
+			} else if (!(Dungeon.level.adjacent(curUser.pos, target) || target == curUser.pos) || Actor.findChar(target) == null) {
+				GLog.w(Messages.get(MasterThievesArmband.class, "no_target_mnemonic"));
+			} else {
+				curUser.busy();
+				curUser.sprite.attack(target, new Callback() {
+					@Override
+					public void call() {
+						Char ch = Actor.findChar(target);
+						MnemonicPrayer.affectChar(ch, 3 + level()/2f);
+						curUser.next();
+					}
+				});
+			}
+		}
+
+		@Override
+		public String prompt() {
+			return Messages.get(MasterThievesArmband.class, "prompt_mnemonic");
+		}
+	};
+
 	//counter of 0 for attempt but no success, 1 for success
 	public static class StolenTracker extends CounterBuff {
 		{ revivePersists = true; }
@@ -224,12 +274,28 @@ public class MasterThievesArmband extends Artifact {
 	protected ArtifactBuff passiveBuff() {
 		return new Thievery();
 	}
+
+	public float rechargeModifier(){
+		return rechargeModifier(type());
+	}
+
+	public float rechargeModifier(int type){
+		switch (type){
+			case 1:
+				return 1.0f;
+			case 2:
+				return 0.5f;
+			case 3:
+				return 2f;
+		}
+		return 1.0f;
+	}
 	
 	@Override
 	public void charge(Hero target, float amount) {
 		if (cursed || target.buff(MagicImmune.class) != null) return;
 		if (charge < chargeCap) {
-			partialCharge += 0.1f * amount;
+			partialCharge += 0.1f * amount * rechargeModifier();
 			while (partialCharge >= 1f) {
 				charge++;
 				partialCharge--;
@@ -243,25 +309,55 @@ public class MasterThievesArmband extends Artifact {
 		}
 	}
 
+	public int chargeCap(){
+		return chargeCap(type());
+	}
+
+	public int chargeCap(int type){
+		switch (type){
+			case 1:
+				return 5 + (level()+1)/2;
+			case 2:
+				return 3 + (level()+1)/3;
+			case 3:
+				return 6 + level();
+		}
+		return 0;
+	}
+
 	@Override
 	public Item upgrade() {
-		chargeCap = 5 + (level()+1)/2;
+		chargeCap = chargeCap();
 		return super.upgrade();
 	}
 
 	@Override
+	public void type(int type) {
+		super.type(type);
+		chargeCap = chargeCap(type);
+		charge = Math.min(charge, chargeCap());
+	}
+
+	@Override
 	public String desc() {
-		String desc = super.desc();
+		String desc = getTypeBasedString("desc", type());
 
 		if ( isEquipped (Dungeon.hero) ){
 			if (cursed){
-				desc += "\n\n" + Messages.get(this, "desc_cursed");
+				desc += "\n\n" + getTypeBasedString("desc_cursed", type());
 			} else {
-				desc += "\n\n" + Messages.get(this, "desc_worn");
+				desc += "\n\n" + getTypeBasedString("desc_worn", type());
 			}
 		}
 
 		return desc;
+	}
+
+	@Override
+	public String getTypeMessage(int type) {
+		return Messages.get(this, "type",
+				Math.round(100*rechargeModifier(type)),
+				chargeCap(type)) + "\n\n" + super.getTypeMessage(type);
 	}
 
 	public class Thievery extends ArtifactBuff {
@@ -269,7 +365,18 @@ public class MasterThievesArmband extends Artifact {
 		@Override
 		public boolean act() {
 			if (cursed && Dungeon.gold > 0 && Random.Int(5) == 0){
-				Dungeon.gold--;
+				if (type() != 3){
+					Dungeon.gold--;
+				} else {
+					Dungeon.hero.belongings.charge(-0.1f);
+					for (Buff b : Dungeon.hero.buffs()) {
+						if (b instanceof Artifact.ArtifactBuff) {
+							if (!((Artifact.ArtifactBuff) b).isCursed()) {
+								((Artifact.ArtifactBuff) b).charge(Dungeon.hero, -0.1f);
+							}
+						}
+					}
+				}
 				updateQuickslot();
 			}
 
@@ -282,6 +389,7 @@ public class MasterThievesArmband extends Artifact {
 
 			if (charge < chargeCap){
 				float chargeGain = 3f * levelPortion;
+				chargeGain *= rechargeModifier();
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
 
 				partialCharge += chargeGain;
@@ -326,7 +434,15 @@ public class MasterThievesArmband extends Artifact {
 		public float stealChance(Item item){
 			int chargesUsed = chargesToUse(item);
 			float val = chargesUsed * (10 + level()/2f);
+			val /= rechargeModifier();
 			return Math.min(1f, val/item.value());
+		}
+
+		public void attunementUpgrade(){
+			upgrade();
+			upgrade();
+			Catalog.countUse(MasterThievesArmband.class);
+			GLog.p(Messages.get(MasterThievesArmband.class, "level_up_major"));
 		}
 
 		public int chargesToUse(Item item){

@@ -163,7 +163,7 @@ public class WndTradeItem extends WndInfoItem {
 		pos = btnBuy.bottom();
 
 		final MasterThievesArmband.Thievery thievery = Dungeon.hero.buff(MasterThievesArmband.Thievery.class);
-		if (thievery != null && !thievery.isCursed() && thievery.chargesToUse(item) > 0) {
+		if (thievery != null && !thievery.isCursed() && thievery.chargesToUse(item) > 0 && thievery.itemType() != 3) {
 			final float chance = thievery.stealChance(item);
 			final int chargesToUse = thievery.chargesToUse(item);
 			RedButton btnSteal = new RedButton(Messages.get(this, "steal", Math.min(100, (int) (chance * 100)), chargesToUse), 6) {
