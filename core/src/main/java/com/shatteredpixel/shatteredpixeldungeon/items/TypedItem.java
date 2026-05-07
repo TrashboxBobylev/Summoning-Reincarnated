@@ -34,10 +34,6 @@ public interface TypedItem {
         return Messages.get(this, "type" + type);
     }
 
-    default String getTypeBasedString(String message, Object... args){
-        return getTypeBasedString(message, type(), args);
-    }
-
     default String getTypeBasedString(String message, int type, Object... args){
         String str = Messages.get(this, message + type, args);
         if (str.startsWith("!!!"))
