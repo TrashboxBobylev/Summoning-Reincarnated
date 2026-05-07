@@ -25,11 +25,10 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.GenericEffect;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
 
-public class Wet extends GenericEffect {
+public class Wet extends EffectBuff {
 
     {
         type = Buff.buffType.NEGATIVE;
