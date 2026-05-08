@@ -1223,6 +1223,7 @@ public class ItemSpriteSheet {
 		}
 
 		private static final int WONDOROUS_SCROLLS =                        xy(1, 8);  //16 slots
+		public static final int SCROLL_MAGINFUSION   = WONDOROUS_SCROLLS+0;
 		public static final int SCROLL_DISCOVERY     = WONDOROUS_SCROLLS+1;
 		public static final int SCROLL_ENLIGHTEMENT  = WONDOROUS_SCROLLS+2;
 		public static final int SCROLL_SHADOW_LEGION = WONDOROUS_SCROLLS+3;
@@ -1234,6 +1235,7 @@ public class ItemSpriteSheet {
 		public static final int SCROLL_VIOLENCE      = WONDOROUS_SCROLLS+9;
 		public static final int SCROLL_PETRIFICATION = WONDOROUS_SCROLLS+10;
 		static {
+			assignItemRect(SCROLL_MAGINFUSION,   7, 7);
 			assignIconRect(SCROLL_DISCOVERY,     7, 5);
 			assignIconRect(SCROLL_ENLIGHTEMENT,  8, 8);
 			assignIconRect(SCROLL_MORPHEUS,      6, 6);

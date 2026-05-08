@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurs
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTerror;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfUpgrade;
 
 import java.util.LinkedHashMap;
 
@@ -73,6 +74,9 @@ public abstract class WondrousScroll extends Scroll {
 
         regToWon.put(ScrollOfRetribution.class, ScrollOfViolence.class);
         wonToReg.put(ScrollOfViolence.class, ScrollOfRetribution.class);
+
+        regToWon.put(ScrollOfUpgrade.class, ScrollOfMagicalInfusion.class);
+        wonToReg.put(ScrollOfMagicalInfusion.class, ScrollOfUpgrade.class);
     }
 
     @Override
