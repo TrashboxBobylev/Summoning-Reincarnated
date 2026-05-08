@@ -98,9 +98,9 @@ abstract public class Variable<T> {
             if(expectedClass == int.class) wrapper = Integer.class;
             else if(expectedClass == char.class) wrapper = Character.class;
             else try {
-                // all other wrappers are just capitalized primitives
-                wrapper = Class.forName("java.lang." + Messages.capitalize(expectedClass.getSimpleName()));
-            } catch (Exception e) { wrapper = expectedClass; }
+                    // all other wrappers are just capitalized primitives
+                    wrapper = Class.forName("java.lang." + Messages.capitalize(expectedClass.getSimpleName()));
+                } catch (Exception e) { wrapper = expectedClass; }
             //change expected class to the wrapper.
             //noinspection unchecked
             expectedClass = (Class<? super T>)wrapper;
