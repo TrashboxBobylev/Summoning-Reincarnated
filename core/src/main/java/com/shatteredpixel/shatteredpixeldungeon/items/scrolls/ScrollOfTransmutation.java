@@ -389,7 +389,9 @@ public class ScrollOfTransmutation extends InventoryScroll {
 
         n.type(w.type());
         n.quantity(w.quantity());
-        w.minion().die(new Grim());
+		if (w.minion() != null){
+			w.minion().die(new Grim());
+		}
 
         n.enchantment = w.enchantment;
         n.masteryPotionBonus = w.masteryPotionBonus;
