@@ -637,7 +637,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		return 5;
 	}
 
-	protected int chargesPerCast() {
+	public int chargesPerCast() {
 		return 1;
 	}
 
@@ -1162,7 +1162,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 
 	public class Charger extends Buff {
 		
-		private static final float BASE_CHARGE_DELAY = 40f;
+		public static final float BASE_CHARGE_DELAY = 40f;
 		private static final float NORMAL_SCALE_FACTOR = 1f;
 
 		private static final float CHARGE_BUFF_BONUS = 0.25f;

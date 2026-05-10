@@ -25,10 +25,24 @@
 package com.shatteredpixel.shatteredpixeldungeon.sprites;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.RainbowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShaftParticle;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.watabou.glwrap.Blending;
 import com.watabou.noosa.TextureFilm;
+import com.watabou.noosa.audio.Sample;
+import com.watabou.noosa.particles.Emitter;
+import com.watabou.utils.PathFinder;
+import com.watabou.utils.Random;
 
 public class GhostSprite extends MobSprite {
 	
@@ -50,6 +64,8 @@ public class GhostSprite extends MobSprite {
 
 		die = new Animation( 8, false );
 		die.frames( frames, 0, 4, 5, 6, 7 );
+
+		zap = attack.clone();
 		
 		play( idle );
 	}
@@ -60,7 +76,49 @@ public class GhostSprite extends MobSprite {
 		super.draw();
 		Blending.setNormalMode();
 	}
-	
+
+	@Override
+	public void onComplete( Animation anim ) {
+		if (anim == zap) {
+			idle();
+		}
+		super.onComplete( anim );
+	}
+
+	@Override
+	public void zap(int cell) {
+		super.zap( cell );
+		if (ch instanceof DriedRose.GhostHero && ((DriedRose.GhostHero) ch).rose != null){
+			DriedRose rose = ((DriedRose.GhostHero) ch).rose;
+			Wand wand;
+			if (rose.type() == 3 && (wand = rose.ghostWand()) != null){
+				final Ballistica shot = new Ballistica( ch.pos, cell, wand.collisionProperties(cell));
+				int dest = shot.collisionPos;
+				if (Dungeon.isChallenged(Conducts.Conduct.NO_MAGIC)){
+					MagicMissile.boltFromChar( ch.sprite.parent,
+							MagicMissile.RAINBOW,
+							ch.sprite,
+							shot.collisionPos,
+							() -> {
+								Emitter emitter = CellEmitter.center(shot.collisionPos);
+								emitter.burst(RainbowParticle.SUPER_BURST, Random.Int(60, 120));
+								for (int i : PathFinder.NEIGHBOURS9){
+									Char ch = Actor.findChar( shot.collisionPos + i );
+									if (ch != null) {
+										ch.damage(1 + Dungeon.scalingDepth() / 3, ch);
+									}
+								}
+								Sample.INSTANCE.play( Assets.Sounds.BLAST, 1.0f, 2.0f );
+								ch.spend(1f);
+							});
+					Sample.INSTANCE.play( Assets.Sounds.ZAP );
+				} else {
+					wand.fx(ch, shot, () -> ((DriedRose.GhostHero) ch).onZapComplete(shot, wand));
+				}
+			}
+		}
+	}
+
 	@Override
 	public void die() {
 		super.die();

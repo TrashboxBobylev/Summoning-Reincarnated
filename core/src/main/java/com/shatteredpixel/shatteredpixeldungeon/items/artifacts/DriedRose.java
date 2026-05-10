@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
@@ -33,7 +34,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.CorrosiveGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AttunementBoost;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurn;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
@@ -53,13 +57,18 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerSet;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.HolyBomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetribution;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfPsionicBlast;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -71,7 +80,9 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GhostSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BossHealthBar;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ItemButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
@@ -82,10 +93,13 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndInfoItem;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndQuest;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndUseItem;
 import com.watabou.noosa.Game;
+import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
+import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
@@ -111,6 +125,8 @@ public class DriedRose extends Artifact {
 	private int ghostID = 0;
 	
 	private MeleeWeapon weapon = null;
+	private MeleeWeapon weapon2 = null;
+	private Wand wand = null;
 	private Armor armor = null;
 
 	public int droppedPetals = 0;
@@ -243,6 +259,70 @@ public class DriedRose extends Artifact {
 		return 13 + level()/2;
 	}
 
+	public int ghostAttunement(){
+		return 2 + level()/2;
+	}
+
+	public int ghostHealth(){
+		return ghostHealth(type());
+	}
+
+	public int ghostHealth(int type){
+		switch (type){
+			case 1:
+				return 20 + 8*level();
+			case 2:
+				return 16 + 6*level();
+			case 3:
+				return 30 + 12*level();
+		}
+		return 1;
+	}
+
+	@Override
+	public void type(int type) {
+		if (type() == 2 && type != 2 && weapon2 != null){
+			if (!weapon2.doPickUp(Dungeon.hero, Dungeon.hero.pos)) {
+				Dungeon.level.drop(weapon2, Dungeon.hero.pos).sprite.drop();
+			} else {
+				Dungeon.hero.spend(-Item.TIME_TO_PICK_UP);
+				GLog.i(Messages.get(Hero.class, "you_now_have", weapon2.name()));
+			}
+			weapon2 = null;
+		}
+		if (type() == 3 && type != 3 && wand != null){
+			if (!wand.doPickUp(Dungeon.hero, Dungeon.hero.pos)) {
+				Dungeon.level.drop(wand, Dungeon.hero.pos).sprite.drop();
+			} else {
+				Dungeon.hero.spend(-Item.TIME_TO_PICK_UP);
+				GLog.i(Messages.get(Hero.class, "you_now_have", wand.name()));
+			}
+			if (ghost != null){
+				Buff.detach(ghost, WandStrikeCooldown.class);
+			}
+			wand = null;
+		}
+		if (type == 2 && armor != null){
+			if (!armor.doPickUp(Dungeon.hero, Dungeon.hero.pos)) {
+				Dungeon.level.drop(armor, Dungeon.hero.pos).sprite.drop();
+			} else {
+				Dungeon.hero.spend(-Item.TIME_TO_PICK_UP);
+				GLog.i(Messages.get(Hero.class, "you_now_have", armor.name()));
+			}
+			armor = null;
+		}
+		if (type == 3 && weapon != null){
+			if (!weapon.doPickUp(Dungeon.hero, Dungeon.hero.pos)) {
+				Dungeon.level.drop(weapon, Dungeon.hero.pos).sprite.drop();
+			} else {
+				Dungeon.hero.spend(-Item.TIME_TO_PICK_UP);
+				GLog.i(Messages.get(Hero.class, "you_now_have", weapon.name()));
+			}
+			weapon = null;
+		}
+		super.type(type);
+	}
+
 	@Override
 	public String desc() {
 		if (!Ghost.Quest.completed()
@@ -263,11 +343,19 @@ public class DriedRose extends Artifact {
 			}
 		}
 
-		if (weapon != null || armor != null) {
+		if (weapon != null || weapon2 != null || wand != null || armor != null) {
 			desc += "\n";
 
 			if (weapon != null) {
 				desc += "\n" + Messages.get(this, "desc_weapon", Messages.titleCase(weapon.title()));
+			}
+
+			if (weapon2 != null) {
+				desc += "\n" + Messages.get(this, "desc_weapon2", Messages.titleCase(weapon2.title()));
+			}
+
+			if (wand != null) {
+				desc += "\n" + Messages.get(this, "desc_wand", Messages.titleCase(wand.title()));
 			}
 
 			if (armor != null) {
@@ -280,16 +368,21 @@ public class DriedRose extends Artifact {
 		
 		return desc;
 	}
-	
+
+	@Override
+	public String getTypeMessage(int type) {
+		return Messages.get(this, "type",
+				Math.round(100*rechargeModifier(type)),
+				Math.round(100*regenModifier(type)),
+				ghostHealth(type)) + "\n\n" + super.getTypeMessage(type);
+	}
+
 	@Override
 	public int value() {
-		if (weapon != null){
-			return -1;
-		}
-		if (armor != null){
-			return -1;
-		}
-		return super.value();
+        if (weapon != null || weapon2 != null || wand != null || armor != null) {
+            return -1;
+        }
+        return super.value();
 	}
 
 	@Override
@@ -313,6 +406,38 @@ public class DriedRose extends Artifact {
 	protected ArtifactBuff passiveBuff() {
 		return new roseRecharge();
 	}
+
+	public float rechargeModifier(){
+		return rechargeModifier(type());
+	}
+
+	public float rechargeModifier(int type){
+		switch (type){
+			case 1:
+				return 1.0f;
+			case 2:
+				return 0.33f;
+			case 3:
+				return 0.4f;
+		}
+		return 1;
+	}
+
+	public float regenModifier(){
+		return regenModifier(type());
+	}
+
+	public float regenModifier(int type){
+		switch (type){
+			case 1:
+				return 1.0f;
+			case 2:
+				return 2f;
+			case 3:
+				return 1.25f;
+		}
+		return 1;
+	}
 	
 	@Override
 	public void charge(Hero target, float amount) {
@@ -320,7 +445,7 @@ public class DriedRose extends Artifact {
 
 		if (ghost == null){
 			if (charge < chargeCap) {
-				partialCharge += 4*amount;
+				partialCharge += 4*amount*rechargeModifier();
 				while (partialCharge >= 1f){
 					charge++;
 					partialCharge--;
@@ -333,7 +458,7 @@ public class DriedRose extends Artifact {
 				updateQuickslot();
 			}
 		} else if (ghost.HP < ghost.HT) {
-			int heal = Math.round((1 + level()/3f)*amount);
+			int heal = Math.round((1 + level()/3f)*amount*rechargeModifier());
 			ghost.HP = Math.min( ghost.HT, ghost.HP + heal);
 			if (ghost.sprite != null) {
 				ghost.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(heal), FloatingText.HEALING);
@@ -363,6 +488,10 @@ public class DriedRose extends Artifact {
 	public Weapon ghostWeapon(){
 		return weapon;
 	}
+
+	public Wand ghostWand(){
+		return wand;
+	}
 	
 	public Armor ghostArmor(){
 		return armor;
@@ -374,6 +503,8 @@ public class DriedRose extends Artifact {
 	private static final String PETALS =        "petals";
 	
 	private static final String WEAPON =        "weapon";
+	private static final String WEAPON2=        "weapon2";
+	private static final String WAND   =        "wand";
 	private static final String ARMOR =         "armor";
 
 	@Override
@@ -386,6 +517,8 @@ public class DriedRose extends Artifact {
 		bundle.put( PETALS, droppedPetals );
 		
 		if (weapon != null) bundle.put( WEAPON, weapon );
+		if (weapon2 != null) bundle.put( WEAPON2, weapon2 );
+		if (wand != null) bundle.put( WAND, wand );
 		if (armor != null)  bundle.put( ARMOR, armor );
 	}
 
@@ -399,6 +532,8 @@ public class DriedRose extends Artifact {
 		droppedPetals = bundle.getInt( PETALS );
 		
 		if (bundle.contains(WEAPON)) weapon = (MeleeWeapon)bundle.get( WEAPON );
+		if (bundle.contains(WEAPON2)) weapon2 = (MeleeWeapon)bundle.get( WEAPON2 );
+		if (bundle.contains(WAND)) wand = (Wand) bundle.get( WAND );
 		if (bundle.contains(ARMOR))  armor = (Armor)bundle.get( ARMOR );
 	}
 
@@ -422,7 +557,7 @@ public class DriedRose extends Artifact {
 				
 				//heals to full over 500 turns
 				if (ghost.HP < ghost.HT && Regeneration.regenOn()) {
-					partialCharge += (ghost.HT / 500f) * RingOfEnergy.artifactChargeMultiplier(target);
+					partialCharge += (ghost.HT / 500f) * RingOfEnergy.artifactChargeMultiplier(target)*regenModifier();
 					updateQuickslot();
 					
 					while (partialCharge > 1) {
@@ -444,7 +579,7 @@ public class DriedRose extends Artifact {
 					&& target.buff(MagicImmune.class) == null
 					&& Regeneration.regenOn()) {
 				//500 turns to a full charge
-				partialCharge += (1/5f * RingOfEnergy.artifactChargeMultiplier(target));
+				partialCharge += (1/5f * RingOfEnergy.artifactChargeMultiplier(target))*rechargeModifier();
 				while (partialCharge > 1){
 					charge++;
 					partialCharge--;
@@ -559,7 +694,8 @@ public class DriedRose extends Artifact {
 			properties.add(Property.INORGANIC);
 		}
 		
-		private DriedRose rose = null;
+		public DriedRose rose = null;
+		private boolean weapon2 = false;
 		
 		public GhostHero(){
 			super();
@@ -602,16 +738,25 @@ public class DriedRose extends Artifact {
 			//same dodge as the hero
 			defenseSkill = (Dungeon.hero.lvl+4);
 			if (rose == null) return;
-			HT = 20 + 8*rose.level();
+			HT = rose.ghostHealth();
 		}
 
 		public Weapon weapon(){
-			if (rose != null)   return rose.weapon;
+			if (rose != null){
+				if (rose.type() == 2){
+					return weapon2 ? rose.weapon2 : rose.weapon;
+				} else
+					return rose.weapon;
+			}
 			else                return null;
 		}
 
 		public Armor armor(){
-			if (rose != null)   return rose.armor;
+			if (rose != null){
+				if (rose.type() == 2)
+					return null;
+				return rose.armor;
+			}
 			else                return null;
 		}
 
@@ -622,6 +767,31 @@ public class DriedRose extends Artifact {
 					|| !rose.isEquipped(Dungeon.hero)
 					|| Dungeon.hero.buff(MagicImmune.class) != null){
 				damage(1, new NoRoseDamage());
+			} else if (rose != null && rose.type() == 3 && buff(LightCooldown.class) == null){
+				Buff.affect(this, LightCooldown.class, 10);
+				HolyBomb.Effect shield;
+				GameScene.effect(shield = new HolyBomb.Effect(sprite));
+				shield.putOut();
+				PathFinder.buildDistanceMap( pos, BArray.not( Dungeon.level.solid, null ), 2 );
+				for (int i = 0; i < PathFinder.distance.length; i++) {
+					if (PathFinder.distance[i] < Integer.MAX_VALUE) {
+						Char ch = Actor.findChar(i);
+						if (ch != null){
+							if (ch.alignment == Dungeon.hero.alignment && ch != Dungeon.hero && ch != this) {
+								Regeneration.regenerate(ch, rose.level()*3/4);
+								Buff.affect(ch, AttunementBoost.class, 10).boost(rose.level()*0.2f);
+							}
+							if (ch.alignment == Alignment.ENEMY){
+								ch.damage(rose.level() * 2, new DamageSource() {
+									@Override
+									public EnumSet<DamageProperty> initDmgProperties() {
+										return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.HOLY);
+									}
+								});
+							}
+						}
+					}
+				}
 			}
 			
 			if (!isAlive()) {
@@ -646,6 +816,8 @@ public class DriedRose extends Artifact {
 			if (weapon() != null){
 				acc *= weapon().accuracyFactor( this, target );
 			}
+			if (rose != null && rose.weapon2 != null)
+				acc = acc * 2/3;
 			
 			return acc;
 		}
@@ -656,14 +828,45 @@ public class DriedRose extends Artifact {
 			if (weapon() != null){
 				delay *= weapon().delayFactor(this);
 			}
+			if (rose != null){
+				if (rose.weapon2 != null)
+					delay /= 2;
+				if (rose.wand != null)
+					delay *= 2;
+			}
 			return delay;
 		}
 		
 		@Override
 		protected boolean canAttack(Char enemy) {
+			if (rose != null && rose.wand != null && buff(ScrollOfAntiMagic.EnemyBuff.class) == null && buff(WandStrikeCooldown.class) == null){
+				return super.canAttack(enemy) || (rose.wand.tryToZap(this, enemy.pos)
+						&& new Ballistica( pos, enemy.pos, rose.wand.collisionProperties(enemy.pos)).collisionPos == enemy.pos);
+			}
 			return super.canAttack(enemy) || (weapon() != null && weapon().canReach(this, enemy.pos));
 		}
-		
+
+		@Override
+		protected boolean doAttack(Char enemy) {
+			if (rose != null && rose.wand != null && buff(WandStrikeCooldown.class) == null && canAttack(enemy)){
+				if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
+					sprite.zap( enemy.pos );
+					return false;
+				} else {
+					zap(new Ballistica( pos, enemy.pos, rose.wand.collisionProperties(enemy.pos)), rose.wand);
+					return true;
+				}
+			}
+			return super.doAttack(enemy);
+		}
+
+		@Override
+		public void onAttackComplete() {
+			super.onAttackComplete();
+			if (rose != null && rose.type() == 2 && rose.weapon2 != null)
+				weapon2 = !weapon2;
+		}
+
 		@Override
 		public int damageRoll() {
 			int dmg = 0;
@@ -772,6 +975,8 @@ public class DriedRose extends Artifact {
 
 		@Override
 		public float targetPriority() {
+			if (rose != null && rose.type() == 3)
+				return 0.75f;
 			return 4.0f;
 		}
 
@@ -792,6 +997,29 @@ public class DriedRose extends Artifact {
 				rose.ghostID = -1;
 			}
 			super.destroy();
+		}
+
+		public void onZapComplete(Ballistica shot, Wand wand) {
+			zap(shot, wand);
+			next();
+		}
+
+		public void zap(Ballistica shot, Wand wand){
+			spend(1f);
+
+			Invisibility.dispel(this);
+
+			if (Dungeon.isChallenged(Conducts.Conduct.COINFLIP) && Random.Int(2) == 0){
+				PointF point = DungeonTilemap.tileCenterToWorld(shot.collisionPos);
+				FloatingText.show( point.x, point.y, shot.collisionPos, defenseVerb(), CharSprite.NEUTRAL, FloatingText.MISS_COINFLIP, true );
+				Buff.detach(this, Talent.FightingWizardryTracker.class);
+			} else {
+				wand.onZap(shot, this);
+				float rechargeDuration = wand.rechargeModifier() * wand.chargesPerCast() * Wand.Charger.BASE_CHARGE_DELAY * 3 / 4;
+				Buff.affect(this, WandStrikeCooldown.class, rechargeDuration);
+				sprite.showStatusWithIcon(CharSprite.WARNING, Integer.toString((int) rechargeDuration), FloatingText.MAGIC_DMG);
+
+			}
 		}
 		
 		public void sayAppeared(){
@@ -889,6 +1117,16 @@ public class DriedRose extends Artifact {
 		}
 
 	}
+
+	public static class WandStrikeCooldown extends FlavourBuff {
+		@Override
+		public int icon() {
+			return BuffIndicator.TIME;
+		}
+		public void tintIcon(Image icon) { icon.hardlight(0x8d2cab); }
+		public float iconFadePercent() { return Math.max(0, visualcooldown() / Wand.Charger.BASE_CHARGE_DELAY*3/4); }
+	}
+	public static class LightCooldown extends FlavourBuff{}
 	
 	private static class WndGhostHero extends Window{
 		
@@ -898,7 +1136,70 @@ public class DriedRose extends Artifact {
 		private static final int WIDTH		= 116;
 		
 		private ItemButton btnWeapon;
+		private ItemButton btnWeapon2;
 		private ItemButton btnArmor;
+
+		private void handleWeapon(ItemButton button, DriedRose rose, int weapon) {
+			if ((weapon == 1 ? rose.weapon : rose.weapon2) != null){
+				button.item(new WndBag.Placeholder(ItemSpriteSheet.WEAPON_HOLDER));
+				if (!(weapon == 1 ? rose.weapon : rose.weapon2).doPickUp(Dungeon.hero)){
+					Dungeon.level.drop( (weapon == 1 ? rose.weapon : rose.weapon2), Dungeon.hero.pos);
+				}
+				if (weapon == 1)
+					rose.weapon = null;
+				else
+					rose.weapon2 = null;
+			} else {
+				GameScene.selectItem(new WndBag.ItemSelector() {
+
+					@Override
+					public String textPrompt() {
+						return Messages.get(WndGhostHero.class, "weapon_prompt");
+					}
+
+					@Override
+					public Class<?extends Bag> preferredBag(){
+						return Belongings.Backpack.class;
+					}
+
+					@Override
+					public boolean itemSelectable(Item item) {
+						return item instanceof MeleeWeapon;
+					}
+
+					@Override
+					public void onSelect(Item item) {
+						if (!(item instanceof MeleeWeapon)) {
+							//do nothing, should only happen when window is cancelled
+						} else if (item.unique) {
+							GLog.w( Messages.get(WndGhostHero.class, "cant_unique"));
+							hide();
+						} else if (item.cursed || !item.cursedKnown) {
+							GLog.w(Messages.get(WndGhostHero.class, "cant_cursed"));
+							hide();
+						}  else if (!item.levelKnown && ((MeleeWeapon)item).STRReq(0) > rose.ghostStrength()){
+							GLog.w( Messages.get(WndGhostHero.class, "cant_strength_unknown"));
+							hide();
+						} else if (((MeleeWeapon)item).STRReq() > rose.ghostStrength()) {
+							GLog.w( Messages.get(WndGhostHero.class, "cant_strength"));
+							hide();
+						} else {
+							if (item.isEquipped(Dungeon.hero)){
+								((MeleeWeapon) item).doUnequip(Dungeon.hero, false, false);
+							} else {
+								item.detach(Dungeon.hero.belongings.backpack);
+							}
+							if (weapon == 1)
+								rose.weapon = (MeleeWeapon) item;
+							else
+								rose.weapon2 = (MeleeWeapon) item;
+							button.item((weapon == 1 ? rose.weapon : rose.weapon2));
+						}
+
+					}
+				});
+			}
+		}
 		
 		WndGhostHero(final DriedRose rose){
 			
@@ -909,162 +1210,209 @@ public class DriedRose extends Artifact {
 			add( titlebar );
 			
 			RenderedTextBlock message =
-					PixelScene.renderTextBlock(Messages.get(this, "desc", rose.ghostStrength()), 6);
+					PixelScene.renderTextBlock(rose.getTypeBasedString( "desc_window", rose.type(), rose.ghostStrength()), 6);
 			message.maxWidth( WIDTH );
 			message.setPos(0, titlebar.bottom() + GAP);
 			add( message );
-			
-			btnWeapon = new ItemButton(){
-				@Override
-				protected void onClick() {
-					if (rose.weapon != null){
-						item(new WndBag.Placeholder(ItemSpriteSheet.WEAPON_HOLDER));
-						if (!rose.weapon.doPickUp(Dungeon.hero)){
-							Dungeon.level.drop( rose.weapon, Dungeon.hero.pos);
+
+			if (rose.type() != 3) {
+
+				btnWeapon = new ItemButton() {
+					@Override
+					protected void onClick() {
+						handleWeapon(this, rose, 1);
+					}
+
+					@Override
+					protected boolean onLongClick() {
+						if (item() != null && item().name() != null) {
+							GameScene.show(new WndInfoItem(item()));
+							return true;
 						}
-						rose.weapon = null;
-					} else {
-						GameScene.selectItem(new WndBag.ItemSelector() {
-
-							@Override
-							public String textPrompt() {
-								return Messages.get(WndGhostHero.class, "weapon_prompt");
-							}
-
-							@Override
-							public Class<?extends Bag> preferredBag(){
-								return Belongings.Backpack.class;
-							}
-
-							@Override
-							public boolean itemSelectable(Item item) {
-								return item instanceof MeleeWeapon;
-							}
-
-							@Override
-							public void onSelect(Item item) {
-								if (!(item instanceof MeleeWeapon)) {
-									//do nothing, should only happen when window is cancelled
-								} else if (item.unique) {
-									GLog.w( Messages.get(WndGhostHero.class, "cant_unique"));
-									hide();
-								} else if (item.cursed || !item.cursedKnown) {
-									GLog.w(Messages.get(WndGhostHero.class, "cant_cursed"));
-									hide();
-								}  else if (!item.levelKnown && ((MeleeWeapon)item).STRReq(0) > rose.ghostStrength()){
-									GLog.w( Messages.get(WndGhostHero.class, "cant_strength_unknown"));
-									hide();
-								} else if (((MeleeWeapon)item).STRReq() > rose.ghostStrength()) {
-									GLog.w( Messages.get(WndGhostHero.class, "cant_strength"));
-									hide();
-								} else {
-									if (item.isEquipped(Dungeon.hero)){
-										((MeleeWeapon) item).doUnequip(Dungeon.hero, false, false);
-									} else {
-										item.detach(Dungeon.hero.belongings.backpack);
-									}
-									rose.weapon = (MeleeWeapon) item;
-									item(rose.weapon);
-								}
-								
-							}
-						});
+						return false;
 					}
+				};
+				btnWeapon.setRect((WIDTH - BTN_GAP) / 2 - BTN_SIZE, message.top() + message.height() + GAP, BTN_SIZE, BTN_SIZE);
+				if (rose.weapon != null) {
+					btnWeapon.item(rose.weapon);
+				} else {
+					btnWeapon.item(new WndBag.Placeholder(ItemSpriteSheet.WEAPON_HOLDER));
 				}
-
-				@Override
-				protected boolean onLongClick() {
-					if (item() != null && item().name() != null){
-						GameScene.show(new WndInfoItem(item()));
-						return true;
-					}
-					return false;
-				}
-			};
-			btnWeapon.setRect( (WIDTH - BTN_GAP) / 2 - BTN_SIZE, message.top() + message.height() + GAP, BTN_SIZE, BTN_SIZE );
-			if (rose.weapon != null) {
-				btnWeapon.item(rose.weapon);
+				add(btnWeapon);
 			} else {
-				btnWeapon.item(new WndBag.Placeholder(ItemSpriteSheet.WEAPON_HOLDER));
-			}
-			add( btnWeapon );
-			
-			btnArmor = new ItemButton(){
-				@Override
-				protected void onClick() {
-					if (rose.armor != null){
-						item(new WndBag.Placeholder(ItemSpriteSheet.ARMOR_HOLDER));
-						if (!rose.armor.doPickUp(Dungeon.hero)){
-							Dungeon.level.drop( rose.armor, Dungeon.hero.pos);
+				btnWeapon = new ItemButton() {
+					@Override
+					protected void onClick() {
+						if (rose.wand != null) {
+							item(new WndBag.Placeholder(ItemSpriteSheet.WAND_HOLDER));
+							if (!rose.wand.doPickUp(Dungeon.hero)) {
+								Dungeon.level.drop(rose.wand, Dungeon.hero.pos);
+							}
+							rose.wand = null;
+						} else {
+							GameScene.selectItem(new WndBag.ItemSelector() {
+
+								@Override
+								public String textPrompt() {
+									return Messages.get(WndGhostHero.class, "wand_prompt");
+								}
+
+								@Override
+								public Class<? extends Bag> preferredBag() {
+									return MagicalHolster.class;
+								}
+
+								@Override
+								public boolean itemSelectable(Item item) {
+									return item instanceof Wand;
+								}
+
+								@Override
+								public void onSelect(Item item) {
+									if (!(item instanceof Wand)) {
+										//do nothing, should only happen when window is cancelled
+									} else if (item.unique) {
+										GLog.w(Messages.get(WndGhostHero.class, "cant_unique"));
+										hide();
+									} else if (item.cursed || !item.cursedKnown) {
+										GLog.w(Messages.get(WndGhostHero.class, "cant_cursed"));
+										hide();
+									} else {
+										if (item.isEquipped(Dungeon.hero)) {
+											((Wand) item).doUnequip(Dungeon.hero, false, false);
+										} else {
+											item.detach(Dungeon.hero.belongings.backpack);
+										}
+										rose.wand = (Wand) item;
+										item(rose.wand);
+									}
+
+								}
+							});
 						}
-						rose.armor = null;
-					} else {
-						GameScene.selectItem(new WndBag.ItemSelector() {
-
-							@Override
-							public String textPrompt() {
-								return Messages.get(WndGhostHero.class, "armor_prompt");
-							}
-
-							@Override
-							public Class<?extends Bag> preferredBag(){
-								return Belongings.Backpack.class;
-							}
-
-							@Override
-							public boolean itemSelectable(Item item) {
-								return item instanceof Armor && !(item instanceof ConjurerSet);
-							}
-
-							@Override
-							public void onSelect(Item item) {
-								if (!(item instanceof Armor)) {
-									//do nothing, should only happen when window is cancelled
-								} else if (item.unique || ((Armor) item).checkSeal() != null) {
-									GLog.w( Messages.get(WndGhostHero.class, "cant_unique"));
-									hide();
-								} else if (item.cursed || !item.cursedKnown) {
-									GLog.w(Messages.get(WndGhostHero.class, "cant_cursed"));
-									hide();
-								}  else if (!item.levelKnown && ((Armor)item).STRReq(0) > rose.ghostStrength()){
-									GLog.w( Messages.get(WndGhostHero.class, "cant_strength_unknown"));
-									hide();
-								} else if (((Armor)item).STRReq() > rose.ghostStrength()) {
-									GLog.w( Messages.get(WndGhostHero.class, "cant_strength"));
-									hide();
-								} else {
-									if (item.isEquipped(Dungeon.hero)){
-										((Armor) item).doUnequip(Dungeon.hero, false, false);
-									} else {
-										item.detach(Dungeon.hero.belongings.backpack);
-									}
-									rose.armor = (Armor) item;
-									item(rose.armor);
-								}
-								
-							}
-						});
 					}
-				}
 
-				@Override
-				protected boolean onLongClick() {
-					if (item() != null && item().name() != null){
-						GameScene.show(new WndInfoItem(item()));
-						return true;
+					@Override
+					protected boolean onLongClick() {
+						if (item() != null && item().name() != null) {
+							GameScene.show(new WndInfoItem(item()));
+							return true;
+						}
+						return false;
 					}
-					return false;
+				};
+				btnWeapon.setRect((WIDTH - BTN_GAP) / 2 - BTN_SIZE, message.top() + message.height() + GAP, BTN_SIZE, BTN_SIZE);
+				if (rose.wand != null) {
+					btnWeapon.item(rose.wand);
+				} else {
+					btnWeapon.item(new WndBag.Placeholder(ItemSpriteSheet.WAND_HOLDER));
 				}
-			};
-			btnArmor.setRect( btnWeapon.right() + BTN_GAP, btnWeapon.top(), BTN_SIZE, BTN_SIZE );
-			if (rose.armor != null) {
-				btnArmor.item(rose.armor);
-			} else {
-				btnArmor.item(new WndBag.Placeholder(ItemSpriteSheet.ARMOR_HOLDER));
+				add(btnWeapon);
 			}
-			add( btnArmor );
-			
-			resize(WIDTH, (int)(btnArmor.bottom() + GAP));
+
+			if (rose.type() == 2){
+				btnWeapon2 = new ItemButton(){
+					@Override
+					protected void onClick() {
+						handleWeapon(this, rose, 2);
+					}
+
+					@Override
+					protected boolean onLongClick() {
+						if (item() != null && item().name() != null){
+							GameScene.show(new WndInfoItem(item()));
+							return true;
+						}
+						return false;
+					}
+				};
+				btnWeapon2.setRect( btnWeapon.right() + BTN_GAP, btnWeapon.top(), BTN_SIZE, BTN_SIZE );
+				if (rose.weapon2 != null) {
+					btnWeapon2.item(rose.weapon2);
+				} else {
+					btnWeapon2.item(new WndBag.Placeholder(ItemSpriteSheet.WEAPON_HOLDER));
+				}
+				add( btnWeapon2 );
+				resize(WIDTH, (int)( btnWeapon2.bottom() + GAP));
+			} else {
+
+				btnArmor = new ItemButton() {
+					@Override
+					protected void onClick() {
+						if (rose.armor != null) {
+							item(new WndBag.Placeholder(ItemSpriteSheet.ARMOR_HOLDER));
+							if (!rose.armor.doPickUp(Dungeon.hero)) {
+								Dungeon.level.drop(rose.armor, Dungeon.hero.pos);
+							}
+							rose.armor = null;
+						} else {
+							GameScene.selectItem(new WndBag.ItemSelector() {
+
+								@Override
+								public String textPrompt() {
+									return Messages.get(WndGhostHero.class, "armor_prompt");
+								}
+
+								@Override
+								public Class<? extends Bag> preferredBag() {
+									return Belongings.Backpack.class;
+								}
+
+								@Override
+								public boolean itemSelectable(Item item) {
+									return item instanceof Armor && !(item instanceof ConjurerSet);
+								}
+
+								@Override
+								public void onSelect(Item item) {
+									if (!(item instanceof Armor)) {
+										//do nothing, should only happen when window is cancelled
+									} else if (item.unique || ((Armor) item).checkSeal() != null) {
+										GLog.w(Messages.get(WndGhostHero.class, "cant_unique"));
+										hide();
+									} else if (item.cursed || !item.cursedKnown) {
+										GLog.w(Messages.get(WndGhostHero.class, "cant_cursed"));
+										hide();
+									} else if (!item.levelKnown && ((Armor) item).STRReq(0) > rose.ghostStrength()) {
+										GLog.w(Messages.get(WndGhostHero.class, "cant_strength_unknown"));
+										hide();
+									} else if (((Armor) item).STRReq() > rose.ghostStrength()) {
+										GLog.w(Messages.get(WndGhostHero.class, "cant_strength"));
+										hide();
+									} else {
+										if (item.isEquipped(Dungeon.hero)) {
+											((Armor) item).doUnequip(Dungeon.hero, false, false);
+										} else {
+											item.detach(Dungeon.hero.belongings.backpack);
+										}
+										rose.armor = (Armor) item;
+										item(rose.armor);
+									}
+
+								}
+							});
+						}
+					}
+
+					@Override
+					protected boolean onLongClick() {
+						if (item() != null && item().name() != null) {
+							GameScene.show(new WndInfoItem(item()));
+							return true;
+						}
+						return false;
+					}
+				};
+				btnArmor.setRect(btnWeapon.right() + BTN_GAP, btnWeapon.top(), BTN_SIZE, BTN_SIZE);
+				if (rose.armor != null) {
+					btnArmor.item(rose.armor);
+				} else {
+					btnArmor.item(new WndBag.Placeholder(ItemSpriteSheet.ARMOR_HOLDER));
+				}
+				add(btnArmor);
+
+				resize(WIDTH, (int)( btnArmor.bottom() + GAP));
+			}
 		}
 	
 	}

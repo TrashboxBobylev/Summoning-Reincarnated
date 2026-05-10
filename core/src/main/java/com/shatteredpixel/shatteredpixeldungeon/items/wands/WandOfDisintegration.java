@@ -86,7 +86,7 @@ public class WandOfDisintegration extends DamageWand {
     }
 
     @Override
-    protected int chargesPerCast() {
+    public int chargesPerCast() {
         switch (type()){
             case 3: return 2;
         }

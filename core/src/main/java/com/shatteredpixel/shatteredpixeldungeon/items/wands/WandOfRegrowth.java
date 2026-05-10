@@ -404,7 +404,7 @@ public class WandOfRegrowth extends Wand {
 	}
 
 	@Override
-	protected int chargesPerCast() {
+	public int chargesPerCast() {
 		if (cursed ||
 				(charger != null && charger.target != null && charger.target.buff(WildMagic.WildMagicTracker.class) != null)){
 			return 1;

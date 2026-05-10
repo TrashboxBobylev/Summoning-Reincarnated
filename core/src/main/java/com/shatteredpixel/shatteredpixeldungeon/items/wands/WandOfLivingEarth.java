@@ -100,7 +100,7 @@ public class WandOfLivingEarth extends DamageWand {
     }
 
     @Override
-    protected int chargesPerCast() {
+    public int chargesPerCast() {
         if (type() == 3){
             return maxCharges;
         }

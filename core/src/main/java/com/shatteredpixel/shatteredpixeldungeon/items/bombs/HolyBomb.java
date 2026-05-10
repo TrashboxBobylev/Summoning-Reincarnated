@@ -152,7 +152,7 @@ public class HolyBomb extends Bomb.ConjuredBomb {
 		return quantity * (20 + 30);
 	}
 
-	public class Effect extends Halo {
+	public static class Effect extends Halo {
 
 		private CharSprite target;
 
