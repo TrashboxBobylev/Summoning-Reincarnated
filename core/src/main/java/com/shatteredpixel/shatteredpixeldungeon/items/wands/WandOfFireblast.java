@@ -103,7 +103,7 @@ public class WandOfFireblast extends DamageWand {
 	ConeAOE cone;
 
 	@Override
-	public void onZap(Ballistica bolt) {
+	public void onZap(Ballistica bolt, Char user) {
 
 		ArrayList<Char> affectedChars = new ArrayList<>();
 		ArrayList<Integer> adjacentCells = new ArrayList<>();
@@ -238,7 +238,7 @@ public class WandOfFireblast extends DamageWand {
 	}
 
 	@Override
-	public void fx(Ballistica bolt, Callback callback) {
+	public void fx(Char user, Ballistica bolt, Callback callback) {
 		//need to perform flame spread logic here so we can determine what cells to put flames in.
 
 		// 5/7/9 distance
@@ -255,18 +255,18 @@ public class WandOfFireblast extends DamageWand {
 			if (longestRay == null || ray.dist > longestRay.dist){
 				longestRay = ray;
 			}
-			((MagicMissile)curUser.sprite.parent.recycle( MagicMissile.class )).reset(
+			((MagicMissile)user.sprite.parent.recycle( MagicMissile.class )).reset(
 					MagicMissile.FIRE_CONE,
-					curUser.sprite,
+					user.sprite,
 					ray.path.get(ray.dist),
 					null
 			);
 		}
 
 		//final zap at half distance of the longest ray, for timing of the actual wand effect
-		MagicMissile.boltFromChar( curUser.sprite.parent,
+		MagicMissile.boltFromChar( user.sprite.parent,
 				MagicMissile.FIRE_CONE,
-				curUser.sprite,
+				user.sprite,
 				longestRay.path.get(longestRay.dist/2),
 				callback );
 		Sample.INSTANCE.play( Assets.Sounds.ZAP );

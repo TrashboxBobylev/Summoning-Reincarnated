@@ -98,7 +98,7 @@ public class WandOfBlastWave extends DamageWand {
     }
 
     @Override
-	public void onZap(Ballistica bolt) {
+	public void onZap(Ballistica bolt, Char user) {
 		Sample.INSTANCE.play( Assets.Sounds.BLAST );
 		BlastWave.blast(bolt.collisionPos);
 
@@ -313,10 +313,10 @@ public class WandOfBlastWave extends DamageWand {
 	}
 
 	@Override
-	public void fx(Ballistica bolt, Callback callback) {
-		MagicMissile.boltFromChar( curUser.sprite.parent,
+	public void fx(Char user, Ballistica bolt, Callback callback) {
+		MagicMissile.boltFromChar( user.sprite.parent,
 				MagicMissile.FORCE,
-				curUser.sprite,
+				user.sprite,
 				bolt.collisionPos,
 				callback);
 		Sample.INSTANCE.play(Assets.Sounds.ZAP);

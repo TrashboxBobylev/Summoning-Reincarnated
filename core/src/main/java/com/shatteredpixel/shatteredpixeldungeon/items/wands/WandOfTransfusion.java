@@ -107,7 +107,7 @@ public class WandOfTransfusion extends DamageWand {
     }
 
     @Override
-	public void onZap(Ballistica beam) {
+	public void onZap(Ballistica beam, Char user) {
 
 		for (int c : beam.subPath(0, beam.dist))
 			CellEmitter.center(c).burst( BloodParticle.BURST, 1 );
@@ -124,20 +124,20 @@ public class WandOfTransfusion extends DamageWand {
 
             //on rank III, swap health states
             if (type() == 3 && !ch.properties().contains(Char.Property.BOSS) && !ch.properties().contains(Char.Property.UNDEAD)) {
-                int myHealth = curUser.HP;
+                int myHealth = user.HP;
                 int enemyHealth = ch.HP;
-                float myHP = curUser.HP * 1f / curUser.HT;
+                float myHP = user.HP * 1f / user.HT;
                 float enemyHP = ch.HP * 1f / ch.HT;
                 if (ch.properties().contains(Char.Property.MINIBOSS)) {
                     myHP /= 3;
                     enemyHP /= 1.5f;
                 }
-                curUser.HP = (int) (curUser.HT * enemyHP);
-                if (curUser.HP - myHealth != 0){
-                    if (curUser.HP - myHealth > 0)
-                        curUser.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(curUser.HP - myHealth), FloatingText.HEALING);
+                user.HP = (int) (user.HT * enemyHP);
+                if (user.HP - myHealth != 0){
+                    if (user.HP - myHealth > 0)
+                        user.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(user.HP - myHealth), FloatingText.HEALING);
                     else
-                        curUser.sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(-(curUser.HP - myHealth)), FloatingText.MAGIC_DMG);
+                        user.sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(-(user.HP - myHealth)), FloatingText.MAGIC_DMG);
                 }
                 ch.HP = (int) (ch.HT * myHP);
                 if (ch.HP - enemyHealth != 0){
@@ -151,12 +151,12 @@ public class WandOfTransfusion extends DamageWand {
                 //heals/shields an ally or a charmed enemy while damaging self
                 if (ch.alignment == Char.Alignment.ALLY || ch.buff(Charm.class) != null) {
                     if (type() == 2){
-                        Buff.prolong(ch, LifeLink.class, chargesPerCast()*(5 + power())).object = curUser.id();
-                        Buff.prolong(curUser, LifeLink.class, chargesPerCast()*(5 + power())).object = ch.id();
+                        Buff.prolong(ch, LifeLink.class, chargesPerCast()*(5 + power())).object = user.id();
+                        Buff.prolong(user, LifeLink.class, chargesPerCast()*(5 + power())).object = ch.id();
                     } else {
 
                         // 5% of max hp
-                        int selfDmg = Math.round(curUser.HT * 0.05f);
+                        int selfDmg = Math.round(user.HT * 0.05f);
 
                         int healing = Math.round(selfDmg + 3 * power());
                         int shielding = (ch.HP + healing) - ch.HT;
@@ -179,7 +179,7 @@ public class WandOfTransfusion extends DamageWand {
                     }
 
                     if (!freeCharge) {
-                        damageHero(Math.round(curUser.HT * 0.05f));
+                        damageHero(user, Math.round(user.HT * 0.05f));
                     } else {
                         freeCharge = false;
                     }
@@ -190,13 +190,13 @@ public class WandOfTransfusion extends DamageWand {
 
                     //grant a self-shield, and...
                     int shield = (int) ((5 + power())*powerModifier(type()));
-                    Buff.affect(curUser, Barrier.class).setShield(shield);
-                    curUser.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shield), FloatingText.SHIELDING);
+                    Buff.affect(user, Barrier.class).setShield(shield);
+                    user.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shield), FloatingText.SHIELDING);
 
                     //charms living enemies
                     if (!ch.properties().contains(Char.Property.UNDEAD)) {
                         Charm charm = Buff.affect(ch, Charm.class, (Charm.DURATION / 2f)*powerModifier(type()));
-                        charm.object = curUser.id();
+                        charm.object = user.id();
                         charm.ignoreHeroAllies = true;
                         ch.sprite.centerEmitter().start(Speck.factory(Speck.HEART), 0.2f, 3);
 
@@ -215,11 +215,11 @@ public class WandOfTransfusion extends DamageWand {
 	}
 
 	//this wand costs health too
-	private void damageHero(int damage){
+	private void damageHero(Char user, int damage){
 		
-		curUser.damage(damage, this);
+		user.damage(damage, this);
 
-		if (!curUser.isAlive()){
+		if (user instanceof Hero && !user.isAlive()){
 			Badges.validateDeathFromFriendlyMagic();
 			Dungeon.fail( this );
 			GLog.n( Messages.get(this, "ondeath") );
@@ -259,9 +259,9 @@ public class WandOfTransfusion extends DamageWand {
     }
 
     @Override
-	public void fx(Ballistica beam, Callback callback) {
-		curUser.sprite.parent.add(
-				new Beam.HealthRay(curUser.sprite.center(), DungeonTilemap.raisedTileCenterToWorld(beam.collisionPos)));
+	public void fx(Char user, Ballistica beam, Callback callback) {
+        user.sprite.parent.add(
+				new Beam.HealthRay(user.sprite.center(), DungeonTilemap.raisedTileCenterToWorld(beam.collisionPos)));
 		Sample.INSTANCE.play( Assets.Sounds.RAY );
 		callback.call();
 	}

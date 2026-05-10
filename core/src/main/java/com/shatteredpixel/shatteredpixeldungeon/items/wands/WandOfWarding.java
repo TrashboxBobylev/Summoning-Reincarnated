@@ -99,7 +99,7 @@ public class WandOfWarding extends Wand {
     private boolean wardAvailable = true;
 	
 	@Override
-	public boolean tryToZap(Hero owner, int target) {
+	public boolean tryToZap(Char owner, int target) {
         if (type() == 2){
             return super.tryToZap(owner, target);
         }
@@ -116,7 +116,7 @@ public class WandOfWarding extends Wand {
 		}
 		
 		int maxWardEnergy = 0;
-		for (Buff buff : curUser.buffs()){
+		for (Buff buff : owner.buffs()){
 			if (buff instanceof Wand.Charger){
 				if (((Charger) buff).wand() instanceof WandOfWarding){
 					maxWardEnergy += 3 + ((Charger) buff).wand().power()*1.5f;
@@ -143,16 +143,16 @@ public class WandOfWarding extends Wand {
 	}
 	
 	@Override
-	public void onZap(Ballistica bolt) {
+	public void onZap(Ballistica bolt, Char user) {
 
         if (type() == 2){
-            int closest = curUser.pos;
+            int closest = user.pos;
             int closestIdx = -1;
 
             for (int i = 0; i < PathFinder.CIRCLE8.length; i++){
                 int ofs = PathFinder.CIRCLE8[i];
-                if (Dungeon.level.trueDistance(bolt.collisionPos, curUser.pos+ofs) < Dungeon.level.trueDistance(bolt.collisionPos, closest)){
-                    closest = curUser.pos+ofs;
+                if (Dungeon.level.trueDistance(bolt.collisionPos, user.pos+ofs) < Dungeon.level.trueDistance(bolt.collisionPos, closest)){
+                    closest = user.pos+ofs;
                     closestIdx = i;
                 }
             }
@@ -222,8 +222,8 @@ public class WandOfWarding extends Wand {
 
             //if all 3 tiles infront of Paladin are blocked, assume cast was in error and cancel
             if (Dungeon.level.solid[closest]
-                    && Dungeon.level.solid[curUser.pos + PathFinder.CIRCLE8[(closestIdx+1)%8]]
-                    && Dungeon.level.solid[curUser.pos + PathFinder.CIRCLE8[(closestIdx+7)%8]]){
+                    && Dungeon.level.solid[user.pos + PathFinder.CIRCLE8[(closestIdx+1)%8]]
+                    && Dungeon.level.solid[user.pos + PathFinder.CIRCLE8[(closestIdx+7)%8]]){
                 GLog.w(Messages.get(this, "invalid_target"));
                 return;
             }
@@ -318,13 +318,13 @@ public class WandOfWarding extends Wand {
 	}
 
 	@Override
-	public void fx(Ballistica bolt, Callback callback) {
+	public void fx(Char user, Ballistica bolt, Callback callback) {
         if (type() == 2){
             callback.call();
         } else {
-            MagicMissile m = MagicMissile.boltFromChar(curUser.sprite.parent,
+            MagicMissile m = MagicMissile.boltFromChar(user.sprite.parent,
                     MagicMissile.WARD,
-                    curUser.sprite,
+                    user.sprite,
                     bolt.collisionPos,
                     callback);
 

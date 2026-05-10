@@ -105,7 +105,7 @@ public class WandOfPrismaticLight extends DamageWand {
     }
 
     @Override
-	public void onZap(Ballistica beam) {
+	public void onZap(Ballistica beam, Char user) {
         if (type() != 3)
 		    affectMap(beam);
 		
@@ -117,9 +117,9 @@ public class WandOfPrismaticLight extends DamageWand {
                     break;
             }
 			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
-				Buff.prolong( curUser, Light.class, (2f + power())*modification);
+				Buff.prolong( user, Light.class, (2f + power())*modification);
 			} else {
-				Buff.prolong( curUser, Light.class, (10f+power()*5)*modification);
+				Buff.prolong( user, Light.class, (10f+power()*5)*modification);
 			}
 		}
         if (type() != 2){
@@ -224,9 +224,9 @@ public class WandOfPrismaticLight extends DamageWand {
 	}
 
 	@Override
-	public void fx(Ballistica beam, Callback callback) {
-		curUser.sprite.parent.add(
-				new Beam.LightRay(curUser.sprite.center(), DungeonTilemap.raisedTileCenterToWorld(beam.collisionPos)));
+	public void fx(Char user, Ballistica beam, Callback callback) {
+        user.sprite.parent.add(
+				new Beam.LightRay(user.sprite.center(), DungeonTilemap.raisedTileCenterToWorld(beam.collisionPos)));
 		Sample.INSTANCE.play( Assets.Sounds.RAY );
 		callback.call();
 	}

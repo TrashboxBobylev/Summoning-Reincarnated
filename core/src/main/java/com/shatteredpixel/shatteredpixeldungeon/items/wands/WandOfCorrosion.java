@@ -91,7 +91,7 @@ public class WandOfCorrosion extends Wand {
     }
 
     @Override
-	public void onZap(Ballistica bolt) {
+	public void onZap(Ballistica bolt, Char user) {
         if (type() == 2){
             Char ch = Actor.findChar(bolt.collisionPos);
             if (ch != null){
@@ -124,11 +124,11 @@ public class WandOfCorrosion extends Wand {
 	}
 
 	@Override
-	public void fx(Ballistica bolt, Callback callback) {
+	public void fx(Char user, Ballistica bolt, Callback callback) {
 		MagicMissile.boltFromChar(
-				curUser.sprite.parent,
+                user.sprite.parent,
 				MagicMissile.CORROSION,
-				curUser.sprite,
+                user.sprite,
 				bolt.collisionPos,
 				callback);
 		Sample.INSTANCE.play(Assets.Sounds.ZAP);

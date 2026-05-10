@@ -151,7 +151,7 @@ public class WandOfCorruption extends Wand {
     static final float RANK_3_MAX = 1.67f;
 
     @Override
-	public void onZap(Ballistica bolt) {
+	public void onZap(Ballistica bolt, Char user) {
 		Char ch = Actor.findChar(bolt.collisionPos);
 
 		if (ch != null){
@@ -369,10 +369,10 @@ public class WandOfCorruption extends Wand {
 	}
 
 	@Override
-	public void fx(Ballistica bolt, Callback callback) {
-		MagicMissile.boltFromChar( curUser.sprite.parent,
+	public void fx(Char user, Ballistica bolt, Callback callback) {
+		MagicMissile.boltFromChar( user.sprite.parent,
 				MagicMissile.SHADOW,
-				curUser.sprite,
+				user.sprite,
 				bolt.collisionPos,
 				callback);
 		Sample.INSTANCE.play( Assets.Sounds.ZAP );

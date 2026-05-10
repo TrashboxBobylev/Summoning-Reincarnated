@@ -96,7 +96,7 @@ public class WandOfFrost extends DamageWand {
     ConeAOE cone;
 
 	@Override
-	public void onZap(Ballistica bolt) {
+	public void onZap(Ballistica bolt, Char user) {
         if (type() == 2){
             ArrayList<Char> affectedChars = new ArrayList<>();
             for( int cell : cone.cells ){
@@ -206,7 +206,7 @@ public class WandOfFrost extends DamageWand {
 	}
 
 	@Override
-	public void fx(Ballistica bolt, Callback callback) {
+	public void fx(Char user, Ballistica bolt, Callback callback) {
         if (type() == 2){
             //need to perform flame spread logic here so we can determine what cells to put flames in.
             int maxDist = 8;
@@ -219,26 +219,26 @@ public class WandOfFrost extends DamageWand {
 
             //cast to cells at the tip, rather than all cells, better performance.
             for (Ballistica ray : cone.rays){
-                ((MagicMissile)curUser.sprite.parent.recycle( MagicMissile.class )).reset(
+                ((MagicMissile)user.sprite.parent.recycle( MagicMissile.class )).reset(
                         MagicMissile.ABYSS,
-                        curUser.sprite,
+                        user.sprite,
                         ray.path.get(ray.dist),
                         null
                 );
             }
 
             //final zap at half distance, for timing of the actual wand effect
-            MagicMissile.boltFromChar( curUser.sprite.parent,
+            MagicMissile.boltFromChar( user.sprite.parent,
                     MagicMissile.ABYSS,
-                    curUser.sprite,
+                    user.sprite,
                     bolt.path.get(dist/2),
                     callback );
             Sample.INSTANCE.play( Assets.Sounds.ZAP );
         }
         else{
-            MagicMissile.boltFromChar(curUser.sprite.parent,
+            MagicMissile.boltFromChar(user.sprite.parent,
                     MagicMissile.FROST,
-                    curUser.sprite,
+                    user.sprite,
                     bolt.collisionPos,
                     callback);
             Sample.INSTANCE.play(Assets.Sounds.ZAP);

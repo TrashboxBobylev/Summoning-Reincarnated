@@ -173,7 +173,11 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		}
 	}
 
-	public abstract void onZap(Ballistica attack);
+	public void onZap(Ballistica attack) {
+		onZap(attack, curUser);
+	}
+
+	public abstract void onZap(Ballistica attack, Char user);
 
 	public abstract void onHit( Char attacker, Char defender, int damage);
 
@@ -261,7 +265,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         return false;
     }
 
-    public boolean tryToZap(Hero owner, int target ){
+    public boolean tryToZap(Char owner, int target ){
 
 		if (owner.buff(WildMagic.WildMagicTracker.class) == null && (owner.buff(MagicImmune.class) != null)){
 			GLog.w( Messages.get(this, "no_magic") );
@@ -689,10 +693,14 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
                 charger == null ? Math.round(Charger.BASE_CHARGE_DELAY*rechargeModifier(type)) : charger.getTurnsToCharge(type));
     }
 
-    public void fx(Ballistica bolt, Callback callback) {
-		MagicMissile.boltFromChar( curUser.sprite.parent,
+	public void fx(Ballistica bolt, Callback callback) {
+		fx(curUser, bolt, callback);
+	}
+
+	public void fx(Char user, Ballistica bolt, Callback callback) {
+		MagicMissile.boltFromChar( user.sprite.parent,
 				MagicMissile.MAGIC_MISSILE,
-				curUser.sprite,
+				user.sprite,
 				bolt.collisionPos,
 				callback);
 		Sample.INSTANCE.play( Assets.Sounds.ZAP );
@@ -932,7 +940,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		}
 
 		@Override
-		public void onZap(Ballistica attack) {}
+		public void onZap(Ballistica attack, Char user) {}
 		public void onHit(Char attacker, Char defender, int damage) {}
 
 		@Override

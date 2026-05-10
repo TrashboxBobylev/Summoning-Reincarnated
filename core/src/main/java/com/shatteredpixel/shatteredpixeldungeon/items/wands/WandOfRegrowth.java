@@ -35,7 +35,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vulnerable;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage.WildMagic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.DwarfKing;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -89,7 +88,7 @@ public class WandOfRegrowth extends Wand {
 	int target;
 
 	@Override
-	public boolean tryToZap(Hero owner, int target) {
+	public boolean tryToZap(Char owner, int target) {
 		if (super.tryToZap(owner, target)){
 			this.target = target;
 			return true;
@@ -136,7 +135,7 @@ public class WandOfRegrowth extends Wand {
     }
 
     @Override
-	public void onZap(Ballistica bolt) {
+	public void onZap(Ballistica bolt, Char user) {
 
 		ArrayList<Integer> cells = new ArrayList<>(cone.cells);
 
@@ -371,7 +370,7 @@ public class WandOfRegrowth extends Wand {
         return super.battlemageDesc(type);
     }
 
-    public void fx(Ballistica bolt, Callback callback) {
+    public void fx(Char user, Ballistica bolt, Callback callback) {
 
 		// 5/7 distance
 		int maxDist = 3 + 2*chargesPerCast();
@@ -387,18 +386,18 @@ public class WandOfRegrowth extends Wand {
 			if (longestRay == null || ray.dist > longestRay.dist){
 				longestRay = ray;
 			}
-			((MagicMissile)curUser.sprite.parent.recycle( MagicMissile.class )).reset(
+			((MagicMissile)user.sprite.parent.recycle( MagicMissile.class )).reset(
 					MagicMissile.FOLIAGE_CONE,
-					curUser.sprite,
+					user.sprite,
 					ray.path.get(ray.dist),
 					null
 			);
 		}
 
 		//final zap at half distance of the longest ray, for timing of the actual wand effect
-		MagicMissile.boltFromChar( curUser.sprite.parent,
+		MagicMissile.boltFromChar( user.sprite.parent,
 				MagicMissile.FOLIAGE_CONE,
-				curUser.sprite,
+				user.sprite,
 				longestRay.path.get(longestRay.dist/2),
 				callback );
 		Sample.INSTANCE.play( Assets.Sounds.ZAP );

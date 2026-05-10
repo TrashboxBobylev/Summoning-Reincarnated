@@ -107,7 +107,7 @@ public class WandOfMagicMissile extends DamageWand {
     }
 
     @Override
-	public void onZap(Ballistica bolt) {
+	public void onZap(Ballistica bolt, Char user) {
 				
 		Char ch = Actor.findChar( bolt.collisionPos );
 		if (ch != null) {
@@ -115,7 +115,7 @@ public class WandOfMagicMissile extends DamageWand {
 
 			if (!(Dungeon.isChallenged(Conducts.Conduct.PACIFIST))) {
                 if (type() == 2){
-                    hit = Char.hit( curUser, ch, 1.5f, true );
+                    hit = Char.hit( user, ch, 1.5f, true );
                 }
                 if (hit) {
                     wandProc(ch, chargesPerCast());
@@ -123,16 +123,16 @@ public class WandOfMagicMissile extends DamageWand {
                         ch.damage(damageRoll(), this);
                 } else {
                     ch.sprite.showStatus( CharSprite.NEUTRAL,  ch.defenseVerb() );
-                    Buff.detach(curUser, Talent.FightingWizardryTracker.class);
+                    Buff.detach(user, Talent.FightingWizardryTracker.class);
                 }
 			}
             if (hit) {
                 Sample.INSTANCE.play(Assets.Sounds.HIT_MAGIC, 1, Random.Float(0.87f, 1.15f));
                 if (type() != 2) {
                     //apply the magic charge buff if we have another wand in inventory of a lower level, or already have the buff
-                    for (Wand.Charger wandCharger : curUser.buffs(Wand.Charger.class)) {
+                    for (Wand.Charger wandCharger : user.buffs(Wand.Charger.class)) {
                         if (wandCharger != charger) {
-                            Buff.prolong(curUser, MagicCharge.class, MagicCharge.DURATION).setup(this);
+                            Buff.prolong(user, MagicCharge.class, MagicCharge.DURATION).setup(this);
                             break;
                         }
                     }

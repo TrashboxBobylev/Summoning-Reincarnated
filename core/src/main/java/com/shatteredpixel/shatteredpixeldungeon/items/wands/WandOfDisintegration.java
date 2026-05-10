@@ -103,7 +103,7 @@ public class WandOfDisintegration extends DamageWand {
 	}
 
 	@Override
-	public void onZap(Ballistica beam) {
+	public void onZap(Ballistica beam, Char user) {
 		
 		boolean terrainAffected = false;
 		
@@ -227,22 +227,22 @@ public class WandOfDisintegration extends DamageWand {
     }
 
     @Override
-	public void fx(Ballistica beam, Callback callback) {
+	public void fx(Char user, Ballistica beam, Callback callback) {
         if (type() == 2) {
             if (beam.reflectPositions.isEmpty()) {
-                curUser.sprite.parent.add(
-                        new Beam.DeathRay(curUser.sprite.center(),
+                user.sprite.parent.add(
+                        new Beam.DeathRay(user.sprite.center(),
                                 DungeonTilemap.raisedTileCenterToWorld(beam.collisionPos)));
             } else {
                 for (int i = 0; i < beam.reflectPositions.size(); i++) {
-                    curUser.sprite.parent.add(
-                            new Beam.DeathRay(i == 0 ? curUser.sprite.center() : DungeonTilemap.raisedTileCenterToWorld(beam.reflectPositions.get(i - 1)),
+                    user.sprite.parent.add(
+                            new Beam.DeathRay(i == 0 ? user.sprite.center() : DungeonTilemap.raisedTileCenterToWorld(beam.reflectPositions.get(i - 1)),
                                     DungeonTilemap.raisedTileCenterToWorld(beam.reflectPositions.get(i))));
                 }
             }
         } else {
             int cell = beam.path.get(Math.min(beam.dist, distance()));
-            curUser.sprite.parent.add(new Beam.DeathRay(curUser.sprite.center(), DungeonTilemap.raisedTileCenterToWorld( cell )));
+            user.sprite.parent.add(new Beam.DeathRay(user.sprite.center(), DungeonTilemap.raisedTileCenterToWorld( cell )));
         }
         Sample.INSTANCE.play( Assets.Sounds.RAY );
 		callback.call();
