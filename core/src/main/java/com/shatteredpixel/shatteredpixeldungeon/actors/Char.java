@@ -1149,7 +1149,7 @@ acuRoll *= accMulti;
 			}
 		}
 
-		if (HP < 0 && src.hasProperty(DamageProperty.PHYSICAL) && alignment == Alignment.ENEMY){
+		if (HP < 0 && src.hasProperty(DamageProperty.PHYSICAL) && alignment == Alignment.ENEMY && src instanceof Char){
 			if (((Char) src).buff(Kinetic.KineticTracker.class) != null){
 				int dmgToAdd = -HP;
 				dmgToAdd -= ((Char) src).buff(Kinetic.KineticTracker.class).conservedDamage;
