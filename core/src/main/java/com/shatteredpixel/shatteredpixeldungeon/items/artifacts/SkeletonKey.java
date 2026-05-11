@@ -638,27 +638,27 @@ public class SkeletonKey extends Artifact {
 					Notes.remove(new IronKey(Dungeon.depth));
 					removed = true;
 				}
-			}
-			if (ironKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000) < 0) {
-				ironKeysNeeded.remove(Dungeon.depth + Dungeon.branch*1000);
+				if (ironKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000) < 0) {
+					ironKeysNeeded.remove(Dungeon.depth + Dungeon.branch*1000);
+				}
 			}
 			if (goldenKeysNeeded.containsKey(Dungeon.depth + Dungeon.branch*1000)) {
 				while (Notes.keyCount(new GoldenKey(Dungeon.depth)) > goldenKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000)) {
 					Notes.remove(new GoldenKey(Dungeon.depth));
 					removed = true;
 				}
-			}
-			if (goldenKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000) < 0) {
-				goldenKeysNeeded.remove(Dungeon.depth + Dungeon.branch*1000);
+				if (goldenKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000) < 0) {
+					goldenKeysNeeded.remove(Dungeon.depth + Dungeon.branch*1000);
+				}
 			}
 			if (crystalKeysNeeded.containsKey(Dungeon.depth + Dungeon.branch*1000)) {
 				while (Notes.keyCount(new CrystalKey(Dungeon.depth)) > crystalKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000)) {
 					Notes.remove(new CrystalKey(Dungeon.depth));
 					removed = true;
 				}
-			}
-			if (crystalKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000) < 0) {
-				crystalKeysNeeded.remove(Dungeon.depth + Dungeon.branch*1000);
+				if (crystalKeysNeeded.get(Dungeon.depth + Dungeon.branch*1000) < 0) {
+					crystalKeysNeeded.remove(Dungeon.depth + Dungeon.branch*1000);
+				}
 			}
 			if (removed){
 				GameScene.updateKeyDisplay();
