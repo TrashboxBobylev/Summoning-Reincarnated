@@ -58,7 +58,7 @@ public class RattleSnake extends Mob {
 	@Override
 	public int damageRoll() {
         int i = Random.NormalIntRange(0, 12);
-        if (Dungeon.level.adjacent(pos, enemy.pos)) i = Random.NormalIntRange(2, 7);
+        if (Dungeon.level.adjacent(pos, enemy.pos) && isSuppressed()) i = Random.NormalIntRange(2, 7);
         return i;
     }
 
@@ -112,6 +112,8 @@ public class RattleSnake extends Mob {
 	
 	@Override
 	protected boolean canAttack( Char enemy ) {
+		if (isSuppressed())
+			return super.canAttack(enemy);
 		Ballistica attack = new Ballistica( pos, enemy.pos, Ballistica.PROJECTILE);
 		return attack.collisionPos == enemy.pos;
 	}

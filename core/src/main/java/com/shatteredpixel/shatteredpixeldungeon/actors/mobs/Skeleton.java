@@ -75,7 +75,7 @@ public class Skeleton extends Mob {
 		
 		super.die( cause );
 		
-		if (cause == Chasm.class) return;
+		if (cause == Chasm.class || isSuppressed()) return;
 		
 		boolean heroKilled = false;
 		for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {

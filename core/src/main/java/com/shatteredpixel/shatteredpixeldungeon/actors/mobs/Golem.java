@@ -128,7 +128,7 @@ public class Golem extends Mob {
 	protected boolean act() {
 		selfTeleCooldown--;
 		enemyTeleCooldown--;
-		if (teleporting){
+		if (teleporting && !isSuppressed()){
 			((GolemSprite)sprite).teleParticles(false);
 			if (Actor.findChar(target) == null && Dungeon.level.openSpace[target]) {
 				ScrollOfTeleportation.appear(this, target);
@@ -178,6 +178,7 @@ public class Golem extends Mob {
 
 	private boolean canTele(int target){
 		if (enemyTeleCooldown > 0) return false;
+		if (isSuppressed()) return false;
 		PathFinder.buildDistanceMap(target, BArray.not(Dungeon.level.solid, null), Dungeon.level.distance(pos, target)+1);
 		//zaps can go around blocking terrain, but not through it
 		if (PathFinder.distance[pos] == Integer.MAX_VALUE){
@@ -196,7 +197,7 @@ public class Golem extends Mob {
 			if (target != -1 && getCloser( target )) {
 				spend( 1 / speed() );
 				return moveSprite( oldPos, pos );
-			} else if (!Dungeon.bossLevel() && target != -1 && target != pos && selfTeleCooldown <= 0 && buff(ScrollOfAntiMagic.EnemyBuff.class) == null) {
+			} else if (!Dungeon.bossLevel() && target != -1 && target != pos && selfTeleCooldown <= 0 && buff(ScrollOfAntiMagic.EnemyBuff.class) == null && !isSuppressed()) {
 				((GolemSprite)sprite).teleParticles(true);
 				teleporting = true;
 				spend( 2*TICK );
@@ -213,7 +214,7 @@ public class Golem extends Mob {
 
 		@Override
 		public boolean act(boolean enemyInFOV, boolean justAlerted) {
-			if (!enemyInFOV || canAttack(enemy)) {
+			if (!enemyInFOV || canAttack(enemy) || isSuppressed()) {
 				return super.act(enemyInFOV, justAlerted);
 			} else {
 

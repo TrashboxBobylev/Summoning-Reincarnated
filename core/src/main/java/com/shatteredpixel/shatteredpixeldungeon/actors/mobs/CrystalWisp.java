@@ -75,8 +75,10 @@ public class CrystalWisp extends Mob implements DamageSource {
 
 	@Override
 	public boolean[] modifyPassable(boolean[] passable) {
-		for (int i = 0; i < Dungeon.level.length(); i++){
-			passable[i] = passable[i] || Dungeon.level.map[i] == Terrain.MINE_CRYSTAL;
+		if (!isSuppressed()) {
+			for (int i = 0; i < Dungeon.level.length(); i++) {
+				passable[i] = passable[i] || Dungeon.level.map[i] == Terrain.MINE_CRYSTAL;
+			}
 		}
 		return passable;
 	}
@@ -98,6 +100,8 @@ public class CrystalWisp extends Mob implements DamageSource {
 
 	@Override
 	protected boolean canAttack( Char enemy ) {
+		if (isSuppressed())
+			return super.canAttack(enemy);
 		return super.canAttack(enemy)
 				|| new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos == enemy.pos;
 	}
@@ -105,7 +109,7 @@ public class CrystalWisp extends Mob implements DamageSource {
 	protected boolean doAttack(Char enemy ) {
 
 		if (Dungeon.level.adjacent( pos, enemy.pos )
-				|| new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos != enemy.pos) {
+				|| new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos != enemy.pos || isSuppressed()) {
 
 			return super.doAttack( enemy );
 

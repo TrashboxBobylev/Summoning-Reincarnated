@@ -71,7 +71,7 @@ public class Guard extends Mob {
 	}
 
 	private boolean chain(int target){
-		if (chainsUsed || enemy.properties().contains(Property.IMMOVABLE))
+		if (chainsUsed || enemy.properties().contains(Property.IMMOVABLE) || isSuppressed())
 			return false;
 
 		Ballistica chain = new Ballistica(pos, target, Ballistica.PROJECTILE);
@@ -184,7 +184,8 @@ public class Guard extends Mob {
 					&& !isCharmedBy( enemy )
 					&& !canAttack( enemy )
 					&& Dungeon.level.distance( pos, enemy.pos ) < 5
-					&& chain(enemy.pos)){
+					&& chain(enemy.pos)
+					&& isSuppressed()){
 				return !(sprite.visible || enemy.sprite.visible);
 			} else {
 				return super.act( enemyInFOV, justAlerted );

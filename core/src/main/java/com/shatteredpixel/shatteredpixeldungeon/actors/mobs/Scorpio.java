@@ -76,6 +76,8 @@ public class Scorpio extends Mob {
 	
 	@Override
 	protected boolean canAttack( Char enemy ) {
+		if (isSuppressed())
+			return super.canAttack(enemy);
 		return !Dungeon.level.adjacent( pos, enemy.pos )
 				&& (super.canAttack(enemy) || new Ballistica( pos, enemy.pos, Ballistica.PROJECTILE).collisionPos == enemy.pos);
 	}
@@ -83,7 +85,7 @@ public class Scorpio extends Mob {
 	@Override
 	public int attackProc( Char enemy, int damage ) {
 		damage = super.attackProc( enemy, damage );
-		if (Random.Int( 2 ) == 0) {
+		if (Random.Int( 2 ) == 0 && !isSuppressed()) {
 			Buff.prolong( enemy, Cripple.class, Cripple.DURATION );
 		}
 		
@@ -92,7 +94,7 @@ public class Scorpio extends Mob {
 	
 	@Override
 	protected boolean getCloser( int target ) {
-		if (state == HUNTING) {
+		if (state == HUNTING && !isSuppressed()) {
 			return enemySeen && getFurther( target );
 		} else {
 			return super.getCloser( target );

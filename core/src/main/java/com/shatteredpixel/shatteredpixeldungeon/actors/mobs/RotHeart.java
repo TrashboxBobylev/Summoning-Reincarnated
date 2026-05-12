@@ -63,7 +63,7 @@ public class RotHeart extends Mob {
 
 	@Override
 	public void damage(int dmg, DamageSource src) {
-		if (src.hasProperty(DamageProperty.FIRE)) {
+		if (src.hasProperty(DamageProperty.FIRE) && !isSuppressed()) {
 			destroy();
 			sprite.die();
 		} else {
@@ -81,7 +81,8 @@ public class RotHeart extends Mob {
 			}
 		}
 
-		GameScene.add(Blob.seed(pos, 5 + 3*openNearby, ToxicGas.class));
+		if (!isSuppressed())
+			GameScene.add(Blob.seed(pos, 5 + 3*openNearby, ToxicGas.class));
 
 		return super.defenseProc(enemy, damage);
 	}

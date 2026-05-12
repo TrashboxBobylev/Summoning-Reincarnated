@@ -974,6 +974,10 @@ public abstract class Mob extends Char {
 		return alignment != Alignment.ENEMY && buff(Amok.class) == null;
 	}
 
+	public boolean isSuppressed(){
+		return false;
+	}
+
 	public void aggro( Char ch ) {
 		enemy = ch;
 		if (state != PASSIVE){

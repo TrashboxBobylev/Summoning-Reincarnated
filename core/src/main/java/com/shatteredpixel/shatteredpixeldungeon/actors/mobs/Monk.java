@@ -89,6 +89,9 @@ public class Monk extends Mob {
 		if (buff(Focus.class) == null && state == HUNTING && focusCooldown <= 0) {
 			Buff.affect( this, Focus.class );
 		}
+		if (isSuppressed()){
+			Buff.detach(this, Focus.class);
+		}
 		return result;
 	}
 	
@@ -108,7 +111,7 @@ public class Monk extends Mob {
 	
 	@Override
 	public int defenseSkill( Char enemy ) {
-		if (buff(Focus.class) != null && paralysed == 0 && state != SLEEPING){
+		if (buff(Focus.class) != null && paralysed == 0 && state != SLEEPING && !isSuppressed()){
 			return INFINITE_EVASION;
 		}
 		return super.defenseSkill( enemy );

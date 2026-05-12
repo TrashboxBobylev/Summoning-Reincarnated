@@ -114,7 +114,7 @@ public class RipperDemon extends Mob {
 
 	@Override
 	protected boolean act() {
-		if (state == WANDERING){
+		if (state == WANDERING || isSuppressed()){
 			leapPos = -1;
 		}
 
@@ -142,7 +142,7 @@ public class RipperDemon extends Mob {
 		@Override
 		public boolean act( boolean enemyInFOV, boolean justAlerted ) {
 
-			if (leapPos != -1){
+			if (leapPos != -1 && !isSuppressed()){
 
 				leapCooldown = Random.NormalIntRange(2, 4);
 
@@ -236,7 +236,7 @@ public class RipperDemon extends Mob {
 				}
 
 				if (leapCooldown <= 0 && enemyInFOV && !rooted
-						&& Dungeon.level.distance(pos, enemy.pos) >= 3) {
+						&& Dungeon.level.distance(pos, enemy.pos) >= 3 && !isSuppressed()) {
 
 					int targetPos = enemy.pos;
 					if (lastEnemyPos != enemy.pos){

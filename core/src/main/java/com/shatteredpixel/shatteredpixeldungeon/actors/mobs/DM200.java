@@ -131,7 +131,7 @@ public class DM200 extends Mob {
 	}
 
 	protected boolean canVent(int target){
-		if (ventCooldown > 0) return false;
+		if (ventCooldown > 0 || isSuppressed()) return false;
 		PathFinder.buildDistanceMap(target, BArray.not(Dungeon.level.solid, null), Dungeon.level.distance(pos, target)+1);
 		//vent can go around blocking terrain, but not through it
 		if (PathFinder.distance[pos] == Integer.MAX_VALUE){
@@ -144,7 +144,7 @@ public class DM200 extends Mob {
 
 		@Override
 		public boolean act(boolean enemyInFOV, boolean justAlerted) {
-			if (!enemyInFOV || canAttack(enemy)) {
+			if (!enemyInFOV || canAttack(enemy) || isSuppressed()) {
 				return super.act(enemyInFOV, justAlerted);
 			} else {
 

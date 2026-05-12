@@ -69,7 +69,8 @@ public class GhostChicken extends AbyssalMob {
 
 	@Override
 	public int attackProc(Char enemy, int damage) {
-		Buff.prolong(enemy, TimedShrink.class, 2.5f + abyssLevel()*2.5f);
+		if (!isSuppressed())
+			Buff.prolong(enemy, TimedShrink.class, 2.5f + abyssLevel()*2.5f);
 		return super.attackProc(enemy, damage);
 	}
 
@@ -80,6 +81,9 @@ public class GhostChicken extends AbyssalMob {
 
 	@Override
 	public boolean isInvulnerable(Class effect) {
+		if (isSuppressed())
+			return super.isInvulnerable(effect);
+
 		HP--;
 		if (HP <= 0) die(Dungeon.hero);
 		aggro(Dungeon.hero);

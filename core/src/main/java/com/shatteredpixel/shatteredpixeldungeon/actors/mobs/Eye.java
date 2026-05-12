@@ -101,7 +101,7 @@ public class Eye extends Mob {
 	@Override
 	protected boolean canAttack( Char enemy ) {
 
-		if (beamCooldown == 0 && buff(ScrollOfAntiMagic.EnemyBuff.class) == null) {
+		if (beamCooldown == 0 && buff(ScrollOfAntiMagic.EnemyBuff.class) == null && !isSuppressed()) {
 			Ballistica aim = new Ballistica(pos, enemy.pos, Ballistica.STOP_SOLID);
 
 			if (enemy.invisible == 0 && !isCharmedBy(enemy) && fieldOfView[enemy.pos]
@@ -120,6 +120,9 @@ public class Eye extends Mob {
 
 	@Override
 	protected boolean act() {
+		if (isSuppressed())
+			return super.act();
+
 		if (beamCharged && state != HUNTING){
 			beamCharged = false;
 			sprite.idle();
@@ -137,7 +140,7 @@ public class Eye extends Mob {
 	protected boolean doAttack( Char enemy ) {
 
 		beam = new Ballistica(pos, beamTarget, Ballistica.STOP_SOLID);
-		if (beamCooldown > 0 || (!beamCharged && !beam.subPath(1, beam.dist).contains(enemy.pos))) {
+		if (beamCooldown > 0 || (!beamCharged && !beam.subPath(1, beam.dist).contains(enemy.pos)) || isSuppressed()) {
 			return super.doAttack(enemy);
 		} else if (!beamCharged){
 			((EyeSprite)sprite).charge( enemy.pos );
@@ -162,7 +165,7 @@ public class Eye extends Mob {
 
 	@Override
 	public void damage(int dmg, DamageSource src) {
-		if (beamCharged) dmg /= 4;
+		if (beamCharged && !isSuppressed()) dmg /= 4;
 		super.damage(dmg, src);
 	}
 
@@ -303,7 +306,7 @@ public class Eye extends Mob {
 		@Override
 		public boolean act(boolean enemyInFOV, boolean justAlerted) {
 			//even if enemy isn't seen, attack them if the beam is charged
-			if (beamCharged && enemy != null && canAttack(enemy)) {
+			if (beamCharged && enemy != null && canAttack(enemy) && !isSuppressed()) {
 				enemySeen = enemyInFOV;
 				return doAttack(enemy);
 			}

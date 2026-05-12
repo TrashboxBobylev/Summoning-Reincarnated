@@ -59,6 +59,13 @@ public class Snake extends Mob {
 		return 10;
 	}
 
+	@Override
+	public int defenseSkill(Char enemy) {
+		if (isSuppressed())
+			return super.defenseSkill(enemy)/8;
+		return super.defenseSkill(enemy);
+	}
+
 	private static int dodges = 0;
 
 	@Override

@@ -73,6 +73,9 @@ public class LostSpirit extends AbyssalMob implements Callback {
         if (buff(ScrollOfAntiMagic.EnemyBuff.class) == null){
             return false;
         }
+        if (isSuppressed()){
+            return super.canAttack(enemy);
+        }
         return super.canAttack(enemy) || new Ballistica( pos, enemy.pos, Ballistica.STOP_TARGET).collisionPos == enemy.pos;
     }
 
@@ -83,9 +86,11 @@ public class LostSpirit extends AbyssalMob implements Callback {
 
     @Override
     public void damage(int dmg, DamageSource src) {
-        int distance = Dungeon.level.distance(this.pos, Dungeon.hero.pos) - 1;
-        float multiplier = Math.min(0.2f, 1 / (1.32f * (float)Math.pow(1.2f, distance)));
-        dmg = Math.round(dmg * multiplier);
+        if (!isSuppressed()) {
+            int distance = Dungeon.level.distance(this.pos, Dungeon.hero.pos) - 1;
+            float multiplier = Math.min(0.2f, 1 / (1.32f * (float) Math.pow(1.2f, distance)));
+            dmg = Math.round(dmg * multiplier);
+        }
         super.damage(dmg, src);
     }
 
@@ -97,10 +102,9 @@ public class LostSpirit extends AbyssalMob implements Callback {
     }
 
     protected boolean doAttack(Char enemy ) {
-
         if ((Dungeon.level.adjacent( pos, enemy.pos ) || new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos != enemy.pos) && enemy == Dungeon.hero) {
 
-            if (HP > HT/5) {
+            if (HP > HT/5 || isSuppressed()) {
                 //do nothing
             }
             else {

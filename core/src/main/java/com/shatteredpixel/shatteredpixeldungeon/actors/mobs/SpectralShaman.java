@@ -122,6 +122,8 @@ public class SpectralShaman extends Mob {
 
     @Override
     protected boolean getCloser( int target ) {
+        if (isSuppressed())
+            return super.getCloser(target);
         return canTryToSummon() ?
                 super.getCloser( pedestal( nextPedestal ) ) :
                 super.getCloser( target );
@@ -139,6 +141,8 @@ public class SpectralShaman extends Mob {
 
     @Override
     protected boolean canAttack( Char enemy ) {
+        if (isSuppressed())
+            return super.canAttack(enemy);
         return canTryToSummon() ?
                 pos == pedestal( nextPedestal ) :
                 Dungeon.level.adjacent( pos, enemy.pos );
@@ -155,7 +159,7 @@ public class SpectralShaman extends Mob {
 
     @Override
     protected boolean act() {
-        if (canTryToSummon() && pos == pedestal( nextPedestal )) {
+        if (canTryToSummon() && pos == pedestal( nextPedestal ) && !isSuppressed()) {
             summon();
             return true;
         } else {

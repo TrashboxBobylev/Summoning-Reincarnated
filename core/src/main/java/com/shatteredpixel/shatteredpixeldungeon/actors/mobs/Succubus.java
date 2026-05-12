@@ -81,7 +81,7 @@ public class Succubus extends Mob {
 	public int attackProc( Char enemy, int damage ) {
 		damage = super.attackProc( enemy, damage );
 		
-		if (enemy.buff(Charm.class) != null ){
+		if (enemy.buff(Charm.class) != null && !isSuppressed()){
 			int shield = (HP - HT) + (5 + damage);
 			if (shield > 0){
 				HP = HT;
@@ -98,7 +98,7 @@ public class Succubus extends Mob {
 			if (Dungeon.level.heroFOV[pos]) {
 				Sample.INSTANCE.play( Assets.Sounds.CHARMS );
 			}
-		} else if (Random.Int( 3 ) == 0) {
+		} else if (Random.Int( 3 ) == 0 && !isSuppressed()) {
 			Charm c = Buff.affect( enemy, Charm.class, Charm.DURATION/2f );
 			c.object = id();
 			c.ignoreNextHit = true; //so that the -5 duration from succubus hit is ignored
@@ -113,7 +113,7 @@ public class Succubus extends Mob {
 	
 	@Override
 	protected boolean getCloser( int target ) {
-		if (fieldOfView[target] && Dungeon.level.distance( pos, target ) > 2 && blinkCooldown <= 0 && !rooted && buff(ScrollOfAntiMagic.EnemyBuff.class) == null) {
+		if (fieldOfView[target] && Dungeon.level.distance( pos, target ) > 2 && blinkCooldown <= 0 && !rooted && buff(ScrollOfAntiMagic.EnemyBuff.class) == null && !isSuppressed()) {
 			
 			if (blink( target )) {
 				spend(-1 / speed());

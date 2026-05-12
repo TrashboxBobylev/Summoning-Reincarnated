@@ -62,7 +62,7 @@ public class Slime extends Mob {
 	public void damage(int dmg, DamageSource src) {
 		float scaleFactor = AscensionChallenge.statModifier(this);
 		float scaledDmg = dmg/scaleFactor;
-		if (scaledDmg >= 5){
+		if (scaledDmg >= 5 && !isSuppressed()){
 			//takes 5/6/7/8/9/10 dmg at 5/7/10/14/19/25 incoming dmg
 			scaledDmg = 4 + (float)(Math.sqrt(8*(scaledDmg - 4) + 1) - 1)/2;
 		}

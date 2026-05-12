@@ -132,7 +132,7 @@ public class GnollSapper extends Mob {
 
 	@Override
 	protected boolean act() {
-		if (throwingRockFromPos != -1){
+		if (throwingRockFromPos != -1 && !isSuppressed()){
 
 			boolean attacked = Dungeon.level.map[throwingRockFromPos] == Terrain.MINE_BOULDER;
 
@@ -168,6 +168,9 @@ public class GnollSapper extends Mob {
 						&& ((Mob) getPartner()).alignment != alignment){
 					losePartner();
 				}
+				if (isSuppressed()){
+					losePartner();
+				}
 
 				if (Actor.findById(partnerID) != null
 						&& Dungeon.level.distance(pos, enemy.pos) <= 3){
@@ -181,7 +184,7 @@ public class GnollSapper extends Mob {
 					}
 				}
 
-				if (abilityCooldown-- <= 0){
+				if (abilityCooldown-- <= 0 && !isSuppressed()){
 					boolean targetNextToBarricade = false;
 					for (int i : PathFinder.NEIGHBOURS8){
 						if (Dungeon.level.map[enemy.pos+i] == Terrain.BARRICADE
@@ -220,7 +223,7 @@ public class GnollSapper extends Mob {
 				}
 
 				//does not approach an enemy it can see, but does melee if in range
-				if (canAttack(enemy)){
+				if (canAttack(enemy) && !isSuppressed()){
 					return super.act(enemyInFOV, justAlerted);
 				} else {
 					spend(TICK);

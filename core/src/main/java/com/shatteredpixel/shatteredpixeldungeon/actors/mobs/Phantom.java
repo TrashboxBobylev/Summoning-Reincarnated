@@ -137,7 +137,7 @@ public class Phantom extends AbyssalMob {
 
 		@Override
 		public boolean act(boolean enemyInFOV, boolean justAlerted) {
-			if (!enemyInFOV || canAttack(enemy)) {
+			if (!enemyInFOV || canAttack(enemy) || isSuppressed()) {
 				return super.act(enemyInFOV, justAlerted);
 			} else {
 				enemySeen = true;

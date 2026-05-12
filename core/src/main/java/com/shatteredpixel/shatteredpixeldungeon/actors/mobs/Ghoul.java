@@ -107,7 +107,7 @@ public class Ghoul extends Mob {
 	@Override
 	protected boolean act() {
 		//create a child
-		if (partnerID == -1){
+		if (partnerID == -1 && !isSuppressed()){
 			
 			ArrayList<Integer> candidates = new ArrayList<>();
 			
@@ -154,7 +154,7 @@ public class Ghoul extends Mob {
 
 	@Override
 	public void die(Object cause) {
-		if (cause != Chasm.class && cause != GhoulLifeLink.class && !Dungeon.level.pit[pos]){
+		if (cause != Chasm.class && cause != GhoulLifeLink.class && !Dungeon.level.pit[pos] && !isSuppressed()){
 			Ghoul nearby = GhoulLifeLink.searchForHost(this);
 			if (nearby != null){
 				beingLifeLinked = true;
@@ -202,7 +202,7 @@ public class Ghoul extends Mob {
 		@Override
 		public boolean act( boolean enemyInFOV, boolean justAlerted ) {
 			Ghoul partner = (Ghoul) Actor.findById( partnerID );
-			if (partner != null && partner.state != partner.SLEEPING){
+			if (partner != null && partner.state != partner.SLEEPING && !isSuppressed()){
 				state = WANDERING;
 				target = partner.pos;
 				return true;
@@ -219,7 +219,7 @@ public class Ghoul extends Mob {
 			enemySeen = false;
 			
 			Ghoul partner = (Ghoul) Actor.findById( partnerID );
-			if (partner != null && (partner.state != partner.WANDERING || Dungeon.level.distance( pos,  partner.target) > 1)){
+			if (partner != null && (partner.state != partner.WANDERING || Dungeon.level.distance( pos,  partner.target) > 1) && !isSuppressed()){
 				target = partner.pos;
 				int oldPos = pos;
 				if (getCloser( target )){

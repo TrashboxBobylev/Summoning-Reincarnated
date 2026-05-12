@@ -57,7 +57,7 @@ public class DM201 extends DM200 {
 
 	@Override
 	public void damage(int dmg, DamageSource src) {
-		if (!(src.hasProperty(DamageProperty.DECAY))) {
+		if (!(src.hasProperty(DamageProperty.DECAY)) && !isSuppressed()) {
 			if ((src instanceof Char && !Dungeon.level.adjacent(pos, ((Char) src).pos))
 					|| enemy == null || !Dungeon.level.adjacent(pos, enemy.pos)) {
 				threatened = true;
@@ -117,7 +117,7 @@ public class DM201 extends DM200 {
 		@Override
 		public boolean act( boolean enemyInFOV, boolean justAlerted ) {
 
-			if (threatened && enemyInFOV){
+			if (threatened && enemyInFOV && !isSuppressed()){
 				if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
 					sprite.zap( enemy.pos );
 					return false;

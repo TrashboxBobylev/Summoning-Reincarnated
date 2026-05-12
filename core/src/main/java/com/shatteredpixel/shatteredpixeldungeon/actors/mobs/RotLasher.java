@@ -60,7 +60,7 @@ public class RotLasher extends Mob {
 
 	@Override
 	protected boolean act() {
-		if (HP < HT && (enemy == null || !Dungeon.level.adjacent(pos, enemy.pos))) {
+		if (HP < HT && (enemy == null || !Dungeon.level.adjacent(pos, enemy.pos)) && !isSuppressed()) {
 			sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(Math.min(5, HT - HP)), FloatingText.HEALING);
 			HP = Math.min(HT, HP + 5);
 		}
@@ -69,7 +69,7 @@ public class RotLasher extends Mob {
 
 	@Override
 	public void damage(int dmg, DamageSource src) {
-		if (src.hasProperty(DamageProperty.FIRE)) {
+		if (src.hasProperty(DamageProperty.FIRE) && !isSuppressed()) {
 			destroy();
 			sprite.die();
 		} else {
@@ -88,7 +88,8 @@ public class RotLasher extends Mob {
 	@Override
 	public int attackProc(Char enemy, int damage) {
 		damage = super.attackProc( enemy, damage );
-		Buff.affect( enemy, Cripple.class, 2f );
+		if (!isSuppressed())
+			Buff.affect( enemy, Cripple.class, 2f );
 		return super.attackProc(enemy, damage);
 	}
 
@@ -130,7 +131,8 @@ public class RotLasher extends Mob {
 
 		@Override
 		protected boolean noticeEnemy() {
-			spend(TICK);
+			if (!isSuppressed())
+				spend(TICK);
 			return super.noticeEnemy();
 		}
 	}

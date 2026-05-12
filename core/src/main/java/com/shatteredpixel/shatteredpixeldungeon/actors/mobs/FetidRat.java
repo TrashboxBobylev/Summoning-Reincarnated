@@ -67,7 +67,7 @@ public class FetidRat extends Rat {
 	@Override
 	public int attackProc( Char enemy, int damage ) {
 		damage = super.attackProc( enemy, damage );
-		if (Random.Int(3) == 0) {
+		if (Random.Int(3) == 0 && !isSuppressed()) {
 			Buff.affect(enemy, Ooze.class).set( Ooze.DURATION );
 			//score loss is on-hit instead of on-attack because it's tied to ooze
 			if (enemy == Dungeon.hero && !Dungeon.level.water[enemy.pos]){
@@ -80,8 +80,8 @@ public class FetidRat extends Rat {
 
 	@Override
 	public int defenseProc( Char enemy, int damage ) {
-
-		GameScene.add(Blob.seed(pos, 20, StenchGas.class));
+		if (!isSuppressed())
+			GameScene.add(Blob.seed(pos, 20, StenchGas.class));
 
 		return super.defenseProc(enemy, damage);
 	}

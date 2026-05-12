@@ -1532,8 +1532,10 @@ acuRoll *= accMulti;
 		for (Property p : properties()){
 			resists.addAll(p.resistances());
 		}
-		for (Buff b : buffs()){
-			resists.addAll(b.resistances());
+		if (!(this instanceof Mob && !((Mob) this).isSuppressed())) {
+			for (Buff b : buffs()) {
+				resists.addAll(b.resistances());
+			}
 		}
 		if (this instanceof Hero && buff(CloakOfShadows.cloakStealth.class) != null){
 			CloakGlyph glyph = buff(CloakOfShadows.cloakStealth.class).glyph();
@@ -1581,11 +1583,13 @@ acuRoll *= accMulti;
 		for (Property p : properties()){
 			immunes.addAll(p.immunities());
 		}
-		for (Buff b : buffs()){
-			immunes.addAll(b.immunities());
-		}
-		if (glyphLevel(Brimstone.class) >= 0){
-			immunes.add(Burning.class);
+		if (!(this instanceof Mob && !((Mob) this).isSuppressed())) {
+			for (Buff b : buffs()) {
+				immunes.addAll(b.immunities());
+			}
+			if (glyphLevel(Brimstone.class) >= 0) {
+				immunes.add(Burning.class);
+			}
 		}
 		if (this instanceof Hero && buff(CloakOfShadows.cloakStealth.class) != null){
 			CloakGlyph glyph = buff(CloakOfShadows.cloakStealth.class).glyph();

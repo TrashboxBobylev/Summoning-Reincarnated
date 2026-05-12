@@ -83,7 +83,7 @@ public class Necromancer extends Mob {
 
 	@Override
 	protected boolean act() {
-		if (summoning && state != HUNTING){
+		if (summoning && (state != HUNTING || isSuppressed())){
 			summoning = false;
 			if (sprite instanceof NecromancerSprite) ((NecromancerSprite) sprite).cancelSummoning();
 		}
@@ -279,6 +279,8 @@ public class Necromancer extends Mob {
 		@Override
 		public boolean act(boolean enemyInFOV, boolean justAlerted) {
 			enemySeen = enemyInFOV;
+			if (isSuppressed())
+				return super.act(enemyInFOV, justAlerted);
 
 			if (enemySeen){
 				target = enemy.pos;

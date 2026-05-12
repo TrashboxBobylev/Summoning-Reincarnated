@@ -83,31 +83,32 @@ public class AbyssalSpawner extends AbyssalMob {
 
     @Override
     protected boolean act() {
-
-        spawnCooldown--;
-        HP = Math.min(HT, HP + 2 + abyssLevel());
-        if (spawnCooldown <= 0){
-            ArrayList<Integer> candidates = new ArrayList<>();
-            for (int n : PathFinder.NEIGHBOURS8) {
-                if (Dungeon.level.passable[pos+n] && Actor.findChar( pos+n ) == null) {
-                    candidates.add( pos+n );
-                }
-            }
-
-            if (!candidates.isEmpty()) {
-                Mob spawn = Dungeon.level.createMob();
-
-                spawn.pos = Random.element( candidates );
-                spawn.state = spawn.HUNTING;
-
-                Dungeon.level.occupyCell(spawn);
-
-                GameScene.add( spawn, 1 );
-                if (sprite.visible) {
-                    Actor.addDelayed(new Pushing(spawn, pos, spawn.pos), -1);
+        if (!isSuppressed()) {
+            spawnCooldown--;
+            HP = Math.min(HT, HP + 2 + abyssLevel());
+            if (spawnCooldown <= 0) {
+                ArrayList<Integer> candidates = new ArrayList<>();
+                for (int n : PathFinder.NEIGHBOURS8) {
+                    if (Dungeon.level.passable[pos + n] && Actor.findChar(pos + n) == null) {
+                        candidates.add(pos + n);
+                    }
                 }
 
-                spawnCooldown = Math.max(3, 25 - Dungeon.depth / 2);
+                if (!candidates.isEmpty()) {
+                    Mob spawn = Dungeon.level.createMob();
+
+                    spawn.pos = Random.element(candidates);
+                    spawn.state = spawn.HUNTING;
+
+                    Dungeon.level.occupyCell(spawn);
+
+                    GameScene.add(spawn, 1);
+                    if (sprite.visible) {
+                        Actor.addDelayed(new Pushing(spawn, pos, spawn.pos), -1);
+                    }
+
+                    spawnCooldown = Math.max(3, 25 - Dungeon.depth / 2);
+                }
             }
         }
         return super.act();
@@ -115,9 +116,11 @@ public class AbyssalSpawner extends AbyssalMob {
 
     @Override
     public void damage(int dmg, DamageSource src) {
-        spawnCooldown -= dmg / 2f;
-        if (dmg >= HT / 4){
-            dmg = HT/4 - 1 + (int)(Math.sqrt(8*(dmg - (HT/4f - 1)) + 1) - 1)/2;
+        if (isSuppressed()) {
+            spawnCooldown -= dmg / 2f;
+            if (dmg >= HT / 4) {
+                dmg = HT / 4 - 1 + (int) (Math.sqrt(8 * (dmg - (HT / 4f - 1)) + 1) - 1) / 2;
+            }
         }
         super.damage(dmg, src);
     }

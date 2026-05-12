@@ -136,7 +136,7 @@ public class Mimic extends Mob {
 
 	@Override
 	protected boolean act() {
-		if (alignment == Alignment.NEUTRAL && state != PASSIVE){
+		if (alignment == Alignment.NEUTRAL && (state != PASSIVE || isSuppressed())){
 			alignment = Alignment.ENEMY;
 			if (sprite != null) sprite.idle();
 			if (Dungeon.level.heroFOV[pos]) {

@@ -132,10 +132,10 @@ public class CrystalMimic extends Mimic {
 
 	@Override
 	public int attackProc(Char enemy, int damage) {
-		if (alignment == Alignment.NEUTRAL && enemy == Dungeon.hero){
+		if (alignment == Alignment.NEUTRAL && enemy == Dungeon.hero && !isSuppressed()){
 			steal( Dungeon.hero );
 
-		} else {
+		} else if (!isSuppressed()) {
 			ArrayList<Integer> candidates = new ArrayList<>();
 			for (int i : PathFinder.NEIGHBOURS8){
 				if (Dungeon.level.passable[pos+i] && Actor.findChar(pos+i) == null){
@@ -199,6 +199,11 @@ public class CrystalMimic extends Mimic {
 			} else {
 				state = WANDERING;
 			}
+		}
+
+		@Override
+		public boolean act(boolean enemyInFOV, boolean justAlerted) {
+			return super.act(enemyInFOV, justAlerted);
 		}
 
 		@Override

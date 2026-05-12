@@ -152,7 +152,8 @@ public class AbyssalNightmare extends AbyssalMob {
 		}
 		Dungeon.level.updateFieldOfView( this, fieldOfView );
 
-		HP = Math.min(HP+Random.IntRange(2, 3), HT);
+		if (!isSuppressed())
+			HP = Math.min(HP+Random.IntRange(2, 3), HT);
 
 		boolean justAlerted = alerted;
 		alerted = false;
@@ -179,7 +180,7 @@ public class AbyssalNightmare extends AbyssalMob {
 
 	@Override
 	public boolean canSee(int pos) {
-		return true;
+		return !isSuppressed();
 	}
 
 	@Override
@@ -206,7 +207,7 @@ public class AbyssalNightmare extends AbyssalMob {
 
 	@Override
 	public int attackProc(Char enemy, int damage) {
-		if (Random.Int(4) == 0 && generation == 0){
+		if (Random.Int(4) == 0 && generation == 0 && !isSuppressed()){
 			ArrayList<Integer> candidates = new ArrayList<>();
 			boolean[] solid = Dungeon.level.solid;
 
@@ -263,6 +264,8 @@ public class AbyssalNightmare extends AbyssalMob {
 
 	@Override
 	public float resistanceValue(Class effect) {
+		if (isSuppressed())
+			return super.resistanceValue(effect);
 		return super.resistanceValue(effect)/2f;
 	}
 
@@ -270,7 +273,7 @@ public class AbyssalNightmare extends AbyssalMob {
 	protected boolean getCloser(int target) {
 		if (super.getCloser(target)){
 			return true;
-		} else {
+		} else if (!isSuppressed()) {
 
 //			if (buff(ChampionEnemy.Paladin.class) != null){
 //				return true;
@@ -323,6 +326,7 @@ public class AbyssalNightmare extends AbyssalMob {
 
 			return false;
 		}
+		return super.getCloser(target);
 	}
 
 	{

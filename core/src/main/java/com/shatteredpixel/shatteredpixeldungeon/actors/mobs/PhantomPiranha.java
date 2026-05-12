@@ -59,7 +59,7 @@ public class PhantomPiranha extends Piranha {
 		}
 		super.damage(dmg, src);
 
-		if (isAlive() && !(src.hasProperty(DamageProperty.DECAY))) {
+		if (isAlive() && !(src.hasProperty(DamageProperty.DECAY)) && !isSuppressed()) {
 			if (dmgSource != null) {
 				if (!Dungeon.level.adjacent(pos, dmgSource.pos)) {
 					ArrayList<Integer> candidates = new ArrayList<>();
@@ -88,7 +88,7 @@ public class PhantomPiranha extends Piranha {
 
 	@Override
 	public void dieOnLand() {
-		if (!teleportAway()){
+		if (isSuppressed() || !teleportAway()){
 			super.dieOnLand();
 		}
 	}

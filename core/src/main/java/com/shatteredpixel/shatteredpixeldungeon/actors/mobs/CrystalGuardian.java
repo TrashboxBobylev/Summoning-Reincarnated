@@ -72,6 +72,10 @@ public class CrystalGuardian extends Mob{
 
 	@Override
 	protected boolean act() {
+		if (isSuppressed()){
+			paralysed = 999;
+			return super.act();
+		}
 		if (recovering){
 			if (buff(PinCushion.class) != null){
 				buff(PinCushion.class).detach();
@@ -163,12 +167,14 @@ public class CrystalGuardian extends Mob{
 				}
 			}
 
-			if (!recovering) {
+			if (!recovering && !isSuppressed()) {
 				recovering = true;
 				Bestiary.setSeen(getClass());
 				Bestiary.countEncounter(getClass());
 				if (sprite != null) ((CrystalGuardianSprite) sprite).crumple();
 			}
+			if (isSuppressed())
+				return super.isAlive();
 		}
 		return super.isAlive();
 	}

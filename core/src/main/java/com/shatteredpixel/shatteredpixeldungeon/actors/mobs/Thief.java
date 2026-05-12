@@ -129,7 +129,7 @@ public class Thief extends Mob {
 	public int attackProc( Char enemy, int damage ) {
 		damage = super.attackProc( enemy, damage );
 		
-		if (alignment == Alignment.ENEMY && item == null
+		if (alignment == Alignment.ENEMY && !isSuppressed() && item == null
 				&& enemy instanceof Hero && steal( (Hero)enemy )) {
 			state = FLEEING;
 		}
@@ -139,7 +139,7 @@ public class Thief extends Mob {
 
 	@Override
 	public int defenseProc(Char enemy, int damage) {
-		if (state == FLEEING && Dungeon.mode != Dungeon.GameMode.GAUNTLET) {
+		if (state == FLEEING && Dungeon.mode != Dungeon.GameMode.GAUNTLET && !isSuppressed()) {
 			Dungeon.level.drop( new Gold(), pos ).sprite.drop();
 		}
 
@@ -150,7 +150,7 @@ public class Thief extends Mob {
 
 		Item toSteal = hero.belongings.randomUnequipped();
 
-		if (toSteal != null && !toSteal.unique && toSteal.level() < 1 ) {
+		if (toSteal != null && !toSteal.unique && toSteal.level() < 1 && !isSuppressed() ) {
 
 			GLog.w( Messages.get(Thief.class, "stole", toSteal.name()) );
 			if (!toSteal.stackable) {
@@ -189,7 +189,7 @@ public class Thief extends Mob {
 			super.act(enemyInFOV, justAlerted);
 			
 			//if an enemy is just noticed and the thief posses an item, run, don't fight.
-			if (state == HUNTING && item != null){
+			if (state == HUNTING && item != null && !isSuppressed()){
 				state = FLEEING;
 			}
 			
@@ -202,7 +202,8 @@ public class Thief extends Mob {
 		protected void escaped() {
 			if (item != null
 					&& !Dungeon.level.heroFOV[pos]
-					&& Dungeon.level.distance(Dungeon.hero.pos, pos) >= 6) {
+					&& Dungeon.level.distance(Dungeon.hero.pos, pos) >= 6
+					&& !isSuppressed()) {
 
 				int count = 32;
 				int newPos;

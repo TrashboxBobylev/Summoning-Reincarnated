@@ -130,6 +130,15 @@ public class Statue extends Mob {
 	}
 
 	@Override
+	protected boolean act() {
+		if (isSuppressed()){
+			die(null);
+			return true;
+		}
+		return super.act();
+	}
+
+	@Override
 	public void damage(int dmg, DamageSource src ) {
 
 		if (state == PASSIVE) {

@@ -137,6 +137,8 @@ public abstract class Elemental extends Mob {
 	protected boolean canAttack( Char enemy ) {
 		if (super.canAttack(enemy)){
 			return true;
+		} else if (isSuppressed()){
+			return super.canAttack(enemy);
 		} else {
 			return rangedCooldown < 0 && new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT ).collisionPos == enemy.pos;
 		}
@@ -146,7 +148,8 @@ public abstract class Elemental extends Mob {
 		
 		if (Dungeon.level.adjacent( pos, enemy.pos )
 				|| rangedCooldown > 0
-				|| new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT ).collisionPos != enemy.pos) {
+				|| new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT ).collisionPos != enemy.pos
+				|| isSuppressed()) {
 			
 			return super.doAttack( enemy );
 			
@@ -165,7 +168,8 @@ public abstract class Elemental extends Mob {
 	@Override
 	public int attackProc( Char enemy, int damage ) {
 		damage = super.attackProc( enemy, damage );
-		meleeProc( enemy, damage );
+		if (!isSuppressed())
+			meleeProc( enemy, damage );
 		
 		return damage;
 	}
@@ -193,7 +197,7 @@ public abstract class Elemental extends Mob {
 	
 	@Override
 	public boolean add( Buff buff ) {
-		if (harmfulBuffs.contains( buff.getClass() )) {
+		if (harmfulBuffs.contains( buff.getClass() ) && !isSuppressed()) {
 			damage( Random.NormalIntRange( HT/2, HT * 3/5 ), (DamageSource) buff);
 			return false;
 		} else {
@@ -277,7 +281,7 @@ public abstract class Elemental extends Mob {
 		@Override
 		protected boolean act() {
 			//fire a charged attack instead of any other action, as long as it is possible to do so
-			if (targetingPos != -1 && state == HUNTING){
+			if (targetingPos != -1 && state == HUNTING && !isSuppressed()){
 				//account for bolt hitting walls, in case position suddenly changed
 				targetingPos = new Ballistica( pos, targetingPos, Ballistica.STOP_SOLID | Ballistica.STOP_TARGET ).collisionPos;
 				if (sprite != null && (sprite.visible || Dungeon.level.heroFOV[targetingPos])) {
@@ -301,6 +305,8 @@ public abstract class Elemental extends Mob {
 		protected boolean canAttack( Char enemy ) {
 			if (super.canAttack(enemy)){
 				return true;
+			} else if (isSuppressed()) {
+				return super.canAttack(enemy);
 			} else {
 				return rangedCooldown < 0 && new Ballistica( pos, enemy.pos, Ballistica.STOP_SOLID | Ballistica.STOP_TARGET ).collisionPos == enemy.pos;
 			}
@@ -308,7 +314,7 @@ public abstract class Elemental extends Mob {
 
 		protected boolean doAttack( Char enemy ) {
 
-			if (rangedCooldown > 0) {
+			if (rangedCooldown > 0 || isSuppressed()) {
 
 				return super.doAttack( enemy );
 
@@ -408,7 +414,7 @@ public abstract class Elemental extends Mob {
 		@Override
 		protected void meleeProc(Char enemy, int damage) {
 			//no fiery on-hit unless it is an ally summon
-			if (summonedALly) {
+			if (summonedALly && !isSuppressed()) {
 				super.meleeProc(enemy, damage);
 			}
 		}

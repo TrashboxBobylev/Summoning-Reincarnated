@@ -92,6 +92,13 @@ public class Wraith extends Mob {
 	}
 
 	@Override
+	public int defenseSkill(Char enemy) {
+		if (isSuppressed())
+			return super.defenseSkill(enemy)/6;
+		return super.defenseSkill(enemy);
+	}
+
+	@Override
 	public float spawningWeight() {
 		return 0f;
 	}

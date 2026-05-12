@@ -124,7 +124,7 @@ public class Spinner extends Mob {
 	@Override
 	public int attackProc(Char enemy, int damage) {
 		damage = super.attackProc( enemy, damage );
-		if (Random.Int(2) == 0) {
+		if (Random.Int(2) == 0 && !isSuppressed()) {
 			int duration = Random.IntRange(7, 8);
 			//we only use half the ascension modifier here as total poison dmg doesn't scale linearly
 			duration = Math.round(duration * (AscensionChallenge.statModifier(this)/2f + 0.5f));
@@ -233,7 +233,7 @@ public class Spinner extends Mob {
 
 		@Override
 		public boolean act(boolean enemyInFOV, boolean justAlerted) {
-			if (enemyInFOV && webCoolDown <= 0 && lastEnemyPos != -1){
+			if (enemyInFOV && webCoolDown <= 0 && lastEnemyPos != -1 && !isSuppressed()){
 				if (webPos() != -1){
 					if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
 						sprite.zap( webPos() );
@@ -254,13 +254,13 @@ public class Spinner extends Mob {
 
 		@Override
 		public boolean act(boolean enemyInFOV, boolean justAlerted) {
-			if (buff( Terror.class ) == null && buff( Dread.class ) == null &&
-					enemyInFOV && enemy.buff( Poison.class ) == null){
+			if ((buff( Terror.class ) == null && buff( Dread.class ) == null &&
+					enemyInFOV && enemy.buff( Poison.class ) == null) || isSuppressed()){
 				state = HUNTING;
 				return true;
 			}
 
-			if (enemyInFOV && webCoolDown <= 0 && lastEnemyPos != -1){
+			if (enemyInFOV && webCoolDown <= 0 && lastEnemyPos != -1 && !!isSuppressed()){
 				if (webPos() != -1){
 					if (sprite != null && (sprite.visible || enemy.sprite.visible)) {
 						sprite.zap( webPos() );

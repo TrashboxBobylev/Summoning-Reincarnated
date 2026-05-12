@@ -101,14 +101,14 @@ public class SpectreRat extends AbyssalMob implements Callback {
 		/*if (buff(ChampionEnemy.Paladin.class) != null){
 			return false;
 		}*/
-        if (buff(ScrollOfAntiMagic.EnemyBuff.class) != null){
+        if (buff(ScrollOfAntiMagic.EnemyBuff.class) != null || isSuppressed()){
             return super.canAttack(enemy);
         }
 		return super.canAttack(enemy) || new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos == enemy.pos;
 	}
 
 	protected boolean doAttack( Char enemy ) {
-		if (buff(ScrollOfAntiMagic.EnemyBuff.class) != null){
+		if (buff(ScrollOfAntiMagic.EnemyBuff.class) != null || isSuppressed()){
             return super.doAttack(enemy);
         }
 		if (Dungeon.level.adjacent( pos, enemy.pos )

@@ -74,6 +74,10 @@ public class TribeGnoll extends Mob {
 
     @Override
     protected boolean canAttack(Char enemy) {
+        if (isSuppressed()){
+            return super.canAttack(enemy);
+        }
+
         if (Dungeon.level.adjacent( pos, enemy.pos )){
             return true;
         }

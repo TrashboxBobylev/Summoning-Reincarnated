@@ -88,7 +88,7 @@ public class Warlock extends Mob implements Callback {
 	
 	@Override
 	protected boolean canAttack( Char enemy ) {
-        if (buff(ScrollOfAntiMagic.EnemyBuff.class) != null){
+        if (buff(ScrollOfAntiMagic.EnemyBuff.class) != null || isSuppressed()){
             return super.canAttack(enemy);
         }
 		return super.canAttack(enemy)
@@ -98,7 +98,8 @@ public class Warlock extends Mob implements Callback {
 	protected boolean doAttack( Char enemy ) {
 
 		if (Dungeon.level.adjacent( pos, enemy.pos )
-				|| new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos != enemy.pos) {
+				|| new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos != enemy.pos
+				|| isSuppressed()) {
 			
 			return super.doAttack( enemy );
 			

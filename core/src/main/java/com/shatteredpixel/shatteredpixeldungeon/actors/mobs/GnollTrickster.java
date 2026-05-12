@@ -73,6 +73,8 @@ public class GnollTrickster extends Gnoll {
 
 	@Override
 	protected boolean canAttack( Char enemy ) {
+		if (isSuppressed())
+			return super.canAttack(enemy);
 		return !Dungeon.level.adjacent( pos, enemy.pos )
 				&& (super.canAttack(enemy) || new Ballistica( pos, enemy.pos, Ballistica.PROJECTILE).collisionPos == enemy.pos);
 	}
@@ -90,7 +92,7 @@ public class GnollTrickster extends Gnoll {
 		combo++;
 		int effect = Random.Int(4)+combo;
 
-		if (effect > 2) {
+		if (effect > 2 && !isSuppressed()) {
 
 			if (effect >=6 && enemy.buff(Burning.class) == null){
 
@@ -110,7 +112,7 @@ public class GnollTrickster extends Gnoll {
 	@Override
 	protected boolean getCloser( int target ) {
 		combo = 0; //if he's moving, he isn't attacking, reset combo.
-		if (state == HUNTING) {
+		if (state == HUNTING && !isSuppressed()) {
 			return enemySeen && getFurther( target );
 		} else {
 			return super.getCloser( target );

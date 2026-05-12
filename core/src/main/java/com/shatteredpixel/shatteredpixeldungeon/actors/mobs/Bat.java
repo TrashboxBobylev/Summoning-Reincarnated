@@ -79,7 +79,7 @@ public class Bat extends Mob {
 		damage = super.attackProc( enemy, damage );
 		int reg = Math.min( damage - 4, HT - HP );
 		
-		if (reg > 0) {
+		if (reg > 0 && !isSuppressed()) {
 			HP += reg;
 			sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(reg), FloatingText.HEALING);
 		}

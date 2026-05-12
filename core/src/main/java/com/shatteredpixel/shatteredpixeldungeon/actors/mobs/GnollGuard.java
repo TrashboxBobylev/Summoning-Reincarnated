@@ -67,7 +67,8 @@ public class GnollGuard extends Mob {
 	public boolean hasSapper(){
 		return sapperID != -1
 				&& Actor.findById(sapperID) instanceof GnollSapper
-				&& ((GnollSapper)Actor.findById(sapperID)).isAlive();
+				&& ((GnollSapper)Actor.findById(sapperID)).isAlive()
+				&& !isSuppressed();
 	}
 
 	public void loseSapper(){
@@ -87,7 +88,7 @@ public class GnollGuard extends Mob {
 
 	@Override
 	public int damageRoll() {
-		if (enemy != null && !Dungeon.level.adjacent(pos, enemy.pos)){
+		if (enemy != null && !Dungeon.level.adjacent(pos, enemy.pos) && !isSuppressed()){
 			return Random.NormalIntRange( 16, 22 );
 		} else {
 			return Random.NormalIntRange( 6, 12 );
@@ -118,7 +119,8 @@ public class GnollGuard extends Mob {
 		//cannot 'curve' spear hits like the hero, requires fairly open space to hit at a distance
 		return Dungeon.level.distance(enemy.pos, pos) <= 2
 				&& new Ballistica( pos, enemy.pos, Ballistica.PROJECTILE).collisionPos == enemy.pos
-				&& new Ballistica( enemy.pos, pos, Ballistica.PROJECTILE).collisionPos == pos;
+				&& new Ballistica( enemy.pos, pos, Ballistica.PROJECTILE).collisionPos == pos
+				&& !isSuppressed();
 	}
 
 	@Override

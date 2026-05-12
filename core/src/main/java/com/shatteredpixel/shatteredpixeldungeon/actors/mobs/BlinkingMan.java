@@ -88,7 +88,7 @@ public class BlinkingMan extends AbyssalMob {
 	public int attackProc( Char enemy, int damage ) {
 		damage = super.attackProc( enemy, damage );
 
-		if (Random.Int( 2 ) == 0) {
+		if (Random.Int( 2 ) == 0 && !isSuppressed()) {
 			Ballistica trajectory = new Ballistica(pos, enemy.pos, Ballistica.STOP_TARGET);
 			//trim it to just be the part that goes past them
 			trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size()-1), Ballistica.PROJECTILE);
@@ -104,6 +104,9 @@ public class BlinkingMan extends AbyssalMob {
 //		if (buff(ChampionEnemy.Paladin.class) != null){
 //			return false;
 //		}
+		if (isSuppressed()){
+			return super.canAttack(enemy);
+		}
 		return !Dungeon.level.adjacent( pos, enemy.pos ) &&
 				(super.canAttack(enemy) || new Ballistica( pos, enemy.pos, Ballistica.PROJECTILE).collisionPos == enemy.pos);
 	}
@@ -113,6 +116,9 @@ public class BlinkingMan extends AbyssalMob {
 //		if (buff(ChampionEnemy.Paladin.class) != null){
 //			return true;
 //		}
+		if (isSuppressed()){
+			return super.getCloser(target);
+		}
 		if (fieldOfView[target] && Dungeon.level.distance( pos, target ) <= 3 && blinkCooldown <= 0) {
 
 			blink( );

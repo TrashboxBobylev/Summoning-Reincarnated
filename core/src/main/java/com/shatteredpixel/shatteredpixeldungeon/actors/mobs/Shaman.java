@@ -83,7 +83,7 @@ public abstract class Shaman extends Mob {
 
 	@Override
 	protected boolean canAttack( Char enemy ) {
-        if (buff(ScrollOfAntiMagic.EnemyBuff.class) != null){
+        if (buff(ScrollOfAntiMagic.EnemyBuff.class) != null || !isSuppressed()){
             return super.canAttack(enemy);
         }
 		return super.canAttack(enemy)
@@ -106,7 +106,7 @@ public abstract class Shaman extends Mob {
 	protected boolean doAttack(Char enemy ) {
 
 		if (Dungeon.level.adjacent( pos, enemy.pos )
-				|| new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos != enemy.pos) {
+				|| new Ballistica( pos, enemy.pos, Ballistica.MAGIC_BOLT).collisionPos != enemy.pos || isSuppressed()) {
 			
 			return super.doAttack( enemy );
 			

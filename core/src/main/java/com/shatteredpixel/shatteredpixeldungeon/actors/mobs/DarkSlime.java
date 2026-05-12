@@ -89,18 +89,20 @@ public class DarkSlime extends Mob {
 
     @Override
     public void damage(int dmg, DamageSource src) {
-        for (Class c : RingOfElements.RESISTS){
-            if (c.isAssignableFrom(src.getClass()) && src instanceof Wand){
-                dmg *= 3f;
-            }
-        }
+		if (!isSuppressed()) {
+			for (Class c : RingOfElements.RESISTS) {
+				if (c.isAssignableFrom(src.getClass()) && src instanceof Wand) {
+					dmg *= 3f;
+				}
+			}
+		}
         super.damage(dmg, src);
     }
 
     @Override
 	public int defenseProc( Char enemy, int damage ) {
 
-		if (HP >= damage + 2) {
+		if (HP >= damage + 2 && !isSuppressed()) {
 			ArrayList<Integer> candidates = new ArrayList<>();
 			boolean[] solid = Dungeon.level.passable;
 			

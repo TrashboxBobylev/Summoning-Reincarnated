@@ -213,6 +213,9 @@ public class DarkestElf extends AbyssalMob {
 		public boolean act(boolean enemyInFOV, boolean justAlerted) {
 			enemySeen = enemyInFOV;
 
+			if (isSuppressed())
+				return super.act(enemyInFOV, justAlerted);
+
 			if (storedSkeletonID != -1){
 				Actor ch = Actor.findById(storedSkeletonID);
 				storedSkeletonID = -1;

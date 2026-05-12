@@ -51,7 +51,7 @@ public class SpectralNecromancer extends Necromancer {
 
 	@Override
 	protected boolean act() {
-		if (summoning && state != HUNTING){
+		if (summoning && (state != HUNTING || isSuppressed())){
 			summoning = false;
 			if (sprite instanceof SpectralNecromancerSprite) {
 				((SpectralNecromancerSprite) sprite).cancelSummoning();

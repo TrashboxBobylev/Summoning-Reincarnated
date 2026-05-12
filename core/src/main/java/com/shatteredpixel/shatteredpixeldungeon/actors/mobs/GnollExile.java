@@ -79,7 +79,7 @@ public class GnollExile extends Gnoll {
 			return true;
 		}
 
-		if (Dungeon.level.distance( pos, enemy.pos ) <= 2){
+		if (Dungeon.level.distance( pos, enemy.pos ) <= 2 && !isSuppressed()){
 			boolean[] passable = BArray.not(Dungeon.level.solid, null);
 
 			for (Char ch : Actor.chars()) {
