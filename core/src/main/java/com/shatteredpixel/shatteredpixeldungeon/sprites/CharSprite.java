@@ -238,7 +238,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 		isMoving = true;
 		
-		if (visible && Dungeon.level.water[from] && !ch.flying) {
+		if (visible && Dungeon.level.water[from] && !ch.isFlying()) {
 			GameScene.ripple( from );
 		}
 
@@ -893,7 +893,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	public void onComplete( Tweener tweener ) {
 		if (tweener == jumpTweener) {
 
-			if (visible && Dungeon.level.water[ch.pos] && !ch.flying) {
+			if (visible && Dungeon.level.water[ch.pos] && !ch.isFlying()) {
 				GameScene.ripple( ch.pos );
 			}
 			if (jumpCallback != null) {

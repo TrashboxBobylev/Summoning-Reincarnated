@@ -565,7 +565,7 @@ public class GameScene extends PixelScene {
 				new Flare( 5, 16 ).color( 0xFFFF00, true ).show( hero, 4f ) ;
 				break;
 			case RETURN:
-				if (Dungeon.level.pit[Dungeon.hero.pos] && !Dungeon.hero.flying){
+				if (Dungeon.level.pit[Dungeon.hero.pos] && !Dungeon.hero.isFlying()){
 					//delay this so falling into the chasm processes properly
 					ShatteredPixelDungeon.runOnRenderThread(new Callback() {
 						@Override

@@ -1208,7 +1208,7 @@ public class Hero extends Char {
 
 	private boolean canSelfTrample = false;
 	public boolean canSelfTrample(){
-		return canSelfTrample && !rooted && !flying &&
+		return canSelfTrample && !rooted && !isFlying() &&
 				//standing in high grass
 				(Dungeon.level.map[pos] == Terrain.HIGH_GRASS ||
 				//standing in furrowed grass and not huntress
@@ -2196,7 +2196,7 @@ public class Hero extends Char {
 			}
 
 			if (Dungeon.level.pit[step] && !Dungeon.level.solid[step]
-					&& (!flying || buff(FlightBuff.class) != null && buff(FlightBuff.class).detachesWithinDelay(delay / speed()))){
+					&& (!isFlying() || buff(FlightBuff.class) != null && buff(FlightBuff.class).detachesWithinDelay(delay / speed()))){
 				if (!Chasm.jumpConfirmed){
 					Chasm.heroJump(this);
 					interrupt();
@@ -2741,7 +2741,7 @@ public class Hero extends Char {
 
 		super.move( step, travelling);
 		
-		if (!flying && !((buff(CloakOfShadows.cloakStealth.class) != null && buff(CloakOfShadows.cloakStealth.class).glyph() instanceof Silent)) && travelling) {
+		if (!isFlying() && !((buff(CloakOfShadows.cloakStealth.class) != null && buff(CloakOfShadows.cloakStealth.class).glyph() instanceof Silent)) && travelling) {
 			if (Dungeon.level.water[pos]) {
 				Sample.INSTANCE.play( Assets.Sounds.WATER, 1, Random.Float( 0.8f, 1.25f ) );
 			} else if (Dungeon.level.map[pos] == Terrain.EMPTY_SP) {

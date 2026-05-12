@@ -47,7 +47,7 @@ public class GrippingTrap extends Trap {
 
 		Char c = Actor.findChar( pos );
 
-		if (c != null && !c.flying) {
+		if (c != null && !c.isFlying()) {
 			if (c instanceof Mob) {
 				Buff.prolong(c, Trap.HazardAssistTracker.class, HazardAssistTracker.DURATION);
 			}

@@ -125,7 +125,7 @@ public class Challenge extends ArmorAbility {
 			for (int i = 0; i < PathFinder.distance.length; i++){
 				if (PathFinder.distance[i] == Integer.MAX_VALUE
 						|| reachable[i] == Integer.MAX_VALUE
-						|| (!Dungeon.level.passable[i] && !(hero.flying && Dungeon.level.avoid[i]))
+						|| (!Dungeon.level.passable[i] && !(hero.isFlying() && Dungeon.level.avoid[i]))
 						|| i == targetCh.pos){
 					continue;
 				}

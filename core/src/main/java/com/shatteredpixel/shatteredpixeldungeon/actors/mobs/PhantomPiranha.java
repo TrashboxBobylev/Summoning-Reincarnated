@@ -95,7 +95,7 @@ public class PhantomPiranha extends Piranha {
 
 	private boolean teleportAway(){
 
-		if (flying){
+		if (isFlying()){
 			return false;
 		}
 

@@ -80,7 +80,7 @@ public class DisarmingTrap extends Trap{
 			CellEmitter.get(pos).burst(Speck.factory(Speck.LIGHT), 4);
 		}
 
-		if (Dungeon.hero.pos == pos && !Dungeon.hero.flying){
+		if (Dungeon.hero.pos == pos && !Dungeon.hero.isFlying()){
 			Hero hero = Dungeon.hero;
 			KindOfWeapon weapon = hero.belongings.weapon;
 

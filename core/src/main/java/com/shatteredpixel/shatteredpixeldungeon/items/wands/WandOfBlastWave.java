@@ -122,7 +122,7 @@ public class WandOfBlastWave extends DamageWand {
                         ch.damage(damageRoll(), this);
 
                     //do not push chars that are dieing over a pit, or that move due to the damage
-                    if (((ch.isAlive() || ch.flying || !Dungeon.level.pit[ch.pos])
+                    if (((ch.isAlive() || ch.isFlying() || !Dungeon.level.pit[ch.pos])
                             && ch.pos == bolt.collisionPos + i) && type() != 2) {
                         Ballistica trajectory = new Ballistica(ch.pos, ch.pos + i, Ballistica.MAGIC_BOLT);
                         int strength = sideKnockback(type());
@@ -140,7 +140,7 @@ public class WandOfBlastWave extends DamageWand {
 			ch.damage(damageRoll(), this);
 
 			//do not push chars that are dieing over a pit, or that move due to the damage
-			if (((ch.isAlive() || ch.flying || !Dungeon.level.pit[ch.pos])
+			if (((ch.isAlive() || ch.isFlying() || !Dungeon.level.pit[ch.pos])
 					&& bolt.path.size() > bolt.dist+1 && ch.pos == bolt.collisionPos) && type() != 2) {
 				Ballistica trajectory = new Ballistica(ch.pos, bolt.path.get(bolt.dist + 1), Ballistica.MAGIC_BOLT);
 				int strength = Math.round(mainKnockback(type()));

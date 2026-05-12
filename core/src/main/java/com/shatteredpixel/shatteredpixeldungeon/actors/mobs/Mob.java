@@ -675,7 +675,7 @@ public abstract class Mob extends Char {
 
 	private boolean cellIsPathable( int cell ){
 		if (!Dungeon.level.passable[cell]){
-			if (flying || buff(Amok.class) != null){
+			if (isFlying() || buff(Amok.class) != null){
 				if (!Dungeon.level.avoid[cell]){
 					return false;
 				}
@@ -978,7 +978,14 @@ public abstract class Mob extends Char {
 		return false;
 	}
 
-	public void aggro( Char ch ) {
+	@Override
+	public boolean isFlying() {
+		if (isSuppressed())
+			return false;
+		return super.isFlying();
+	}
+
+	public void aggro(Char ch ) {
 		enemy = ch;
 		if (state != PASSIVE){
 			state = HUNTING;
@@ -1471,7 +1478,7 @@ public abstract class Mob extends Char {
 							}
 						}
 						//flying characters are naturally stealthy
-						if (ch.flying && distance(ch) >= 2){
+						if (ch.isFlying() && distance(ch) >= 2){
 							bestChance = Float.POSITIVE_INFINITY;
 						}
 						if (bestChance < highestChance){

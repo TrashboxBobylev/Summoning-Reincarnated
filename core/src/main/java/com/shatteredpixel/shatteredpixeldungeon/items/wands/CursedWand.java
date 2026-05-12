@@ -638,7 +638,7 @@ public class CursedWand implements DamageSource {
 		@Override
 		public boolean effect(Item origin, Char user, Ballistica bolt, boolean positiveOnly) {
 			Char ch = Actor.findChar(bolt.collisionPos);
-			if ((!positiveOnly || (ch instanceof Piranha)) && ch != null && !ch.flying && !Char.hasProp(ch, Char.Property.IMMOVABLE)) {
+			if ((!positiveOnly || (ch instanceof Piranha)) && ch != null && !ch.isFlying() && !Char.hasProp(ch, Char.Property.IMMOVABLE)) {
 				Buff.affect(ch, Levitation.class, Levitation.DURATION);
 			} else {
 				Buff.affect(user, Levitation.class, Levitation.DURATION);

@@ -1298,7 +1298,7 @@ public class Dungeon {
 	public static final int PATHBLOCK_NORMAL = PATHBLOCK_CHARS | PATHBLOCK_TIGHTNESS;
 
 	public static boolean isSafeToSwap(Char ch1, Char ch2){
-		if (!Dungeon.level.passable[ch1.pos] && !ch2.flying){
+		if (!Dungeon.level.passable[ch1.pos] && !ch2.isFlying()){
 			return false;
 		}
 
@@ -1322,7 +1322,7 @@ public class Dungeon {
 
 	public static boolean[] findPassable(Char ch, boolean[] pass, boolean[] vis, int flags){
 		setupPassable();
-		if (ch.flying || ch.buff( Amok.class ) != null) {
+		if (ch.isFlying() || ch.buff( Amok.class ) != null) {
 			BArray.or( pass, Dungeon.level.avoid, passable );
 		} else {
 			System.arraycopy( pass, 0, passable, 0, Dungeon.level.length() );

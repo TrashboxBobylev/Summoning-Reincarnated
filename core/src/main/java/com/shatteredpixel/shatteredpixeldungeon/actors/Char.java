@@ -275,7 +275,7 @@ public abstract class Char extends Actor implements ManaSource, DamageSource {
 
 		//don't allow char to swap onto hazard unless they're flying
 		//you can swap onto a hazard though, as you're not the one instigating the swap
-		if (!Dungeon.level.passable[pos] && !c.flying){
+		if (!Dungeon.level.passable[pos] && !c.isFlying()){
 			return true;
 		}
 
@@ -919,6 +919,10 @@ acuRoll *= accMulti;
 	public boolean canSurpriseAttack(){
 		return true;
 	}
+
+	public boolean isFlying() {
+		return flying;
+	}
 	
 	//used so that buffs(Shieldbuff.class) isn't called every time unnecessarily
 	private int cachedShield = 0;
@@ -1262,7 +1266,7 @@ acuRoll *= accMulti;
 		destroy();
 		if (src != Chasm.class) {
 			sprite.die();
-			if (!flying && Dungeon.level != null && sprite instanceof MobSprite && Dungeon.level.map[pos] == Terrain.CHASM){
+			if (!isFlying() && Dungeon.level != null && sprite instanceof MobSprite && Dungeon.level.map[pos] == Terrain.CHASM){
 				((MobSprite) sprite).fall();
 			}
 		}

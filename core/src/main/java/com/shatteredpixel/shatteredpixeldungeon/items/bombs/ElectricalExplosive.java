@@ -167,7 +167,7 @@ public class ElectricalExplosive extends Bomb implements ChargingItem {
 		affected.add( ch );
 
 		int dist;
-		if (Dungeon.level.water[ch.pos] && !ch.flying)
+		if (Dungeon.level.water[ch.pos] && !ch.isFlying())
 			dist = (int) (4 + charge / 0.5f);
 		else
 			dist = (int) (2 + charge / 0.5f);

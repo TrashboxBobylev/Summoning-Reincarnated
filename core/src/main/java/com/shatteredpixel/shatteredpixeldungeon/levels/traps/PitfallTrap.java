@@ -107,7 +107,7 @@ public class PitfallTrap extends Trap {
 
 					Char ch = Actor.findChar(cell);
 					//don't trigger on flying chars, or immovable neutral chars
-					if (ch != null && !ch.flying
+					if (ch != null && !ch.isFlying()
 							&& !(ch.alignment == Char.Alignment.NEUTRAL && Char.hasProp(ch, Char.Property.IMMOVABLE))
 							&& !(ch.alignment == Char.Alignment.ALLY && ignoreAllies)) {
 						if (ch == Dungeon.hero) {

@@ -861,7 +861,7 @@ public class CavesBossLevel extends Level {
 					if (off[cell] > 0){
 
 						Char ch = Actor.findChar(cell);
-						if (ch != null && !(ch instanceof DM300) && !ch.flying) {
+						if (ch != null && !(ch instanceof DM300) && !ch.isFlying()) {
 							if (ch instanceof Mob){
 								//incredibly specific but I'll 100% get a bug report in a year if I don't add this
 								Buff.prolong(ch, Trap.HazardAssistTracker.class, Trap.HazardAssistTracker.DURATION);

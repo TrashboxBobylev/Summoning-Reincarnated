@@ -110,7 +110,7 @@ public class Shocking extends Weapon.Enchantment implements DamageSource {
 		affected.addAll(hitThisArc);
 		for (Char hit : hitThisArc){
 			arcs.add(new Lightning.Arc(defender.sprite.center(), hit.sprite.center()));
-			arc(attacker, hit, (Dungeon.level.water[hit.pos] && !hit.flying) ? 2 : 1, affected, arcs);
+			arc(attacker, hit, (Dungeon.level.water[hit.pos] && !hit.isFlying()) ? 2 : 1, affected, arcs);
 		}
 
 	}

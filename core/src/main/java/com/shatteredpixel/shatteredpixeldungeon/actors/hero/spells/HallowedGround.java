@@ -155,7 +155,7 @@ public class HallowedGround extends TargetedClericSpell {
 					ch.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(barrier), FloatingText.SHIELDING );
 				}
 			}
-		} else if (!ch.flying) {
+		} else if (!ch.isFlying()) {
 			Buff.affect(ch, GuidingLight.Illuminated.class);
 			Buff.affect(ch, Roots.class, 2f);
 		}
@@ -251,7 +251,7 @@ public class HallowedGround extends TargetedClericSpell {
 					ch.HP++;
 					ch.sprite.showStatusWithIcon( CharSprite.POSITIVE, "1", FloatingText.HEALING );
 				}
-			} else if (!ch.flying && ch.buff(Roots.class) == null){
+			} else if (!ch.isFlying() && ch.buff(Roots.class) == null){
 				Buff.prolong(ch, Cripple.class, 1f);
 			}
 		}

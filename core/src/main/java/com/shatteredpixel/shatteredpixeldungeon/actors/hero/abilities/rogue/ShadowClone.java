@@ -291,7 +291,7 @@ public class ShadowClone extends ArmorAbility {
 			}
 
 			//some checks from super.interact
-			if (!Dungeon.level.passable[pos] && !c.flying){
+			if (!Dungeon.level.passable[pos] && !c.isFlying()){
 				return true;
 			}
 

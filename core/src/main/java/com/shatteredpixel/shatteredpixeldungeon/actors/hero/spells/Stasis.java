@@ -156,7 +156,7 @@ public class Stasis extends ClericSpell {
 			for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
 				int p = target.pos + PathFinder.NEIGHBOURS8[i];
 				if (Actor.findChar(p) == null
-						&& (Dungeon.level.passable[p] || (stasisAlly.flying && Dungeon.level.avoid[p])) ){
+						&& (Dungeon.level.passable[p] || (stasisAlly.isFlying() && Dungeon.level.avoid[p])) ){
 					spawnPoints.add(p);
 				}
 			}

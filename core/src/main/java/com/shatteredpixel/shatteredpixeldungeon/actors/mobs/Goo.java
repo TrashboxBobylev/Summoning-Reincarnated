@@ -113,7 +113,7 @@ public class Goo extends Mob {
 			sprite.idle();
 		}
 
-		if (!flying && Dungeon.level.water[pos] && HP < HT) {
+		if (!isFlying() && Dungeon.level.water[pos] && HP < HT) {
 			HP += healInc;
 			Statistics.qualifiedForBossChallengeBadge = false;
 

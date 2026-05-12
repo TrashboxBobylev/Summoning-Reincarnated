@@ -114,7 +114,7 @@ public class HeroSprite extends CharSprite {
 	@Override
 	public void move( int from, int to ) {
 		super.move( from, to );
-		if (ch != null && ch.flying) {
+		if (ch != null && ch.isFlying()) {
 			play( fly );
 		}
 		Camera.main.panFollow(this, 20f);
@@ -123,7 +123,7 @@ public class HeroSprite extends CharSprite {
 	@Override
 	public void idle() {
 		super.idle();
-		if (ch != null && ch.flying) {
+		if (ch != null && ch.isFlying()) {
 			play( fly );
 		}
 	}

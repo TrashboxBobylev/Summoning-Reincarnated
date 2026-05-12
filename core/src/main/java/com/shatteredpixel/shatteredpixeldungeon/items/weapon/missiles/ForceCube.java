@@ -147,7 +147,7 @@ public class ForceCube extends MissileWeapon {
 			}
             if (type() == 2){
                 //do not push chars that are dieing over a pit, or that move due to the damage
-                if ((target.isAlive() || target.flying || !Dungeon.level.pit[target.pos])) {
+                if ((target.isAlive() || target.isFlying() || !Dungeon.level.pit[target.pos])) {
                     //trace a ballistica to our target (which will also extend past them
                     Ballistica trajectory = new Ballistica(cell, target.pos, Ballistica.STOP_TARGET);
                     //trim it to just be the part that goes past them

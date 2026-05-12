@@ -1203,7 +1203,7 @@ public abstract class Level implements Bundlable {
 			Buff.prolong( ch, SacrificialFire.Marked.class, SacrificialFire.Marked.DURATION );
 		}
 
-		if (!ch.flying){
+		if (!ch.isFlying()){
 
 			//we call act here instead of detach in case the debuffs haven't managed to deal dmg once yet
 			if (map[ch.pos] == Terrain.WATER){

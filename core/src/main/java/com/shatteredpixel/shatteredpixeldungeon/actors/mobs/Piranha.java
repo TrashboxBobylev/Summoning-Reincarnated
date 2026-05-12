@@ -73,7 +73,7 @@ public class Piranha extends Mob {
 	@Override
 	protected boolean act() {
 		
-		if (!Dungeon.level.water[pos] || flying) {
+		if (!Dungeon.level.water[pos] || isFlying()) {
 			if (sprite != null && buff(Levitation.class) != null){
 				sprite.emitter().burst(Speck.factory( Speck.JET ), 10);
 			}

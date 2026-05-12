@@ -96,7 +96,7 @@ public class Ooze extends Buff implements DamageSource {
 	@Override
 	public boolean act() {
 		//washing away happens before debuff effects if debuff has gotten to act
-		if (acted && Dungeon.level.water[target.pos] && !target.flying){
+		if (acted && Dungeon.level.water[target.pos] && !target.isFlying()){
 			detach();
 		} else if (target.isAlive()) {
 
@@ -121,7 +121,7 @@ public class Ooze extends Buff implements DamageSource {
 		} else {
 			detach();
 		}
-		if (Dungeon.level.water[target.pos] && !target.flying){
+		if (Dungeon.level.water[target.pos] && !target.isFlying()){
 			detach();
 		}
 		return true;

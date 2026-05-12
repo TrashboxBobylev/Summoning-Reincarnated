@@ -101,7 +101,7 @@ public class BeamingRay extends TargetedClericSpell {
 			telePos = -1;
 			for (int i : PathFinder.NEIGHBOURS8){
 				if (Actor.findChar(target+i) == null && Dungeon.level.heroFOV[target+i]
-						&& (Dungeon.level.passable[target+i] || (ally.flying && Dungeon.level.avoid[target+i])) ){
+						&& (Dungeon.level.passable[target+i] || (ally.isFlying() && Dungeon.level.avoid[target+i])) ){
 					if (telePos == -1 || Dungeon.level.trueDistance(telePos, ally.pos) > Dungeon.level.trueDistance(target+i, ally.pos)){
 						telePos =  target+i;
 					}
