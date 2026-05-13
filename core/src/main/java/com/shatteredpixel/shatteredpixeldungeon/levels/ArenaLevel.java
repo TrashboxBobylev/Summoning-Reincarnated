@@ -121,7 +121,7 @@ public class ArenaLevel extends RegularLevel {
     }
 
     @Override
-    protected Class<?>[] trapClasses() {
+    public Class<?>[] trapClasses() {
         return new Class[]{
                 FrostTrap.class, SummoningTrap.class, StormTrap.class, CorrosionTrap.class, ConfusionTrap.class,
                 RockfallTrap.class, FlashingTrap.class, WornDartTrap.class, GuardianTrap.class, ExplosiveTrap.class,
@@ -129,7 +129,7 @@ public class ArenaLevel extends RegularLevel {
     }
 
     @Override
-    protected float[] trapChances() {
+    public float[] trapChances() {
         return new float[]{
                 1, 1, 1, 1, 1,
                 1, 1, 1, 1,

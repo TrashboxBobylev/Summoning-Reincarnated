@@ -86,6 +86,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.Silent;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
@@ -165,6 +166,7 @@ public abstract class Mob extends Char {
 	protected int enemyID = -1; //used for save/restore
 	public boolean enemySeen;
 	protected boolean alerted = false;
+	public boolean locked = false;
 
 	public boolean hordeSpawned = false;
 	public int hordeHead = -1;
@@ -975,7 +977,7 @@ public abstract class Mob extends Char {
 	}
 
 	public boolean isSuppressed(){
-		return false;
+		return buff(SkeletonKey.Locked.class) != null || locked;
 	}
 
 	@Override

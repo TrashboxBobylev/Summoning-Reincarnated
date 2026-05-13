@@ -27,6 +27,9 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.traps;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -102,6 +105,18 @@ public abstract class Trap implements Bundlable {
 			Dungeon.level.discover(pos);
 			Bestiary.setSeen(getClass());
 			Bestiary.countEncounter(getClass());
+			if (Dungeon.hero.pos == pos){
+				SkeletonKey.keyRecharge key = Dungeon.hero.buff(SkeletonKey.keyRecharge.class);
+				if (key != null && key.itemType() == 3){
+					if (key.charges() > 0){
+						key.depleteCharges(1);
+						key.gainExp(1);
+						if (!disarmedByActivation) disarm();
+						CellEmitter.get( pos ).burst( Speck.factory( Speck.SMOKE ), 6 );
+						return;
+					}
+				}
+			}
 			activate();
 		}
 	}
@@ -109,6 +124,10 @@ public abstract class Trap implements Bundlable {
 	public abstract void activate();
 
 	public void disarm(){
+		SkeletonKey.keyRecharge key = Dungeon.hero.buff(SkeletonKey.keyRecharge.class);
+		if (key != null && key.itemType() == 3 && key.isCursed()){
+			return;
+		}
 		active = false;
 		Dungeon.level.disarmTrap(pos);
 	}

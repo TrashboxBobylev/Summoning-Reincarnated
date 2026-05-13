@@ -2842,7 +2842,7 @@ public class Hero extends Char {
 			SkeletonKey.keyRecharge skele = buff(SkeletonKey.keyRecharge.class);
 			SkeletonKey.KeyReplacementTracker keyUseTrack = buff(SkeletonKey.KeyReplacementTracker.class);
 
-			if (skele != null && skele.isCursed() && Random.Int(6) != 0){
+			if (skele != null && skele.isCursed() && skele.itemType() == 1 && Random.Int(6) != 0){
 				GLog.n(Messages.get(this, "key_distracted"));
 				spendAndNext(2*Key.TIME_TO_UNLOCK);
 				Buff.affect(this, Hunger.class).affectHunger(-4);
@@ -2891,7 +2891,7 @@ public class Hero extends Char {
 			SkeletonKey.keyRecharge skele = buff(SkeletonKey.keyRecharge.class);
 			SkeletonKey.KeyReplacementTracker keyUseTrack = buff(SkeletonKey.KeyReplacementTracker.class);
 
-			if (skele != null && skele.isCursed()
+			if (skele != null && skele.isCursed() && skele.itemType() == 1
 					&& (heap.type == Type.LOCKED_CHEST || heap.type == Type.CRYSTAL_CHEST)
 					&& Random.Int(6) != 0){
 				GLog.n(Messages.get(this, "key_distracted"));

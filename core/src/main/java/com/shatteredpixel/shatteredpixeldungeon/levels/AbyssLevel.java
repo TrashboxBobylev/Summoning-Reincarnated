@@ -144,12 +144,12 @@ public class AbyssLevel extends RegularLevel {
             DisarmingTrap.class, WarpingTrap.class, CursingTrap.class, GrimTrap.class, PitfallTrap.class, DistortionTrap.class};
 
     @Override
-    protected Class<?>[] trapClasses() {
+    public Class<?>[] trapClasses() {
         return trapClasses;
     }
 
     @Override
-    protected float[] trapChances() {
+    public float[] trapChances() {
         return new float[]{
                 2, 2, 2, 2,
                 2, 2, 2,

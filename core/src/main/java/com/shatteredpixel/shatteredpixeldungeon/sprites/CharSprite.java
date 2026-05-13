@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.TorchHalo;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SnowParticle;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SpectralWallParticle;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -92,7 +93,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 	public enum State {
 		BURNING, LEVITATING, INVISIBLE, PARALYSED, FROZEN, ILLUMINATED, CHILLED, DARKENED, MARKED, HEALING, SHIELDED, HEARTS, GLOWING, AURA,
-		SHRUNK, FROSTBURNING, SPIRIT, ENLARGED, CONJURER_AURA, CONJURER_WINGS, RAGESHIELDED
+		SHRUNK, FROSTBURNING, SPIRIT, ENLARGED, CONJURER_AURA, CONJURER_WINGS, RAGESHIELDED, LOCKED
 	}
 	
 	protected Animation idle;
@@ -125,6 +126,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 	protected HolyAura holyAura;
 	protected AscendedWings ascendedWings;
 	protected RageHalo rageShield;
+	protected Emitter locked;
 
 	protected EmoIcon emo;
 	protected CharHealthIndicator health;
@@ -507,6 +509,14 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 			case RAGESHIELDED:
 				GameScene.effect( rageShield = new RageHalo( this ));
 				break;
+			case LOCKED:
+				if (locked != null) locked.on = false;
+				locked = emitter();
+				locked.pour(SpectralWallParticle.FACTORY, 0.04f);
+				if (visible) {
+					Sample.INSTANCE.play(Assets.Sounds.UNLOCK, 1f, 0.75f);
+				}
+				break;
 		}
 	}
 
@@ -643,6 +653,12 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 					rageShield.putOut();
 				}
 				break;
+			case LOCKED:
+				if (locked != null) {
+					locked.on = false;
+					locked = null;
+				}
+				break;
 		}
 	}
 	
@@ -710,6 +726,9 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		}
 		if (glowBlock != null){
 			glowBlock.visible =visible;
+		}
+		if (locked != null) {
+			locked.visible = visible;
 		}
 
 		if (sleeping) {

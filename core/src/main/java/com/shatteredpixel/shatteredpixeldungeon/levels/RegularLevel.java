@@ -232,11 +232,11 @@ public abstract class RegularLevel extends Level {
 		return traps;
 	}
 	
-	protected Class<?>[] trapClasses(){
+	public Class<?>[] trapClasses(){
 		return new Class<?>[]{WornDartTrap.class};
 	}
 
-	protected float[] trapChances() {
+	public float[] trapChances() {
 		return new float[]{1};
 	}
 	

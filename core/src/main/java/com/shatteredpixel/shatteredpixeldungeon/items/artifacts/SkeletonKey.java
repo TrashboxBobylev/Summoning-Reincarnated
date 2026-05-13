@@ -29,13 +29,18 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.CorrosiveGas;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Regrowth;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.EffectBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SpectralWallParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -44,22 +49,31 @@ import com.shatteredpixel.shatteredpixeldungeon.items.keys.CrystalKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.GoldenKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.IronKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
+import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ChaoticCenser;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
+import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.WornDartTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+import com.watabou.utils.Reflection;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -111,7 +125,19 @@ public class SkeletonKey extends Artifact {
 				GLog.w( Messages.get(this, "cursed") );
 
 			} else {
-				GameScene.selectCell(targeter);
+				CellSelector.Listener usedTargeter;
+				switch (type()){
+					case 1: default:
+						usedTargeter = targeter;
+						break;
+					case 2:
+						usedTargeter = targeter2;
+						break;
+					case 3:
+						usedTargeter = targeter3;
+						break;
+				}
+				GameScene.selectCell(usedTargeter);
 			}
 
 		}
@@ -391,15 +417,291 @@ public class SkeletonKey extends Artifact {
 		}
 	};
 
+	public CellSelector.Listener targeter2 = new CellSelector.Listener(){
+
+		@Override
+		public void onSelect(Integer target) {
+
+			if (target != null && (Dungeon.level.visited[target] || Dungeon.level.mapped[target])) {
+
+				if (target == curUser.pos) {
+					GLog.w(Messages.get(SkeletonKey.class, "invalid_target"));
+					return;
+				}
+				if (Dungeon.level.adjacent(target, curUser.pos)) {
+					Char ch = Actor.findChar(target);
+					if (ch != null && ch.alignment != Char.Alignment.ALLY && !ch.isImmune(Grim.class)){
+						int chargeCost;
+						if (ch.properties().contains(Char.Property.MINIBOSS)) chargeCost = 3;
+                        else {
+                            chargeCost = 1;
+                        }
+
+                        if (charge < chargeCost){
+							GLog.i(Messages.get(SkeletonKey.class, "enemy_charges"));
+							return;
+						}
+
+						Sample.INSTANCE.play(Assets.Sounds.UNLOCK);
+						curUser.sprite.operate(target, new Callback() {
+							@Override
+							public void call() {
+								Buff.affect(ch, Locked.class, 6f);
+								new Flare( 4, 24 ).color(0x716c29, true).show( ch.sprite, 2f );
+								charge -= chargeCost;
+								gainExp(4 + chargeCost*2);
+								Talent.onArtifactUsed(Dungeon.hero);
+								curUser.spendAndNext(Actor.TICK);
+								curUser.sprite.idle();
+							}
+						});
+						curUser.busy();
+					} else {
+						GLog.w(Messages.get(SkeletonKey.class, "invalid_target"));
+					}
+				}
+			}
+		}
+
+		@Override
+		public String prompt() {
+			return Messages.get(SkeletonKey.class, "prompt");
+		}
+	};
+
+	public CellSelector.Listener targeter3 = new CellSelector.Listener() {
+
+		@Override
+		public void onSelect(Integer target) {
+
+			if (target != null && (Dungeon.level.visited[target] || Dungeon.level.mapped[target])) {
+
+				if (target == curUser.pos) {
+					GLog.w(Messages.get(SkeletonKey.class, "invalid_target"));
+					return;
+				}
+
+				if (Dungeon.level.map[target] == Terrain.HERO_LKD_DR) {
+
+					Sample.INSTANCE.play(Assets.Sounds.UNLOCK);
+					curUser.sprite.operate(target, new Callback() {
+						@Override
+						public void call() {
+							Level.set(target, Terrain.DOOR);
+							GameScene.updateMap(target);
+							//no charge cost, no artifact on-use
+							curUser.spendAndNext(Actor.TICK);
+							curUser.sprite.idle();
+						}
+					});
+					curUser.busy();
+					return;
+				} else if (Dungeon.level.map[target] == Terrain.DOOR || Dungeon.level.map[target] == Terrain.OPEN_DOOR) {
+
+					if (charge < 2) {
+						GLog.i(Messages.get(SkeletonKey.class, "lock_charges"));
+						return;
+					}
+
+					//attempt to knock back char
+					if (Actor.findChar(target) != null) {
+
+						Char toMove = Actor.findChar(target);
+
+						int pushCell = -1;
+						//push to the closest open cell that's further than the door
+						for (int i : PathFinder.NEIGHBOURS8) {
+							if (!Dungeon.level.solid[target + i]
+									&& Actor.findChar(target + i) == null
+									&& (Dungeon.level.openSpace[target + i] || !Char.hasProp(toMove, Char.Property.LARGE))
+									&& Dungeon.level.trueDistance(curUser.pos, target + i) > Dungeon.level.trueDistance(curUser.pos, target)
+									&& (pushCell == -1 || Dungeon.level.trueDistance(curUser.pos, pushCell) > Dungeon.level.trueDistance(curUser.pos, target + i))) {
+								pushCell = target + i;
+							}
+						}
+
+						if (pushCell != -1 && !Char.hasProp(toMove, Char.Property.IMMOVABLE)) {
+							Ballistica push = new Ballistica(target, pushCell, Ballistica.PROJECTILE);
+							WandOfBlastWave.throwChar(toMove, push, 1, false, false, this);
+							artifactProc(toMove, visiblyUpgraded(), 2);
+						} else {
+							GLog.w(Messages.get(SkeletonKey.class, "lock_no_space"));
+							return;
+						}
+					}
+
+					Sample.INSTANCE.play(Assets.Sounds.UNLOCK);
+					curUser.sprite.operate(target, new Callback() {
+						@Override
+						public void call() {
+							Level.set(target, Terrain.HERO_LKD_DR);
+							GameScene.updateMap(target);
+							charge -= 2;
+							gainExp(3);
+							Talent.onArtifactUsed(Dungeon.hero);
+							curUser.spendAndNext(Actor.TICK);
+							curUser.sprite.idle();
+
+							//throw items inside the door in random directions
+							if (Dungeon.level.heaps.get(target) != null) {
+								ArrayList<Integer> candidates = new ArrayList<>();
+								for (int n : PathFinder.NEIGHBOURS8) {
+									if (Dungeon.level.passable[target + n]) {
+										candidates.add(target + n);
+									}
+								}
+								if (!candidates.isEmpty()) {
+									Heap heap = Dungeon.level.heaps.get(target);
+									while (!heap.isEmpty()) {
+										Dungeon.level.drop(heap.pickUp(), Random.element(candidates)).sprite.drop(target);
+									}
+								}
+							}
+
+							int targetCell = -1;
+							//spew gas to the closest open cell that's further than the door
+							for (int i : PathFinder.NEIGHBOURS8) {
+								if (!Dungeon.level.solid[target + i]
+										&& Actor.findChar(target + i) == null
+										&& Dungeon.level.trueDistance(curUser.pos, target + i) > Dungeon.level.trueDistance(curUser.pos, target)
+										&& (targetCell == -1 || Dungeon.level.trueDistance(curUser.pos, targetCell) > Dungeon.level.trueDistance(curUser.pos, target + i))) {
+									targetCell = target + i;
+								}
+							}
+
+							Class<?extends Blob> gasToSpawn;
+							float gasQuantity;
+							switch (Random.chances(ChaoticCenser.GAS_CAT_CHANCES[Math.min(2, level()/3-2)])){
+								case 0: default:
+									do {
+										gasToSpawn = Random.element(ChaoticCenser.COMMON_GASSES.keySet());
+									} while (!Regeneration.regenOn() && gasToSpawn == Regrowth.class);
+									gasQuantity = ChaoticCenser.COMMON_GASSES.get(gasToSpawn);
+									break;
+								case 1:
+									gasToSpawn = Random.element(ChaoticCenser.UNCOMMON_GASSES.keySet());
+									gasQuantity = ChaoticCenser.UNCOMMON_GASSES.get(gasToSpawn);
+									break;
+								case 2:
+									gasToSpawn = Random.element(ChaoticCenser.RARE_GASSES.keySet());
+									gasQuantity = ChaoticCenser.RARE_GASSES.get(gasToSpawn);
+									break;
+							}
+
+							GameScene.add(Blob.seed(targetCell, (int) gasQuantity, gasToSpawn));
+
+							//corrosion starts at the same level as potion of corrosive gas
+							if (gasToSpawn == CorrosiveGas.class){
+								((CorrosiveGas)Dungeon.level.blobs.get(CorrosiveGas.class)).setStrength( 2 + Dungeon.scalingDepth()/5, ChaoticCenser.class);
+							}
+						}
+					});
+					curUser.busy();
+					return;
+
+				}
+
+				if (charge < 2) {
+					GLog.i(Messages.get(SkeletonKey.class, "wall_charges"));
+					return;
+				}
+
+				int closest = curUser.pos;
+				int closestIdx = -1;
+
+				for (int i = 0; i < PathFinder.CIRCLE8.length; i++) {
+					int ofs = PathFinder.CIRCLE8[i];
+					if (Dungeon.level.trueDistance(target, curUser.pos + ofs) < Dungeon.level.trueDistance(target, closest)) {
+						closest = curUser.pos + ofs;
+						closestIdx = i;
+					}
+				}
+
+				int knockBackDir = PathFinder.CIRCLE8[closestIdx];
+
+				if (Dungeon.level.solid[closest]) {
+					GLog.w(Messages.get(SkeletonKey.class, "invalid_target"));
+					return;
+				}
+
+				int finalClosestIdx = closestIdx;
+				Sample.INSTANCE.play(Assets.Sounds.UNLOCK);
+				curUser.sprite.operate(target, new Callback() {
+					@Override
+					public void call() {
+						placeWall(curUser.pos + PathFinder.CIRCLE8[finalClosestIdx], knockBackDir);
+						placeWall(curUser.pos + PathFinder.CIRCLE8[(finalClosestIdx + 7) % 8], knockBackDir);
+						placeWall(curUser.pos + PathFinder.CIRCLE8[(finalClosestIdx + 1) % 8], knockBackDir);
+
+						//if we're in a diagonal direction
+						if (finalClosestIdx % 2 == 0) {
+							placeWall(curUser.pos + 2 * PathFinder.CIRCLE8[(finalClosestIdx + 7) % 8], knockBackDir);
+							placeWall(curUser.pos + 2 * PathFinder.CIRCLE8[(finalClosestIdx + 1) % 8], knockBackDir);
+						}
+
+						charge -= 2;
+						gainExp(3);
+
+						Dungeon.observe();
+						GameScene.updateFog();
+						Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
+
+						Talent.onArtifactUsed(Dungeon.hero);
+						curUser.spendAndNext(Actor.TICK);
+						curUser.sprite.idle();
+					}
+				});
+				curUser.busy();
+			}
+		}
+
+		@Override
+		public String prompt() {
+			return Messages.get(SkeletonKey.class, "prompt");
+		}
+	};
+
 	@Override
 	protected ArtifactBuff passiveBuff() {
 		return new keyRecharge();
 	}
 
+	public float rechargeModifier(){
+		return rechargeModifier(type());
+	}
+
+	public float rechargeModifier(int type){
+		switch (type){
+			case 1:
+				return 1.0f;
+			case 2:
+				return 0.5f;
+			case 3:
+				return 0.75f;
+		}
+		return 1;
+	}
+
+	public int chargeCap(){
+		return chargeCap(type());
+	}
+
+	public int chargeCap(int type){
+		switch (type){
+			case 1:
+				return 3 + (level()+1)/2;
+			case 2:
+				return 2 + (level()+2)/4;
+			case 3:
+				return (int) (4 + (level()+1)/1.5f);
+		}
+		return 0;
+	}
+
 	@Override
 	public void charge(Hero target, float amount) {
 		if (charge < chargeCap && !cursed && target.buff(MagicImmune.class) == null){
-			partialCharge += 0.133f*amount;
+			partialCharge += 0.133f*amount*rechargeModifier();
 			while (partialCharge >= 1){
 				partialCharge--;
 				charge++;
@@ -413,20 +715,49 @@ public class SkeletonKey extends Artifact {
 
 	@Override
 	public String desc() {
-		String desc = super.desc();
+		String desc = getTypeBasedString("desc", type());
 
 		if ( isEquipped (Dungeon.hero) ){
 			if (cursed){
-				desc += "\n\n" + Messages.get(this, "desc_cursed");
+				desc += "\n\n" + getTypeBasedString("desc_cursed", type());
 			} else {
-				desc += "\n\n" + Messages.get(this, "desc_worn");
+				desc += "\n\n" + getTypeBasedString("desc_worn", type());
 			}
 		}
 
 		return desc;
 	}
 
+	@Override
+	public String getTypeMessage(int type) {
+		return Messages.get(this, "type",
+				Math.round(100*rechargeModifier(type)),
+				chargeCap(type)) + "\n\n" + super.getTypeMessage(type);
+	}
+
+	@Override
+	public void type(int type) {
+		super.type(type);
+		if (type != 1){
+			Buff.detach(Dungeon.hero, KeyReplacementTracker.class);
+		}
+		chargeCap = chargeCap();
+		charge = Math.min(charge, chargeCap);
+	}
+
 	public class keyRecharge extends ArtifactBuff {
+		public int charges(){
+			return charge;
+		}
+
+		public void depleteCharges(int amount){
+			charge -= amount;
+		}
+
+		public void gainExp(int amount){
+			SkeletonKey.this.gainExp(amount);
+		}
+
 		@Override
 		public boolean act() {
 			if (charge < chargeCap
@@ -435,6 +766,7 @@ public class SkeletonKey extends Artifact {
 					&& Regeneration.regenOn()) {
 				//120 turns to charge at full, 60 turns to charge at 0/8
 				float chargeGain = 1 / (120f - (chargeCap - charge)*7.5f);
+				chargeGain *= rechargeModifier();
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
 				partialCharge += chargeGain;
 
@@ -444,6 +776,15 @@ public class SkeletonKey extends Artifact {
 
 					if (charge == chargeCap){
 						partialCharge = 0;
+					}
+				}
+			}
+
+			if (cursed && type() == 2){
+				for (Buff b : target.buffs()){
+					if (b.type == buffType.POSITIVE
+							&& !b.revivePersists){
+						b.detach();
 					}
 				}
 			}
@@ -458,14 +799,15 @@ public class SkeletonKey extends Artifact {
 
 	@Override
 	public Item upgrade() {
-		chargeCap = 3 + (level()+1)/2;
+		chargeCap = chargeCap();
 		return super.upgrade();
 	}
 
 	private void placeWall(int pos, int knockbackDIR ){
-		Blob wall = Dungeon.level.blobs.get(KeyWall.class);
+		Class<? extends Blob> wallType = type() == 3 ? TrapWall.class : KeyWall.class;
+		Blob wall = Dungeon.level.blobs.get(wallType);
 		if (!Dungeon.level.solid[pos] || (wall != null && wall.cur[pos] > 0)) {
-			GameScene.add(Blob.seed(pos, 10, KeyWall.class));
+			GameScene.add(Blob.seed(pos, 10, wallType));
 
 			Char ch = Actor.findChar(pos);
 			if (ch != null && ch.alignment == Char.Alignment.ENEMY){
@@ -556,6 +898,69 @@ public class SkeletonKey extends Artifact {
 		public void use(BlobEmitter emitter) {
 			super.use( emitter );
 			emitter.pour(SpectralWallParticle.FACTORY, 0.02f );
+		}
+
+		@Override
+		public String tileDesc() {
+			return Messages.get(this, "desc");
+		}
+
+	}
+
+	public static class TrapWall extends Blob {
+
+		{
+			alwaysVisible = true;
+		}
+
+		@Override
+		protected void evolve() {
+
+			int cell;
+			boolean cellEnded = false;
+
+			Level l = Dungeon.level;
+			for (int i = area.left; i < area.right; i++){
+				for (int j = area.top; j < area.bottom; j++){
+					cell = i + j*l.width();
+					off[cell] = cur[cell] > 0 ? cur[cell] - 1 : 0;
+
+					if (cur[cell] > 0 && off[cell] == 0){
+						cellEnded = true;
+					}
+
+					//caps at 10 turns
+					off[cell] = Math.min(off[cell], 9);
+
+					if (cur[cell] > 0){
+						Char ch = Actor.findChar(cell);
+						if (ch != null && ch.alignment == Char.Alignment.ENEMY){
+							Trap trap = Dungeon.level instanceof RegularLevel ?
+                                    (Trap) Reflection.newInstance(((RegularLevel) Dungeon.level).trapClasses()[Random.chances(((RegularLevel) Dungeon.level).trapChances())]) :
+									new WornDartTrap();
+							trap.pos = cell;
+							trap.reclaimed = true;
+							Bestiary.countEncounter(trap.getClass());
+							trap.activate();
+							cur[cell] = off[cell] = 0;
+							continue;
+						}
+					}
+
+					volume += off[cell];
+				}
+			}
+
+			if (cellEnded){
+				Dungeon.observe();
+			}
+		}
+
+		@Override
+		public void use(BlobEmitter emitter) {
+			super.use( emitter );
+			emitter.pour(SpectralWallParticle.FACTORY, 0.04f );
+
 		}
 
 		@Override
@@ -699,5 +1104,36 @@ public class SkeletonKey extends Artifact {
 			}
 		}
 
+	}
+
+	public static class Locked extends EffectBuff {
+		{
+			type = buffType.NEGATIVE;
+		}
+
+		@Override
+		public int icon() {
+			return BuffIndicator.LOCKED;
+		}
+
+		@Override
+		public boolean attachTo(Char target) {
+			if (target instanceof Mob)
+				((Mob) target).locked = true;
+			return super.attachTo(target);
+		}
+
+		@Override
+		public void detach() {
+			super.detach();
+			if (target.HP > 0 && target instanceof Mob)
+				((Mob) target).locked = false;
+		}
+
+		@Override
+		public void fx(boolean on) {
+			if (on) target.sprite.add(CharSprite.State.LOCKED);
+			else target.sprite.remove(CharSprite.State.LOCKED);
+		}
 	}
 }

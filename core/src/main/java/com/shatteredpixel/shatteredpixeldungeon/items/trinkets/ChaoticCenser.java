@@ -301,7 +301,7 @@ public class ChaoticCenser extends Trinket {
 		}
 	}
 
-	private static final float[][] GAS_CAT_CHANCES = new float[4][3];
+	public static final float[][] GAS_CAT_CHANCES = new float[4][3];
 	static {
 		GAS_CAT_CHANCES[0] = new float[]{70, 25, 5};
 		GAS_CAT_CHANCES[1] = new float[]{60, 30, 10};
@@ -309,21 +309,21 @@ public class ChaoticCenser extends Trinket {
 		GAS_CAT_CHANCES[3] = new float[]{40, 40, 20};
 	}
 
-	private static final HashMap<Class<? extends Blob>, Float> COMMON_GASSES = new HashMap<>();
+	public static final HashMap<Class<? extends Blob>, Float> COMMON_GASSES = new HashMap<>();
 	static {
 		COMMON_GASSES.put(ToxicGas.class, 300f);
 		COMMON_GASSES.put(ConfusionGas.class, 300f);
 		COMMON_GASSES.put(Regrowth.class, 200f);
 	}
 
-	private static final HashMap<Class<? extends Blob>, Float> UNCOMMON_GASSES = new HashMap<>();
+	public static final HashMap<Class<? extends Blob>, Float> UNCOMMON_GASSES = new HashMap<>();
 	static {
 		UNCOMMON_GASSES.put(StormCloud.class, 300f);
 		UNCOMMON_GASSES.put(SmokeScreen.class, 300f);
 		UNCOMMON_GASSES.put(StenchGas.class, 200f);
 	}
 
-	private static final HashMap<Class<? extends Blob>, Float> RARE_GASSES = new HashMap<>();
+	public static final HashMap<Class<? extends Blob>, Float> RARE_GASSES = new HashMap<>();
 	static {
 		RARE_GASSES.put(Inferno.class, 300f);
 		RARE_GASSES.put(Blizzard.class, 300f);

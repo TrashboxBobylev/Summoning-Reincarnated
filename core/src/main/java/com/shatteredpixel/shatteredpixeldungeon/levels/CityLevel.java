@@ -130,7 +130,7 @@ public class CityLevel extends RegularLevel {
 	}
 
 	@Override
-	protected Class<?>[] trapClasses() {
+    public Class<?>[] trapClasses() {
 		return new Class[]{
 				FrostTrap.class, StormTrap.class, CorrosionTrap.class, BlazingTrap.class, DisintegrationTrap.class,
 				RockfallTrap.class, FlashingTrap.class, GuardianTrap.class, WeakeningTrap.class,
@@ -138,7 +138,7 @@ public class CityLevel extends RegularLevel {
 	}
 
 	@Override
-	protected float[] trapChances() {
+	public float[] trapChances() {
 		return new float[]{
 				4, 4, 4, 4, 4,
 				2, 2, 2, 2,
