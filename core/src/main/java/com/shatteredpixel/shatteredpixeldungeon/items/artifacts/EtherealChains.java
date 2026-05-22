@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
@@ -38,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Chains;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Effects;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Wound;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.MiningLevel;
@@ -120,7 +122,7 @@ public class EtherealChains extends Artifact {
 	@Override
 	public void resetForTrinity(int visibleLevel) {
 		super.resetForTrinity(visibleLevel);
-		charge = 5+(level()*2); //sets charge to soft cap
+		charge = chargeCap(); //sets charge to soft cap
 	}
 
 	public CellSelector.Listener caster = new CellSelector.Listener(){
@@ -194,23 +196,43 @@ public class EtherealChains extends Artifact {
 				Effects.Type.ETHEREAL_CHAIN,
 				new Callback() {
 			public void call() {
-				Actor.add(new Pushing(enemy, enemy.pos, pulledPos, new Callback() {
-					public void call() {
-						enemy.pos = pulledPos;
+				if (type() == 3){
+					float bleedDmg = 5 + level();
+					bleedDmg *= Math.pow(1.2f, chargeUse-1);
+					enemy.sprite.flash();
+					enemy.sprite.bloodBurstA(enemy.sprite.center(), (int)bleedDmg);
+					enemy.hitSound(Random.Float(0.87f, 1.15f));
+					Buff.affect(enemy, Bleeding.class).set(Math.round(bleedDmg));
 
-						charge -= chargeUse;
-						Invisibility.dispel(hero);
-						Talent.onArtifactUsed(hero);
-						updateQuickslot();
+					charge -= chargeUse;
+					Invisibility.dispel(hero);
+					Talent.onArtifactUsed(hero);
+					updateQuickslot();
 
-						Dungeon.level.occupyCell(enemy);
-						Dungeon.observe();
-						GameScene.updateFog();
-						hero.spendAndNext(1f);
+					hero.spendAndNext(1f);
 
-						artifactProc(enemy, visiblyUpgraded(), chargeUse);
-					}
-				}));
+					artifactProc(enemy, visiblyUpgraded(), chargeUse);
+				} else {
+					Actor.add(new Pushing(enemy, enemy.pos, pulledPos, new Callback() {
+						public void call() {
+							enemy.pos = pulledPos;
+
+							charge -= chargeUse;
+							Invisibility.dispel(hero);
+							Talent.onArtifactUsed(hero);
+							updateQuickslot();
+
+							Dungeon.level.occupyCell(enemy);
+							Dungeon.observe();
+							GameScene.updateFog();
+							hero.spendAndNext(1f);
+							if (type() == 2)
+								Buff.affect(enemy, Cripple.class, 1 + chargeUse*3);
+
+							artifactProc(enemy, visiblyUpgraded(), chargeUse);
+						}
+					}));
+				}
 				hero.next();
 			}
 		}));
@@ -218,6 +240,12 @@ public class EtherealChains extends Artifact {
 	
 	//pulls the hero along the chain to the collisionPos, if possible.
 	private void chainLocation( Ballistica chain, final Hero hero ){
+
+		//can't pull, if we are a harpoon
+		if (type() == 3){
+			GLog.w( Messages.get(EtherealChains.class, "cant_move") );
+			return;
+		}
 
 		//don't pull if rooted
 		if (hero.rooted){
@@ -232,16 +260,26 @@ public class EtherealChains extends Artifact {
 			GLog.i( Messages.get(this, "inside_wall"));
 			return;
 		}
-		
-		//don't pull if there are no solid objects next to the pull location
-		boolean solidFound = false;
-		for (int i : PathFinder.NEIGHBOURS8){
-			if (Dungeon.level.solid[chain.collisionPos + i]){
-				solidFound = true;
-				break;
+
+		boolean isValid = false;
+		if (type() == 1) {
+			//don't pull if there are no solid objects next to the pull location
+			for (int i : PathFinder.NEIGHBOURS8) {
+				if (Dungeon.level.solid[chain.collisionPos + i]) {
+					isValid = true;
+					break;
+				}
+			}
+		} else {
+			//don't pull if there are no enemies next to the pull location
+			for (int i : PathFinder.NEIGHBOURS8) {
+				if (Actor.findChar(chain.collisionPos + i) != null && !Dungeon.level.solid[chain.collisionPos + i]) {
+					isValid = true;
+					break;
+				}
 			}
 		}
-		if (!solidFound){
+		if (!isValid){
 			GLog.i( Messages.get(EtherealChains.class, "nothing_to_grab") );
 			return;
 		}
@@ -272,7 +310,10 @@ public class EtherealChains extends Artifact {
 						updateQuickslot();
 
 						Dungeon.level.occupyCell(hero);
-						hero.spendAndNext(1f);
+						if (type() == 1)
+							hero.spendAndNext(1f);
+						else
+							hero.next();
 						Dungeon.observe();
 						GameScene.updateFog();
 					}
@@ -286,11 +327,59 @@ public class EtherealChains extends Artifact {
 	protected ArtifactBuff passiveBuff() {
 		return new chainsRecharge();
 	}
+
+	public float normalRechargeModifier(){
+		return normalRechargeModifier(type());
+	}
+
+	public float normalRechargeModifier(int type){
+		switch (type){
+			case 1:
+				return 1.0f;
+			case 2:
+				return 0.75f;
+			case 3:
+				return 0f;
+		}
+		return 1;
+	}
+
+	public float expRechargeModifier(){
+		return expRechargeModifier(type());
+	}
+
+	public float expRechargeModifier(int type){
+		switch (type){
+			case 1:
+				return 1.0f;
+			case 2:
+				return 1.25f;
+			case 3:
+				return 2f;
+		}
+		return 1;
+	}
+
+	public int chargeCap(){
+		return chargeCap(type());
+	}
+
+	public int chargeCap(int type){
+		switch (type){
+			case 1:
+				return 5+(level()*2);
+			case 2:
+				return (int) (6+(level()*2.25f));
+			case 3:
+				return 8+(level()*3);
+		}
+		return 0;
+	}
 	
 	@Override
 	public void charge(Hero target, float amount) {
 		if (cursed || target.buff(MagicImmune.class) != null) return;
-		int chargeTarget = 5+(level()*2);
+		int chargeTarget = chargeCap();
 		if (charge < chargeTarget*2){
 			partialCharge += 0.5f*amount;
 			while (partialCharge >= 1){
@@ -303,23 +392,38 @@ public class EtherealChains extends Artifact {
 	
 	@Override
 	public String desc() {
-		String desc = super.desc();
+		String desc = getTypeBasedString("desc", type());
 
 		if (isEquipped( Dungeon.hero )){
 			desc += "\n\n";
 			if (cursed)
-				desc += Messages.get(this, "desc_cursed");
+				desc += getTypeBasedString("desc_cursed", type());
 			else
-				desc += Messages.get(this, "desc_equipped");
+				desc += getTypeBasedString("desc_equipped", type());
 		}
 		return desc;
+	}
+
+	@Override
+	public String getTypeMessage(int type) {
+		return Messages.get(this, "type",
+				Math.round(100*normalRechargeModifier(type)),
+				Math.round(100*expRechargeModifier(type)),
+				chargeCap(type)) + "\n\n" + super.getTypeMessage(type);
+	}
+
+	@Override
+	public void type(int type) {
+		super.type(type);
+		chargeCap = chargeCap(type);
+		charge = Math.min(charge, chargeCap());
 	}
 
 	public class chainsRecharge extends ArtifactBuff{
 
 		@Override
 		public boolean act() {
-			int chargeTarget = 5+(level()*2);
+			int chargeTarget = chargeCap();
 			if (charge < chargeTarget
 					&& !cursed
 					&& target.buff(MagicImmune.class) == null
@@ -327,9 +431,17 @@ public class EtherealChains extends Artifact {
 				//gains a charge in 40 - 2*missingCharge turns
 				float chargeGain = (1 / (40f - (chargeTarget - charge)*2f));
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
+				chargeGain *= normalRechargeModifier();
 				partialCharge += chargeGain;
-			} else if (cursed && Random.Int(100) == 0){
-				Buff.prolong( target, Cripple.class, 10f);
+			} else if (cursed && Random.Int(type() == 3 ? 150 : 100) == 0){
+				if (type() == 3){
+					int damage = Math.max( 0,  (2 + Dungeon.scalingDepth()/2) - target.drRoll()/2 );
+					Buff.affect( target, Bleeding.class ).set( damage );
+					Sample.INSTANCE.play(Assets.Sounds.TRAP);
+					Wound.hit( target );
+				} else {
+					Buff.prolong(target, Cripple.class, 10f);
+				}
 			}
 
 			while (partialCharge >= 1) {
@@ -350,9 +462,10 @@ public class EtherealChains extends Artifact {
 			exp += Math.round(levelPortion*100);
 
 			//past the soft charge cap, gaining  charge from leveling is slowed.
-			if (charge > 5+(level()*2)){
+			if (charge > chargeCap()){
 				levelPortion *= (5+((float)level()*2))/charge;
 			}
+			levelPortion *= expRechargeModifier();
 			partialCharge += levelPortion*6f;
 
 			if (exp > 100+level()*100 && level() < levelCap){
