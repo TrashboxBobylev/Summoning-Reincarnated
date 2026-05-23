@@ -340,7 +340,7 @@ public class MasterThievesArmband extends Artifact {
 
 	@Override
 	public String desc() {
-		String desc = getTypeBasedString("desc", type());
+		String desc = super.desc();
 
 		if ( isEquipped (Dungeon.hero) ){
 			if (cursed){

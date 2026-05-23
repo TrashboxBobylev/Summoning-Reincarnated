@@ -191,6 +191,10 @@ public class Artifact extends KindofMisc implements TypedItem {
 		}
 	}
 
+	public String desc() {
+		return getTypeBasedString("desc", type());
+	}
+
 	@Override
 	public String info() {
 		if (cursed && cursedKnown && !isEquipped( Dungeon.hero )) {

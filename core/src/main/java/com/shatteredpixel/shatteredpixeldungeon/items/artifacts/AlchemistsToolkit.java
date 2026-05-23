@@ -446,7 +446,7 @@ public class AlchemistsToolkit extends Artifact {
 
 	@Override
 	public String desc() {
-		String result = getTypeBasedString("desc", type());
+		String result = super.desc();
 
 		if (isEquipped(Dungeon.hero)) {
 			if (cursed)                 result += "\n\n" + Messages.get(this, "desc_cursed");

@@ -156,7 +156,7 @@ public class TalismanOfForesight extends Artifact {
 
 	@Override
 	public String desc() {
-		String desc = getTypeBasedString("desc", type());
+		String desc = super.desc();
 
 		if ( isEquipped( hero ) ){
 			if (!cursed) {

@@ -271,7 +271,7 @@ public class HornOfPlenty extends Artifact {
 	
 	@Override
 	public String desc() {
-		String desc = Messages.get(this, "desc" + type());
+		String desc = super.desc();
 
 		if ( isEquipped( Dungeon.hero ) ){
 			if (!cursed) {

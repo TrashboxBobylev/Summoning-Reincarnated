@@ -330,7 +330,7 @@ public class ChaliceOfBlood extends Artifact implements DamageSource {
 	
 	@Override
 	public String desc() {
-		String desc = getTypeBasedString("desc", type());
+		String desc = super.desc();
 
 		if (isEquipped (Dungeon.hero)){
 			desc += "\n\n";
