@@ -84,6 +84,8 @@ public class HighGrass {
 				if (naturalism != null) {
 					if (!naturalism.isCursed()) {
 						naturalismLevel = naturalism.itemLevel() + 1;
+						if (naturalism.itemType() == 3)
+							naturalismLevel *= 1.25f;
 						naturalism.charge();
 					} else {
 						naturalismLevel = -1;

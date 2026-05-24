@@ -54,7 +54,7 @@ public class StoneOfBlink extends Runestone {
 	}
 	
 	@Override
-	protected void activate(int cell) {
+    public void activate(int cell) {
 		ScrollOfTeleportation.teleportToLocation(curUser, cell);
 	}
 }

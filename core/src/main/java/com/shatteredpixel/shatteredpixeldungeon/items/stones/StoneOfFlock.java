@@ -45,7 +45,7 @@ public class StoneOfFlock extends Runestone {
 	}
 	
 	@Override
-	protected void activate(int cell) {
+    public void activate(int cell) {
 
 		PathFinder.buildDistanceMap( cell, BArray.not( Dungeon.level.solid, null ), 2 );
 		ArrayList<Integer> spawnPoints = new ArrayList<>();

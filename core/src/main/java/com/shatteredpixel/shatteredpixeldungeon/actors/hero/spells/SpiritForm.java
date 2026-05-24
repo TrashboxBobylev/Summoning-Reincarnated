@@ -233,7 +233,7 @@ public class SpiritForm extends ClericSpell {
 			}
 
 		} else if (effect instanceof SandalsOfNature){
-			((SandalsOfNature) effect).curSeedEffect = Random.oneOf(
+			((SandalsOfNature) effect).curConsumableEffect = Random.oneOf(
 					Blindweed.Seed.class, Fadeleaf.Seed.class, Firebloom.Seed.class,
 					Icecap.Seed.class, Sorrowmoss.Seed.class, Stormvine.Seed.class
 			);

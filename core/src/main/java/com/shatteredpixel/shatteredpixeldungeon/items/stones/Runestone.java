@@ -66,7 +66,7 @@ public abstract class Runestone extends Item {
 		}
 	}
 	
-	protected abstract void activate(int cell);
+	public abstract void activate(int cell);
 	
 	@Override
 	public boolean isUpgradable() {
@@ -95,7 +95,7 @@ public abstract class Runestone extends Item {
 		}
 		
 		@Override
-		protected void activate(int cell) {
+        public void activate(int cell) {
 			//does nothing
 		}
 		

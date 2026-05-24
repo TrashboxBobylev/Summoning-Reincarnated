@@ -24,6 +24,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.trinkets;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SandalsOfNature;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
@@ -65,6 +67,12 @@ public class PetrifiedSeed extends Trinket {
 	}
 
 	public static float stoneInsteadOfSeedChance(){
+		if (Dungeon.hero != null){
+			SandalsOfNature.Naturalism naturalism = Dungeon.hero.buff( SandalsOfNature.Naturalism.class );
+
+			if (naturalism != null && !naturalism.isCursed() && naturalism.itemType() == 2)
+				return 0.33f + 0.33f*(naturalism.itemLevel())/3f;
+		}
 		return stoneInsteadOfSeedChance(trinketLevel(PetrifiedSeed.class));
 	}
 

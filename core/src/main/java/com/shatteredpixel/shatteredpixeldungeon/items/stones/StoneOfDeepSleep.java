@@ -41,7 +41,7 @@ public class StoneOfDeepSleep extends Runestone {
 	}
 	
 	@Override
-	protected void activate(int cell) {
+    public void activate(int cell) {
 
 		if (Actor.findChar(cell) != null) {
 

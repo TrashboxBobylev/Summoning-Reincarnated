@@ -36,7 +36,7 @@ public class StoneOfBlast extends Runestone {
 	}
 	
 	@Override
-	protected void activate(int cell) {
+    public void activate(int cell) {
 		if (!Dungeon.isChallenged(Conducts.Conduct.PACIFIST))
 			new Bomb.ConjuredBomb().explode(cell);
 	}

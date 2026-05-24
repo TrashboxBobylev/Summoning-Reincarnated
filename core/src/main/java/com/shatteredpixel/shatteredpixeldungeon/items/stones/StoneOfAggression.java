@@ -44,7 +44,7 @@ public class StoneOfAggression extends Runestone {
 	}
 	
 	@Override
-	protected void activate(int cell) {
+    public void activate(int cell) {
 		
 		Char ch = Actor.findChar( cell );
 		

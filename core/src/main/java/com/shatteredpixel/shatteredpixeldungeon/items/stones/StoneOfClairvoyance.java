@@ -43,7 +43,7 @@ public class StoneOfClairvoyance extends Runestone {
 	}
 	
 	@Override
-	protected void activate(final int cell) {
+    public void activate(final int cell) {
 		Point c = Dungeon.level.cellToPoint(cell);
 		
 		int[] rounding = ShadowCaster.rounding[DIST];

@@ -27,17 +27,34 @@ package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.EarthParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.LeafParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.InventoryStone;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.Runestone;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlast;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlink;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfClairvoyance;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfDeepSleep;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfDetectMagic;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfEnchantment;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfFear;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfFlock;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfIntuition;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfShock;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -61,6 +78,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.tiles.DungeonTilemap;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
+import com.watabou.noosa.Camera;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PointF;
@@ -86,39 +104,65 @@ public class SandalsOfNature extends Artifact {
 	public static final String AC_FEED = "FEED";
 	public static final String AC_ROOT = "ROOT";
 
-	public ArrayList<Class> seeds = new ArrayList<>();
-	public Class curSeedEffect = null;
+	public ArrayList<Class> consumables = new ArrayList<>();
+	public Class curConsumableEffect = null;
 
-	private static final HashMap<Class<? extends Plant.Seed>, Integer> seedColors = new HashMap<>();
+	private static final HashMap<Class<? extends Item>, Integer> consumableColors = new HashMap<>();
 	static {
-		seedColors.put(Rotberry.Seed.class,     0xCC0022);
-		seedColors.put(Firebloom.Seed.class,    0xFF7F00);
-		seedColors.put(Swiftthistle.Seed.class, 0xCCBB00);
-		seedColors.put(Sungrass.Seed.class,     0x2EE62E);
-		seedColors.put(Icecap.Seed.class,       0x66B3FF);
-		seedColors.put(Stormvine.Seed.class,    0x195D80);
-		seedColors.put(Sorrowmoss.Seed.class,   0xA15CE5);
-		seedColors.put(Mageroyal.Seed.class,    0xFF4CD2);
-		seedColors.put(Earthroot.Seed.class,    0x67583D);
-		seedColors.put(Starflower.Seed.class,   0x404040);
-		seedColors.put(Fadeleaf.Seed.class,     0x919999);
-		seedColors.put(Blindweed.Seed.class,    0XD9D9D9);
+		consumableColors.put(Rotberry.Seed.class,     0xCC0022);
+		consumableColors.put(Firebloom.Seed.class,    0xFF7F00);
+		consumableColors.put(Swiftthistle.Seed.class, 0xCCBB00);
+		consumableColors.put(Sungrass.Seed.class,     0x2EE62E);
+		consumableColors.put(Icecap.Seed.class,       0x66B3FF);
+		consumableColors.put(Stormvine.Seed.class,    0x195D80);
+		consumableColors.put(Sorrowmoss.Seed.class,   0xA15CE5);
+		consumableColors.put(Mageroyal.Seed.class,    0xFF4CD2);
+		consumableColors.put(Earthroot.Seed.class,    0x67583D);
+		consumableColors.put(Starflower.Seed.class,   0x404040);
+		consumableColors.put(Fadeleaf.Seed.class,     0x919999);
+		consumableColors.put(Blindweed.Seed.class,    0XD9D9D9);
+
+		consumableColors.put(StoneOfEnchantment.class,  0x303030);
+		consumableColors.put(StoneOfIntuition.class,  	0x00A0FF);
+		consumableColors.put(StoneOfDetectMagic.class,	0xFFFFFF);
+		consumableColors.put(StoneOfFlock.class,    	0x99EEFF);
+		consumableColors.put(StoneOfShock.class,		0xFFFF00);
+		consumableColors.put(StoneOfBlink.class, 		0xB47FFE);
+		consumableColors.put(StoneOfDeepSleep.class,    0x00FEFF);
+		consumableColors.put(StoneOfClairvoyance.class, 0xA3FFE8);
+		consumableColors.put(StoneOfAggression.class,   0xFF1A1A);
+		consumableColors.put(StoneOfBlast.class, 		0x808080);
+		consumableColors.put(StoneOfFear.class,			0x800D0D);
+		consumableColors.put(StoneOfAugmentation.class, 0x303030);
 	}
 
-	private static final HashMap<Class<? extends Plant.Seed>, Integer> seedChargeReqs = new HashMap<>();
+	private static final HashMap<Class<? extends Item>, Integer> consumableChargeReqs = new HashMap<>();
 	static {
-		seedChargeReqs.put(Rotberry.Seed.class,     8);
-		seedChargeReqs.put(Firebloom.Seed.class,    20);
-		seedChargeReqs.put(Swiftthistle.Seed.class, 20);
-		seedChargeReqs.put(Sungrass.Seed.class,     80);
-		seedChargeReqs.put(Icecap.Seed.class,       20);
-		seedChargeReqs.put(Stormvine.Seed.class,    20);
-		seedChargeReqs.put(Sorrowmoss.Seed.class,   20);
-		seedChargeReqs.put(Mageroyal.Seed.class,    12);
-		seedChargeReqs.put(Earthroot.Seed.class,    40);
-		seedChargeReqs.put(Starflower.Seed.class,   40);
-		seedChargeReqs.put(Fadeleaf.Seed.class,     12);
-		seedChargeReqs.put(Blindweed.Seed.class,    12);
+		consumableChargeReqs.put(Rotberry.Seed.class,     8);
+		consumableChargeReqs.put(Firebloom.Seed.class,    20);
+		consumableChargeReqs.put(Swiftthistle.Seed.class, 20);
+		consumableChargeReqs.put(Sungrass.Seed.class,     80);
+		consumableChargeReqs.put(Icecap.Seed.class,       20);
+		consumableChargeReqs.put(Stormvine.Seed.class,    20);
+		consumableChargeReqs.put(Sorrowmoss.Seed.class,   20);
+		consumableChargeReqs.put(Mageroyal.Seed.class,    12);
+		consumableChargeReqs.put(Earthroot.Seed.class,    40);
+		consumableChargeReqs.put(Starflower.Seed.class,   40);
+		consumableChargeReqs.put(Fadeleaf.Seed.class,     12);
+		consumableChargeReqs.put(Blindweed.Seed.class,    12);
+
+		consumableChargeReqs.put(StoneOfEnchantment.class,  100);
+		consumableChargeReqs.put(StoneOfIntuition.class,  	12);
+		consumableChargeReqs.put(StoneOfDetectMagic.class,	12);
+		consumableChargeReqs.put(StoneOfFlock.class,    	20);
+		consumableChargeReqs.put(StoneOfShock.class,		20);
+		consumableChargeReqs.put(StoneOfBlink.class, 		12);
+		consumableChargeReqs.put(StoneOfDeepSleep.class,    12);
+		consumableChargeReqs.put(StoneOfClairvoyance.class, 40);
+		consumableChargeReqs.put(StoneOfAggression.class,   30);
+		consumableChargeReqs.put(StoneOfBlast.class, 		30);
+		consumableChargeReqs.put(StoneOfFear.class,			12);
+		consumableChargeReqs.put(StoneOfAugmentation.class, 75);
 	}
 
 	@Override
@@ -132,8 +176,8 @@ public class SandalsOfNature extends Artifact {
 		}
 		if (isEquipped( hero )
 				&& !cursed
-				&& curSeedEffect != null
-				&& charge >= seedChargeReqs.get(curSeedEffect)) {
+				&& curConsumableEffect != null
+				&& charge >= consumableChargeReqs.get(curConsumableEffect)) {
 			actions.add(AC_ROOT);
 		}
 		return actions;
@@ -152,10 +196,25 @@ public class SandalsOfNature extends Artifact {
 		} else if (action.equals(AC_ROOT) && !cursed){
 
 			if (!isEquipped( hero ))                                GLog.i( Messages.get(Artifact.class, "need_to_equip") );
-			else if (curSeedEffect == null)                         GLog.i( Messages.get(this, "no_effect") );
-			else if (charge < seedChargeReqs.get(curSeedEffect))    GLog.i( Messages.get(this, "low_charge") );
 			else {
-				GameScene.selectCell(cellSelector);
+				if (type() == 3){
+					if (charge == 0)    GLog.i( Messages.get(this, "no_charge") );
+					else {
+						Buff.prolong(hero, Roots.class, Roots.DURATION);
+						Buff.affect(hero, Earthroot.Armor.class).level(charge);
+						CellEmitter.bottom(hero.pos).start(EarthParticle.FACTORY, 0.05f, 8);
+						Camera.main.shake(1, 0.4f);
+						charge = 0;
+						Talent.onArtifactUsed(Dungeon.hero);
+						updateQuickslot();
+					}
+				} else {
+					if (curConsumableEffect == null)                         GLog.i( Messages.get(this, "no_effect") );
+					else if (charge < consumableChargeReqs.get(curConsumableEffect))    GLog.i( Messages.get(this, "low_charge") );
+					else {
+						GameScene.selectCell(cellSelector);
+					}
+				}
 			}
 		}
 	}
@@ -169,7 +228,7 @@ public class SandalsOfNature extends Artifact {
 	public void charge(Hero target, float amount) {
 		if (cursed || target.buff(MagicImmune.class) != null) return;
 		if (charge < chargeCap) {
-			partialCharge += 2*amount;
+			partialCharge += 2*amount*rechargeModifier();
 			while (partialCharge >= 1f){
 				charge++;
 				partialCharge--;
@@ -184,8 +243,8 @@ public class SandalsOfNature extends Artifact {
 
 	@Override
 	public ItemSprite.Glowing glowing() {
-		if (curSeedEffect != null){
-			return new ItemSprite.Glowing(seedColors.get(curSeedEffect));
+		if (curConsumableEffect != null){
+			return new ItemSprite.Glowing(consumableColors.get(curConsumableEffect));
 		}
 		return null;
 	}
@@ -204,24 +263,30 @@ public class SandalsOfNature extends Artifact {
 			desc += "\n\n";
 
 			if (!cursed) {
-				desc += Messages.get(this, "desc_hint");
+				desc += getTypeBasedString( "desc_hint", type());
 			} else {
 				desc += Messages.get(this, "desc_cursed");
 			}
 
 		}
 
-		if (curSeedEffect != null){
-				desc += "\n\n" + Messages.get(this, "desc_ability",
-					Messages.titleCase(Messages.get(curSeedEffect, "name")),
-					seedChargeReqs.get(curSeedEffect));
+		if (curConsumableEffect != null){
+				desc += "\n\n" + getTypeBasedString("desc_ability", type(),
+					Messages.titleCase(Messages.get(curConsumableEffect, "name")),
+					consumableChargeReqs.get(curConsumableEffect));
 		}
 
-		if (!seeds.isEmpty()){
-			desc += "\n\n" + Messages.get(this, "desc_seeds", seeds.size());
+		if (!consumables.isEmpty()){
+			desc += "\n\n" + getTypeBasedString("desc_seeds", type(), consumables.size());
 		}
 
 		return desc;
+	}
+
+	@Override
+	public String getTypeMessage(int type) {
+		return Messages.get(this, "type",
+				Math.round(100*rechargeModifier(type))) + "\n\n" + super.getTypeMessage(type);
 	}
 
 	@Override
@@ -234,15 +299,23 @@ public class SandalsOfNature extends Artifact {
 	}
 
 	public boolean canUseSeed(Item item){
-		return item instanceof Plant.Seed
-				&& !seeds.contains(item.getClass())
-				&& (level() < 3 || curSeedEffect != item.getClass());
+		boolean isValidType;
+		switch (type()){
+			case 2:
+				isValidType = item instanceof Runestone;
+				break;
+			default:
+				isValidType = item instanceof Plant.Seed;
+		}
+
+		return isValidType && !consumables.contains(item.getClass())
+				&& (level() < 3 || curConsumableEffect != item.getClass());
 	}
 
 	@Override
 	public void resetForTrinity(int visibleLevel) {
 		super.reset();
-		curSeedEffect = null;
+		curConsumableEffect = null;
 	}
 
 	private static final String SEEDS = "seeds";
@@ -251,24 +324,40 @@ public class SandalsOfNature extends Artifact {
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle(bundle);
-		bundle.put(SEEDS, seeds.toArray(new Class[0]));
-		bundle.put(CUR_SEED_EFFECT, curSeedEffect);
+		bundle.put(SEEDS, consumables.toArray(new Class[0]));
+		bundle.put(CUR_SEED_EFFECT, curConsumableEffect);
 	}
 
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
 		super.restoreFromBundle(bundle);
-		seeds.clear();
+		consumables.clear();
 		if (bundle.contains(SEEDS) && bundle.getClassArray(SEEDS) != null) {
 			for (Class<?> seed : bundle.getClassArray(SEEDS)) {
-				if (seed != null) seeds.add(seed);
+				if (seed != null) consumables.add(seed);
 			}
 		}
-		curSeedEffect = bundle.getClass(CUR_SEED_EFFECT);
+		curConsumableEffect = bundle.getClass(CUR_SEED_EFFECT);
 
 		if (level() == 1)  image = ItemSpriteSheet.ARTIFACT_SHOES;
 		else if (level() == 2)  image = ItemSpriteSheet.ARTIFACT_BOOTS;
 		else if (level() >= 3)  image = ItemSpriteSheet.ARTIFACT_GREAVES;
+	}
+
+	public float rechargeModifier(){
+		return rechargeModifier(type());
+	}
+
+	public float rechargeModifier(int type){
+		switch (type){
+			case 1:
+				return 1.0f;
+			case 2:
+				return 0.5f;
+			case 3:
+				return 1.33f;
+		}
+		return 1.0f;
 	}
 
 	public class Naturalism extends ArtifactBuff{
@@ -278,6 +367,7 @@ public class SandalsOfNature extends Artifact {
 				//0.5 charge per grass at +0, up to 1 at +10
 				float chargeGain = (3f + level())/6f;
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
+				chargeGain *= rechargeModifier();
 				partialCharge += Math.max(0, chargeGain);
 				while (partialCharge >= 1){
 					charge++;
@@ -308,17 +398,17 @@ public class SandalsOfNature extends Artifact {
 
 		@Override
 		public void onSelect( Item item ) {
-			if (item != null && item instanceof Plant.Seed) {
-				if (level() < 3) seeds.add(0, item.getClass());
-				curSeedEffect = item.getClass();
+			if (item != null && (type() == 2 ? item instanceof Runestone : item instanceof Plant.Seed)) {
+				if (level() < 3) consumables.add(0, item.getClass());
+				curConsumableEffect = item.getClass();
 
 				Hero hero = Dungeon.hero;
 				hero.sprite.operate( hero.pos );
 				Sample.INSTANCE.play( Assets.Sounds.PLANT );
 				hero.busy();
 				hero.spend( Actor.TICK );
-				if (seeds.size() >= 3+(level()*3)){
-					seeds.clear();
+				if (consumables.size() >= 3+(level()*3)){
+					consumables.clear();
 					upgrade();
 					Catalog.countUses(SandalsOfNature.class, level() == 3 ? 4 : 3);
 					if (level() >= 1 && level() <= 3) {
@@ -326,7 +416,7 @@ public class SandalsOfNature extends Artifact {
 					}
 
 				} else {
-					GLog.i( Messages.get(SandalsOfNature.class, "absorb_seed") );
+					GLog.i( getTypeBasedString( "absorb_seed", type()) );
 				}
 				item.detach(hero.belongings.backpack);
 			}
@@ -339,28 +429,40 @@ public class SandalsOfNature extends Artifact {
 		public void onSelect(Integer cell) {
 			if (cell != null){
 
-				if (!Dungeon.level.heroFOV[cell] || Dungeon.level.distance(curUser.pos, cell) > 3){
+				if (!Dungeon.level.heroFOV[cell] || Dungeon.level.distance(curUser.pos, cell) > (type() == 2 ? 4 : 3)){
 					GLog.w(Messages.get(SandalsOfNature.class, "out_of_range"));
 				} else {
 
 					Ballistica aim = new Ballistica(curUser.pos, cell, Ballistica.STOP_TARGET);
 					for (int c : aim.subPath(0, aim.dist)){
-						CellEmitter.get( c ).burst( LeafParticle.GENERAL, 6 );
+						CellEmitter.get( c ).burst( type() == 2 ? EarthParticle.FALLING : LeafParticle.GENERAL, 6 );
 					}
 
-					Splash.at(DungeonTilemap.tileCenterToWorld( cell ), -PointF.PI/2, PointF.PI/2, seedColors.get(curSeedEffect), 6);
+					Splash.at(DungeonTilemap.tileCenterToWorld( cell ), -PointF.PI/2, PointF.PI/2, consumableColors.get(curConsumableEffect), 6);
 					Invisibility.dispel(curUser);
 
-					Plant plant = ((Plant.Seed) Reflection.newInstance(curSeedEffect)).couch(cell, null);
-					plant.activate(Actor.findChar(cell));
-					Sample.INSTANCE.play(Assets.Sounds.PLANT);
+					if (type() != 2) {
+						Plant plant = ((Plant.Seed) Reflection.newInstance(curConsumableEffect)).couch(cell, null);
+						plant.activate(Actor.findChar(cell));
+						Sample.INSTANCE.play(Assets.Sounds.PLANT);
+					} else {
+						Runestone item = (Runestone) Reflection.newInstance(curConsumableEffect);
+						item.anonymize();
+						if (item instanceof InventoryStone){
+							curItem = item;
+							((InventoryStone) item).directActivate();
+						} else {
+							item.activate(cell);
+							if (Actor.findChar(cell) == null) Dungeon.level.pressCell( cell );
+						}
+					}
 					Sample.INSTANCE.playDelayed(Assets.Sounds.TRAMPLE, 0.25f, 1, Random.Float( 0.96f, 1.05f ) );
 
 					if (Actor.findChar(cell) != null){
-						artifactProc(Actor.findChar(cell), visiblyUpgraded(), seedChargeReqs.get(curSeedEffect));
+						artifactProc(Actor.findChar(cell), visiblyUpgraded(), consumableChargeReqs.get(curConsumableEffect));
 					}
 
-					charge -= seedChargeReqs.get(curSeedEffect);
+					charge -= consumableChargeReqs.get(curConsumableEffect);
 					Talent.onArtifactUsed(Dungeon.hero);
 					updateQuickslot();
 					curUser.spendAndNext(1f);
