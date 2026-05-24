@@ -1066,7 +1066,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 										for (int i : PathFinder.NEIGHBOURS9){
 											Char ch = Actor.findChar( shot.collisionPos + i );
 											if (ch != null) {
-												ch.damage(1 + Dungeon.scalingDepth() / 3, curUser);
+												ch.damage(1 + Dungeon.scalingDepth() / 3, new Confetti());
 											}
 										}
 										Sample.INSTANCE.play( Assets.Sounds.BLAST, 1.0f, 2.0f );
@@ -1324,4 +1324,19 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
             size(minSize + (left / lifespan)*(maxSize-minSize) + Random.Float(sizeJitter));
         }
     }
+
+	public static class Confetti implements DamageSource, Hero.Doom {
+
+		@Override
+		public EnumSet<DamageProperty> initDmgProperties() {
+			return EnumSet.of(DamageProperty.CRUMBLING);
+		}
+
+		@Override
+		public void onDeath() {
+			Badges.validateDeathFromFriendlyMagic();
+
+			Hero.Doom.super.onDeath();
+		}
+	}
 }
