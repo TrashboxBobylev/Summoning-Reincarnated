@@ -25,7 +25,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -34,7 +33,6 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamagePro
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
 
@@ -123,9 +121,8 @@ public class Poison extends Buff implements Hero.Doom, DamageSource {
 	@Override
 	public void onDeath() {
 		Badges.validateDeathFromPoison();
-		
-		Dungeon.fail( this );
-		GLog.n( Messages.get(this, "ondeath") );
+
+		Hero.Doom.super.onDeath();
 	}
 
     @Override

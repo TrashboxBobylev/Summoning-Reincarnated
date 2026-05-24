@@ -34,7 +34,6 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 
 import java.util.EnumSet;
 
@@ -76,11 +75,9 @@ public class ToxicGas extends Blob implements Hero.Doom, DamageSource {
 	
 	@Override
 	public void onDeath() {
-		
 		Badges.validateDeathFromGas();
-		
-		Dungeon.fail( this );
-		GLog.n( Messages.get(this, "ondeath") );
+
+		Hero.Doom.super.onDeath();
 	}
 
     @Override

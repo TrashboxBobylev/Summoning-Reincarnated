@@ -28,7 +28,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 
 public class FoodDebuff extends Buff implements Hero.Doom  {
@@ -105,13 +104,7 @@ public class FoodDebuff extends Buff implements Hero.Doom  {
 		left = (int) Math.max(left - extension, 0);
 	}
 
-	@Override
-	public void onDeath() {
-		Dungeon.fail( getClass() );
-		GLog.negative(Messages.get(this, "ondeath"));
-	}
-
-	private static final String LEFT = "left";
+    private static final String LEFT = "left";
 	private static final String FULLHP = "fullHP";
 	
 	@Override

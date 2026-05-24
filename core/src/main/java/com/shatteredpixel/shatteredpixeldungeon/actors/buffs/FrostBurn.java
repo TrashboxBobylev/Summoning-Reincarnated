@@ -218,9 +218,8 @@ public class FrostBurn extends Buff implements Hero.Doom, DamageSource {
 	public void onDeath() {
 		
 		Badges.validateDeathFromFire();
-		
-		Dungeon.fail( getClass() );
-		GLog.negative( Messages.get(this, "ondeath") );
+
+		Hero.Doom.super.onDeath();
 	}
 
     @Override

@@ -46,7 +46,6 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.InterlevelScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MobSprite;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Image;
@@ -131,8 +130,7 @@ public class Chasm implements Hero.Doom, DamageSource {
 	public void onDeath() {
 		Badges.validateDeathFromFalling();
 
-		Dungeon.fail( Chasm.class );
-		GLog.n( Messages.get(Chasm.class, "ondeath") );
+		Hero.Doom.super.onDeath();
 	}
 
 	public static void heroLand() {

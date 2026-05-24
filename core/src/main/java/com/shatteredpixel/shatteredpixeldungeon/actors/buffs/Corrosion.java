@@ -32,7 +32,6 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamagePro
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
-import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Image;
 import com.watabou.utils.Bundle;
 
@@ -132,8 +131,7 @@ public class Corrosion extends Buff implements Hero.Doom, DamageSource {
 			Badges.validateDeathFromFriendlyMagic();
 		}
 
-		Dungeon.fail( this );
-		GLog.n(Messages.get(this, "ondeath"));
+		Hero.Doom.super.onDeath();
 	}
 
     @Override

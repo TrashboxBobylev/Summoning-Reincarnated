@@ -3131,6 +3131,9 @@ public class Hero extends Char {
 	}
 
 	public static interface Doom {
-		public void onDeath();
+		default void onDeath(){
+			Dungeon.fail( getClass() );
+			GLog.negative(Messages.get(this, "ondeath"));
+		}
 	}
 }
