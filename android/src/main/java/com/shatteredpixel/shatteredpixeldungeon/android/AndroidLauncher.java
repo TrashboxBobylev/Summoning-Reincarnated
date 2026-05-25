@@ -55,6 +55,8 @@ import com.watabou.input.KeyEvent;
 import com.watabou.noosa.Game;
 import com.watabou.utils.FileUtils;
 
+import java.util.Objects;
+
 public class AndroidLauncher extends AndroidApplication {
 	
 	public static AndroidApplication instance;
@@ -69,7 +71,8 @@ public class AndroidLauncher extends AndroidApplication {
 		try {
 			GdxNativesLoader.load();
 			FreeType.initFreeType();
-			new EH.Builder (this)
+			if (!Objects.equals(getPackageManager().getInstallerPackageName(getPackageName()), "com.android.vending"))
+				new EH.Builder (this)
 					.addEmailAddresses ("trashbox.bobylev@gmail.com")
 					.init ();
 		} catch (Exception e){
