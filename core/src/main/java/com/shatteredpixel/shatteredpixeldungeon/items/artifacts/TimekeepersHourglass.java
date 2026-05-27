@@ -33,23 +33,32 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHaste;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.PotionOfStamina;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Plant;
 import com.shatteredpixel.shatteredpixeldungeon.plants.Rotberry;
+import com.shatteredpixel.shatteredpixeldungeon.plants.Swiftthistle;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndBag;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
@@ -80,6 +89,7 @@ public class TimekeepersHourglass extends Artifact {
 	}
 
 	public static final String AC_ACTIVATE = "ACTIVATE";
+	public static final String AC_FEED     = "FEED";
 
 	//keeps track of generated sandbags.
 	public int sandBags = 0;
@@ -92,6 +102,9 @@ public class TimekeepersHourglass extends Artifact {
 				&& hero.buff(MagicImmune.class) == null
 				&& (charge > 0 || activeBuff != null)) {
 			actions.add(AC_ACTIVATE);
+			if (type() == 3 && charge < chargeCap){
+				actions.add(AC_FEED);
+			}
 		}
 		return actions;
 	}
@@ -117,15 +130,30 @@ public class TimekeepersHourglass extends Artifact {
 			else GameScene.show(
 						new WndOptions(new ItemSprite(this),
 								Messages.titleCase(name()),
-								Messages.get(this, "prompt"),
-								Messages.get(this, "stasis"),
-								Messages.get(this, "freeze")) {
+								getTypeBasedString("prompt", type()),
+								getTypeBasedString("stasis", type()),
+								getTypeBasedString("freeze", type())) {
 							@Override
 							protected void onSelect(int index) {
 								if (index == 0) {
 									GLog.i( Messages.get(TimekeepersHourglass.class, "onstasis") );
 									GameScene.flash(0x80FFFFFF);
-									Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
+
+									if (type() == 2) {
+										int usedCharge = Math.min(charge, 2);
+										for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
+											if (Dungeon.level.heroFOV[mob.pos]) {
+												Ballistica trajectory = new Ballistica(hero.pos, mob.pos, Ballistica.STOP_TARGET);
+												trajectory = new Ballistica(trajectory.collisionPos, trajectory.path.get(trajectory.path.size() - 1), Ballistica.PROJECTILE);
+												WandOfBlastWave.throwChar(mob, trajectory, 1+usedCharge, true, false, hero);
+												Buff.affect(mob, Paralysis.class, 2f*usedCharge);
+												artifactProc(mob, visiblyUpgraded(), usedCharge);
+											}
+										}
+										Sample.INSTANCE.play(Assets.Sounds.PUFF);
+									} else {
+										Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
+									}
 
 									activeBuff = new timeStasis();
 									Talent.onArtifactUsed(Dungeon.hero);
@@ -153,6 +181,13 @@ public class TimekeepersHourglass extends Artifact {
 							}
 						}
 				);
+		} else if (action.equals(AC_FEED)){
+			if (!isEquipped( hero ))        GLog.i( Messages.get(Artifact.class, "need_to_equip") );
+			if (charge == chargeCap)         GLog.i( Messages.get(this, "too_much_charge") );
+			else if (cursed)                GLog.i( Messages.get(this, "cursed") );
+			else if (type() == 3){
+				GameScene.selectItem(itemSelector);
+			}
 		}
 	}
 
@@ -179,11 +214,43 @@ public class TimekeepersHourglass extends Artifact {
 	protected ArtifactBuff passiveBuff() {
 		return new hourglassRecharge();
 	}
+
+	public float rechargeModifier(){
+		return rechargeModifier(type());
+	}
+
+	public float rechargeModifier(int type){
+		switch (type){
+			case 1:
+				return 1.0f;
+			case 2:
+				return 0.666f;
+			case 3:
+				return 0f;
+		}
+		return 1.0f;
+	}
+
+	public int chargeCap(){
+		return chargeCap(type());
+	}
+
+	public int chargeCap(int type){
+		switch (type){
+			case 1:
+				return 5 + level();
+			case 2:
+				return 3 + (level()+1)/2;
+			case 3:
+				return 25 + level()*5;
+		}
+		return 0;
+	}
 	
 	@Override
 	public void charge(Hero target, float amount) {
 		if (charge < chargeCap && !cursed && target.buff(MagicImmune.class) == null){
-			partialCharge += 0.25f*amount;
+			partialCharge += 0.25f*amount*rechargeModifier();
 			while (partialCharge >= 1){
 				partialCharge--;
 				charge++;
@@ -197,13 +264,22 @@ public class TimekeepersHourglass extends Artifact {
 
 	@Override
 	public Item upgrade() {
-		chargeCap+= 1;
+		Item upgraded = super.upgrade();
+
+		chargeCap = chargeCap();
 
 		//for artifact transmutation.
-		while (level()+1 > sandBags)
+		while (level() > sandBags)
 			sandBags ++;
 
-		return super.upgrade();
+		return upgraded;
+	}
+
+	@Override
+	public void type(int type) {
+		super.type(type);
+		chargeCap = chargeCap();
+		charge = chargeCap;
 	}
 
 	@Override
@@ -219,6 +295,13 @@ public class TimekeepersHourglass extends Artifact {
 				desc += "\n\n" + Messages.get(this, "desc_cursed");
 		}
 		return desc;
+	}
+
+	@Override
+	public String getTypeMessage(int type) {
+		return Messages.get(this, "type",
+				Math.round(100*rechargeModifier(type)),
+				chargeCap(type)) + "\n\n" + super.getTypeMessage(type);
 	}
 
 
@@ -263,6 +346,7 @@ public class TimekeepersHourglass extends Artifact {
 				//90 turns to charge at full, 60 turns to charge at 0/10
 				float chargeGain = 1 / (90f - (chargeCap - charge)*3f);
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
+				chargeGain *= rechargeModifier();
 				partialCharge += chargeGain;
 
 				while (partialCharge >= 1) {
@@ -300,7 +384,24 @@ public class TimekeepersHourglass extends Artifact {
 
 				int usedCharge = Math.min(charge, 2);
 				//buffs always act last, so the stasis buff should end a turn early.
-				spend(5*usedCharge);
+				int timeSkip = 5;
+				if (type() == 2){
+					timeSkip = 1;
+				}
+				spend(timeSkip*usedCharge);
+
+				if (type() == 3) {
+					for (Buff b : target.buffs()) {
+						if (b instanceof Artifact.ArtifactBuff) {
+							if (b instanceof timeStasis) {
+								continue;
+							}
+							if (!((Artifact.ArtifactBuff) b).isCursed()) {
+								((Artifact.ArtifactBuff) b).charge((Hero) target, 3f * usedCharge);
+							}
+						}
+					}
+				}
 
 				//shouldn't punish the player for going into stasis frequently
 				Hunger hunger = Buff.affect(target, Hunger.class);
@@ -368,6 +469,18 @@ public class TimekeepersHourglass extends Artifact {
 			while (turnsToCost < -0.001f){
 				turnsToCost += 2f;
 				charge --;
+				if (type() == 3) {
+					for (Buff b : target.buffs()) {
+						if (b instanceof Artifact.ArtifactBuff) {
+							if (b instanceof timeStasis) {
+								continue;
+							}
+							if (!((Artifact.ArtifactBuff) b).isCursed()) {
+								((Artifact.ArtifactBuff) b).charge((Hero) target, 3f);
+							}
+						}
+					}
+				}
 			}
 
 			updateQuickslot();
@@ -545,5 +658,35 @@ public class TimekeepersHourglass extends Artifact {
 		}
 	}
 
+	protected WndBag.ItemSelector itemSelector = new WndBag.ItemSelector() {
 
+		@Override
+		public String textPrompt() {
+			return Messages.get(TimekeepersHourglass.class, "feed_prompt");
+		}
+
+		@Override
+		public Class<?extends Bag> preferredBag(){
+			return VelvetPouch.class;
+		}
+
+		@Override
+		public boolean itemSelectable(Item item) {
+			return (item instanceof Swiftthistle.Seed || item instanceof PotionOfHaste || item instanceof PotionOfStamina) && item.isIdentified();
+		}
+
+		@Override
+		public void onSelect(Item item) {
+			if (itemSelectable(item)){
+				Hero hero = Dungeon.hero;
+				hero.sprite.operate( hero.pos );
+				Sample.INSTANCE.play( Assets.Sounds.PLANT );
+				hero.busy();
+				hero.spend( Actor.TICK );
+				charge += (int) (item.energyVal()*1.5f);
+				item.detach(hero.belongings.backpack);
+				GLog.w( Messages.get(TimekeepersHourglass.class, "feed", item.trueName(), (int)(item.energyVal()*1.5f)) );
+			}
+		}
+	};
 }
