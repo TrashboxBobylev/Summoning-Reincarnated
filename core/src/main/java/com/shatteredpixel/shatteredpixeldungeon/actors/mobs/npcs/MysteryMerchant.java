@@ -24,6 +24,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs;
 
+import static com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent.MAX_TALENT_TIERS;
+
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
@@ -52,8 +54,6 @@ import com.watabou.utils.Callback;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-
-import static com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent.MAX_TALENT_TIERS;
 
 public class MysteryMerchant extends NPC {
 
@@ -103,10 +103,7 @@ public class MysteryMerchant extends NPC {
                 Messages.get(MysteryMerchant.class, "transmute_talent")){
             @Override
             protected void onSelect(int index) {
-                CurrencyIndicator.showGold = true;
-                Dungeon.gold -= Stats.pricing;
-                Catalog.countUses(Gold.class, Stats.pricing);
-                Stats.incrementPricing();
+                Stats.handlePurchase();
                 hide();
                 if (index == 0){
                     GameScene.show(new WndDegradeChoose());
@@ -197,7 +194,14 @@ public class MysteryMerchant extends NPC {
             Notes.remove(Notes.Landmark.MYSTERY_MERCHANT);
         }
 
-        public static void incrementPricing(){
+        public static void handlePurchase(){
+            CurrencyIndicator.showGold = true;
+            Dungeon.gold -= Stats.pricing;
+            Catalog.countUses(Gold.class, Stats.pricing);
+            Stats.incrementPricing();
+        }
+
+        private static void incrementPricing(){
             pricing += 250;
         }
     }

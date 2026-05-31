@@ -239,6 +239,7 @@ public class TalentButton extends Button {
                             ((MysteryMerchant) ch).yell( Messages.get(MysteryMerchant.class, "degrade_complete", talent.title() ));
                         }
                     }
+					MysteryMerchant.Stats.handlePurchase();
                     Statistics.qualifiedForRandomVictoryBadge = false;
                 }
             });

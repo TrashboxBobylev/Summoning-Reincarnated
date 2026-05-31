@@ -95,6 +95,7 @@ public class ScrollOfMetamorphosis extends ExoticScroll {
                     ((MysteryMerchant) ch).yell( Messages.get(MysteryMerchant.class, "transmute_complete", oldTalent.title(), newTalent.title() ));
                 }
             }
+			MysteryMerchant.Stats.handlePurchase();
         }
 	}
 
