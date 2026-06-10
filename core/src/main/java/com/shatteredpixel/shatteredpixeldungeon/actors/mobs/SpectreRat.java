@@ -44,7 +44,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
-import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.SpectreRatSprite;
@@ -129,11 +128,17 @@ public class SpectreRat extends AbyssalMob implements Callback {
 	}
 
 	//used so resistances can differentiate between melee and magical attacks
-	public static class DarkBolt implements DamageSource {
-        @Override
-        public EnumSet<DamageProperty> initDmgProperties() {
-            return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.DARK);
-        }
+	public static class DarkBolt extends MagicalAttack {
+		public DarkBolt(Mob attacker, int damage) {
+			super(attacker, damage);
+		}
+
+		@Override
+		public EnumSet<DamageProperty> initDmgProperties() {
+			EnumSet<DamageProperty> properties = super.initDmgProperties();
+			properties.add(DamageProperty.DARK);
+			return properties;
+		}
     }
 
 	private void zap() {
@@ -158,12 +163,12 @@ public class SpectreRat extends AbyssalMob implements Callback {
 				hero.sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(Math.round(dmg*1.25f)), FloatingText.SHIELDING );
 				enemy.buff(WarriorParry.BlockTrock.class).triggered = true;
 			} else {*/
-				enemy.damage(dmg, new DarkBolt());
+			enemy.damage(dmg, new DarkBolt(this, dmg));
 
-				if (enemy == Dungeon.hero && !enemy.isAlive()) {
-					Dungeon.fail(getClass());
-					GLog.n(Messages.get(this, "bolt_kill"));
-				}
+			if (enemy == Dungeon.hero && !enemy.isAlive()) {
+				Dungeon.fail(getClass());
+				GLog.n(Messages.get(this, "bolt_kill"));
+			}
 //			}
 		} else {
 			enemy.sprite.showStatus( CharSprite.NEUTRAL,  enemy.defenseVerb() );

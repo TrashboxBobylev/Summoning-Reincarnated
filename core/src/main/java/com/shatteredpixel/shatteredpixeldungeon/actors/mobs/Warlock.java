@@ -40,7 +40,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAnt
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
-import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.WarlockSprite;
@@ -116,10 +115,16 @@ public class Warlock extends Mob implements Callback {
 	}
 	
 	//used so resistances can differentiate between melee and magical attacks
-	public static class DarkBolt implements DamageSource {
-        @Override
+	public static class DarkBolt extends MagicalAttack {
+		public DarkBolt(Mob attacker, int damage) {
+			super(attacker, damage);
+		}
+
+		@Override
         public EnumSet<DamageProperty> initDmgProperties() {
-            return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.DARK);
+			EnumSet<DamageProperty> properties = super.initDmgProperties();
+			properties.add(DamageProperty.DARK);
+            return properties;
         }
     }
 	
@@ -146,7 +151,7 @@ public class Warlock extends Mob implements Callback {
 				dmg *= 0.5f;
 			}
 
-			enemy.damage( dmg, new DarkBolt() );
+			enemy.damage( dmg, new DarkBolt(this, dmg) );
 			
 			if (enemy == Dungeon.hero && !enemy.isAlive()) {
 				Badges.validateDeathFromEnemyMagic();

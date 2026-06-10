@@ -505,11 +505,17 @@ public abstract class YogFist extends Mob {
 		}
 
 		//used so resistances can differentiate between melee and magical attacks
-		public static class LightBeam implements DamageSource{
-            @Override
-            public EnumSet<DamageProperty> initDmgProperties() {
-                return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.HOLY);
-            }
+		public static class LightBeam extends MagicalAttack {
+			public LightBeam(Mob attacker, int damage) {
+				super(attacker, damage);
+			}
+
+			@Override
+			public EnumSet<DamageProperty> initDmgProperties() {
+				EnumSet<DamageProperty> properties = super.initDmgProperties();
+				properties.add(DamageProperty.HOLY);
+				return properties;
+			}
         }
 
 		@Override
@@ -520,7 +526,8 @@ public abstract class YogFist extends Mob {
 			Char enemy = this.enemy;
 			if (hit( this, enemy, true )) {
 
-				enemy.damage( Random.NormalIntRange(10, 20), new LightBeam() );
+				int dmg = Random.NormalIntRange(10, 20);
+				enemy.damage(dmg, new LightBeam(this, dmg) );
 				Buff.prolong( enemy, Blindness.class, Blindness.DURATION/2f );
 
 				if (!enemy.isAlive() && enemy == Dungeon.hero) {
@@ -576,11 +583,17 @@ public abstract class YogFist extends Mob {
 		}
 
 		//used so resistances can differentiate between melee and magical attacks
-		public static class DarkBolt implements DamageSource {
-            @Override
-            public EnumSet<DamageProperty> initDmgProperties() {
-                return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.DARK);
-            }
+		public static class DarkBolt extends MagicalAttack {
+			public DarkBolt(Mob attacker, int damage) {
+				super(attacker, damage);
+			}
+
+			@Override
+			public EnumSet<DamageProperty> initDmgProperties() {
+				EnumSet<DamageProperty> properties = super.initDmgProperties();
+				properties.add(DamageProperty.DARK);
+				return properties;
+			}
         }
 
 		@Override
@@ -591,7 +604,8 @@ public abstract class YogFist extends Mob {
 			Char enemy = this.enemy;
 			if (hit( this, enemy, true )) {
 
-				enemy.damage( Random.NormalIntRange(10, 20), new DarkBolt() );
+				int dmg = Random.NormalIntRange(10, 20);
+				enemy.damage(dmg, new DarkBolt(this, dmg) );
 
 				Light l = enemy.buff(Light.class);
 				if (l != null){

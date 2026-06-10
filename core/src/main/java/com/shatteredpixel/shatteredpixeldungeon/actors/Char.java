@@ -128,6 +128,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Potential;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Swiftness;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MirrorOfFates;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.CloakGlyph;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.Crumbling;
@@ -1057,6 +1058,20 @@ acuRoll *= accMulti;
 			}
 		}
 
+		if (src.hasProperty(DamageProperty.REFLECTABLE)){
+			if (MirrorOfFates.isMirrorActive(this)) {
+				MirrorOfFates.MirrorShield shield = buff(MirrorOfFates.MirrorShield.class);
+				int reflectDamage = shield.damage(dmg);
+				Char victim = src instanceof MirrorOfFates.IndirectAttack ?
+						((MirrorOfFates.IndirectAttack) src).caster() : (Char) src;
+				victim.damage(dmg - reflectDamage, this);
+				dmg = reflectDamage;
+				if (dmg <= 0) {
+					return;
+				}
+			}
+		}
+
 		Class<?> srcClass = src.getClass();
 		if (isImmune( srcClass )) {
 			damage = 0;
@@ -1731,7 +1746,7 @@ acuRoll *= accMulti;
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.PHYSICAL);
+        return EnumSet.of(DamageProperty.PHYSICAL, DamageProperty.REFLECTABLE);
     }
 
     public interface CharacterizedCallback {

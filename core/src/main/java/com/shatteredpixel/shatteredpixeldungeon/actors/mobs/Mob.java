@@ -86,6 +86,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MirrorOfFates;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.Silent;
@@ -134,6 +135,7 @@ import com.watabou.utils.Reflection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -1439,6 +1441,31 @@ public abstract class Mob extends Char {
 	//mobs may also remove this landmark in some cases, such as when a quest is complete or they die
 	public Notes.Landmark landmark(){
 		return null;
+	}
+
+	public static class MagicalAttack implements DamageSource, MirrorOfFates.IndirectAttack {
+		public Mob caster;
+		public int damage;
+
+		public MagicalAttack(Mob attacker, int damage){
+			caster = attacker;
+			this.damage = damage;
+		}
+
+		@Override
+		public EnumSet<DamageProperty> initDmgProperties() {
+			return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.REFLECTABLE);
+		}
+
+		@Override
+		public Char caster() {
+			return caster;
+		}
+
+		@Override
+		public int damage() {
+			return damage;
+		}
 	}
 
 	public interface AiState {

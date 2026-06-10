@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MirrorOfFates;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DarkGold;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
@@ -703,8 +704,10 @@ public class GnollGeomancer extends Mob {
 		Ballistica rockPath = new Ballistica(from, to, Ballistica.MAGIC_BOLT);
 
 		Sample.INSTANCE.play(Assets.Sounds.MISS);
+		final int rockDmg = Random.NormalIntRange(6, 12);
+		Boulder boulder = new GnollGeomancer.Boulder(source, rockDmg);
 		((MissileSprite)source.sprite.parent.recycle( MissileSprite.class )).
-				reset( from, rockPath.collisionPos, new GnollGeomancer.Boulder(), new Callback() {
+				reset( from, rockPath.collisionPos, boulder, new Callback() {
 					@Override
 					public void call() {
 						Splash.at(rockPath.collisionPos, 0x555555, 15);
@@ -718,7 +721,7 @@ public class GnollGeomancer extends Mob {
 						}
 
 						if (ch != null && !(ch instanceof GnollGeomancer)){
-							ch.damage(Random.NormalIntRange(6, 12), new GnollGeomancer.Boulder());
+							ch.damage(rockDmg, boulder);
 
 							if (ch == Dungeon.hero){
 								Statistics.questScores[2] -= 100;
@@ -752,16 +755,34 @@ public class GnollGeomancer extends Mob {
 		rocksInFlight++;
 	}
 
-	public static class Boulder extends Item implements DamageSource {
+	public static class Boulder extends Item implements DamageSource, MirrorOfFates.IndirectAttack {
 		{
 			image = ItemSpriteSheet.GEO_BOULDER;
 		}
 
+		public Char caster;
+		public int damage;
+
+		public Boulder(Char attacker, int damage){
+			caster = attacker;
+			this.damage = damage;
+		}
+
         @Override
         public EnumSet<DamageProperty> initDmgProperties() {
-            return EnumSet.of(DamageProperty.CRUMBLING);
+            return EnumSet.of(DamageProperty.CRUMBLING, DamageProperty.REFLECTABLE);
         }
-    }
+
+		@Override
+		public Char caster() {
+			return caster;
+		}
+
+		@Override
+		public int damage() {
+			return damage;
+		}
+	}
 
 	//similar overall logic as DM-300's rock fall attack, but with more parameters
 	public static boolean prepRockFallAttack( Char target, Char source, int range, boolean avoidBarricades ){

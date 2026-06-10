@@ -222,7 +222,7 @@ public class YogDzewa extends Mob {
 							Char ch = Actor.findChar(k);
 							if (ch != null && ch.alignment == Alignment.ALLY) {
 								int dmg = Random.NormalIntRange(50, 170);
-								ch.damage(dmg, new Eye.DeathGaze());
+								ch.damage(dmg, new Eye.DeathGaze(this, dmg));
 							}
 						}
 						needCrossBeam = false;
@@ -258,11 +258,13 @@ public class YogDzewa extends Mob {
 						}
 
 						if (hit(this, ch, true)) {
+							int laserDmg = 0;
 							if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL) {
-								ch.damage(Random.NormalIntRange(30, 50), new Eye.DeathGaze());
+								laserDmg = Random.NormalIntRange(30, 50);
 							} else {
-								ch.damage(Random.NormalIntRange(20, 30), new Eye.DeathGaze());
+								laserDmg = Random.NormalIntRange(20, 30);
 							}
+							ch.damage(laserDmg, new Eye.DeathGaze(this, laserDmg));
 							if (Dungeon.level.heroFOV[pos]) {
 								ch.sprite.flash();
 								CellEmitter.center(pos).burst(PurpleParticle.BURST, Random.IntRange(1, 2));

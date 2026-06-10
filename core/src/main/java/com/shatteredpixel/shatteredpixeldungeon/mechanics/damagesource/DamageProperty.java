@@ -138,6 +138,10 @@ public enum DamageProperty {
      */
     HP_REDUCTION,
     /**
+     * Damage, that can be reflected.
+     */
+    REFLECTABLE,
+    /**
      * Damage that is dealt by bleeding out.
      */
     BLEEDING(ORGANIC),

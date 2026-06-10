@@ -39,16 +39,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
-import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
-import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ShamanSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Random;
-
-import java.util.EnumSet;
 
 public abstract class Shaman extends Mob {
 	
@@ -123,11 +119,10 @@ public abstract class Shaman extends Mob {
 	}
 	
 	//used so resistances can differentiate between melee and magical attacks
-	public static class EarthenBolt implements DamageSource {
-        @Override
-        public EnumSet<DamageProperty> initDmgProperties() {
-            return EnumSet.of(DamageProperty.MAGICAL);
-        }
+	public static class EarthenBolt extends MagicalAttack {
+		public EarthenBolt(Mob attacker, int damage) {
+			super(attacker, damage);
+		}
     }
 	
 	private void zap() {
@@ -145,7 +140,7 @@ public abstract class Shaman extends Mob {
 			int dmg = Random.NormalIntRange( 6, 15 );
 			if (buff(Shrunken.class) != null) dmg = Math.round(dmg*0.6f);
 			dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
-			enemy.damage( dmg, new EarthenBolt() );
+			enemy.damage( dmg, new EarthenBolt(this, dmg) );
 			
 			if (!enemy.isAlive() && enemy == Dungeon.hero) {
 				Badges.validateDeathFromEnemyMagic();

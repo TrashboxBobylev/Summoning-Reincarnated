@@ -35,7 +35,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
-import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -92,11 +91,17 @@ public class DM100 extends Mob implements Callback {
 	}
 	
 	//used so resistances can differentiate between melee and magical attacks
-	public static class LightningBolt implements DamageSource {
-        @Override
-        public EnumSet<DamageProperty> initDmgProperties() {
-            return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.ELECTRIC);
-        }
+	public static class LightningBolt extends MagicalAttack {
+		public LightningBolt(Mob attacker, int damage) {
+			super(attacker, damage);
+		}
+
+		@Override
+		public EnumSet<DamageProperty> initDmgProperties() {
+			EnumSet<DamageProperty> properties = super.initDmgProperties();
+			properties.add(DamageProperty.ELECTRIC);
+			return properties;
+		}
     }
 	
 	@Override
@@ -116,7 +121,7 @@ public class DM100 extends Mob implements Callback {
 				int dmg = Random.NormalIntRange(3, 10);
 				if (buff(Shrunken.class) != null) dmg = Math.round(dmg*0.6f);
 				dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
-				enemy.damage( dmg, new LightningBolt() );
+				enemy.damage( dmg, new LightningBolt(this, dmg) );
 
 				if (enemy.sprite.visible) {
 					enemy.sprite.centerEmitter().burst(SparkParticle.FACTORY, 3);

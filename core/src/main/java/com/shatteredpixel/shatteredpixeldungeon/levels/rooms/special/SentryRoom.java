@@ -46,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.EmptyRoom;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -59,6 +60,8 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.Point;
 import com.watabou.utils.Random;
 import com.watabou.utils.Rect;
+
+import java.util.EnumSet;
 
 public class SentryRoom extends SpecialRoom {
 
@@ -302,7 +305,15 @@ public class SentryRoom extends SpecialRoom {
 
 		public void onZapComplete(){
 			if (hit(this, Dungeon.hero, true)) {
-				Dungeon.hero.damage(Random.NormalIntRange(2 + Dungeon.depth / 2, 4 + Dungeon.depth), new Eye.DeathGaze());
+				int dmg = Random.NormalIntRange(2 + Dungeon.depth / 2, 4 + Dungeon.depth);
+				Dungeon.hero.damage(dmg, new Eye.DeathGaze(this, dmg){
+					@Override
+					public EnumSet<DamageProperty> initDmgProperties() {
+						EnumSet<DamageProperty> properties = super.initDmgProperties();
+						properties.remove(DamageProperty.REFLECTABLE);
+						return properties;
+					}
+				});
 				if (!Dungeon.hero.isAlive()) {
 					Badges.validateDeathFromEnemyMagic();
 					Dungeon.fail(this);

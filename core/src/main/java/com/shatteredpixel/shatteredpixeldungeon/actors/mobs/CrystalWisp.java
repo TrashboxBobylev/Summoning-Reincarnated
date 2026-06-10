@@ -30,7 +30,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
-import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -38,8 +37,6 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CrystalWispSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
-
-import java.util.EnumSet;
 
 public class CrystalWisp extends Mob implements DamageSource {
 
@@ -132,11 +129,10 @@ public class CrystalWisp extends Mob implements DamageSource {
 	}
 
 	//used so resistances can differentiate between melee and magical attacks
-	public static class LightBeam implements DamageSource {
-        @Override
-        public EnumSet<DamageProperty> initDmgProperties() {
-            return EnumSet.of(DamageProperty.MAGICAL);
-        }
+	public static class LightBeam extends MagicalAttack {
+		public LightBeam(Mob attacker, int damage) {
+			super(attacker, damage);
+		}
     }
 
 	private void zap() {
@@ -147,7 +143,7 @@ public class CrystalWisp extends Mob implements DamageSource {
 		if (hit( this, enemy, true )) {
 
 			int dmg = Random.NormalIntRange( 5, 10 );
-			enemy.damage( dmg, new LightBeam() );
+			enemy.damage( dmg, new LightBeam(this, dmg) );
 
 			if (!enemy.isAlive() && enemy == Dungeon.hero) {
 				Badges.validateDeathFromEnemyMagic();

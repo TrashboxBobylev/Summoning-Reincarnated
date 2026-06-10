@@ -74,6 +74,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MirrorOfFates;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.CloakGlyph;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.Victide;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Berry;
@@ -106,6 +107,7 @@ import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
+
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
@@ -1058,6 +1060,9 @@ public enum Talent {
 				}
 			}
 		}
+		if (hero.buff(MirrorOfFates.mirrorExp.class) != null && hero.buff(MirrorOfFates.mirrorExp.class).itemType() == 3){
+			MirrorOfFates.UsedItemTracker.track(hero, cls);
+		}
 	}
 
 	public static void onRunestoneUsed( Hero hero, int pos, Class<?extends Item> cls ){
@@ -1076,6 +1081,9 @@ public enum Talent {
 					GLog.p(Messages.get(Talent.class, RECALL_INSCRIPTION.name() + ".refunded"));
 				}
 			}
+		}
+		if (hero.buff(MirrorOfFates.mirrorExp.class) != null && hero.buff(MirrorOfFates.mirrorExp.class).itemType() == 3){
+			MirrorOfFates.UsedItemTracker.track(hero, cls);
 		}
 	}
 

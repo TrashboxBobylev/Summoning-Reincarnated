@@ -131,11 +131,11 @@ public class AttunementConstruct extends Mob implements Callback {
 	}
 	
 	//used so resistances can differentiate between melee and magical attacks
-//	public static class Bolt extends MagicalAttack{
-//		public Bolt(Mob attacker, int damage) {
-//			super(attacker, damage);
-//		}
-//	}
+	public static class Bolt extends MagicalAttack{
+		public Bolt(Mob attacker, int damage) {
+			super(attacker, damage);
+		}
+	}
 	
 	private void zap() {
 		spend( TIME_TO_ZAP );
@@ -158,7 +158,7 @@ public class AttunementConstruct extends Mob implements Callback {
 
 			Buff.prolong( enemy, Eradication.class, Eradication.DURATION ).combo++;
 
-			enemy.damage( dmg, this/*new Bolt(this, damage)*/ );
+			enemy.damage( dmg, new Bolt(this, damage) );
 			
 			if (!enemy.isAlive() && enemy == Dungeon.hero) {
 				Badges.validateDeathFromEnemyMagic();

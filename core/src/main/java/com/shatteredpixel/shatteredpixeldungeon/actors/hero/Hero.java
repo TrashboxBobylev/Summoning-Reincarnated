@@ -131,6 +131,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EtherealChains;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MirrorOfFates;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
@@ -2239,6 +2240,11 @@ public class Hero extends Char {
 			spend( delay / speed() );
             justMoved = true;
 			search(false);
+
+			if (MirrorOfFates.isMirrorActive(this)){
+				MirrorOfFates.MirrorShield shield = buff(MirrorOfFates.MirrorShield.class);
+				shield.damage(shield.maxPotency / 4);
+			}
 
 			return true;
 

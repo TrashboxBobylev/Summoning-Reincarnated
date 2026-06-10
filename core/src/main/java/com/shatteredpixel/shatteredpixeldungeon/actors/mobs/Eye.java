@@ -42,7 +42,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfDisintegration;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.DisintegrationTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
-import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -52,8 +51,6 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
-
-import java.util.EnumSet;
 
 public class Eye extends Mob {
 	
@@ -176,11 +173,10 @@ public class Eye extends Mob {
 	}
 	
 	//used so resistances can differentiate between melee and magical attacks
-	public static class DeathGaze implements DamageSource{
-        @Override
-        public EnumSet<DamageProperty> initDmgProperties() {
-            return EnumSet.of(DamageProperty.MAGICAL);
-        }
+	public static class DeathGaze extends MagicalAttack {
+		public DeathGaze(Mob attacker, int damage) {
+			super(attacker, damage);
+		}
     }
 
 	public void deathGaze(){
@@ -223,7 +219,7 @@ public class Eye extends Mob {
 					}
 				}
 
-				ch.damage( dmg, new DeathGaze() );
+				ch.damage( dmg, new DeathGaze(this, dmg) );
 
 				if (Dungeon.level.heroFOV[pos]) {
 					ch.sprite.flash();
