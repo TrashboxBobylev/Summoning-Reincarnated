@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.GameMath;
 
 import java.util.ArrayList;
@@ -42,6 +43,18 @@ public class ConjurerArmor extends Armor implements TypedItem, ConjurerSet {
 
     public ConjurerArmor() {
         super( 1 );
+    }
+
+    @Override
+    public int powerlevel() {
+        int level = ConjurerSet.super.powerlevel();
+        if (curseInfusionBonus) level += 1 + level/6;
+        return level;
+    }
+
+    @Override
+    public int level() {
+        return powerlevel();
     }
 
     @Override
@@ -70,14 +83,16 @@ public class ConjurerArmor extends Armor implements TypedItem, ConjurerSet {
         return actions;
     }
 
+    int type = 1;
+
     @Override
     public int type() {
-        return level()+1;
+        return type;
     }
 
     @Override
     public void type(int type) {
-        level(type -1);
+        this.type = type;
     }
 
     //    @Override
@@ -115,7 +130,29 @@ public class ConjurerArmor extends Armor implements TypedItem, ConjurerSet {
         return false;
     }
 
+    @Override
+    public boolean canBeCurseInfused() {
+        return true;
+    }
+
     public String getTypeMessage(int type) {
         return Messages.get(this, "type" + type, GameMath.printAverage(DRMin(powerlevel(), type), DRMax(powerlevel(), type)));
+    }
+
+    private static final String TYPE = "rank";
+
+    @Override
+    public void storeInBundle(Bundle bundle) {
+        super.storeInBundle(bundle);
+        bundle.put(TYPE, type);
+    }
+
+    @Override
+    public void restoreFromBundle(Bundle bundle) {
+        super.restoreFromBundle(bundle);
+        if (bundle.contains(TYPE))
+            type = bundle.getInt(TYPE);
+        else
+            type = level();
     }
 }
