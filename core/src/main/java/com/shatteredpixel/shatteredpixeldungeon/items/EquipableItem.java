@@ -123,6 +123,10 @@ public abstract class EquipableItem extends Item {
 		Sample.INSTANCE.play( Assets.Sounds.CURSED );
 	}
 
+	public boolean persistsOnThrow(){
+		return false;
+	}
+
 	protected float timeToEquip( Hero hero ) {
 		return 1f;
 	}
@@ -151,7 +155,8 @@ public abstract class EquipableItem extends Item {
 		keptThoughLostInvent = true;
 		if (!collect || !collect( hero.belongings.backpack )) {
 			onDetach();
-			Dungeon.quickslot.clearItem(this);
+			if (!persistsOnThrow())
+				Dungeon.quickslot.clearItem(this);
 			updateQuickslot();
 			if (collect) Dungeon.level.drop( this, hero.pos ).sprite.drop();
 		}

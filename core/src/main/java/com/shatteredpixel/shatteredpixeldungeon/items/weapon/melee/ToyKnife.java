@@ -181,6 +181,11 @@ public class ToyKnife extends MeleeWeapon implements TypedItem, ManaSource {
     }
 
     @Override
+    public boolean persistsOnThrow() {
+        return true;
+    }
+
+    @Override
     public void onThrow(int cell) {
         Char enemy = Actor.findChar(cell);
         if (enemy == null || enemy == curUser) {
