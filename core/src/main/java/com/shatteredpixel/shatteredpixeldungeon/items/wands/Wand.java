@@ -116,8 +116,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 	protected Charger charger;
 	
 	public boolean curChargeKnown = false;
-	
-	public boolean curseInfusionBonus = false;
+
 	public int resinBonus = 0;
     public boolean magicalPotionBonus = false;
 
