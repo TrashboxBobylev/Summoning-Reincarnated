@@ -311,6 +311,11 @@ public class Dart extends MissileWeapon {
 	public int value() {
 		return Math.round(super.value()/2f); //half normal value
 	}
+
+	@Override
+	public boolean canBeCurseInfused() {
+		return false;
+	}
 	
 	private final WndBag.ItemSelector itemSelector = new WndBag.ItemSelector() {
 

@@ -779,4 +779,8 @@ public class Item implements Bundlable {
 	public boolean isFaceProtected(){
 		return false;
 	}
+
+	public boolean canBeCurseInfused(){
+		return false;
+	}
 }

@@ -63,4 +63,8 @@ public interface TypedItem {
     default boolean canHaveLevels(){
         return false;
     }
+
+    default boolean canBeCurseInfused(){
+        return true;
+    }
 }

@@ -150,7 +150,9 @@ public class Slingshot extends Weapon {
 
     @Override
     public int level() {
-        return (Dungeon.hero != null ) ? Dungeon.hero.STR() - 10 : 0;
+        int level = (Dungeon.hero != null) ? Dungeon.hero.STR() - 10 : 0;
+        if (curseInfusionBonus) level += 1 + level/6;
+        return level;
     }
 
     @Override
@@ -245,6 +247,11 @@ public class Slingshot extends Weapon {
     @Override
     public boolean isUpgradable() {
             return false;
+    }
+
+    @Override
+    public boolean canBeCurseInfused() {
+        return true;
     }
 
     @Override

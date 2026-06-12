@@ -87,6 +87,7 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
     public Weapon.Augment augment = Weapon.Augment.NONE;
     public Weapon.Enchantment enchantment;
     public boolean masteryPotionBonus = false;
+    public boolean curseInfusionBonus = false;
 
     public int curCharges = 1;
     public float partialCharge = 0f;
@@ -225,6 +226,7 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
             if (charger.target.buff(Degrade.class) != null)
                 level -= 1;
         }
+        if (curseInfusionBonus) level += 1 + level/6;
         return level;
     }
 
@@ -241,6 +243,11 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
     @Override
     public boolean isUpgradable() {
         return false;
+    }
+
+    @Override
+    public boolean canBeCurseInfused() {
+        return true;
     }
 
     public int hp(int lvl){
@@ -561,6 +568,7 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
     private static final String AUGMENT	        = "augment";
     private static final String ENCHANTMENT	    = "enchantment";
     private static final String MASTERY_POTION_BONUS = "mastery_potion_bonus";
+    private static final String CURSE_INFUSION_BONUS = "curse_infusion_bonus";
 
 
     @Override
@@ -573,6 +581,7 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
         bundle.put(ENCHANTMENT, enchantment );
         bundle.put(AUGMENT, augment );
         bundle.put( MASTERY_POTION_BONUS, masteryPotionBonus );
+        bundle.put( CURSE_INFUSION_BONUS, curseInfusionBonus );
     }
 
     @Override
@@ -586,6 +595,8 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
         enchantment = (Weapon.Enchantment)bundle.get( ENCHANTMENT );
         if (bundle.contains(MASTERY_POTION_BONUS))
             masteryPotionBonus = bundle.getBoolean(MASTERY_POTION_BONUS);
+        if (bundle.contains(CURSE_INFUSION_BONUS))
+            curseInfusionBonus = bundle.getBoolean(CURSE_INFUSION_BONUS);
     }
 
     public class Charger extends Buff {

@@ -188,7 +188,9 @@ abstract public class MissileWeapon extends Weapon implements TypedItem {
 
     @Override
     public int level() {
-        return (int)powerLevel();
+		int level = (int) powerLevel();
+		if (curseInfusionBonus) level += 1 + level/6;
+		return level;
     }
 
     @Override
@@ -701,6 +703,11 @@ abstract public class MissileWeapon extends Weapon implements TypedItem {
 	@Override
 	public boolean isIdentified() {
 		return levelKnown && cursedKnown;
+	}
+
+	@Override
+	public boolean canBeCurseInfused() {
+		return true;
 	}
 	
 	@Override

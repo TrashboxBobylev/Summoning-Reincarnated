@@ -358,6 +358,11 @@ public class SpiritBow extends Weapon implements TypedItem {
 	}
 
 	@Override
+	public boolean canBeCurseInfused() {
+		return true;
+	}
+
+	@Override
 	public String getTypeMessage(int type){
 		return Messages.get(this, "type" + type,
 				GameMath.printAverage(minTyped(type), maxTyped(type)),

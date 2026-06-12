@@ -28,16 +28,15 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
-import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
@@ -57,7 +56,7 @@ public class CurseInfusion extends InventorySpell {
 
 	@Override
 	protected boolean usableOnItem(Item item) {
-		return !Dungeon.isChallenged(Conducts.Conduct.CANDI_18) && ((item instanceof EquipableItem && item.isUpgradable()) || item instanceof Wand || item instanceof SpiritBow);
+		return !Dungeon.isChallenged(Conducts.Conduct.CANDI_18) && item.canBeCurseInfused();
 	}
 
 	@Override
@@ -67,7 +66,7 @@ public class CurseInfusion extends InventorySpell {
 		Sample.INSTANCE.play(Assets.Sounds.CURSED);
 		
 		item.cursed = true;
-		if (item instanceof Weapon) {
+		if (item instanceof Weapon && !(item instanceof Wand && Dungeon.hero.heroClass != HeroClass.MAGE)) {
 			Weapon w = (Weapon) item;
 			if (w.enchantment != null) {
 				//if we are freshly applying curse infusion, don't replace an existing curse

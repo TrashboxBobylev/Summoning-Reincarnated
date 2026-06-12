@@ -643,7 +643,9 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 
     @Override
     public int level() {
-        return (int)power();
+		int power = (int) power();
+		if (curseInfusionBonus) power += 1 + power/6;
+		return power;
     }
 
     @Override
@@ -655,6 +657,11 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
     public boolean isUpgradable() {
         return false;
     }
+
+	@Override
+	public boolean canBeCurseInfused() {
+		return true;
+	}
 
     @Override
     public int type() {

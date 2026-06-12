@@ -87,6 +87,7 @@ public class ToyKnife extends MeleeWeapon implements TypedItem, ManaSource {
         if (Dungeon.hero != null && Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.hasTalent(Talent.EGOISM)) {
             lvl += 2;
         }
+        if (curseInfusionBonus) lvl += 1 + lvl/6;
         return lvl;
     }
 
@@ -103,6 +104,11 @@ public class ToyKnife extends MeleeWeapon implements TypedItem, ManaSource {
     @Override
     public boolean isUpgradable() {
         return false;
+    }
+
+    @Override
+    public boolean canBeCurseInfused() {
+        return true;
     }
 
     public float damageMod(int rank){

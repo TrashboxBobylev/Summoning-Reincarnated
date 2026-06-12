@@ -113,7 +113,12 @@ public abstract class EquipableItem extends Item {
 		super.cast( user, dst );
 	}
 
-	public static void equipCursed( Hero hero ) {
+	@Override
+	public boolean canBeCurseInfused() {
+		return isUpgradable();
+	}
+
+	public static void equipCursed(Hero hero ) {
 		hero.sprite.emitter().burst( ShadowParticle.CURSE, 6 );
 		Sample.INSTANCE.play( Assets.Sounds.CURSED );
 	}
