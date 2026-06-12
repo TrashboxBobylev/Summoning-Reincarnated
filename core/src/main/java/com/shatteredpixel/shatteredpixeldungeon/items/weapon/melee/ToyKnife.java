@@ -191,8 +191,8 @@ public class ToyKnife extends MeleeWeapon implements TypedItem, ManaSource {
             } else {
                 Dungeon.level.drop( this, cell ).sprite.drop();
             }
-            processSoulsBurst(this, cell);
         }
+        processSoulsBurst(this, cell);
     }
 
     @Override
