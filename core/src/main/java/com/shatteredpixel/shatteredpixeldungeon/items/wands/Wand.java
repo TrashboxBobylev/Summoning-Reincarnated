@@ -66,6 +66,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SubtilitasSigil;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.CloakGlyph;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.Sparking;
@@ -562,7 +563,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		super.upgrade();
 
 		if (Random.Int(3) == 0) {
-			cursed = false;
+			uncurse();
 		}
 
 		if (resinBonus > 0){
@@ -830,6 +831,11 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 				}
 			}
 			if (removed) new Flare( 6, 32 ).color(0xFF4CD2, true).show( Dungeon.hero.sprite, 2f );
+		}
+
+		SubtilitasSigil.Recharge sigilCharge = curUser.buff(SubtilitasSigil.Recharge.class);
+		if (sigilCharge != null){
+			sigilCharge.gainExp(1);
 		}
 
 		Invisibility.dispel();

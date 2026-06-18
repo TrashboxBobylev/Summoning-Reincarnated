@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.SpiritForm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SubtilitasSigil;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ChaoticCenser;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.SaltCube;
@@ -118,6 +119,7 @@ public class Regeneration extends Buff {
 
                 if (Dungeon.isChallenged(Conducts.Conduct.KING) && target instanceof Hero) delay /= 2.5f;
                 if (target instanceof Mob) delay /= 3;
+				if (target.buff(SubtilitasSigil.Recharge.class) != null && target.buff(SubtilitasSigil.Recharge.class).itemType() == 3) delay *= 2;
 
 				//salt cube is turned off while regen is disabled.
 				if (target.buff(LockedFloor.class) == null) {

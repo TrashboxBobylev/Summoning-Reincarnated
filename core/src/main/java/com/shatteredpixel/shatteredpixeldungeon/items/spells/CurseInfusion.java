@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SubtilitasSigil;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
@@ -96,6 +97,8 @@ public class CurseInfusion extends InventorySpell {
 			((Wand) item).updateLevel();
 		} else if (item instanceof RingOfMight){
 			curUser.updateHT(false);
+		} else if (item instanceof SubtilitasSigil){
+			((SubtilitasSigil) item).type(3);
 		}
 		Badges.validateItemLevelAquired(item);
 		updateQuickslot();

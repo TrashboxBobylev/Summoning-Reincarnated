@@ -129,6 +129,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Swiftness;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MirrorOfFates;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SubtilitasSigil;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.CloakGlyph;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.Crumbling;
@@ -757,6 +758,7 @@ public abstract class Char extends Actor implements ManaSource, DamageSource {
 		if (attacker.buff(  Hex.class) != null) acuRoll *= 0.8f;
 		if (attacker.buff( Daze.class) != null) acuRoll *= 0.5f;
 		if (attacker.buff(Shrunken.class)!= null) acuRoll *= 0.6f;
+		if (attacker.buff(SubtilitasSigil.EnrageBuff.class) != null) acuRoll *= 1.33f;
 		for (ChampionEnemy buff : attacker.buffs(ChampionEnemy.class)){
 			acuRoll *= buff.evasionAndAccuracyFactor();
 		}
@@ -1077,6 +1079,13 @@ acuRoll *= accMulti;
 			damage = 0;
 		} else {
 			damage *= resist( srcClass );
+		}
+
+		if ( buff(SubtilitasSigil.EnrageBuff.class) != null){
+			damage *= 2f;
+		}
+		if (buff(SubtilitasSigil.Recharge.class) != null && buff(SubtilitasSigil.Recharge.class).isCursed() && buff(SubtilitasSigil.Recharge.class).itemType() == 1){
+			damage *= 1.25f;
 		}
 
 		dmg = Math.round(damage);

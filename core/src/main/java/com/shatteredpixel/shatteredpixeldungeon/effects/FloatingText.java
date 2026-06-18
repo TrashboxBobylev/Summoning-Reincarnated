@@ -49,6 +49,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Stone;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SubtilitasSigil;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEvasion;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.FerretTuft;
@@ -139,6 +140,7 @@ public class FloatingText extends RenderedTextBlock {
     public static int HIT_KING   =93;
     public static int HIT_WRAITH =94;
 	public static int HIT_BOOST  =95;
+	public static int HIT_SIGIL  =96;
 
 	//extra row for hit icons that are armor-piercing
 
@@ -392,6 +394,9 @@ public class FloatingText extends RenderedTextBlock {
 		if (RingOfAccuracy.accuracyMultiplier(attacker) > 1)    hitReasons.put(HIT_ACC, RingOfAccuracy.accuracyMultiplier(attacker));
 		if (attacker.buff(HornOfPlenty.DamageBoost.class) != null) hitReasons.put(HIT_BOOST, 2f);
 		if (attacker.buff(Scimitar.SwordDance.class) != null)   hitReasons.put(HIT_DANCE, 1.5f);
+		if (attacker.buff(SubtilitasSigil.EnrageBuff.class) != null) hitReasons.put(HIT_SIGIL, 1.33f);
+		if (attacker.buff(SubtilitasSigil.Recharge.class) != null && attacker.buff(SubtilitasSigil.Recharge.class).itemType() == 3) hitReasons.put(HIT_SIGIL, 2f);
+
 		if (!(wep instanceof MissileWeapon)) {
 			if (attacker instanceof Hero && ((Hero) attacker).hasTalent(Talent.PRECISE_ASSAULT) && ((Hero) attacker).heroClass != HeroClass.DUELIST){
 				hitReasons.put(HIT_PRES, 0.1f * Dungeon.hero.pointsInTalent(Talent.PRECISE_ASSAULT));

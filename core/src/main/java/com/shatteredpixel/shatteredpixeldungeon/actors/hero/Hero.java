@@ -133,6 +133,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MirrorOfFates;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SkeletonKey;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SubtilitasSigil;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.Silent;
@@ -343,6 +344,8 @@ public class Hero extends Char {
 			strBonus += (int)Math.floor(STR * (0.03f + 0.05f*pointsInTalent(Talent.STRONGMAN)));
 		}
 
+		if (buff(SubtilitasSigil.Recharge.class) != null && buff(SubtilitasSigil.Recharge.class).itemType() == 3) strBonus += 2;
+
 		return STR + strBonus;
 	}
 
@@ -356,6 +359,7 @@ public class Hero extends Char {
 		}
 		if (subClass == HeroSubClass.SOUL_WIELDER) attunementBonus++;
 		if (buff(Ascension.AscendBuff.class) != null && pointsInTalent(Talent.CHARITY) > 3) attunementBonus += 2;
+		if (buff(SubtilitasSigil.Recharge.class) != null && buff(SubtilitasSigil.Recharge.class).itemType() == 3) attunementBonus -= 2;
 
 		return ATU + attunementBonus;
 	}
@@ -732,6 +736,10 @@ public class Hero extends Char {
 			accuracy *= 2f;
 		}
 
+		if (buff(SubtilitasSigil.Recharge.class) != null && buff(SubtilitasSigil.Recharge.class).itemType() == 3){
+			accuracy *= 1.5f;
+		}
+
 		if (!RingOfForce.fightingUnarmed(this)) {
 			return Math.max(1, Math.round(attackSkill * accuracy * wep.accuracyFactor( this, target )));
 		} else {
@@ -739,11 +747,24 @@ public class Hero extends Char {
 		}
 	}
 
-	public int defenseRolls() {
-		if (Dungeon.isChallenged(Conducts.Conduct.WRAITH)){
-			return super.defenseRolls() + 1;
+	@Override
+	public int attackRolls() {
+		int rolls = super.attackRolls();
+		if (buff(SubtilitasSigil.Recharge.class) != null && buff(SubtilitasSigil.Recharge.class).itemType() == 3){
+			rolls++;
 		}
-		return super.defenseRolls();
+		return rolls;
+	}
+
+	public int defenseRolls() {
+		int rolls = super.defenseRolls();
+		if (Dungeon.isChallenged(Conducts.Conduct.WRAITH)){
+			rolls++;
+		}
+		if (buff(SubtilitasSigil.Recharge.class) != null && buff(SubtilitasSigil.Recharge.class).itemType() == 3){
+			rolls++;
+		}
+		return rolls;
 	}
 
 	@Override
@@ -859,6 +880,11 @@ public class Hero extends Char {
 
 		if (!RingOfForce.fightingUnarmed(this)) {
 			dmg = wep.damageRoll( this );
+			if (buff(SubtilitasSigil.Recharge.class) != null && buff(SubtilitasSigil.Recharge.class).itemType() == 3){
+				int dmg2 = wep.damageRoll( this );
+				if (dmg2 > dmg)
+					dmg = dmg2;
+			}
 
 			TieringEmpower emp = buff(TieringEmpower.class);
 			if (emp != null){
@@ -869,9 +895,26 @@ public class Hero extends Char {
 				Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG, 0.75f, 1.2f);
 			}
 
-			if (!(wep instanceof MissileWeapon)) dmg += RingOfForce.armedDamageBonus(this);
+			SubtilitasSigil.Recharge subForce = buff(SubtilitasSigil.Recharge.class);
+
+			if (!(wep instanceof MissileWeapon)) {
+				dmg += RingOfForce.armedDamageBonus(this);
+				if (subForce != null && subForce.itemType() == 2){
+					dmg += subForce.armedDamageBonus();
+				}
+			} else {
+				if (subForce != null && subForce.itemType() == 2){
+					dmg += subForce.armedDamageBonus()/2;
+				}
+			}
 		} else {
 			dmg = RingOfForce.damageRoll(this);
+			SubtilitasSigil.Recharge subForce = buff(SubtilitasSigil.Recharge.class);
+			if (subForce != null && subForce.itemType() == 2){
+				int damageBonus = subForce.unarmedDamageBonus();
+				if (damageBonus > 0)
+					dmg = damageBonus;
+			}
 			if (RingOfForce.unarmedGetsWeaponAugment(this)){
 				dmg = ((Weapon)belongings.attackingWeapon()).augment.damageFactor(dmg);
 			}
@@ -894,6 +937,9 @@ public class Hero extends Char {
 		}
 		if (buff(HornOfPlenty.DamageBoost.class) != null){
 			dmg *= 2;
+		}
+		if (buff(SubtilitasSigil.Recharge.class) != null && buff(SubtilitasSigil.Recharge.class).itemType() == 3){
+			dmg *= 1.75f;
 		}
 
 		if (dmg < 0) dmg = 0;
@@ -1952,6 +1998,9 @@ public class Hero extends Char {
 			}
 			if (buff(Ascension.AscendBuff.class) != null && pointsInTalent(Talent.EGOISM) > 3){
 				damage *= 0.67f;
+			}
+			if (buff(SubtilitasSigil.Recharge.class) != null && buff(SubtilitasSigil.Recharge.class).itemType() == 3){
+				damage *= 2;
 			}
 		}
 
