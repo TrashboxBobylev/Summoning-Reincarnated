@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -203,6 +204,7 @@ public class SubtilitasSigil extends Artifact {
             if (SubtilitasSigil.this.exp > 5 + (level()+1)*8 && level() < levelCap){
                 SubtilitasSigil.this.exp = 0;
                 GLog.positive( Messages.get(SubtilitasSigil.class, "level_up") );
+                Catalog.countUse(MirrorOfFates.class);
                 upgrade();
                 updateQuickslot();
             }
