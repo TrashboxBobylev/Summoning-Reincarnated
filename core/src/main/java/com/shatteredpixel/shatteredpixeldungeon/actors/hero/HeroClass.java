@@ -290,7 +290,7 @@ public enum HeroClass {
             if (weapon != null){
                 weapon.duelistStart = true;
                 weapon.tier = 1;
-                weapon.cursed = false;
+                weapon.uncurse();
                 weapon.level(0);
                 weapon.enchant(null);
                 (hero.belongings.weapon = weapon).identify();

@@ -61,7 +61,7 @@ public class VaultSingleEnemyTreasureRoom extends VaultTreasureRoom {
 
 		Item treasureItem = Generator.randomUsingDefaults(Generator.Category.WEP_T4);
 		if (treasureItem.cursed){
-			treasureItem.cursed = false;
+			treasureItem.uncurse();
 			if (((MeleeWeapon) treasureItem).hasCurseEnchant()){
 				((MeleeWeapon) treasureItem).enchant(null);
 			}

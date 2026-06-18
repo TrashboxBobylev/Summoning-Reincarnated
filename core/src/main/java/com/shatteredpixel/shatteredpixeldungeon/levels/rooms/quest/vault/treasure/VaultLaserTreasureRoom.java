@@ -147,7 +147,7 @@ public class VaultLaserTreasureRoom extends VaultTreasureRoom{
 		int treasurePos = level.pointToCell(Random.element(itemPlace.getPoints()));
 		Item treasureItem = Generator.randomUsingDefaults(Generator.Category.WEP_T3);
 		if (treasureItem.cursed){
-			treasureItem.cursed = false;
+			treasureItem.uncurse();
 			if (((MeleeWeapon) treasureItem).hasCurseEnchant()){
 				((MeleeWeapon) treasureItem).enchant(null);
 			}

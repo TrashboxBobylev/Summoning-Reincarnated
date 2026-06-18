@@ -315,14 +315,14 @@ public class ShopRoom extends SpecialRoom {
 			}
 			if (w != null) {
 				w.enchant(null);
-				w.cursed = false;
+				w.uncurse();
 				w.level(0);
 				w.identify(false);
 				itemsToSpawn.add(w);
 			}
             if (m != null){
                 m.enchant(null);
-                m.cursed = false;
+                m.uncurse();
                 m.level(0);
                 m.identify(false);
                 itemsToSpawn.add(m);
@@ -381,7 +381,7 @@ public class ShopRoom extends SpecialRoom {
 				default:
 					rare = new Stylus();
 			}
-			rare.cursed = false;
+			rare.uncurse();
 			rare.cursedKnown = true;
 			itemsToSpawn.add(rare);
 		}
@@ -612,7 +612,7 @@ public class ShopRoom extends SpecialRoom {
 		}
 		if (!wepToReplace.hasCurseEnchant()) shopWeapon.enchantment = wepToReplace.enchantment;
 		shopWeapon.augment = wepToReplace.augment;
-		shopWeapon.cursed = false;
+		shopWeapon.uncurse();
 		shopWeapon.identify();
 		shopWeapon.level(wepToReplace.level());
 		return shopWeapon;

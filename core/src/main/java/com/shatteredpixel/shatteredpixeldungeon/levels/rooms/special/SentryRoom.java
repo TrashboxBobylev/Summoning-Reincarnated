@@ -211,7 +211,7 @@ public class SentryRoom extends SpecialRoom {
 				}
 				break;
 		}
-		prize.cursed = false;
+		prize.uncurse();
 		prize.cursedKnown = true;
 
 		//33% chance for an extra update.

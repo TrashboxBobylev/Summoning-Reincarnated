@@ -90,7 +90,7 @@ public class VaultSimpleEnemyTreasureRoom extends StandardRoom {
 		Item treasure = Generator.randomWeapon(true);
 		level.drop(treasure, treasurePos).type = Heap.Type.CHEST;
 		if (treasure.cursed){
-			treasure.cursed = false;
+			treasure.uncurse();
 			if (((MeleeWeapon) treasure).hasCurseEnchant()){
 				((MeleeWeapon) treasure).enchant(null);
 			}

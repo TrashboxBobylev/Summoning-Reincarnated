@@ -232,7 +232,7 @@ public class Ring extends KindofMisc {
 		super.upgrade();
 		
 		if (Random.Int(3) == 0) {
-			cursed = false;
+			uncurse();
 		}
 		
 		return this;

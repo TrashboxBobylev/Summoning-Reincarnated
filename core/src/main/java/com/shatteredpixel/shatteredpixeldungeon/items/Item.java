@@ -516,6 +516,10 @@ public class Item implements Bundlable {
 	public void onHeroGainExp( float levelPercent, Hero hero ){
 		//do nothing by default
 	}
+
+	public void uncurse(){
+		cursed = false;
+	}
 	
 	public static void evoke( Hero hero ) {
 		hero.sprite.emitter().burst( Speck.factory( Speck.EVOKE ), 5 );

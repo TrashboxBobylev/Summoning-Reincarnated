@@ -431,7 +431,7 @@ abstract public class Weapon extends KindOfWeapon implements StrengthItem, Weapo
 			}
 		}
 		
-		cursed = false;
+		uncurse();
 
 		return super.upgrade();
 	}

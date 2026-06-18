@@ -105,7 +105,7 @@ public class EbonyMimic extends Mimic {
 		//all existing prize items are guaranteed uncursed, and are always at least +1
 		for (Item i : items){
 			if (i instanceof EquipableItem || i instanceof Wand){
-				i.cursed = false;
+				i.uncurse();
 				i.cursedKnown = true;
 				if (i instanceof Weapon && ((Weapon) i).hasCurseEnchant()){
 					((Weapon) i).enchant(null);

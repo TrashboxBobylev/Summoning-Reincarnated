@@ -136,7 +136,7 @@ public class GnollTrickster extends Gnoll {
 		if (drop.hasCurseEnchant()){
 			drop.enchant(null);
 		}
-		drop.cursed = false;
+		drop.uncurse();
 		drop.identify(false);
 		//half quantity, rounded up
 		drop.quantity((drop.quantity()+1)/2);

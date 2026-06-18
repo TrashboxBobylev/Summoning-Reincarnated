@@ -81,7 +81,7 @@ public class VaultLevel extends CityLevel {
 				continue;
 			}
 			if (item.cursed){
-				item.cursed = false;
+				item.uncurse();
 				if (item instanceof MeleeWeapon && ((MeleeWeapon) item).hasCurseEnchant()){
 					((MeleeWeapon) item).enchant(null);
 				} else if (item instanceof Armor && ((Armor) item).hasCurseGlyph()){

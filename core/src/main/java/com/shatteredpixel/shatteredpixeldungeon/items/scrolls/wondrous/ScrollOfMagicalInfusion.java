@@ -49,7 +49,7 @@ public class ScrollOfMagicalInfusion extends WondrousScroll {
 
         for (Item item : Dungeon.hero.belongings) {
             if (item instanceof EquipableItem && item.isEquipped(Dungeon.hero) && ScrollOfEnchantment.enchantable(item)){
-                item.cursed = false;
+                item.uncurse();
                 item.cursedKnown = true;
                 if (item instanceof WeaponEnchantable) {
 

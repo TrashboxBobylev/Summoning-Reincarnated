@@ -76,7 +76,7 @@ public class VaultManyScansRoom extends VaultTreasureRoom {
 		Painter.set(level, c, Terrain.PEDESTAL);
 		Item treasureItem = Generator.randomUsingDefaults(Generator.Category.WEP_T5);
 		if (treasureItem.cursed){
-			treasureItem.cursed = false;
+			treasureItem.uncurse();
 			if (((MeleeWeapon) treasureItem).hasCurseEnchant()){
 				((MeleeWeapon) treasureItem).enchant(null);
 			}

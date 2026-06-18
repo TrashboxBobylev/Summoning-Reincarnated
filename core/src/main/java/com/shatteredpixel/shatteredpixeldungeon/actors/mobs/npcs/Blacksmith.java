@@ -407,7 +407,7 @@ public class Blacksmith extends NPC {
 				} else if (i instanceof Armor){
 					((Armor) i).inscribe(null);
 				}
-				i.cursed = false;
+				i.uncurse();
 			}
 
 			// 30% base chance to be enchanted, stored separately so status isn't revealed early

@@ -82,7 +82,7 @@ public class VaultBookcaseTreasureRoom extends VaultTreasureRoom {
 
 		treasureItem = Generator.randomUsingDefaults(Generator.Category.WEP_T4);
 		if (treasureItem.cursed){
-			treasureItem.cursed = false;
+			treasureItem.uncurse();
 			if (((MeleeWeapon) treasureItem).hasCurseEnchant()){
 				((MeleeWeapon) treasureItem).enchant(null);
 			}

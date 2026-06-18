@@ -126,7 +126,7 @@ public class ScrollOfRemoveCurse extends InventoryScroll {
 				item.cursedKnown = true;
 				if (item.cursed) {
 					procced = true;
-					item.cursed = false;
+					item.uncurse();
 				}
 			}
 			if (item instanceof WeaponEnchantable){

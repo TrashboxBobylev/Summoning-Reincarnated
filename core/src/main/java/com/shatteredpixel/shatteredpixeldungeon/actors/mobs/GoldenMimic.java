@@ -94,7 +94,7 @@ public class GoldenMimic extends Mimic {
 		//all existing prize items are guaranteed uncursed, and have a 50% chance to be +1 if they were +0
 		for (Item i : items){
 			if (i instanceof EquipableItem || i instanceof Wand){
-				i.cursed = false;
+				i.uncurse();
 				i.cursedKnown = true;
 				if (i instanceof WeaponEnchantable && ((WeaponEnchantable) i).hasCurseEnchant()){
 					((WeaponEnchantable) i).enchant(null);

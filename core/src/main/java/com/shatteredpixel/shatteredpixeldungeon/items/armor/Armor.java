@@ -500,7 +500,7 @@ public class Armor extends EquipableItem implements StrengthItem, AugmentedItem,
 			}
 		}
 		
-		cursed = false;
+		uncurse();
 
 		if (seal != null && seal.level() == 0)
 			seal.upgrade();

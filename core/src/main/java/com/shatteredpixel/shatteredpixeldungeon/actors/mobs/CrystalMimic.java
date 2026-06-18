@@ -184,7 +184,7 @@ public class CrystalMimic extends Mimic {
 	protected void generatePrize( boolean useDecks ) {
 		//Crystal mimic already contains a prize item. Just guarantee it isn't cursed.
 		for (Item i : items){
-			i.cursed = false;
+			i.uncurse();
 			i.cursedKnown = true;
 		}
 	}
