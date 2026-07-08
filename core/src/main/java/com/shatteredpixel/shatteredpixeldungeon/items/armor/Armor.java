@@ -70,6 +70,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Stone;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Swiftness;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Thorns;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EmeradicBattery;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfArcana;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ParchmentScrap;
@@ -526,6 +527,7 @@ public class Armor extends EquipableItem implements StrengthItem, AugmentedItem,
 				if (glyph != null &&
 						(((Hero) defender).subClass == HeroSubClass.PALADIN || hasCurseGlyph())){
 					damage = glyph.proc( this, attacker, defender, damage );
+					EmeradicBattery.procArcaneEnergy(attacker);
 				}
 				if (trinityGlyph != null){
 					damage = trinityGlyph.proc( this, attacker, defender, damage );
@@ -536,6 +538,7 @@ public class Armor extends EquipableItem implements StrengthItem, AugmentedItem,
 			} else {
 				if (glyph != null) {
 					damage = glyph.proc(this, attacker, defender, damage);
+					EmeradicBattery.procArcaneEnergy(attacker);
 				}
 				if (trinityGlyph != null){
 					damage = trinityGlyph.proc( this, attacker, defender, damage );
@@ -863,11 +866,24 @@ public class Armor extends EquipableItem implements StrengthItem, AugmentedItem,
 		public abstract int proc( Armor armor, Char attacker, Char defender, int damage );
 
 		protected float procChanceMultiplier( Char defender ){
-			return genericProcChanceMultiplier( defender );
+			float multiplier = genericProcChanceMultiplier(defender);
+			EmeradicBattery.fuelBuff emeradicArcana;
+			if ((emeradicArcana = defender.buff(EmeradicBattery.fuelBuff.class)) != null && emeradicArcana.itemType() == 2){
+				if (emeradicArcana.isCursed() && curse())
+					multiplier *= 2.5f * 3f;
+			}
+			return multiplier;
 		}
 
 		public static float genericProcChanceMultiplier( Char defender ){
 			float multi = RingOfArcana.enchantPowerMultiplier(defender);
+			EmeradicBattery.fuelBuff emeradicArcana;
+			if ((emeradicArcana = defender.buff(EmeradicBattery.fuelBuff.class)) != null && emeradicArcana.itemType() == 2){
+				if (emeradicArcana.isCursed())
+					multi *= 0.33f;
+				else if (emeradicArcana.charges() > 0)
+					multi *= 1 + (2 + emeradicArcana.itemLevel())/3f;
+			}
 
 			if (Dungeon.hero.alignment == defender.alignment
 					&& Dungeon.hero.buff(AuraOfProtection.AuraBuff.class) != null

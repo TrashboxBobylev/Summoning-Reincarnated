@@ -1049,9 +1049,11 @@ public class ItemSpriteSheet {
 	private static final int SUMM_ARTIFACTS   =                               xy(1, 42);  //16 slots
 	public static final int SIGIL             = SUMM_ARTIFACTS+0;
 	public static final int MIRROR            = SUMM_ARTIFACTS+1;
+	public static final int BATTERY           = SUMM_ARTIFACTS+2;
 	static {
 		assignItemRect(SIGIL,  14, 12);
 		assignItemRect(MIRROR, 14, 14);
+		assignItemRect(BATTERY,14, 13);
 	}
 
 	//for smaller 8x8 icons that often accompany an item sprite

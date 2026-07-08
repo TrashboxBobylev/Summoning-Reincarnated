@@ -57,6 +57,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EmeradicBattery;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
@@ -451,6 +452,7 @@ public class ElementalStrike extends ArmorAbility implements DamageSource {
 				for (Char ch : affected){
 					if (ch != primaryTarget) {
 						ench.proc((Weapon) w, hero, ch, w.damageRoll(hero));
+						EmeradicBattery.procArcaneEnergy(hero);
 					}
 				}
 			}

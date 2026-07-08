@@ -49,6 +49,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerSet;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EmeradicBattery;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -299,6 +300,7 @@ public class Minion extends Mob implements ManaSource {
     public int attackProc(Char enemy, int damage) {
         if (enchantment != null && buff(MagicImmune.class) == null) {
             damage = enchantment.proc(  this, enemy, damage );
+            EmeradicBattery.procArcaneEnergy(Dungeon.hero);
         }
         if (Dungeon.hero.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.pointsInTalent(Talent.CHARITY) > 1 && enemy.buff(Talent.CharityEmpoweringTracker.class) == null){
             Buff.affect(enemy, Talent.CharityEmpoweringTracker.class);

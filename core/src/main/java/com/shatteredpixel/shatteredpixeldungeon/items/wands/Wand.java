@@ -66,6 +66,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.ChargingItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EmeradicBattery;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SubtilitasSigil;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.CloakGlyph;
@@ -139,7 +140,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
-		if (curCharges > 0 || !curChargeKnown) {
+		if (canZap(hero) || !curChargeKnown) {
 			actions.add( AC_ZAP );
 		}
         if (hero.heroClass != HeroClass.MAGE){
@@ -265,6 +266,17 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         return false;
     }
 
+	public boolean canZap(Char owner){
+		if (owner.buff(WildMagic.WildMagicTracker.class) != null || curCharges >= (cursed ? 1 : chargesPerCast())){
+			return true;
+		} else {
+			if (owner.buff(EmeradicBattery.fuelBuff.class) != null){
+				return owner.buff(EmeradicBattery.fuelBuff.class).canUseCharge(this, (cursed ? 1 : chargesPerCast()));
+			}
+		}
+		return false;
+	}
+
     public boolean tryToZap(Char owner, int target ){
 
 		if (owner.buff(WildMagic.WildMagicTracker.class) == null && (owner.buff(MagicImmune.class) != null)){
@@ -273,7 +285,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		}
 
 		//if we're using wild magic, then assume we have charges
-		if ( owner.buff(WildMagic.WildMagicTracker.class) != null || curCharges >= chargesPerCast()){
+		if (canZap(owner)){
 			return true;
 		} else {
 			GLog.w(Messages.get(this, "fizzles"));
@@ -765,8 +777,13 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 				Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shieldToGive), FloatingText.SHIELDING);
 			}
 		}
-		
-		curCharges -= cursed ? 1 : chargesPerCast();
+
+		int usedCharges = cursed ? 1 : chargesPerCast();
+		if (this.curCharges > 0)
+			this.curCharges -= usedCharges;
+		else if (curUser.buff(EmeradicBattery.fuelBuff.class) != null){
+			curUser.buff(EmeradicBattery.fuelBuff.class).useCharge(this, usedCharges);
+		}
 
 		//remove magic charge at a higher priority, if we are benefiting from it are and not the
 		//wand that just applied it
@@ -1053,7 +1070,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 						}
 					}
 					
-					if (curWand.cursed){
+					if (curWand.cursed || EmeradicBattery.isEmeradicEvil(curUser)){
 						if (!curWand.cursedKnown){
 							GLog.n(Messages.get(Wand.class, "curse_discover", curWand.name()));
 						}
@@ -1156,7 +1173,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 	};
 
 	protected static void wondrousProc(Wand curWand, Integer target) {
-		if (Random.Float() < WondrousResin.extraCurseEffectChance()) {
+		if (Random.Float() < WondrousResin.extraCurseEffectChance() || EmeradicBattery.procWondrousEnergy(curUser)) {
 			WondrousResin.forcePositive = true;
 			CursedWand.cursedZap(curWand,
 					curUser,
@@ -1195,7 +1212,12 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		
 		@Override
 		public boolean act() {
-			if (curCharges < maxCharges && target.buff(MagicImmune.class) == null)
+			boolean emeradicCurse = false;
+			EmeradicBattery.fuelBuff fuelBuff = target.buff(EmeradicBattery.fuelBuff.class);
+			if (fuelBuff != null && fuelBuff.isCursed())
+				emeradicCurse = true;
+
+			if (curCharges < maxCharges && target.buff(MagicImmune.class) == null && !emeradicCurse)
 				recharge();
 			
 			while (partialCharge >= 1 && curCharges < maxCharges) {

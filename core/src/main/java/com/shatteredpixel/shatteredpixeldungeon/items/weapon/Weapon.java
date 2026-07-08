@@ -47,6 +47,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.AugmentedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.StrengthItem;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EmeradicBattery;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfArcana;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfForce;
@@ -166,6 +167,7 @@ abstract public class Weapon extends KindOfWeapon implements StrengthItem, Weapo
 				if (enchantment != null &&
 						(((Hero) attacker).subClass == HeroSubClass.PALADIN || hasCurseEnchant())){
 					damage = enchantment.proc(this, attacker, defender, damage);
+					EmeradicBattery.procArcaneEnergy(attacker);
 					if (defender.alignment == Char.Alignment.ALLY && !wasAlly){
 						becameAlly = true;
 					}
@@ -181,6 +183,7 @@ abstract public class Weapon extends KindOfWeapon implements StrengthItem, Weapo
 			} else {
 				if (enchantment != null) {
 					damage = enchantment.proc(this, attacker, defender, damage);
+					EmeradicBattery.procArcaneEnergy(attacker);
 					if (defender.alignment == Char.Alignment.ALLY && !wasAlly) {
 						becameAlly = true;
 					}
@@ -573,6 +576,11 @@ abstract public class Weapon extends KindOfWeapon implements StrengthItem, Weapo
 
 		protected float procChanceMultiplier(Weapon wep, Char attacker ){
 			float multiplier = genericProcChanceMultiplier(attacker);
+			EmeradicBattery.fuelBuff emeradicArcana;
+			if ((emeradicArcana = attacker.buff(EmeradicBattery.fuelBuff.class)) != null && emeradicArcana.itemType() == 2){
+				if (emeradicArcana.isCursed() && curse())
+					multiplier *= 2.5f * 3f;
+			}
 			if (wep instanceof SpiritBow && ((SpiritBow) wep).type() == 3){
 				multiplier *= 2;
 			}
@@ -590,6 +598,16 @@ abstract public class Weapon extends KindOfWeapon implements StrengthItem, Weapo
 
 		public static float genericProcChanceMultiplier( Char attacker ){
 			float multi = RingOfArcana.enchantPowerMultiplier(attacker);
+
+			EmeradicBattery.fuelBuff emeradicArcana;
+			if ((emeradicArcana = attacker.buff(EmeradicBattery.fuelBuff.class)) != null && emeradicArcana.itemType() == 2
+				&& emeradicArcana.charges() > 0){
+				if (emeradicArcana.isCursed())
+					multi *= 0.33f;
+				else if (emeradicArcana.charges() > 0)
+					multi *= 1 + (2 + emeradicArcana.itemLevel())/3f;
+			}
+
 			Berserk rage = attacker.buff(Berserk.class);
 			if (rage != null) {
 				multi = rage.enchantFactor(multi);

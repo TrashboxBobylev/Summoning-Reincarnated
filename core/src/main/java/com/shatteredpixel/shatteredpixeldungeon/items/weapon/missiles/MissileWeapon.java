@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EmeradicBattery;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SubtilitasSigil;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
@@ -389,6 +390,7 @@ abstract public class MissileWeapon extends Weapon implements TypedItem {
 			SpiritBow bow = Dungeon.hero.belongings.getItem(SpiritBow.class);
 			if (bow != null && bow.enchantment != null && Dungeon.hero.buff(MagicImmune.class) == null) {
 				damage = bow.enchantment.proc(this, attacker, defender, damage);
+				EmeradicBattery.procArcaneEnergy(attacker);
 			}
 		}
 
