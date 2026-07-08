@@ -184,8 +184,7 @@ public class Guard extends Mob {
 					&& !isCharmedBy( enemy )
 					&& !canAttack( enemy )
 					&& Dungeon.level.distance( pos, enemy.pos ) < 5
-					&& chain(enemy.pos)
-					&& isSuppressed()){
+					&& chain(enemy.pos)){
 				return !(sprite.visible || enemy.sprite.visible);
 			} else {
 				return super.act( enemyInFOV, justAlerted );
