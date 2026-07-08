@@ -1209,7 +1209,7 @@ public abstract class Mob extends Char {
 
                 int amountOfGold = 0;
                 Random.pushGenerator(Dungeon.seedCurDepth());
-                for (int i = 0; i < Random.Int(7, 10); i++){
+                for (int i = 0; i < Random.Int(7, 11); i++){
                     amountOfGold += Random.IntRange(30 + Dungeon.scalingDepth() * 10, 60 + Dungeon.scalingDepth() * 20);
                 }
                 Random.popGenerator();

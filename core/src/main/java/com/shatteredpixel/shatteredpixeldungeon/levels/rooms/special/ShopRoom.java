@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Ropes;
 import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
 import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
 import com.shatteredpixel.shatteredpixeldungeon.items.Torch;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.MailArmor;
@@ -62,6 +63,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfAt
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.CleanWater;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.AccessoriesBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.EquipmentBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.GenericBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.HolsterBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.PotionsBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.ScrollsBag;
@@ -459,58 +461,88 @@ public class ShopRoom extends SpecialRoom {
 		if (Dungeon.depth % 3 == 0) itemsToSpawn.add( new TypeManager());
 		if (Dungeon.depth % 3 == 0) itemsToSpawn.add(new CleanWater());
 		if (Dungeon.depth % 5 == 0) itemsToSpawn.add( new ElixirOfAttunement());
-		if (Dungeon.depth % 2 == 0) itemsToSpawn.add( Generator.random(Generator.Category.MISSILE).identify());
-		if (Dungeon.depth == Dungeon.chapterSize()*5+1) itemsToSpawn.add(new Amulet());
+		if (Dungeon.depth >= Dungeon.chapterSize()*5+1 && Dungeon.hero.belongings.getItem(Amulet.class) == null) itemsToSpawn.add(new Amulet());
 		if (Dungeon.hero.lvl >= 12 && Dungeon.hero.subClass == HeroSubClass.NONE && Dungeon.hero.heroClass.subClasses().size() > 1) itemsToSpawn.add( new TengusMask());
 		if (Dungeon.hero.lvl >= 21 && Dungeon.hero.belongings.armor != null &&
 				Dungeon.hero.armorAbility == null && Dungeon.hero.heroClass.armorAbilities().length > 0) itemsToSpawn.add( new KingsCrown());
 
-		Item rare;
-		switch (Random.Int(6)){
+		Item uncommon;
+		switch (Random.Int(3)){
 			case 0:
-				rare = Generator.randomUsingDefaults( Generator.Category.WAND );
+				uncommon = Generator.randomWeapon();
 				break;
 			case 1:
-				rare = Generator.randomUsingDefaults( Generator.Category.ARTIFACT );
+				uncommon = Generator.randomArmor();
 				break;
 			case 2:
-				rare = Generator.randomWeapon();
-				break;
-			case 3:
-				rare = Generator.randomArmor();
-				break;
-			case 4:
-				rare = Generator.randomStaff();
-				break;
-			case 5:
-				rare = Generator.randomUsingDefaults(Generator.Category.RING);
+				uncommon = Generator.random(Generator.Category.MISSILE);
 				break;
 			default:
-				rare = new Dewdrop();
+				uncommon = new Dewdrop();
 		}
-		rare.identify();
-		itemsToSpawn.add( rare );
+		uncommon.identify();
+		itemsToSpawn.add( uncommon );
+
+		if (Dungeon.depth % 2 == 0) {
+			Item rare;
+			switch (Random.Int(4)) {
+				case 0:
+					rare = Generator.randomUsingDefaults(Generator.Category.WAND);
+					break;
+				case 1:
+					rare = Generator.randomUsingDefaults(Generator.Category.ARTIFACT);
+					break;
+				case 2:
+					rare = Generator.randomStaff();
+					break;
+				case 3:
+					rare = Generator.randomUsingDefaults(Generator.Category.RING);
+					break;
+				default:
+					rare = new Dewdrop();
+			}
+			rare.identify();
+			itemsToSpawn.add(rare);
+		}
+
 		itemsToSpawn.add( new Bomb().random() );
-		if (Random.Int(4) == 0){
+
+		if (Random.Int(3) == 0){
 			Item additionalRare;
 			switch (Dungeon.hero.heroClass){
 				case WARRIOR:
-					additionalRare = Generator.randomArmor(); break;
+					additionalRare = Generator.randomArmor();
+					if (((Armor)additionalRare).hasCurseGlyph()){
+						((Armor) additionalRare).inscribe(null);
+					}
+					break;
 				case MAGE:
 					additionalRare = Generator.random(Generator.Category.WAND); break;
 				case ROGUE:
 					additionalRare = Generator.random(Generator.Category.RING); break;
 				case DUELIST:
-					additionalRare = Generator.randomWeapon(); break;
+					additionalRare = Generator.randomWeapon();
+					if (((Weapon)additionalRare).hasCurseEnchant()){
+						((Weapon) additionalRare).enchant(null);
+					}
+					break;
 				case HUNTRESS:
-					additionalRare = Generator.random(Generator.Category.MISSILE); break;
+					additionalRare = Generator.random(Generator.Category.MISSILE);
+					if (((Weapon)additionalRare).hasCurseEnchant()){
+						((Weapon) additionalRare).enchant(null);
+					}
+					break;
 				case CONJURER:
 					additionalRare = Generator.randomStaff(); break;
 				case ADVENTURER:
-					additionalRare = Generator.random(); break;
+					additionalRare = new GenericBag(); break;
 				default:
 					additionalRare = new Dewdrop();
 			}
+			additionalRare.cursed = false;
+			additionalRare.cursedKnown = true;
+			if (additionalRare.isUpgradable())
+				additionalRare.upgrade();
 			additionalRare.identify();
 			itemsToSpawn.add( additionalRare );
 		}
