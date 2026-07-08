@@ -147,7 +147,7 @@ public class AlchemistsToolkit extends Artifact {
 			case 2:
 				return AC_CREATE;
 			case 3:
-				return null;
+				return AC_ENERGIZE;
 		}
 		return super.defaultAction();
 	}
