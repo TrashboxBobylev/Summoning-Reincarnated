@@ -50,7 +50,7 @@ public class PotionOfInvisibility extends Potion {
 		Buff.prolong( hero, Invisibility.class, Invisibility.DURATION );
 		for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
 			if (mob instanceof Minion && hero.fieldOfView[mob.pos]) {
-				Buff.affect(mob, Invisibility.class, Invisibility.DURATION);
+				Buff.prolong(mob, Invisibility.class, Invisibility.DURATION);
 			}
 		}
 		GLog.i( Messages.get(this, "invisible") );
