@@ -212,6 +212,28 @@ public class ToyKnife extends MeleeWeapon implements TypedItem, ManaSource {
         return super.castDelay(user, dst)*augment.delayFactor(delayMod(type()));
     }
 
+    @Override
+    public float pickupDelay() {
+        return 0;
+    }
+
+    @Override
+    public boolean doPickUp(Hero hero, int pos) {
+        if (super.doPickUp(hero, pos)){
+            int quickslot = Dungeon.quickslot.getSlot(this);
+            if (hero.belongings.weapon() == null) {
+                //insta-equip
+                doEquip(hero);
+                hero.spend(-timeToEquip(hero));
+                if (quickslot != -1){
+                    Dungeon.quickslot.setSlot(quickslot, this);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
     public static void processSoulsBurst(Item source, int pos){
         if (Dungeon.hero.hasTalent(Talent.SOULS_BURST)){
             Class<? extends Item> sample = Dungeon.hero.heroClass == HeroClass.CONJURER ? ToyKnife.class : Wand.class;
