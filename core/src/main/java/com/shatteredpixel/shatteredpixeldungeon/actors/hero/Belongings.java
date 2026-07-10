@@ -89,6 +89,7 @@ public class Belongings implements Iterable<Item> {
 	public KindOfWeapon weapon = null;
 	public Armor armor = null;
 	public Artifact artifact = null;
+	public Artifact artifact2 = null;
 	public KindofMisc misc = null;
 	public Ring ring = null;
 
@@ -146,6 +147,14 @@ public class Belongings implements Iterable<Item> {
 		}
 	}
 
+	public Artifact artifact2(){
+		if (!lostInventory() || (artifact2 != null && artifact2.keptThroughLostInventory())){
+			return artifact2;
+		} else {
+			return null;
+		}
+	}
+
 	public KindofMisc misc(){
 		if (!lostInventory() || (misc != null && misc.keptThroughLostInventory())){
 			return misc;
@@ -174,9 +183,10 @@ public class Belongings implements Iterable<Item> {
 	
 	private static final String WEAPON		= "weapon";
 	private static final String ARMOR		= "armor";
-	private static final String ARTIFACT   = "artifact";
-	private static final String MISC       = "misc";
-	private static final String RING       = "ring";
+	private static final String ARTIFACT    = "artifact";
+	private static final String ARTIFACT2   = "artifact2";
+	private static final String MISC        = "misc";
+	private static final String RING        = "ring";
 
 	private static final String SECOND_WEP = "second_wep";
 
@@ -187,6 +197,7 @@ public class Belongings implements Iterable<Item> {
 		bundle.put( WEAPON, weapon );
 		bundle.put( ARMOR, armor );
 		bundle.put( ARTIFACT, artifact );
+		bundle.put( ARTIFACT2, artifact2 );
 		bundle.put( MISC, misc );
 		bundle.put( RING, ring );
 		bundle.put( SECOND_WEP, secondWep );
@@ -211,11 +222,22 @@ public class Belongings implements Iterable<Item> {
 		artifact = (Artifact) bundle.get(ARTIFACT);
 		if (artifact() != null)     artifact().activate(owner);
 
-		misc = (KindofMisc) bundle.get(MISC);
-		if (misc() != null)         misc().activate( owner );
+		artifact2 = (Artifact) bundle.get(ARTIFACT2);
+		if (artifact2() != null)     artifact2().activate(owner);
 
-		ring = (Ring) bundle.get(RING);
-		if (ring() != null)         ring().activate( owner );
+		// deprecate rings
+		KindofMisc misc = (KindofMisc) bundle.get(MISC);
+		if (misc instanceof Ring){
+			misc.collect(backpack);
+		} else {
+			this.misc = misc;
+			if (misc() != null) misc().activate(owner);
+		}
+
+		Ring ring = (Ring) bundle.get(RING);
+		if (ring != null) {
+			ring.collect(backpack);
+		}
 
 		secondWep = (KindOfWeapon) bundle.get(SECOND_WEP);
 		if (secondWep() != null)    secondWep().activate(owner);
@@ -231,6 +253,7 @@ public class Belongings implements Iterable<Item> {
 		weapon = secondWep = null;
 		armor = null;
 		artifact = null;
+		artifact2 = null;
 		misc = null;
 		ring = null;
 	}
@@ -389,11 +412,17 @@ public class Belongings implements Iterable<Item> {
 				Badges.validateItemLevelAquired(armor());
 			}
 		}
+
+		//oblivion shard does not prevent artifact IDing
 		if (artifact() != null) {
-			//oblivion shard does not prevent artifact IDing
 			artifact().identify();
 			Badges.validateItemLevelAquired(artifact());
 		}
+		if (artifact2() != null) {
+			artifact2().identify();
+			Badges.validateItemLevelAquired(artifact2());
+		}
+
 		if (misc() != null) {
 			if (ShardOfOblivion.passiveIDDisabled() && misc() instanceof Ring){
 				((Ring) misc()).setIDReady();
@@ -422,7 +451,7 @@ public class Belongings implements Iterable<Item> {
 	}
 	
 	public void uncurseEquipped() {
-		ScrollOfRemoveCurse.uncurse( owner, armor(), weapon(), artifact(), misc(), ring(), secondWep());
+		ScrollOfRemoveCurse.uncurse( owner, armor(), weapon(), artifact(), artifact2(), misc(), ring(), secondWep());
 	}
 	
 	public Item randomUnequipped() {
@@ -454,7 +483,7 @@ public class Belongings implements Iterable<Item> {
 		
 		private Iterator<Item> backpackIterator = backpack.iterator();
 		
-		private Item[] equipped = {weapon, armor, artifact, misc, ring, secondWep};
+		private Item[] equipped = {weapon, armor, artifact, artifact2, misc, secondWep};
 		private int backpackIndex = equipped.length;
 		
 		@Override
@@ -495,10 +524,10 @@ public class Belongings implements Iterable<Item> {
 				equipped[2] = artifact = null;
 				break;
 			case 3:
-				equipped[3] = misc = null;
+				equipped[3] = artifact2 = null;
 				break;
 			case 4:
-				equipped[4] = ring = null;
+				equipped[4] = misc = null;
 				break;
 			case 5:
 				equipped[5] = secondWep = null;

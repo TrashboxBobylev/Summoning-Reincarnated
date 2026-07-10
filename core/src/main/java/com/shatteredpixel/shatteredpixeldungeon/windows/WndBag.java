@@ -252,9 +252,9 @@ public class WndBag extends WndTabbed {
 		placeItem( stuff.weapon != null ? stuff.weapon : new Placeholder( ItemSpriteSheet.WEAPON_HOLDER ) );
 		placeItem( stuff.armor != null ? stuff.armor : new Placeholder( ItemSpriteSheet.ARMOR_HOLDER ) );
 		placeItem( stuff.artifact != null ? stuff.artifact : new Placeholder( ItemSpriteSheet.ARTIFACT_HOLDER ) );
+		placeItem( stuff.artifact2 != null ? stuff.artifact2 : new Placeholder( ItemSpriteSheet.ARTIFACT_HOLDER ) );
 		if (!Dungeon.isChallenged(Conducts.Conduct.CANDI_18))
-			placeItem( stuff.misc != null ? stuff.misc : new Placeholder( ItemSpriteSheet.SOMETHING ) );
-		placeItem( stuff.ring != null ? stuff.ring : new Placeholder( ItemSpriteSheet.RING_HOLDER ) );
+			placeItem( stuff.misc != null ? stuff.misc : new Placeholder( ItemSpriteSheet.ARTIFACT_HOLDER ) );
 
 		int equipped = 5;
 
