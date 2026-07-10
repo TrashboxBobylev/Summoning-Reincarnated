@@ -267,6 +267,9 @@ public class TimekeepersHourglass extends Artifact {
 		Item upgraded = super.upgrade();
 
 		chargeCap = chargeCap();
+		if (type() == 3){
+			charge = Math.min(charge + 5, chargeCap);
+		}
 
 		//for artifact transmutation.
 		while (level() > sandBags)
