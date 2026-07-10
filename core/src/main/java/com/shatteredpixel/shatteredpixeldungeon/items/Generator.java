@@ -81,7 +81,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
@@ -583,9 +582,8 @@ public class Generator {
 					RingOfElements.class,
 					RingOfFuror.class,
 					RingOfMight.class,
-					RingOfSharpshooting.class,
-					RingOfWealth.class};
-			RING.defaultProbs = new float[]{ 3, 3, 3, 3, 3 };
+					RingOfSharpshooting.class};
+			RING.defaultProbs = new float[]{ 3, 3, 3, 3 };
 			RING.probs = RING.defaultProbs.clone();
 			
 			ARTIFACT.classes = new Class<?>[]{
