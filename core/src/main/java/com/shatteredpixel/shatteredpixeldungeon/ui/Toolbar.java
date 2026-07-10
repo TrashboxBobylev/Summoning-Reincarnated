@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.QuickSlot;
 import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
@@ -427,7 +428,8 @@ public class Toolbar extends Component {
 
 							if (idx == 0){
 								Belongings b = Dungeon.hero.belongings;
-								if (b.misc() != null) items.add(0, b.misc());
+                                if (!Dungeon.isChallenged(Conducts.Conduct.CANDI_18) && b.misc() != null)
+                                    items.add(0, b.misc());
 								if (b.artifact() != null) items.add(0, b.artifact());
 								if (b.artifact2() != null) items.add(0, b.artifact2());
 								if (b.armor() != null) items.add(0, b.armor());
