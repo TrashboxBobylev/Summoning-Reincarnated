@@ -125,7 +125,6 @@ public class CrystalChoiceRoom extends SpecialRoom {
 
 		Item hidden = Challenges.process(Generator.random(Random.oneOf(
 				Generator.Category.WAND,
-				Generator.Category.RING,
 				Generator.Category.ARTIFACT,
 				Generator.Category.STAFF
 		)));

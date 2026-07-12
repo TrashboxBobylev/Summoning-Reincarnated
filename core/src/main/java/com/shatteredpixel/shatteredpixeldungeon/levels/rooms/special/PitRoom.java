@@ -71,10 +71,7 @@ public class PitRoom extends SpecialRoom {
 		Item mainLoot = null;
 		do {
 			switch (Random.Int(4)){
-				case 0:
-					mainLoot = Generator.random(Generator.Category.RING);
-					break;
-				case 1:
+				case 0: case 1:
 					mainLoot = Generator.random(Generator.Category.ARTIFACT);
 					break;
 				case 2:

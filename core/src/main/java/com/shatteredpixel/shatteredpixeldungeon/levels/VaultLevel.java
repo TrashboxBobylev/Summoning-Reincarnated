@@ -74,8 +74,7 @@ public class VaultLevel extends CityLevel {
 			Item item = Generator.randomUsingDefaults(Random.oneOf(
 					Generator.Category.WEP_T2, Generator.Category.WEP_T2,
 					Generator.Category.ARMOR, Generator.Category.ARMOR,
-					Generator.Category.WAND,
-					Generator.Category.RING));
+					Generator.Category.WAND));
 			//regrowth is disallowed as it can be used to farm HP regen
 			if (item instanceof WandOfRegrowth){
 				continue;

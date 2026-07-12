@@ -252,8 +252,8 @@ public class Generator {
 		STAFF_T5  ( 0, 0, Staff.class ),
 
 		WAND	( 1, 1, Wand.class ),
-		RING	( 1, 0, Ring.class ),
-		ARTIFACT( 0, 1, Artifact.class),
+		RING	( 0, 0, Ring.class ),
+		ARTIFACT( 0, 2, Artifact.class),
 		
 		FOOD	( 0, 0, Food.class ),
 		
@@ -650,9 +650,8 @@ public class Generator {
 
 	private static final EnumSet<Generator.Category> chaosCategories = EnumSet.of(
 			Category.POTION, Category.SCROLL, Category.WEAPON, Category.ARMOR,
-			Category.RING, Category.ARTIFACT, Category.MISSILE, Category.STAFF,
-			Category.WAND, Category.FOOD, Category.SEED, Category.STONE,
-			Category.GOLD
+			Category.ARTIFACT, Category.MISSILE, Category.STAFF, Category.WAND,
+			Category.FOOD, Category.SEED, Category.STONE, Category.GOLD
 	);
 
 	private static boolean usingFirstDeck = false;

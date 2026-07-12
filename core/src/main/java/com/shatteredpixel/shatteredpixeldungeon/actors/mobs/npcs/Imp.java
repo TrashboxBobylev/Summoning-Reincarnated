@@ -33,6 +33,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Golem;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DwarfToken;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
@@ -165,7 +167,7 @@ public class Imp extends NPC {
 		private static boolean given;
 		private static boolean completed;
 		
-		public static Ring reward;
+		public static Artifact reward;
 		
 		public static void reset() {
 			spawned = false;
@@ -209,7 +211,11 @@ public class Imp extends NPC {
 				
 				given = node.getBoolean( GIVEN );
 				completed = node.getBoolean( COMPLETED );
-				reward = (Ring)node.get( REWARD );
+				Item thing = (Item) node.get( REWARD );
+				if (thing instanceof Ring)
+					reward = Generator.randomArtifact();
+				else
+					reward = (Artifact) thing;
 			}
 		}
 
@@ -230,9 +236,9 @@ public class Imp extends NPC {
 				given = false;
 				
 				do {
-					reward = (Ring)Generator.random( Generator.Category.RING );
+					reward = Generator.randomArtifact();
 				} while (reward.cursed);
-				reward.upgrade( 2 );
+				reward.transferUpgrade(3);
 				reward.cursed = true;
 			}
 

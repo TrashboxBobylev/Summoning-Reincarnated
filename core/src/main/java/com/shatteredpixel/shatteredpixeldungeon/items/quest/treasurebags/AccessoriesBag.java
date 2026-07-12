@@ -39,12 +39,13 @@ public class AccessoriesBag extends TreasureBag {
     @Override
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
-        Artifact artifact = Generator.randomArtifact();
-        if (artifact != null){
-            artifact.transferUpgrade(8);
+        for (int i = 0; i < 2; i++) {
+            Artifact artifact = Generator.randomArtifact();
+            if (artifact != null) {
+                artifact.transferUpgrade(8);
+            }
+            items.add((artifact != null ? artifact : Generator.random(Generator.Category.RING)).identify());
         }
-        items.add((artifact != null ? artifact : Generator.random(Generator.Category.RING)).identify());
-        items.add(Generator.random(Generator.Category.RING).identify());
         return items;
     }
 

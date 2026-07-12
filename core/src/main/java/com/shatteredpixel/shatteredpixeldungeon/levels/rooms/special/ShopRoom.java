@@ -365,19 +365,15 @@ public class ShopRoom extends SpecialRoom {
 			}
 
 			Item rare;
-			switch (Random.Int(10)) {
+			switch (Random.Int(8)) {
 				case 0:
 					rare = Generator.random(Generator.Category.WAND);
 					rare.level(0);
 					break;
 				case 1:
-					rare = Generator.random(Generator.Category.RING);
-					rare.level(0);
-					break;
-				case 2:
 					rare = Generator.random(Generator.Category.ARTIFACT);
 					break;
-				case 3:
+				case 2:
 					rare = Generator.randomStaff();
 					break;
 				default:
@@ -485,7 +481,7 @@ public class ShopRoom extends SpecialRoom {
 
 		if (Dungeon.depth % 2 == 0) {
 			Item rare;
-			switch (Random.Int(4)) {
+			switch (Random.Int(3)) {
 				case 0:
 					rare = Generator.randomUsingDefaults(Generator.Category.WAND);
 					break;
@@ -494,9 +490,6 @@ public class ShopRoom extends SpecialRoom {
 					break;
 				case 2:
 					rare = Generator.randomStaff();
-					break;
-				case 3:
-					rare = Generator.randomUsingDefaults(Generator.Category.RING);
 					break;
 				default:
 					rare = new Dewdrop();
@@ -519,7 +512,7 @@ public class ShopRoom extends SpecialRoom {
 				case MAGE:
 					additionalRare = Generator.random(Generator.Category.WAND); break;
 				case ROGUE:
-					additionalRare = Generator.random(Generator.Category.RING); break;
+					additionalRare = Generator.randomArtifact(); break;
 				case DUELIST:
 					additionalRare = Generator.randomWeapon();
 					if (((Weapon)additionalRare).hasCurseEnchant()){

@@ -336,7 +336,7 @@ public class Mimic extends Mob {
 	protected void generatePrize( boolean useDecks ){
 		Item reward = null;
 		do {
-			switch (Random.Int(6)) {
+			switch (Random.Int(5)) {
 				case 0:
 					reward = new Gold().random();
 					break;
@@ -351,9 +351,6 @@ public class Mimic extends Mob {
 					break;
 				case 4:
 					reward = Generator.randomStaff(!useDecks);
-					break;
-				case 5:
-					reward = useDecks ? Generator.random(Generator.Category.RING) : Generator.randomUsingDefaults(Generator.Category.RING);
 					break;
 			}
 		} while (reward == null || Challenges.isItemBlocked(reward));
