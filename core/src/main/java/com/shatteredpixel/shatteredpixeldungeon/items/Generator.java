@@ -78,9 +78,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.Elixir;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.exotic.ExoticPotion;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Pickaxe;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfElements;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfFuror;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
@@ -580,11 +578,9 @@ public class Generator {
 			FOOD.probs = FOOD.defaultProbs.clone();
 			
 			RING.classes = new Class<?>[]{
-					RingOfElements.class,
 					RingOfFuror.class,
-					RingOfMight.class,
 					RingOfSharpshooting.class};
-			RING.defaultProbs = new float[]{ 3, 3, 3, 3 };
+			RING.defaultProbs = new float[]{ 3, 3 };
 			RING.probs = RING.defaultProbs.clone();
 			
 			ARTIFACT.classes = new Class<?>[]{
