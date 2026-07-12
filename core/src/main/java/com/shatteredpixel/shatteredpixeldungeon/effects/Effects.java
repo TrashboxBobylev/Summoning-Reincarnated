@@ -43,7 +43,8 @@ public class Effects {
 		ROPE,
 		// flipping them just doesn't work in game!
 		CONJURER_WING_LEFT,
-		CONJURER_WING_RIGHT
+		CONJURER_WING_RIGHT,
+		HEAVY_CHAIN
 	}
 	
 	public static Image get( Type type ) {
@@ -87,6 +88,9 @@ public class Effects {
 				break;
 			case CONJURER_WING_RIGHT:
 				icon.frame(icon.texture.uvRect(0, 86, 34, 118));
+				break;
+			case HEAVY_CHAIN:
+				icon.frame(icon.texture.uvRect(6, 23, 11, 29));
 				break;
 		}
 		return icon;

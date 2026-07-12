@@ -50,6 +50,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corrosion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.DefenseDebuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Drowsy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
@@ -346,8 +347,8 @@ public class AbyssalNightmare extends AbyssalMob {
 		resistances.add( Web.class );
 		resistances.add( FrostFire.class);
 
-
 		resistances.add( Burning.class );
+		resistances.add( DefenseDebuff.class );
 		resistances.add( Charm.class );
 		resistances.add( Chill.class );
 		resistances.add( Frost.class );

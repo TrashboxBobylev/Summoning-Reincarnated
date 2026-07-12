@@ -53,6 +53,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corrosion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Daze;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.DefenseDebuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.EctoCharge;
@@ -1035,6 +1036,9 @@ acuRoll *= accMulti;
 		}
 		if (this.buff(Empowered.class) != null){
 			damage *= 0.65f;
+		}
+		if (this.buff(DefenseDebuff.class) != null){
+			damage *= 1.333f;
 		}
 		if (this.buff(AllyDamageTag.class) != null && src instanceof Char && !(src instanceof Hero)){
 			if (alignment == Alignment.ENEMY && ((Char) src).alignment == Alignment.ALLY){

@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.GuardiansStone;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.RunicShell;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
@@ -65,6 +66,8 @@ public abstract class ShieldBuff extends Buff {
 	}
 	
 	public int shielding(){
+		if (target.buff(GuardiansStone.heavyBuff.class) != null && target.buff(GuardiansStone.heavyBuff.class).isCursed())
+			return shielding/2;
 		return shielding;
 	}
 	
@@ -132,6 +135,9 @@ public abstract class ShieldBuff extends Buff {
                 int shieldDmg = damage;
                 if (target.buff(RunicShell.EmpowerTracker.class) != null)
                     shieldDmg *= 0.67f;
+				if (buff instanceof GuardiansStone.Shielding && src.hasProperty(DamageProperty.PHYSICAL) && target.buff(GuardiansStone.heavyBuff.class) != null
+						&& target.buff(GuardiansStone.heavyBuff.class).itemType() == 2)
+					continue;
                 damage = buff.absorbDamage(shieldDmg);
 				if (buff.shielding() <= 0){
                     Buff.detach(target, RunicShell.EmpowerTracker.class);

@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.HolyLance;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollGeomancer;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.GnollHunter;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.GuardiansStone;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.StarBlazing;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
@@ -117,6 +118,7 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 		ANGULAR_SPEEDS.put(GnollHunter.GnollShot.class, 0);
 		ANGULAR_SPEEDS.put(HolyLance.HolyLanceVFX.class,      0);
 		ANGULAR_SPEEDS.put(TriadRanger.Sprite.RangedShot.class, 0);
+		ANGULAR_SPEEDS.put(GuardiansStone.Sprite.class, 0);
 
 		//720 is default
 
@@ -196,9 +198,13 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
         if (item instanceof Trident.invisproj){
             speed *= 0.95f;
         }
+		if (item instanceof GuardiansStone.Sprite){
+			speed /= 1.5f;
+		}
 		
 		PosTweener tweener = new PosTweener( this, to, d.length() / speed );
 		tweener.listener = this;
+		item.onMissileCreate(this, from, to, d);
 		parent.add( tweener );
 	}
 

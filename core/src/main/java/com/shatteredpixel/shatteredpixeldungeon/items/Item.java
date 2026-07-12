@@ -58,11 +58,13 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.WndChangesTabbed;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndJournalItem;
 import com.watabou.noosa.Game;
+import com.watabou.noosa.Visual;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
+import com.watabou.utils.PointF;
 import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
@@ -563,6 +565,10 @@ public class Item implements Bundlable {
 	}
 
 	public Emitter emitter() { return null; }
+
+	public void onMissileCreate(Visual vis, PointF from, PointF to, PointF distance){
+		//do nothing by default
+	}
 	
 	public String info() {
 
