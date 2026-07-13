@@ -26,7 +26,6 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.entrance;
 
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
-import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.StatuesRoom;
 import com.watabou.utils.PathFinder;
@@ -60,7 +59,7 @@ public class StatuesEntranceRoom extends StatuesRoom {
 		}
 
 		Painter.set( level, entrance, Terrain.ENTRANCE_SP );
-		level.transitions.add(new LevelTransition(level, entrance, LevelTransition.Type.REGULAR_ENTRANCE));
+		EntranceRoom.setupStairs(level, entrance);
 
 	}
 }

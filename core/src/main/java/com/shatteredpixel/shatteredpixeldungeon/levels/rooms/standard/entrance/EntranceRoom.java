@@ -96,14 +96,18 @@ public class EntranceRoom extends StandardRoom {
 		if (Dungeon.branch != AbyssLevel.BRANCH && !(level instanceof AbyssChallengeLevel))
 			Painter.set( level, entrance, Terrain.ENTRANCE );
 
-		if (Dungeon.depth == 1){
-			level.transitions.add(new LevelTransition(level, entrance, LevelTransition.Type.SURFACE));
-		} else {
-			level.transitions.add(new LevelTransition(level, entrance, LevelTransition.Type.REGULAR_ENTRANCE));
-		}
+		setupStairs(level, entrance);
 
 		placeEarlyGuidePages(level, this);
 
+	}
+	
+	public static void setupStairs(Level level, int entrance){
+		if (Dungeon.depth == 1){
+			level.transitions.add(new LevelTransition(level, entrance, LevelTransition.Type.SURFACE));
+		} else {
+			EntranceRoom.setupStairs(level, entrance);
+		}
 	}
 
 	public static void placeEarlyGuidePages(Level level, Room r){

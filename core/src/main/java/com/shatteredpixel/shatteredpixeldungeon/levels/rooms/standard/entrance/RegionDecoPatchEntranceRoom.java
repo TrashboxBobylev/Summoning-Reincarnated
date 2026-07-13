@@ -27,7 +27,6 @@ package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.entrance;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
-import com.shatteredpixel.shatteredpixeldungeon.levels.features.LevelTransition;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.standard.RegionDecoPatchRoom;
@@ -98,11 +97,7 @@ public class RegionDecoPatchEntranceRoom extends RegionDecoPatchRoom {
 			Painter.set( level, entrance+i, Terrain.EMPTY );
 		}
 
-		if (Dungeon.depth == 1){
-			level.transitions.add(new LevelTransition(level, entrance, LevelTransition.Type.SURFACE));
-		} else {
-			level.transitions.add(new LevelTransition(level, entrance, LevelTransition.Type.REGULAR_ENTRANCE));
-		}
+		EntranceRoom.setupStairs(level, entrance);
 
 		EntranceRoom.placeEarlyGuidePages(level, this);
 
