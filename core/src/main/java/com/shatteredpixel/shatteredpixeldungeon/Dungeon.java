@@ -58,6 +58,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
@@ -102,6 +103,7 @@ import com.watabou.utils.FileUtils;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 import com.watabou.utils.SparseArray;
+
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.IOException;
@@ -916,6 +918,7 @@ public class Dungeon {
 			Scroll.save( bundle );
 			Potion.save( bundle );
 			Ring.save( bundle );
+			Artifact.storeTypeUniqueness(bundle);
 
 			Actor.storeNextID( bundle );
 			
@@ -996,6 +999,7 @@ public class Dungeon {
 		Scroll.restore( bundle );
 		Potion.restore( bundle );
 		Ring.restore( bundle );
+		Artifact.restoreTypeUniqueness(bundle);
 
 		quickslot.restorePlaceholders( bundle );
 		

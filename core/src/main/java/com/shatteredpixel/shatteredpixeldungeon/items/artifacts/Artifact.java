@@ -41,6 +41,12 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Artifact extends KindofMisc implements TypedItem {
 
 	protected Buff passiveBuff;
@@ -239,10 +245,25 @@ public class Artifact extends KindofMisc implements TypedItem {
 		return null;
 	}
 
+	// ensure that artifacts spawn with different types
+	public static ArrayList<ImmutablePair<Class<? extends Artifact>, Integer>> artifactTypes = new ArrayList<>();
+
 	@Override
 	public Item random() {
 		//always +0
-		type(Random.Int(1, 4));
+
+		ArrayList<Integer> possibleTypes = new ArrayList<>(List.of(1, 2, 3));
+		for (Pair<Class<? extends Artifact>, Integer> artifact : artifactTypes) {
+			if (artifact.getKey().equals(getClass()))
+				possibleTypes.remove(artifact.getValue());
+		}
+		if (possibleTypes.isEmpty())
+			type(Random.Int(1, 4));
+		else {
+			int chosenType = Random.element(possibleTypes);
+			type(chosenType);
+			artifactTypes.add(new ImmutablePair<>(getClass(), chosenType));
+		}
 		
 		//30% chance to be cursed
 		if (Random.Float() < 0.3f) {
@@ -336,5 +357,26 @@ public class Artifact extends KindofMisc implements TypedItem {
 		partialCharge = bundle.getFloat( PARTIALCHARGE );
 		if (bundle.contains(TYPE))
 			type = bundle.getInt(TYPE);
+	}
+
+	private static final String ARTIFACT_TYPE_KEYS = "artifacttypes_keys";
+	private static final String ARTIFACT_TYPE_VALUES = "artifacttypes_values";
+
+	public static void storeTypeUniqueness(Bundle bundle){
+		bundle.put(ARTIFACT_TYPE_KEYS, artifactTypes.stream().map(ImmutablePair::getLeft).toArray(Class[]::new));
+		bundle.put(ARTIFACT_TYPE_VALUES, artifactTypes.stream().map(ImmutablePair::getRight).mapToInt(Integer::intValue).toArray());
+	}
+
+	public static void restoreTypeUniqueness(Bundle bundle){
+		artifactTypes.clear();
+		if (bundle.contains(ARTIFACT_TYPE_KEYS)) {
+
+			Class[] classes = bundle.getClassArray(ARTIFACT_TYPE_KEYS);
+			int[] types = bundle.getIntArray(ARTIFACT_TYPE_VALUES);
+
+			for (int i = 0; i < classes.length; i++) {
+				artifactTypes.add(new ImmutablePair<Class<? extends Artifact>, Integer>(classes[i], types[i]));
+			}
+		}
 	}
 }
