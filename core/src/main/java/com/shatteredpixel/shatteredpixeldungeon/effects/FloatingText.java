@@ -49,6 +49,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Stone;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SilkyQuiver;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SubtilitasSigil;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfAccuracy;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEvasion;
@@ -142,6 +143,7 @@ public class FloatingText extends RenderedTextBlock {
     public static int HIT_WRAITH =94;
 	public static int HIT_BOOST  =95;
 	public static int HIT_SIGIL  =96;
+	public static int HIT_QUIVER =97;
 
 	//extra row for hit icons that are armor-piercing
 
@@ -356,6 +358,10 @@ public class FloatingText extends RenderedTextBlock {
 		if (accRoll == Char.INFINITE_ACCURACY
 				&& attacker.buff(Talent.LiquidAgilACCTracker.class) != null){
 			return HIT_LIQ;
+		}
+		if (accRoll == Char.INFINITE_ACCURACY
+				&& defender.buff(SilkyQuiver.QuiverMark.class) != null){
+			return HIT_QUIVER;
 		}
 
 		KindOfWeapon wep = null;

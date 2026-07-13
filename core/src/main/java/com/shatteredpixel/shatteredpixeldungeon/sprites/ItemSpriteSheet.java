@@ -370,6 +370,7 @@ public class ItemSpriteSheet {
 	public static final int THROWING_HAMMER = MISSILE_WEP+14;
 	public static final int FORCE_CUBE      = MISSILE_WEP+15;
 	public static final int LIGHT_KNIFE     = MISSILE_WEP+29;
+	public static final int QUIVER_ARROW    = MISSILE_WEP+31;
 
 	static{
 		assignItemRect(SPIRIT_BOW,      16, 16);
@@ -394,6 +395,7 @@ public class ItemSpriteSheet {
 		assignItemRect(THROWING_HAMMER, 12, 12);
 		assignItemRect(FORCE_CUBE,      11, 12);
         assignItemRect(LIGHT_KNIFE+1,      16, 16);
+		assignItemRect(QUIVER_ARROW,    13, 13);
 	}
 	
 	public static final int DARTS    =                                      xy(1, 11);  //16 slots
@@ -1051,11 +1053,13 @@ public class ItemSpriteSheet {
 	public static final int MIRROR            = SUMM_ARTIFACTS+1;
 	public static final int BATTERY           = SUMM_ARTIFACTS+2;
 	public static final int STONE             = SUMM_ARTIFACTS+3;
+	public static final int QUIVER            = SUMM_ARTIFACTS+4;
 	static {
 		assignItemRect(SIGIL,  14, 12);
 		assignItemRect(MIRROR, 14, 14);
 		assignItemRect(BATTERY,14, 13);
 		assignItemRect(STONE,  11, 12);
+		assignItemRect(QUIVER, 15, 14);
 	}
 
 	//for smaller 8x8 icons that often accompany an item sprite

@@ -42,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EmeradicBattery;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SilkyQuiver;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SubtilitasSigil;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
@@ -587,6 +588,14 @@ abstract public class MissileWeapon extends Weapon implements TypedItem {
 				GLog.w(Messages.get(this, "about_to_break"));
 			} else if (durabilityPerUse() < 100f && durability <= 0){
 				GLog.n(Messages.get(this, "has_broken"));
+			}
+		}
+
+		SilkyQuiver.quiverBuff buff = Dungeon.hero.buff(SilkyQuiver.quiverBuff.class);
+		if (buff != null){
+			buff.gainCharge();
+			if (buff.itemType() == 2){
+				SilkyQuiver.QuiverTracker.track(Dungeon.hero, this);
 			}
 		}
 	}

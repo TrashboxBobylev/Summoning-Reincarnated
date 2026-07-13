@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Gravery;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Adrenaline;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
@@ -1135,7 +1136,21 @@ public abstract class Mob extends Char {
 				Badges.validateHazardAssists();
 			}
 
-			rollToDropLoot();
+			if (!(cause instanceof Gravery))
+				rollToDropLoot();
+			else {
+				EXP = 0;
+				if (!(this instanceof Wraith)) {
+					Wraith w = Wraith.spawnForcefullyAt(pos);
+					if (w != null) {
+						Buff.affect(w, Corruption.class);
+						if (Dungeon.level.heroFOV[pos]) {
+							CellEmitter.get(pos).burst(ShadowParticle.CURSE, 6);
+							Sample.INSTANCE.play(Assets.Sounds.CURSED);
+						}
+					}
+				}
+			}
 
 			if (cause == Dungeon.hero || cause instanceof Weapon || cause instanceof Weapon.Enchantment){
 				if (Dungeon.hero.hasTalent(Talent.LETHAL_MOMENTUM)

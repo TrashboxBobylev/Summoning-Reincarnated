@@ -130,6 +130,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Swiftness;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MirrorOfFates;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SilkyQuiver;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SubtilitasSigil;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourglass;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.cloakglyphs.CloakGlyph;
@@ -426,6 +427,7 @@ public abstract class Char extends Actor implements ManaSource, DamageSource {
 		} else if (hit( this, enemy, accMulti, false )) {
 			
 			int dr = Math.round(enemy.drRoll() * AscensionChallenge.statModifier(enemy));
+			boolean quivered = false;
 			
 			if (this instanceof Hero){
 				Hero h = (Hero)this;
@@ -438,6 +440,15 @@ public abstract class Char extends Actor implements ManaSource, DamageSource {
 				}
 
 				if (h.buff(MonkEnergy.MonkAbility.UnarmedAbilityTracker.class) != null){
+					dr = 0;
+				}
+
+				if (SilkyQuiver.selectedMove == SilkyQuiver.ComboMove.SHOOT2){
+					dr = 0;
+				}
+
+				if (enemy.buff(SilkyQuiver.QuiverMark.class) != null && ((Hero) this).belongings.attackingWeapon() instanceof MissileWeapon) {
+					quivered = true;
 					dr = 0;
 				}
 			}
@@ -524,6 +535,7 @@ public abstract class Char extends Actor implements ManaSource, DamageSource {
 			}
 
 			if (enemy.buff(Shrunken.class) != null) dmg *= 1.4f;
+			if (quivered) dmg *= 1.33f;
 
 			if (this instanceof Hero && ((Hero) this).belongings.armor instanceof ConjurerSet &&
 					((ConjurerSet)((Hero) this).belongings.armor).type() == 3)
@@ -1076,6 +1088,9 @@ acuRoll *= accMulti;
 					return;
 				}
 			}
+			if (buff(SilkyQuiver.quiverBuff.class) != null && buff(SilkyQuiver.quiverBuff.class).itemType() == 3){
+				buff(SilkyQuiver.quiverBuff.class).loseArrows();
+			}
 		}
 
 		Class<?> srcClass = src.getClass();
@@ -1212,6 +1227,16 @@ acuRoll *= accMulti;
 			//special case for monk using unarmed abilities
 			if (src == Dungeon.hero
 					&& Dungeon.hero.buff(MonkEnergy.MonkAbility.UnarmedAbilityTracker.class) != null){
+				icon = FloatingText.PHYS_DMG_NO_BLOCK;
+			}
+
+			if (src == hero && buff(SilkyQuiver.QuiverMark.class) != null &&
+					((Hero) src).belongings.attackingWeapon() instanceof MissileWeapon){
+				icon = FloatingText.PHYS_DMG_NO_BLOCK;
+			}
+
+			if (src == hero && ((Hero) src).belongings.attackingWeapon() instanceof SilkyQuiver.Arrow &&
+				SilkyQuiver.selectedMove == SilkyQuiver.ComboMove.SHOOT2){
 				icon = FloatingText.PHYS_DMG_NO_BLOCK;
 			}
 

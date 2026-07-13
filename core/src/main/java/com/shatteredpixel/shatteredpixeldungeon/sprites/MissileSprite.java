@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GnollGeomancer;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.GnollHunter;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.GuardiansStone;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SilkyQuiver;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.StarBlazing;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Crossbow;
@@ -119,6 +120,7 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 		ANGULAR_SPEEDS.put(HolyLance.HolyLanceVFX.class,      0);
 		ANGULAR_SPEEDS.put(TriadRanger.Sprite.RangedShot.class, 0);
 		ANGULAR_SPEEDS.put(GuardiansStone.Sprite.class, 0);
+		ANGULAR_SPEEDS.put(SilkyQuiver.Arrow.class, 0);
 
 		//720 is default
 
@@ -185,7 +187,8 @@ public class MissileSprite extends ItemSprite implements Tweener.Listener {
 		} else if (item instanceof SpiritBow.SpiritArrow
 				|| item instanceof ScorpioSprite.ScorpioShot
 				|| item instanceof TenguSprite.TenguShuriken
-				|| item instanceof TriadRanger.Sprite.RangedShot){
+				|| item instanceof TriadRanger.Sprite.RangedShot
+				|| item instanceof SilkyQuiver.Arrow){
 			speed *= 1.5f;
 		} else if (item instanceof GnollHunter.GnollShot){
 			speed *= 2f;

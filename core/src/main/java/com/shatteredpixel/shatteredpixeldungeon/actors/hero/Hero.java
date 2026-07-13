@@ -132,6 +132,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MirrorOfFates;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SilkyQuiver;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SkeletonKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SubtilitasSigil;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TalismanOfForesight;
@@ -724,6 +725,7 @@ public class Hero extends Char {
 			if (buff(Momentum.class) != null && buff(Momentum.class).freerunning()){
 				accuracy *= 1f + pointsInTalent(Talent.PROJECTILE_MOMENTUM)/2f;
 			}
+			if (target.buff(SilkyQuiver.QuiverMark.class) != null) return INFINITE_ACCURACY;
 		}
 
 		if (buff(Scimitar.SwordDance.class) != null){
@@ -992,6 +994,9 @@ public class Hero extends Char {
 		if (!(w instanceof Weapon))             return true;
 		if (RingOfForce.fightingUnarmed(this))  return true;
 		if (STR() < ((Weapon)w).STRReq())       return false;
+		if (w instanceof MissileWeapon &&
+				buff(SilkyQuiver.quiverBuff.class) != null &&
+				buff(SilkyQuiver.quiverBuff.class).isCursed()) return false;
 		if (w instanceof Flail || w instanceof Cleaver ||
                 (w instanceof WandOfMagicMissile && subClass == HeroSubClass.BATTLEMAGE && ((WandOfMagicMissile) w).type() == 2)) return false;
 
