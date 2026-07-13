@@ -106,7 +106,7 @@ public class EntranceRoom extends StandardRoom {
 		if (Dungeon.depth == 1){
 			level.transitions.add(new LevelTransition(level, entrance, LevelTransition.Type.SURFACE));
 		} else {
-			EntranceRoom.setupStairs(level, entrance);
+			level.transitions.add(new LevelTransition(level, entrance, LevelTransition.Type.REGULAR_ENTRANCE));
 		}
 	}
 
