@@ -236,7 +236,7 @@ public class Imp extends NPC {
 				given = false;
 				
 				do {
-					reward = Generator.random(Generator.Category.ARTIFACT);
+					reward = (Artifact) Generator.random(Generator.Category.ARTIFACT);
 				} while (reward.cursed);
 				reward.transferUpgrade(3);
 				reward.cursed = true;
