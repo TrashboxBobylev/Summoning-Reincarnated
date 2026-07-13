@@ -744,10 +744,8 @@ public class Generator {
 				return randomWeapon();
 			case STAFF:
 				return randomStaff();
-//			case ARTIFACT:
-//				Item item = randomArtifact();
-//				//if we're out of artifacts, return a ring instead.
-//				return item != null ? item : random(Category.RING);
+			case ARTIFACT:
+				return randomUsingDefaults(Category.ARTIFACT);
 			default:
 				if (cat.defaultProbs != null && cat.seed != null){
 					Random.pushGenerator(cat.seed);
