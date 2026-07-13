@@ -788,7 +788,7 @@ public class Generator {
 			return randomWeapon(true);
 		} else if (cat == Category.STAFF){
 			return randomStaff(true);
-		} else if (cat.defaultProbs == null || cat == Category.ARTIFACT) {
+		} else if (cat.defaultProbs == null) {
 			return random(cat);
 		} else if (cat.defaultProbsTotal != null){
 			return (Dungeon.mode == Dungeon.GameMode.CHAOS ?
