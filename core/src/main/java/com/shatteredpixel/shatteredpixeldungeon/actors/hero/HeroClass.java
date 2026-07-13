@@ -316,7 +316,7 @@ public enum HeroClass {
                 if (item instanceof Artifact){
                     item.detachAll(hero.belongings.backpack);
                     Random.pushGenerator();
-                    Artifact cloak = Generator.randomArtifact();
+                    Artifact cloak = (Artifact) Generator.random(Generator.Category.ARTIFACT);
                     (hero.belongings.artifact = cloak).identify();
                     hero.belongings.artifact.activate(hero);
                     Random.popGenerator();

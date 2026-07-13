@@ -213,7 +213,7 @@ public class Imp extends NPC {
 				completed = node.getBoolean( COMPLETED );
 				Item thing = (Item) node.get( REWARD );
 				if (thing instanceof Ring)
-					reward = Generator.randomArtifact();
+					reward = (Artifact) Generator.random(Generator.Category.ARTIFACT);
 				else
 					reward = (Artifact) thing;
 			}
@@ -236,7 +236,7 @@ public class Imp extends NPC {
 				given = false;
 				
 				do {
-					reward = Generator.randomArtifact();
+					reward = Generator.random(Generator.Category.ARTIFACT);
 				} while (reward.cursed);
 				reward.transferUpgrade(3);
 				reward.cursed = true;

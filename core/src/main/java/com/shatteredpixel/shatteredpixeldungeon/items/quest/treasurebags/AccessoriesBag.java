@@ -40,7 +40,7 @@ public class AccessoriesBag extends TreasureBag {
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
-            Artifact artifact = Generator.randomArtifact();
+            Artifact artifact = (Artifact) Generator.random(Generator.Category.ARTIFACT);
             if (artifact != null) {
                 artifact.transferUpgrade(8);
             }

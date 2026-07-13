@@ -512,7 +512,7 @@ public class ShopRoom extends SpecialRoom {
 				case MAGE:
 					additionalRare = Generator.random(Generator.Category.WAND); break;
 				case ROGUE:
-					additionalRare = Generator.randomArtifact(); break;
+					additionalRare = Generator.random(Generator.Category.ARTIFACT); break;
 				case DUELIST:
 					additionalRare = Generator.randomWeapon();
 					if (((Weapon)additionalRare).hasCurseEnchant()){
