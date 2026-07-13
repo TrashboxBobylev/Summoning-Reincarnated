@@ -85,7 +85,7 @@ public class MirrorOfFates extends Artifact {
     protected boolean canBeUsed(Hero hero){
         switch (type()){
             case 3:
-                return hero.buff(UsedItemTracker.class) != null && chargeUse(hero) > 0 && chargeUse(hero) <= chargeCap;
+                return hero.buff(UsedItemTracker.class) != null && charge > 0 && chargeUse(hero) > 0 && chargeUse(hero) <= chargeCap;
             default:
                 return !isMirrorActive(hero) && !isMirrorDown(hero);
         }
