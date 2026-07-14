@@ -156,7 +156,7 @@ public enum Talent {
 	TELEFRAG(55, 4), REMOTE_BEACON(56, 4), LONGRANGE_WARP(57, 4),
 
 	//Rogue T1
-	CACHED_RATIONS(64), THIEFS_INTUITION(65), SUCKER_PUNCH(66), PROTECTIVE_SHADOWS(67),
+	CACHED_RATIONS(64), THIEFS_INTUITION(65), SUCKER_PUNCH(66), PROTECTIVE_SHADOWS(67), ACUTENESS(91),
 	//Rogue T2
 	MYSTICAL_MEAL(68), INSCRIBED_STEALTH(69), WIDE_SEARCH(70), SILENT_STEPS(71), ROGUES_FORESIGHT(72),
 	//Rogue T3
@@ -957,7 +957,8 @@ public enum Talent {
 	}
 
 	public static float itemIDSpeedFactor( Hero hero, Item item ){
-		float factor = 1f;
+		// 2x/3x speed with Rogue talent
+		float factor = 1f + 1f*hero.pointsInTalent(SURVIVALISTS_INTUITION);
 
 		// Affected by both Warrior(1.75x/2.5x) and Duelist(2.5x/inst.) talents
 		if (item instanceof MeleeWeapon){
@@ -977,10 +978,10 @@ public enum Talent {
 		if (item instanceof MissileWeapon){
 			factor *= 1f + 2.0f*hero.pointsInTalent(SURVIVALISTS_INTUITION);
 		}
-		// 2x/instant for Rogue (see onItemEqupped), also id's type on equip/on pickup
-		if (item instanceof Ring){
-			factor *= 1f + hero.pointsInTalent(THIEFS_INTUITION);
-		}
+//		// 2x/instant for Rogue (see onItemEqupped), also id's type on equip/on pickup
+//		if (item instanceof Ring){
+//			factor *= 1f + hero.pointsInTalent(THIEFS_INTUITION);
+//		}
 		return factor;
 	}
 
@@ -1458,7 +1459,7 @@ public enum Talent {
 				Collections.addAll(tierTalents, EMPOWERING_MEAL, SCHOLARS_INTUITION, LINGERING_MAGIC, BACKUP_BARRIER);
 				break;
 			case ROGUE:
-				Collections.addAll(tierTalents, CACHED_RATIONS, THIEFS_INTUITION, SUCKER_PUNCH, PROTECTIVE_SHADOWS);
+				Collections.addAll(tierTalents, CACHED_RATIONS, ACUTENESS, SUCKER_PUNCH, PROTECTIVE_SHADOWS);
 				break;
 			case HUNTRESS:
 				Collections.addAll(tierTalents, NATURES_BOUNTY, SURVIVALISTS_INTUITION, FOLLOWUP_STRIKE, SCOUTS_BARRIER);
@@ -1736,8 +1737,8 @@ public enum Talent {
 
 	private static final HashMap<String, String> renamedTalents = new HashMap<>();
 	static{
-		//nothing atm
 		renamedTalents.put("NATURES_AID", "SCOUTS_BARRIER");
+		renamedTalents.put("THIEFS_INTUITION", "ACUTENESS");
 	}
 
 	public static void restoreTalentsFromBundle( Bundle bundle, Hero hero ){
