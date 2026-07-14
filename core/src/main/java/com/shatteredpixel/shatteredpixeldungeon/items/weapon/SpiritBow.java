@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
@@ -402,6 +403,14 @@ public class SpiritBow extends Weapon implements TypedItem {
 			float multiplier = Math.min(5f, 1.35f * (float)Math.pow(1.2f, distance));
 			damage = Math.round(damage * multiplier);
 			return damage;
+		}
+
+		@Override
+		public int proc(Char attacker, Char defender, int damage) {
+			if (Dungeon.hero.hasTalent(Talent.SCOUTS_BARRIER)){
+				Buff.affect(attacker, Barrier.class).incShield(2 + Dungeon.hero.pointsInTalent(Talent.SCOUTS_BARRIER)*2);
+			}
+			return super.proc(attacker, defender, damage);
 		}
 
 		@Override

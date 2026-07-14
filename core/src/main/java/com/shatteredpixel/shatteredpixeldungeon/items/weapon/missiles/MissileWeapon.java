@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
@@ -41,6 +42,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScoutArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EmeradicBattery;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SilkyQuiver;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SubtilitasSigil;
@@ -423,6 +425,17 @@ abstract public class MissileWeapon extends Weapon implements TypedItem {
 			}
 		} else if (parent != null && isIdentified() && !parent.isIdentified()){
 			parent.identify();
+		}
+
+		if (Dungeon.hero.heroClass != HeroClass.HUNTRESS
+				&& Dungeon.hero.buff(ScoutArmor.ScoutCooldown.class) == null) {
+			boolean super_shot_talent = false;
+			if (Dungeon.hero.hasTalent(Talent.SCOUTS_BARRIER)) {
+				Buff.affect(attacker, Barrier.class).incShield(2 + Dungeon.hero.pointsInTalent(Talent.SCOUTS_BARRIER) * 2);
+				super_shot_talent = true;
+			}
+			if (super_shot_talent)
+				Buff.affect(attacker, ScoutArmor.ScoutCooldown.class, 33f);
 		}
 
 		if (attacker == Dungeon.hero && !isIdentified() && ShardOfOblivion.passiveIDDisabled()){

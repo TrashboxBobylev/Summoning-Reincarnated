@@ -173,7 +173,7 @@ public enum Talent {
 	SHADOW_BLADE(87, 4), CLONED_ARMOR(88, 4), PERFECT_COPY(89, 4),
 
 	//Huntress T1
-	NATURES_BOUNTY(96), SURVIVALISTS_INTUITION(97), FOLLOWUP_STRIKE(98), NATURES_AID(99),
+	NATURES_BOUNTY(96), SURVIVALISTS_INTUITION(97), FOLLOWUP_STRIKE(98), NATURES_AID(99), SCOUTS_BARRIER(99),
 	//Huntress T2
 	INVIGORATING_MEAL(100), LIQUID_NATURE(101), REJUVENATING_STEPS(102), HEIGHTENED_SENSES(103), DURABLE_PROJECTILES(104),
 	//Huntress T3
@@ -1461,7 +1461,7 @@ public enum Talent {
 				Collections.addAll(tierTalents, CACHED_RATIONS, THIEFS_INTUITION, SUCKER_PUNCH, PROTECTIVE_SHADOWS);
 				break;
 			case HUNTRESS:
-				Collections.addAll(tierTalents, NATURES_BOUNTY, SURVIVALISTS_INTUITION, FOLLOWUP_STRIKE, NATURES_AID);
+				Collections.addAll(tierTalents, NATURES_BOUNTY, SURVIVALISTS_INTUITION, FOLLOWUP_STRIKE, SCOUTS_BARRIER);
 				break;
 			case DUELIST:
 				Collections.addAll(tierTalents, STRENGTHENING_MEAL, ADVENTURERS_INTUITION, PATIENT_STRIKE, AGGRESSIVE_BARRIER);
@@ -1737,6 +1737,7 @@ public enum Talent {
 	private static final HashMap<String, String> renamedTalents = new HashMap<>();
 	static{
 		//nothing atm
+		renamedTalents.put("NATURES_AID", "SCOUTS_BARRIER");
 	}
 
 	public static void restoreTalentsFromBundle( Bundle bundle, Hero hero ){
