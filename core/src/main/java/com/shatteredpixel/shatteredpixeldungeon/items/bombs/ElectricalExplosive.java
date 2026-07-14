@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Recharging;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
@@ -248,8 +249,10 @@ public class ElectricalExplosive extends Bomb implements ChargingItem {
 			}
 		}
 
-		usedCharge += charge*100;
-		charge = 0;
+		if (!Dungeon.hero.hasTalent(Talent.EXPLOSIVE_PRIDE) || Random.Float() > 1f / (5f - Dungeon.hero.pointsInTalent(Talent.EXPLOSIVE_PRIDE))) {
+			usedCharge += charge * 100;
+			charge = 0;
+		}
 
 		if (Random.Float() < canBreak()) {
 			for (Heap heap : Dungeon.level.heaps.valueList()) {

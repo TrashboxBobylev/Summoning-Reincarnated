@@ -160,7 +160,7 @@ public enum Talent {
 	//Rogue T2
 	MYSTICAL_MEAL(68), INSCRIBED_STEALTH(69), WIDE_SEARCH(70), SILENT_STEPS(71), ROGUES_FORESIGHT(72),
 	//Rogue T3
-	ENHANCED_RINGS(73, 3), LIGHT_CLOAK(74, 3),
+	ENHANCED_RINGS(73, 3), LIGHT_CLOAK(74, 3), EXPLOSIVE_PRIDE(92, 3),
 	//Assassin T3
 	ENHANCED_LETHALITY(75, 3), ASSASSINS_REACH(76, 3), BOUNTY_HUNTER(77, 3),
 	//Freerunner T3
@@ -1529,7 +1529,7 @@ public enum Talent {
 				Collections.addAll(tierTalents, DESPERATE_POWER, ALLY_WARP);
 				break;
 			case ROGUE:
-				Collections.addAll(tierTalents, ENHANCED_RINGS, LIGHT_CLOAK);
+				Collections.addAll(tierTalents, EXPLOSIVE_PRIDE, LIGHT_CLOAK);
 				break;
 			case HUNTRESS:
 				Collections.addAll(tierTalents, POINT_BLANK, SEER_SHOT);
@@ -1739,6 +1739,7 @@ public enum Talent {
 	static{
 		renamedTalents.put("NATURES_AID", "SCOUTS_BARRIER");
 		renamedTalents.put("THIEFS_INTUITION", "ACUTENESS");
+		renamedTalents.put("ENHANCED_RINGS", "EXPLOSIVE_PRIDE");
 	}
 
 	public static void restoreTalentsFromBundle( Bundle bundle, Hero hero ){

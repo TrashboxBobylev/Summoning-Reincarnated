@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SmokeParticle;
@@ -178,10 +179,7 @@ public class Bomb extends Item implements DamageSource {
 	}
 
 	public static int minDamage(int depth) {
-		int baseDamage = 8 + Math.round(depth*1.5f);
-//		if (Dungeon.hero.pointsInTalent(Talent.NUCLEAR_RAGE) > 0)
-//			baseDamage *= 1.05f + 0.1f * (Dungeon.hero.pointsInTalent(Talent.NUCLEAR_RAGE));
-		return baseDamage;
+		return 8 + Math.round(depth*1.5f);
 	}
 
 //	public static float nuclearBoost(){
@@ -269,6 +267,12 @@ public class Bomb extends Item implements DamageSource {
 				Dungeon.observe();
 			}
 		}
+
+		if (Dungeon.hero.hasTalent(Talent.EXPLOSIVE_PRIDE) &&
+				Random.Float() < 1f / (5f - Dungeon.hero.pointsInTalent(Talent.EXPLOSIVE_PRIDE))){
+			Bomb newBomb = Reflection.newInstance(getClass());
+			Dungeon.level.drop(newBomb, cell);
+		}
 	}
 	
 	@Override
@@ -318,13 +322,13 @@ public class Bomb extends Item implements DamageSource {
 					return Reflection.newInstance(Random.element(enhancedBombs));
 			}
 		}
-		switch(Random.Int( 15 )){
-			case 0: case 1: case 2: case 3: case 4:
-				return new DoubleBomb();
-			case 14:
-				return Reflection.newInstance(Random.element(enhancedBombs));
-			default:
-				return this;
+		int roll = Random.Int(15);
+		if (roll < 5){
+			return new DoubleBomb();
+		} else if (roll >= 14 - (int)(Dungeon.hero.pointsInTalent(Talent.EXPLOSIVE_PRIDE)*1.5f)){
+			return Reflection.newInstance(Random.element(enhancedBombs));
+		} else {
+			return this;
 		}
 	}
 
