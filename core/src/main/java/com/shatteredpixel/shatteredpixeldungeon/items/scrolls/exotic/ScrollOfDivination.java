@@ -28,7 +28,6 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Identification;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -62,14 +61,13 @@ public class ScrollOfDivination extends ExoticScroll {
 		
 		HashSet<Class<? extends Potion>> potions = Potion.getUnknown();
 		HashSet<Class<? extends Scroll>> scrolls = Scroll.getUnknown();
-		HashSet<Class<? extends Ring>> rings = Ring.getUnknown();
 		
-		int total = potions.size() + scrolls.size() + rings.size();
+		int total = potions.size() + scrolls.size();
 		
 		ArrayList<Item> IDed = new ArrayList<>();
 		int left = 4;
 		
-		float[] baseProbs = new float[]{3, 3, 3};
+		float[] baseProbs = new float[]{3, 3};
 		float[] probs = baseProbs.clone();
 		
 		while (left > 0 && total > 0) {
@@ -98,17 +96,6 @@ public class ScrollOfDivination extends ExoticScroll {
 					s.identify();
 					IDed.add(s);
 					scrolls.remove(s.getClass());
-					break;
-				case 2:
-					if (rings.isEmpty()) {
-						probs[2] = 0;
-						continue;
-					}
-					probs[2]--;
-					Ring r = Reflection.newInstance(Random.element(rings));
-					r.setKnown();
-					IDed.add(r);
-					rings.remove(r.getClass());
 					break;
 			}
 			left --;
