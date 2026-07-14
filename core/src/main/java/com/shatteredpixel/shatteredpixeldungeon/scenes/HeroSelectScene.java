@@ -24,6 +24,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
+import static com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass.CONJURER;
+
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Chrome;
 import com.shatteredpixel.shatteredpixeldungeon.Conducts;
@@ -78,8 +80,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import static com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass.CONJURER;
-
 public class HeroSelectScene extends PixelScene {
 
 	private Image background;
@@ -91,7 +91,8 @@ public class HeroSelectScene extends PixelScene {
 	private ArrayList<StyledButton> heroBtns = new ArrayList<>();
 	private RenderedTextBlock heroName; //only on landscape
 	private RenderedTextBlock heroDesc; //only on landscape
-	private StyledButton startBtn;
+	public StyledButton startBtn;
+	private StyledButton modeBtn;
 	private IconButton infoButton;
 	private IconButton btnOptions;
 	private GameOptions optionsPane;
@@ -158,19 +159,40 @@ public class HeroSelectScene extends PixelScene {
 			protected void onClick() {
 				super.onClick();
 
-                Dungeon.GameMode[] modes = Dungeon.GameMode.values();
+				if (GamesInProgress.selectedClass == null) return;
 
-				ShatteredPixelDungeon.scene().addToFront(modeWasRandomized ?
-                        new WndDungeonMode(Random.oneOf(modes)) :
-                        new WndDungeonMode());
-                modeWasRandomized = false;
+				Dungeon.mode = SPDSettings.mode();
+				Dungeon.hero = null;
+				Dungeon.daily = Dungeon.dailyReplay = false;
+				Dungeon.initSeed();
+				ActionIndicator.clearAction();
+				InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
+
+				Game.switchScene( InterlevelScene.class );
 			}
 		};
-		startBtn.icon(Icons.get(Icons.ENTER));
+		startBtn.icon(SPDSettings.mode().icon.get());
 		startBtn.setSize(80, 21);
 		startBtn.textColor(Window.TITLE_COLOR);
 		add(startBtn);
 		startBtn.visible = startBtn.active = false;
+
+		modeBtn = new StyledButton(Chrome.Type.GREY_BUTTON_TR, ""){
+			@Override
+			protected void onClick() {
+				super.onClick();
+
+				Dungeon.GameMode[] modes = Dungeon.GameMode.values();
+
+				ShatteredPixelDungeon.scene().addToFront(modeWasRandomized ?
+						new WndDungeonMode(Random.oneOf(modes)) :
+						new WndDungeonMode());
+				modeWasRandomized = false;
+			}
+		};
+		modeBtn.setSize(50, 15);
+		add(modeBtn);
+		modeBtn.visible = modeBtn.active = false;
 
 		infoButton = new IconButton(Icons.get(Icons.INFO)){
 			@Override
@@ -304,6 +326,11 @@ public class HeroSelectScene extends PixelScene {
 			startBtn.setSize(startBtn.reqWidth()+8, 21);
 			startBtn.setPos(insets.left + (leftArea - startBtn.width())/2f, title.top() + uiHeight - startBtn.height());
 			align(startBtn);
+
+			modeBtn.text(Messages.titleCase(Messages.get(this, "mode")));
+			modeBtn.setSize(modeBtn.reqWidth()+4, 16);
+			modeBtn.setPos(insets.left + (leftArea - modeBtn.width())/2f, title.top() - startBtn.height() + uiHeight - modeBtn.height());
+			align(modeBtn);
 
 			btnFade = new IconButton(Icons.CHEVRON.get()){
 				@Override
@@ -455,6 +482,7 @@ public class HeroSelectScene extends PixelScene {
 			btnFade.visible = btnFade.active = true;
 
 			startBtn.visible = startBtn.active = true;
+			modeBtn.visible = modeBtn.active = true;
 
 			infoButton.visible = infoButton.active = true;
 			infoButton.setPos(heroName.right(), heroName.top() + (heroName.height() - infoButton.height())/2f);
@@ -469,8 +497,14 @@ public class HeroSelectScene extends PixelScene {
 			startBtn.text(Messages.titleCase(cl.title()));
 			startBtn.setSize(startBtn.reqWidth() + 8, 21);
 
+			modeBtn.visible = modeBtn.active = true;
+			modeBtn.text(Messages.titleCase(Messages.get(this, "mode")));
+			modeBtn.setSize(modeBtn.reqWidth() + 5, 16);
+
 			startBtn.setPos((Camera.main.width - startBtn.width())/2f, (Camera.main.height - insets.bottom - HeroBtn.HEIGHT + 2 - startBtn.height()));
 			PixelScene.align(startBtn);
+			modeBtn.setPos((Camera.main.width - modeBtn.width())/2f, (Camera.main.height - insets.bottom - HeroBtn.HEIGHT - startBtn.height() + 2 - modeBtn.height()));
+			PixelScene.align(modeBtn);
 
 			infoButton.visible = infoButton.active = true;
 			infoButton.setPos(startBtn.right(), startBtn.top());
@@ -521,6 +555,8 @@ public class HeroSelectScene extends PixelScene {
 		}
 		startBtn.enable(alpha != 0);
 		startBtn.alpha(alpha);
+		modeBtn.enable(alpha != 0);
+		modeBtn.alpha(alpha);
 		btnExit.enable(btnExit.visible && alpha != 0);
 		btnExit.icon().alpha(alpha);
 		optionsPane.active = optionsPane.visible && alpha != 0;

@@ -328,9 +328,17 @@ public class Dungeon {
 			this.scoreMod = scoreMod;
 		}
 
-		public String desc(){
+		public String fullDesc(){
 			return "_" + this + "_: " + Messages.get(Dungeon.class, "mode_desc_" + saveName) + "\n" +
 					Messages.get(Dungeon.class, "score", new DecimalFormat("#.##").format(scoreMod));
+		}
+
+		public String desc(){
+			return Messages.get(Dungeon.class, "mode_desc_" + saveName);
+		}
+
+		public String score(){
+			return Messages.get(Dungeon.class, "score", new DecimalFormat("#.##").format(scoreMod));
 		}
 
 		@Override

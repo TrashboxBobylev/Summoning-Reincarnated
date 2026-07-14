@@ -109,7 +109,7 @@ public class WndGame extends Window {
 		}
 		if (Dungeon.mode != null) {
 			Image ic = Icons.get(Dungeon.mode.icon);
-			RedButton mode = new RedButton(Dungeon.mode.desc(), 6){
+			RedButton mode = new RedButton(Dungeon.mode.fullDesc(), 6){
 				{
 					enable(false);
 				}

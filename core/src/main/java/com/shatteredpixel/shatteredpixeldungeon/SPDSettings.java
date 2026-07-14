@@ -228,6 +228,7 @@ public class SPDSettings extends GameSettings {
 	public static final String KEY_INTRO		= "intro";
 	public static final String KEY_ONE_CONDUCT  = "one_conduct";
 	public static final String KEY_CONDUCTS  	= "conducts";
+	public static final String KEY_GAMEMODE  	= "game_mode";
 
 	public static final String KEY_SUPPORT_NAGGED= "support_nagged";
 	public static final String KEY_VICTORY_NAGGED= "victory_nagged";
@@ -278,6 +279,14 @@ public class SPDSettings extends GameSettings {
 
 	public static Conducts.ConductStorage conducts() {
 		return getBundlable(KEY_CONDUCTS, new Conducts.ConductStorage());
+	}
+
+	public static void mode(Dungeon.GameMode mode) {
+		put(KEY_GAMEMODE, mode.name());
+	}
+
+	public static Dungeon.GameMode mode(){
+		return Enum.valueOf(Dungeon.GameMode.class, getString(KEY_GAMEMODE, "NORMAL"));
 	}
 
 	public static boolean oneConduct() {return getBoolean(KEY_ONE_CONDUCT, true);}
