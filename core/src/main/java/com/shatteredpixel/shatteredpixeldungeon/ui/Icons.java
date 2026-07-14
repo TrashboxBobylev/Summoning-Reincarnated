@@ -451,7 +451,7 @@ public enum Icons {
 				icon.frame( icon.texture.uvRectBySize( 32, 161, 15, 13 ) );
 				break;
 			case ENLARGEMENT:
-				icon.frame( icon.texture.uvRectBySize( 49, 161, 20, 20 ) );
+				icon.frame( icon.texture.uvRectBySize( 48, 160, 16, 16 ) );
 				break;
 			case EXPLORE:
 				icon.frame( icon.texture.uvRectBySize( 0, 176,  16, 15 ) );
