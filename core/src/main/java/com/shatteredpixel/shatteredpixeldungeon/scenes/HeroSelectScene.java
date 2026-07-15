@@ -976,6 +976,12 @@ public class HeroSelectScene extends PixelScene {
 						} else {
 							setSelectedHero(GamesInProgress.selectedClass);
 						}
+
+						if (chkMode.checked()){
+							SPDSettings.mode(Random.oneOf(Dungeon.GameMode.values()));
+							((HeroSelectScene)Game.scene()).startBtn.icon(SPDSettings.mode().icon.get());
+							GamesInProgress.randomizedMode = true;
+						}
 					}
 				};
 				btnConfirm.setRect(0, 64, 60, 16);

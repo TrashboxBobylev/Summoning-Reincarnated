@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.HeroSelectScene;
@@ -141,6 +142,7 @@ public class WndDungeonMode extends Window {
                 hide();
                 SPDSettings.mode(chosenGameMode);
                 ((HeroSelectScene)Game.scene()).startBtn.icon(chosenGameMode.icon.get());
+                GamesInProgress.randomizedMode = false;
             }
         };
         btnSetMode.setRect(content.width() + MARGIN*2, pos, width - MARGIN*3 - content.width(), btnSetMode.reqHeight()*1.5f);
