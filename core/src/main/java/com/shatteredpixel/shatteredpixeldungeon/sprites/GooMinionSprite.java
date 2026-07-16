@@ -100,8 +100,10 @@ public class GooMinionSprite extends MinionSprite {
 	@Override
 	public void update() {
 		super.update();
-		spray.pos(center());
-		spray.visible = visible;
+		if (spray != null) {
+			spray.pos(center());
+			spray.visible = visible;
+		}
 	}
 
 	@Override
