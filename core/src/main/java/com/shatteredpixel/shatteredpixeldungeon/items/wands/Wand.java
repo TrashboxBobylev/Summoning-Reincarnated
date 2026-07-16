@@ -622,7 +622,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
                 base -= 1;
             WandOfMagicMissile.MagicCharge buff = charger.target.buff(WandOfMagicMissile.MagicCharge.class);
             if (buff != null && buff.wandJustApplied() != this){
-                return (base+1)*buff.wandJustApplied().powerModifier()-1;
+                return (base+1)*buff.powerModifier()-1;
             }
         }
         return base;
