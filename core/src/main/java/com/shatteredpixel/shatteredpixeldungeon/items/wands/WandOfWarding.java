@@ -217,6 +217,8 @@ public class WandOfWarding extends Wand {
             }
 
             boolean placedWall = false;
+            if (closestIdx == -1)
+                closestIdx = 0;
 
             int knockBackDir = PathFinder.CIRCLE8[closestIdx];
 
