@@ -55,7 +55,7 @@ public class EnergizedRenewal extends ConjurerSpell {
             int healing = heal(ch, type());
 
             if (type() == 3){
-                Buff.affect(ch, Healing.class).setHeal(healing, 0, 1);
+                Buff.affect(ch, Healing.class).setHeal(healing, 0.005f, 0);
             } else {
                 Regeneration.regenerate(ch, healing, true, false);
             }
