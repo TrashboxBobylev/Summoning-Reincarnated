@@ -145,6 +145,8 @@ public class Dragon extends AbyssalMob {
         }
     }
 
+    public boolean swipeActive = false;
+
     @Override
     public int attackProc( Char enemy, int damage ) {
         damage = super.attackProc( enemy, damage );
@@ -152,9 +154,10 @@ public class Dragon extends AbyssalMob {
             Buff.affect(enemy, FrostBurn.class ).reignite(enemy, 10f );
             Splash.at( enemy.sprite.center(), sprite.blood(), 5);
         }
-        if (!isSuppressed()) {
+        if (!isSuppressed() && !swipeActive) {
             for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
                 if (pos + PathFinder.NEIGHBOURS8[i] == enemy.pos) {
+                    swipeActive = true;
                     switch (i) {
                         case 0:
                             swipeAttack(1, 3);
@@ -217,6 +220,7 @@ public class Dragon extends AbyssalMob {
         if (ch2 != null && ch2.alignment != alignment){
             attack(ch2);
         }
+        swipeActive = false;
     }
 
     protected void rangedProc( Char enemy ) {
