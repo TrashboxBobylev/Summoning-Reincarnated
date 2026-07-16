@@ -103,7 +103,6 @@ public class MysteryMerchant extends NPC {
                 Messages.get(MysteryMerchant.class, "transmute_talent")){
             @Override
             protected void onSelect(int index) {
-                Stats.handlePurchase();
                 hide();
                 if (index == 0){
                     GameScene.show(new WndDegradeChoose());
