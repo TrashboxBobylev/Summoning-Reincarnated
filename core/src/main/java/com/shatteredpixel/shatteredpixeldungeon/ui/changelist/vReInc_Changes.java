@@ -78,12 +78,168 @@ import java.util.ArrayList;
 
 public class vReInc_Changes {
     public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
+        add_v0_7_0_Changes(changeInfos);
         add_v0_6_0_Changes(changeInfos);
         add_v0_5_0_Changes(changeInfos);
         add_v0_4_0_Changes(changeInfos);
         add_v0_3_0_Changes(changeInfos);
         add_v0_2_0_Changes(changeInfos);
         add_v0_1_0_Changes(changeInfos);
+    }
+
+    public static void add_v0_7_0_Changes( ArrayList<ChangeInfo> changeInfos ) {
+        ChangeInfo changes = new ChangeInfo("vReInc-0.7.0", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBYLEV), "Developer Commentary",
+                "_-_ Released July 17th, 2026\n" +
+                        "_-_ 204 days after Reincarnated 0.6.2\n\n" +
+                        "This was supposed to be bugfix update, but it got too far..."
+        ));
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered Ports",
+                "Implemented Shattered v3.3.8 changes.\n\n" +
+                        "_-_ Conducts and game mode can be randomized as well.\n" +
+                        "_-_ Mysterious Merchant's talent services invalidate random talents badge.\n" +
+                        "_-_ Skeleton Key works in Abyss."
+        ));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
+        changes.hardlight(CharSprite.POSITIVE);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.MIRROR), "Artifact Rework",
+                "_-_ Now use item types system, providing player with 3 variants of same artifact, ranging from mechanical tweaks to brand new effects, like chalice's blood wraiths and spellbook's mob summoning!\n\n" +
+                        "_-_ The player can now equip three artifacts; the same kind of artifact still can't be equipped.\n\n" +
+                        "_-_ Removed the uniqueness restriction for dropped artifacts; duplicates will have different item type from artifacts you already own, however.\n\n" +
+                        "_-_ Added 5 new artifacts from Legacy Summoning: _Subtilitas Sigil_, _Mirror of Fates_, _Emeradic Battery_ (previously called Fuel Container), _Guardian's Stone_ and _Silky Quiver_. Each one received visual refinements and balance changes over old version."
+        ));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.RANDOM_HERO), "Game Modes and Conducts",
+                "_-_ Added one new game mode: _Distorted Rulebook_, which picks a random conduct for hero to follow on each floor.\n\n" +
+                        "_-_ Completely redesigned the game mode selection menu, focusing on taking less screen space and allowing to keep playing the same game mode over multiple runs.\n\n" +
+                        "_-_ Added two new conducts:\n" +
+                        "   _*_ _Unwanted Clover_ makes the hero-sourced damage roll either minimal value or maximal value, 50/50. This includes summons from staffs.\n" +
+                        "   _*_ _Candice's Rulebook_ is based on community member _doemaxxing_'s ruleset, providing additional challenge over classic 9chal."
+        ));
+
+        changes.addButton(new ChangeButton(new TalentIcon(Talent.EXPLOSIVE_PRIDE), "Talent Replacements",
+                "_-_ Replaced _Thief's Intuition_ with _Acuteness_, which provides universal ID speed boost.\n\n" +
+                        "_-_ Replaced _Nature's Aid_ with _Scout's Barrier_, which gives shielding after successful Super-Shot.\n\n" +
+                        "_-_ Replaced _Enhanced Rings_ with _Explosive Pride_, which boosts the chances for enhanced bombs to appear and adds a chance for bombs to not disappear after exploding."
+        ));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.EXOTIC_RAIDO), "Other Replacements",
+                    "Replaced Scroll of Siren Song with _Scroll of Attunement_, a scroll that buffs nearby allies with Empowered effect."
+        ));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "changes"), false, null);
+        changes.hardlight(CharSprite.WARNING);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.RING_GARNET), "Ring Removal",
+                "_-_ Completely removed rings from the item generation. The previous ring sources now only output artifacts.\n\n" +
+                        "_-_ Already equipped rings will be unequipped on loading the save and be unequippable.\n\n" +
+                        "_-_ Ambitious Imp now gives upgraded artifact instead of an upgraded ring.\n\n" +
+                        "_-_ Scroll of Divination will no longer identify ring types."
+        ));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.SOMETHING), "Other Removals",
+                "Removed the items, whose roles are now satisfied by new artifacts or challenges:\n\n" +
+                        "_-_ Petrified Seed (T2 Sandals of Nature).\n" +
+                        "_-_ 13-Leaf Clover (Unwanted Clover conduct).\n" +
+                        "_-_ Wondrous Resin (T3 Emeradic Battery)."
+        ));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.CHAOS), "Game Mode changes",
+                "_Project Paradox_:\n" +
+                        "_-_ No longer \"taints\" the runs started after it with random item generation.\n" +
+                        "_-_ Restored the equal odds aspect for item generation.\n\n" +
+                        "_Large Enlargement_:\n" +
+                        "_-_ Changed the mode's icon to fit into new format.\n\n" +
+                        "_Gauntlet Mode_:\n" +
+                        "_-_ Mobs drop slightly more gold.\n" +
+                        "_-_ Rebalanced item distribution:\n" +
+                        "   _-_ Missile weapons no longer spawn every 2 floors.\n" +
+                        "   _-_ Weapons, armor and missiles are now a separate roll from other equipment.\n" +
+                        "   _-_ Other equipment roll is provided every 2 floors and has staffs, wands and artifacts.\n" +
+                        "   _-_ Player-dependant rewards now appear more frequently and are now always upgraded and uncursed, when possible.\n" +
+                        "   _-_ Changed the class reward for Adventurer from random item to generic treasure bag.\n" +
+                        "   _-_ Amulet of Yendor will persist in the shop until it is picked up."
+        ));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+                "_-_ Froggit Staff can no longer be transmuted.\n" +
+                        "_-_ Migrated to new crash handler code and made it no longer apply in Google Play-based builds.\n" +
+                        "_-_ Buff duration effect now applies to more Summoning's effects.\n" +
+                        "_-_ Updated Scroll of Debug tool to the latest version.\n" +
+                        "_-_ Mysterious Merchant now only takes money after the talent metamorph/degrade is completed.\n" +
+                        "_-_ Curse Infusion spell can now be applied to more Summoning's items and meaningfully affect them.\n" +
+                        "_-_ Toy Knife now persist in its quickslot, if thrown away, and gets instantly equipped, if Conjurer has no weapon on picking up the knife.\n" +
+                        "_-_ Made more utility potions be shared with minions, like levitation, invisibility and haste.\n" +
+                        "_-_ Added a class armor for Adventurer, if he somehow gets Ratmogrify or other abilities."
+        ));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "_Fixed the following bugs:_\n" +
+                        "_-_ DM-150's recharge being \"instant\" depending on how strong it is\n" +
+                        "_-_ Summon staffs using wrong item pool, when transmutated\n" +
+                        "_-_ Underground Paradise applying enchantment effects to itself instead of its enemy\n" +
+                        "_-_ Curse of Faced conduct eating away more items than intended\n" +
+                        "_-_ Curse of Faced conduct not processing Summoning's region room loot\n" +
+                        "_-_ Artemis Bridge spell not properly detecting minions\n" +
+                        "_-_ Crash on picking up Slingshot's stone" +
+                        "_-_ Wands not being affected by locked floor effect\n" +
+                        "_-_ Summon staffs being impossible to augment\n" +
+                        "_-_ Animated statue crashing the game, when spawned with no weapon\n" +
+                        "_-_ Regeneration coding considering everything as a hero\n" +
+                        "_-_ Crash related to mob targeting visual\n" +
+                        "_-_ Crash related to Phantom Piranhas\n" +
+                        "_-_ Crash related to spellsprites",
+
+                        "_-_ Issues with out-of-bounds map modifications\n" +
+                        "_-_ Wands doing non-elemental damage\n" +
+                        "_-_ Summon staff transmutation resulting in crash, if its minion wasn't alive\n" +
+                        "_-_ Curse of the Muggle's confetti not counting as run ender for rankings\n" +
+                        "_-_ Formatting error in Conjurer's class armor types' descriptions\n" +
+                        "_-_ The ability to ascend beyond level 1 in Project Paradox mode and Abyss\n" +
+                        "_-_ Few remaining mentions of an item rank instead of an item type\n" +
+                        "_-_ Floral Vanguard ally having no discovery hint in journal\n" +
+                        "_-_ Magic Charge effect not working as intended\n" +
+                        "_-_ Abyss shops crashing, if entered with Adventurer\n" +
+                        "_-_ Hammer of Acid's minion crashing the journal\n" +
+                        "_-_ Stack overflow related to Abyssal Dragons\n" +
+                        "_-_ Wand of Warding T2 placement crash\n" +
+                        "_-_ Issues with out-of-bounds modifications to the level"
+        ));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "buffs"), false, null);
+        changes.hardlight(CharSprite.POSITIVE);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(HeroSprite.avatar(HeroClass.CONJURER, 0), "Conjurer",
+            "Removed Conjurer's downsides to bring him in line with other heroes:\n\n" +
+                    "_-_ Increased Conjurer's max HP from 13(+3) to 20(+5).\n" +
+                    "_-_ _Soul Wielder_ no longer has 33% physical damage debuff.\n" +
+                    "_-_ _Will Sorcerer_ now has natural life regeneration again.\n" +
+                    "_-_ Reduced the spell cost for spells of both subclasses by 20%.\n" +
+                    "_-_ Buffed _Energized Renewal_ III's regen speed from 1 HP/turn to 0.5% max HP/turn."
+        ));
+
+        changes = new ChangeInfo(Messages.get(ChangesScene.class, "nerfs"), false, null);
+        changes.hardlight(CharSprite.NEGATIVE);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(HeroSprite.avatar(HeroClass.CONJURER, 0), "Conjurer",
+                "To compensate for the massive increase in survivability, some perks were removed or changed as well:\n\n" +
+                        "_-_ Reduced _Energized Renewal_ I's heal from 8 to 6 HP.\n" +
+                        "_-_ Reduced _Runic Shell_ I's shielding from 10 to 8.\n" +
+                        "_-_ Reduced Froggit's HP from 15/15/30 to 12/12/25.\n" +
+                        "_-_ _Soul Wielder_ no longer gets extra mana.\n" +
+                        "_-_ Reduced _Eternal Friendship_'s armor boost from 1/3/5 to 1/2/3.\n" +
+                        "_-_ Reduced _Rejuvenating Force_'s healing from 2/3/4 HP to 1/2/2 HP and mana gain from 1/2/3 to 0/0/1."
+        ));
     }
 
     public static void add_v0_6_0_Changes( ArrayList<ChangeInfo> changeInfos ){
