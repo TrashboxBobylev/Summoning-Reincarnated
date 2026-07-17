@@ -116,7 +116,7 @@ public class vReInc_Changes {
                         "_-_ Added 5 new artifacts from Legacy Summoning: _Subtilitas Sigil_, _Mirror of Fates_, _Emeradic Battery_ (previously called Fuel Container), _Guardian's Stone_ and _Silky Quiver_. Each one received visual refinements and balance changes over old version."
         ));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.RANDOM_HERO), "Game Modes and Conducts",
+        changes.addButton(new ChangeButton(Icons.get(Icons.RANDOM_CONDUCT), "Game Modes and Conducts",
                 "_-_ Added one new game mode: _Distorted Rulebook_, which picks a random conduct for hero to follow on each floor.\n\n" +
                         "_-_ Completely redesigned the game mode selection menu, focusing on taking less screen space and allowing to keep playing the same game mode over multiple runs.\n\n" +
                         "_-_ Added two new conducts:\n" +
