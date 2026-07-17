@@ -272,9 +272,9 @@ public class DriedRose extends Artifact {
 			case 1:
 				return 20 + 8*level();
 			case 2:
-				return 16 + 6*level();
-			case 3:
 				return 30 + 12*level();
+			case 3:
+				return 16 + 6*level();
 		}
 		return 1;
 	}
