@@ -97,8 +97,11 @@ public class Eye extends Mob {
 
 	@Override
 	protected boolean canAttack( Char enemy ) {
+		if (buff(ScrollOfAntiMagic.EnemyBuff.class) != null || isSuppressed()){
+			return super.canAttack(enemy);
+		}
 
-		if (beamCooldown == 0 && buff(ScrollOfAntiMagic.EnemyBuff.class) == null && !isSuppressed()) {
+		if (beamCooldown == 0 && buff(ScrollOfAntiMagic.EnemyBuff.class) == null) {
 			Ballistica aim = new Ballistica(pos, enemy.pos, Ballistica.STOP_SOLID);
 
 			if (enemy.invisible == 0 && !isCharmedBy(enemy) && fieldOfView[enemy.pos]
@@ -135,9 +138,12 @@ public class Eye extends Mob {
 
 	@Override
 	protected boolean doAttack( Char enemy ) {
+		if (buff(ScrollOfAntiMagic.EnemyBuff.class) != null || isSuppressed()){
+			return super.doAttack(enemy);
+		}
 
 		beam = new Ballistica(pos, beamTarget, Ballistica.STOP_SOLID);
-		if (beamCooldown > 0 || (!beamCharged && !beam.subPath(1, beam.dist).contains(enemy.pos)) || isSuppressed()) {
+		if (beamCooldown > 0 || (!beamCharged && !beam.subPath(1, beam.dist).contains(enemy.pos))) {
 			return super.doAttack(enemy);
 		} else if (!beamCharged){
 			((EyeSprite)sprite).charge( enemy.pos );
