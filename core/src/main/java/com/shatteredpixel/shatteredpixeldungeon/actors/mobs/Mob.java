@@ -353,7 +353,7 @@ public abstract class Mob extends Char {
 	public void doWithHordeMinions(MoblikeCallback action){
 		if (hordeHead == -1) {
 			for (Mob mob : Dungeon.level.mobs.toArray(new Mob[0])) {
-				if (mob.id() != id() && mob.hordeHead == id()) {
+				if (mob.id() != id() && mob.hordeHead == id() && mob.alignment == alignment) {
 					action.call(mob);
 				}
 			}
