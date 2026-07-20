@@ -28,14 +28,13 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Healing;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
-import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 
 import java.util.EnumSet;
 
@@ -54,9 +53,7 @@ public class HealGas extends Blob implements DamageSource {
 				if (cur[cell] > 0 && (ch = Actor.findChar( cell )) != null) {
 					if (!ch.isImmune(Healing.class) || (ch instanceof Hero && Dungeon.mode != Dungeon.GameMode.NINE_CHAL)) {
 						int heal = (Dungeon.chapterNumber()+1)*2;
-						if (ch.HP < ch.HT)
-							ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(heal), FloatingText.HEALING);
-                        ch.HP = Math.min(ch.HT, ch.HP + heal);
+						Regeneration.regenerate(ch, heal);
 					} else {
 
                         ch.damage((Dungeon.chapterNumber()+1)*2, this);

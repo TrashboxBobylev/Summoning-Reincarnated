@@ -33,6 +33,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.ChaliceOfBlood;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SubtilitasSigil;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.ShockerBreaker;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfEnergy;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ChaoticCenser;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.SaltCube;
@@ -73,7 +74,7 @@ public class Regeneration extends Buff {
 		int healAmt = amount;
 		healAmt = Math.min( healAmt, ch.HT - ch.HP );
 
-		if (healAmt > 0 && ch.isAlive()) {
+		if (healAmt > 0 && ch.isAlive() && ch.buff(ShockerBreaker.NoHeal.class) == null) {
 			ch.HP += healAmt;
 			if (visible){
 				if (showHPString)

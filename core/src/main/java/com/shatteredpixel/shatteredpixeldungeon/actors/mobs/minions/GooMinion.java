@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.ShockerBreaker;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
@@ -89,7 +90,7 @@ public class GooMinion extends Minion {
     @Override
     public boolean act() {
 
-        if (Dungeon.level.water[pos] && HP < HT) {
+        if (Dungeon.level.water[pos] && HP < HT && buff(ShockerBreaker.NoHeal.class) == null) {
             sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
             HP++;
         }
