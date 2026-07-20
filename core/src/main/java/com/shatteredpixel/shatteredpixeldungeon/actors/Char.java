@@ -1152,7 +1152,7 @@ acuRoll *= accMulti;
 
 		int shielded = dmg;
 		dmg = ShieldBuff.processDamage(this, dmg, src);
-        if (buff(Corruption.class) != null && !(src.hasProperty(DamageProperty.DECAY) || src.hasProperty(DamageProperty.DEFERRED))){
+        if (buff(Corruption.class) != null && !src.hasProperty(DamageProperty.UNDEFERRABLE)){
             if (dmg >= 0) {
                 Viscosity.DeferedDamage deferred = Buff.affect( this, Viscosity.DeferedDamage.class );
                 deferred.extend( dmg );

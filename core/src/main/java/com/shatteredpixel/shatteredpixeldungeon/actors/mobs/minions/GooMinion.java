@@ -250,7 +250,7 @@ public class GooMinion extends Minion {
         if (type == 3){
             dmg /= 10;
         } else {
-            if (!(src.hasProperty(DamageProperty.DEFERRED))) {
+            if (!src.hasProperty(DamageProperty.UNDEFERRABLE)) {
                 float deferedDmgMulti = 0.5f;
                 if (pumping) {
                     dmg *= 2;

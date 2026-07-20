@@ -52,6 +52,10 @@ public enum DamageProperty {
      */
     IGNORES_SHIELDING,
     /**
+     * Damage that cannot be turned into deferred damage.
+     */
+    UNDEFERRABLE,
+    /**
      * Damage that is amplified on undead/demonic creatures.
      */
     HOLY,
@@ -90,7 +94,7 @@ public enum DamageProperty {
     /**
      * Damage that decays over time.
      */
-    DEFERRED,
+    DEFERRED(UNDEFERRABLE),
     /**
      * Damage based on percentage of health.
      */
@@ -116,7 +120,7 @@ public enum DamageProperty {
      * Damage suffered by decaying enemies, like ones inflicted with corruption.
      * Decay damage does not awake enemies.
      */
-    DECAY,
+    DECAY(UNDEFERRABLE),
     /**
      * Damage that is dealt by explosives.
      */

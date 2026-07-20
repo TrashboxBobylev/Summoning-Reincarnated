@@ -33,6 +33,6 @@ import java.util.EnumSet;
 public interface InescapableDamage extends DamageSource {
     @Override
     default EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.IGNORES_INVULNERABILITY, DamageProperty.MAGICAL);
+        return EnumSet.of(DamageProperty.IGNORES_INVULNERABILITY, DamageProperty.UNDEFERRABLE, DamageProperty.MAGICAL);
     }
 }
