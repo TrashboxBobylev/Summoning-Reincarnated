@@ -38,9 +38,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.TimekeepersHourg
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.Key;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.TelekineticGrab;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
-import com.shatteredpixel.shatteredpixeldungeon.messages.Languages;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -239,11 +239,9 @@ public class Ropes extends Item {
                             || item instanceof Key) {
                         //Do Nothing
                     } else {
-                        //TODO temporary until 0.8.0a, when all languages will get this phrase
-                        if (Messages.lang() == Languages.ENGLISH) {
-                            GLog.newLine();
-                            GLog.negative(Messages.get(this, "you_cant_have", item.name()));
-                        }
+                        GLog.negative(Messages.get(TelekineticGrab.class, "cant_grab"));
+                        heap.sprite.drop();
+                        hero.next();
                     }
 
                     heap.sprite.drop();
