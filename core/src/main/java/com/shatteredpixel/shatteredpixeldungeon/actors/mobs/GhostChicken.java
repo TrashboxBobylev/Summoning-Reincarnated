@@ -30,9 +30,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TimedShrink;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GhostChickenSprite;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Random;
+
+import java.util.EnumSet;
 
 public class GhostChicken extends AbyssalMob {
 
@@ -98,5 +101,13 @@ public class GhostChicken extends AbyssalMob {
 	@Override
 	public float attackDelay() {
 		return super.attackDelay()*0.25f;
+	}
+
+	@Override
+	public EnumSet<DamageProperty> initDmgProperties() {
+		EnumSet<DamageProperty> damageProperties = super.initDmgProperties();
+		damageProperties.remove(DamageProperty.PHYSICAL);
+		damageProperties.add(DamageProperty.CRUMBLING);
+		return damageProperties;
 	}
 }

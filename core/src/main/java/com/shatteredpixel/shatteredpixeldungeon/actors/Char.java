@@ -456,6 +456,10 @@ public abstract class Char extends Actor implements ManaSource, DamageSource {
 			if (this instanceof GnollHunter && ((GnollHunter) this).type == 3 && this.buff(GnollHunter.GnollSnipingCooldown.class) == null)
 				dr /= 2;
 
+			if (hasProperty(DamageProperty.IGNORES_ARMOR)){
+				dr = 0;
+			}
+
 			//we use a float here briefly so that we don't have to constantly round while
 			// potentially applying various multiplier effects
 			float dmg;
