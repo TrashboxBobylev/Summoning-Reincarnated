@@ -51,6 +51,13 @@ public class ScrollOfWarp extends WondrousScroll {
             return;
         }
 
+        setKnown();
+
+        Sample.INSTANCE.play( Assets.Sounds.READ );
+        Invisibility.dispel();
+
+        readAnimation();
+
         Actor.add(new Actor() {
             {
                 actPriority = VFX_PRIO;
@@ -80,12 +87,5 @@ public class ScrollOfWarp extends WondrousScroll {
                 return true;
             }
         });
-
-        setKnown();
-
-        Sample.INSTANCE.play( Assets.Sounds.READ );
-        Invisibility.dispel();
-
-        readAnimation();
     }
 }
