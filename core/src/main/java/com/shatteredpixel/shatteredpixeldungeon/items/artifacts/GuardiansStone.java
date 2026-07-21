@@ -326,12 +326,14 @@ public class GuardiansStone extends Artifact {
                                                 case 3:
                                                     Buff.affect(ch, Daze.class, 5f);
                                                     Buff.affect(ch, Vertigo.class, 5f);
-                                                    Buff.affect(hero, PhysicalEmpower.class).set(1 + distance*distanceMod, distance*distanceMod);
-                                                    Buff.affect(hero, AdrenalineSurge.class).reset(distance*distanceMod/2, 10);
                                                     break;
                                             }
                                         }
                                     }
+                                }
+                                if (GuardiansStone.this.type() == 3){
+                                    Buff.affect(hero, PhysicalEmpower.class).set(1 + distance*distanceMod, distance*distanceMod);
+                                    Buff.affect(hero, AdrenalineSurge.class).reset(distance*distanceMod/2, 10);
                                 }
                                 shielding.absorbDamage(shielding.shielding());
                                 Camera.main.shake( 4, 0.25f );
