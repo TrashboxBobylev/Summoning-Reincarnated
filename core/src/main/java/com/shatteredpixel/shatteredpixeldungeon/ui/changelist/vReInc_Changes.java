@@ -105,6 +105,31 @@ public class vReInc_Changes {
                         "_-_ Skeleton Key works in Abyss."
         ));
 
+        changes = new ChangeInfo("0.7.1", false, "");
+        changes.hardlight(CharSprite.NEUTRAL);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "_Fixed the following bugs:_\n" +
+                        "_-_ DM-150 III freezing the game, if affected by the spells with Energized Support talent\n" +
+                        "_-_ Typo in Silky Quiver's Deadly Mark description\n" +
+                        "_-_ Thornlasher and Floral Vanguard being described as enemies in their discovery hints\n" +
+                        "_-_ Guardian's Stone III not giving hero buffs, if the stone throw doesn't hit any enemies\n" +
+                        "_-_ Gnoll Shamans and Evil Eyes not being able to attack\n" +
+                        "_-_ Goo minion III effectively ignoring Shocker Breaker's damage\n" +
+                        "_-_ Goo minion being able to heal under Shocker Breaker's debuffs\n" +
+                        "_-_ Shocker Breaker not affecting most of healing sources\n" +
+                        "_-_ Formatting error in Emeradic Battery II's description\n" +
+                        "_-_ Item type descriptions for sentries being malformed",
+                        "_-_ Softlock on attempting to pick up an item with a rope with filled inventory\n" +
+                        "_-_ Horn of Plenty not accounting for new classes' eating talents\n" +
+                        "_-_ Ability to pseudo-identify potions with Hammer of Acid II\n" +
+                        "_-_ Corrupted horde members still attacking the hero\n" +
+                        "_-_ Lack of a death message for Possessed Rodent\n" +
+                        "_-_ Ghost Chickens not actually piercing armor\n" +
+                        "_-_ Scroll of Warp not functioning properly"
+        ));
+
         changes = new ChangeInfo(Messages.get(ChangesScene.class, "new"), false, null);
         changes.hardlight(CharSprite.POSITIVE);
         changeInfos.add(changes);
