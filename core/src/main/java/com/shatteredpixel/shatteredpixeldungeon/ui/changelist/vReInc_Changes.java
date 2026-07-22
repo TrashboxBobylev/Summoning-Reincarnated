@@ -64,6 +64,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MysteryMerchantSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.RatKingSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.RatSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.YogSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIcon;
@@ -78,6 +79,7 @@ import java.util.ArrayList;
 
 public class vReInc_Changes {
     public static void addAllChanges( ArrayList<ChangeInfo> changeInfos ){
+        add_Coming_Soon(changeInfos);
         add_v0_7_0_Changes(changeInfos);
         add_v0_6_0_Changes(changeInfos);
         add_v0_5_0_Changes(changeInfos);
@@ -85,6 +87,47 @@ public class vReInc_Changes {
         add_v0_3_0_Changes(changeInfos);
         add_v0_2_0_Changes(changeInfos);
         add_v0_1_0_Changes(changeInfos);
+    }
+
+    public static void add_Coming_Soon( ArrayList<ChangeInfo> changeInfos ) {
+
+        ChangeInfo changes = new ChangeInfo("Coming Soon", true, "");
+        changes.hardlight(0xCCCCCC);
+        changeInfos.add(changes);
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.DIFFICULTY), "Game Mode Expansion",
+                "One of purposes for the game mode menu revamp was to provide the groundwork for eventual game mode expansion, with providing a \"hard mode\" variant for each existing mode.\n\n" +
+                        "To play them, you will need to select a special conduct, that enables harder versions of the mode, and beat the game to permanently unlock it in the menu.\n\n" +
+                        "Increased Difficulty game mode is planned to come back in this, alongside with other ideas, like Extreme Gauntlet and expy of YAPD's Impossible mode."
+        ));
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.WAND), "New Wands and Artifacts",
+                "Some of Legacy Summoning's wands still haven't been reimplemented yet, like Crystal Bullet, Conjuration and Stars. However, Evan has announced some of new wands in 4.X update cycle on Patreon, which will be adapted to use item types and will potentially be an engine to bring old wands back.\n\n" +
+                        "Evan also announced some new rings coming soon as well. I do plan to rework them into artifacts, depending on what ring comes up first, and maybe even reuse older sprites for artifacts, that weren't ported in 0.7.0. They will have different functionality, of course."
+        ));
+
+        changes.addButton( new ChangeButton(new RatKingSprite(), "Rat Kingdom",
+                "One major shakedown I want to provide is some kind of alternate region. In old Evan notes, the alts would basically replace the normal region, with no way to go into main route once entered.\n" +
+                        "Therefore, Rat Kingdom would replace Prison and be accessible by using Worn Key in Rat King's room instead of an actual exit.\n\n" +
+                        "Alongside with some hilarious rat mutants, this area would feature Rat King as actual region boss, probably with a significantly nerfed AI of Rat King Adventure's Rat King boss. On defeat, he would provide random _professions_ instead of normal subclass. And maybe actually balanced Rat King class."
+        ));
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.PROF), "Professions",
+                "A major hurdle on reimplementing Legacy Summoning's talent system in any way is how overly complicated each tier 3 talent is, having many loosely connected effects and synergies with other talents, rivaling subclasses from base game in terms of gameplay changes.\n\n" +
+                        "I couldn't figure out, how to overcome this problem, until very recently, and the solution is... just turn those big talents into subclasses. But where they would fit?\n" +
+                        "The Rat King boss's reward mentioned before would be a choice between 3 random \"professions\", that do not depend on a hero and will be different every run. Each profession would embody one or several of Legacy Summoning talents, with actual smaller scale talents to boot."
+        ));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.ARMOR_CLOTH), "Types for Equipment",
+                "The only types of equipment, that still need upgrades to be improved, are weapons and armor; therefore, implementing them as soon as possible will complete the item type system.\n\n" +
+                        "Weapons will likely be reduced in item count or be significantly reworked to provide the space for varied items. Also, they will be sometimes augmented by default, and not with just heavy and light augments!\n\n" +
+                        "Armor will get the same treatments, with existing Legacy types being reevaluated for modern meta. However, Evan announced variants of armor coming to Shattered soon, with new tradeoff system, so I am holding on to reworking armor before said armor update comes to not get my own ideas invalidated."
+        ));
+
+        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.WAND_MAGIC_MISSILE), "Wand Quests",
+                "Another wand-related idea I want to try is wand quests, that will become available after Tengu is defeated and Wandmaker's quest is done. You will be able to follow the Wandmaker's trail into a new level, themed after a wand that you didn't pick.\n\n" +
+                        "The reward for such quest would be a special edition of said wand, being able to switch its type without usage of type manager, but hefty cooldown. Alternatively, you could get said effect on any wand you desire, but with high resource cost."
+        ));
     }
 
     public static void add_v0_7_0_Changes( ArrayList<ChangeInfo> changeInfos ) {

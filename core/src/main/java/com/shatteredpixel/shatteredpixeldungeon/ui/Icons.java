@@ -148,6 +148,9 @@ public enum Icons {
     NINE_CHAL,
     RANDOM_HERO,
 	RANDOM_CONDUCT,
+	PROF,
+	WAND,
+	DIFFICULTY,
 
 	//icons that appear in the about screen, variable spacing
 	LIBGDX,
@@ -485,6 +488,15 @@ public enum Icons {
                 break;
 			case RANDOM_CONDUCT:
 				icon.frame( icon.texture.uvRectBySize( 112, 192, 15, 16 ) );
+				break;
+			case PROF:
+				icon.frame( icon.texture.uvRectBySize( 48, 176, 16, 16 ) );
+				break;
+			case WAND:
+				icon.frame( icon.texture.uvRectBySize( 64, 176, 17, 16 ) );
+				break;
+			case DIFFICULTY:
+				icon.frame( icon.texture.uvRectBySize( 64, 192, 16, 16 ) );
 				break;
 
 			case LIBGDX:
