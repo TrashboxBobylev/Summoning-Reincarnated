@@ -66,7 +66,7 @@ public abstract class ShieldBuff extends Buff {
 	}
 	
 	public int shielding(){
-		if (target.buff(GuardiansStone.heavyBuff.class) != null && target.buff(GuardiansStone.heavyBuff.class).isCursed())
+		if (target != null && target.buff(GuardiansStone.heavyBuff.class) != null && target.buff(GuardiansStone.heavyBuff.class).isCursed())
 			return shielding/2;
 		return shielding;
 	}
