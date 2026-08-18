@@ -1061,7 +1061,7 @@ public enum Talent {
 				}
 			}
 		}
-		if (hero.buff(MirrorOfFates.mirrorExp.class) != null && hero.buff(MirrorOfFates.mirrorExp.class).itemType() == 3){
+		if (hero.buff(MirrorOfFates.mirrorExp.class) != null && hero.buff(MirrorOfFates.mirrorExp.class).itemType() == 3 && cls != ScrollOfUpgrade.class){
 			MirrorOfFates.UsedItemTracker.track(hero, cls);
 		}
 	}
