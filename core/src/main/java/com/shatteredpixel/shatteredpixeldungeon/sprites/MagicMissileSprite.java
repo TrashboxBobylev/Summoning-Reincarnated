@@ -78,13 +78,15 @@ public class MagicMissileSprite extends MinionSprite {
         //cancels die animation and fades out immediately
         play(idle, true);
         emitter().burst(MagicMissile.WhiteParticle.FACTORY, 20);
-        parent.add( new AlphaTweener( this, 0, 2f ) {
-            @Override
-            protected void onComplete() {
-                MagicMissileSprite.this.killAndErase();
-                parent.erase( this );
-            }
-        } );
+        if (parent != null) {
+            parent.add(new AlphaTweener(this, 0, 2f) {
+                @Override
+                protected void onComplete() {
+                    MagicMissileSprite.this.killAndErase();
+                    parent.erase(this);
+                }
+            });
+        }
     }
 
 }
