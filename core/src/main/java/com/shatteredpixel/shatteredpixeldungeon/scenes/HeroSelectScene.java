@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.scenes;
 
+import static com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass.CLERIC;
 import static com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass.CONJURER;
 
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
@@ -880,7 +881,7 @@ public class HeroSelectScene extends PixelScene {
 							HeroClass randomCls;
 							do {
 								randomCls = Random.oneOf(HeroClass.values());
-							} while (!randomCls.isUnlocked());
+							} while (!randomCls.isUnlocked() || randomCls == CLERIC);
 							setSelectedHero(randomCls);
 							GamesInProgress.randomizedClass = true;
 						}
