@@ -91,7 +91,8 @@ public class WndQuickBehavior extends Window {
 					Minion minion = staff.minion();
 					minion.behaviorType = behaviorType;
 					GLog.highlight( Messages.get(staff, "behavior_switch", minion.name(), minion.behaviorType.toString()) );
-					minion.sprite.emitter().burst(behaviorType.visual, 8);
+					if (minion.sprite != null)
+						minion.sprite.emitter().burst(behaviorType.visual, 8);
 					Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
 					updateQuickslot();
 				}
