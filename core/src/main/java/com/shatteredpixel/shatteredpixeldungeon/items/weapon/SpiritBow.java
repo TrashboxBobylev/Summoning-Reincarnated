@@ -224,18 +224,19 @@ public class SpiritBow extends Weapon implements TypedItem {
 	}
 
 	private int minTyped(int type) {
-		int dmg = 1 + Dungeon.hero.lvl/5
+		int lvl = Dungeon.hero != null ? Dungeon.hero.lvl : 1;
+		int dmg = 1 + lvl/5
 				+ RingOfSharpshooting.levelDamageBonus(Dungeon.hero)
-				+ (curseInfusionBonus ? 1 + Dungeon.hero.lvl/30 : 0);
+				+ (curseInfusionBonus ? 1 + lvl/30 : 0);
 		switch (type){
 			case 2:
-				dmg = 1 + Dungeon.hero.lvl/8
+				dmg = 1 + lvl/8
 						+ (int)(RingOfSharpshooting.levelDamageBonus(Dungeon.hero)*0.75f)
-						+ (curseInfusionBonus ? 1 + Dungeon.hero.lvl/40 : 0); break;
+						+ (curseInfusionBonus ? 1 + lvl/40 : 0); break;
 			case 3:
-				dmg = 4 + (int)(Dungeon.hero.lvl/1.25f)
+				dmg = 4 + (int)(lvl/1.25f)
 						+ 4*RingOfSharpshooting.levelDamageBonus(Dungeon.hero)
-						+ (curseInfusionBonus ? 4 + (int)(Dungeon.hero.lvl/7.5f) : 0); break;
+						+ (curseInfusionBonus ? 4 + (int)(lvl/7.5f) : 0); break;
 		}
 		return Math.max(0, dmg);
 	}
@@ -246,18 +247,19 @@ public class SpiritBow extends Weapon implements TypedItem {
 	}
 
 	private int maxTyped(int type) {
-		int dmg = 6 + (int)(Dungeon.hero.lvl/2.5f)
+		int lvl = Dungeon.hero != null ? Dungeon.hero.lvl : 1;
+		int dmg = 6 + (int)(lvl/2.5f)
 				+ 2*RingOfSharpshooting.levelDamageBonus(Dungeon.hero)
-				+ (curseInfusionBonus ? 2 + Dungeon.hero.lvl/15 : 0);
+				+ (curseInfusionBonus ? 2 + lvl/15 : 0);
 		switch (type){
 			case 2:
-				dmg = 5 + (int)(Dungeon.hero.lvl/3.75f
+				dmg = 5 + (int)(lvl/3.75f
 						+ (1.5f*RingOfSharpshooting.levelDamageBonus(Dungeon.hero))
-						+ (curseInfusionBonus ? 1.5f + Dungeon.hero.lvl/24 : 0)); break;
+						+ (curseInfusionBonus ? 1.5f + lvl/24f : 0)); break;
 			case 3:
-				dmg = 13 + (int)(Dungeon.hero.lvl/1.2f)
+				dmg = 13 + (int)(lvl/1.2f)
                         + 4 * RingOfSharpshooting.levelDamageBonus(Dungeon.hero)
-                        + (curseInfusionBonus ? 4 + Dungeon.hero.lvl / 7 : 0); break;
+                        + (curseInfusionBonus ? 4 + lvl / 7 : 0); break;
 		}
 		return Math.max(0, dmg);
 	}
