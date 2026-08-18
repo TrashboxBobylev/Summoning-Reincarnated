@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
 
 public class WandOfMagicMissile extends DamageWand {
@@ -190,8 +191,15 @@ public class WandOfMagicMissile extends DamageWand {
 		public static float DURATION = 4f;
 		private Wand wandJustApplied; //we don't bundle this as it's only used right as the buff is applied
 
+        private float powerModifier;
+
 		public void setup(Wand wand){
             this.wandJustApplied = wand;
+            if (wandJustApplied.type() == 3){
+                powerModifier = 3f;
+            } else {
+                powerModifier = 1.5f;
+            }
 		}
 
 		@Override
@@ -206,10 +214,7 @@ public class WandOfMagicMissile extends DamageWand {
 		}
 
         public float powerModifier(){
-            if (wandJustApplied.type() == 3){
-                return 3f;
-            }
-            return 1.5f;
+            return powerModifier;
         }
 
 		@Override
@@ -230,6 +235,20 @@ public class WandOfMagicMissile extends DamageWand {
         @Override
         public String desc() {
             return Messages.get(this, "desc", powerModifier(), dispTurns());
+        }
+
+        private static final String POWER = "power_modifier";
+
+        @Override
+        public void storeInBundle(Bundle bundle) {
+            super.storeInBundle(bundle);
+            bundle.put(POWER, powerModifier);
+        }
+
+        @Override
+        public void restoreFromBundle(Bundle bundle) {
+            super.restoreFromBundle(bundle);
+            powerModifier = bundle.getFloat(POWER);
         }
     }
 
