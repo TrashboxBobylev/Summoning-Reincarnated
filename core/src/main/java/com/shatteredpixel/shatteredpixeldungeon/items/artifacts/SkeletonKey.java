@@ -571,7 +571,7 @@ public class SkeletonKey extends Artifact {
 
 							Class<?extends Blob> gasToSpawn;
 							float gasQuantity;
-							switch (Random.chances(ChaoticCenser.GAS_CAT_CHANCES[Math.min(2, level()/3-2)])){
+							switch (Random.chances(ChaoticCenser.GAS_CAT_CHANCES[Math.max(2, Math.max(0, level()-2)/3)])){
 								case 0: default:
 									do {
 										gasToSpawn = Random.element(ChaoticCenser.COMMON_GASSES.keySet());
