@@ -318,7 +318,7 @@ public class ScrollOfEnchantment extends ExoticScroll {
 			glyphs[2] = glyph3;
 
 			WndEnchantSelect.wep = null;
-			WndCloakSelect.cloak = null;
+			WndGlyphSelect.arm = null;
 		}
 
 		@Override
