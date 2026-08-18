@@ -1083,6 +1083,8 @@ acuRoll *= accMulti;
 		if (src.hasProperty(DamageProperty.REFLECTABLE)){
 			if (MirrorOfFates.isMirrorActive(this)) {
 				MirrorOfFates.MirrorShield shield = buff(MirrorOfFates.MirrorShield.class);
+				if (MirrorOfFates.mirrorType(hero) == 2)
+					shield = hero.buff(MirrorOfFates.MirrorShield.class);
 				int reflectDamage = shield.damage(dmg);
 				Char victim = src instanceof MirrorOfFates.IndirectAttack ?
 						((MirrorOfFates.IndirectAttack) src).caster() : (Char) src;
