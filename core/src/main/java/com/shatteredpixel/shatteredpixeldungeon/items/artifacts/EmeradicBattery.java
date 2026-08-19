@@ -142,7 +142,7 @@ public class EmeradicBattery extends Artifact {
     public static boolean procWondrousEnergy(Hero hero){
         EmeradicBattery.fuelBuff emeradicResin;
         if ((emeradicResin = hero.buff(EmeradicBattery.fuelBuff.class)) != null && emeradicResin.itemType() == 3
-                && emeradicResin.charges() > 0){
+                && emeradicResin.charges() > 1){
             emeradicResin.useCharge(2);
             return true;
         }
