@@ -108,7 +108,7 @@ public class Ankh extends Item {
 	@Override
 	public boolean collect(Bag container) {
 		if (super.collect(container)) {
-			if (Dungeon.isChallenged(Conducts.Conduct.CANDI_18)){
+			if (Dungeon.isChallenged(Conducts.Conduct.CANDI_18) && Dungeon.hero != null){
 				Buff.affect(Dungeon.hero, AnkhPurchaseTracker.class);
 			}
 			return true;
