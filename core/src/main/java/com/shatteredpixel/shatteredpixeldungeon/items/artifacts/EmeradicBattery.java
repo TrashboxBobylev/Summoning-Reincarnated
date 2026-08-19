@@ -230,8 +230,10 @@ public class EmeradicBattery extends Artifact {
                 hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, String.valueOf(charge - previousCharge), FloatingText.EMERADIC);
                 if (wand != null)
                     wand.curCharges = 0;
-                else if (staff != null)
+                else if (staff != null) {
                     staff.curCharges = 0;
+                    staff.partialCharge = 0;
+                }
 
                 Sample.INSTANCE.play(Assets.Sounds.BURNING);
                 Sample.INSTANCE.play(Assets.Sounds.CHARGEUP);
