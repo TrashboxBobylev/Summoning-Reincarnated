@@ -270,7 +270,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		if (owner.buff(WildMagic.WildMagicTracker.class) != null || curCharges >= (cursed ? 1 : chargesPerCast())){
 			return true;
 		} else {
-			if (owner.buff(EmeradicBattery.fuelBuff.class) != null){
+			if (owner.buff(EmeradicBattery.fuelBuff.class) != null && owner.buff(EmeradicBattery.fuelBuff.class).itemType() == 1){
 				return owner.buff(EmeradicBattery.fuelBuff.class).canUseCharge(this, (cursed ? 1 : chargesPerCast()));
 			}
 		}
