@@ -176,6 +176,7 @@ public class ChaliceOfBlood extends Artifact implements DamageSource {
 
 					LifestealWraith wraith = new LifestealWraith();
 					wraith.state = wraith.HUNTING;
+					wraith.adjustStats(Dungeon.scalingDepth());
 					GameScene.add( wraith );
 					ScrollOfTeleportation.appear( wraith, Random.element(spawnPoints) );
 					CellEmitter.get(wraith.pos).start(Speck.factory(Speck.HEALGAS), 0.05f, 10);
