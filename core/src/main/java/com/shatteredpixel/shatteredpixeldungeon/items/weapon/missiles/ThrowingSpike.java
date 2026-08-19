@@ -81,10 +81,14 @@ public class ThrowingSpike extends MissileWeapon {
         }
         if (type() == 3 && attacker instanceof Hero){
             Hero hero = (Hero) attacker;
-            MeleeWeapon wep = (MeleeWeapon) hero.belongings.weapon;
+            MeleeWeapon wep;
+            if (hero.belongings.weapon() instanceof MeleeWeapon)
+                wep = (MeleeWeapon) hero.belongings.weapon();
+            else
+                wep = null;
             //do nothing
             if (wep == null || !wep.isEquipped(hero) ||
-                    hero.heroClass != HeroClass.DUELIST && !Dungeon.isChallenged(Conducts.Conduct.EVERYTHING) ||
+                    (hero.heroClass != HeroClass.DUELIST && !Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) ||
                     wep.STRReq() > hero.STR() ||
                     (Buff.affect(hero, MeleeWeapon.Charger.class).charges + Buff.affect(hero, MeleeWeapon.Charger.class).partialCharge) < wep.abilityChargeUse(hero, null)) {
                 //do nothing
