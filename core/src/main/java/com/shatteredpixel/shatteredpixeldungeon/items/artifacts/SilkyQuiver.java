@@ -777,8 +777,8 @@ public class SilkyQuiver extends Artifact {
                 Weapon wep = (Weapon) curUser.belongings.weapon;
                 if (wep instanceof MeleeWeapon)
                     arrow.enchant(wep.enchantment);
-                arrow.cast(curUser, target);
                 ((SilkyQuiver)curItem).charge -= selectedMove.cost;
+                arrow.cast(curUser, target);
                 updateQuickslot();
             }
         }
