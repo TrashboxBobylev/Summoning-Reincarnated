@@ -527,7 +527,7 @@ public class Armor extends EquipableItem implements StrengthItem, AugmentedItem,
 				if (glyph != null &&
 						(((Hero) defender).subClass == HeroSubClass.PALADIN || hasCurseGlyph())){
 					damage = glyph.proc( this, attacker, defender, damage );
-					EmeradicBattery.procArcaneEnergy(attacker);
+					EmeradicBattery.procArcaneEnergy(defender);
 				}
 				if (trinityGlyph != null){
 					damage = trinityGlyph.proc( this, attacker, defender, damage );
@@ -538,7 +538,7 @@ public class Armor extends EquipableItem implements StrengthItem, AugmentedItem,
 			} else {
 				if (glyph != null) {
 					damage = glyph.proc(this, attacker, defender, damage);
-					EmeradicBattery.procArcaneEnergy(attacker);
+					EmeradicBattery.procArcaneEnergy(defender);
 				}
 				if (trinityGlyph != null){
 					damage = trinityGlyph.proc( this, attacker, defender, damage );
