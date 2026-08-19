@@ -770,7 +770,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		}
 
 		//inside staff
-		if (charger != null && charger.target == Dungeon.hero && !Dungeon.hero.belongings.contains(this)){
+		if (charger != null && charger.target == Dungeon.hero && (!Dungeon.hero.belongings.contains(this) || Dungeon.hero.belongings.weapon() == this)){
 			if (Dungeon.hero.hasTalent(Talent.EXCESS_CHARGE) && curCharges >= maxCharges){
 				int shieldToGive = Math.round(buffedLvl()*0.67f*Dungeon.hero.pointsInTalent(Talent.EXCESS_CHARGE));
 				Buff.affect(Dungeon.hero, Barrier.class).setShield(shieldToGive);
