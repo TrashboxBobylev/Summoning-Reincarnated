@@ -61,7 +61,7 @@ public class BeamOfAffection extends ConjurerSpell {
         Char ch = Actor.findChar(trajectory.collisionPos);
         if (ch != null && !(ch instanceof Hero)){
             if (ch.alignment == Char.Alignment.ALLY){
-                if (type() != 3)
+                if (type() != 3 && !ch.isInvulnerable(getClass()))
                     ch.die( curUser );
                 if (type() == 2 && ch instanceof Minion){
                     for (Staff.Charger charger : Dungeon.hero.buffs(Staff.Charger.class)){
