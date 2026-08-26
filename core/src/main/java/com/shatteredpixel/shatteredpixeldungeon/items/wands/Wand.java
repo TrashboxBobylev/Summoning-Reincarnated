@@ -1102,7 +1102,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 										Wand.wondrousProc(curWand, shot.collisionPos);
 									});
 							Sample.INSTANCE.play( Assets.Sounds.ZAP );
-						} if (curUser.buff(CloakOfShadows.cloakStealth.class) != null &&
+						} else if (curUser.buff(CloakOfShadows.cloakStealth.class) != null &&
 								curUser.buff(CloakOfShadows.cloakStealth.class).glyph() instanceof Sparking){
 							new WandOfLightning().fx(shot, () -> {
 								ArrayList<Char> affected = new ArrayList<>();
