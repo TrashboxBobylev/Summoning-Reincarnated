@@ -56,7 +56,7 @@ public abstract class EffectBuff extends FlavourBuff {
 
     @Override
     public float iconFadePercent() {
-        return Math.max(0, (duration - visualcooldown()) / duration);
+        return Math.max(0, visualcooldown() / duration);
     }
 
     @Override
