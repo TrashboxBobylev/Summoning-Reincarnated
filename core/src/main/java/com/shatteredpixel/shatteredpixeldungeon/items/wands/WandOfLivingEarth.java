@@ -569,6 +569,13 @@ public class WandOfLivingEarth extends DamageWand {
 		}
 
 		@Override
+		protected boolean act() {
+			if (owner == null)
+				owner = Dungeon.hero;
+			return super.act();
+		}
+
+		@Override
 		public int attackSkill(Char target) {
 			//same as the hero
             int accuracy = 2 * defenseSkill + 5;
@@ -651,7 +658,10 @@ public class WandOfLivingEarth extends DamageWand {
 			bundle.put(DEFENSE, defenseSkill);
 			bundle.put(WAND_LEVEL, wandLevel);
             bundle.put(RANK, rank);
-			bundle.put(OWNER, owner.id());
+			if (owner != null)
+				bundle.put(OWNER, owner.id());
+			else
+				bundle.put(OWNER, Dungeon.hero.id());
 		}
 
 		@Override
@@ -662,8 +672,6 @@ public class WandOfLivingEarth extends DamageWand {
             rank = bundle.getInt(RANK);
 			if (bundle.contains(OWNER))
 				owner = (Char) Actor.findById(bundle.getInt(OWNER));
-			else
-				owner = Dungeon.hero;
 		}
 
 		private class Wandering extends Mob.Wandering{
