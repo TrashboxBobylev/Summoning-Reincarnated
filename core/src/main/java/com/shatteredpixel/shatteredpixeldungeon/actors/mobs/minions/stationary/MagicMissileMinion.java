@@ -83,7 +83,7 @@ public class MagicMissileMinion extends StationaryMinion {
             useResource(1);
             if (type == 3){
                 for (Wand.Charger c : Dungeon.hero.buffs(Wand.Charger.class)){
-                    c.gainCharge(1.0f / 3.0f);
+                    c.gainCharge(1.0f / 2.5f);
                 }
             }
         } else {
