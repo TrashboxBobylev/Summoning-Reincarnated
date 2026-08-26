@@ -477,6 +477,11 @@ public class MirrorOfFates extends Artifact {
         }
 
         @Override
+        public String iconTextDisplay() {
+            return String.valueOf(potency);
+        }
+
+        @Override
         public float iconFadePercent() {
             return Math.max(0, (maxPotency - potency) / 1f / maxPotency);
         }
