@@ -75,7 +75,7 @@ public abstract class DamageWand extends Wand implements DamageSource {
 		if (levelKnown)
 			return Messages.get(this, "stats_desc", GameMath.printAverage((int) magicMin(), (int) magicMax()));
 		else
-			return Messages.get(this, "stats_desc", GameMath.printAverage((int) magicMin(0), (int) magicMax(0)));
+			return Messages.get(this, "stats_desc", GameMath.printAverage((int) (magicMin(0)*powerModifier()), (int) (magicMax(0)*powerModifier())));
 	}
 
 	@Override
