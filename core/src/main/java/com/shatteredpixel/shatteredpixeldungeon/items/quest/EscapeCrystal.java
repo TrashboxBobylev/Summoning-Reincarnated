@@ -71,7 +71,7 @@ public class EscapeCrystal extends Item {
 
 		if (action.equals( AC_USE )) {
 
-			if (Dungeon.depth > 15 && Dungeon.depth < 20 && Dungeon.branch == 1 && Dungeon.level instanceof VaultLevel){
+			if (Dungeon.depth > Dungeon.chapterNumber()*3 && Dungeon.depth < Dungeon.chapterNumber()*4 && Dungeon.branch == 1 && Dungeon.level instanceof VaultLevel){
 
 				Sample.INSTANCE.play(Assets.Sounds.TELEPORT);
 
