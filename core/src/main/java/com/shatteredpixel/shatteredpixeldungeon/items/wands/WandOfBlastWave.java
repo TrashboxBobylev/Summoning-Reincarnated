@@ -74,14 +74,14 @@ public class WandOfBlastWave extends DamageWand {
 	}
 
 	public float magicMax(float lvl){
-		return 4+4.33f*lvl;
+		return 3+3.5f*lvl;
 	}
 
     @Override
     public float powerModifier(int type) {
         switch (type){
             case 1: return 1.0f;
-            case 2: return 2f;
+            case 2: return 1.5f;
             case 3: return 1.75f;
         }
         return super.powerModifier(type);
