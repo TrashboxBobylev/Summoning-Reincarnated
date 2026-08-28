@@ -42,7 +42,7 @@ public class Javelin extends MissileWeapon {
         switch (type){
             case 1: return 4 + lvl;
             case 2: return 3 + lvl*0.67f;
-            case 3: return 8 + lvl*2;
+            case 3: return 6 + lvl*1.5f;
         }
         return 0;
     }
@@ -51,7 +51,7 @@ public class Javelin extends MissileWeapon {
         switch (type){
             case 1: return 10 + lvl*4.5f;
             case 2: return 7 + lvl*3;
-            case 3: return 20 + lvl*6;
+            case 3: return 15 + lvl*4.5f;
         }
         return 0;
     }
@@ -92,10 +92,10 @@ public class Javelin extends MissileWeapon {
                 return super.damageRoll(owner)*2;
             }
             if (type() == 3 && enemy != null){
-                //as distance increases so does damage, capping at 3x:
-                //1.20x|1.35x|1.52x|1.71x|1.92x|2.16x|2.43x|2.74x|3.00x
+                //as distance increases so does damage, capping at 4x:
+                //1.20x|1.44x|1.72x|2.07x|2.48x|2.98x|3.58x|4.00x
                 int distance = Dungeon.level.distance(owner.pos, enemy.pos) - 1;
-                float multiplier = Math.min(3f, 1.2f * (float)Math.pow(1.125f, distance));
+                float multiplier = Math.min(3.5f, 1.2f * (float)Math.pow(1.2f, distance));
                 return (int) (super.damageRoll(owner) * multiplier);
             }
         }
