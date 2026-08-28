@@ -102,7 +102,7 @@ public abstract class SecretRoom extends SpecialRoom {
 		int index = Random.chances(new float[]{6, 3, 1});
 		while (index >= runSecrets.size()) index--;
 		if (Dungeon.mode == Dungeon.GameMode.CHAOS){
-			index = Random.Int(0, floorSpecials.size());
+			index = Random.Int(0, runSecrets.size());
 		}
 
 		SecretRoom r = Reflection.newInstance(runSecrets.get( index ));
