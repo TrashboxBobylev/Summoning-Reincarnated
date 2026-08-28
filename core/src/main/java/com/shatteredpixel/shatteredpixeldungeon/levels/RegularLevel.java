@@ -145,7 +145,7 @@ public abstract class RegularLevel extends Level {
 		if (isLarge()) {
 			standards = (int) Math.ceil(standards * 1.5f);
 		}
-		if (Dungeon.mode == Dungeon.GameMode.CHAOS) standards = Random.Int(1, standards * 2);
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS) standards = Random.Int(1, (int) (standards*1.25f));
 		if (Dungeon.mode == Dungeon.GameMode.SMALL){
 			standards /= 2;
 			standards += 1;
