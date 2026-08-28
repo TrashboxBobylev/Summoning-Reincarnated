@@ -116,8 +116,13 @@ public abstract class Room extends Rect implements Graph.Node, Bundlable {
 			return false;
 		} else {
 			//subtract one because rooms are inclusive to their right and bottom sides
-			resize(Random.NormalIntRange(minW, maxW) - 1,
-					Random.NormalIntRange(minH, maxH) - 1);
+			if (Dungeon.mode == Dungeon.GameMode.CHAOS){
+				resize(Random.IntRange(minW, maxW) - 1,
+						Random.IntRange(minH, maxH) - 1);
+			} else {
+				resize(Random.NormalIntRange(minW, maxW) - 1,
+						Random.NormalIntRange(minH, maxH) - 1);
+			}
 			return true;
 		}
 	}

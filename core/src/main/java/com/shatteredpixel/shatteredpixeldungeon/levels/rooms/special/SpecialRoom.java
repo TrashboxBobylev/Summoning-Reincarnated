@@ -150,15 +150,19 @@ public abstract class SpecialRoom extends Room {
 	}
 	
 	private static void useType( Class<?extends Room> type ) {
-		floorSpecials.remove( type );
-		if (CRYSTAL_KEY_SPECIALS.contains(type)){
-			floorSpecials.removeAll(CRYSTAL_KEY_SPECIALS);
-		}
-		if (POTION_SPAWN_ROOMS.contains(type)){
-			floorSpecials.removeAll(POTION_SPAWN_ROOMS);
-		}
-		if (runSpecials.remove( type )) {
-			runSpecials.add( type );
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS){
+			//deck? what's that
+		} else {
+			floorSpecials.remove(type);
+			if (CRYSTAL_KEY_SPECIALS.contains(type)) {
+				floorSpecials.removeAll(CRYSTAL_KEY_SPECIALS);
+			}
+			if (POTION_SPAWN_ROOMS.contains(type)) {
+				floorSpecials.removeAll(POTION_SPAWN_ROOMS);
+			}
+			if (runSpecials.remove(type)) {
+				runSpecials.add(type);
+			}
 		}
 	}
 
@@ -196,10 +200,10 @@ public abstract class SpecialRoom extends Room {
 
 			//60% chance for front of queue, 30% chance for next, 10% for one after that
 			int index = Random.chances(new float[]{6, 3, 1});
-			if (Dungeon.mode == Dungeon.GameMode.CHAOS){
-				index = Random.Int(3);
-			}
 			while (index >= floorSpecials.size()) index--;
+			if (Dungeon.mode == Dungeon.GameMode.CHAOS){
+				index = Random.Int(0, floorSpecials.size());
+			}
 
 			Room r = Reflection.newInstance(floorSpecials.get( index ));
 

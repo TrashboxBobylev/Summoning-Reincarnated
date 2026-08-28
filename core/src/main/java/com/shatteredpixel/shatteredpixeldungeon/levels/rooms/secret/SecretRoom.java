@@ -101,10 +101,15 @@ public abstract class SecretRoom extends SpecialRoom {
 		//60% chance for front of queue, 30% chance for next, 10% for one after that
 		int index = Random.chances(new float[]{6, 3, 1});
 		while (index >= runSecrets.size()) index--;
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS){
+			index = Random.Int(0, floorSpecials.size());
+		}
 
 		SecretRoom r = Reflection.newInstance(runSecrets.get( index ));
-		
-		runSecrets.add(runSecrets.remove(index));
+
+		if (Dungeon.mode != Dungeon.GameMode.CHAOS){
+			runSecrets.add(runSecrets.remove(index));
+		}
 		
 		return r;
 	}

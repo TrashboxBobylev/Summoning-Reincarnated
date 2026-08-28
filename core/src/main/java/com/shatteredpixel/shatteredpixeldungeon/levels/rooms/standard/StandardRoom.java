@@ -122,12 +122,12 @@ public abstract class StandardRoom extends Room {
 		if (isEntrance()){
 			return 1; //entrance rooms don't have higher mob spawns even if they're larger
 		}
-		if (Dungeon.mode == Dungeon.GameMode.CHAOS) return Random.IntRange(1, sizeFactor());
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS) return Random.IntRange(1, 3);
 		return sizeFactor();
 	}
 
 	public int connectionWeight(){
-		if (Dungeon.mode == Dungeon.GameMode.CHAOS) return Random.IntRange(1, sizeFactor()*sizeFactor());
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS) return Random.IntRange(0, 5);
 		return sizeFactor() * sizeFactor();
 	}
 
