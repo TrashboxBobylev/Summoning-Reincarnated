@@ -128,7 +128,7 @@ public class UnstableSpellbook extends Artifact {
 		while (!scrolls.isEmpty() && scrolls.size() > (levelCap-1-level())) {
 			scrolls.remove(0);
 		}
-		while (mobs.size() < (level()+1)*4){
+		while (mobs.size() < (level())*4){
 			mobs.add(Random.element(Random.element(
 					EnumSet.of(Bestiary.REGIONAL, Bestiary.BOSSES, Bestiary.RARE, Bestiary.QUEST)
 			).entities()));
