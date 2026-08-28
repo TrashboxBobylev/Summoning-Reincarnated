@@ -84,7 +84,7 @@ public class Trident extends MissileWeapon {
     public int proc(Char attacker, Char defender, int damage) {
         if (type() == 1){
             if (defender.isWet())
-                damage *= 1.5f;
+                damage *= 1.33f;
         }
         return super.proc(attacker, defender, damage);
     }
