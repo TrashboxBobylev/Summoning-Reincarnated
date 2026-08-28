@@ -650,7 +650,7 @@ public class Generator {
 			0, 1, 1, 1, 1
 	};
 
-	private static final EnumSet<Generator.Category> chaosCategories = EnumSet.of(
+	private static final EnumSet<Category> chaosCategories = EnumSet.of(
 			Category.POTION, Category.SCROLL, Category.WEAPON, Category.ARMOR,
 			Category.ARTIFACT, Category.MISSILE, Category.STAFF, Category.WAND,
 			Category.FOOD, Category.SEED, Category.STONE, Category.GOLD
@@ -793,14 +793,14 @@ public class Generator {
 			return randomWeapon(true);
 		} else if (cat == Category.STAFF){
 			return randomStaff(true);
-		} else if (cat.defaultProbs == null) {
+		} else if (cat.defaultProbs == null && Dungeon.mode != Dungeon.GameMode.CHAOS) {
 			return random(cat);
 		} else if (cat.defaultProbsTotal != null){
 			return (Dungeon.mode == Dungeon.GameMode.CHAOS ?
                     (Item) Reflection.newInstance(Random.element(cat.classes)) :
 					(Item) Reflection.newInstance(cat.classes[Random.chances(cat.defaultProbsTotal)])).random();
 		} else {
-			Class<?> itemCls = cat.classes[Random.chances(cat.defaultProbs)];
+			Class<?> itemCls = cat.classes[Random.chances(cat.defaultProbs != null ? cat.defaultProbs : cat.probs)];
 			if (Dungeon.mode == Dungeon.GameMode.CHAOS)
 				itemCls = Random.element(cat.classes);
 
