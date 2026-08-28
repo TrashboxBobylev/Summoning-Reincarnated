@@ -51,7 +51,7 @@ public class Kunai extends MissileWeapon {
         switch (type){
             case 1: return 4 + lvl;
             case 2: return 4 + lvl;
-            case 3: return 6 + lvl*2.5f;
+            case 3: return 8 + lvl*3f;
         }
         return 0;
     }
@@ -60,7 +60,7 @@ public class Kunai extends MissileWeapon {
         switch (type){
             case 1: return 8 + lvl*3f;
             case 2: return 9 + lvl*4f;
-            case 3: return 14 + lvl*5f;
+            case 3: return 16 + lvl*6f;
         }
         return 0;
     }
@@ -169,7 +169,12 @@ public class Kunai extends MissileWeapon {
             } else if (type() == 3){
                 Hero hero = (Hero) owner;
                 Char enemy = hero.attackTarget();
-                if (enemy == null || Dungeon.level.heroFOV[enemy.pos] || new Ballistica(hero.pos, enemy.pos, Ballistica.FRIENDLY_PROJECTILE).collisionPos == enemy.pos){
+                if (enemy == null){
+                    return 0;
+                }
+                if (!Dungeon.level.heroFOV[enemy.pos] || new Ballistica(hero.pos, enemy.pos, Ballistica.FRIENDLY_PROJECTILE).collisionPos != enemy.pos){
+                    return super.damageRoll(owner);
+                } else {
                     return 0;
                 }
             }
