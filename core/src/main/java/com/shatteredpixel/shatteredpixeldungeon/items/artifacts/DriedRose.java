@@ -1012,7 +1012,7 @@ public class DriedRose extends Artifact {
 			if (Dungeon.isChallenged(Conducts.Conduct.COINFLIP) && Random.Int(2) == 0){
 				PointF point = DungeonTilemap.tileCenterToWorld(shot.collisionPos);
 				FloatingText.show( point.x, point.y, shot.collisionPos, defenseVerb(), CharSprite.NEUTRAL, FloatingText.MISS_COINFLIP, true );
-				Buff.detach(this, Talent.FightingWizardryTracker.class);
+				Talent.FightingWizardryTracker.proc(wand);
 			} else {
 				wand.onZap(shot, this);
 				float rechargeDuration = wand.rechargeModifier() * wand.chargesPerCast() * Wand.Charger.BASE_CHARGE_DELAY * 3 / 4;

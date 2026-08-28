@@ -587,6 +587,11 @@ public enum Talent {
             super.restoreFromBundle(bundle);
             counter = bundle.getInt(COUNT);
         }
+
+		public static void proc(Wand wand){
+			if (wand.isEquipped(Dungeon.hero))
+				Buff.detach(Dungeon.hero, FightingWizardryTracker.class);
+		}
     };
 
 	int icon;

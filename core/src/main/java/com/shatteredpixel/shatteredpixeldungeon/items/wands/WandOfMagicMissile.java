@@ -124,7 +124,7 @@ public class WandOfMagicMissile extends DamageWand {
                         ch.damage(damageRoll(), this);
                 } else {
                     ch.sprite.showStatus( CharSprite.NEUTRAL,  ch.defenseVerb() );
-                    Buff.detach(user, Talent.FightingWizardryTracker.class);
+                    Talent.FightingWizardryTracker.proc(this);
                 }
 			}
             if (hit) {

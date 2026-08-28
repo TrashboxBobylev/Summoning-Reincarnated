@@ -405,34 +405,32 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		if (target != Dungeon.hero) {
 			Buff.affect(target, Minion.ReactiveTargeting.class, 10f);
 
-		if (target.buff(GuidingLight.Illuminated.class) != null) {
-			target.buff(GuidingLight.Illuminated.class).detach();
-			target.damage(Dungeon.hero.lvl+5, GuidingLight.INSTANCE);
-		}
-
-		if (target.alignment != Char.Alignment.ALLY
-				&& Dungeon.hero.heroClass != HeroClass.CLERIC
-				&& Dungeon.hero.hasTalent(Talent.SEARING_LIGHT)
-				&& Dungeon.hero.buff(Talent.SearingLightCooldown.class) == null){
-			Buff.affect(target, GuidingLight.Illuminated.class);
-			Buff.affect(Dungeon.hero, Talent.SearingLightCooldown.class, 20f);
-		}
-
-		if (target.alignment != Char.Alignment.ALLY
-				&& Dungeon.hero.heroClass != HeroClass.CLERIC
-				&& Dungeon.hero.hasTalent(Talent.SUNRAY)){
-			// 15/25% chance
-			if (Random.Int(20) < 1 + 2*Dungeon.hero.pointsInTalent(Talent.SUNRAY)){
-				Buff.prolong(target, Blindness.class, 4f);
+			if (target.buff(GuidingLight.Illuminated.class) != null) {
+				target.buff(GuidingLight.Illuminated.class).detach();
+				target.damage(Dungeon.hero.lvl+5, GuidingLight.INSTANCE);
 			}
-		}
+
+			if (target.alignment != Char.Alignment.ALLY
+					&& Dungeon.hero.heroClass != HeroClass.CLERIC
+					&& Dungeon.hero.hasTalent(Talent.SEARING_LIGHT)
+					&& Dungeon.hero.buff(Talent.SearingLightCooldown.class) == null){
+				Buff.affect(target, GuidingLight.Illuminated.class);
+				Buff.affect(Dungeon.hero, Talent.SearingLightCooldown.class, 20f);
+			}
+
+			if (target.alignment != Char.Alignment.ALLY
+					&& Dungeon.hero.heroClass != HeroClass.CLERIC
+					&& Dungeon.hero.hasTalent(Talent.SUNRAY)){
+				// 15/25% chance
+				if (Random.Int(20) < 1 + 2*Dungeon.hero.pointsInTalent(Talent.SUNRAY)){
+					Buff.prolong(target, Blindness.class, 4f);
+				}
+			}
 
 			if (Dungeon.hero.hasTalent(Talent.ENERGY_BREAK) && Dungeon.hero.heroClass != HeroClass.CONJURER &&
 				target.alignment == Char.Alignment.ENEMY){
 				Buff.affect(target, Talent.EnergyBreakTracker.class, 5f);
 			}
-
-            Buff.detach(target, Talent.FightingWizardryTracker.class);
 		}
 	}
 
@@ -798,6 +796,8 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 			}
 		}
 
+		Talent.FightingWizardryTracker.proc(this);
+
 		//If hero owns wand but it isn't in belongings it must be in the staff
 		if (Dungeon.hero.hasTalent(Talent.EMPOWERED_STRIKE)
 				&& charger != null && charger.target == Dungeon.hero
@@ -1150,7 +1150,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
                                     if (Dungeon.isChallenged(Conducts.Conduct.COINFLIP) && Random.Int(2) == 0){
                                         PointF point = DungeonTilemap.tileCenterToWorld(shot.collisionPos);
                                         FloatingText.show( point.x, point.y, shot.collisionPos, curUser.defenseVerb(), CharSprite.NEUTRAL, FloatingText.MISS_COINFLIP, true );
-                                        Buff.detach(curUser, Talent.FightingWizardryTracker.class);
+										Talent.FightingWizardryTracker.proc(curWand);
                                     } else {
                                         curWand.onZap(shot);
                                     }
