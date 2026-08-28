@@ -415,7 +415,6 @@ public class EtherealChains extends Artifact {
 	@Override
 	public void type(int type) {
 		super.type(type);
-		chargeCap = chargeCap(type);
 		charge = Math.min(charge, chargeCap());
 	}
 
