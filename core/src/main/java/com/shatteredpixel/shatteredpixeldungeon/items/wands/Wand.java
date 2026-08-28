@@ -350,6 +350,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 	public void charge( Char owner ) {
 		if (charger == null) charger = new Charger();
 		charger.attachTo( owner );
+		charger.setScaleFactor(1.0f);
 	}
 
 	public void charge( Char owner, float chargeScaleFactor ){
