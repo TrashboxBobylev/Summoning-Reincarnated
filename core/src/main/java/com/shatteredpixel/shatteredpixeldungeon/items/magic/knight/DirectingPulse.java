@@ -51,7 +51,7 @@ public class DirectingPulse extends ConjurerSpell {
     public void effect(Ballistica trajectory) {
         Char ch = Actor.findChar(trajectory.collisionPos);
         if (ch != null && (ch.alignment == Char.Alignment.ENEMY || Dungeon.hero.hasTalent(Talent.SPIRITUAL_RESTOCK))) {
-            Buff.affect(ch, ToyKnife.SoulGain.class, buff(type()));
+            Buff.prolong(ch, ToyKnife.SoulGain.class, buff(type()));
             ch.sprite.burst(0xFFFFFFFF, buffedLvl() / 2 + 2);
             Buff.affect(ch, Minion.ReactiveTargeting.class, 10f);
             if (isEmpowered()){
