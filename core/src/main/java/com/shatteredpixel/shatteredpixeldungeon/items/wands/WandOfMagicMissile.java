@@ -64,7 +64,7 @@ public class WandOfMagicMissile extends DamageWand {
     public float powerModifier(int type) {
         switch (type){
             case 1: return 1f;
-            case 2: return 3f;
+            case 2: return 2.666f;
             case 3: return 0f;
         }
         return super.powerModifier(type);
@@ -74,7 +74,7 @@ public class WandOfMagicMissile extends DamageWand {
     public float rechargeModifier(int type) {
         switch (type){
             case 1: return 1f;
-            case 2: return 1.75f;
+            case 2: return 2.25f;
             case 3: return 1.33f;
         }
         return super.rechargeModifier(type);
@@ -84,7 +84,7 @@ public class WandOfMagicMissile extends DamageWand {
     public int min(int lvl) {
         int min = super.min(lvl);
         if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE && type() == 2){
-            min *= 4;
+            min *= 3;
         }
         return min;
     }
@@ -120,8 +120,13 @@ public class WandOfMagicMissile extends DamageWand {
                 }
                 if (hit) {
                     wandProc(ch, chargesPerCast());
-                    if (damageRoll() > 0)
-                        ch.damage(damageRoll(), this);
+                    int damageRoll = damageRoll();
+                    if (damageRoll > 0) {
+                        if (type() == 2){
+                            damageRoll = Math.max(0, damageRoll - ch.drRoll()*2);
+                        }
+                        ch.damage(damageRoll, this);
+                    }
                 } else {
                     ch.sprite.showStatus( CharSprite.NEUTRAL,  ch.defenseVerb() );
                     Talent.FightingWizardryTracker.proc(this);
