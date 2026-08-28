@@ -722,7 +722,7 @@ public class Generator {
 			cat = Random.element(chaosCategories);
 		}
 
-		if (cat == Category.SEED) {
+		if (cat == Category.SEED || Dungeon.mode == Dungeon.GameMode.CHAOS) {
 			//We specifically use defaults for seeds here because, unlike other item categories
 			// their predominant source of drops is grass, not levelgen. This way the majority
 			// of seed drops still use a deck, but the few that are spawned by levelgen are consistent
@@ -739,6 +739,9 @@ public class Generator {
 	}
 	
 	public static Item random( Category cat ) {
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS){
+			return randomUsingDefaults(cat);
+		}
 		switch (cat) {
 			case ARMOR:
 				return randomArmor();
