@@ -252,7 +252,7 @@ public class Hero extends Char {
 
 	private static final float TIME_TO_REST		    = 1f;
 	private static final float TIME_TO_SEARCH	    = 2f;
-	private static final float HUNGER_FOR_SEARCH	= 15f;
+	private static final float HUNGER_FOR_SEARCH	= 12f;
 	
 	public HeroClass heroClass = HeroClass.ROGUE;
 	public HeroSubClass subClass = HeroSubClass.NONE;
@@ -1603,7 +1603,7 @@ public class Hero extends Char {
 
 						//4 hunger spent total
 						} else if (Dungeon.level.map[action.dst] == Terrain.WALL){
-							buff(Hunger.class).affectHunger(-3);
+							Hunger.adjustHunger(-10);
 							PixelScene.shake(0.5f, 0.5f);
 							CellEmitter.get( action.dst ).burst( Speck.factory( Speck.ROCK ), 2 );
 							Sample.INSTANCE.play( Assets.Sounds.MINE );
@@ -2905,7 +2905,7 @@ public class Hero extends Char {
 			if (skele != null && skele.isCursed() && skele.itemType() == 1 && Random.Int(6) != 0){
 				GLog.n(Messages.get(this, "key_distracted"));
 				spendAndNext(2*Key.TIME_TO_UNLOCK);
-				Buff.affect(this, Hunger.class).affectHunger(-4);
+				Hunger.adjustHunger(-15);
 			} else if (Dungeon.level.distance(pos, doorCell) <= 1) {
 				boolean hasKey = true;
 				if (door == Terrain.LOCKED_DOOR) {
@@ -2956,7 +2956,7 @@ public class Hero extends Char {
 					&& Random.Int(6) != 0){
 				GLog.n(Messages.get(this, "key_distracted"));
 				spend(2*Key.TIME_TO_UNLOCK);
-				Buff.affect(this, Hunger.class).affectHunger(-4);
+				Hunger.adjustHunger(-15);
 			} else if (Dungeon.level.distance(pos, heap.pos) <= 1){
 				boolean hasKey = true;
 				if (heap.type == Type.SKELETON || heap.type == Type.REMAINS) {
@@ -3119,9 +3119,9 @@ public class Hero extends Char {
 			if (!Dungeon.level.locked) {
 				if (cursed) {
 					GLog.n(Messages.get(this, "search_distracted"));
-					Buff.affect(this, Hunger.class).affectHunger(TIME_TO_SEARCH - (2 * HUNGER_FOR_SEARCH));
+					Hunger.adjustHunger(TIME_TO_SEARCH - (2 * HUNGER_FOR_SEARCH));
 				} else {
-					Buff.affect(this, Hunger.class).affectHunger(TIME_TO_SEARCH - HUNGER_FOR_SEARCH);
+					Hunger.adjustHunger(TIME_TO_SEARCH - HUNGER_FOR_SEARCH);
 				}
 			}
 			spendAndNext(TIME_TO_SEARCH);
