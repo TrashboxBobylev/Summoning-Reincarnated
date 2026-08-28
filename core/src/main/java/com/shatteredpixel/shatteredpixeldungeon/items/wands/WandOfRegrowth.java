@@ -886,6 +886,11 @@ public class WandOfRegrowth extends Wand {
 
             return act;
         }
+
+		@Override
+		public String description() {
+			return Messages.get(this, "desc");
+		}
     }
 
 }
