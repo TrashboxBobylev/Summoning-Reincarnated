@@ -801,7 +801,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		//If hero owns wand but it isn't in belongings it must be in the staff
 		if (Dungeon.hero.hasTalent(Talent.EMPOWERED_STRIKE)
 				&& charger != null && charger.target == Dungeon.hero
-				&& !Dungeon.hero.belongings.contains(this)){
+				&& (!Dungeon.hero.belongings.contains(this) || Dungeon.hero.belongings.weapon() == this)){
 
 			Buff.prolong(Dungeon.hero, Talent.EmpoweredStrikeTracker.class, 10f);
 		}
