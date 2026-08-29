@@ -153,12 +153,12 @@ public class ElectricalExplosive extends Bomb implements ChargingItem {
 	public float canBreak(){
 		float chance = 0;
 
-		if (usedCharge < 1000) chance = 0.01f;
-		if (usedCharge >= 1000 && usedCharge < 1500) chance = 0.033f;
-		if (usedCharge >= 1500 && usedCharge < 2000) chance = 0.06f;
-		if (usedCharge >= 2000 && usedCharge < 2500) chance = 0.08f;
-		if (usedCharge >= 2500 && usedCharge > 3000) chance = 0.12f;
-		if (usedCharge > 3000) chance = 0.24f;
+		if (usedCharge < 500) chance = 0.01f;
+		if (usedCharge >= 500 && usedCharge < 750) chance = 0.033f;
+		if (usedCharge >= 750 && usedCharge < 1000) chance = 0.06f;
+		if (usedCharge >= 1000 && usedCharge < 1250) chance = 0.08f;
+		if (usedCharge >= 1250 && usedCharge > 1500) chance = 0.12f;
+		if (usedCharge > 1500) chance = 0.24f;
 //		chance /= Bomb.nuclearBoost();
 		return chance;
 	}
@@ -235,7 +235,7 @@ public class ElectricalExplosive extends Bomb implements ChargingItem {
 			float multipler = 0.66f + (0.4f/affected.size());
 			//if the main target is in water, all affected take full damage
 			if (Actor.findChar(cell) != null && Dungeon.level.water[Actor.findChar(cell).pos]) multipler = 1f;
-			int dmg = Math.round(damageRoll() * 1.25f * charge * multipler);
+			int dmg = Math.round(damageRoll() * 0.75f * charge * multipler);
 
 			target.damage(dmg, new Electricity());
 			if (target.isAlive()) Buff.prolong(target, Paralysis.class, charge / 0.06f);
@@ -334,7 +334,7 @@ public class ElectricalExplosive extends Bomb implements ChargingItem {
 	@Override
 	public String desc() {
 		String desc_fuse = Messages.get(this, "desc",
-				GameMath.printAverage(Math.round(minDamage()*1.25f * charge), Math.round(maxDamage()*1.25f * charge)));
+				GameMath.printAverage(Math.round(minDamage()*0.7f * charge), Math.round(maxDamage()*0.7f * charge)));
 		if (fuse != null){
 			desc_fuse += "\n\n" + Messages.get(this, "desc_burning");
 		} else {
