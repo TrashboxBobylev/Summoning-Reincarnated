@@ -120,6 +120,9 @@ public class Crossbow extends MeleeWeapon {
 	}
 
 	public int dartMin(int lvl){
+		if (tier == 1){
+			return 2 + lvl;
+		}
 		return  4 +     //4 base, up from dart base of 1
 				lvl;    //+1 per level
 	}
@@ -129,6 +132,9 @@ public class Crossbow extends MeleeWeapon {
 	}
 
 	public int dartMax(int lvl){
+		if (tier == 1){
+			return 6 + lvl*4/3;
+		}
 		return  12 +    //12 base, up from dart base of 2
 				3*lvl;  //+3 per crossbow level
 	}

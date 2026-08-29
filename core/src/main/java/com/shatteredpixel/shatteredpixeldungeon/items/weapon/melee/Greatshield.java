@@ -55,6 +55,9 @@ public class Greatshield extends MeleeWeapon {
 
 	//6 extra defence, plus 2 per level
 	public int DRMax(int lvl){
+		if (tier == 1){
+			return 2 + lvl;
+		}
 		return 6 + 2*lvl;
 	}
 	

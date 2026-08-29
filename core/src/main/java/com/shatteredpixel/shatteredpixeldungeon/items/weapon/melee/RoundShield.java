@@ -64,6 +64,9 @@ public class RoundShield extends MeleeWeapon {
 
 	//4 extra defence, plus 1 per level
 	public int DRMax(int lvl){
+		if (tier == 1){
+			return 2 + lvl;
+		}
 		return 4 + lvl;
 	}
 	
