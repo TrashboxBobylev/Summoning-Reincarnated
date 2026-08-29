@@ -97,9 +97,11 @@ public class Kunai extends MissileWeapon {
 
             decrementDurability();
 
-            if (durability <= durabilityPerUse()) {
+            if (durability <= 0) {
                 if (quantity() > 1) {
                     quantity(quantity() - 1);
+                    durability = MAX_DURABILITY;
+                    extraThrownLeft = false;
                 } else {
                     detachAll(Dungeon.hero.belongings.backpack);
                 }
