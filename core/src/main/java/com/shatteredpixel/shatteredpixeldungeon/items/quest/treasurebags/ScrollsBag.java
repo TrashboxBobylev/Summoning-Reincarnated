@@ -24,8 +24,10 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 import java.util.ArrayList;
@@ -38,12 +40,23 @@ public class ScrollsBag extends TreasureBag {
     @Override
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
-        for(int i = 0; i < 6; i++) items.add(Generator.random(Generator.Category.SCROLL).identify());
+        int amount = 6;
+        if (Dungeon.mode == Dungeon.GameMode.GAUNTLET)
+            amount = 3;
+        for(int i = 0; i < amount; i++) {
+            Item scroll;
+            do {
+                scroll = Generator.random(Generator.Category.SCROLL).identify();
+            } while (scroll instanceof ScrollOfIdentify);
+            items.add(scroll);
+        }
         return items;
     }
 
     @Override
     public int value() {
+        if (Dungeon.mode == Dungeon.GameMode.GAUNTLET)
+            return 100 * quantity;
         return 50 * quantity;
     }
 }

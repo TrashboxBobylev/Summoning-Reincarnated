@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -38,12 +39,17 @@ public class SeedsBag extends TreasureBag {
     @Override
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
-        for(int i = 0; i < 9; i++) items.add(Generator.random(Generator.Category.SEED));
+        int amount = 9;
+        if (Dungeon.mode == Dungeon.GameMode.GAUNTLET)
+            amount = 4;
+        for(int i = 0; i < amount; i++)  items.add(Generator.random(Generator.Category.SEED));
         return items;
     }
 
     @Override
     public int value() {
+        if (Dungeon.mode == Dungeon.GameMode.GAUNTLET)
+            return 45 * quantity;
         return 20 * quantity;
     }
 }

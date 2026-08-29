@@ -431,22 +431,27 @@ public class ShopRoom extends SpecialRoom {
 	protected static ArrayList<Item> generateItemsGauntlet(){
 		ArrayList<Item> itemsToSpawn = new ArrayList<>();
 
-		for (int i = 0; i < 3; i++) {
-			itemsToSpawn.add(Generator.random(Generator.Category.POTION).identify());
+		itemsToSpawn.add(Generator.random(Generator.Category.POTION).identify());
+		itemsToSpawn.add(new PotionsBag());
 
-			// do not add useless items
-			Item scroll;
-			do {
-				scroll = Generator.random(Generator.Category.SCROLL).identify();
-			} while (scroll instanceof ScrollOfIdentify);
-			itemsToSpawn.add(scroll);
+		// do not add useless items
+		Item scroll;
+		do {
+			scroll = Generator.random(Generator.Category.SCROLL).identify();
+		} while (scroll instanceof ScrollOfIdentify);
+		itemsToSpawn.add(scroll);
+		itemsToSpawn.add(new ScrollsBag());
 
-			Item stone;
-			do {
-				stone = Generator.random(Generator.Category.STONE).identify();
-			} while (stone instanceof StoneOfDetectMagic || stone instanceof StoneOfIntuition);
-			itemsToSpawn.add(stone);
-		}
+		Item stone;
+		do {
+			stone = Generator.random(Generator.Category.STONE).identify();
+		} while (stone instanceof StoneOfDetectMagic || stone instanceof StoneOfIntuition);
+		itemsToSpawn.add(stone);
+
+		if (Random.Int(2) == 0)
+			itemsToSpawn.add(new StonesBag());
+		else
+			itemsToSpawn.add(new SeedsBag());
 
 		if (Dungeon.depth % 4 == 0) itemsToSpawn.add( TippedDart.randomTipped(2) );
 

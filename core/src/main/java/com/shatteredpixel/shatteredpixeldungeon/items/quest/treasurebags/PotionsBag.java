@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -38,12 +39,17 @@ public class PotionsBag extends TreasureBag {
     @Override
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
-        for(int i = 0; i < 6; i++) items.add(Generator.random(Generator.Category.POTION).identify());
+        int amount = 6;
+        if (Dungeon.mode == Dungeon.GameMode.GAUNTLET)
+            amount = 3;
+        for(int i = 0; i < amount; i++) items.add(Generator.random(Generator.Category.POTION).identify());
         return items;
     }
 
     @Override
     public int value() {
+        if (Dungeon.mode == Dungeon.GameMode.GAUNTLET)
+            return 100 * quantity;
         return 40 * quantity;
     }
 }

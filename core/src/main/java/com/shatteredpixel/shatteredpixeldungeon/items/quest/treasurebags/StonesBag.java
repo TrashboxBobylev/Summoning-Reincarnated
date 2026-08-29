@@ -24,8 +24,11 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfDetectMagic;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfIntuition;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 import java.util.ArrayList;
@@ -38,12 +41,23 @@ public class StonesBag extends TreasureBag {
     @Override
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
-        for(int i = 0; i < 7; i++) items.add(Generator.random(Generator.Category.STONE));
+        int amount = 7;
+        if (Dungeon.mode == Dungeon.GameMode.GAUNTLET)
+            amount = 4;
+        for(int i = 0; i < amount; i++) {
+            Item stone;
+            do {
+                stone = Generator.random(Generator.Category.STONE).identify();
+            } while (stone instanceof StoneOfDetectMagic || stone instanceof StoneOfIntuition);
+            items.add(stone);
+        }
         return items;
     }
 
     @Override
     public int value() {
+        if (Dungeon.mode == Dungeon.GameMode.GAUNTLET)
+            return 65 * quantity;
         return 25 * quantity;
     }
 }
