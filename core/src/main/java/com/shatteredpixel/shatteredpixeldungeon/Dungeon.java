@@ -448,7 +448,7 @@ public class Dungeon {
 		gold = 0;
 		energy = 0;
 		if (Dungeon.mode == GameMode.GAUNTLET){
-			gold = 250;
+			gold = 500;
 		}
 
 		droppedItems = new SparseArray<>();

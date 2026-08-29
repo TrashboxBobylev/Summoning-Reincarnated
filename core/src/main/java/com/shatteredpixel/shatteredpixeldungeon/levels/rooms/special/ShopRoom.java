@@ -452,7 +452,10 @@ public class ShopRoom extends SpecialRoom {
 
 		itemsToSpawn.add (new Ropes().quantity(Random.Int(2, 6)));
 
-		if (Dungeon.depth % 2 == 0) itemsToSpawn.add( new ScrollOfUpgrade().identify());
+		if (Dungeon.depth % 4 == 0) {
+			itemsToSpawn.add( new ScrollOfUpgrade().identify());
+			itemsToSpawn.add( new ScrollOfUpgrade().identify());
+		}
 		if (Dungeon.depth % 3 == 0) itemsToSpawn.add( new PotionOfStrength().identify());
 		if (Dungeon.depth % 3 == 0) itemsToSpawn.add( new TypeManager());
 		if (Dungeon.depth % 3 == 0) itemsToSpawn.add(new CleanWater());

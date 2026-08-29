@@ -171,6 +171,9 @@ public class ScrollOfUpgrade extends InventoryScroll {
 	
 	@Override
 	public int value() {
+		if (Dungeon.mode == Dungeon.GameMode.GAUNTLET){
+			return 65 * quantity;
+		}
 		return isKnown() ? 50 * quantity : super.value();
 	}
 
