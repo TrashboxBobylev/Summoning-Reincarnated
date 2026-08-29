@@ -136,6 +136,8 @@ public class ShopRoom extends SpecialRoom {
 
 		//we also add 1 more space, for the shopkeeper
 		spacesNeeded++;
+		if (Dungeon.mode == Dungeon.GameMode.GAUNTLET)
+			spacesNeeded -= 3;
 		return spacesNeeded;
 	}
 	
