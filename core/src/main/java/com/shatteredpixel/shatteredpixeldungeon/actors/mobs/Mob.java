@@ -1225,8 +1225,6 @@ public abstract class Mob extends Char {
                 int amountOfGold = 0;
                 Random.pushGenerator(Dungeon.seedCurDepth());
 				int money = 10;
-				if (Dungeon.gold < money*(15+Dungeon.scalingDepth()*15) && Dungeon.scalingDepth() > 1)
-					money += 3;
 	            for (int i = 0; i < money; i++){
                     amountOfGold += Random.IntRange(30 + Dungeon.scalingDepth() * 10, 60 + Dungeon.scalingDepth() * 20);
                 }
