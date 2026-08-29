@@ -791,6 +791,8 @@ public class Generator {
 	public static Item randomUsingDefaults( Category cat ){
 		if (cat == Category.WEAPON){
 			return randomWeapon(true);
+		} else if (cat == Category.ARMOR){
+			return randomArmor();
 		} else if (cat == Category.STAFF){
 			return randomStaff(true);
 		} else if (cat.defaultProbs == null && Dungeon.mode != Dungeon.GameMode.CHAOS) {
