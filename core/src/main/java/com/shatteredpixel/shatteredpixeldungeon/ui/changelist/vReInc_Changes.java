@@ -131,7 +131,118 @@ public class vReInc_Changes {
     }
 
     public static void add_v0_7_0_Changes( ArrayList<ChangeInfo> changeInfos ) {
-        ChangeInfo changes = new ChangeInfo("vReInc-0.7.0", true, "");
+        ChangeInfo changes = new ChangeInfo("vReInc-0.7.2", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBYLEV), "Developer Commentary",
+                "_-_ Released September XXth, 2026\n" +
+                        "_-_ 39+ days after Reincarnated 0.7.1\n" +
+                        "_-_ 45+ days after Reincarnated 0.7.0"
+        ));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.BUFFS), "Balance Changes",
+                "_-_ Buffed _Kunai III_:\n" +
+                        "   _-_ Can now be used with trickshots.\n\n" +
+                        "_-_ Nerfed _Trident I_:\n" +
+                        "   _-_ Reduced its damage bonus against wet enemies from _50%_ to _33%_.\n\n" +
+                        "_-_ Rebalanced _Javelin III_:\n" +
+                        "   _-_ Nerfed damage from _8-20(+2/+6)_ to _6-15(+1.5/+4.5)_.\n" +
+                        "   _-_ Increased damage ramp up from _1.12x_ to _1.2x_.\n" +
+                        "   _-_ Increased damage cap from _3x_ to _4x_.\n\n" +
+                        "_-_ Nerfed _Electrical Explosive_:\n" +
+                        "   _-_ Decreased the damage modifier from _125%_ to _70%_.\n" +
+                        "   _-_ Doubled the durability draining rate.",
+
+                    "_-_ Nerfed _Wand of Magic Missile II_:\n" +
+                    "   _-_ Reduced damage modifier from _3x_ to _2.666x_.\n" +
+                    "   _-_ Increased recharge time from _70 turns_ to _90 turns_.\n" +
+                    "   _-_ Now is double affected by enemy's armor roll.\n" +
+                    "   _-_ Decreased Battlemage's min damage modifier from _4x_ to _3x_.\n\n" +
+                    "_-_ Nerfed _Wand of Blast Wave_:\n" +
+                    "   _-_ Reduced its max damage from _4(+4.33)_ to _3(+3.5)_.\n" +
+                    "   _-_ Reduced type II damage modifier from _2x_ to _1.5x_.\n\n" +
+                    "_-_ Buffed Magic Missile Staff III:\n" +
+                    "   _-_ Increased recharge boost from _10 turns_ to _16 turns_.",
+
+                    "_-_ Reworked _Silky Quiver II_'s 5 charge move, _Graveyard Shot_:\n" +
+                    "   _-_ Now lasts _2x_ shorter.\n" +
+                    "   _-_ Now damages living beings _2x_ faster.\n" +
+                    "   _-_ Instead of being corrupted instantly, undead enemies get affected by corruption effects, until they too turn into wraiths.\n\n" +
+                    "_-_ Reworked _Unique Attention_ talent:\n" +
+                    "   _-_ Now reward artifact recharging effect on enemy kills instead of passively giving instant charge.\n" +
+                    "   _-_ Changed values from _0.2/0.4/0.6 turns_ to _1.5/3/4.5 turns_ of value."
+                ));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.CHAOS), "Game Mode changes",
+                "_Project Paradox_:\n" +
+                        "_-_ Room sizes are now uniformly random.\n" +
+                        "_-_ Connection weights and mob spawning weights are now properly random, making the levels less obnoxiously big.\n" +
+                        "_-_ Special and secrets are no longer queued and can repeat across the run.\n" +
+                        "_-_ Item generation no longer uses decks, allowing as many items of each type to drop in a row as possible.\n\n" +
+                        "_Gauntlet Mode_:\n" +
+                        "_-_ Gold drop from clearing the level is now fixed at 10x of normal gold drop.\n" +
+                        "_-_ Increased starting gold from 250 to 500.\n" +
+                        "_-_ Reworked item distribution:\n" +
+                        "   _-_ Scrolls of Upgrade now spawn in pairs every 4 floors instead of one scroll every 2 floors, with their price being increased by 30%.\n" +
+                        "   _-_ Changed consumables in each category from 3 different items to 1 item and 1 grab bag.\n" +
+                        "   _-_ Consumable grab bags give 3-4 items, depending on category, and cost as much to buy.\n" +
+                        "   _-_ Seeds grab bag can replace runestones grab bag with 1/2 chance."
+        ));
+
+        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+                "_-_ Silky Quiver no longer creates a fake enemy, when targeting it at empty space.\n" +
+                        "_-_ Added text for Mirror of Fates' shielding on desktop.\n" +
+                        "_-_ Reversed the duration visual for Summoning's cooldowns to match Shattered's.\n" +
+                        "_-_ Beam of Affection can no longer kill invincible targets, like Underground's Paradise."
+        ));
+
+        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+                "_Fixed the following bugs:_\n" +
+                        "_-_ Crash with selecting a random armor ability for the Adventurer\n" +
+                        "_-_ Crash with reading about Spirit Bow's stats in the journal\n" +
+                        "_-_ Ability to select Cleric with random hero option\n" +
+                        "_-_ Crash on attempting to enchant the Cloak of Shadows II\n" +
+                        "_-_ Crash on using unupgraded Skeleton Key III\n" +
+                        "_-_ Crash on switching a behavior of invisible minion\n" +
+                        "_-_ Crash on reloading the save with cursed Guardian's Stone\n" +
+                        "_-_ Crash on Mirror of Fates II's shield being damaged\n" +
+                        "_-_ Mirror of Fates III being able to copy Scrolls of Upgrade\n" +
+                        "_-_ Crash on querying Magic Charge's power modifier during loading the save file\n" +
+                        "_-_ Crash on Magic Missile sentry's death animation\n" +
+                        "_-_ Crash on showing a targeting visual from currently invisible sprite\n" +
+                        "_-_ Crash on reloading the save file with Ankh in inventory and Candice's Rulebook conduct enabled\n" +
+                        "_-_ Crash with Master Thief's Armband attempting to pickup literally nothing",
+
+                        "_-_ Emeradic Battery II not consuming charge, when boosting glyphs\n" +
+                        "_-_ Emeradic Battery II and III being able to fuel wands\n" +
+                        "_-_ Emeradic Battery II going into negative charges\n" +
+                        "_-_ Emeradic Battery being able to infinitely drain semi-recharged staffs\n" +
+                        "_-_ Throwing Spike crashing, when not used by Duelist\n" +
+                        "_-_ Excess Charge not working with the wand rework\n" +
+                        "_-_ Chalice of Blood III's wraiths not scaling with dungeon's depth\n" +
+                        "_-_ Silky Quiver crashing, if Rain of Arrows ability has no targets\n" +
+                        "_-_ Tester area's Escape Crystal doing nothing in non-standard length dungeons\n" +
+                        "_-_ Typed damaging wands not communicating their true damage in their description\n" +
+                        "_-_ Earth Guardian saving/loading crash\n" +
+                        "_-_ Curse of the Muggle conduct not preventing wands from being fired\n" +
+                        "_-_ Fighting Wizardy effect not detaching correctly\n" +
+                        "_-_ Empowered Strike not working properly\n" +
+                        "_-_ Wands not getting their recharge speed reduced after being unequipped\n" +
+                        "_-_ Floral Vanguard listing Golden Lotus' stats",
+
+                        "_-_ Unstable Spellbook III having a headstart on mob kills\n" +
+                        "_-_ Ethereal Chains having a cap\n" +
+                        "_-_ Some leftover interactions not using Summoning's hunger system\n" +
+                        "_-_ Directing Pulse being able to stack its aggro effect\n" +
+                        "_-_ Runestones Bag and Scrolls bag having the same name\n" +
+                        "_-_ Subtilitas Sigil II having formatting errors in its description\n" +
+                        "_-_ Kunai II breaking faster, than intended\n" +
+                        "_-_ Some weapons being more effective than others in Procedurally Generated Protagonist mode\n" +
+                        "_-_ Attunement badges looking scuffed"
+        ));
+
+        changes = new ChangeInfo("vReInc-0.7.0", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
