@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.blobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -31,14 +32,20 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corruption;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Wraith;
 import com.shatteredpixel.shatteredpixeldungeon.effects.BlobEmitter;
+import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.SilkyQuiver;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
+import com.watabou.noosa.audio.Sample;
 
 import java.util.EnumSet;
 
@@ -68,13 +75,25 @@ public class Gravery extends Blob implements Hero.Doom, DamageSource {
     public static void corrupt(int cell ){
         Char ch = Actor.findChar( cell );
         if (ch != null) {
-            if (ch.properties().contains(Char.Property.UNDEAD)){
-                if (ch.isImmune(Corruption.class))
-                    Buff.affect(ch, Doom.class);
-                else
-                    Buff.affect(ch, Corruption.class);
-            } else if (!ch.properties().contains(Char.Property.BOSS) && !ch.properties().contains(Char.Property.MINIBOSS)){
-                ch.damage(Dungeon.chapterNumber()*2+2, new Gravery());
+            if (ch.properties().contains(Char.Property.UNDEAD) && (ch.buff(Corruption.class) == null && ch.buff(Doom.class) == null)){
+                WandOfCorruption corruption = new WandOfCorruption();
+                corruption.level((int) (Dungeon.chapterNumber()*1.5f));
+                corruption.onZap(new Ballistica(cell, ch.pos, Ballistica.STOP_TARGET));
+                if (ch.buff(Corruption.class) != null){
+                    if (ch instanceof Mob)
+                        ((Mob) ch).EXP = 0;
+                    ch.die(new Gravery());
+                    Wraith w = Wraith.spawnForcefullyAt(ch.pos);
+                    if (w != null) {
+                        Buff.affect(w, Corruption.class);
+                        if (Dungeon.level.heroFOV[ch.pos]) {
+                            CellEmitter.get(ch.pos).burst(ShadowParticle.CURSE, 6);
+                            Sample.INSTANCE.play(Assets.Sounds.CURSED);
+                        }
+                    }
+                }
+            } else if (!ch.properties().contains(Char.Property.BOSS) && !ch.properties().contains(Char.Property.MINIBOSS) && !(ch instanceof Wraith)){
+                ch.damage(Dungeon.chapterNumber()*4+4, new Gravery());
             }
             if (ch.buff(Corruption.class) != null || !ch.isAlive()){
                 SilkyQuiver.quiverBuff quiverBuff = Dungeon.hero.buff(SilkyQuiver.quiverBuff.class);

@@ -313,7 +313,7 @@ public class SilkyQuiver extends Artifact {
                 for (int i = 0; i < PathFinder.distance.length; i++) {
                     if (PathFinder.distance[i] < Integer.MAX_VALUE) {
                         if (!Dungeon.level.pit[i]) {
-                            GameScene.add(Blob.seed(i, 50, Gravery.class));
+                            GameScene.add(Blob.seed(i, 25, Gravery.class));
                             CellEmitter.get(i).burst(MagicMissile.YogParticle.FACTORY, 3);
                         }
                     }
