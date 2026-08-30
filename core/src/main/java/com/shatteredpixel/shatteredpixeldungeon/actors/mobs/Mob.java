@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Gravery;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Adrenaline;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Amok;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
@@ -1163,6 +1164,10 @@ public abstract class Mob extends Char {
 					Buff.affect(Dungeon.hero, Talent.LethalHasteCooldown.class, 100f);
 					Buff.affect(Dungeon.hero, GreaterHaste.class).set(2 + 2*Dungeon.hero.pointsInTalent(Talent.LETHAL_HASTE));
 				}
+			}
+
+			if (hero.hasTalent(Talent.UNIQUE_ATTENTION)){
+				Buff.affect(hero, ArtifactRecharge.class).set(hero.pointsInTalent(Talent.UNIQUE_ATTENTION)*1.5f);
 			}
 
 		}

@@ -70,7 +70,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
-import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
@@ -280,21 +279,7 @@ public enum Talent {
 		public boolean delayedDetach = false;
 	};
 	public static class RudeStrikeCounter extends CounterBuff{{revivePersists = true;}}
-	public static class UniqueAttentionTracker extends Buff {{revivePersists = true;}
 
-		@Override
-		public boolean act() {
-			for (Buff b : target.buffs()) {
-				if (b instanceof Artifact.ArtifactBuff) {
-					if (!((Artifact.ArtifactBuff) b).isCursed()) {
-						((Artifact.ArtifactBuff) b).charge((Hero) target, ((Hero) target).pointsInTalent(UNIQUE_ATTENTION)*0.2f);
-					}
-				}
-			}
-			spend(TICK);
-			return true;
-		}
-	};
 	public static class ProtectiveShadowsTracker extends Buff {
 		float barrierInc = 0.5f;
 
@@ -666,9 +651,6 @@ public enum Talent {
 		if (talent == IRON_WILL && hero.heroClass != HeroClass.WARRIOR){
 			Buff.affect(hero, BrokenSeal.WarriorShield.class);
 		}
-		if (talent == UNIQUE_ATTENTION){
-			Buff.affect(hero, UniqueAttentionTracker.class);
-		}
 
 		if (talent == VETERANS_INTUITION && hero.pointsInTalent(VETERANS_INTUITION) == 2){
 			if (hero.belongings.armor() != null && !ShardOfOblivion.passiveIDDisabled())  {
@@ -787,9 +769,6 @@ public enum Talent {
         if (isGone){
             if (talent == IRON_WILL && hero.heroClass != HeroClass.WARRIOR){
                 Buff.detach(hero, BrokenSeal.WarriorShield.class);
-            }
-            if (talent == UNIQUE_ATTENTION){
-                Buff.detach(hero, UniqueAttentionTracker.class);
             }
             if (talent == PROTECTIVE_SHADOWS){
                 Buff.detach(hero, Talent.ProtectiveShadowsTracker.class);
