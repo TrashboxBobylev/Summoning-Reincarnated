@@ -33,7 +33,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FlavourBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hex;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Slow;
-import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Weakness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
@@ -117,13 +116,6 @@ public class Wizard extends Minion implements Callback {
 						if (ch.buff(ReactiveTargeting.class) != null){
 							ch.damage(1, this);
 							Buff.affect(ch, Hex.class, 1f);
-						}
-					}
-					break;
-				case PROTECTIVE:
-					for (Mob ch: Dungeon.level.mobs.toArray( new Mob[0] )){
-						if (ch.buff(ProtectiveTargeting.class) != null){
-							Buff.affect( ch, Terror.class, 1 ).object = Dungeon.hero.id();
 						}
 					}
 					break;

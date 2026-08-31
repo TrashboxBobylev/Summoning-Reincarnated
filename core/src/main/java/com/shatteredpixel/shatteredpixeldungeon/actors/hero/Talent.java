@@ -50,6 +50,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RevealedArea;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ScrollEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulSparking;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TieringEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.WandEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Wet;
@@ -59,6 +60,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.DivineSense;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.RecallInscription;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Wizard;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Flare;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
@@ -1260,6 +1263,19 @@ public enum Talent {
 			}
 			dmg *= Math.max(1f, Math.pow(1.3f, bonus* CloakGlyph.efficiency()));
 		}
+
+		int duration = 0;
+		for (Mob ch: Dungeon.level.mobs.toArray( new Mob[0] )){
+			if (ch instanceof Wizard && ((Wizard) ch).type == 3 && ((Wizard) ch).behaviorType == Minion.BehaviorType.PROTECTIVE){
+				if (duration == 0){
+					duration = 2;
+				} else {
+					duration++;
+				}
+			}
+		}
+		if (duration > 0)
+			Buff.affect( enemy, Terror.class, duration ).object = Dungeon.hero.id();
 
 		return dmg;
 	}
