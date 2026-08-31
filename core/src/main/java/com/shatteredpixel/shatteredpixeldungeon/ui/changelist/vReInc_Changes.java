@@ -159,12 +159,19 @@ public class vReInc_Changes {
                     "   _-_ Increased recharge time from _70 turns_ to _90 turns_.\n" +
                     "   _-_ Now is double affected by enemy's armor roll.\n" +
                     "   _-_ Decreased Battlemage's min damage modifier from _4x_ to _3x_.\n\n" +
+                    "_-_ Nerfed _Magic Charge mechanic_:\n" +
+                    "   _-_ Can no longer amplify attunement boosts from temporary buffs, like Fighting Wizardry talent.\n\n" +
                     "_-_ Nerfed _Wand of Blast Wave_:\n" +
                     "   _-_ Reduced its max damage from _4(+4.33)_ to _3(+3.5)_.\n" +
                     "   _-_ Reduced type II damage modifier from _2x_ to _1.5x_.\n\n" +
-                    "_-_ Buffed Magic Missile Staff III:\n" +
-                    "   _-_ Increased recharge boost from _10 turns_ to _16 turns_.",
+                    "_-_ Nerfed _Wand of Frost III_:\n" +
+                    "   _-_ Increased recharge time from _90 turns_ to _110 turns_.\n" +
+                    "   _-_ Reworked Battlemage effect to work like Blazing enchantment, but Frostburn-flavored.",
 
+                    "_-_ Buffed _Magic Missile Staff III_:\n" +
+                    "   _-_ Increased recharge boost from _10 turns_ to _16 turns_.\n\n" +
+                    "_-_ Nerfed _Dwarf Wizard Staff III_:\n" +
+                    "   _-_ Now only applies Terrified on hero's attacks instead of consistently applying it during 10 turns after an attack.\n\n" +
                     "_-_ Reworked _Silky Quiver II_'s 5 charge move, _Graveyard Shot_:\n" +
                     "   _-_ Now lasts _2x_ shorter.\n" +
                     "   _-_ Now damages living beings _2x_ faster.\n" +
@@ -176,6 +183,7 @@ public class vReInc_Changes {
 
         changes.addButton(new ChangeButton(Icons.get(Icons.CHAOS), "Game Mode changes",
                 "_Project Paradox_:\n" +
+                        "_-_ Reduced the max amount of rooms from 2x to 1.4x.\n" +
                         "_-_ Room sizes are now uniformly random.\n" +
                         "_-_ Connection weights and mob spawning weights are now properly random, making the levels less obnoxiously big.\n" +
                         "_-_ Special and secrets are no longer queued and can repeat across the run.\n" +
@@ -194,7 +202,10 @@ public class vReInc_Changes {
                 "_-_ Silky Quiver no longer creates a fake enemy, when targeting it at empty space.\n" +
                         "_-_ Added text for Mirror of Fates' shielding on desktop.\n" +
                         "_-_ Reversed the duration visual for Summoning's cooldowns to match Shattered's.\n" +
-                        "_-_ Beam of Affection can no longer kill invincible targets, like Underground's Paradise."
+                        "_-_ Beam of Affection can no longer kill invincible targets, like Underground's Paradise.\n" +
+                        "_-_ Reworked wand's attunement power description to better display, how strong the wand actually is.\n" +
+                        "_-_ Removed Chaotic Censer from trinket generation.\n" +
+                        "_-_ Changed Excess Charge talent's description to use attunement points."
         ));
 
         changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
@@ -239,7 +250,9 @@ public class vReInc_Changes {
                         "_-_ Subtilitas Sigil II having formatting errors in its description\n" +
                         "_-_ Kunai II breaking faster, than intended\n" +
                         "_-_ Some weapons being more effective than others in Procedurally Generated Protagonist mode\n" +
-                        "_-_ Attunement badges looking scuffed"
+                        "_-_ Attunement badges looking scuffed\n" +
+                        "_-_ Frostburn VFX persisting in fog of war\n" +
+                        "_-_ Protective minions not being less likely to be targeted by enemies"
         ));
 
         changes = new ChangeInfo("vReInc-0.7.0", true, "");
