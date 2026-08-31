@@ -151,7 +151,7 @@ public abstract class SpecialRoom extends Room {
 	
 	private static void useType( Class<?extends Room> type ) {
 		if (Dungeon.mode == Dungeon.GameMode.CHAOS &&
-				(type != AttunementPotRoom.class && type != LaboratoryRoom.class && type != PitRoom.class)){
+				(type != AttunementPotRoom.class && type != LaboratoryRoom.class && type != PitRoom.class && type != MysteryMerchantRoom.class)){
 			//deck? what's that
 		} else {
 			floorSpecials.remove(type);
