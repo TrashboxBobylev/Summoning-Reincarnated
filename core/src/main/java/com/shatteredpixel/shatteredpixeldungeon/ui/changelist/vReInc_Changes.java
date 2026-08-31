@@ -252,7 +252,8 @@ public class vReInc_Changes {
                         "_-_ Some weapons being more effective than others in Procedurally Generated Protagonist mode\n" +
                         "_-_ Attunement badges looking scuffed\n" +
                         "_-_ Frostburn VFX persisting in fog of war\n" +
-                        "_-_ Protective minions not being less likely to be targeted by enemies"
+                        "_-_ Protective minions not being less likely to be targeted by enemies\n" +
+                        "_-_ Darts not preserving their type, when being tipped"
         ));
 
         changes = new ChangeInfo("vReInc-0.7.0", true, "");
