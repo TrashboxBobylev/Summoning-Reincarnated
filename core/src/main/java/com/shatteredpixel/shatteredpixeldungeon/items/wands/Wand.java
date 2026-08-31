@@ -516,9 +516,9 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
             desc += "\n\n" + Messages.get(Weapon.class, "hardened_no_enchant");
         }
 
-        if (power() > (Dungeon.hero != null ? Dungeon.hero.ATU() - 1 : 0)){
-            desc += "\n\n" + Messages.get(Wand.class, "boost",
-                    Messages.decimalFormat("#.##", power() - (Dungeon.hero != null ? Dungeon.hero.ATU() - 1 : 0)));
+        if (Dungeon.hero != null){
+            desc += "\n\n" + Messages.get(Wand.class, "atu_power",
+                    Messages.decimalFormat("#.##", power()+1));
         }
 
 		if (Dungeon.hero != null && Dungeon.hero.subClass == HeroSubClass.BATTLEMAGE){
