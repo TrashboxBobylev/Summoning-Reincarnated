@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Frost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurn;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FrostfireParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.FrostBomb;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -79,7 +80,7 @@ public class WandOfFrost extends DamageWand {
         switch (type){
             case 1: return 1.0f;
             case 2: return 3.25f;
-            case 3: return 2.25f;
+            case 3: return 2.75f;
         }
         return 0f;
     }
@@ -306,14 +307,37 @@ public class WandOfFrost extends DamageWand {
             }
         }
         if (type() == 3){
-            Buff.affect(defender, FrostBurn.class).reignite(defender, (6 + power()*3)*Math.max(1f, procChanceMultiplier(attacker)));
+            // lvl 0 - 33%
+            // lvl 1 - 50%
+            // lvl 2 - 60%
+            float procChance = (power()+1f)/(power()+3f) * procChanceMultiplier(attacker);
+            if (Random.Float() < procChance) {
+
+                float powerMulti = Math.max(1f, procChance);
+
+                if (defender.buff(FrostBurn.class) == null){
+                    Buff.affect(defender, FrostBurn.class).reignite(defender, 6);
+                    powerMulti -= 1;
+                }
+
+                if (powerMulti > 0){
+                    int burnDamage = Random.NormalIntRange( 1, 3 + Dungeon.scalingDepth()/4 );
+                    burnDamage = Math.round(burnDamage * 0.67f * powerMulti);
+                    if (burnDamage > 0) {
+                        defender.damage(burnDamage, this);
+                    }
+                }
+
+                defender.sprite.emitter().burst(FrostfireParticle.FACTORY, (int) (power() * 2));
+
+            }
         }
 	}
 
     @Override
     public String battlemageDesc(int type) {
         if (type == 3){
-            return Messages.get(this, "type_bm" + type, (int)(6 + power()*3));
+            return Messages.get(this, "type_bm" + type, (int)((power()+1f)/(power()+3f)*100));
         }
         return super.battlemageDesc(type);
     }
