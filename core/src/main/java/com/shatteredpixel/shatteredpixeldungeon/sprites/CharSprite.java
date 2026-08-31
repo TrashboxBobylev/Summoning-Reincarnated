@@ -486,6 +486,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 				scale.y = 1.5f;
 				break;
 			case FROSTBURNING:
+				if (frostburning != null) frostburning.on = false;
 				frostburning = emitter();
 				frostburning.pour(Speck.factory( Speck.FROSTBURN, true ), 0.02f );
 				if (visible) {
@@ -688,6 +689,9 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 
 		if (burning != null) {
 			burning.visible = visible;
+		}
+		if (frostburning != null) {
+			frostburning.visible = visible;
 		}
 		if (levitation != null) {
 			levitation.visible = visible;
