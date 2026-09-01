@@ -113,7 +113,7 @@ public class FrostBurn extends Buff implements Hero.Doom, DamageSource {
 
 					if (!burnable.isEmpty()){
 						Item toBurn = Random.element(burnable).detach(hero.belongings.backpack);
-						GLog.warning( Messages.get(this, "burnsup", Messages.capitalize(toBurn.toString())) );
+						GLog.warning( Messages.get(this, "burnsup", Messages.capitalize(toBurn.name())) );
 						if (toBurn instanceof MysteryMeat){
 							FrozenCarpaccio steak = new FrozenCarpaccio();
 							if (!steak.collect( hero.belongings.backpack )) {
