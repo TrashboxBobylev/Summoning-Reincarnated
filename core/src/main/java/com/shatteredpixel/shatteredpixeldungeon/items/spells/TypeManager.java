@@ -99,4 +99,9 @@ public class TypeManager extends Spell {
     public boolean isFaceProtected() {
         return true;
     }
+
+    @Override
+    public int energyVal() {
+        return 8 * quantity;
+    }
 }
