@@ -78,6 +78,8 @@ public class LibraryRingExitRoom extends LibraryRingRoom {
 			p.x += dirX;
 			p.y += dirY;
 		}
+
+		ExitRoom.spawnConstructs(level, this);
 	}
 
 	@Override

@@ -79,6 +79,7 @@ public class RegionDecoPatchExitRoom extends RegionDecoPatchRoom {
 		}
 
 		level.transitions.add(new LevelTransition(level, exit, LevelTransition.Type.REGULAR_EXIT));
+		ExitRoom.spawnConstructs(level, this);
 	}
 
 	@Override

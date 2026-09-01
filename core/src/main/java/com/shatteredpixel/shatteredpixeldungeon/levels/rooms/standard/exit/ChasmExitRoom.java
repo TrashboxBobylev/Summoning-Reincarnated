@@ -84,6 +84,7 @@ public class ChasmExitRoom extends ChasmRoom {
 		}
 
 		level.transitions.add(new LevelTransition(level, exit, LevelTransition.Type.REGULAR_EXIT));
+		ExitRoom.spawnConstructs(level, this);
 	}
 
 	@Override

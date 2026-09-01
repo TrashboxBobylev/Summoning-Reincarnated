@@ -85,6 +85,8 @@ public class CircleWallExitRoom extends CircleWallRoom {
 			p.x += xDir;
 			p.y += yDir;
 		}
+
+		ExitRoom.spawnConstructs(level, this);
 	}
 
 	@Override

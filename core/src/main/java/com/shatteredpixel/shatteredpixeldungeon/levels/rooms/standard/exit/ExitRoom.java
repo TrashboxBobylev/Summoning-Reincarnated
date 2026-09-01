@@ -68,21 +68,25 @@ public class ExitRoom extends StandardRoom {
 		int exit = level.pointToCell(random( 2 ));
 		Painter.set( level, exit, Terrain.EXIT );
 		level.transitions.add(new LevelTransition(level, exit, LevelTransition.Type.REGULAR_EXIT));
-		if (Dungeon.depth > Dungeon.chapterSize() * 4 || Dungeon.branch == AbyssLevel.BRANCH) {
-			for (int i = 0; i < Random.IntRange(1, 3); i++) {
-				AttunementConstruct npc = new AttunementConstruct();
-				do {
-					npc.pos = level.pointToCell(random());
-				} while (level.map[npc.pos] != Terrain.EMPTY || level.findMob(npc.pos) != null || npc.pos == level.exit);
-				npc.state = npc.SLEEPING;
-				level.mobs.add(npc);
-			}
-		}
+		ExitRoom.spawnConstructs(level, this);
 	}
 	
 	@Override
 	public boolean canPlaceCharacter(Point p, Level l) {
 		return super.canPlaceCharacter(p, l) && l.pointToCell(p) != l.exit();
+	}
+
+	public static void spawnConstructs(Level level, Room room){
+		if (Dungeon.depth > Dungeon.chapterSize() * 4 || Dungeon.branch == AbyssLevel.BRANCH) {
+			for (int i = 0; i < Random.IntRange(1, 3); i++) {
+				AttunementConstruct npc = new AttunementConstruct();
+				do {
+					npc.pos = level.pointToCell(room.random());
+				} while (level.map[npc.pos] != Terrain.EMPTY || level.findMob(npc.pos) != null || npc.pos == level.exit);
+				npc.state = npc.SLEEPING;
+				level.mobs.add(npc);
+			}
+		}
 	}
 
 	private static ArrayList<Class<?extends StandardRoom>> rooms = new ArrayList<>();

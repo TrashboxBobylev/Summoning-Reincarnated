@@ -51,6 +51,7 @@ public class RingExitRoom extends RingRoom {
 	protected void placeCenterDetail(Level level, int pos) {
 		Painter.set(level, pos, Terrain.EXIT);
 		level.transitions.add(new LevelTransition(level, pos, LevelTransition.Type.REGULAR_EXIT));
+		ExitRoom.spawnConstructs(level, this);
 	}
 
 	@Override

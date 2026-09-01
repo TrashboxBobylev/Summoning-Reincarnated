@@ -47,6 +47,7 @@ public class RitualExitRoom extends RitualRoom {
 	protected void placeloot(Level level, Point p) {
 		Painter.set(level, p, Terrain.EXIT);
 		level.transitions.add(new LevelTransition(level, level.pointToCell(p), LevelTransition.Type.REGULAR_EXIT));
+		ExitRoom.spawnConstructs(level, this);
 	}
 
 	@Override

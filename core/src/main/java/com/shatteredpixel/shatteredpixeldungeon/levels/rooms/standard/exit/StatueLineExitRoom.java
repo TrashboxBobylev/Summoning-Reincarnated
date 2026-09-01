@@ -59,6 +59,7 @@ public class StatueLineExitRoom extends StatueLineRoom {
 
 		Painter.set(level, exit, Terrain.EXIT);
 		level.transitions.add(new LevelTransition(level, exit, LevelTransition.Type.REGULAR_EXIT));
+		ExitRoom.spawnConstructs(level, this);
 	}
 
 	@Override

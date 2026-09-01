@@ -64,6 +64,7 @@ public class CellBlockExitRoom extends CellBlockRoom {
 					Painter.set( level, entrance, Terrain.EXIT );
 
 					level.transitions.add(new LevelTransition(level, entrance, LevelTransition.Type.REGULAR_EXIT));
+					ExitRoom.spawnConstructs(level, this);
 					return;
 				}
 			}
