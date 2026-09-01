@@ -179,7 +179,16 @@ public class TrinketCatalyst extends Item {
 
 			//roll new trinkets if trinkets were not already rolled
 			while (cata.rolledTrinkets.size() < NUM_TRINKETS){
-				cata.rolledTrinkets.add((Trinket) Generator.random(Generator.Category.TRINKET));
+				boolean repeat = false;
+				Trinket trinket = (Trinket) Generator.random(Generator.Category.TRINKET);
+				for (Trinket t : cata.rolledTrinkets){
+					if (trinket.getClass() == t.getClass()){
+						repeat = true;
+						break;
+					}
+				}
+				if (!repeat && !Challenges.isItemBlocked(trinket))
+					cata.rolledTrinkets.add(trinket);
 			}
 
 			for (int i = 0; i < NUM_TRINKETS; i++){
@@ -191,9 +200,7 @@ public class TrinketCatalyst extends Item {
 				};
 				btnReward.item(cata.rolledTrinkets.get(i));
 				btnReward.setRect( (i+1)*(WIDTH - BTN_GAP) / NUM_TRINKETS - BTN_SIZE, message.top() + message.height() + BTN_GAP, BTN_SIZE, BTN_SIZE );
-				if (!Challenges.isItemBlocked(cata.rolledTrinkets.get(i))){
-					add( btnReward );
-				}
+				add( btnReward );
 			}
 
 			resize(WIDTH, (int)(message.top() + message.height() + 2*BTN_GAP + BTN_SIZE));
