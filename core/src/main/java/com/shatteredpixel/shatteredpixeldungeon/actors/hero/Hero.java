@@ -72,6 +72,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Shadows;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SnipersMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulSparking;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TieringEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TimeStasis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
@@ -1925,6 +1926,19 @@ public class Hero extends Char {
 		//we will have to do with that for now
 		//will need to port sourced magical attacks from summoning to implement the full idea
 		Buff.affect(enemy, Minion.ProtectiveTargeting.class, 10f);
+
+		int duration = 0;
+		for (Mob ch: Dungeon.level.mobs.toArray( new Mob[0] )){
+			if (ch instanceof Wizard && ((Wizard) ch).type == 3 && ((Wizard) ch).behaviorType == Minion.BehaviorType.PROTECTIVE){
+				if (duration == 0){
+					duration = 2;
+				} else {
+					duration++;
+				}
+			}
+		}
+		if (duration > 0)
+			Buff.affect( enemy, Terror.class, duration ).object = Dungeon.hero.id();
 
 		return super.defenseProc( enemy, damage );
 	}
