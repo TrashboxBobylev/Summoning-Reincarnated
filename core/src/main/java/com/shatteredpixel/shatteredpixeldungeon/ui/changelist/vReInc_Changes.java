@@ -205,7 +205,9 @@ public class vReInc_Changes {
                         "_-_ Beam of Affection can no longer kill invincible targets, like Underground's Paradise.\n" +
                         "_-_ Reworked wand's attunement power description to better display, how strong the wand actually is.\n" +
                         "_-_ Removed Chaotic Censer from trinket generation.\n" +
-                        "_-_ Changed Excess Charge talent's description to use attunement points."
+                        "_-_ Changed Excess Charge talent's description to use attunement points.\n" +
+                        "_-_ Type Manager can now be energized for 8 energy.\n" +
+                        "_-_ Magical attacks now trigger minions with protective behavior."
         ));
 
         changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
@@ -253,7 +255,11 @@ public class vReInc_Changes {
                         "_-_ Attunement badges looking scuffed\n" +
                         "_-_ Frostburn VFX persisting in fog of war\n" +
                         "_-_ Protective minions not being less likely to be targeted by enemies\n" +
-                        "_-_ Darts not preserving their type, when being tipped"
+                        "_-_ Darts not preserving their type, when being tipped\n" +
+                        "_-_ Attunement Constructs not spawning in Demon Halls\n" +
+                        "_-_ Trinkets repeating on creating them\n" +
+                        "_-_ Yog's death wall not being registered as death in rankings\n" +
+                        "_-_ Frostburn using internal names for burnt items"
         ));
 
         changes = new ChangeInfo("vReInc-0.7.0", true, "");
