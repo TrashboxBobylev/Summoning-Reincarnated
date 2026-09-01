@@ -2011,6 +2011,10 @@ public class Hero extends Char {
 			damage = thorns.proc((int)damage, (src instanceof Char ? (Char)src : null),  this);
 		}
 
+		if (src instanceof MirrorOfFates.IndirectAttack && ((MirrorOfFates.IndirectAttack) src).caster() != null){
+			Buff.affect(((MirrorOfFates.IndirectAttack) src).caster(), Minion.ProtectiveTargeting.class, 10f);
+		}
+
 		if (!(src.hasProperty(DamageProperty.DEFERRED))) {
 			if (Dungeon.mode == Dungeon.GameMode.EXPLORE) {
 				damage *= 0.75f;
