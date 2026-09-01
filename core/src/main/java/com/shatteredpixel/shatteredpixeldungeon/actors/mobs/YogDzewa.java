@@ -223,6 +223,11 @@ public class YogDzewa extends Mob {
 							if (ch != null && ch.alignment == Alignment.ALLY) {
 								int dmg = Random.NormalIntRange(50, 170);
 								ch.damage(dmg, new Eye.DeathGaze(this, dmg));
+								if (!ch.isAlive() && ch == Dungeon.hero) {
+									Badges.validateDeathFromEnemyMagic();
+									Dungeon.fail(this);
+									GLog.n(Messages.get(Char.class, "kill", name()));
+								}
 							}
 						}
 						needCrossBeam = false;
