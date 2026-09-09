@@ -825,8 +825,8 @@ public class ItemSpriteSheet {
 	public static final int SUMMON_ELE_FROST= SPELLS+12;
 	public static final int SUMMON_ELE_SHOCK= SPELLS+13;
 	public static final int SUMMON_ELE_CHAOS= SPELLS+14;
-	public static final int TYPE_MANAGER = SPELLS+14;
-	public static final int ENCHANT_TRANSFER= SPELLS+15;
+	public static final int TYPE_MANAGER    = SPELLS+14+16;
+	public static final int ENCHANT_TRANSFER= SPELLS+15+16;
 
 	static{
 		assignItemRect(WILD_ENERGY,     6, 15);
