@@ -34,13 +34,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Monk;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
-import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DwarfToken;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.AmbitiousImpRoom;
@@ -322,37 +321,31 @@ public class Imp extends NPC {
 				mirrorUsed = false;
 
 				rewardOptions.clear();
-				Item artif = Generator.randomArtifact();
-				//generate a ring instead
-				if (artif != null){
-					((Artifact)artif.identify(false)).transferUpgrade(5);
-				} else {
-					artif = Generator.random(Generator.Category.RING);
-					//we delay the ID on rings until the boss is defeated
-					artif.level(Random.IntRange(2, 4));
-				}
+				Item artif = Generator.random(Generator.Category.ARTIFACT);
+				((Artifact)artif.identify(false)).transferUpgrade(5);
 				rewardOptions.add(artif);
 
-				Item ring;
-				do {
-					ring = Generator.random(Generator.Category.RING);
-				} while (ring.getClass() == artif.getClass()); //rare cases of the same kind of ring twice
-				//we delay the ID on rings until the boss is defeated
-				ring.level(Random.IntRange(2, 4));
-				rewardOptions.add(ring);
-
+				MeleeWeapon weaponReward;
 				if (Random.Int(2) == 0) {
-					rewardOptions.add(((Weapon)Generator.random(Generator.Category.WEP_T5)).enchant().identify(false).level(Random.IntRange(2, 4)));
-					rewardOptions.add(((Weapon)Generator.random(Generator.Category.MIS_T4)).enchant().identify(false).level(Random.IntRange(3, 5)));
+					weaponReward = (MeleeWeapon) Generator.random(Generator.Category.WEP_T5);
 				} else {
-					rewardOptions.add(((Weapon)Generator.random(Generator.Category.MIS_T5)).enchant().identify(false).level(Random.IntRange(2, 4)));
-					rewardOptions.add(((Weapon)Generator.random(Generator.Category.WEP_T4)).enchant().identify(false).level(Random.IntRange(3, 5)));
+					weaponReward = (MeleeWeapon) Generator.random(Generator.Category.WEP_T4);
 				}
+				weaponReward.identify(false);
+				weaponReward.enchant();
+				weaponReward.level(weaponReward.tier == 4 ? Random.IntRange(3, 5) : Random.IntRange(2, 4));
+				rewardOptions.add(weaponReward);
+
 				rewardOptions.add(new PlateArmor().inscribe().identify(false).level(Random.IntRange(2, 4)));
+				//todo: change the reward effect!
 				Wand w = (Wand) Generator.random(Generator.Category.WAND);
-				w.identify(false).level(Random.IntRange(2, 4));
+				w.identify(false);
 				w.curCharges = w.maxCharges;
 				rewardOptions.add(w);
+
+				MissileWeapon m = (MissileWeapon) Generator.random(Generator.Category.WAND);
+				m.identify(false);
+				rewardOptions.add(m);
 
 				for (Item i : rewardOptions){
 					i.cursed = false;

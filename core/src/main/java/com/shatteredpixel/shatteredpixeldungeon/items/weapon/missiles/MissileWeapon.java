@@ -54,6 +54,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ParchmentScrap;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.ShardOfOblivion;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponEnchantable;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.curses.Explosive;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Crystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Projecting;
@@ -593,7 +594,7 @@ abstract public class MissileWeapon extends Weapon implements TypedItem {
 	}
 
 	@Override
-	public Weapon enchant(Enchantment ench) {
+	public WeaponEnchantable enchant(Enchantment ench) {
 		if (ench instanceof Crystal){
 			((Crystal) ench).setThrownWep();
 			//start repairing if thrown wep was already damaged

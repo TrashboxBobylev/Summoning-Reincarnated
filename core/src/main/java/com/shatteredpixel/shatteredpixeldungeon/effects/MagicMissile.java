@@ -78,7 +78,7 @@ public class MagicMissile extends Emitter {
 	public static final int ELMO            = 15;
 	public static final int POISON          = 16;
 	public static final int LIGHT_MISSILE   = 17;
-	public static final int FROGGERS        = 17;
+	public static final int FROGGERS        = 18;
 
 	public static final int CRYSTAL         = 24;
 	public static final int CRYSTAL_SHARDS  = 25;

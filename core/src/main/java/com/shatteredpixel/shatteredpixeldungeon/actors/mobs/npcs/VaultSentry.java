@@ -44,6 +44,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.particles.Emitter;
 import com.watabou.utils.Bundle;
+import com.watabou.utils.Random;
 
 import java.util.ArrayList;
 
@@ -124,9 +125,11 @@ public class VaultSentry extends NPC {
 									&& ch.alignment == Alignment.ALLY
 									&& ch.invisible == 0) {
 								if (recentZaps.contains(ch.id())) {
-									ch.damage(Random.NormalIntRange(3, 6), new DM100.LightningBolt());
+									int dmg = Random.NormalIntRange(3, 6);
+									ch.damage(dmg, new DM100.LightningBolt(this, dmg));
 								} else {
-									ch.damage(Random.NormalIntRange(6, 12), new DM100.LightningBolt());
+									int dmg = Random.NormalIntRange(6, 12);
+									ch.damage(dmg, new DM100.LightningBolt(this, dmg));
 								}
 								curZaps.add(ch.id());
 								if (ch.sprite.visible || sprite.visible) {

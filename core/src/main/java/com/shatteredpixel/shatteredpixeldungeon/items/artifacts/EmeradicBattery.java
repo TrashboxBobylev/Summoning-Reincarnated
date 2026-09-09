@@ -109,9 +109,10 @@ public class EmeradicBattery extends Artifact {
     }
 
     @Override
-    public void level(int value) {
+    public Item level(int value) {
         super.level(value);
         chargeCap = 50 + level()*10;
+        return this;
     }
 
     @Override

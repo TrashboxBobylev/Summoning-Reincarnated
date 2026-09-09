@@ -212,7 +212,7 @@ public class DeathMark extends ArmorAbility {
 		//if something is already dieing when death mark is attached, need to avoid triggering die() again
 		public void detachOnDeath(){
 			super.detach();
-			target.deathMarked = false;
+			target.deathRefusal = null;
 			//trigger death mark vfx and deathly durability if the target would have died with death mark ending normally
 			if (!target.isAlive()){
 				target.sprite.flash();

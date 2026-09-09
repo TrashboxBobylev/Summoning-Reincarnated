@@ -40,7 +40,7 @@ public class Vorpal extends Weapon.Enchantment {
 		}
 
 		//flat 25% proc chance, effect scales with damage dealt
-		float procChance = 1/4f * procChanceMultiplier(attacker);
+		float procChance = 1/4f * procChanceMultiplier(weapon, attacker);
 		if (Random.Float() < procChance) {
 
 			float powerMulti = Math.max(1f, procChance);

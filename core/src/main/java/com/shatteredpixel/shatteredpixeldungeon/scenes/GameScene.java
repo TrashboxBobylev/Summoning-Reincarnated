@@ -1253,11 +1253,11 @@ public class GameScene extends PixelScene {
 		}
 	}
 
-	public static TargetedCell targetedCell(int pos, int color, float delay){
-		return targetedCell(pos, delay);
+	public static TargetedCell targetedCell(int pos, float delay){
+		return targetedCell(pos, 0xFF0000, delay);
 	}
 
-	public static TargetedCell targetedCell(int pos, float delay){
+	public static TargetedCell targetedCell(int pos, int color, float delay){
 		if (scene != null) {
 			TargetedCell cell;
 			synchronized (TargetedCell.cells) {
@@ -1268,7 +1268,7 @@ public class GameScene extends PixelScene {
 				}
 			}
 			cell = (TargetedCell) scene.targetedCells.recycle(TargetedCell.class);
-			cell.reset(pos, Actor.now()+delay);
+			cell.reset(pos, color,Actor.now()+delay);
 			return cell;
 		} else {
 			return null;

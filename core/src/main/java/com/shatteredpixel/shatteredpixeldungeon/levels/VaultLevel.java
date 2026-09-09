@@ -95,17 +95,8 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultEntranceRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultFinalRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultLasersRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultLongRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultQuadrantsRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultRingRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultRingsRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultSimpleEnemyTreasureRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultBookcaseTreasureRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultFlamePathRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultLaserTreasureRoom;
-import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultManyScansRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.VaultTokensRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure.VaultTreasureRoom;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.Trap;
@@ -317,21 +308,7 @@ public class VaultLevel extends CityLevel {
 
 		//missile weapon (same level/tiering as 2nd weapon)
 		do {
-			switch (lootTier) {
-				default:
-				case 0:
-					loot = Generator.randomUsingDefaults(Generator.Category.MIS_T2);
-					break;
-				case 1:
-					loot = Generator.randomUsingDefaults(Generator.Category.MIS_T3);
-					break;
-				case 2:
-					loot = Generator.randomUsingDefaults(Generator.Category.MIS_T4);
-					break;
-				case 3:
-					loot = Generator.randomUsingDefaults(Generator.Category.MIS_T5);
-					break;
-			}
+			loot = Generator.randomUsingDefaults(Generator.Category.MISSILE);
 		} while (generatedClasses.contains(loot.getClass()));
 		generatedClasses.add(loot.getClass());
 		loot.level(lootTier);

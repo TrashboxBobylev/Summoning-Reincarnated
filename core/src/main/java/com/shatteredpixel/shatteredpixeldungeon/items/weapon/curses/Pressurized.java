@@ -35,7 +35,7 @@ public class Pressurized extends Weapon.Enchantment {
 
 	@Override
 	public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
-		float procChance = 1/8f * procChanceMultiplier(attacker);
+		float procChance = 1/8f * procChanceMultiplier(weapon, attacker);
 
 		if (Random.Float() < procChance){
 

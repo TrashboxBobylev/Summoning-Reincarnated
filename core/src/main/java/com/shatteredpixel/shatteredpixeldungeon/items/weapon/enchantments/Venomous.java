@@ -39,7 +39,7 @@ public class Venomous extends Weapon.Enchantment {
 		int level = Math.max( 0, weapon.buffedLvl() );
 
 		// flat 33% proc chance, effect scales with level
-		float procChance = 1/3f * procChanceMultiplier(attacker);
+		float procChance = 1/3f * procChanceMultiplier(weapon, attacker);
 		if (Random.Float() < procChance) {
 
 			float powerMulti = Math.max(1f, procChance);

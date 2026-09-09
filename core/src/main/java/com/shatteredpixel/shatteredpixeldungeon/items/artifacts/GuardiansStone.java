@@ -290,8 +290,7 @@ public class GuardiansStone extends Artifact {
                                 if (type() == 3){
                                     distanceMod = 2;
                                 }
-                                TargetedCell targetedCell = new TargetedCell(cell, 0xb85d00);
-                                user.sprite.parent.addToBack(targetedCell);
+                                TargetedCell targetedCell = GameScene.targetedCell(cell, 0xb85d00, Actor.TICK);
                                 Ballistica aim;
                                 if (cell % Dungeon.level.width() > 10){
                                     aim = new Ballistica(cell, cell - 1, Ballistica.WONT_STOP);

@@ -48,9 +48,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.staffs.MagicMissileStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.RoboStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.SheepStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.WizardStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Slingshot;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cleaver;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RunicBlade;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.StoneHammer;
@@ -881,7 +879,7 @@ public class vReInc_Changes {
                         "   _*_ now grants extra mana on next 3/5 kills\n\n" +
                         "_-_ _Conjurer's Robe_'s armor value now scales with attunement."));
 
-        changes.addButton(new ChangeButton(new WandOfCorruption(),
+        changes.addButton(new ChangeButton(ChangeIcons.V062_CORRUPTION, "Wand of Corruption",
                 "_-_ Reduced corruption resistance from _1x-5x_ to _1x-4x_ (0%-100%).\n\n" +
                         "_-_ Increased Corrupting enchantment's chance from _(5+level)/(25+level)_ to _(8+level)/(25+level)_.\n\n" +
                         "_-_ Corrupted enemies no longer awaken enemies with Swarm Intelligence challenge and _take all damage as deferred_, allowing them to survive for far longer."));
@@ -1327,12 +1325,12 @@ public class vReInc_Changes {
                         "_-_ Rank managers spawn every 2 depths, but not on boss depths, meaning there is 10 rank managers in entire game.\n" +
                         "_-_ Rank managers allow to switch applicable item's rank to any of three, from I to III, and preview rank's effects on item."));
 
-        changes.addButton( new ChangeButton(new SpiritBow(),
+        changes.addButton( new ChangeButton(ChangeIcons.V080_SPIRIT_BOW, "Spirit Bow",
                 "Reimplemented Spirit Bow's ability to have ranks.\n\n" +
                         "_-_ Increased bow II's cone from 50 to 65 degrees.\n" +
                         "_-_ Super-shot cooldown scales with bow's rank attack modifier."));
 
-        changes.addButton( new ChangeButton(new Food(),
+        changes.addButton( new ChangeButton(ChangeIcons.V060_RATION, "Hunger Changes",
                 "Adjusted satiety consumption across the board:\n\n" +
                         "_-_ Decreased moving satiety value from _1.33_ to _1.25_.\n" +
                         "_-_ Increased unlocking satiety value from _3.75_ to _5_.\n" +

@@ -443,7 +443,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 	}
 	
 	public Item level( int value) {
-		super.level( value );
+		super.level(value);
 		updateLevel();
 		return this;
 	}

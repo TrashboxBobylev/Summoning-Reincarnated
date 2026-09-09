@@ -43,6 +43,10 @@ public class ChangeButton extends Component {
 		this( icon.get(), title, message );
 	}
 
+	public ChangeButton(Item item, String message ){
+		this( new ItemSprite(item), item.name(), message);
+	}
+
 	public ChangeButton( Image icon, String title, String... messages){
 		super();
 		

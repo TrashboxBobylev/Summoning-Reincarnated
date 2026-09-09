@@ -57,6 +57,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -331,7 +332,7 @@ public class VaultBossElemental extends Mob {
 	private boolean weakAnnounced = false;
 
 	@Override
-	public void damage(int dmg, Object src) {
+	public void damage(int dmg, DamageSource src) {
 		//fire form is resistant to magic and weak to thrown weapons
 		if (form == ElementalForm.FIRE){
 			if (AntiMagic.RESISTS.contains(src.getClass())){
@@ -446,7 +447,7 @@ public class VaultBossElemental extends Mob {
 
 		//damaged by these, but much less so than regular elementals
 		if (harmful){
-			damage( Random.NormalIntRange( 5, 10 ), buff );
+			damage( Random.NormalIntRange( 5, 10 ), (DamageSource) buff);
 			return false;
 		}
 

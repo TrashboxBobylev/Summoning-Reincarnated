@@ -36,6 +36,7 @@ import com.watabou.utils.SparseArray;
 public class TargetedCell extends Image implements Bundlable {
 
 	public int pos;
+	public int color;
 	public float time;
 
 	public float alpha;
@@ -43,6 +44,10 @@ public class TargetedCell extends Image implements Bundlable {
 	public static SparseArray<TargetedCell> cells = new SparseArray<>();
 
 	public void reset( int pos, float time ){
+		reset(pos, 0xFF0000, time);
+	}
+
+	public void reset( int pos, int color, float time ){
 		copy(Icons.get(Icons.TARGET));
 		origin.set( width/2f );
 		camera = null;
@@ -50,7 +55,8 @@ public class TargetedCell extends Image implements Bundlable {
 		this.pos = pos;
 		point( DungeonTilemap.tileToWorld( pos ) );
 
-		hardlight(0xFF0000);
+		this.color = color;
+		hardlight(this.color);
 
 		alpha = 1f;
 		this.time = time;
@@ -96,6 +102,7 @@ public class TargetedCell extends Image implements Bundlable {
 	@Override
 	public void storeInBundle(Bundle bundle) {
 		bundle.put(POS, pos);
+		bundle.put(COLOR, color);
 		bundle.put(TIME, time);
 	}
 
@@ -103,6 +110,7 @@ public class TargetedCell extends Image implements Bundlable {
 	public void restoreFromBundle(Bundle bundle) {
 		pos = bundle.getInt(POS);
 		time = bundle.getInt(TIME);
+		color = bundle.getInt(COLOR);
 	}
 
 }

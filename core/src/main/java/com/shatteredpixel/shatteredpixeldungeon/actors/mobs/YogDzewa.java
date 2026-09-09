@@ -355,9 +355,9 @@ public class YogDzewa extends Mob {
 				for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++){
 					Ballistica b = new Ballistica(pos, pos + PathFinder.NEIGHBOURS8[i], Ballistica.STOP_SOLID);
 					for (int p : b.path){
-						TargetedCell targetedCell = new TargetedCell(p, 0xFF0000);
-						targetedCell.alpha = 2f;
-						sprite.parent.add(targetedCell);
+						TargetedCell targetedCell = GameScene.targetedCell(p, 0xFF0000, 1f);
+						if (targetedCell != null)
+							targetedCell.alpha = 2f;
 						affectedCells.add(p);
 					}
 				}
