@@ -86,7 +86,7 @@ public class Golem extends Mob {
 
 	@Override
 	public void rollToDropLoot() {
-		Imp.Quest.process( this );
+		Imp.Quest.oldProcess( this );
 		super.rollToDropLoot();
 	}
 

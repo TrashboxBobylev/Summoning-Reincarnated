@@ -121,7 +121,9 @@ import com.shatteredpixel.shatteredpixeldungeon.items.quest.CorpseDust;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DarkGold;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DwarfToken;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.Embers;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.EscapeCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.ImpStatue;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.AccessoriesBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.EquipmentBag;
@@ -132,6 +134,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.Scrolls
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.SeedsBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.StonesBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.ArmorRemains;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.VaultBeacon;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.BowFragment;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.BrokenHilt;
 import com.shatteredpixel.shatteredpixeldungeon.items.remains.BrokenStaff;
@@ -312,7 +315,7 @@ public enum Catalog {
 		MISC_CONSUMABLES.addItems( Gold.class, EnergyCrystal.class, Dewdrop.class,
 				IronKey.class, GoldenKey.class, CrystalKey.class, WornKey.class,
 				TrinketCatalyst.class, Stylus.class, Torch.class, Honeypot.class, Ankh.class, Ropes.class, CleanWater.class,
-				CorpseDust.class, Embers.class, CeremonialCandle.class, DarkGold.class, DwarfToken.class,
+				CorpseDust.class, Embers.class, CeremonialCandle.class, DarkGold.class, EscapeCrystal.class, VaultBeacon.class, DwarfToken.class, ImpStatue.class,
 				GooBlob.class, TengusMask.class, MetalShard.class, KingsCrown.class,
 				LiquidMetal.class, ArcaneResin.class, Chaosstone.class,
 				SealShard.class, BrokenStaff.class, CloakScrap.class, BowFragment.class, BrokenHilt.class, ArmorRemains.class, SpellPage.class,
@@ -321,19 +324,6 @@ public enum Catalog {
 
 
 
-	}
-
-	//old badges for pre-2.5
-	public static LinkedHashMap<Catalog, Badges.Badge> catalogBadges = new LinkedHashMap<>();
-	static {
-		catalogBadges.put(MELEE_WEAPONS, Badges.Badge.ALL_WEAPONS_IDENTIFIED);
-		catalogBadges.put(ARMOR, Badges.Badge.ALL_ARMOR_IDENTIFIED);
-		catalogBadges.put(WANDS, Badges.Badge.ALL_WANDS_IDENTIFIED);
-		catalogBadges.put(STAFFS, Badges.Badge.ALL_STAFFS_IDENTIFIED);
-		catalogBadges.put(RINGS, Badges.Badge.ALL_RINGS_IDENTIFIED);
-		catalogBadges.put(ARTIFACTS, Badges.Badge.ALL_ARTIFACTS_IDENTIFIED);
-		catalogBadges.put(POTIONS, Badges.Badge.ALL_POTIONS_IDENTIFIED);
-		catalogBadges.put(SCROLLS, Badges.Badge.ALL_SCROLLS_IDENTIFIED);
 	}
 
 	public static ArrayList<Catalog> equipmentCatalogs = new ArrayList<>();
@@ -401,10 +391,6 @@ public enum Catalog {
 	}
 
 	public static void countUses(Class<?> cls, int uses){
-		//TODO currently uses of items in vault tester are don't count
-		if (Dungeon.depth > 15 && Dungeon.branch > 0){
-			return;
-		}
 		for (Catalog cat : values()) {
 			if (cat.useCount.containsKey(cls) && cat.useCount.get(cls) != Integer.MAX_VALUE) {
 				cat.useCount.put(cls, cat.useCount.get(cls)+uses);
@@ -452,30 +438,7 @@ public enum Catalog {
 		
 	}
 
-	//pre-v2.5
-	private static final String CATALOG_ITEMS = "catalog_items";
-
 	public static void restore( Bundle bundle ){
-
-		//old logic for pre-v2.5 catalog-specific badges
-		Badges.loadGlobal();
-		for (Catalog cat : values()){
-			if (Badges.isUnlocked(catalogBadges.get(cat))){
-				for (Class<?> item : cat.items()){
-					cat.seen.put(item, true);
-				}
-			}
-		}
-		if (bundle.contains(CATALOG_ITEMS)) {
-			for (Class<?> cls : Arrays.asList(bundle.getClassArray(CATALOG_ITEMS))){
-				for (Catalog cat : values()) {
-					if (cat.seen.containsKey(cls)) {
-						cat.seen.put(cls, true);
-					}
-				}
-			}
-		}
-		//end of old logic
 
 		if (bundle.contains(CATALOG_CLASSES)){
 			Class<?>[] classes = bundle.getClassArray(CATALOG_CLASSES);

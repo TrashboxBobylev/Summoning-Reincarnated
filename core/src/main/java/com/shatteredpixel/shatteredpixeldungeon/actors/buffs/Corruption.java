@@ -30,17 +30,18 @@ import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamagePro
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
+import com.watabou.utils.Bundle;
 
 import java.util.EnumSet;
 
-public class Corruption extends AllyBuff implements DamageSource {
+public class Corruption extends AllyBuff implements DamageSource, Buff.DOTbuff {
 
 	{
 		type = buffType.NEGATIVE;
 		announced = true;
 	}
 
-	private float buildToDamage = 0f;
+	private float partialDamage = 0f;
 
 	//corrupted enemies are usually fully healed and cleansed of most debuffs
 	public static void corruptionHeal(Char target){
@@ -53,16 +54,26 @@ public class Corruption extends AllyBuff implements DamageSource {
 			}
 		}
 	}
-	
+
+	@Override
+	public boolean attachTo(Char target) {
+		if (super.attachTo(target)){
+			target.needsIncomingDOTUpdate = true;
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public boolean act() {
-		buildToDamage += target.HT/100f;
+		partialDamage += target.HT/100f;
 
-		int damage = (int)buildToDamage;
-		buildToDamage -= damage;
+		int damage = (int)partialDamage;
+		partialDamage -= damage;
 
-		if (damage > 0)
+		if (damage > 0) {
 			target.damage(damage, this);
+		}
 
 		spend(TICK);
 
@@ -84,4 +95,23 @@ public class Corruption extends AllyBuff implements DamageSource {
     public EnumSet<DamageProperty> initDmgProperties() {
         return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.DARK, DamageProperty.DECAY);
     }
+
+	@Override
+	public int totalIncomingDMG() {
+		return target.HT;
+	}
+
+	public static final String PARTIAL_DAMAGE = "partial_damage";
+
+	@Override
+	public void storeInBundle(Bundle bundle) {
+		super.storeInBundle(bundle);
+		bundle.put(PARTIAL_DAMAGE, partialDamage);
+	}
+
+	@Override
+	public void restoreFromBundle(Bundle bundle) {
+		super.restoreFromBundle(bundle);
+		partialDamage = bundle.getInt(PARTIAL_DAMAGE);
+	}
 }

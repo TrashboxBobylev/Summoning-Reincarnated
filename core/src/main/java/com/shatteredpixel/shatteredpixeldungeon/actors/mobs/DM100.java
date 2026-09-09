@@ -45,7 +45,7 @@ import com.watabou.utils.Random;
 
 import java.util.EnumSet;
 
-public class DM100 extends Mob implements Callback {
+public class DM100 extends Mob {
 
 	private static final float TIME_TO_ZAP	= 1f;
 	
@@ -150,10 +150,5 @@ public class DM100 extends Mob implements Callback {
 			}
 		}
 	}
-	
-	@Override
-	public void call() {
-		next();
-	}
-	
+
 }

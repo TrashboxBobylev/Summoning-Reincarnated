@@ -248,6 +248,10 @@ public class WallOfLight extends TargetedClericSpell {
 
 	public static class LightWall extends Blob {
 
+		{
+			alwaysVisible = true;
+		}
+
 		@Override
 		protected void evolve() {
 

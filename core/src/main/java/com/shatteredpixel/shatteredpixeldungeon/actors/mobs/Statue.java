@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.RatSkull;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon.Enchantment;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Corrupting;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
@@ -168,8 +169,11 @@ public class Statue extends Mob {
 	
 	@Override
 	public void die( Object cause ) {
-		weapon.identify(false);
-		Dungeon.level.drop( Challenges.process(weapon), pos ).sprite.drop();
+		//silently duplicated in this case, so don't drop original weapon
+		if (buff(Corrupting.CorruptingTracker.class) == null) {
+			weapon.identify(false);
+			Dungeon.level.drop(Challenges.process(weapon), pos).sprite.drop();
+		}
 		super.die( cause );
 	}
 

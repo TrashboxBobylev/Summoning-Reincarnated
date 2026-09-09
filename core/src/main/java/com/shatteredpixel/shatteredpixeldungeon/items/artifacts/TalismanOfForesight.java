@@ -135,7 +135,7 @@ public class TalismanOfForesight extends Artifact {
 		}
 		return 1.0f;
 	}
-	
+
 	@Override
 	public void charge(Hero target, float amount) {
 		if (cursed || target.buff(MagicImmune.class) != null) return;
@@ -225,7 +225,7 @@ public class TalismanOfForesight extends Artifact {
 					Char ch;
 					switch (type()) {
 						case 1:
-							GameScene.effectOverFog(new CheckedCell(cell, curUser.pos));
+							GameScene.checkedCell(cell, curUser.pos);
 							if (Dungeon.level.discoverable[cell] && !(Dungeon.level.mapped[cell] || Dungeon.level.visited[cell])) {
 								Dungeon.level.mapped[cell] = true;
 								earnedExp++;

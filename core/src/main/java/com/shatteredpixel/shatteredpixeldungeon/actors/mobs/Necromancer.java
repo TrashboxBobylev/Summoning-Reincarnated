@@ -204,7 +204,8 @@ public class Necromancer extends Mob {
 	}
 
 	public void summonMinion(){
-		if (Actor.findChar(summoningPos) != null || !Dungeon.level.passable[summoningPos]) {
+		Char existing = Actor.findChar(summoningPos);
+		if ((existing != null && existing != mySkeleton) || !Dungeon.level.passable[summoningPos]) {
 
 			int pushPos = pos;
 			for (int c : PathFinder.NEIGHBOURS8) {
@@ -358,7 +359,9 @@ public class Necromancer extends Mob {
 				} else if (!mySkeleton.canAttack(enemy)){
 					PathFinder.Path skelePath = Dungeon.findPath(mySkeleton, enemy.pos, Dungeon.level.passable, fieldOfView, Dungeon.PATHBLOCK_NORMAL);
 
-					if (skelePath == null || skelePath.size() > 2*Dungeon.level.distance(pos, enemy.pos)){
+					if (skelePath == null ||
+							(skelePath.size() > 2*Dungeon.level.distance(pos, enemy.pos)
+							&& skelePath.size() >= 4)){
 						teleporting = true;
 					}
 				}

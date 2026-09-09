@@ -381,6 +381,7 @@ public class Toolbar extends Component {
 				arrow.x = left() + (width - arrow.width())/2;
 				arrow.y = bottom()-arrow.height-1;
 				arrow.angle = bottom() == camera().height ? 0 : 180;
+				PixelScene.align(arrow);
 			}
 
 			@Override
@@ -433,6 +434,7 @@ public class Toolbar extends Component {
 								if (b.artifact() != null) items.add(0, b.artifact());
 								if (b.artifact2() != null) items.add(0, b.artifact2());
 								if (b.armor() != null) items.add(0, b.armor());
+								if (b.secondWep() != null) items.add(0, b.secondWep());
 								if (b.weapon() != null) items.add(0, b.weapon());
 							}
 

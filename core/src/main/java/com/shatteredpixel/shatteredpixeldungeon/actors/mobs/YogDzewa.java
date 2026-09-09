@@ -320,27 +320,31 @@ public class YogDzewa extends Mob {
 				}
 			}
 
-			//remove one beam if multiple shots would cause every cell next to the hero to be targeted
-			boolean allAdjTargeted = true;
-			for (int i : PathFinder.NEIGHBOURS9){
-				if (!affectedCells.contains(Dungeon.hero.pos + i) && Dungeon.level.passable[Dungeon.hero.pos + i]){
-					allAdjTargeted = false;
-					break;
+				//remove one beam if multiple shots would cause every cell next to the hero to be targeted
+				boolean allAdjTargeted = true;
+				for (int i : PathFinder.NEIGHBOURS9){
+					if (!affectedCells.contains(Dungeon.hero.pos + i) && Dungeon.level.passable[Dungeon.hero.pos + i]){
+						allAdjTargeted = false;
+						break;
+					}
 				}
-			}
-			if (allAdjTargeted){
-				targetedCells.remove(targetedCells.size()-1);
-			}
-			for (int i : targetedCells){
-				Ballistica b = new Ballistica(pos, i, Ballistica.WONT_STOP);
-				for (int p : b.path){
-					sprite.parent.add(new TargetedCell(p, needCrossBeam ? 0xFFFFFF : 0xFF0000));
-					affectedCells.add(p);
+				if (allAdjTargeted){
+					targetedCells.remove(targetedCells.size()-1);
 				}
-			}
 
-			//don't want to overly punish players with slow move or attack speed
-			spend(GameMath.gate(TICK, (int)Math.ceil(Dungeon.hero.cooldown()), 3*TICK));
+				//don't want to overly punish players with slow move or attack speed
+				float delay = GameMath.gate(TICK, (int)Math.ceil(Dungeon.hero.cooldown()), 3*TICK);
+
+				for (int i : targetedCells){
+					Ballistica b = new Ballistica(pos, i, Ballistica.WONT_STOP);
+					for (int p : b.path){
+						GameScene.targetedCell(p, needCrossBeam ? 0xFFFFFF : 0xFF0000, delay);
+						affectedCells.add(p);
+					}
+				}
+
+
+			spend(delay );
 			Dungeon.hero.interrupt();
 
 			abilityCooldown += Random.NormalFloat(MIN_ABILITY_CD, MAX_ABILITY_CD);

@@ -71,6 +71,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
+import com.shatteredpixel.shatteredpixeldungeon.levels.VaultLevel;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.AlchemyScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.CellSelector;
@@ -151,7 +152,8 @@ public class DriedRose extends Artifact {
 		if (ghostID != 0){
 			actions.add(AC_DIRECT);
 		}
-		if (isIdentified() && !cursed){
+		//cannot outfit a rose that's cursed, unIDed, or in the vault to prevent smuggling exploits
+		if (isIdentified() && !cursed && !(Dungeon.level instanceof VaultLevel)){
 			actions.add(AC_OUTFIT);
 		}
 		
@@ -270,11 +272,11 @@ public class DriedRose extends Artifact {
 	public int ghostHealth(int type){
 		switch (type){
 			case 1:
-				return 20 + 8*level();
+				return 40 + 10*level();
 			case 2:
-				return 30 + 12*level();
+				return 60 + 15*level();
 			case 3:
-				return 16 + 6*level();
+				return 32 + 7*level();
 		}
 		return 1;
 	}
@@ -438,7 +440,7 @@ public class DriedRose extends Artifact {
 		}
 		return 1;
 	}
-	
+
 	@Override
 	public void charge(Hero target, float amount) {
 		if (cursed || target.buff(MagicImmune.class) != null) return;
@@ -492,7 +494,7 @@ public class DriedRose extends Artifact {
 	public Wand ghostWand(){
 		return wand;
 	}
-	
+
 	public Armor ghostArmor(){
 		return armor;
 	}
@@ -751,6 +753,10 @@ public class DriedRose extends Artifact {
 			else                return null;
 		}
 
+		public void clearWeapon(){
+			if (rose != null) rose.weapon = null;
+		}
+
 		public Armor armor(){
 			if (rose != null){
 				if (rose.type() == 2)
@@ -818,7 +824,7 @@ public class DriedRose extends Artifact {
 			}
 			if (rose != null && rose.weapon2 != null)
 				acc = acc * 2/3;
-			
+
 			return acc;
 		}
 		
@@ -872,8 +878,15 @@ public class DriedRose extends Artifact {
 			int dmg = 0;
 			if (weapon() != null){
 				dmg += weapon().damageRoll(this);
-			} else {
-				dmg += Random.NormalIntRange(0, 5);
+				if (rose != null){
+					int excessStr = rose.ghostStrength()-weapon().STRReq();
+					if (excessStr > 0){
+						dmg += Random.NormalIntRange(0, excessStr);
+					}
+				}
+			} else if (rose != null) {
+				//1-5 to 1-10
+				dmg += Random.NormalIntRange(1, rose.ghostStrength()-8);
 			}
 			
 			return dmg;
@@ -1021,7 +1034,7 @@ public class DriedRose extends Artifact {
 
 			}
 		}
-		
+
 		public void sayAppeared(){
 			if (Dungeon.hero.buff(AscensionChallenge.class) != null){
 				yell( Messages.get( this, "dialogue_ascension_" + Random.IntRange(1, 6) ));
@@ -1127,7 +1140,7 @@ public class DriedRose extends Artifact {
 		public float iconFadePercent() { return Math.max(0, visualcooldown() / Wand.Charger.BASE_CHARGE_DELAY*3/4); }
 	}
 	public static class LightCooldown extends FlavourBuff{}
-	
+
 	private static class WndGhostHero extends Window{
 		
 		private static final int BTN_SIZE	= 32;
@@ -1200,15 +1213,15 @@ public class DriedRose extends Artifact {
 				});
 			}
 		}
-		
+
 		WndGhostHero(final DriedRose rose){
-			
+
 			IconTitle titlebar = new IconTitle();
 			titlebar.icon( new ItemSprite(rose) );
 			titlebar.label( Messages.get(this, "title") );
 			titlebar.setRect( 0, 0, WIDTH, 0 );
 			add( titlebar );
-			
+
 			RenderedTextBlock message =
 					PixelScene.renderTextBlock(rose.getTypeBasedString( "desc_window", rose.type(), rose.ghostStrength()), 6);
 			message.maxWidth( WIDTH );

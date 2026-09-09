@@ -54,6 +54,7 @@ public class AdrenalineDart extends TippedDart {
 			//do nothing to the hero when processing charged shot
 		} else if (attacker.alignment == defender.alignment){
 			Buff.prolong( defender, Adrenaline.class, Adrenaline.DURATION*powerMultiplier(type()));
+			return 0; //also skips on-hit fx like enchants for allies
 		} else {
 			Buff.prolong( defender, Cripple.class, Cripple.DURATION/2*powerMultiplier(type()));
 		}

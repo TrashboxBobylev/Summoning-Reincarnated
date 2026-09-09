@@ -441,6 +441,12 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 			charger = null;
 		}
 	}
+	
+	public Item level( int value) {
+		super.level( value );
+		updateLevel();
+		return this;
+	}
 
 	@Override
 	protected void onThrow(int cell) {
@@ -567,7 +573,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 			return null;
 		}
 	}
-	
+
 	@Override
 	public Item upgrade() {
 
@@ -1264,7 +1270,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
             charge = Math.round(charge);
             return charge;
         }
-		
+
 		public Wand wand(){
 			return Wand.this;
 		}

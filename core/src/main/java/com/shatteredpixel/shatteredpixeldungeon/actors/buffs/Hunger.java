@@ -94,8 +94,7 @@ public class Hunger extends Buff implements Hero.Doom, DamageSource {
 				|| target.buff(WellFed.class) != null
 				|| SPDSettings.intro()
 				|| target.buff(ScrollOfChallenge.ChallengeArena.class) != null
-				|| Dungeon.level instanceof AbyssChallengeLevel
-                || Dungeon.level instanceof VaultLevel){
+				|| Dungeon.level instanceof AbyssChallengeLevel){
 			return;
 		}
 //		if (Dungeon.hero.heroClass == HeroClass.WARRIOR && energy != -50 && energy < 0) energy *= 0.75f;

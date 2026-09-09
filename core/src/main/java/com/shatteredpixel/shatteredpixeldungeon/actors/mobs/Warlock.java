@@ -45,12 +45,11 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.WarlockSprite;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
-import com.watabou.utils.Callback;
 import com.watabou.utils.Random;
 
 import java.util.EnumSet;
 
-public class Warlock extends Mob implements Callback {
+public class Warlock extends Mob {
 	
 	private static final float TIME_TO_ZAP	= 1f;
 	
@@ -144,13 +143,6 @@ public class Warlock extends Mob implements Callback {
 			if (buff(Shrunken.class) != null) dmg = Math.round(dmg*0.6f);
 			dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
 
-			//logic for DK taking 1/2 damage from aggression stoned minions
-			if ( enemy.buff(StoneOfAggression.Aggression.class) != null
-					&& enemy.alignment == alignment
-					&& (Char.hasProp(enemy, Property.BOSS) || Char.hasProp(enemy, Property.MINIBOSS))){
-				dmg *= 0.5f;
-			}
-
 			enemy.damage( dmg, new DarkBolt(this, dmg) );
 			
 			if (enemy == Dungeon.hero && !enemy.isAlive()) {
@@ -165,11 +157,6 @@ public class Warlock extends Mob implements Callback {
 	
 	public void onZapComplete() {
 		zap();
-		next();
-	}
-	
-	@Override
-	public void call() {
 		next();
 	}
 

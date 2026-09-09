@@ -31,6 +31,10 @@ import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
 
 public class Alchemy extends Blob {
 
+	{
+		alwaysVisible = true;
+	}
+
 	protected int pos;
 
 	@Override

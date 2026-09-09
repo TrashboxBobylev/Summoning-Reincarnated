@@ -42,7 +42,7 @@ import com.watabou.utils.Random;
 
 import java.util.EnumSet;
 
-public class Bleeding extends Buff implements DamageSource {
+public class Bleeding extends Buff implements DamageSource, Buff.DOTbuff {
 
 	{
 		type = buffType.NEGATIVE;
@@ -80,10 +80,16 @@ public class Bleeding extends Buff implements DamageSource {
 	}
 
 	public void set( float level, Class source ){
+		//previously bleed would reduce them dmg, now it dmgs then reduces.
+		//this is essentially pre-calculating the first loss of bleed dmg.
+		//this helps the total incoming DOT calculation be more consistent
+		//avg. total damage is 3x the initial level, and becomes 4x the level with this pre-calc
+		level = Random.NormalFloat(level / 2f, level);
 		if (this.level < level) {
 			this.level = Math.max(this.level, level);
 			this.source = source;
 		}
+		if (target != null) target.needsIncomingDOTUpdate = true;
 	}
 
 	public void extend( float amount ) {
@@ -103,10 +109,8 @@ public class Bleeding extends Buff implements DamageSource {
 	@Override
 	public boolean act() {
 		if (target.isAlive()) {
-			
-			level = Random.NormalFloat(level / 2f, level);
+
 			int dmg = Math.round(level);
-			
 			if (dmg > 0) {
 				
 				target.damage( dmg, this );
@@ -130,10 +134,14 @@ public class Bleeding extends Buff implements DamageSource {
 				}
 				
 				spend( TICK );
-			} else {
+			}
+
+			level = Random.NormalFloat(level / 2f, level);
+			if (Math.round(level) <= 0){
 				detach();
 			}
-			
+			target.needsIncomingDOTUpdate = true;
+
 		} else {
 			
 			detach();
@@ -141,6 +149,12 @@ public class Bleeding extends Buff implements DamageSource {
 		}
 		
 		return true;
+	}
+
+	@Override
+	public void detach() {
+		target.needsIncomingDOTUpdate = true;
+		super.detach();
 	}
 
 	@Override
@@ -152,4 +166,11 @@ public class Bleeding extends Buff implements DamageSource {
     public EnumSet<DamageProperty> initDmgProperties() {
         return EnumSet.of(DamageProperty.CRUMBLING, DamageProperty.BLEEDING);
     }
+
+	@Override
+	public int totalIncomingDMG() {
+		//we reduce level after applying damage, otherwise this would be level*3
+		//note that we also reduce level when applying bleed initially, to simulate old behaviour
+		return Math.round(level*4f); //average damage
+	}
 }

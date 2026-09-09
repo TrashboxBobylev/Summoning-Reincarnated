@@ -25,18 +25,18 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault.treasure;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.VaultLaser;
-import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.DwarfToken;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
+import com.shatteredpixel.shatteredpixeldungeon.levels.VaultLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
 import com.watabou.utils.Rect;
 
-public class VaultLaserTreasureRoom extends VaultTreasureRoom{
+public class VaultLaserTreasureRoom extends VaultTreasureRoom {
 
 	@Override
 	public void paint(Level level) {
@@ -62,11 +62,12 @@ public class VaultLaserTreasureRoom extends VaultTreasureRoom{
 					Painter.set(level, sentry.pos, Terrain.PEDESTAL);
 					level.mobs.add(sentry);
 
+					//second row is only visual, to avoid double damage
 					sentry = new VaultLaser();
 					sentry.pos = x + level.width()*(areaTop+5);
 					sentry.laserDirs = new int[]{sentry.pos-level.width()};
-					sentry.curCooldown = right-x;
-					sentry.afterShotCooldown = 3;
+					sentry.curCooldown = Integer.MAX_VALUE;
+					sentry.afterShotCooldown = Integer.MAX_VALUE;
 					sentry.giveWarning = false;
 					Painter.set(level, sentry.pos, Terrain.PEDESTAL);
 					level.mobs.add(sentry);
@@ -83,11 +84,12 @@ public class VaultLaserTreasureRoom extends VaultTreasureRoom{
 					Painter.set(level, sentry.pos, Terrain.PEDESTAL);
 					level.mobs.add(sentry);
 
+					//second row is only visual, to avoid double damage
 					sentry = new VaultLaser();
 					sentry.pos = x + level.width()*(areaTop+5);
 					sentry.laserDirs = new int[]{sentry.pos-level.width()};
-					sentry.curCooldown = x-left;
-					sentry.afterShotCooldown = 3;
+					sentry.curCooldown = Integer.MAX_VALUE;
+					sentry.afterShotCooldown = Integer.MAX_VALUE;
 					sentry.giveWarning = false;
 					Painter.set(level, sentry.pos, Terrain.PEDESTAL);
 					level.mobs.add(sentry);
@@ -108,11 +110,12 @@ public class VaultLaserTreasureRoom extends VaultTreasureRoom{
 					Painter.set(level, sentry.pos, Terrain.PEDESTAL);
 					level.mobs.add(sentry);
 
+					//second row is only visual, to avoid double damage
 					sentry = new VaultLaser();
 					sentry.pos = areaLeft+5 + level.width()*(y);
 					sentry.laserDirs = new int[]{sentry.pos-1};
-					sentry.curCooldown = bottom-y;
-					sentry.afterShotCooldown = 3;
+					sentry.curCooldown = Integer.MAX_VALUE;
+					sentry.afterShotCooldown = Integer.MAX_VALUE;
 					sentry.giveWarning = false;
 					Painter.set(level, sentry.pos, Terrain.PEDESTAL);
 					level.mobs.add(sentry);
@@ -129,11 +132,12 @@ public class VaultLaserTreasureRoom extends VaultTreasureRoom{
 					Painter.set(level, sentry.pos, Terrain.PEDESTAL);
 					level.mobs.add(sentry);
 
+					//second row is only visual, to avoid double damage
 					sentry = new VaultLaser();
 					sentry.pos = areaLeft+5 + level.width()*(y);
 					sentry.laserDirs = new int[]{sentry.pos-1};
-					sentry.curCooldown = y-top;
-					sentry.afterShotCooldown = 3;
+					sentry.curCooldown = Integer.MAX_VALUE;
+					sentry.afterShotCooldown = Integer.MAX_VALUE;
 					sentry.giveWarning = false;
 					Painter.set(level, sentry.pos, Terrain.PEDESTAL);
 					level.mobs.add(sentry);
@@ -145,24 +149,22 @@ public class VaultLaserTreasureRoom extends VaultTreasureRoom{
 
 		Painter.fill(level, itemPlace.left, itemPlace.top, itemPlace.width()+1, itemPlace.height()+1, Terrain.EMPTY_SP);
 		int treasurePos = level.pointToCell(Random.element(itemPlace.getPoints()));
-		Item treasureItem = Generator.randomUsingDefaults(Generator.Category.WEP_T3);
-		if (treasureItem.cursed){
-			treasureItem.uncurse();
-			if (((MeleeWeapon) treasureItem).hasCurseEnchant()){
-				((MeleeWeapon) treasureItem).enchant(null);
-			}
-		}
-		//not true ID
-		treasureItem.levelKnown = treasureItem.cursedKnown = true;
+		Item treasureItem = ((VaultLevel)level).createEquipment(1);
 		level.drop(treasureItem, treasurePos).type = Heap.Type.CHEST;
 
-		treasureItem = level.findPrizeItem();
-		if (treasureItem != null){
-			do {
-				treasurePos = level.pointToCell(Random.element(itemPlace.getPoints()));
-			} while (level.heaps.get(treasurePos) != null);
-			level.drop(treasureItem, treasurePos);
+		treasureItem = ((VaultLevel) level).findT2SolveItem();
+		if (treasureItem == null){
+			treasureItem = ((VaultLevel)level).createConsumabe(1);
 		}
+		do {
+			treasurePos = level.pointToCell(Random.element(itemPlace.getPoints()));
+		} while (level.heaps.get(treasurePos) != null);
+		level.drop(treasureItem, treasurePos);
+
+		do {
+			treasurePos = level.pointToCell(Random.element(itemPlace.getPoints()));
+		} while (level.heaps.get(treasurePos) != null);
+		level.drop(new DwarfToken(), treasurePos);
 
 	}
 }
