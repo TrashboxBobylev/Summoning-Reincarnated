@@ -96,7 +96,7 @@ public class MirrorOfFates extends Artifact {
             case 1:
                 return ch == Dungeon.hero && ch.buff(MirrorShield.class) != null;
             case 2:
-                return Dungeon.hero.buff(MirrorShield.class) != null;
+                return ch.alignment == Char.Alignment.ALLY && Dungeon.hero.buff(MirrorShield.class) != null;
             default:
                 return false;
         }
