@@ -24,54 +24,13 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.ui.changelist;
 
-import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
-import com.shatteredpixel.shatteredpixeldungeon.items.Ropes;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScoutArmor;
-import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
-import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
-import com.shatteredpixel.shatteredpixeldungeon.items.bombs.ChaoticBomb;
-import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Firebomb;
-import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
-import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfMysticProwess;
-import com.shatteredpixel.shatteredpixeldungeon.items.quest.UpgradeClump;
-import com.shatteredpixel.shatteredpixeldungeon.items.spells.EnchantParchment;
-import com.shatteredpixel.shatteredpixeldungeon.items.staffs.BlasterStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.staffs.FroggitStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.staffs.GnollHunterStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.staffs.GooStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.staffs.GrayRatStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.staffs.MagicMissileStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.staffs.RoboStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.staffs.SheepStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.staffs.WizardStaff;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Slingshot;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Cleaver;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.RunicBlade;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop.StoneHammer;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.ChangesScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.AbyssalSpawnerSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.AttunementConstructSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.DogSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.MysteryMerchantSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.RatKingSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.RatSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.YogSprite;
-import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIcon;
-import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
-import com.shatteredpixel.shatteredpixeldungeon.ui.HeroIcon;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
-import com.shatteredpixel.shatteredpixeldungeon.ui.TalentIcon;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Window;
-import com.watabou.noosa.Image;
 
 import java.util.ArrayList;
 
@@ -93,36 +52,36 @@ public class vReInc_Changes {
         changes.hardlight(0xCCCCCC);
         changeInfos.add(changes);
 
-        changes.addButton( new ChangeButton(Icons.get(Icons.DIFFICULTY), "Game Mode Expansion",
+        changes.addButton( new ChangeButton(SummIcons.VRSOON_DIFFICULTY, "Game Mode Expansion",
                 "One of purposes for the game mode menu revamp was to provide the groundwork for eventual game mode expansion, with providing a \"hard mode\" variant for each existing mode.\n\n" +
                         "To play them, you will need to select a special conduct, that enables harder versions of the mode, and beat the game to permanently unlock it in the menu.\n\n" +
                         "Increased Difficulty game mode is planned to come back in this, alongside with other ideas, like Extreme Gauntlet and expy of YAPD's Impossible mode."
         ));
 
-        changes.addButton( new ChangeButton(Icons.get(Icons.WAND), "New Wands and Artifacts",
+        changes.addButton( new ChangeButton(SummIcons.V120_WAND_OF_CONJURATION, "New Wands and Artifacts",
                 "Some of Legacy Summoning's wands still haven't been reimplemented yet, like Crystal Bullet, Conjuration and Stars. However, Evan has announced some of new wands in 4.X update cycle on Patreon, which will be adapted to use item types and will potentially be an engine to bring old wands back.\n\n" +
                         "Evan also announced some new rings coming soon as well. I do plan to rework them into artifacts, depending on what ring comes up first, and maybe even reuse older sprites for artifacts, that weren't ported in 0.7.0. They will have different functionality, of course."
         ));
 
-        changes.addButton( new ChangeButton(new RatKingSprite(), "Rat Kingdom",
+        changes.addButton( new ChangeButton(SummIcons.VRSOON_RAT_KING, "Rat Kingdom",
                 "One major shakedown I want to provide is some kind of alternate region. In old Evan notes, the alts would basically replace the normal region, with no way to go into main route once entered.\n" +
                         "Therefore, Rat Kingdom would replace Prison and be accessible by using Worn Key in Rat King's room instead of an actual exit.\n\n" +
                         "Alongside with some hilarious rat mutants, this area would feature Rat King as actual region boss, probably with a significantly nerfed AI of Rat King Adventure's Rat King boss. On defeat, he would provide random _professions_ instead of normal subclass. And maybe actually balanced Rat King class."
         ));
 
-        changes.addButton( new ChangeButton(Icons.get(Icons.PROF), "Professions",
+        changes.addButton( new ChangeButton(SummIcons.VRSOON_PROFESSIONS, "Professions",
                 "A major hurdle on reimplementing Legacy Summoning's talent system in any way is how overly complicated each tier 3 talent is, having many loosely connected effects and synergies with other talents, rivaling subclasses from base game in terms of gameplay changes.\n\n" +
                         "I couldn't figure out, how to overcome this problem, until very recently, and the solution is... just turn those big talents into subclasses. But where they would fit?\n" +
                         "The Rat King boss's reward mentioned before would be a choice between 3 random \"professions\", that do not depend on a hero and will be different every run. Each profession would embody one or several of Legacy Summoning talents, with actual smaller scale talents to boot."
         ));
 
-        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.ARMOR_CLOTH), "Types for Equipment",
+        changes.addButton(new ChangeButton(SummIcons.VRSOON_CLOTH_ARMOR, "Types for Equipment",
                 "The only types of equipment, that still need upgrades to be improved, are weapons and armor; therefore, implementing them as soon as possible will complete the item type system.\n\n" +
                         "Weapons will likely be reduced in item count or be significantly reworked to provide the space for varied items. Also, they will be sometimes augmented by default, and not with just heavy and light augments!\n\n" +
                         "Armor will get the same treatments, with existing Legacy types being reevaluated for modern meta. However, Evan announced variants of armor coming to Shattered soon, with new tradeoff system, so I am holding on to reworking armor before said armor update comes to not get my own ideas invalidated."
         ));
 
-        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.WAND_MAGIC_MISSILE), "Wand Quests",
+        changes.addButton(new ChangeButton(ChangeIcons.V063_MAGICMISSILE, "Wand Quests",
                 "Another wand-related idea I want to try is wand quests, that will become available after Tengu is defeated and Wandmaker's quest is done. You will be able to follow the Wandmaker's trail into a new level, themed after a wand that you didn't pick.\n\n" +
                         "The reward for such quest would be a special edition of said wand, being able to switch its type without usage of type manager, but hefty cooldown. Alternatively, you could get said effect on any wand you desire, but with high resource cost."
         ));
@@ -139,7 +98,7 @@ public class vReInc_Changes {
                         "_-_ 45+ days after Reincarnated 0.7.0"
         ));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.BUFFS), "Balance Changes",
+        changes.addButton(new ChangeButton(ChangeIcons.V23_ARROWS, "Balance Changes",
                 "_-_ Buffed _Kunai III_:\n" +
                         "   _-_ Can now be used with trickshots.\n\n" +
                         "_-_ Nerfed _Trident I_:\n" +
@@ -179,7 +138,7 @@ public class vReInc_Changes {
                     "   _-_ Changed values from _0.2/0.4/0.6 turns_ to _1.5/3/4.5 turns_ of value."
                 ));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.CHAOS), "Game Mode changes",
+        changes.addButton(new ChangeButton(SummIcons.VR070_CHAOS, "Game Mode changes",
                 "_Project Paradox_:\n" +
                         "_-_ Reduced the max amount of rooms from 2x to 1.4x.\n" +
                         "_-_ Room sizes are now uniformly random.\n" +
@@ -196,7 +155,7 @@ public class vReInc_Changes {
                         "   _-_ Seeds grab bag can replace runestones grab bag with 1/2 chance."
         ));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+        changes.addButton(new ChangeButton(ChangeIcons.V081_MISC, Messages.get(ChangesScene.class, "misc"),
                 "_-_ Silky Quiver no longer creates a fake enemy, when targeting it at empty space.\n" +
                         "_-_ Added text for Mirror of Fates' shielding on desktop.\n" +
                         "_-_ Reversed the duration visual for Summoning's cooldowns to match Shattered's.\n" +
@@ -208,7 +167,7 @@ public class vReInc_Changes {
                         "_-_ Magical attacks now trigger minions with protective behavior."
         ));
 
-        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+        changes.addButton(new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
                 "_Fixed the following bugs:_\n" +
                         "_-_ Crash with selecting a random armor ability for the Adventurer\n" +
                         "_-_ Crash with reading about Spirit Bow's stats in the journal\n" +
@@ -270,7 +229,7 @@ public class vReInc_Changes {
                         "This was supposed to be bugfix update, but it got too far..."
         ));
 
-        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered Ports",
+        changes.addButton( new ChangeButton(ChangeIcons.V074_SHPX, "Shattered Ports",
                 "Implemented Shattered v3.3.8 changes.\n\n" +
                         "_-_ Conducts and game mode can be randomized as well.\n" +
                         "_-_ Mysterious Merchant's talent services invalidate random talents badge.\n" +
@@ -281,7 +240,7 @@ public class vReInc_Changes {
         changes.hardlight(CharSprite.NEUTRAL);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+        changes.addButton(new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
                 "_Fixed the following bugs:_\n" +
                         "_-_ DM-150 III freezing the game, if affected by the spells with Energized Support talent\n" +
                         "_-_ Typo in Silky Quiver's Deadly Mark description\n" +
@@ -306,14 +265,14 @@ public class vReInc_Changes {
         changes.hardlight(CharSprite.POSITIVE);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.MIRROR), "Artifact Rework",
+        changes.addButton(new ChangeButton(SummIcons.V123_MIRROR_OF_FATES, "Artifact Rework",
                 "_-_ Now use item types system, providing player with 3 variants of same artifact, ranging from mechanical tweaks to brand new effects, like chalice's blood wraiths and spellbook's mob summoning!\n\n" +
                         "_-_ The player can now equip three artifacts; the same kind of artifact still can't be equipped.\n\n" +
                         "_-_ Removed the uniqueness restriction for dropped artifacts; duplicates will have different item type from artifacts you already own, however.\n\n" +
                         "_-_ Added 5 new artifacts from Legacy Summoning: _Subtilitas Sigil_, _Mirror of Fates_, _Emeradic Battery_ (previously called Fuel Container), _Guardian's Stone_ and _Silky Quiver_. Each one received visual refinements and balance changes over old version."
         ));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.RANDOM_CONDUCT), "Game Modes and Conducts",
+        changes.addButton(new ChangeButton(SummIcons.VR070_RANDOM_CONDUCT, "Game Modes and Conducts",
                 "_-_ Added one new game mode: _Distorted Rulebook_, which picks a random conduct for hero to follow on each floor.\n\n" +
                         "_-_ Completely redesigned the game mode selection menu, focusing on taking less screen space and allowing to keep playing the same game mode over multiple runs.\n\n" +
                         "_-_ Added two new conducts:\n" +
@@ -321,13 +280,13 @@ public class vReInc_Changes {
                         "   _*_ _Candice's Rulebook_ is based on community member _doemaxxing_'s ruleset, providing additional challenge over classic 9chal."
         ));
 
-        changes.addButton(new ChangeButton(new TalentIcon(Talent.EXPLOSIVE_PRIDE), "Talent Replacements",
+        changes.addButton(new ChangeButton(SummIcons.VR070_EXPLOSIVE_PRIDE, "Talent Replacements",
                 "_-_ Replaced _Thief's Intuition_ with _Acuteness_, which provides universal ID speed boost.\n\n" +
                         "_-_ Replaced _Nature's Aid_ with _Scout's Barrier_, which gives shielding after successful Super-Shot.\n\n" +
                         "_-_ Replaced _Enhanced Rings_ with _Explosive Pride_, which boosts the chances for enhanced bombs to appear and adds a chance for bombs to not disappear after exploding."
         ));
 
-        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.EXOTIC_RAIDO), "Other Replacements",
+        changes.addButton(new ChangeButton(SummIcons.VR070_EXOTIC_RAIDO, "Other Replacements",
                     "Replaced Scroll of Siren Song with _Scroll of Attunement_, a scroll that buffs nearby allies with Empowered effect."
         ));
 
@@ -335,21 +294,21 @@ public class vReInc_Changes {
         changes.hardlight(CharSprite.WARNING);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.RING_GARNET), "Ring Removal",
+        changes.addButton(new ChangeButton(ChangeIcons.V061_RING_GARNET, "Ring Removal",
                 "_-_ Completely removed rings from the item generation. The previous ring sources now only output artifacts.\n\n" +
                         "_-_ Already equipped rings will be unequipped on loading the save and be unequippable.\n\n" +
                         "_-_ Ambitious Imp now gives upgraded artifact instead of an upgraded ring.\n\n" +
                         "_-_ Scroll of Divination will no longer identify ring types."
         ));
 
-        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.SOMETHING), "Other Removals",
+        changes.addButton(new ChangeButton(SummIcons.VR070_PLACEHOLDER, "Other Removals",
                 "Removed the items, whose roles are now satisfied by new artifacts or challenges:\n\n" +
                         "_-_ Petrified Seed (T2 Sandals of Nature).\n" +
                         "_-_ 13-Leaf Clover (Unwanted Clover conduct).\n" +
                         "_-_ Wondrous Resin (T3 Emeradic Battery)."
         ));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.CHAOS), "Game Mode changes",
+        changes.addButton(new ChangeButton(SummIcons.VR070_CHAOS, "Game Mode changes",
                 "_Project Paradox_:\n" +
                         "_-_ No longer \"taints\" the runs started after it with random item generation.\n" +
                         "_-_ Restored the equal odds aspect for item generation.\n\n" +
@@ -366,7 +325,7 @@ public class vReInc_Changes {
                         "   _-_ Amulet of Yendor will persist in the shop until it is picked up."
         ));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+        changes.addButton(new ChangeButton(ChangeIcons.V081_MISC, Messages.get(ChangesScene.class, "misc"),
                 "_-_ Froggit Staff can no longer be transmuted.\n" +
                         "_-_ Migrated to new crash handler code and made it no longer apply in Google Play-based builds.\n" +
                         "_-_ Buff duration effect now applies to more Summoning's effects.\n" +
@@ -378,7 +337,7 @@ public class vReInc_Changes {
                         "_-_ Added a class armor for Adventurer, if he somehow gets Ratmogrify or other abilities."
         ));
 
-        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+        changes.addButton(new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
                 "_Fixed the following bugs:_\n" +
                         "_-_ DM-150's recharge being \"instant\" depending on how strong it is\n" +
                         "_-_ Summon staffs using wrong item pool, when transmutated\n" +
@@ -450,27 +409,27 @@ public class vReInc_Changes {
                         "_-_ 123 days after Reincarnated 0.6.0"
         ));
 
-        changes.addButton(new ChangeButton(Conducts.Conduct.COINFLIP.getIcon(), "New Conducts",
+        changes.addButton(new ChangeButton(SummIcons.VR062_COINFLIP, "New Conducts",
                 "Added two new conducts:\n\n" +
                         "_-_ _Double or Nothing_ makes all hit checks depend on coin flip, either it hit or it doesn't. This includes wands and surprise attacks.\n" +
                         "_-_ _Chambers of Gang War_ makes all mobs spawn as horde leaders, creating followers for every foe."
         ));
 
-        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.TYPE_MANAGER), "Ranking -> item type",
+        changes.addButton(new ChangeButton(SummIcons.VR030_TYPE_MANAGER, "Ranking -> item type",
                 "Changed all mentions of Summoning-exclusive rank system with item type system, therefore rank manager is now type manager and item's ranks are now item's types.\n\n" +
                         "\"Ranking\" system was initial attempt to distance the gameplay system from word \"tier\", as it was used in Project ECLISE, due to it being already used in Pixel Dungeon as measure for item's power.\n" +
                         "However, it didn't really do its job, replacing the word with its synonym, therefore still meaning that some \"ranks\" are better than others. But I only realized the extend of this very recently and decided to change the word again.\n" +
                         "The new term, type, conveys the essence of system far better and still allows for shorthand of T1/T2/T3 to be used (just meaning type 1 instead of tier 1)."
         ));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+        changes.addButton(new ChangeButton(ChangeIcons.V081_MISC, Messages.get(ChangesScene.class, "misc"),
                 "_-_ Bosses are now immune to HP reduction effects, like one from Precise Strike talent.\n" +
                         "_-_ Summoning staffs can now be transmutated.\n" +
                         "_-_ Removed legacy item type info screen and replaced it with catalog's tabbed representation.\n" +
                         "_-_ Made minions benefit from Silent Steps talent."
         ));
 
-        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+        changes.addButton(new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
                 "_Fixed the following bugs:_\n" +
                         "_-_ Corruption missing its deferred damage effect\n" +
                         "_-_ Crash on using Potion of Mastery on armor\n" +
@@ -490,12 +449,12 @@ public class vReInc_Changes {
                         "_-_ 76 days after Reincarnated 0.6.0"
                 ));
 
-        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered Ports",
+        changes.addButton( new ChangeButton(ChangeIcons.V074_SHPX, "Shattered Ports",
                 "Implemented Shattered v3.2.5 changes.\n\n" +
                         "_-_ Finally fixed the issue with fullscreen/navigation bar.\n" +
                         "_-_ Moved mode/conduct icon to be under player avatar to account for new UI."));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+        changes.addButton(new ChangeButton(ChangeIcons.V081_MISC, Messages.get(ChangesScene.class, "misc"),
                 "_-_ Added placeholder-ish Duelist ability to Adventurer's stabber.\n" +
                         "_-_ Refactored conduct choosing screen to be more stable.\n" +
                         "_-_ Reimplemented ability to choose multiple conducts through Balanced Conducts settings option.\n" +
@@ -506,7 +465,7 @@ public class vReInc_Changes {
                         "_-_ Added the Abyss's mobs to Gauntlet Mode's post-game."
                         ));
 
-        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+        changes.addButton(new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
                 "_Fixed the following bugs:_\n" +
                         "_-_ Dried Rose not being usable in Abyssal Crusade mode\n" +
                         "_-_ Holy Aura II's shielding going into infinity\n" +
@@ -530,7 +489,7 @@ public class vReInc_Changes {
                         "Trying to bring those waiting times lower and lower...\n" +
                         "This release implements ranks for thrown weapons and wands and making them automatically stale with their respective stats."));
 
-        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered Ports",
+        changes.addButton( new ChangeButton(ChangeIcons.V074_SHPX, "Shattered Ports",
                 "Implemented Shattered v3.2.1 changes.\n\n" +
                         "_-_ Some of thrown weapon nerfs have been reverted or negated by Summoning's own rework.\n" +
                         "_-_ Added Summoning's effects to new floating text icon's acc/eva showcase.\n" +
@@ -540,7 +499,7 @@ public class vReInc_Changes {
         changes.hardlight(CharSprite.POSITIVE);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.WAND_MAGIC_MISSILE), "Wand Rework",
+        changes.addButton(new ChangeButton(ChangeIcons.V063_MAGICMISSILE, "Wand Rework",
                 "_-_ Are no longer upgradeable. Instead they scale with player's attunement stat, +1 old system's level per 1 attunement. Offensive wand's damage has been slightly buffed to compensate for this.\n\n" +
                         "_-_ Now can be equipped as melee weapon with Mage class to get the same effects as Mage's staff. Mage's staff has been fully removed from the game, with old saves getting staff's wand after being loaded.\n\n" +
                         "_-_ Now use same ranking system as summoning staffs, essentially creating 3 variants of same item per each wand, including Battlemage's abilities. Some wand's ranks were ported straight from Legacy version, while other's have brand new effects, aiming at providing different experience from \"stronger wand, longer recharge\".\n\n" +
@@ -549,7 +508,7 @@ public class vReInc_Changes {
                         "_-_ Replaced _Wand Preservation_ talent with _Fighting Wizardry_ talent, which increases effective power of next wand's zap with each melee hit.\n\n" +
                         "_-_ Arcane Resin is now always made in quantity of 2 and boosts attunement power of wand instead of its level."));
 
-        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.JAVELIN), "Thrown Weapon Rework",
+        changes.addButton(new ChangeButton(SummIcons.VR060_JAVELIN, "Thrown Weapon Rework",
                 "_-_ Are no longer upgradeable. Instead they scale with player's strength stat, +1.5 old system's level per 2 strength.\n\n" +
                         "_-_ Are no longer divided by tiers and are all usable from 10 starting strength. The generation of thrown weapons has been changed to feature all of them in same pool regardless of progression.\n\n" +
                         "_-_ Changed the durability gain from levels to be a flat number.\n\n" +
@@ -559,7 +518,7 @@ public class vReInc_Changes {
                         "_-_ Replaced _Shared Upgrades_ talent with _Olympic Dedication_, which rewards Sniper for attacking with thrown weapons rapidly with special attack boost.\n\n" +
                         "_-_ Liquid Metal is now always made and consumed in quantity of 10."));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.RANDOM_HERO), "New Game Modes and Conducts",
+        changes.addButton(new ChangeButton(SummIcons.VR060_RANDOM_HERO, "New Game Modes and Conducts",
                 "Added two new gamemodes:\n\n" +
                         "_-_ _Platinum Champion_ now replaces old challenge system, allowing to experience Shattered's 9 challenge runs in single package.\n\n" +
                         "_-_ _Procedurally Generated Protagonist_ shuffles around most of hero's aspects, like starting equipment, talents and what subclasses and armor abilities they will get.",
@@ -570,13 +529,13 @@ public class vReInc_Changes {
                                 "And one has been reworked:\n\n" +
                                 "_-_ _Starving for Items_ now turns some of equipment into gold and consumables into energy, while providing a chance for gold to be reduced to 1."));
 
-        changes.addButton(new ChangeButton(new ItemSprite(new ElixirOfMysticProwess()), "New/Reworked Items",
+        changes.addButton(new ChangeButton(SummIcons.VR060_MYSTIC_PROWESS, "New/Reworked Items",
                 "_-_ Added the _Elixir of Mystic Prowess_, an item that increases attunement power of selected power by 2. It is made from Elixir of Attunement.\n\n" +
                         "_-_ Tridents were reworked to be themed around water and being heavy, taking 2 turns to throw.\n\n" +
                         "_-_ Reworked Scroll of Passage into _Scroll of Discord_, which teleports all enemies away into void, but spawns new ones to replace them in distance.\n\n" +
                         "_-_ Scroll of Antimagic has been buffed to inflict anti-magic effect on enemies, which makes them unable to use their magical abilities."));
 
-        changes.addButton(new ChangeButton(new MysteryMerchantSprite(), "New Dungeon Additions",
+        changes.addButton(new ChangeButton(SummIcons.VR060_MYSTERY_MERCHANT, "New Dungeon Additions",
                 "_-_ Reimplemented floor 20's shopkeeper sprite from Legacy version as brand new NPC, _mysterious merchant_! He can be met in every region behind secret door and offers the ability to either subtract a point from a talent to get it back, or transmute a talent into another talent. This costs 500 gold at the start plus 250 gold per each use.\n\n" +
                         "_-_ Reimplemented gnoll tribe's room, spectral shaman's room and bombs maze room. All of them were slightly polished or changed for the newer Shattered's design."));
 
@@ -584,12 +543,12 @@ public class vReInc_Changes {
         changes.hardlight(CharSprite.WARNING);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(new YogSprite(), "Yog-Dzewa's fight",
+        changes.addButton(new ChangeButton(ChangeIcons.V080_YOG, "Yog-Dzewa's fight",
                 "_-_ Added more rippers and attunement constructs into Yog-Dzewa's summon list.\n" +
                         "_-_ Significantly reduced eradication walls spam during the final phase.\n" +
                         "_-_ The Yog-Dzewa's arena now shrinks in size with each fist summoned."));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+        changes.addButton(new ChangeButton(ChangeIcons.V081_MISC, Messages.get(ChangesScene.class, "misc"),
                 "_-_ Scaled down _Abyssal Crusade_'s initial level by reducing amount of treasure bags and rooms, but increasing amount of items they give.\n" +
                         "_-_ Summoning staffs now have random rank instead of 50% to get either rank II or III.\n" +
                         "_-_ Imported Abyss tileset improvements from RKA.\n" +
@@ -602,7 +561,7 @@ public class vReInc_Changes {
                         "_-_ Elemental Blast now works with any wand in inventory, not just equipped one.\n" +
                         "_-_ Ranked items are now affected by degrade debuff."));
 
-        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+        changes.addButton(new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
                 "Fixed the following bugs:\n" +
                         "_-_ Shop weapons being one tier off from their placement\n" +
                         "_-_ Good Night conduct making allies go to sleep instead of returning to hero\n" +
@@ -624,7 +583,7 @@ public class vReInc_Changes {
         changes.hardlight(CharSprite.POSITIVE);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.TALENT), "Talent Changes",
+        changes.addButton(new ChangeButton(ChangeIcons.V090_TALENTS, "Talent Changes",
                 "_-_ Added metamorphosis effect for _Attuned Meal_ talent.\n" +
                         "_-_ _Manaburn_ talent no longer triggers above 50% mana.\n" +
                         "_-_ Star Blazing spell can no longer damages the hero even with _Concentrated Support_ talent active."));
@@ -644,13 +603,13 @@ public class vReInc_Changes {
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+        changes.addButton(new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
                 "Fixed the following bugs:\n" +
                         "_-_ Being impossible to descend past depth 26\n" +
                         "_-_ Attunement constructs not existing in Abyss\n" +
                         "_-_ Demon halls not having any visibility in Large Enlargement"));
 
-        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.BOOK), "Conjurer spells",
+        changes.addButton(new ChangeButton(SummIcons.VR040_CONJURER_BOOK, "Conjurer spells",
                 "_Star Blazing:_\n" +
                         "_-_ Increased mana cost from _1/3/8_ to _1/4/10_.\n" +
                         "_-_ No longer changes damage with ranks.\n" +
@@ -706,7 +665,7 @@ public class vReInc_Changes {
                             "_-_ Nerfed _Soul's Burst_'s damage multiplier from _150%/200%_ (was supposed to be 100%/150%) to _75%/125%_."
         ));
 
-        changes.addButton( new ChangeButton(Icons.get(Icons.GAUNTLET), "Gauntlet Mode",
+        changes.addButton( new ChangeButton(SummIcons.VR053_GAUNTLET, "Gauntlet Mode",
                 "_-_ Increased gold payout from _3x-4x_ to _7x-10x_.\n\n" +
                         "_-_ The shop no longer spawns identification consumables.\n\n" +
                         "_-_ Fixed Tengu's Mask not appearing in the shop.\n\n" +
@@ -714,7 +673,7 @@ public class vReInc_Changes {
                         "_-_ Added rings and rank managers into the shop.\n\n" +
                         "_-_ Reduced the chance of extra, class-focused equipment from _50%_ to _25%_."));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+        changes.addButton(new ChangeButton(ChangeIcons.V081_MISC, Messages.get(ChangesScene.class, "misc"),
                 "_-_ Removed custom minion following code to hopefully make them more obedient.\n" +
                         "_-_ Scrolls of Retribution and Psionic Blast now deal 60% less damage to allies.\n" +
                         "_-_ Made targeting visual less intense on game's performance.\n" +
@@ -735,7 +694,7 @@ public class vReInc_Changes {
                         "_-_ Made Fire Elementals vulnerable to frostburn.\n" +
                         "_-_ Hero being attacked now aggravates protective minions even if attack was dodged."));
 
-        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+        changes.addButton(new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
                 "Fixed the following bugs:\n" +
                         "_-_ Attunement and laboratory rooms sometimes not appearing in the run on non-standard chapter sizes\n" +
                         "_-_ Conjurer and Adventurer using warrior seal as icon in hero info window\n" +
@@ -756,7 +715,7 @@ public class vReInc_Changes {
                         "At least it is not longer wait, than the previous update, right?\n" +
                         "This release mainly reintroduces game modes and fully completes Conjurer, giving armor abilities and remains item."));
 
-        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered Ports",
+        changes.addButton( new ChangeButton(ChangeIcons.V074_SHPX, "Shattered Ports",
                 "Implemented Shattered v3.0.2 changes.\n\n" +
                         "_-_ Cleric is dead. Don't ask why, Conjurer is happy enough of a class, right?"));
 
@@ -764,7 +723,7 @@ public class vReInc_Changes {
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+        changes.addButton(new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
                 "Fixed the following bugs:\n" +
                         "_-_ Sheep minions softlocking the game by their attack animation"));
 
@@ -772,7 +731,7 @@ public class vReInc_Changes {
         changes.hardlight(CharSprite.POSITIVE);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(HeroSprite.avatar(HeroClass.CONJURER, 3), HeroClass.CONJURER.title(),
+        changes.addButton(new ChangeButton(SummIcons.VR050_CONJURER_HEROARM, HeroClass.CONJURER.title(),
                 "Implemented armor abilities for Conjurer!\n\n" +
                         "_-_ _Ascension_ allows Conjurer to transcend, turning his mana power into large amount of shielding, with possibility of empowering spells and minions with it.\n\n" +
                         "_-_ _Power of Triad_ gives Conjurer ability to call for the trio of powerful allies, each having different abilities, way to summon and niche.\n\n" +
@@ -780,7 +739,7 @@ public class vReInc_Changes {
                 "_-_ Added a remains item: _Spell Page_! This remains summons simple ally Attunement Construct on usage, that scales its power with depth.\n\n" +
                         "_-_ Added a brand new robe appearance, when armor ability is available."));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.STAIRS), "Game Modes",
+        changes.addButton(new ChangeButton(SummIcons.V122_GAME_MODE, "Game Modes",
                 "Reimplemented game modes, the sets of rules that you pick every run!\n\n" +
                         "This build has 7 game modes (the future of the rest remains uncertain):\n" +
                         "_-_ _Fast Adventure_ and _Large Enlargement_ have been tweaked to be more consistent and less invasive on the codebase, but the gameplay should be the same.\n\n" +
@@ -789,7 +748,7 @@ public class vReInc_Changes {
                         "_-_ _Gauntlet Mode_ have been modernized, with new infrequent special and alchemy rooms, new economy and more integrated locked floor mechanic.\n\n" +
                         "_-_ Added a brand new _Abyssal Crusade_ mode, where you start in almost-Abyss! Your character is set to max power and is given special loot bags in shop and across the level to full prepare for the invasion into depths of Abyss."));
 
-        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.CROW_STAFF), "New summon weapons",
+        changes.addButton(new ChangeButton(SummIcons.VR050_CROW_STAFF, "New summon weapons",
                 "Added 2 new summoning staffs:\n\n" +
                         "_-_ _Ravenous Branch_ is a tier 3 weapon, that summons a dark crow. The crows are adept at support, making other allies deal more damage, scouting or corrupting enemies depending on a rank.\n\n" +
                         "_-_ _Frost Elemental Staff_ is a returning tier 4 weapon, that summons a frost elemental. They received a new look and new tiering behavior.",
@@ -797,7 +756,7 @@ public class vReInc_Changes {
                         "_Tribal Cane_ adds flat bonus damage, while _Ritual Gong_ adds a multiplier. Their effects can stack together for even more power!\n\n" +
                         "Their Duelist abilities allows to give reverse tag to allies, making them take less damage instead of dealing more damage."));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.CONDUCTS_COLOR), "New conduct effects",
+        changes.addButton(new ChangeButton(SummIcons.VR020_CONDUCTS, "New conduct effects",
                 "Several conducts had their effects reinvented:\n\n" +
                         "_-_ _Curse of the Muggle_ now replaces wand zaps with confetti blasts and minions with chickens instead of disabling them altogether.\n\n" +
                         "_-_ _Anti-Protein Campaign_ have returned with a new effect: it now makes all strength pots essentially temporary instead of removing them.\n\n" +
@@ -807,7 +766,7 @@ public class vReInc_Changes {
         changes.hardlight(CharSprite.WARNING);
         changeInfos.add(changes);
 
-        changes.addButton( new ChangeButton(Icons.DISPLAY.get(), "Visual & Interface Changes",
+        changes.addButton( new ChangeButton(ChangeIcons.V081_DISPLAY_VERT, "Visual & Interface Changes",
                 "_-_ Mana indicator now shows Conjurer's spell book. Spell book has been removed from quickslots due to redundancy.\n\n" +
                         "_-_ Conjurer's spells can now be made favorite to be used from action indicator button.\n\n" +
                         "_-_ Resprited title banner to fit with Shattered's new title art.\n\n" +
@@ -817,7 +776,7 @@ public class vReInc_Changes {
                         "_-_ Minions and Underground Paradise now switch to idling animation if not moving for past turn, imitating hero's behavior.\n\n" +
                         "_-_ Made all equipment with range of numbers show the average number too."));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+        changes.addButton(new ChangeButton(ChangeIcons.V081_MISC, Messages.get(ChangesScene.class, "misc"),
                 "_-_ Reimplemented Yog-Dzewa's eradication wall attack, with new visual and more frequent chance of occurring.\n" +
                         "_-_ Made targeting priority system work properly, so minions and other allies are actually prioritized by enemy attacks over player.\n" +
                         "_-_ Tweaked healing gas to heal for flat instead of depending on target's health, reduced the amount to compensate.\n" +
@@ -830,7 +789,7 @@ public class vReInc_Changes {
                         "_-_ Dungeon of Doom talent no longer upgrades generating thrown weapons.\n" +
                         "_-_ Reduced Arcane Nuke's fuse time from 8 to 4 turns."));
 
-        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+        changes.addButton(new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
                 "Fixed the following bugs:\n" +
                         "_-_ Recursion overflow in Goo minion III's behavior\n" +
                         "_-_ Wizard's corruption not working\n" +
@@ -861,7 +820,7 @@ public class vReInc_Changes {
         changes.hardlight(CharSprite.POSITIVE);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.BOOK), "Conjurer",
+        changes.addButton(new ChangeButton(SummIcons.VR040_CONJURER_BOOK, "Conjurer",
                 "_-_ Changed (mostly reduced) mana cost of some spells:\n" +
                         "   _*_ Antarctic Touch: 15/25/25 -> 10/20/20\n" +
                         "   _*_ Tommie's Armor Spell: 20/24/4 -> 15/20/4\n" +
@@ -888,7 +847,7 @@ public class vReInc_Changes {
         changes.hardlight(CharSprite.NEGATIVE);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.BOOK), "Conjurer",
+        changes.addButton(new ChangeButton(SummIcons.VR040_CONJURER_BOOK, "Conjurer",
                 "_-_ Reduced minimal damage of _Star Blazing_ from _4(+0.33/+0.5)_ to _2(+0.25/0.33)_.\n" +
                         "_-_ Reduced _Energized Renewal I_'s healing from _10_ to _8_.\n" +
                         "_-_ Reduced _Conjurer's robe II_'s damage reduction boost from _40%_ to _25%_.\n" +
@@ -896,7 +855,7 @@ public class vReInc_Changes {
                         "   _*_ the increase is now more gradual, with no boost at 50% HP and full boost at 0% HP instead of half of boost at 50% HP and full boost at 0% HP\n" +
                         "   _*_ changed the max boost from _150%/0%/450%_ to _75%/0%/300%_"));
 
-        changes.addButton(new ChangeButton(new DogSprite(), "Dog retiering",
+        changes.addButton(new ChangeButton(SummIcons.V110_DOG, "Dog retiering",
                 "_-_ Now replaces crabs instead of snakes.\n" +
                         "_-_ Reduced HP from 10 to 9.\n" +
                         "_-_ Increased EXP values to that of a crab.\n" +
@@ -918,21 +877,21 @@ public class vReInc_Changes {
                         "This release was actually supposed to be done on October 31st, the 5th anniversary to original Summoning's release, but PC upgrading troubles, overall motivation blocks and getting re-addicted to modded Minecraft made it hard to do it on deadline.\n" +
                         "Still, this release should actually make Reincarnated feel like Summoning we know and love... for its first few years of existence, that is. More global stuff, like game modes, wand and armor ranks, rogue's talents, abilities, still remain unported."));
 
-        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered Ports",
+        changes.addButton( new ChangeButton(ChangeIcons.V074_SHPX, "Shattered Ports",
                 "Implemented Shattered v2.5.4 changes."));
 
         changes = new ChangeInfo("v0.4.1", false, null);
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+        changes.addButton(new ChangeButton(ChangeIcons.V081_MISC, Messages.get(ChangesScene.class, "misc"),
                 "_-_ Reworked minion behavior selection to use better UI and to be instantaneous.\n" +
                         "_-_ Added Conjurer text for shopkeeper and blacksmith.\n" +
                         "_-_ Tweaked clarity of minion behavior icon.\n" +
                         "_-_ Added distinct particles for each type of behavior switch.\n" +
                         "_-_ Underground Paradise now moves at the same speed as his master."));
 
-        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+        changes.addButton(new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
                 "Fixed the following bugs:\n" +
                         "_-_ Stairs not spawning in entrance rooms\n" +
                         "_-_ Conjurer being able to equip other armor\n" +
@@ -955,7 +914,7 @@ public class vReInc_Changes {
                         "_-_ Removed food healing perk.\n" +
                         "_-_ Mana can now be gained by any ally, as long as their target has soul gain effect."));
 
-        changes.addButton(new ChangeButton(new ItemSprite(new ConjurerBook()), "Spell Changes",
+        changes.addButton(new ChangeButton(SummIcons.VR040_CONJURER_BOOK, "Spell Changes",
                 "_-_ Several spells have been renamed to more accurately reflect their purposes and powers.\n\n" +
                         "_-_ _Energized Renewal_'s ranking is completely reworked, and the spell no longer can be used to heal Conjurer himself.\n\n" +
                         "_-_ _Star Blazing_ no longer hits allies, ignores obstacles and has its damage increased on rank II and rank III. Rank III now covers the entire room worth of enemies.\n\n" +
@@ -965,11 +924,11 @@ public class vReInc_Changes {
                         "_-_ _Pushing Waveform_ now has slightly higher push force.\n\n" +
                         "_-_ _Dreemur's Necromancy_ is completely reworked: now makes characters be able to live on 0 HP, but consume mana as if it was their health; works on both enemies and allies."));
 
-        changes.addButton(new ChangeButton(new ItemSprite(new FroggitStaff()), "Equipment Changes",
+        changes.addButton(new ChangeButton(SummIcons.V120_FROGGIT_STAFF, "Equipment Changes",
                 "_-_ Toy Knife is now a ranked weapon and scales with attunement. Its ranged soul gain is increased from 7 to 8 turns.\n\n" +
                         "_-_ Froggit has received completely new ranks: rank II rapidly attacks with low damage, while rank III sucks up mana out of enemies it targets."));
 
-        changes.addButton(new ChangeButton(new TalentIcon(Talent.SPIRITUAL_BARRIER), "Base Talents",
+        changes.addButton(new ChangeButton(SummIcons.VR040_SPIRITUAL_BARRIER, "Base Talents",
                 "_Tier 1:_\n\n" +
                         "_-_ _Benevolent Meal_ makes Conjurer heal his allies on eating food.\n\n" +
                         "_-_ _Empowering Intuition_ rewards Conjurer with mana on identifying items.\n\n" +
@@ -987,7 +946,7 @@ public class vReInc_Changes {
                         "_-_ _Newborn Motivation_ boosts newly created summons with Empowered effect.\n\n" +
                         "_-_ _Combined Refill_ rewards diverse spellcasting by refunding some of mana cast of two spells, that are used consequently."));
 
-        changes.addButton(new ChangeButton(new HeroIcon(HeroSubClass.SOUL_WIELDER), HeroSubClass.SOUL_WIELDER.title(),
+        changes.addButton(new ChangeButton(SummIcons.VR040_SOUL_WIELDER, HeroSubClass.SOUL_WIELDER.title(),
                 "_-_ Increased physical weakness from 25% to 33%.\n\n" +
                         "_-_ Reduced _Antarctic Touch_'s frostburn effect from 7/20/40 to 7/15/25 turns.",
 
@@ -996,7 +955,7 @@ public class vReInc_Changes {
                         "_-_ _Concentrated Support_ allows to boost minion's attunement power with casting spells on them.\n\n" +
                         "_-_ _Eternal Friendship_ rewards diverse ally army by giving them extra armor, the strength of which depends on unique ally types."));
 
-        changes.addButton(new ChangeButton(new HeroIcon(HeroSubClass.WILL_SORCERER), HeroSubClass.WILL_SORCERER.title(),
+        changes.addButton(new ChangeButton(SummIcons.VR040_WILL_SORCERER, HeroSubClass.WILL_SORCERER.title(),
                 "_-_ Was previously named Knight.\n\n" +
                         "_-_ Changed _Directing Pulse_'s soul gain buff from 9/3/1.1 to 12/6/2 turns.\n\n" +
                         "_-_ _Shards of Despair_'s rank II and rank III damage have been significantly increased, stun duration is increased from 1 to 6 turns.\n\n" +
@@ -1012,7 +971,7 @@ public class vReInc_Changes {
         changes.hardlight(0xa8a8a8);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(new Image(Assets.Environment.TILES_ABYSS, 0, 48, 16, 16 ), "Highlights",
+        changes.addButton(new ChangeButton(SummIcons.V120_ABYSS, "Highlights",
                 "_-_ Has been ported to new branch standard, replacing the older format with going beyond depth 26.\n\n" +
                 "_-_ Added \"placeholder\" music, consisting of 5 ominous edits of existing tracks.\n\n" +
                 "_-_ Added a chaotic, distorted splash background.\n\n" +
@@ -1022,13 +981,13 @@ public class vReInc_Changes {
                 "_-_ Room randomization now includes entrance and exit rooms.\n\n" +
                 "_-_ Exit tile is now highlighted."));
 
-        changes.addButton(new ChangeButton(new ItemSprite(new UpgradeClump()), "Progression",
+        changes.addButton(new ChangeButton(SummIcons.VR040_UPGRADE_CLUMP, "Progression",
                 "_-_ Scrolls of Upgrade and Potions of Strength no longer _spawn naturally_ in Abyss.\n\n" +
                 "_-_ Instead, special items are dropped by abyssal spawners, _Runic and Reddish Clusters_ and that can be converted into progression items.\n\n" +
                 "_-_ 2 Runic Clusters turn into Scroll of Upgrade, while 3 Reddish Clusters can be brewed into Potion of Strength.\n\n" +
                 "_-_ This effectively decreases amount of strength to 1.67 and amount of upgrades to 2.5 on each set of 5 floors."));
 
-        changes.addButton(new ChangeButton(new AbyssalSpawnerSprite(), "Enemies",
+        changes.addButton(new ChangeButton(SummIcons.VR040_ABYSS_SPAWNER, "Enemies",
                 "_Abyssal Spawners:_\n\n" +
                 "_-_ Updated sprites.\n" +
                 "_-_ Reduced HP from 420 to 150, but restored soft damage cap, now equal to 25% of spawner's HP.\n" +
@@ -1066,12 +1025,12 @@ public class vReInc_Changes {
         changes.hardlight(CharSprite.POSITIVE);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(new DogSprite(), "Enemies",
+        changes.addButton(new ChangeButton(SummIcons.V110_DOG, "Enemies",
                 "_-_ To make the enemy selection less overwhelming, all original Summoning enemies from this point forward will spawn as _mob variants_, randomly being chosen to replace vanilla enemies at beginning of each run.\n\n" +
                         "_-_ Sewer dog is variant of snake, with no changes.\n\n" +
                         "_-_ Rattlesnake is variant of spinner, with attack speed doubled, but damage decreased."));
 
-        changes.addButton(new ChangeButton(new ItemSprite(new ChaoticBomb()), "Bomb Revamp",
+        changes.addButton(new ChangeButton(SummIcons.VR040_CHAOTIC_BOMB, "Bomb Revamp",
                 "_-_ _Holy Grenade_ has been reworked to hit 9x9 area instead of 3x3 cross for more damage, bless allies and produce satisfying visuals and sound.\n\n" +
                         "_-_ _Frost Bomb_ now freezes its targets solid, making them take less damage but be completely paralyzed in ice.\n\n" +
                         "_-_ Webbomb has been reworked into _Spider Bomb_ with webs poisoning its targets.\n\n" +
@@ -1082,10 +1041,10 @@ public class vReInc_Changes {
                         "_-_ _Supply Station_ provides its healing and saturation faster, also increased total satiety from 400 to 450.\n\n" +
                         "_-_ _Electrical Explosive_ does more damage and stuns enemies, but charges slower and break chance scales depending on charges used instead of total throws."));
 
-        changes.addButton(new ChangeButton(new Slingshot(),
+        changes.addButton(new ChangeButton(SummIcons.V100_SLINGSHOT,
                 "_-_ Implemented slingshot with no changes."));
 
-        changes.addButton(new ChangeButton(new ItemSprite(new Food()), "Full Food rework",
+        changes.addButton(new ChangeButton(ChangeIcons.V060_RATION, "Full Food rework",
                 "Finished porting original Summoning's hunger system:\n\n" +
                         "_-_ Increased max satiety from 450 to 1000.\n" +
                         "_-_ Adjusted food values to be roughly the same as original Summoning.\n" +
@@ -1097,7 +1056,7 @@ public class vReInc_Changes {
         changes.hardlight(CharSprite.WARNING);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.STAFF_PLACEHOLDER), "Staffs in General",
+        changes.addButton(new ChangeButton(SummIcons.VR030_STAFF_PLACEHOLDER, "Staffs in General",
                 "_-_ Now actually have enchantments and curses (they weren't saved before).\n\n" +
                         "_-_ Enchanted staff minions now glow just like staff items.\n\n" +
                         "_-_ Now can be rewarded by Sad Ghost.\n\n" +
@@ -1109,7 +1068,7 @@ public class vReInc_Changes {
                         "_-_ Invisibility and purity potions now affect minions in visible range, when drank by player.\n\n" +
                         "_-_ DM-150 is now inorganic enemy."));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+        changes.addButton(new ChangeButton(ChangeIcons.V081_MISC, Messages.get(ChangesScene.class, "misc"),
                 "_-_ Phase 2 Tengu now attempts to bring minions next to you.\n" +
                         "_-_ Added Duelist weapon abilities for shop weapons.\n" +
                         "_-_ Hero automatically swaps with allies when moving.\n" +
@@ -1121,7 +1080,7 @@ public class vReInc_Changes {
                         "_-_ Elixir of Attunement room now spawns either in floor 2 or 3, and uses same logic as laboratory.\n" +
                         "_-_ Changed Enchant Transfer spell to use arcane resin, but cost 2 less energy."));
 
-        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+        changes.addButton(new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
                 "Fixed the following bugs:\n" +
                         "_-_ Attunement Constructs never actually spawning\n" +
                         "_-_ Staffs being impossible to uncurse\n" +
@@ -1140,19 +1099,19 @@ public class vReInc_Changes {
                         "It's been a long wait, isn't it? The 3 months long development hell was surely something for mental state and other stuff... " +
                         "But at least the main course of action, minions, are finally here!"));
 
-        changes.addButton( new ChangeButton(Icons.get(Icons.SHPX), "Shattered Ports",
+        changes.addButton( new ChangeButton(ChangeIcons.V074_SHPX, "Shattered Ports",
                 "Implemented Shattered v2.3.2 changes."));
 
         changes = new ChangeInfo("v0.3.2", false, null);
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(HeroSprite.avatar(HeroClass.ADVENTURER, 6), HeroClass.ADVENTURER.title(),
+        changes.addButton(new ChangeButton(SummIcons.VR020_ADVENTURER, HeroClass.ADVENTURER.title(),
                 "_-_ _Precise Strike_ +2 no longer heals enemies and sets max HP of enemies beyond 1 HP.\n\n" +
                         "_-_ _Empowering Meal_ now actually works as effect.\n\n" +
                         "_-_ Reduced _Slice of Power_'s boost by half, decreasing DPS boost from 4x to 2x."));
 
-        changes.addButton(new ChangeButton(new ItemSprite(new GooStaff()), "Hammer of Acid II Buffs",
+        changes.addButton(new ChangeButton(SummIcons.V121_GOO_STAFF, "Hammer of Acid II Buffs",
                 "_-_ Now is able to affect hero.\n\n" +
                         "_-_ Increased _Liquid Flame_ effect's damage by _100%_\n\n" +
                         "_-_ Increased _Frostburn Brew_ effect's damage by _78%_ and chill duration by _50%_\n\n" +
@@ -1161,13 +1120,13 @@ public class vReInc_Changes {
                         "_-_ _Mind Vision_ effect now heals for _20%_ instead of _33%_ and now applies the same effects of paralysis and forgetfulness as Phase Shift\n\n" +
                         "_-_ _Caustic Brew_ effect now damages enemies for 50% of their max health, with min damage of 20 and max damage of 50"));
 
-        changes.addButton(new ChangeButton(new ItemSprite(ItemSpriteSheet.STAFF_PLACEHOLDER), "Staffs in General",
+        changes.addButton(new ChangeButton(SummIcons.VR030_STAFF_PLACEHOLDER, "Staffs in General",
                 "_-_ Now have actual gold price.\n\n" +
                         "_-_ Now can have random ranks and be enchanted and cursed.\n\n" +
                         "_-_ Now can spawn in crystal chests, mimics and as Ring of Wealth rewards.\n\n" +
                         "_-_ Can no longer be upgraded."));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+        changes.addButton(new ChangeButton(ChangeIcons.V081_MISC, Messages.get(ChangesScene.class, "misc"),
                 "_-_ Scrolls of Upgrade and Potions of Strength are now identified by default in face challenge\n" +
                         "_-_ Healing Dart now has the same accuracy in point-blank and at range\n" +
                         "_-_ Tweaked hordes:\n" +
@@ -1176,7 +1135,7 @@ public class vReInc_Changes {
                         "   _*_ Refactored some of relationship between horde heads and horde members to make it more stable\n" +
                         "   _*_ Wandering horde minions now follow their head directly instead of following head's destination"));
 
-        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+        changes.addButton(new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
                 "Fixed the following bugs:\n" +
                         "_-_ Effect type relation not working, which lead to resistances and immunities also not working\n" +
                         "_-_ Crashes from minions attempting to retarget or attack\n" +
@@ -1187,12 +1146,12 @@ public class vReInc_Changes {
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
-        changes.addButton( new ChangeButton( Conducts.Conduct.FACE.getIcon(), "Curse of Faced",
+        changes.addButton( new ChangeButton( SummIcons.VR031_FACE, "Curse of Faced",
                 "Implemented popular face challenge as _Curse of Faced_ conduct.\n\n" +
                         "_-_ Thanks @tiresdonexits and other face players for telling me most of details.\n" +
                         "_-_ The bugs can still be there."));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+        changes.addButton(new ChangeButton(ChangeIcons.V081_MISC, Messages.get(ChangesScene.class, "misc"),
                 "_-_ Staffs can now generate in shops\n" +
                         "_-_ Missile weapons and most of wands can now go through allies\n" +
                         "_-_ Added conduct icons into save file buttons\n" +
@@ -1201,7 +1160,7 @@ public class vReInc_Changes {
                         "_-_ Refactored target priority to allow enemies to attack minions, if they block the path to better target\n" +
                         "_-_ Removed the update notes scene (for now)"));
 
-        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+        changes.addButton(new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
                 "Fixed the following bugs:\n" +
                         "_-_ Frostburn and frost fire not being visible\n" +
                         "_-_ Adventurer having no shopkeeper line and therefore showing there !!!NO TEXT FOUND!!!\n" +
@@ -1212,7 +1171,7 @@ public class vReInc_Changes {
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
-        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.STAFF_PLACEHOLDER), "In general",
+        changes.addButton( new ChangeButton(SummIcons.VR030_STAFF_PLACEHOLDER, "In general",
                 "_-_ Removed attunement \"minion slots\"; now each minion corresponds to their own staff, that tracks their health.\n" +
                         "_-_ Now have _4 behavior types_, that tell them what enemies to hunt:\n" +
                         "   * _Reactive_ minions will target enemies that are hit by hero\n" +
@@ -1225,7 +1184,7 @@ public class vReInc_Changes {
                         "_-_ Sentries can be moved around with quick-use, but this consumes sentry's Resource points.\n" +
                         "_-_ Staffs no longer recharge when minions are present."));
 
-        changes.addButton(new ChangeButton(new GrayRatStaff(),
+        changes.addButton(new ChangeButton(SummIcons.VR030_GRAY_RAT_STAFF, "Gray Rat Staff",
                 "_-_ Resprited both staff and minion to be more distinct.\n" +
                         "_-_ HP changed from _35/23/12_ to _35/30/10_.\n" +
                         "_-_ Damage changed from _5-12/10-16/15-25_ to _3-14/3-11/1-8_.\n" +
@@ -1233,7 +1192,7 @@ public class vReInc_Changes {
                         "_-_ _Rank II_ now heals itself when attacking and reduces player's hunger usage, when passive.\n" +
                         "_-_ _Rank III_ is equivalent of normal rat, but staff's recharge is reduced to 100 turns and rat gets 7.5 turns of adrenaline on summoning."));
 
-        changes.addButton(new ChangeButton(new SheepStaff(),
+        changes.addButton(new ChangeButton(SummIcons.V121_WOOLY_STICK, "Wooly Stick",
                 "_-_ No longer considered \"tanky\" minion, but has higher target priority over other minions.\n" +
                         "_-_ HP changed from _50/50/50_ to _55/45/93_.\n" +
                         "_-_ Recharge changed from _500 turns_ to _575 turns_.\n" +
@@ -1241,7 +1200,7 @@ public class vReInc_Changes {
                         "_-_ _Rank II_ now reflects damage back at the attacker.\n" +
                         "_-_ _Rank III_ recharges for 862 turns and permanently has Targeted debuff on it, making all enemies engage such sheep when possible."));
 
-        changes.addButton(new ChangeButton(new MagicMissileStaff(),
+        changes.addButton(new ChangeButton(SummIcons.V121_MAGIC_MISSILE_STAFF, "Magic Missile Staff",
                 "_-_ HP changed from _85/125/160_ to _40/55/20_.\n" +
                         "_-_ Damage changed from _12-24/12-24/12-24_ to _4-15/10-30/3-12_.\n" +
                         "_-_ Maximum resource changed from _85/42/40_ to _25/25/3_.\n" +
@@ -1250,7 +1209,7 @@ public class vReInc_Changes {
                         "_-_ _Rank II_ has higher damage, that is affected by armor and less accurate, like YAPD's magic missile.\n" +
                         "_-_ _Rank III_ is short-living sentry, that recharges for 75 turns and gives wand recharge on hitting enemies."));
 
-        changes.addButton(new ChangeButton(new GnollHunterStaff(),
+        changes.addButton(new ChangeButton(SummIcons.V121_GNOLL_HUNTER_STAFF, "Gnoll Hunter Staff",
                 "_-_ No longer always pierces armor.\n" +
                         "_-_ HP changed from _25/40/66_ to _25/30/25_.\n" +
                         "_-_ Damage changed from _6-12/7-12/9-12_ to _5-15/1-5/20-45_.\n" +
@@ -1259,7 +1218,7 @@ public class vReInc_Changes {
                         "_-_ _Rank II_ now throws 3 darts per turn, that deal low damage, but trigger gnoll's enchantment more frequently.\n" +
                         "_-_ _Rank III_ uses sniper shots, that pierce armor and knock enemies away, but trigger cooldown for each attack."));
 
-        changes.addButton(new ChangeButton(new WizardStaff(),
+        changes.addButton(new ChangeButton(SummIcons.VR030_DWARF_WIZARD_STAFF, "Dwarf Wizard Staff",
                 "_-_ Resprited both staff and minion to be more distinct.\n" +
                         "_-_ HP changed from _35/28/19_ to _35/25/35_.\n" +
                         "_-_ Damage changed from _4-15/2-8/0-5_ to _7-17/2-6/0_.\n" +
@@ -1268,7 +1227,7 @@ public class vReInc_Changes {
                         "_-_ _Rank II_ now attacks twice as frequently and attempts to corrupt the target enemy; the potency scales with progression.\n" +
                         "_-_ _Rank III_ doesn't attack at all, but provides various boosts to player, that depend on wizard's behavior type."));
 
-        changes.addButton(new ChangeButton(new RoboStaff(),
+        changes.addButton(new ChangeButton(SummIcons.V121_ROBO_STAFF, "Reinforced Quarterstaff",
                 "_-_ No longer considered \"tanky\" minion, but has higher target priority over other minions.\n" +
                         "_-_ HP changed from _120/175/225_ to _120/105/215_.\n" +
                         "_-_ Damage changed from _25-50/30-55/35-60_ to _20-40/15-25/5-15_.\n" +
@@ -1278,7 +1237,7 @@ public class vReInc_Changes {
                         "_-_ _Rank II_ has lower stats, but can chain to itself any kind of enemy, not just ranged ones.\n" +
                         "_-_ _Rank III_ has lower armor, damage and passive regen rate, but heals from both attacking and being attacked."));
 
-        changes.addButton(new ChangeButton(new GooStaff(),
+        changes.addButton(new ChangeButton(SummIcons.V121_GOO_STAFF, "Hammer of Acid",
                 "_-_ HP changed from _45/55/65_ to _45/55/15_.\n" +
                         "_-_ Damage changed from _20-35/15-26/8-17_ to _20-35/12-25/4-15_.\n" +
                         "_-_ Charged attacks no longer charge for longer and become more deadly with ranks. They also no longer damage allies.\n" +
@@ -1286,7 +1245,7 @@ public class vReInc_Changes {
                         "_-_ _Rank II_ charged attack no longer deals damage, but covers larger range and applies effect based on a potion infused into Goo minion. Potions can be infused by throwing them into the minion.\n" +
                         "_-_ _Rank III_ recharges for 200 turns and takes 10% damage without viscosity; its charged attack does damage based on depth's bomb damage and makes minion instantly die after using it."));
 
-        changes.addButton(new ChangeButton(new BlasterStaff(),
+        changes.addButton(new ChangeButton(SummIcons.V121_GASTER_BLASTER, "Deploy Device",
                 "_-_ HP changed from _120/160/200_ to _85/75/100_.\n" +
                         "_-_ Damage changed from _15-60/12-40/10-34_ to _20-50/6-14/30-75_.\n" +
                         "_-_ Maximum resource changed from _60/27/25_ to _18/50/12_.\n" +
@@ -1300,27 +1259,27 @@ public class vReInc_Changes {
         changes.hardlight(CharSprite.WARNING);
         changeInfos.add(changes);
 
-        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.ELIXIR_ATTUNED), "Elixir of Attunement",
+        changes.addButton( new ChangeButton(SummIcons.VR030_ELIXIR_OF_ATTUNEMENT, "Elixir of Attunement",
                 "Reimplemented Elixir of Attunement with some important changes:\n\n" +
                         "_-_ Resprited.\n" +
                         "_-_ No longer sold in shops.\n" +
                         "_-_ No longer possible to create with alchemy.\n" +
                         "_-_ Now has its own room with custom blue carpet tiles."));
 
-        changes.addButton( new ChangeButton(new RatSprite(), "Hordes",
+        changes.addButton( new ChangeButton(ChangeIcons.PD_RAT, "Hordes",
                 "Reimplemented hordes.\n\n" +
                         "_-_ Should be less glitchy or more glitchy, idk."));
 
-        changes.addButton( new ChangeButton(new AttunementConstructSprite(), "Attunement Construct",
+        changes.addButton( new ChangeButton(SummIcons.VR030_ATTUNEMENT_CONSTRUCT, "Attunement Construct",
                 "Reimplemented Final Froggits, with flavor change into Attunement Constructs.\n\n" +
                         "_-_ Reduced some stats.\n" +
                         "_-_ Spawn in less quantities in Demon Halls.\n" +
                         "_-_ Does not spawn on Yog-Dzewa yet."));
 
-        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.ELIXIR_DRAGON), "Elemental Elixirs/Brews",
+        changes.addButton( new ChangeButton(SummIcons.VR030_FIRE_ELIXIR, "Elemental Elixirs/Brews",
                 "Reimplemented merge of Blizzard Brew/Elixir of Icy Touch and Inferno Brew/Elixir of Dragon's Blood."));
 
-        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.TYPE_MANAGER), "New way to obtain Ranks",
+        changes.addButton( new ChangeButton(SummIcons.VR030_TYPE_MANAGER, "New way to obtain Ranks",
                 "Changed ranking from being changed with upgrades to to be managed by new item, Rank Manager.\n\n" +
                         "_-_ Rank managers spawn every 2 depths, but not on boss depths, meaning there is 10 rank managers in entire game.\n" +
                         "_-_ Rank managers allow to switch applicable item's rank to any of three, from I to III, and preview rank's effects on item."));
@@ -1340,31 +1299,31 @@ public class vReInc_Changes {
                         "_-_ Decreased level moving satiety value from _30_ to _25_.\n" +
                         "_-_ Decreased attacking satiety value from _3.75_ to _3_."));
 
-        changes.addButton( new ChangeButton(new ItemSprite(ItemSpriteSheet.POTION_CRIMSON), "Healing gases",
+        changes.addButton( new ChangeButton(ChangeIcons.V070_POTION_CRIMSON, "Healing gases",
                 "Reimplemented gases produced by throwing Potion of Healing and Elixir of Honeyed Healing, with some changes:\n\n" +
                         "_-_ Now hurt hero with Pharmacophobia challenge active.\n" +
                         "_-_ Both gases now heal percentage amount of HP to characters inside of it (2% for PoH and 6.25% for EoHH).\n" +
                         "_-_ Honey gas is less dense visually and lasts 20% more time.\n" +
                         "_-_ Healing gas lasts 10% less time."));
 
-        changes.addButton( new ChangeButton(new Cleaver(),
+        changes.addButton( new ChangeButton(SummIcons.VR030_CLEAVER, "Cleaver",
                 "Reimplemented cleaver, with rework to its functionality:\n\n" +
                         "_-_ Now T3 weapon instead of T2.\n" +
                         "_-_ Now deals 50% more damage than sword, but takes 50% more time to swing.\n" +
                         "_-_ Decreased accuracy penalty from 40% to 20%.\n" +
                         "_-_ Now deals 2x damage to enemies with full HP."));
 
-        changes.addButton( new ChangeButton(new EnchantParchment(),
+        changes.addButton( new ChangeButton(SummIcons.V121_ENCHANT_TRANSFER, "Enchant Transfer",
                 "Reimplemented Enchant Transfer spell.\n\n" +
                         "_-_ Now has recipe with stone of enchantment."));
 
-        changes.addButton( new ChangeButton(new BuffIcon(BuffIndicator.FROSTBURN, true), "Frostburn effect",
+        changes.addButton( new ChangeButton(SummIcons.VR030_FROSTBURN, "Frostburn effect",
                 "Reimplemented Frostburn and cold fire:\n\n" +
                         "_-_ The way to inflict it for now are Wand of Frost and Frostburn Brew.\n" +
                         "_-_ Wand of Frost does less damage but inflicts Frostburn.\n" +
                         "_-_ Frostburn Brew is made from potions of Liquid Flame and Frost and acts like Liquid Flame, but spreads frost fire instead of normal fire."));
 
-        changes.addButton(new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+        changes.addButton(new ChangeButton(ChangeIcons.V081_MISC, Messages.get(ChangesScene.class, "misc"),
                 "_-_ Reimplemented Mineral Water and Scimitar's rework, with no changes.\n" +
                         "_-_ Staffs now have their own journal tab and identification badge.\n" +
                         "_-_ Fixed inconsistent outlines for all Summoning-sourced sprites.\n" +
@@ -1373,7 +1332,7 @@ public class vReInc_Changes {
                         "_-_ Reimplemented about page, with updated icons and links for contributors.\n" +
                         "_-_ Resprited Runic Blade's projectile."));
 
-        changes.addButton(new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+        changes.addButton(new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
                 "Fixed the following bugs from original Summoning:\n" +
                         "_-_ Enemies running from Flashbang's effect even if they are immovable entities.\n" +
                         "_-_ Dying with Blessed Ankh and Become Ethereal conduct doesn't trigger the revive."));
@@ -1388,42 +1347,42 @@ public class vReInc_Changes {
                 "_-_ Released January 6th, 2024\n" +
                         "_-_ 13 days after Reincarnated 0.1.0"));
 
-        changes.addButton( new ChangeButton( new ItemSprite(new Firebomb()), "Enhanced bombs",
+        changes.addButton( new ChangeButton( SummIcons.VR020_FIREBOMB, "Enhanced bombs",
                 "Reimplemented all enhanced bomb overhauls and changes.\n\n" +
                         "_-_ Shrinking from shrinking bomb now works on minibosses, but is only applied for 8 turns."));
 
-        changes.addButton( new ChangeButton(new ItemSprite(new Ropes()), "Ropes",
+        changes.addButton( new ChangeButton(SummIcons.V120_ROPES, "Ropes",
                 "Reimplemented ropes.\n\n" +
                         "_-_ Cost slightly less."));
 
-        changes.addButton( new ChangeButton(HeroSprite.avatar(HeroClass.ADVENTURER, 1), "Adventurer",
+        changes.addButton( new ChangeButton(SummIcons.VR020_ADVENTURER, "Adventurer",
                 "Reimplemented Adventurer, with some placeholder-ish T1, T2 and T3 talents.\n\n" +
                         "_-_ Shopkeeper and Blacksmith quotes are not implemented yet, due to forgetfulness."));
 
-        changes.addButton( new ChangeButton(Icons.get(Icons.CONDUCTS_COLOR), "Conducts",
+        changes.addButton( new ChangeButton(SummIcons.VR020_CONDUCTS, "Conducts",
                 "Reimplemented most of conducts (16 out of 24) and all their backend code.\n\n" +
                         "_-_ Some of conducts will likely never return, due to being too unfun to play and code.\n" +
                         "_-_ Some of conducts will be back, when Shattered's challenges will be deprecated."));
 
-        changes.addButton( new ChangeButton(new ItemSprite(new RunicBlade()), "Runic Blade",
+        changes.addButton( new ChangeButton(ChangeIcons.V041_RUNICBLADE, "Runic Blade",
                 "Reimplemented runic blade rework.\n\n" +
                         "_-_ The cooldown is now actually shown as buff.\n" +
                         "_-_ Fixed all typos in its script."));
 
-        changes.addButton( new ChangeButton(new ItemSprite(new Food()), "Hunger rework",
+        changes.addButton( new ChangeButton(ChangeIcons.V060_RATION, "Hunger rework",
                 "Reimplemented hunger rework.\n\n" +
                         "_-_ The numbers are still up to debate."));
 
-        changes.addButton( new ChangeButton(Icons.get(Icons.GOLD), "Email button",
+        changes.addButton( new ChangeButton(SummIcons.V100_GOLD, "Email button",
                 "Implemented email button from Experienced Redone.\n\n" +
                         "_-_ More emails, but hopefully feedback will be more useful here."));
 
-        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+        changes.addButton( new ChangeButton(ChangeIcons.V081_MISC, Messages.get(ChangesScene.class, "misc"),
                 "_-_ All classes are now always unlocked.\n\n" +
                         "_-_ Reimplemented the code that allows interfaces be used for buff checks.\n\n" +
                         "_-_ Removed support nagging thing after Goo."));
 
-        changes.addButton( new ChangeButton(new Image(Assets.Sprites.SPINNER, 144, 0, 16, 16), Messages.get(ChangesScene.class, "bugfixes"),
+        changes.addButton( new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
                 "Fixed:\n" +
                         "_-_ Armored Cloak being encounterable in the wild\n" +
                         "_-_ Debug scroll being not possible to enable"));
@@ -1443,18 +1402,18 @@ public class vReInc_Changes {
                         "Shattered mechanics will be eventually discarded in favor of Summoning's ones (but still persist in code for easier merging).\n\n" +
                         "If this project will be successful, it will become the main version of Summoning, with previous one, that is based on v0.9.4, becoming legacy."));
 
-        changes.addButton( new ChangeButton( new ItemSprite(new ScoutArmor()), "Armored Cloak",
+        changes.addButton( new ChangeButton( SummIcons.VR010_SCOUT_ARMOR, "Armored Cloak",
                 "Reimplemented Armored Cloak as starting Huntress's armor, with following changes:\n" +
                         "_-_ Increased super-shot's damage boost from 32% and x1.13x per tile to 35% and x1.20x per tile\n" +
                         "_-_ Increased super-shot's cooldown from 20 turns to 25 turns"));
 
-        changes.addButton( new ChangeButton(new ItemSprite(new StoneHammer()), "Shop weapons",
+        changes.addButton( new ChangeButton(SummIcons.V110_STONE_HAMMER, "Shop weapons",
                 "Reimplemented exclusive shop weapons, with fixed typos in their descriptions."));
 
-        changes.addButton( new ChangeButton(new ItemSprite(new Bomb()), "Bomb rework",
+        changes.addButton( new ChangeButton(ChangeIcons.V25_BOMB, "Bomb rework",
                 "Reimplemented bomb's damage boost and reduced delay, with changed sprites for some bombs, but with without their reworks."));
 
-        changes.addButton( new ChangeButton(Icons.get(Icons.PREFS), Messages.get(ChangesScene.class, "misc"),
+        changes.addButton( new ChangeButton(ChangeIcons.V081_MISC, Messages.get(ChangesScene.class, "misc"),
                 "_-_ The language is always locked to English and cannot be changed.\n\n" +
                         "_-_ Spirit Bow's arrow sprite depend on the augment (with new sprite for speed bow).\n\n" +
                         "_-_ The app's icon is different from Summoning (looking at fully replicating the original).\n\n" +
