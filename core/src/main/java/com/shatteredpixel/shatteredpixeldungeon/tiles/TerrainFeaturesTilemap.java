@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.tiles;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssChallengeLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.LastShopLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
@@ -73,7 +74,8 @@ public class TerrainFeaturesTilemap extends DungeonTilemap {
 		int stage = (Dungeon.depth-1)/Dungeon.chapterSize();
 		if (Dungeon.depth == 21 && Dungeon.level instanceof LastShopLevel) stage--;
 		stage = Math.min(stage, 4);
-		if (Dungeon.branch == AbyssLevel.BRANCH) stage = 4;
+		if (Dungeon.branch == AbyssLevel.BRANCH) stage = 6;
+		if (Dungeon.level instanceof AbyssChallengeLevel) stage = 7;
 		if (Dungeon.mode == Dungeon.GameMode.GAUNTLET) stage = 4;
 		if (tile == Terrain.HIGH_GRASS){
 			if (DungeonTileSheet.getVisualWithAlts(DungeonTileSheet.RAISED_HIGH_GRASS, pos) == DungeonTileSheet.RAISED_HIGH_GRASS_ALT){

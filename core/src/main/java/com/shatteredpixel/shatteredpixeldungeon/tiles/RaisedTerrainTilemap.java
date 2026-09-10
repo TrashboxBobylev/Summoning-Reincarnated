@@ -26,6 +26,8 @@ package com.shatteredpixel.shatteredpixeldungeon.tiles;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssChallengeLevel;
+import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 
 import java.util.HashSet;
@@ -49,7 +51,10 @@ public class RaisedTerrainTilemap extends DungeonTilemap {
 			return -1;
 		}
 
-		int region = (Dungeon.depth-1)/5;
+		int region = (Dungeon.depth-1)/Dungeon.chapterSize();
+		if (Dungeon.branch == AbyssLevel.BRANCH) region = 5;
+		if (Dungeon.level instanceof AbyssChallengeLevel) region = 6;
+		if (Dungeon.mode == Dungeon.GameMode.GAUNTLET) region = 3;
 		int regionOffset = region*4;
 
 		if (tile == Terrain.HIGH_GRASS){
