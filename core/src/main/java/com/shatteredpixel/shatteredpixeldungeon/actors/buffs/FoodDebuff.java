@@ -30,7 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.watabou.utils.Bundle;
 
-public class FoodDebuff extends Buff implements Hero.Doom  {
+public class FoodDebuff extends Buff implements Hero.Doom, Buff.DOTbuff  {
 	
 	{
 		type = buffType.NEGATIVE;
@@ -119,5 +119,10 @@ public class FoodDebuff extends Buff implements Hero.Doom  {
 		super.restoreFromBundle(bundle);
 		left = bundle.getInt(LEFT);
 		fullHP = bundle.getInt(FULLHP);
+	}
+
+	@Override
+	public int totalIncomingDMG() {
+		return fullHP;
 	}
 }
