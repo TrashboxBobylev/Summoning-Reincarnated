@@ -39,7 +39,7 @@ public class ChangeButton extends Component {
 	protected String title;
 	protected String[] messages;
 
-	public ChangeButton(ChangeIcons icon, String title, String... message){
+	public ChangeButton(ChangeIcon icon, String title, String... message){
 		this( icon.get(), title, message );
 	}
 
@@ -70,5 +70,17 @@ public class ChangeButton extends Component {
 		icon.x = x + (width - icon.width()) / 2f;
 		icon.y = y + (height - icon.height()) / 2f;
 		PixelScene.align(icon);
+	}
+
+	public interface ChangeIcon {
+		Image get();
+		int ordinal();
+
+		default int w(){
+			return 16;
+		}
+		default int h(){
+			return 16;
+		}
 	}
 }

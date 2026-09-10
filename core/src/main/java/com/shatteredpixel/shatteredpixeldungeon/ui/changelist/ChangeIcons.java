@@ -25,7 +25,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.watabou.noosa.Image;
 
 //separate sprite assets for icons in the changelist, so that old visuals are preserved here after changes
-public enum ChangeIcons {
+public enum ChangeIcons implements ChangeButton.ChangeIcon {
 
 	PD_AMULET,
 	PD_BADGE_ASCENT,
@@ -360,8 +360,6 @@ public enum ChangeIcons {
 
 	;
 
-
-	private static int texW = 128/16;
 	int w, h;
 
 	ChangeIcons(){
@@ -373,15 +371,23 @@ public enum ChangeIcons {
 		this.h = h;
 	}
 
-	public Image get(){
-		return get(this);
+	public int w(){
+		return w;
 	}
 
-	public static Image get( ChangeIcons type ) {
-		Image icon = new Image( Assets.Interfaces.CHANGE_ICONS );
-		int x = type.ordinal()%texW;
-		int y = type.ordinal()/texW;
-		icon.frame(16*x, 16*y, type.w, type.h);
+	public int h(){
+		return h;
+	}
+
+	public Image get(){
+		return get(this, Assets.Interfaces.CHANGE_ICONS);
+	}
+
+	public static Image get(ChangeButton.ChangeIcon type, String iconsPath ) {
+		Image icon = new Image( iconsPath );
+		int x = type.ordinal()%(128/type.w());
+		int y = type.ordinal()/(128/type.w());
+		icon.frame(16*x, 16*y, type.w(), type.h());
 		return icon;
 	}
 
