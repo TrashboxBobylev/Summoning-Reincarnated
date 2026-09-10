@@ -117,10 +117,10 @@ public abstract class ChampionEnemy extends Buff {
 		if (Dungeon.mobsToChampion <= 0 && Dungeon.mode == Dungeon.GameMode.NINE_CHAL) {
 
 			//we block certain standout enemies on floor <10 from becoming champions
-			if (m instanceof Crab  && Dungeon.scalingDepth() <= 3) return;
-			if (m instanceof Thief && Dungeon.scalingDepth() <= 4) return;
-			if (m instanceof Guard && Dungeon.scalingDepth() <= 7) return;
-			if (m instanceof Bat   && Dungeon.scalingDepth() <= 9) return;
+			if (m instanceof Crab  && Dungeon.scalingDepth() <= (int)Math.ceil(Dungeon.chapterSize()/2f)) return;
+			if (m instanceof Thief && Dungeon.scalingDepth() <= (int)Math.ceil(Dungeon.chapterSize()*2f/3)) return;
+			if (m instanceof Guard && Dungeon.scalingDepth() <= (int)Math.floor(Dungeon.chapterSize()*1.5f)) return;
+			if (m instanceof Bat   && Dungeon.scalingDepth() <= (int)Math.ceil(Dungeon.chapterSize()*1.75f)) return;
 
 			Buff.affect(m, getTitle());
 			//numbers of mobs until a champion scales from 1/8 to 1/6 as depths increases
