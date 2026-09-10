@@ -52,8 +52,9 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v0_9_X_Changes;
 import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v1_X_Changes;
 import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v2_X_Changes;
 import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v3_X_Changes;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.vReInc_Changes;
 import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.v4_X_Changes;
+import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.vLegacy_Changes;
+import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.vReInc_Changes;
 import com.shatteredpixel.shatteredpixeldungeon.windows.IconTitle;
 import com.watabou.noosa.Camera;
 import com.watabou.noosa.Image;
@@ -67,7 +68,7 @@ import java.util.ArrayList;
 
 public class ChangesScene extends PixelScene {
 	
-	public static int changesSelected = 0;
+	public static int changesSelected = 9;
 
 	private NinePatch rightPanel;
 	private ScrollPane rightScroll;
@@ -193,6 +194,12 @@ public class ChangesScene extends PixelScene {
 				v0_1_X_Changes.addAllChanges(changeInfos);
 				Pixel_Dungeon_Changes.addAllChanges(changeInfos);
 				break;
+			case 9:
+				vReInc_Changes.addAllChanges(changeInfos);
+				break;
+			case 10:
+                vLegacy_Changes.addAllChanges(changeInfos);
+				break;
 		}
 
 		ScrollPane list = new ScrollPane( new Component() ){
@@ -249,21 +256,25 @@ public class ChangesScene extends PixelScene {
 
 		float left = list.left()-4f;
 
-		if (changesSelected <= 3){
-
-			left = setupChangesSelectionButton(0, "v4.X", left, list.bottom(), 24);
-			left = setupChangesSelectionButton(1, "v3.X", left, list.bottom(), 24);
-			left = setupChangesSelectionButton(2, "v2.X", left, list.bottom(), 24);
-			left = setupChangesSelectionButton(3, "v1.X", left, list.bottom(), 24);
-			left = setupChangesSelectionButton(4, "PreRelease->", left, list.bottom(), 53);
+		if (changesSelected > 8){
+			left = setupChangesSelectionButton(9, "Reincarnated", left, list.bottom(), 48);
+			left = setupChangesSelectionButton(10, "Legacy", left, list.bottom(), 48);
+			left = setupChangesSelectionButton(0, "ShPD->", left, list.bottom(), 48);
+		} else if (changesSelected <= 3){
+			left = setupChangesSelectionButton(10, "<-SummPD", left, list.bottom(), 40);
+			left = setupChangesSelectionButton(0, "v4.X", left, list.bottom(), 22);
+			left = setupChangesSelectionButton(1, "v3.X", left, list.bottom(), 22);
+			left = setupChangesSelectionButton(2, "v2.X", left, list.bottom(), 22);
+			left = setupChangesSelectionButton(3, "v1.X", left, list.bottom(), 22);
+			left = setupChangesSelectionButton(4, "v0.X->", left, list.bottom(), 26);
 
 		} else {
 
 			left = setupChangesSelectionButton(3, "<-Release", left, list.bottom(), 40);
-			left = setupChangesSelectionButton(4, "v0.9", left, list.bottom(), 22);
-			left = setupChangesSelectionButton(5, "v0.8", left, list.bottom(), 22);
-			left = setupChangesSelectionButton(6, "v0.7", left, list.bottom(), 22);
-			left = setupChangesSelectionButton(7, "v0.6", left, list.bottom(), 22);
+			left = setupChangesSelectionButton(4, "v0.9", left, list.bottom(), 21);
+			left = setupChangesSelectionButton(5, "v0.8", left, list.bottom(), 21);
+			left = setupChangesSelectionButton(6, "v0.7", left, list.bottom(), 21);
+			left = setupChangesSelectionButton(7, "v0.6", left, list.bottom(), 21);
 			left = setupChangesSelectionButton(8, "v0.5-", left, list.bottom(), 23);
 
 		}
