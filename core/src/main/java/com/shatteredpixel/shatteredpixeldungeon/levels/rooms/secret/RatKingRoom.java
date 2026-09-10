@@ -24,12 +24,12 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.secret;
 
-import com.shatteredpixel.shatteredpixeldungeon.Conducts;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.RatKing;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
+import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
 import com.shatteredpixel.shatteredpixeldungeon.levels.painters.Painter;
@@ -126,7 +126,9 @@ public class RatKingRoom extends SecretRoom {
 		for (Point p : getPoints()){
 			int cell = level.pointToCell(p);
 			if (cell != center && (level.map[cell] == Terrain.EMPTY || level.map[cell] == Terrain.EMPTY_SP)){
-				level.drop( new Gold( Random.IntRange( 5, 20 ) ), cell );
+				Heap drop = level.drop(new Gold(Random.IntRange(5, 20)), cell);
+				if (Dungeon.isChallenged(Conducts.Conduct.CANDI_18))
+					drop.type = Heap.Type.LOCKED_CHEST;
 			}
 		}
 	}
