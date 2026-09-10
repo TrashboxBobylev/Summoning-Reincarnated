@@ -52,7 +52,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
-public class FrostBurn extends Buff implements Hero.Doom, DamageSource {
+public class FrostBurn extends Buff implements Hero.Doom, DamageSource, Buff.DOTbuff {
 	
 	private static final float DURATION = 8f;
 	
@@ -60,9 +60,11 @@ public class FrostBurn extends Buff implements Hero.Doom, DamageSource {
 	
 	//for tracking burning of hero items
 	private int burnIncrement = 0;
+	private int nextHit = 0; //we pre-caulcate the incoming hit for a bit more accuracy in totalIncomingDMG()
 	
 	private static final String LEFT	= "left";
 	private static final String BURN	= "burnIncrement";
+	private static final String NEXT_DMG= "next_dmg";
 
 	{
 		type = buffType.NEGATIVE;
@@ -75,6 +77,7 @@ public class FrostBurn extends Buff implements Hero.Doom, DamageSource {
 		super.storeInBundle( bundle );
 		bundle.put( LEFT, left );
 		bundle.put( BURN, burnIncrement );
+		bundle.put( NEXT_DMG, nextHit );
 	}
 	
 	@Override
@@ -82,14 +85,19 @@ public class FrostBurn extends Buff implements Hero.Doom, DamageSource {
 		super.restoreFromBundle(bundle);
 		left = bundle.getFloat( LEFT );
 		burnIncrement = bundle.getInt( BURN );
+		nextHit = bundle.getInt( NEXT_DMG );
 	}
 
 	@Override
 	public boolean act() {
 		
 		if (target.isAlive() && !target.isImmune(getClass())) {
-			
-			int damage = Random.NormalIntRange( 1, 2 + Dungeon.chapterNumber()*6/5 );
+
+			if (nextHit == 0){
+				nextHit = Random.NormalIntRange( 1, 2 + Dungeon.chapterNumber()*6/5 );
+			}
+			int damage = nextHit;
+			nextHit = Random.NormalIntRange( 1, 2 + Dungeon.chapterNumber()*6/5 );
 
 			if (target instanceof Hero) {
 				
@@ -159,8 +167,16 @@ public class FrostBurn extends Buff implements Hero.Doom, DamageSource {
 			
 			detach();
 		}
+
+		target.needsIncomingDOTUpdate = true;
 		
 		return true;
+	}
+
+	@Override
+	public void detach() {
+		target.needsIncomingDOTUpdate = true;
+		super.detach();
 	}
 
     //reduces speed by 10% for every turn remaining, capping at 50%
@@ -173,12 +189,15 @@ public class FrostBurn extends Buff implements Hero.Doom, DamageSource {
 	}
 	
 	public void reignite( Char ch, float duration ) {
-		if (left <= duration)
+		if (left <= duration) {
 			left = duration;
+			ch.needsIncomingDOTUpdate = true;
+		}
 	}
 
 	public void extend( float duration ) {
 		left += duration;
+		if (target != null) target.needsIncomingDOTUpdate = true;
 	}
 	
 	@Override
@@ -226,4 +245,13 @@ public class FrostBurn extends Buff implements Hero.Doom, DamageSource {
     public EnumSet<DamageProperty> initDmgProperties() {
         return EnumSet.of(DamageProperty.FROST, DamageProperty.FIRE);
     }
+
+	@Override
+	public int totalIncomingDMG() {
+		if (nextHit == 0){
+			nextHit = Random.NormalIntRange( 1, 2 + Dungeon.chapterNumber()*6/5 );
+		}
+		float avgDmg = 1 + Dungeon.chapterNumber()*6/10f;
+		return (int)Math.round(nextHit + Math.ceil(left-1)*avgDmg);
+	}
 }
