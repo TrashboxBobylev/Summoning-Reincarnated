@@ -415,7 +415,7 @@ public class vReInc_Changes {
         changes.hardlight(CharSprite.POSITIVE);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(HeroSprite.avatar(HeroClass.CONJURER, 0), "Conjurer",
+        changes.addButton(new ChangeButton(SummIcons.V100_CONJURER, "Conjurer",
             "Removed Conjurer's downsides to bring him in line with other heroes:\n\n" +
                     "_-_ Increased Conjurer's max HP from 13(+3) to 20(+5).\n" +
                     "_-_ _Soul Wielder_ no longer has 33% physical damage debuff.\n" +
@@ -428,7 +428,7 @@ public class vReInc_Changes {
         changes.hardlight(CharSprite.NEGATIVE);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(HeroSprite.avatar(HeroClass.CONJURER, 0), "Conjurer",
+        changes.addButton(new ChangeButton(SummIcons.V100_CONJURER, "Conjurer",
                 "To compensate for the massive increase in survivability, some perks were removed or changed as well:\n\n" +
                         "_-_ Reduced _Energized Renewal_ I's heal from 8 to 6 HP.\n" +
                         "_-_ Reduced _Runic Shell_ I's shielding from 10 to 8.\n" +
@@ -696,7 +696,7 @@ public class vReInc_Changes {
                         "_-_ Now triggers after-spell effects for every enemy hit."
                         ));
 
-        changes.addButton(new ChangeButton(HeroSprite.avatar(HeroClass.CONJURER, 0), "Other Conjurer changes",
+        changes.addButton(new ChangeButton(SummIcons.V100_CONJURER, "Other Conjurer changes",
                     "_-_ Underground Paradise now travels to next floor no matter the distance.\n\n" +
                             "_-_ Severely nerfed Soul Wielder's mana boost: now only increases by 1 instead of being multiplied by 1.5x.\n\n" +
                             "_-_ Soul Sparking's damage boost now maxes out at 10% HP.\n\n" +
@@ -944,7 +944,7 @@ public class vReInc_Changes {
         changes.hardlight(0x4c51ad);
         changeInfos.add(changes);
 
-        changes.addButton(new ChangeButton(HeroSprite.avatar(HeroClass.CONJURER, 0), HeroClass.CONJURER.title(),
+        changes.addButton(new ChangeButton(SummIcons.V100_CONJURER, HeroClass.CONJURER.title(),
                 "The Goat is back, and more invested than ever.\n\n" +
                         "_-_ Now has a full set of tier 1, tier 2 and tier 3 talents (no armor abilities or t4...)!\n" +
                         "_-_ His appearance changes when choosing a subclass.\n" +
