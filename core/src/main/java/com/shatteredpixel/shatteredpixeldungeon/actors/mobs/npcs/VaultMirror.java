@@ -27,15 +27,36 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.BeamOfAffection;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.DreemurrsNecromancy;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.EnergizedRenewal;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.PushingWaveform;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.RunicShell;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.ShockerBreaker;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.StarBlazing;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.SubNullFieldLighter;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.Concentration;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.DirectingPulse;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.EnergizedBlast;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.MotionBloom;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.knight.ShardsOfDespair;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.AntarcticTouch;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.ArtemisBridge;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.HolyAura;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.TommiesArmorSpell;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.soulreaver.TransmogrificationWand;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.GenericBag;
+import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfMagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.Greatsword;
-import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -76,8 +97,9 @@ public class VaultMirror extends NPC {
 					((BrokenSeal)reward).setGlyph(Armor.Glyph.random());
 					break;
 				case MAGE:
-					reward = new MagesStaff().upgrade(3).identify(false);
-					((MagesStaff)reward).enchant();
+					reward = new WandOfMagicMissile();
+					((WandOfMagicMissile)reward).enchant();
+					((WandOfMagicMissile) reward).magicalPotionBonus = true;
 					break;
 				case ROGUE:
 					reward = new CloakOfShadows().upgrade(8).identify(false);
@@ -94,6 +116,34 @@ public class VaultMirror extends NPC {
 				case CLERIC:
 					reward = new HolyTome().upgrade(8).identify(false);
 					((HolyTome) reward).directCharge(8);
+					break;
+				case CONJURER:
+					ConjurerBook book = new ConjurerBook();
+					book.items.add(new StarBlazing());
+					book.items.add(new EnergizedRenewal());
+					book.items.add(new BeamOfAffection());
+					book.items.add(new RunicShell());
+					book.items.add(new PushingWaveform());
+					book.items.add(new ShockerBreaker());
+					book.items.add(new DreemurrsNecromancy());
+					book.items.add(new SubNullFieldLighter());
+					if (Dungeon.hero.subClass == HeroSubClass.WILL_SORCERER){
+						book.items.add(new EnergizedBlast());
+						book.items.add(new MotionBloom());
+						book.items.add(new Concentration());
+						book.items.add(new DirectingPulse());
+						book.items.add(new ShardsOfDespair());
+					} else if (Dungeon.hero.subClass == HeroSubClass.SOUL_WIELDER){
+						book.items.add(new AntarcticTouch());
+						book.items.add(new TommiesArmorSpell());
+						book.items.add(new TransmogrificationWand());
+						book.items.add(new ArtemisBridge());
+						book.items.add(new HolyAura());
+					}
+					reward = book;
+					break;
+				case ADVENTURER:
+					reward = new GenericBag();
 					break;
 			}
 		Random.popGenerator();
@@ -126,6 +176,12 @@ public class VaultMirror extends NPC {
 								break;
 							case CLERIC:
 								sceneText += Messages.get(VaultMirror.class, "scene_cleric");
+								break;
+							case ADVENTURER:
+								sceneText += Messages.get(VaultMirror.class, "scene_adventurer");
+								break;
+							case CONJURER:
+								sceneText += Messages.get(VaultMirror.class, "scene_conjurer");
 								break;
 						}
 						sceneText += "\n\n" + Messages.get(VaultMirror.class, "scene_final");
