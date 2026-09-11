@@ -66,43 +66,45 @@ public class WndChooseAbility extends Window {
 		titlebar.setRect( 0, 0, WIDTH, 0 );
 		add( titlebar );
 
-		IconButton random = new IconButton(Icons.SHUFFLE.get()){
-			@Override
-			protected void onClick() {
-				super.onClick();
-				GameScene.show(new WndOptions(Icons.SHUFFLE.get(),
-						Messages.get(WndChooseAbility.class, "random_title"),
-						Messages.get(WndChooseAbility.class, "random_sure"),
-						Messages.get(WndChooseAbility.class, "yes"),
-						Messages.get(WndChooseAbility.class, "no")){
-					@Override
-					protected void onSelect(int index) {
-						super.onSelect(index);
-						if (index == 0){
-							WndChooseAbility.this.hide();
-							ArmorAbility abil = Random.oneOf(armorAbilities.toArray(new ArmorAbility[0]));
-							crown.upgradeArmor(hero, armor, abil);
-							GameScene.show(new WndInfoArmorAbility(hero.heroClass, abil));
+		if (!armorAbilities.isEmpty()) {
+			IconButton random = new IconButton(Icons.SHUFFLE.get()) {
+				@Override
+				protected void onClick() {
+					super.onClick();
+					GameScene.show(new WndOptions(Icons.SHUFFLE.get(),
+							Messages.get(WndChooseAbility.class, "random_title"),
+							Messages.get(WndChooseAbility.class, "random_sure"),
+							Messages.get(WndChooseAbility.class, "yes"),
+							Messages.get(WndChooseAbility.class, "no")) {
+						@Override
+						protected void onSelect(int index) {
+							super.onSelect(index);
+							if (index == 0) {
+								WndChooseAbility.this.hide();
+								ArmorAbility abil = Random.oneOf(armorAbilities.toArray(new ArmorAbility[0]));
+								crown.upgradeArmor(hero, armor, abil);
+								GameScene.show(new WndInfoArmorAbility(hero.heroClass, abil));
+							}
 						}
-					}
-				});
-			}
-
-			@Override
-			public void update() {
-				if (Statistics.qualifiedForRandomVictoryBadge){
-					icon.tint(1, 1, 1, (float)Math.abs(Math.cos(1.5f*Math.PI* Game.timeTotal)/2f));
+					});
 				}
-				super.update();
-			}
 
-			@Override
-			protected String hoverText() {
-				return Messages.get(WndChooseAbility.class, "random_title");
-			}
-		};
-		random.setRect(WIDTH-16, 0, 16, 16);
-		if (crown != null) add(random);
+				@Override
+				public void update() {
+					if (Statistics.qualifiedForRandomVictoryBadge) {
+						icon.tint(1, 1, 1, (float) Math.abs(Math.cos(1.5f * Math.PI * Game.timeTotal) / 2f));
+					}
+					super.update();
+				}
+
+				@Override
+				protected String hoverText() {
+					return Messages.get(WndChooseAbility.class, "random_title");
+				}
+			};
+			random.setRect(WIDTH - 16, 0, 16, 16);
+			if (crown != null) add(random);
+		}
 
 		RenderedTextBlock body = PixelScene.renderTextBlock( 6 );
 		if (crown != null) {
