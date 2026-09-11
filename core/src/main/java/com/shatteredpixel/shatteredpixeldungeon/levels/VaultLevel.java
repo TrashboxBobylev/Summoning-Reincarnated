@@ -44,12 +44,14 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.quest.vault.VaultSke
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.Ropes;
 import com.shatteredpixel.shatteredpixeldungeon.items.Torch;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.MailArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScaleArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfFrost;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
@@ -59,6 +61,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlam
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfParalyticGas;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.CleanWater;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
@@ -68,6 +71,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRetributio
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTerror;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.TypeManager;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlast;
@@ -456,7 +460,8 @@ public class VaultLevel extends CityLevel {
 					Reflection.newInstance(Random.oneOf(PotionOfFrost.class, PotionOfLevitation.class)),
 					Reflection.newInstance(Random.oneOf(Mageroyal.Seed.class, Icecap.Seed.class, Stormvine.Seed.class)),
 					Reflection.newInstance(Random.oneOf(ScrollOfMirrorImage.class, ScrollOfTeleportation.class)),
-					Reflection.newInstance(Random.oneOf(StoneOfFlock.class, StoneOfShock.class, StoneOfFear.class))));
+					Reflection.newInstance(Random.oneOf(StoneOfFlock.class, StoneOfShock.class, StoneOfFear.class)),
+					new Ropes().quantity(Random.IntRange(1, 2))));
 			Collections.shuffle(consumableLoot.get(0));
 			//first item in each tier is always a potion of healing (except T3, which has one randomly)
 			consumableLoot.get(0).add(0, new PotionOfHealing());
@@ -479,7 +484,8 @@ public class VaultLevel extends CityLevel {
 					Reflection.newInstance(Random.oneOf(PotionOfMindVision.class, PotionOfLiquidFlame.class)),
 					Reflection.newInstance(Random.oneOf(Swiftthistle.Seed.class, Sungrass.Seed.class)),
 					Reflection.newInstance(Random.oneOf(ScrollOfLullaby.class, ScrollOfMagicMapping.class)),
-					Reflection.newInstance(Random.oneOf(StoneOfBlast.class, StoneOfBlink.class))));
+					Reflection.newInstance(Random.oneOf(StoneOfBlast.class, StoneOfBlink.class)),
+					new Bomb().random()));
 			Collections.shuffle(consumableLoot.get(2));
 			consumableLoot.get(2).add(0, new PotionOfHealing());
 		}
@@ -491,7 +497,8 @@ public class VaultLevel extends CityLevel {
 					Reflection.newInstance(Random.oneOf(Earthroot.Seed.class, Starflower.Seed.class)),
 					Reflection.newInstance(Random.oneOf(ScrollOfRetribution.class, ScrollOfTransmutation.class)),
 					Reflection.newInstance(Random.oneOf(StoneOfEnchantment.class, StoneOfAugmentation.class)),
-					new PotionOfHealing()));
+					new TypeManager(),
+					new CleanWater()));
 			Collections.shuffle(consumableLoot.get(3));
 		}
 	}
@@ -506,6 +513,7 @@ public class VaultLevel extends CityLevel {
 
 	static Class<?extends Item>[] T3SolveItems = new Class[]{
 			StoneOfBlink.class,
+			Ropes.class,
 			PotionOfInvisibility.class
 	};
 
@@ -523,6 +531,7 @@ public class VaultLevel extends CityLevel {
 
 	static Class<?extends Item>[] T2SolveItems = new Class[]{
 			StoneOfBlink.class,
+			Ropes.class,
 			PotionOfInvisibility.class
 	};
 
