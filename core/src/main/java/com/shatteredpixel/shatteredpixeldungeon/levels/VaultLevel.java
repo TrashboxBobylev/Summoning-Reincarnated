@@ -352,6 +352,34 @@ public class VaultLevel extends CityLevel {
 		((Wand)loot).curCharges = ((Wand)loot).maxCharges;
 		lootList.add(loot);
 
+		//staff (same level/tiering as 2nd weapon)
+		do {
+			switch (lootTier) {
+				default:
+				case 0:
+					loot = Generator.randomUsingDefaults(Generator.Category.STAFF_T2);
+					break;
+				case 1:
+					loot = Generator.randomUsingDefaults(Generator.Category.STAFF_T3);
+					break;
+				case 2:
+					loot = Generator.randomUsingDefaults(Generator.Category.STAFF_T4);
+					break;
+				case 3:
+					loot = Generator.randomUsingDefaults(Generator.Category.STAFF_T5);
+					break;
+			}
+			//T2 weapon duplicates allowed, because so many can be generated
+		} while (lootTier > 0 && generatedClasses.contains(loot.getClass()));
+		generatedClasses.add(loot.getClass());
+		loot.level(lootTier);
+		if (Random.Int(3) >= lootTier) {
+			((Weapon) loot).enchant(null);
+		} else {
+			((Weapon) loot).enchant();
+		}
+		lootList.add(loot);
+
 //		//ring (some rings are banned)
 //		do {
 //			loot = Generator.randomUsingDefaults(Generator.Category.RING);
