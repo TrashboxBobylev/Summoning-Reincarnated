@@ -158,7 +158,7 @@ public class VaultLevel extends CityLevel {
 		VaultRoom.setupChances();
 
 		int i = 0;
-		while (i < 9){
+		while (i < 10){
 			VaultRoom r = VaultRoom.createRoom();
 			i += r.sizeFactor();
 			initRooms.add(r);
