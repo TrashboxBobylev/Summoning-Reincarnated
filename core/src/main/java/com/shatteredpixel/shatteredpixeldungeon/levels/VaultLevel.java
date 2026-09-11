@@ -60,9 +60,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfParalyticGas;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfForce;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfMight;
-import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfWealth;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMirrorImage;
@@ -355,14 +352,14 @@ public class VaultLevel extends CityLevel {
 		((Wand)loot).curCharges = ((Wand)loot).maxCharges;
 		lootList.add(loot);
 
-		//ring (some rings are banned)
-		do {
-			loot = Generator.randomUsingDefaults(Generator.Category.RING);
-		} while (generatedClasses.contains(loot.getClass()) || loot instanceof RingOfWealth
-				|| loot instanceof RingOfMight || loot instanceof RingOfForce);
-		generatedClasses.add(loot.getClass());
-		loot.level(lootTier);
-		lootList.add(loot);
+//		//ring (some rings are banned)
+//		do {
+//			loot = Generator.randomUsingDefaults(Generator.Category.RING);
+//		} while (generatedClasses.contains(loot.getClass()) || loot instanceof RingOfWealth
+//				|| loot instanceof RingOfMight || loot instanceof RingOfForce);
+//		generatedClasses.add(loot.getClass());
+//		loot.level(lootTier);
+//		lootList.add(loot);
 
 		equipmentLoot[lootTier] = lootList.toArray(new Item[0]);
 	}
