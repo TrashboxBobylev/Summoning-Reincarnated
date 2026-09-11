@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items;
 
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ItemSlot;
 
 import java.util.Collections;
@@ -54,6 +55,49 @@ public interface TypedItem {
             case 2: return ItemSlot.TYPE2;
             case 3: return ItemSlot.TYPE3;
         }
+    }
+
+    default int getTypeIcon(){
+        return getTypeIcon(type(), false, false);
+    }
+
+    static int getTypeIcon(int type, boolean isGolden, boolean isLarge){
+        int icon;
+        if (!isLarge) {
+            switch (type) {
+                case 1:
+                default:
+                    icon = ItemSpriteSheet.Icons.TYPE_1;
+                    break;
+                case 2:
+                    icon = ItemSpriteSheet.Icons.TYPE_2;
+                    break;
+                case 3:
+                    icon = ItemSpriteSheet.Icons.TYPE_3;
+                    break;
+            }
+            if (isGolden) {
+                icon += 1;
+            }
+        } else {
+            switch (type) {
+                case 1:
+                default:
+                    icon = ItemSpriteSheet.TYPE_1;
+                    break;
+                case 2:
+                    icon = ItemSpriteSheet.TYPE_2;
+                    break;
+                case 3:
+                    icon = ItemSpriteSheet.TYPE_3;
+                    break;
+            }
+            if (isGolden) {
+                icon += 3;
+            }
+        }
+
+        return icon;
     }
 
     static String getTypeString(int type){

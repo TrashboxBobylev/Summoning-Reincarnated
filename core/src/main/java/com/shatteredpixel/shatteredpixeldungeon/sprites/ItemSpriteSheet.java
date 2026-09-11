@@ -1073,6 +1073,23 @@ public class ItemSpriteSheet {
 		assignItemRect(QUIVER, 15, 14);
 	}
 
+	private static final int TYPE_ICONS        =                               xy(1, 43);  //16 slots
+	public static final int TYPE_1           = TYPE_ICONS+0;
+	public static final int TYPE_2           = TYPE_ICONS+1;
+	public static final int TYPE_3           = TYPE_ICONS+2;
+	public static final int TYPE_1_GOLDEN    = TYPE_1+3;
+	public static final int TYPE_2_GOLDEN    = TYPE_2+3;
+	public static final int TYPE_3_GOLDEN    = TYPE_3+3;
+	static {
+		assignItemRect(TYPE_1, 13, 16);
+		assignItemRect(TYPE_2, 15, 15);
+		assignItemRect(TYPE_3, 13, 16);
+
+		assignItemRect(TYPE_1_GOLDEN, 13, 16);
+		assignItemRect(TYPE_2_GOLDEN, 15, 15);
+		assignItemRect(TYPE_3_GOLDEN, 13, 16);
+	}
+
 	//for smaller 8x8 icons that often accompany an item sprite
 	public static class Icons {
 
@@ -1273,6 +1290,18 @@ public class ItemSpriteSheet {
 			assignIconRect(SCROLL_PETRIFICATION, 5, 7);
 			assignIconRect(SCROLL_RALLYING,      6, 6);
 			assignIconRect(SCROLL_VIOLENCE,      6, 6);
+		}
+
+		public static final int TYPE_1 = xy(15, 1);
+		public static final int TYPE_2 = xy(15, 2);
+		public static final int TYPE_3 = xy(15, 3);
+		public static final int TYPE_1_GOLDEN = TYPE_1+1;
+		public static final int TYPE_2_GOLDEN = TYPE_2+1;
+		public static final int TYPE_3_GOLDEN = TYPE_3+1;
+		static {
+			for (int image : new int[]{TYPE_1, TYPE_2, TYPE_3, TYPE_1_GOLDEN, TYPE_2_GOLDEN, TYPE_3_GOLDEN}){
+				assignIconRect(image, 7, 8);
+			}
 		}
 
 	}

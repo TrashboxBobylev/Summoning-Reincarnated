@@ -83,7 +83,8 @@ public class WndTypeManager extends WndTabbed {
             }
 
             int finalI = i;
-            add(new LabeledTab(Messages.get(TypedItem.class, "type" + (finalI + 1))){
+            int icon = TypedItem.getTypeIcon(i+1, false, true);
+            add(new IconTab(new ItemSprite(icon)){
                 @Override
                 protected void select(boolean value) {
                     super.select( value );

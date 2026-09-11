@@ -54,9 +54,10 @@ public class ItemSlot extends Button {
 	public static final int ENHANCED	= 0x3399FF;
 	public static final int MASTERED	= 0xFFFF44;
 	public static final int CURSE_INFUSED	= 0x8800FF;
-	public static final int TYPE1 = 0xFF7B00;
-	public static final int TYPE2 = 0x57AEFF;
-	public static final int TYPE3 = 0x2FED2F;
+	public static final int TYPE1 = 0x66B3FF;
+	public static final int TYPE2 = 0xD45FE8;
+	public static final int TYPE3 = 0xEE48B0;
+	public static final int TYPE_GOLD = 0xE6BC00;
 	public static final int DEGRADED_ATU	= 0x9C3B8D;
 	public static final int WARNING_ATU		= 0x3239A1;
 	public static final int NORMAL_ATU		= 0x2E4CE6;
@@ -71,7 +72,7 @@ public class ItemSlot extends Button {
 	protected Item       item;
 	protected BitmapText status;
 	protected BitmapText extra;
-	protected BitmapText type;
+	protected Image      type;
 	protected Image      itemIcon;
 	protected BitmapText level;
 	
@@ -136,9 +137,6 @@ public class ItemSlot extends Button {
 		
 		level = new BitmapText( PixelScene.pixelFont);
 		add(level);
-
-		type = new BitmapText( PixelScene.pixelFont);
-		add(type);
 	}
 	
 	@Override
@@ -178,6 +176,12 @@ public class ItemSlot extends Button {
 			}
 		}
 
+		if (type != null) {
+			type.x = x;
+			type.y = y + (height - type.height) - margin.bottom;
+			PixelScene.align(type);
+		}
+
 		if (itemIcon != null){
 			//center the icon slightly if there is enough room
 			if (width >= 24 || height >= 24) {
@@ -188,8 +192,7 @@ public class ItemSlot extends Button {
 				itemIcon.y = y + margin.top;
 			}
 			if (item instanceof Staff){
-				itemIcon.x = x + margin.left;
-				itemIcon.y = y + height - itemIcon.height - margin.top;
+				itemIcon.y = y + height - itemIcon.height() - margin.top;
 			}
 			PixelScene.align(itemIcon);
 		}
@@ -198,22 +201,6 @@ public class ItemSlot extends Button {
 			level.x = x + (width - level.width()) - margin.right;
 			level.y = y + (height - level.baseLine() - 1) - margin.bottom;
 			PixelScene.align(level);
-		}
-
-		if (type != null) {
-			type.measure();
-			if (type.width + level.width > width - (margin.left + margin.right)){
-				type.scale.set(PixelScene.align(0.8f));
-			} else {
-				type.scale.set(1f);
-			}
-            if (item instanceof TypedItem && ((TypedItem) item).canHaveLevels()) {
-                type.x = x - margin.left;
-            } else {
-                type.x = x + (width - type.width()) - margin.right;
-            }
-            type.y = y + (height - type.baseLine() - 1) - margin.bottom;
-			PixelScene.align(type);
 		}
 
 	}
@@ -271,11 +258,16 @@ public class ItemSlot extends Button {
 			itemIcon = null;
 		}
 
+		if (type != null){
+			remove(type);
+			type = null;
+		}
+
 		if (item == null){
-			status.visible = extra.visible = level.visible = type.visible = false;
+			status.visible = extra.visible = level.visible = false;
 			return;
 		} else {
-			status.visible = extra.visible = level.visible = type.visible = true;
+			status.visible = extra.visible = level.visible = true;
 		}
 
 		status.text( item.status() );
@@ -345,10 +337,11 @@ public class ItemSlot extends Button {
 			if (((TypedItem) item).canHaveLevels()){
 				showLevel(level);
 			}
-			type.text(TypedItem.getTypeString(((TypedItem) item).type()));
-			type.hardlight(TypedItem.getTypeColor(((TypedItem) item).type()));
+			type = new Image(Assets.Sprites.ITEM_ICONS);
+			int icon = ((TypedItem) item).getTypeIcon();
+			type.frame(ItemSpriteSheet.Icons.film.get(icon));
+			add(type);
 		} else {
-			type.text(null);
 			showLevel(level);
 		}
 
@@ -398,7 +391,7 @@ public class ItemSlot extends Button {
 		status.alpha( alpha );
 		extra.alpha( alpha );
 		level.alpha( alpha );
-		type.alpha( alpha );
+		if (type != null) type.alpha( alpha );
 		if (itemIcon != null) itemIcon.alpha( alpha );
 	}
 
