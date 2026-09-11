@@ -26,13 +26,10 @@ package com.shatteredpixel.shatteredpixeldungeon.windows;
 
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
-import com.shatteredpixel.shatteredpixeldungeon.ui.changelist.WndChangesTabbed;
 import com.watabou.input.PointerEvent;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.PointerArea;
@@ -72,19 +69,9 @@ public class WndJournalItem extends WndTitledMessage {
 				@Override
 				protected void onClick() {
 					if (ShatteredPixelDungeon.scene() instanceof GameScene) {
-						GameScene.show(new WndChangesTabbed(
-								new ItemSprite(item),
-								Messages.titleCase(Messages.get(WndJournalItem.class, "types")),
-								((TypedItem) item).getTypeMessage(1),
-								((TypedItem) item).getTypeMessage(2),
-								((TypedItem) item).getTypeMessage(3)));
+						GameScene.show(new WndItemTypes(item));
 					} else {
-						ShatteredPixelDungeon.scene().addToFront(new WndChangesTabbed(
-								new ItemSprite(item),
-								Messages.titleCase(Messages.get(WndJournalItem.class, "types")),
-								((TypedItem) item).getTypeMessage(1),
-								((TypedItem) item).getTypeMessage(2),
-								((TypedItem) item).getTypeMessage(3)));
+						ShatteredPixelDungeon.scene().addToFront(new WndItemTypes(item));
 					}
 				}
 			};
