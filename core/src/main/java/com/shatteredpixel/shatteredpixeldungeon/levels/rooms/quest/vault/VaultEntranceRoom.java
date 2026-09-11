@@ -25,7 +25,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels.rooms.quest.vault;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Torch;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.VaultBeacon;
@@ -118,7 +117,7 @@ public class VaultEntranceRoom extends VaultRoom {
 			ofs = level.width();
 		}
 
-		boolean addTorch = Dungeon.isChallenged(Challenges.DARKNESS);
+		boolean addTorch = Dungeon.mode == Dungeon.GameMode.NINE_CHAL;
 		switch (Random.Int(3)){
 			case 0:
 				if (addTorch) level.drop(new Torch(), level.pointToCell(furthest)-ofs);

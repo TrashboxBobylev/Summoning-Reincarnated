@@ -25,7 +25,6 @@
 package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -638,7 +637,7 @@ public class VaultLevel extends CityLevel {
 		}
 
 		//also generate 2 torches if into darkness is enabled. Separate seed to avoid affecting other parts of levelgen
-		if (Dungeon.isChallenged(Challenges.DARKNESS)){
+		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
 			Random.pushGenerator(Random.Long());
 			for (int i = 0; i < 2; i++){
 				int cell = randomDropCell();

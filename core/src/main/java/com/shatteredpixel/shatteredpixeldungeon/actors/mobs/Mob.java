@@ -445,7 +445,7 @@ public abstract class Mob extends Char {
 
 	protected void processSwarmIntel( boolean enemyInFOV ){
 		if (alignment == Alignment.ENEMY && state == HUNTING
-				&& Dungeon.isChallenged(Challenges.SWARM_INTELLIGENCE)
+				&& Dungeon.mode == Dungeon.GameMode.NINE_CHAL
 				&& enemyInFOV && enemy != null && enemy.alignment == Alignment.ALLY) {
 
 			if (timeSeenAt >= now()){
