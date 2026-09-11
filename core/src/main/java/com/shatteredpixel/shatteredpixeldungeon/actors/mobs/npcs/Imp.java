@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.DwarfToken;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
@@ -346,6 +347,16 @@ public class Imp extends NPC {
 				MissileWeapon m = (MissileWeapon) Generator.random(Generator.Category.MISSILE);
 				m.identify(false);
 				rewardOptions.add(m);
+
+				Staff staff;
+				if (Random.Int(2) == 0) {
+					staff = (Staff) Generator.random(Generator.Category.STAFF_T5);
+				} else {
+					staff = (Staff) Generator.random(Generator.Category.STAFF_T4);
+				}
+				staff.identify(false);
+				staff.curCharges = 1;
+				rewardOptions.add(staff);
 
 				for (Item i : rewardOptions){
 					i.cursed = false;
