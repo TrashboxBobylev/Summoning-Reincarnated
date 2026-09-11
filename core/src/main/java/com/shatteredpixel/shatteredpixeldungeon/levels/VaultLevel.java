@@ -46,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Ropes;
 import com.shatteredpixel.shatteredpixeldungeon.items.Torch;
+import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.MailArmor;
@@ -313,6 +314,7 @@ public class VaultLevel extends CityLevel {
 		} while (generatedClasses.contains(loot.getClass()));
 		generatedClasses.add(loot.getClass());
 		loot.level(lootTier);
+		((TypedItem)loot).type(Random.IntRange(1, 3));
 		if (Random.Int(3) >= lootTier) {
 			((Weapon) loot).enchant(null);
 		} else {
@@ -353,6 +355,7 @@ public class VaultLevel extends CityLevel {
 				|| loot instanceof WandOfTransfusion || loot instanceof WandOfCorruption);
 		generatedClasses.add(loot.getClass());
 		loot.level(lootTier);
+		((TypedItem)loot).type(Random.IntRange(1, 3));
 		((Wand)loot).curCharges = ((Wand)loot).maxCharges;
 		lootList.add(loot);
 
@@ -377,6 +380,7 @@ public class VaultLevel extends CityLevel {
 		} while (lootTier > 0 && generatedClasses.contains(loot.getClass()));
 		generatedClasses.add(loot.getClass());
 		loot.level(lootTier);
+		((TypedItem)loot).type(Random.IntRange(1, 3));
 		if (Random.Int(3) >= lootTier) {
 			((Weapon) loot).enchant(null);
 		} else {
