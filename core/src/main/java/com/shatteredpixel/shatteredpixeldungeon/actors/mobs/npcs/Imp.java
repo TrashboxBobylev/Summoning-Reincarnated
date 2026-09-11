@@ -343,7 +343,7 @@ public class Imp extends NPC {
 				w.curCharges = w.maxCharges;
 				rewardOptions.add(w);
 
-				MissileWeapon m = (MissileWeapon) Generator.random(Generator.Category.WAND);
+				MissileWeapon m = (MissileWeapon) Generator.random(Generator.Category.MISSILE);
 				m.identify(false);
 				rewardOptions.add(m);
 
