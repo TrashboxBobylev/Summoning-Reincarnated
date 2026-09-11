@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MagesStaff;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
@@ -180,7 +181,7 @@ public class EscapeCrystal extends Item {
 											}
 											//lowest reward, just a consumable
 											if (finalScore <= 1000){
-												return !item.unique && !(item instanceof EquipableItem || item instanceof Wand);
+												return !item.unique && !(item instanceof EquipableItem || item instanceof Staff);
 											//mid rewards, item at a max of +0 or +1
 											} else if (finalScore < 4000){
 												int maxLevel = finalScore > 2000 ? 1 : 0;
