@@ -873,6 +873,9 @@ public class InterlevelScene extends PixelScene {
 
 		Dungeon.depth = 1;
 		Dungeon.branch = AbyssLevel.BRANCH;
+		Dungeon.LimitedDrops.LAB_ROOM.count = 0;
+		Dungeon.LimitedDrops.ATU_ROOM.count = 0;
+		Dungeon.LimitedDrops.MYSTMERCH_ROOM.count = 0;
 		Statistics.deepestFloor = 0;
 		Statistics.floorsExplored.clear();
 		Level level = Dungeon.newLevel();
