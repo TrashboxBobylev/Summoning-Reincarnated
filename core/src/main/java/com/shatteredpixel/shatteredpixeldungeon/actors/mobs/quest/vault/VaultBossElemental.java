@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PinCushion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.ClericSpell;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
@@ -312,7 +313,9 @@ public class VaultBossElemental extends Mob {
 
 	@Override
 	public int defenseProc(Char enemy, int damage) {
-		if (form == ElementalForm.SHOCK && enemy == Dungeon.hero && !(Dungeon.hero.belongings.attackingWeapon() instanceof MissileWeapon)){
+		if (form == ElementalForm.SHOCK && enemy == Dungeon.hero &&
+				!(Dungeon.hero.belongings.attackingWeapon() instanceof MissileWeapon) ||
+				!(enemy instanceof Minion && enemy.distance(this) < 2)){
 			enemy.sprite.parent.addToFront( new Lightning( sprite.center(), enemy.sprite.center(), null ) );
 			enemy.damage( Random.IntRange(5, 10), new Shocking() );
 			Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
