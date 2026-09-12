@@ -96,6 +96,6 @@ public abstract class DamageWand extends Wand implements DamageSource {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.MAGICAL);
+        return EnumSet.of(DamageProperty.ENRAGES_GREATER_FIRE);
     }
 }

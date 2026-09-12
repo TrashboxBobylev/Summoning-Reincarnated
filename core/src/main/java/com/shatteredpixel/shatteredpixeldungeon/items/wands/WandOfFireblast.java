@@ -337,7 +337,7 @@ public class WandOfFireblast extends DamageWand {
 
 	@Override
 	public EnumSet<DamageProperty> initDmgProperties() {
-		return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.FIRE);
+		return EnumSet.of(DamageProperty.ENRAGES_GREATER_FIRE, DamageProperty.FIRE);
 	}
 
 }

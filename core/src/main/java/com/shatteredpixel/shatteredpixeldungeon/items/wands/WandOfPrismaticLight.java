@@ -273,7 +273,7 @@ public class WandOfPrismaticLight extends DamageWand {
 
     @Override
     public EnumSet<DamageProperty> initDmgProperties() {
-        return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.HOLY);
+        return EnumSet.of(DamageProperty.ENRAGES_GREATER_FIRE, DamageProperty.HOLY);
     }
 
 }

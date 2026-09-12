@@ -176,7 +176,11 @@ public enum DamageProperty {
     /**
      * Damage dealt by instant kills.
      */
-    INSTANT_KILL(MAGICAL)
+    INSTANT_KILL(MAGICAL),
+    /**
+     * Damage, that aggravates fire greater elemental.
+     */
+    ENRAGES_GREATER_FIRE(MAGICAL)
     ;
 
     public HashSet<DamageProperty> children;

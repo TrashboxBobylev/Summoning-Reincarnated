@@ -348,7 +348,7 @@ public class WandOfLightning extends DamageWand {
 
 	@Override
 	public EnumSet<DamageProperty> initDmgProperties() {
-		return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.ELECTRIC);
+		return EnumSet.of(DamageProperty.ENRAGES_GREATER_FIRE, DamageProperty.ELECTRIC);
 	}
 	
 }

@@ -129,7 +129,7 @@ public class GasterBlaster extends StationaryMinion {
     public EnumSet<DamageProperty> initDmgProperties() {
         EnumSet<DamageProperty> damageProperties = super.initDmgProperties();
         damageProperties.remove(DamageProperty.PHYSICAL);
-        damageProperties.add(DamageProperty.MAGICAL);
+        damageProperties.add(DamageProperty.ENRAGES_GREATER_FIRE);
         return damageProperties;
     }
 

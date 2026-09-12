@@ -58,6 +58,7 @@ import com.shatteredpixel.shatteredpixeldungeon.levels.RegularLevel;
 import com.shatteredpixel.shatteredpixeldungeon.levels.rooms.Room;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ConeAOE;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -338,10 +339,10 @@ public class VaultBossElemental extends Mob {
 	public void damage(int dmg, DamageSource src) {
 		//fire form is resistant to magic and weak to thrown weapons
 		if (form == ElementalForm.FIRE){
-			if (AntiMagic.RESISTS.contains(src.getClass())){
+			if (AntiMagic.RESISTS.contains(src.getClass()) || src.hasProperty(DamageProperty.MAGICAL)){
 				dmg /= 4;
 				//prompts faster attacks, only do this if it's from the hero
-				if (src instanceof Wand || src instanceof ClericSpell){
+				if (src.hasProperty(DamageProperty.ENRAGES_GREATER_FIRE)){
 					GLog.w(Messages.get(this, "fire_resist"));
 					spAttackCooldown -= 3;
 					envAttackCooldown -= 5;
