@@ -24,18 +24,17 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.bags;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.TypedItem;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ConjurerSpell;
-import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.ActionIndicator;
-import com.watabou.noosa.BitmapText;
+import com.watabou.noosa.Image;
 import com.watabou.noosa.Visual;
 import com.watabou.utils.Bundle;
 
@@ -170,11 +169,12 @@ public class ConjurerBook extends Bag {
 
 		@Override
 		public Visual secondaryVisual() {
-			BitmapText txt = new BitmapText(PixelScene.pixelFont);
-			txt.text(TypedItem.getTypeString(quickSpell.type()));
-			txt.hardlight(TypedItem.getTypeColor(quickSpell.type(), quickSpell.isReinforced()));
-			txt.measure();
-			return txt;
+			Image type = new Image(Assets.Sprites.ITEM_ICONS);
+			int icon = quickSpell.getTypeIcon();
+			type.frame(ItemSpriteSheet.Icons.film.get(icon));
+			if (quickSpell.isReinforced() && !quickSpell.canSwitchTypes())
+				type.tint(0x1a160c, 0.75f);
+			return type;
 		}
 
 		@Override
