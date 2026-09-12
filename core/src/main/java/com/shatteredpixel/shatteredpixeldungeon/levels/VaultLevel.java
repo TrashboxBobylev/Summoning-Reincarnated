@@ -73,6 +73,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportat
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTerror;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTransmutation;
 import com.shatteredpixel.shatteredpixeldungeon.items.spells.TypeManager;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAugmentation;
 import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfBlast;
@@ -382,9 +383,9 @@ public class VaultLevel extends CityLevel {
 		loot.level(lootTier);
 		((TypedItem)loot).type(Random.IntRange(1, 3));
 		if (Random.Int(3) >= lootTier) {
-			((Weapon) loot).enchant(null);
+			((Staff) loot).enchant(null);
 		} else {
-			((Weapon) loot).enchant();
+			((Staff) loot).enchant();
 		}
 		lootList.add(loot);
 
