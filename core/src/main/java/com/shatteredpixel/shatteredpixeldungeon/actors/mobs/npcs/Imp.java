@@ -346,6 +346,7 @@ public class Imp extends NPC {
 
 				MissileWeapon m = (MissileWeapon) Generator.random(Generator.Category.MISSILE);
 				m.identify(false);
+				m.enchant();
 				rewardOptions.add(m);
 
 				Staff staff;
@@ -354,6 +355,7 @@ public class Imp extends NPC {
 				} else {
 					staff = (Staff) Generator.random(Generator.Category.STAFF_T4);
 				}
+				staff.enchant();
 				staff.identify(false);
 				staff.curCharges = 1;
 				rewardOptions.add(staff);
