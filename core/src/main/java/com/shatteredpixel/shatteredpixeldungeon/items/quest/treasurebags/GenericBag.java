@@ -24,8 +24,15 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
+import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRemoveCurse;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfDetectMagic;
+import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfIntuition;
+import com.shatteredpixel.shatteredpixeldungeon.levels.VaultLevel;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 import java.util.ArrayList;
@@ -38,7 +45,21 @@ public class GenericBag extends TreasureBag {
     @Override
     protected ArrayList<Item> items() {
         ArrayList<Item> items = new ArrayList<>();
-        for(int i = 0; i < 7; i++) items.add(Generator.random());
+        for(int i = 0; i < 7; i++) {
+            Item item;
+            do {
+                item = Generator.random();
+                if (!(Dungeon.level instanceof VaultLevel))
+                    break;
+                // does not give useless stuff in the vault
+            } while (item instanceof Gold || item instanceof ScrollOfIdentify || item instanceof ScrollOfRemoveCurse ||
+                item instanceof StoneOfIntuition || item instanceof StoneOfDetectMagic);
+            if (Dungeon.level instanceof VaultLevel){
+                item.cursed = false;
+                item.identify(false);
+            }
+            items.add(item);
+        }
         return items;
     }
 
