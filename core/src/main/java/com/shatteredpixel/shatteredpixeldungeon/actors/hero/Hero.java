@@ -1086,6 +1086,14 @@ public class Hero extends Char {
 	public void spendConstant(float time) {
         justMoved = false;
 		super.spendConstant(time);
+
+		for (Item item : belongings){
+			if (item.isTypeReinforced && item.typeReinforcementCooldown > 0){
+				item.typeReinforcementCooldown = (int) Math.max(0, item.typeReinforcementCooldown - time);
+				if (item.typeReinforcementCooldown == 0)
+					Item.updateQuickslot();
+			}
+		}
 	}
 
 	public void spendAndNextConstant(float time ) {

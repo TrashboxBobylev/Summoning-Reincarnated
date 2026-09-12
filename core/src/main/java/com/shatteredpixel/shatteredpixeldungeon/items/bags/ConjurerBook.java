@@ -172,7 +172,7 @@ public class ConjurerBook extends Bag {
 		public Visual secondaryVisual() {
 			BitmapText txt = new BitmapText(PixelScene.pixelFont);
 			txt.text(TypedItem.getTypeString(quickSpell.type()));
-			txt.hardlight(TypedItem.getTypeColor(quickSpell.type()));
+			txt.hardlight(TypedItem.getTypeColor(quickSpell.type(), quickSpell.isReinforced()));
 			txt.measure();
 			return txt;
 		}

@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.spells;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -40,7 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndTypeManager;
 // we just need for it to behave like enchantment scroll, which means
 // creating our own item selector without spending turn right away
 // and such
-public class TypeManager extends Spell {
+public class TypeManager extends Spell implements TypedItem.Managing {
 
     {
         image = ItemSpriteSheet.TYPE_MANAGER;
@@ -52,6 +53,24 @@ public class TypeManager extends Spell {
     @Override
     public ItemSprite.Glowing glowing() {
         return TEAL;
+    }
+
+    @Override
+    public void onDetach(Item item) {
+        detach(Dungeon.hero.belongings.backpack);
+        if (item.isTypeReinforced && item.typeReinforcementCooldown > 0){
+            item.typeReinforcementCooldown /= 2;
+        }
+    }
+
+    @Override
+    public int uiIcon() {
+        return image;
+    }
+
+    @Override
+    public String managingDescription(Item itemChanged) {
+        return Messages.get(TypeManager.class, "change_desc");
     }
 
     public void reShowSelector(){

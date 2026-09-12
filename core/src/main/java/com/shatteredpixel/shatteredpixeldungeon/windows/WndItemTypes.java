@@ -75,7 +75,7 @@ public class WndItemTypes extends WndTabbed {
             }
 
             int finalI = i-1;
-            int icon = TypedItem.getTypeIcon(i, false, true);
+            int icon = TypedItem.getTypeIcon(i, ((TypedItem) item).isReinforced(), true);
             add(new IconTab(new ItemSprite(icon)){
                 @Override
                 protected void select(boolean value) {

@@ -301,6 +301,13 @@ public class ToyKnife extends MeleeWeapon implements TypedItem, ManaSource {
         );
     }
 
+    @Override
+    public String statsInfo() {
+        String statsInfo = super.statsInfo();
+        statsInfo += reinforceCooldownDescription();
+        return statsInfo;
+    }
+
     private static final String TYPE = "rank";
 
     @Override

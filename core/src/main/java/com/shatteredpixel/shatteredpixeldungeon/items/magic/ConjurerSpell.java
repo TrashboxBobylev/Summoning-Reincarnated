@@ -248,7 +248,7 @@ public abstract class ConjurerSpell extends Item implements TypedItem, ManaSourc
 
     @Override
     public String desc() {
-        return fullSpellDesc() + "\n\n" + manaCostDesc();
+        return fullSpellDesc() + "\n\n" + manaCostDesc() + reinforceCooldownDescription();
     }
 
     public String spellDesc() {

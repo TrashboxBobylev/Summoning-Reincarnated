@@ -192,6 +192,11 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
     }
 
     @Override
+    public int reinforcementCooldown() {
+        return getChargeTurns()*5/4;
+    }
+
+    @Override
     public float ATUReq() {
         float atuReq = ATUReq(0);
         if (minion != null){
@@ -486,6 +491,8 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
             info += "\n\n" + Messages.get(Weapon.class, "enchanted", enchantment.name());
             info += " " + Messages.get(enchantment, "desc");
         }
+
+        info += reinforceCooldownDescription();
 
         if (cursedKnown && cursed) {
             info += "\n\n" + Messages.get(Weapon.class, "cursed");

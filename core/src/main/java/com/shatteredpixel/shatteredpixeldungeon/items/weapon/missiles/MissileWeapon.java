@@ -787,6 +787,8 @@ abstract public class MissileWeapon extends Weapon implements TypedItem {
 			info += "\n\n" + Messages.get(Weapon.class, "hardened_no_enchant");
 		}
 
+		info += reinforceCooldownDescription();
+
 		if (cursedKnown && cursed) {
 			info += "\n\n" + Messages.get(Weapon.class, "cursed");
 		} else if (!isIdentified() && cursedKnown){

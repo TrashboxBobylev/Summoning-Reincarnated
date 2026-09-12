@@ -35,7 +35,6 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.HeroSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
-import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RedButton;
 import com.shatteredpixel.shatteredpixeldungeon.ui.RenderedTextBlock;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
@@ -54,10 +53,10 @@ public class WndTypeManager extends WndTabbed {
     private RedButton btnSwitch;
 
     private static Item typedItem;
-    private static Item typer;
+    private static TypedItem.Managing typer;
     protected static int selectedType;
 
-    public WndTypeManager(TypeManager typeManager, Item item){
+    public WndTypeManager(TypedItem.Managing typeManager, Item item){
         super();
 
         typedItem = item;
@@ -72,7 +71,7 @@ public class WndTypeManager extends WndTabbed {
         RenderedTextBlock largest = null;
         for (int i = 0; i < 3; i++){
             RenderedTextBlock text = PixelScene.renderTextBlock( 6 );
-            text.text( Messages.get(TypeManager.class, "change_desc") + "\n\n"
+            text.text(typer.managingDescription(typedItem) + "\n\n"
                     + ((TypedItem) typedItem).getTypeMessage(i+1), width );
             text.setPos( titlebar.left(), titlebar.bottom() + 2*GAP );
             add( text );
@@ -83,7 +82,7 @@ public class WndTypeManager extends WndTabbed {
             }
 
             int finalI = i;
-            int icon = TypedItem.getTypeIcon(i+1, false, true);
+            int icon = TypedItem.getTypeIcon(i+1, ((TypedItem)item).isReinforced(), true);
             add(new IconTab(new ItemSprite(icon)){
                 @Override
                 protected void select(boolean value) {
@@ -123,8 +122,8 @@ public class WndTypeManager extends WndTabbed {
                 ((HeroSprite)Dungeon.hero.sprite).read();
 
                 Sample.INSTANCE.play( Assets.Sounds.READ );
-                Dungeon.hero.sprite.burst(TypedItem.getTypeColor(selectedType), 10);
-                typer.detach(Dungeon.hero.belongings.backpack);
+                Dungeon.hero.sprite.burst(TypedItem.getTypeColor(selectedType, false), 10);
+                typer.onDetach(typedItem);
                 Enchanting.show(Dungeon.hero, new Item(){
                     @Override
                     public int image() {
@@ -133,7 +132,7 @@ public class WndTypeManager extends WndTabbed {
 
                     @Override
                     public ItemSprite.Glowing glowing() {
-                        return new ItemSprite.Glowing(TypedItem.getTypeColor(selectedType));
+                        return new ItemSprite.Glowing(TypedItem.getTypeColor(selectedType, false));
                     }
                 });
                 Item.updateQuickslot();
@@ -145,7 +144,7 @@ public class WndTypeManager extends WndTabbed {
         btnSwitch.setRect(0, largest.bottom()+2*GAP, width, BUTTON_HEIGHT);
         add(btnSwitch);
 
-        btnSwitch.icon(new ItemSprite(ItemSpriteSheet.TYPE_MANAGER));
+        btnSwitch.icon(new ItemSprite(typer.uiIcon()));
         btnSwitch.enable(Dungeon.hero.ready);
 
         resize( width, (int)btnSwitch.bottom() + 2 );
@@ -166,6 +165,6 @@ public class WndTypeManager extends WndTabbed {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        ((TypeManager) typer).reShowSelector();
+        typer.reShowSelector();
     }
 }

@@ -93,7 +93,7 @@ public class WndInfoItem extends Window {
 		
 		int color = TITLE_COLOR;
 		if (item instanceof TypedItem){
-			color = TypedItem.getTypeColor(((TypedItem) item).type());
+			color = TypedItem.getTypeColor(((TypedItem) item).type(), item.isReinforced());
 		} else {
 			if (item.levelKnown && item.level() > 0) {
 				color = ItemSlot.UPGRADED;

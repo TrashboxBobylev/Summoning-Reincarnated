@@ -56,6 +56,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.MissileSprite;
 import com.shatteredpixel.shatteredpixeldungeon.ui.QuickSlotButton;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndItemTypes;
+import com.shatteredpixel.shatteredpixeldungeon.windows.WndTypeManager;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.Visual;
 import com.watabou.noosa.audio.Sample;
@@ -82,6 +83,7 @@ public class Item implements Bundlable {
 	public static final String AC_DROP		= "DROP";
 	public static final String AC_THROW		= "THROW";
 	public static final String AC_TIERINFO  = "TIERINFO";
+	public static final String AC_TIERSWITCH= "TIERSWITCH";
 
 	protected String defaultAction;
 	public boolean usesTargeting;
@@ -112,6 +114,10 @@ public class Item implements Bundlable {
 	public boolean bones = false;
 
 	public int customNoteID = -1;
+
+	// type reinforcement stuff
+	public boolean isTypeReinforced = false;
+	public int typeReinforcementCooldown = 0;
 	
 	public static final Comparator<Item> itemComparator = new Comparator<Item>() {
 		@Override
@@ -126,6 +132,8 @@ public class Item implements Bundlable {
 		actions.add( AC_THROW );
 		if (this instanceof TypedItem){
 			actions.add( AC_TIERINFO );
+			if (isTypeReinforced && ((TypedItem) this).canSwitchTypes())
+				actions.add( AC_TIERSWITCH );
 		}
 		return actions;
 	}
@@ -191,6 +199,33 @@ public class Item implements Bundlable {
 			
 		} else if (action.equals(AC_TIERINFO)) {
 			ShatteredPixelDungeon.runOnRenderThread(() -> Game.scene().addToFront(new WndItemTypes(this)));
+		} else if (action.equals(AC_TIERSWITCH)){
+			if (!isTypeReinforced){
+				GLog.warning(Messages.get(TypedItem.class, "not_reinforced"));
+			} else if (typeReinforcementCooldown > 0){
+				GLog.warning(Messages.get(TypedItem.class, "reinforced_on_cooldown"));
+			} else {
+				ShatteredPixelDungeon.runOnRenderThread(() -> Game.scene().addToFront(
+						new WndTypeManager(new TypedItem.Managing() {
+							@Override
+							public void onDetach(Item item) {
+								item.typeReinforcementCooldown = ((TypedItem) item).reinforcementCooldown();
+							}
+
+							@Override
+							public int uiIcon() {
+								return image;
+							}
+
+							@Override
+							public void reShowSelector() {}
+
+							@Override
+							public String managingDescription(Item itemChanged) {
+								return Messages.get(TypedItem.class, "reinforcement_change_type_desc", ((TypedItem)itemChanged).reinforcementCooldown());
+							}
+						}, this)));
+			}
 		}
 	}
 
@@ -461,6 +496,14 @@ public class Item implements Bundlable {
 		
 		return this;
 	}
+
+	public boolean isReinforced(){
+		return isTypeReinforced;
+	}
+
+	public int currentCooldown(){
+		return typeReinforcementCooldown;
+	}
 	
 	public int visiblyUpgraded() {
 		return levelKnown ? level() : 0;
@@ -641,6 +684,8 @@ public class Item implements Bundlable {
 	private static final String QUICKSLOT		= "quickslotpos";
 	private static final String KEPT_LOST       = "kept_lost";
 	private static final String CUSTOM_NOTE_ID = "custom_note_id";
+	private static final String REINFORCEMENT   = "typeReinforced";
+	private static final String REINFORCE_CD    = "typeReinforcedCooldown";
 	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -654,6 +699,8 @@ public class Item implements Bundlable {
 		}
 		bundle.put( KEPT_LOST, keptThoughLostInvent );
 		if (customNoteID != -1)     bundle.put(CUSTOM_NOTE_ID, customNoteID);
+		bundle.put(REINFORCEMENT, isTypeReinforced);
+		bundle.put(REINFORCE_CD, typeReinforcementCooldown);
 	}
 	
 	@Override
@@ -680,6 +727,10 @@ public class Item implements Bundlable {
 
 		keptThoughLostInvent = bundle.getBoolean( KEPT_LOST );
 		if (bundle.contains(CUSTOM_NOTE_ID))    customNoteID = bundle.getInt(CUSTOM_NOTE_ID);
+		if (bundle.contains(REINFORCEMENT)) {
+			isTypeReinforced = bundle.getBoolean(REINFORCEMENT);
+			typeReinforcementCooldown = bundle.getInt(REINFORCE_CD);
+		}
 	}
 
 	public int targetingPos( Hero user, int dst ){

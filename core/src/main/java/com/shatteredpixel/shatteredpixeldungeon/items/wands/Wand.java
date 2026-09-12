@@ -504,6 +504,8 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         if (resinBonus > 0)
 		    desc += "\n\n" + Messages.get(Wand.class, "resin_many", resinBonus*RESIN_BOOST);
 
+		desc += reinforceCooldownDescription();
+
 		if (cursed && cursedKnown) {
 			desc += "\n\n" + Messages.get(Wand.class, "cursed");
 		} else if (!isIdentified() && cursedKnown){
@@ -710,7 +712,12 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
         );
     }
 
-    public String battlemageDesc(int type){
+	@Override
+	public int reinforcementCooldown() {
+		return (int) (Charger.BASE_CHARGE_DELAY*rechargeModifier()*4);
+	}
+
+	public String battlemageDesc(int type){
         return Messages.get(this, "type_bm" + type);
     }
 

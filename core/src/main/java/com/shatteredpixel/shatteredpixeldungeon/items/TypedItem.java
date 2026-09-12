@@ -47,7 +47,24 @@ public interface TypedItem {
 
     void type(int type);
 
-    static int getTypeColor(int type){
+    boolean isReinforced();
+    default int reinforcementCooldown(){
+        return 225;
+    };
+    int currentCooldown();
+    default boolean canSwitchTypes(){
+        return isReinforced() && currentCooldown() == 0;
+    }
+
+    default String reinforceCooldownDescription(){
+        if (!canSwitchTypes())
+            return "\n\n" + Messages.get(TypedItem.class, "reinforcement_cooldown_desc", currentCooldown());
+        return "";
+    }
+
+    static int getTypeColor(int type, boolean isGolden){
+        if (isGolden)
+            return ItemSlot.TYPE_GOLD;
         switch (type){
             default: return 0xFFFFFF;
 
@@ -58,7 +75,7 @@ public interface TypedItem {
     }
 
     default int getTypeIcon(){
-        return getTypeIcon(type(), false, false);
+        return getTypeIcon(type(), isReinforced(), false);
     }
 
     static int getTypeIcon(int type, boolean isGolden, boolean isLarge){
@@ -110,5 +127,15 @@ public interface TypedItem {
 
     default boolean canBeCurseInfused(){
         return true;
+    }
+
+    public interface Managing {
+        void onDetach(Item item);
+
+        int uiIcon();
+
+        void reShowSelector();
+
+        String managingDescription(Item itemChanged);
     }
 }

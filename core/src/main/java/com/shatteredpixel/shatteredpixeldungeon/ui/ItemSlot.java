@@ -340,6 +340,8 @@ public class ItemSlot extends Button {
 			type = new Image(Assets.Sprites.ITEM_ICONS);
 			int icon = ((TypedItem) item).getTypeIcon();
 			type.frame(ItemSpriteSheet.Icons.film.get(icon));
+			if (item.isReinforced() && !((TypedItem) item).canSwitchTypes())
+				type.tint(0x1a160c, 0.75f);
 			add(type);
 		} else {
 			showLevel(level);

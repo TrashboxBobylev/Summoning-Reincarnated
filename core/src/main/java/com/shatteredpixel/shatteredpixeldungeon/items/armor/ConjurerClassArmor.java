@@ -120,6 +120,13 @@ public class ConjurerClassArmor extends ClassArmor implements TypedItem, Conjure
         return Messages.get(this, "type" + type, GameMath.printAverage(DRMin(powerlevel(), type), DRMax(powerlevel(), type)));
     }
 
+    @Override
+    public String info() {
+        String info = super.info();
+        info += reinforceCooldownDescription();
+        return info;
+    }
+
     private static final String TYPE = "rank";
 
     @Override

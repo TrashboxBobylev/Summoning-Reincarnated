@@ -204,16 +204,18 @@ public class Artifact extends KindofMisc implements TypedItem {
 
 	@Override
 	public String info() {
+		String info = super.info();
 		if (cursed && cursedKnown && !isEquipped( Dungeon.hero )) {
-			return super.info() + "\n\n" + Messages.get(Artifact.class, "curse_known");
+			info += "\n\n" + Messages.get(Artifact.class, "curse_known");
 			
 		} else if (!isIdentified() && cursedKnown && !isEquipped( Dungeon.hero)) {
-			return super.info() + "\n\n" + Messages.get(Artifact.class, "not_cursed");
-			
-		} else {
-			return super.info();
+			info += "\n\n" + Messages.get(Artifact.class, "not_cursed");
 			
 		}
+
+		info += reinforceCooldownDescription();
+
+		return info;
 	}
 
 	@Override

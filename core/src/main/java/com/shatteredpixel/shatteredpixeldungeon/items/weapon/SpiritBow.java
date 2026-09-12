@@ -184,6 +184,8 @@ public class SpiritBow extends Weapon implements TypedItem {
 		} else if (enchantHardened){
 			info += "\n\n" + Messages.get(Weapon.class, "hardened_no_enchant");
 		}
+
+		info += reinforceCooldownDescription();
 		
 		if (cursed && isEquipped( Dungeon.hero )) {
 			info += "\n\n" + Messages.get(Weapon.class, "cursed_worn");
