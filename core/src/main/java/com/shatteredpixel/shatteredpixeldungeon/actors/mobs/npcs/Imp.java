@@ -324,6 +324,7 @@ public class Imp extends NPC {
 				rewardOptions.clear();
 				Item artif = Generator.random(Generator.Category.ARTIFACT);
 				((Artifact)artif.identify(false)).transferUpgrade(5);
+				artif.isTypeReinforced = true;
 				rewardOptions.add(artif);
 
 				MeleeWeapon weaponReward;
@@ -338,15 +339,17 @@ public class Imp extends NPC {
 				rewardOptions.add(weaponReward);
 
 				rewardOptions.add(new PlateArmor().inscribe().identify(false).level(Random.IntRange(2, 4)));
-				//todo: change the reward effect!
+
 				Wand w = (Wand) Generator.random(Generator.Category.WAND);
 				w.identify(false);
 				w.curCharges = w.maxCharges;
+				w.isTypeReinforced = true;
 				rewardOptions.add(w);
 
 				MissileWeapon m = (MissileWeapon) Generator.random(Generator.Category.MISSILE);
 				m.identify(false);
 				m.enchant();
+				m.isTypeReinforced = true;
 				rewardOptions.add(m);
 
 				Staff staff;
@@ -358,6 +361,7 @@ public class Imp extends NPC {
 				staff.enchant();
 				staff.identify(false);
 				staff.curCharges = 1;
+				staff.isTypeReinforced = true;
 				rewardOptions.add(staff);
 
 				for (Item i : rewardOptions){
