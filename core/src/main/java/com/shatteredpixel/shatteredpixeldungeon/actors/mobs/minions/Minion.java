@@ -53,6 +53,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.EmeradicBattery;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ManaSource;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.Staff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Crystal;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -378,7 +379,7 @@ public class Minion extends Mob implements ManaSource {
     @Override
     public void damage(int dmg, DamageSource src) {
         if (Dungeon.hero.belongings.armor instanceof ConjurerSet &&
-                ((ConjurerSet) Dungeon.hero.belongings.armor).type() == 2)
+                ((ConjurerSet) Dungeon.hero.belongings.armor).type() == 2 && !(src instanceof Crystal))
             dmg *= 0.75f;
         if (buff(Fury.class) != null)
             dmg *= 1.6f;

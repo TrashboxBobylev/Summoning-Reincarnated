@@ -27,11 +27,13 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Minion;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles.MissileWeapon;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -40,6 +42,8 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.GameMath;
 import com.watabou.utils.Random;
+
+import java.util.EnumSet;
 
 public class Crystal extends Weapon.Enchantment implements DamageSource {
 
@@ -101,6 +105,8 @@ public class Crystal extends Weapon.Enchantment implements DamageSource {
 					}
 				}
 			}
+		} else if (attacker instanceof Minion){
+			attacker.damage(Math.max(1, attacker.HT/20), this);
 		}
 
 		if (attacker instanceof Hero){
@@ -191,6 +197,11 @@ public class Crystal extends Weapon.Enchantment implements DamageSource {
 			desc += " _" + Messages.get(this, "desc_cracked") + "_";
 		}
 		return desc;
+	}
+
+	@Override
+	public EnumSet<DamageProperty> initDmgProperties() {
+		return EnumSet.of(DamageProperty.MAGICAL);
 	}
 
 	private static final String DURABILITY = "durability";

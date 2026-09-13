@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurn;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Crystal;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ElementalSprite;
@@ -132,6 +133,8 @@ public class FrostElemental extends Minion {
         Invisibility.dispel(this);
         Char enemy = this.enemy;
         if (hit( this, enemy, true )) {
+            if (enchantment instanceof Crystal)
+                damage(Math.max(1, HT/20), (Crystal)enchantment);;
 
             if (type != 3) {
                 Freezing.freeze(enemy.pos);

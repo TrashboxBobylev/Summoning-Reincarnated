@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.stationary;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Crystal;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -88,6 +89,8 @@ public class MagicMissileMinion extends StationaryMinion {
             GameScene.effect(shield);
             shield.putOut();
             useResource(1);
+            if (enchantment instanceof Crystal)
+                damage(Math.max(1, HT/20), (Crystal)enchantment);;
             if (type == 3){
                 for (Wand.Charger c : Dungeon.hero.buffs(Wand.Charger.class)){
                     c.gainCharge(1.0f / 2.5f);

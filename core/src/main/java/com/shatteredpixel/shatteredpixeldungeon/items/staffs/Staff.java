@@ -53,6 +53,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportat
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.Wand;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.WeaponEnchantable;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Crystal;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -489,7 +490,10 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
 
         if (enchantment != null && (cursedKnown || !enchantment.curse())){
             info += "\n\n" + Messages.get(Weapon.class, "enchanted", enchantment.name());
-            info += " " + Messages.get(enchantment, "desc");
+            if (!Messages.get(enchantment, "desc_minion").startsWith("!!!"))
+                info += " " + Messages.get(enchantment, "desc_minion");
+            else
+                info += " " + Messages.get(enchantment, "desc");
         }
 
         info += reinforceCooldownDescription();
@@ -625,11 +629,17 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
             if (curCharges < 1 && (minion == null || !minion.isAlive()))
                 recharge();
 
-            if (minion != null && minion.isAlive() && minion.behaviorType == Minion.BehaviorType.PASSIVE && target.buff(MagicImmune.class) == null){
+            if (minion != null && minion.isAlive() && (minion.behaviorType == Minion.BehaviorType.PASSIVE || enchantment instanceof Crystal) && target.buff(MagicImmune.class) == null){
                 if (minion.HP < minion.HT && Regeneration.regenOn()) {
                     float healing = (float) minion.HT / getRegenerationTurns();
                     if (target.buff(Ascension.AscendBuff.class) != null && Dungeon.hero.hasTalent(Talent.CHARITY)){
                         healing *= 2;
+                    }
+                    if (enchantment instanceof Crystal){
+                        if (minion.behaviorType == Minion.BehaviorType.PASSIVE)
+                            healing *= 3;
+                        else
+                            healing *= 2;
                     }
                     partialCharge += healing;
                     updateQuickslot();

@@ -39,6 +39,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.AntiMagic;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfCorruption;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Crystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Grim;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
@@ -153,6 +154,8 @@ public class Wizard extends Minion implements Callback {
 		spend( attackDelay() );
 		
 		if (hit( this, enemy, true )) {
+			if (enchantment instanceof Crystal)
+				damage(Math.max(1, HT/20), (Crystal)enchantment);;
 			if (type == 2){
 				WandOfCorruption wand = new WandOfCorruption();
 				wand.level((int) (Dungeon.scalingDepth() / Dungeon.chapterSize() + Math.max(0, Dungeon.hero.ATU() - attunement)));

@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Crystal;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
@@ -110,6 +111,8 @@ public class GasterBlaster extends StationaryMinion {
                 }
 //                if (buff(MagicPower.class) != null) damage *= Random.NormalFloat(1.5f, 3.4f);
                 ch.damage(damage, (type == 3 ? new Karma() : this));
+                if (enchantment instanceof Crystal)
+                    damage(Math.max(1, HT/20), (Crystal)enchantment);;
                 if (type == 3)
                     Buff.affect(ch, Karma.class);
 

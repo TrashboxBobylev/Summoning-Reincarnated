@@ -40,6 +40,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Viscosity;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ShockerBreaker;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Crystal;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -204,7 +205,8 @@ public class GooMinion extends Minion {
         }
         if (type == 3){
             die(null);
-        }
+        } else if (enchantment instanceof Crystal)
+            damage(Math.max(1, HT/20), (Crystal)enchantment);
     }
 
     private int elementalRange() {
