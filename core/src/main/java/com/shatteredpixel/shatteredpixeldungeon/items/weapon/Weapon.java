@@ -575,7 +575,7 @@ abstract public class Weapon extends KindOfWeapon implements StrengthItem, Weapo
 				}
 			};
 			wp.enchant(attacker.enchantment);
-			wp.level(2);
+			wp.level(1 + (int) attacker.attunement);
 			return proc(wp, attacker, defender, damage);
 		}
 
