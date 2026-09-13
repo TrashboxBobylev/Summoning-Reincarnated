@@ -50,11 +50,11 @@ public class EnchantParchment extends InventorySpell {
     protected boolean usableOnItem(Item item) {
         if (glyph == null && enchantment == null){
             return ((item instanceof Armor && ((Armor) item).glyph != null) || (item instanceof WeaponEnchantable && ((WeaponEnchantable) item).getEnchantment() != null) && (!(item instanceof Wand) || Dungeon.hero.heroClass == HeroClass.MAGE));
-        }
-        else if (glyph != null){
+        } else if (glyph != null && enchantment == null){
             return item instanceof Armor;
-        }
-        else {
+        } else if (glyph == null){
+            return item instanceof WeaponEnchantable;
+        } else {
             return ScrollOfEnchantment.enchantable(item);
         }
     }
