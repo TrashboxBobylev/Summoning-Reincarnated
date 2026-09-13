@@ -57,7 +57,7 @@ public interface TypedItem {
     }
 
     default String reinforceCooldownDescription(){
-        if (!canSwitchTypes())
+        if (isReinforced() && !canSwitchTypes())
             return "\n\n" + Messages.get(TypedItem.class, "reinforcement_cooldown_desc", currentCooldown());
         return "";
     }
