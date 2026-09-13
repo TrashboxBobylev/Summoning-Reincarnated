@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Shrink;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Statue;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.RingOfSharpshooting;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -180,6 +181,10 @@ public class Tomahawk extends MissileWeapon {
             if (b.revivePersists) {
                 Buff.affect(clone, b.getClass());
             }
+        }
+        if (target instanceof Statue){
+            ((Statue) clone).levelGenStatue = true;
+            ((Statue) clone).copyWeapon((Statue) target);
         }
         return clone;
     }

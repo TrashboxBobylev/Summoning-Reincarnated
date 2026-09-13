@@ -76,6 +76,10 @@ public class Statue extends Mob {
 		weapon.enchant( Enchantment.random() );
 	}
 
+	public void copyWeapon( Statue other ){
+		weapon = other.weapon;
+	}
+
 	public Weapon weapon(){
 		return weapon;
 	}

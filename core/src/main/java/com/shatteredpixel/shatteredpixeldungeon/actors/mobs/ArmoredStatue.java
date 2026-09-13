@@ -61,6 +61,18 @@ public class ArmoredStatue extends Statue {
 		armor.inscribe(Armor.Glyph.random());
 	}
 
+	@Override
+	public void copyWeapon(Statue other) {
+		super.copyWeapon(other);
+		if (other instanceof ArmoredStatue){
+			armor = ((ArmoredStatue) other).armor;
+		} else {
+			armor = Generator.randomArmor();
+			armor.uncurse();
+			armor.inscribe(Armor.Glyph.random());
+		}
+	}
+
 	private static final String ARMOR	= "armor";
 
 	@Override
