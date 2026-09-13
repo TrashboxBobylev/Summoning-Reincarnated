@@ -314,9 +314,9 @@ public class VaultBossElemental extends Mob {
 
 	@Override
 	public int defenseProc(Char enemy, int damage) {
-		if (form == ElementalForm.SHOCK && enemy == Dungeon.hero &&
-				!(Dungeon.hero.belongings.attackingWeapon() instanceof MissileWeapon) ||
-				!(enemy instanceof Minion && enemy.distance(this) < 2)){
+		if (form == ElementalForm.SHOCK &&
+				((enemy == Dungeon.hero && !(Dungeon.hero.belongings.attackingWeapon() instanceof MissileWeapon)) ||
+				(enemy instanceof Minion && enemy.distance(this) < 2))){
 			enemy.sprite.parent.addToFront( new Lightning( sprite.center(), enemy.sprite.center(), null ) );
 			enemy.damage( Random.IntRange(5, 10), new Shocking() );
 			Sample.INSTANCE.play(Assets.Sounds.LIGHTNING);
