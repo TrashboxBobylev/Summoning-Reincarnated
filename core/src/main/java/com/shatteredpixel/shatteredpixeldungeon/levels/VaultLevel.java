@@ -51,6 +51,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.LeatherArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.MailArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.PlateArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScaleArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfExperience;
@@ -392,7 +393,7 @@ public class VaultLevel extends CityLevel {
 		//artifacts (which ones to ban, though?)
 		do {
 			loot = Generator.randomUsingDefaults(Generator.Category.ARTIFACT);
-		} while (generatedClasses.contains(loot.getClass()));
+		} while (generatedClasses.contains(loot.getClass()) || (loot instanceof AlchemistsToolkit));
 		generatedClasses.add(loot.getClass());
 		((Artifact)loot).transferUpgrade(lootTier+3);
 		((Artifact) loot).type(Random.IntRange(1, 3));
