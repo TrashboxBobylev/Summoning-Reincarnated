@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.conjurer.Ascension;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.GoatClone;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.WhiteWound;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -159,8 +160,10 @@ public class ToyKnife extends MeleeWeapon implements TypedItem, ManaSource {
         modifier *= soulGainMod(type);
         if (type() == 2)
             modifier *= 1.40f;
-        Buff.prolong( defender, SoulGain.class, /*speedModifier(attacker) **/ modifier );
-        WhiteWound.hit(defender);
+        if (!(attacker instanceof GoatClone)) {
+            WhiteWound.hit(defender);
+            Buff.prolong( defender, SoulGain.class, /*speedModifier(attacker) **/ modifier );
+        }
         if (defender instanceof Mob && defender.buff(Talent.EnergyBreakTracker.class) != null){
             defender.buff(Talent.EnergyBreakTracker.class).detach();
             damage += Random.NormalIntRange(1, 3) + Dungeon.hero.pointsInTalent(Talent.ENERGY_BREAK);
