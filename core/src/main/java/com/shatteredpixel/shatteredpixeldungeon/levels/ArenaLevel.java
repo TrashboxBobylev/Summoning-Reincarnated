@@ -308,7 +308,7 @@ public class ArenaLevel extends RegularLevel {
         Random.pushGenerator(Random.Long());
         if (Random.Float() < MimicTooth.ebonyMimicChance()){
             ArrayList<Integer> candidateCells = new ArrayList<>();
-            if (Random.Int(2) == 0){
+            if (Random.Int(2) == 0 || Dungeon.mode == Dungeon.GameMode.GAUNTLET){
                 for (Heap h : heaps.valueList()){
                     if (h.type == Heap.Type.HEAP
                             && !(room(h.pos) instanceof SpecialRoom)
