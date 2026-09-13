@@ -88,14 +88,67 @@ public class vReInc_Changes {
     }
 
     public static void add_v0_7_0_Changes( ArrayList<ChangeInfo> changeInfos ) {
-        ChangeInfo changes = new ChangeInfo("vReInc-0.7.2", true, "");
+        ChangeInfo changes = new ChangeInfo("vReInc-0.7.3", true, "");
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBYLEV), "Developer Commentary",
-                "_-_ Released September XXth, 2026\n" +
-                        "_-_ 39+ days after Reincarnated 0.7.1\n" +
-                        "_-_ 45+ days after Reincarnated 0.7.0"
+                "_-_ Released September 14th, 2026\n" +
+                        "_-_ 12 days after Reincarnated 0.7.2\n" +
+                        "_-_ 58 days after Reincarnated 0.7.0"
+        ));
+
+        changes.addButton( new ChangeButton(ChangeIcons.V074_SHPX, "Shattered Ports",
+                "Implemented Shattered v4.0.0 changes.\n\n" +
+                        "_-_ Added artifacts and staffs into the dwarven vault's loot pools, but removed rings.\n" +
+                        "_-_ Added Summoning's consumables into dwarven vault's puzzle pools.\n" +
+                        "_-_ Added vault mirror rewards and dialogue for Adventurer and Conjurer and changed one for Mage (due to removal of Mage's Staff).\n" +
+                        "_-_ Dwarven vault has one extra room.\n" +
+                        "_-_ Items with types are _reinforced_, when generated as final vault rewards, allowing to change their type for free with steep cooldown!\n" +
+                        "_-_ Added a variant of crystal enchantment effect for summoning staffs.\n" +
+                        "_-_ Improved the rendering of the Abyss, Abyssal Crusade and Gauntlet Mode tilesets.\n" +
+                        "_-_ Implemented Legacy Summoning's changelog, with era-accurate change icons.\n" +
+                        "_-_ Added DoT display support for Frostburn and Food Poisoning.\n" +
+                        "_-_ Wondrous scrolls have been resprited to match new exotic ones.\n" +
+                        "_-_ Summoning's brews and spells haven't been resprited yet due to lack of resources to do so."
+        ));
+
+        changes.addButton(new ChangeButton(SummIcons.VR073_TYPE_ICON, "Item Type Changes",
+                "_-_ Redesigned item type icons to be more fancy and unique. They are now 8x8(item slot)/16x16(type descriptions) sprites instead of text.\n\n" +
+                        "_-_ Changed type colors to fit the new icons.\n\n" +
+                        "_-_ Type icons are now always on the left of an item slot.\n\n" +
+                        "_-_ Added a new item modifier: _reinforcement_! It turns type icons golden and allows to switch item's type without using type managers, but has a steep cooldown. Most items use 225 turns of cooldown, while wands and staffs scale with their recharge speed.\n\n" +
+                        "_-_ Reinforced items are currently present as rewards for new imp quest."
+        ));
+
+        changes.addButton(new ChangeButton(ChangeIcons.V081_MISC, Messages.get(ChangesScene.class, "misc"),
+                    "_-_ Minion's enchantment power now scales with their attunement power.\n" +
+                            "_-_ Remaining Cleric saves are now \"transmuted\" into the Adventurer saves with random artifact equipped instead of the Holy Tome."
+        ));
+
+        changes.addButton(new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
+                "_Fixed the following bugs:_\n" +
+                        "_-_ Crash after using Tomahawk III on animated statues\n" +
+                        "_-_ Champion standout mechanic not working with other dungeon sizes\n" +
+                        "_-_ Random option existing for no armor abilities available\n" +
+                        "_-_ Attunement and laboratory rooms not spawning in Abyss until way later\n" +
+                        "_-_ Crash on attempting to spawn ebony mimic in Gauntlet Mode\n" +
+                        "_-_ Crash on attempting to transfer enchantment onto an armor with enchant transfer spell\n" +
+                        "_-_ Golem teleportation crash\n" +
+                        "_-_ Tutorial being impossible to complete in Project Paradox\n" +
+                        "_-_ Wands not having enchantment glowing\n" +
+                        "_-_ Underground Paradise self-refreshing its soul gain debuff, if hero's weapon is Toy Knife\n" +
+                        "_-_ A lot of interactions not accounting for variable chapter size"
+        ));
+
+        changes = new ChangeInfo("vReInc-0.7.2", true, "");
+        changes.hardlight(Window.TITLE_COLOR);
+        changeInfos.add(changes);
+
+        changes.addButton( new ChangeButton(Icons.get(Icons.BOBYLEV), "Developer Commentary",
+                "_-_ Released September 2nd, 2026\n" +
+                        "_-_ 40 days after Reincarnated 0.7.1\n" +
+                        "_-_ 46 days after Reincarnated 0.7.0"
         ));
 
         changes.addButton(new ChangeButton(ChangeIcons.V23_ARROWS, "Balance Changes",

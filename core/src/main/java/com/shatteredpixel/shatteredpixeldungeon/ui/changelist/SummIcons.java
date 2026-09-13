@@ -148,7 +148,7 @@ public enum SummIcons implements ChangeButton.ChangeIcon {
     VRSOON_RAT_KING,
     VRSOON_PROFESSIONS,
 
-
+    VR073_TYPE_ICON
 
     ;
 
