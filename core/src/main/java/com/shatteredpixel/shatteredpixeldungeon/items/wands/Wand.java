@@ -895,9 +895,15 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 
 	@Override
 	public ItemSprite.Glowing glowing() {
-		if (resinBonus == 0) return null;
+		ItemSprite.Glowing glow = super.glowing();
 
-		return new ItemSprite.Glowing(0xFFFFFF, 1f/(float)resinBonus);
+		if (glow == null && resinBonus > 0)
+			return new ItemSprite.Glowing(0xFFFFFF, 1f/(float)resinBonus);
+		else if (glow != null) {
+			glow.period = 1f/(resinBonus+1);
+			return glow;
+		}
+		return null;
 	}
 
 	@Override
