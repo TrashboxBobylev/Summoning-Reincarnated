@@ -130,7 +130,7 @@ public class Golem extends Mob {
 		enemyTeleCooldown--;
 		if (teleporting && !isSuppressed()){
 			((GolemSprite)sprite).teleParticles(false);
-			if (Actor.findChar(target) == null && Dungeon.level.openSpace[target]) {
+			if (Actor.findChar(target) == null && target < Dungeon.level.openSpace.length && Dungeon.level.openSpace[target]) {
 				ScrollOfTeleportation.appear(this, target);
 				selfTeleCooldown = 30;
 			} else {
