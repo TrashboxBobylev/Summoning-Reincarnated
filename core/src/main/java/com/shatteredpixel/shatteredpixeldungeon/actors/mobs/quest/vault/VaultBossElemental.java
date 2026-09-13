@@ -371,7 +371,7 @@ public class VaultBossElemental extends Mob {
 			}
 		//shock form is resistant to melee and weak to magic
 		} else if ( form == ElementalForm.SHOCK ){
-			if (AntiMagic.RESISTS.contains(src.getClass())){
+			if (AntiMagic.RESISTS.contains(src.getClass()) || src.hasProperty(DamageProperty.MAGICAL)){
 				if (!weakAnnounced){
 					GLog.p(Messages.get(this, "shock_weak"));
 					weakAnnounced = true;
