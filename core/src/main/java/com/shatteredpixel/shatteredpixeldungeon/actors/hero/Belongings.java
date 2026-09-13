@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.items.EquipableItem;
+import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.KindofMisc;
@@ -37,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.Bag;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
 import com.shatteredpixel.shatteredpixeldungeon.items.rings.Ring;
@@ -50,6 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
+import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -220,9 +223,11 @@ public class Belongings implements Iterable<Item> {
 		if (armor() != null)        armor().activate( owner );
 
 		artifact = (Artifact) bundle.get(ARTIFACT);
+		artifact = transmuteTome(artifact);
 		if (artifact() != null)     artifact().activate(owner);
 
 		artifact2 = (Artifact) bundle.get(ARTIFACT2);
+		artifact2 = transmuteTome(artifact2);
 		if (artifact2() != null)     artifact2().activate(owner);
 
 		// deprecate rings
@@ -231,6 +236,7 @@ public class Belongings implements Iterable<Item> {
 			misc.collect(backpack);
 		} else {
 			this.misc = misc;
+			misc = transmuteTome((Artifact) misc);
 			if (misc() != null) misc().activate(owner);
 		}
 
@@ -246,6 +252,15 @@ public class Belongings implements Iterable<Item> {
         if (book != null) book.activate(owner);
 
 		bundleRestoring = false;
+	}
+
+	private Artifact transmuteTome(Artifact artifact) {
+		if (artifact instanceof HolyTome){
+			Artifact newArt = (Artifact) Reflection.newInstance(Random.oneOf(Generator.Category.ARTIFACT.classes));
+			newArt.transferUpgrade(artifact.trueLevel());
+			return newArt;
+		}
+		return artifact;
 	}
 
 	public void clear(){

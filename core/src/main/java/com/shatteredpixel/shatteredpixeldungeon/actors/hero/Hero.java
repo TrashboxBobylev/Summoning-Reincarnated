@@ -444,7 +444,11 @@ public class Hero extends Char {
 		super.restoreFromBundle( bundle );
 
 		heroClass = bundle.getEnum( CLASS, HeroClass.class );
+		if (heroClass == HeroClass.CLERIC)
+			heroClass = HeroClass.ADVENTURER;
 		subClass = bundle.getEnum( SUBCLASS, HeroSubClass.class );
+		if (subClass == HeroSubClass.PALADIN || subClass == HeroSubClass.PRIEST)
+			subClass = HeroSubClass.NONE;
 		armorAbility = (ArmorAbility)bundle.get( ABILITY );
 		Talent.restoreTalentsFromBundle( bundle, this );
 		
