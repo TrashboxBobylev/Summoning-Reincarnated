@@ -82,5 +82,6 @@ public class RuinsEntranceRoom extends RuinsRoom {
 		}
 
 		EntranceRoom.setupStairs(level, entrance);
+		EntranceRoom.placeEarlyGuidePages(level, this);
 	}
 }

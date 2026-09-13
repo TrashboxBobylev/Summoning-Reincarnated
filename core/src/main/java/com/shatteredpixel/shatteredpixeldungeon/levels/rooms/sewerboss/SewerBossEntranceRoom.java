@@ -56,6 +56,7 @@ public class SewerBossEntranceRoom extends EntranceRoom {
 		} while (level.findMob(entrance) != null);
 		Painter.set( level, entrance, Terrain.ENTRANCE );
 		EntranceRoom.setupStairs(level, entrance);
+		EntranceRoom.placeEarlyGuidePages(level, this);
 
 		for (Room.Door door : connected.values()) {
 			door.set( Room.Door.Type.REGULAR );

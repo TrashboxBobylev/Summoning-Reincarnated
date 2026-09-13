@@ -63,5 +63,6 @@ public class PillarsEntranceRoom extends PillarsRoom {
 		Painter.set( level, entrance, Terrain.ENTRANCE );
 
 		EntranceRoom.setupStairs(level, entrance);
+		EntranceRoom.placeEarlyGuidePages(level, this);
 	}
 }

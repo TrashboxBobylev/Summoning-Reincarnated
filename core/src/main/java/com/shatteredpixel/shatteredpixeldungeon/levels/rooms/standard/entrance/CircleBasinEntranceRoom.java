@@ -49,6 +49,7 @@ public class CircleBasinEntranceRoom extends CircleBasinRoom {
 		Painter.set( level, entrance, Terrain.ENTRANCE_SP );
 
 		EntranceRoom.setupStairs(level, entrance);
+		EntranceRoom.placeEarlyGuidePages(level, this);
 	}
 
 }

@@ -69,6 +69,7 @@ public class CircleWallEntranceRoom extends CircleWallRoom {
 		}
 		Painter.set(level, p, Terrain.ENTRANCE);
 		EntranceRoom.setupStairs(level, level.pointToCell(p));
+		EntranceRoom.placeEarlyGuidePages(level, this);
 
 		int xDir = 0, yDir = 0;
 		if (Random.Int(2) == 0) {

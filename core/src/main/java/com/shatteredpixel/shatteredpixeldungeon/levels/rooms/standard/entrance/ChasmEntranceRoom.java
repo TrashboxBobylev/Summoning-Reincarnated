@@ -82,6 +82,7 @@ public class ChasmEntranceRoom extends ChasmRoom {
 		}
 
 		EntranceRoom.setupStairs(level, entrance);
+		EntranceRoom.placeEarlyGuidePages(level, this);
 	}
 
 }

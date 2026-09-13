@@ -63,6 +63,7 @@ public class CellBlockEntranceRoom extends CellBlockRoom {
 					Painter.set( level, entrance, Terrain.ENTRANCE_SP );
 
 					EntranceRoom.setupStairs(level, entrance);
+					EntranceRoom.placeEarlyGuidePages(level, this);
 					return;
 				}
 			}

@@ -49,6 +49,7 @@ public class LibraryHallEntranceRoom extends LibraryHallRoom {
 				Painter.set( level, entrance, Terrain.ENTRANCE );
 
 				EntranceRoom.setupStairs(level, entrance);
+				EntranceRoom.placeEarlyGuidePages(level, this);
 				return;
 			}
 		}

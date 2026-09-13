@@ -63,6 +63,7 @@ public class ChasmBridgeEntranceRoom extends ChasmBridgeRoom {
 
 		Painter.set( level, entrance, Terrain.ENTRANCE );
 		EntranceRoom.setupStairs(level, entrance);
+		EntranceRoom.placeEarlyGuidePages(level, this);
 	}
 
 }

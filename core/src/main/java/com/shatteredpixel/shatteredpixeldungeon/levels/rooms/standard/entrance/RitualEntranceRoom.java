@@ -46,5 +46,6 @@ public class RitualEntranceRoom extends RitualRoom {
 	protected void placeloot(Level level, Point p) {
 		Painter.set(level, p, Terrain.ENTRANCE);
 		EntranceRoom.setupStairs(level, level.pointToCell(p));
+		EntranceRoom.placeEarlyGuidePages(level, this);
 	}
 }

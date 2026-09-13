@@ -49,6 +49,7 @@ public class RingEntranceRoom extends RingRoom {
 	protected void placeCenterDetail(Level level, int pos) {
 		Painter.set(level, pos, Terrain.ENTRANCE_SP);
 		EntranceRoom.setupStairs(level, pos);
+		EntranceRoom.placeEarlyGuidePages(level, this);
 	}
 
 }

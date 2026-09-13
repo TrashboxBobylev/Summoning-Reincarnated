@@ -63,6 +63,7 @@ public class LibraryRingEntranceRoom extends LibraryRingRoom {
 		Point p = center();
 		Painter.set(level, p, Terrain.ENTRANCE_SP);
 		EntranceRoom.setupStairs(level, level.pointToCell(p));
+		EntranceRoom.placeEarlyGuidePages(level, this);
 
 		Carpet carpet = new Carpet();
 		carpet.setRect(left+5, top+5, width()-10, height()-10);

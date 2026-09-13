@@ -82,6 +82,7 @@ public class CaveEntranceRoom extends CaveRoom {
 		}
 
 		EntranceRoom.setupStairs(level, entrance);
+		EntranceRoom.placeEarlyGuidePages(level, this);
 	}
 
 }

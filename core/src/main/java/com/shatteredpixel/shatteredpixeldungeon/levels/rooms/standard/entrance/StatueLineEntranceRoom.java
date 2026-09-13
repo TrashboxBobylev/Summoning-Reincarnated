@@ -57,6 +57,7 @@ public class StatueLineEntranceRoom extends StatueLineRoom {
 
 		Painter.set( level, entrance, Terrain.ENTRANCE );
 		EntranceRoom.setupStairs(level, entrance);
+		EntranceRoom.placeEarlyGuidePages(level, this);
 	}
 
 }
