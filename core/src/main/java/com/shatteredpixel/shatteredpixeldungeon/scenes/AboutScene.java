@@ -68,7 +68,7 @@ public class AboutScene extends PixelScene {
 		Component content = list.content();
 		content.clear();
 
-		CreditsBlock tb = new CreditsBlock(true, ItemSlot.TYPE2,
+		CreditsBlock tb = new CreditsBlock(true, 0x57AEFF,
 				"Summoning PD: Reincarnated",
 				Icons.BOBYLEV.get(),
 				"Developed by: _Trashbox Bobylev_\nThe remaster of original Summoning PD\nBased on ShatteredPD's open source",
