@@ -304,7 +304,7 @@ public class ShopRoom extends SpecialRoom {
 			} else if (shopLevel() == 3) {
 				w = (MeleeWeapon) Generator.random(Generator.wepTiers[3]);
 				itemsToSpawn.add(new ScaleArmor().identify(false));
-			} else if (shopLevel() == 4 || Dungeon.depth == 20) {
+			} else if (shopLevel() == 4 || Dungeon.depth == Dungeon.chapterSize()*4) {
 				w = (MeleeWeapon) Generator.random(Generator.wepTiers[4]);
 				itemsToSpawn.add(new PlateArmor().identify(false));
 				itemsToSpawn.add(new Torch());

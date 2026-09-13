@@ -381,7 +381,7 @@ public class Imp extends NPC {
 		}
 
 		public static void oldProcess( Mob mob ) {
-			if (spawned && oldQuest && given && !completed && Dungeon.depth != 20) {
+			if (spawned && oldQuest && given && !completed && Dungeon.depth != Dungeon.chapterSize()*4) {
 				if ((alternative && mob instanceof Monk) ||
 					(!alternative && mob instanceof Golem)) {
 					

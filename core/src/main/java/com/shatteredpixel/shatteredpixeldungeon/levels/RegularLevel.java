@@ -247,7 +247,7 @@ public abstract class RegularLevel extends Level {
 			else                            return 10;
 		}
 
-		int mobs = 3 + (this instanceof AbyssLevel ? Dungeon.scalingDepth() : Dungeon.depth) % 5 + Random.Int(3);
+		int mobs = 3 + (this instanceof AbyssLevel ? Dungeon.scalingDepth() : Dungeon.depth) % Dungeon.chapterSize() + Random.Int(3);
 		if (isLarge()){
 			mobs = (int)Math.ceil(mobs * 1.33f);
 		}
@@ -664,7 +664,7 @@ public abstract class RegularLevel extends Level {
 		Random.pushGenerator( Random.Long() );
 			if (Document.ADVENTURERS_GUIDE.allPagesFound()){
 
-				int region = 1+(Dungeon.depth-1)/5;
+				int region = 1+(Dungeon.depth-1)/Dungeon.chapterSize();
 
 				Document regionDoc;
 				switch( region ){

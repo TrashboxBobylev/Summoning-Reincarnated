@@ -53,7 +53,7 @@ public class PitfallTrap extends Trap {
 	@Override
 	public void activate() {
 		
-		if( Dungeon.bossLevel() || Dungeon.depth > 25 || Dungeon.branch != 0){
+		if( Dungeon.bossLevel() || Dungeon.depth > Dungeon.chapterSize()*5 || Dungeon.branch != 0){
 			GLog.w(Messages.get(this, "no_pit"));
 			return;
 		}
