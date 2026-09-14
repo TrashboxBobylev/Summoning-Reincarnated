@@ -1,0 +1,1 @@
+0.7.3 implements all features from Shattered 4.0.0, alongside with tweaks to item types system and bugfixes.
