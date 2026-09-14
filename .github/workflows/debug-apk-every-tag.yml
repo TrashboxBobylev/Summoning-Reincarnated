@@ -44,6 +44,20 @@ jobs:
           path: ~/.gradle/wrapper/
           key: cache-clean-wrapper-${{ matrix.os }}-${{ matrix.jdk }}
 
+      - name: Configure Keystore
+        run: |
+          echo "$ANDROID_KEYSTORE_FILE" > keystore.jks.b64
+          base64 -d -i keystore.jks.b64 > android/keystore.jks
+          echo "storeFile=keystore.jks" >> keystore.properties
+          echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> keystore.properties
+          echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> keystore.properties
+          echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> keystore.properties
+        env:
+          ANDROID_KEYSTORE_FILE: ${{ secrets.GOOGLEPLAY_SIGNING_KEYSTORE }}
+          KEYSTORE_KEY_ALIAS: ${{ secrets.GOOGLEPLAY_KEY_ALIAS }}
+          KEYSTORE_KEY_PASSWORD: ${{ secrets.GOOGLEPLAY_KEY_PASSWORD }}
+          KEYSTORE_STORE_PASSWORD: ${{ secrets.GOOGLEPLAY_STORE_PASSWORD }}
+
       # 2
       - name: Generate Release APK
         run: ./gradlew android:assembleRelease
@@ -107,20 +121,6 @@ jobs:
         run: |
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
-
-      - name: Configure Keystore
-        run: |
-          echo "$ANDROID_KEYSTORE_FILE" > keystore.jks.b64
-          base64 -d -i keystore.jks.b64 > android/keystore.jks
-          echo "storeFile=keystore.jks" >> keystore.properties
-          echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> keystore.properties
-          echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> keystore.properties
-          echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> keystore.properties
-        env:
-          ANDROID_KEYSTORE_FILE: ${{ secrets.GOOGLEPLAY_SIGNING_KEYSTORE }}
-          KEYSTORE_KEY_ALIAS: ${{ secrets.GOOGLEPLAY_KEY_ALIAS }}
-          KEYSTORE_KEY_PASSWORD: ${{ secrets.GOOGLEPLAY_KEY_PASSWORD }}
-          KEYSTORE_STORE_PASSWORD: ${{ secrets.GOOGLEPLAY_STORE_PASSWORD }}
 
       - name: Create Google Play Config file
         run: |
