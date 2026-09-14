@@ -135,7 +135,7 @@ public abstract class ShieldBuff extends Buff {
                 int shieldDmg = damage;
                 if (target.buff(RunicShell.EmpowerTracker.class) != null)
                     shieldDmg *= 0.67f;
-				if (buff instanceof GuardiansStone.Shielding && src.hasProperty(DamageProperty.PHYSICAL) && target.buff(GuardiansStone.heavyBuff.class) != null
+				if (buff instanceof GuardiansStone.Shielding && (src.hasProperty(DamageProperty.PHYSICAL) && !src.hasProperty(DamageProperty.CRUMBLING)) && target.buff(GuardiansStone.heavyBuff.class) != null
 						&& target.buff(GuardiansStone.heavyBuff.class).itemType() == 2)
 					continue;
                 damage = buff.absorbDamage(shieldDmg);
