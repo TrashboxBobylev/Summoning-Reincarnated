@@ -138,7 +138,8 @@ public class vReInc_Changes {
                         "_-_ Tutorial being impossible to complete in Project Paradox\n" +
                         "_-_ Wands not having enchantment glowing\n" +
                         "_-_ Underground Paradise self-refreshing its soul gain debuff, if hero's weapon is Toy Knife\n" +
-                        "_-_ A lot of interactions not accounting for variable chapter size"
+                        "_-_ A lot of interactions not accounting for variable chapter size\n" +
+                        "_-_ Guardian's Stone II not protecting against physical debuffs"
         ));
 
         changes = new ChangeInfo("vReInc-0.7.2", true, "");
