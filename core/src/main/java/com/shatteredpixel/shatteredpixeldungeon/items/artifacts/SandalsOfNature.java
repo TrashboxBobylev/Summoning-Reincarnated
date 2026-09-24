@@ -85,6 +85,8 @@ import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
 
+import org.apache.commons.lang3.ClassUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -441,7 +443,7 @@ public class SandalsOfNature extends Artifact {
 					Splash.at(DungeonTilemap.tileCenterToWorld( cell ), -PointF.PI/2, PointF.PI/2, consumableColors.get(curConsumableEffect), 6);
 					Invisibility.dispel(curUser);
 
-					if (type() != 2) {
+					if (type() != 2 || ClassUtils.getAllSuperclasses(curConsumableEffect).contains(Plant.Seed.class)) {
 						Plant plant = ((Plant.Seed) Reflection.newInstance(curConsumableEffect)).couch(cell, null);
 						plant.activate(Actor.findChar(cell));
 						Sample.INSTANCE.play(Assets.Sounds.PLANT);
