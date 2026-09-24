@@ -56,6 +56,10 @@ public enum DamageProperty {
      */
     UNDEFERRABLE,
     /**
+    * Damage that cannot be affected by any damage reductions.
+     */
+    PURE(IGNORES_ARMOR),
+    /**
      * Damage that is amplified on undead/demonic creatures.
      */
     HOLY,

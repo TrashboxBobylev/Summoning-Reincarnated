@@ -809,7 +809,7 @@ public class DwarfKing extends Mob {
 
         @Override
         public EnumSet<DamageProperty> initDmgProperties() {
-            return EnumSet.of(DamageProperty.CRUMBLING);
+            return EnumSet.of(DamageProperty.CRUMBLING, DamageProperty.PURE);
         }
     }
 

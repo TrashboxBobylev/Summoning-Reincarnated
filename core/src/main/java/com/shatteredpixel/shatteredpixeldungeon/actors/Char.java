@@ -1054,26 +1054,28 @@ acuRoll *= accMulti;
                 Buff.detach(this, MagicalSleep.class);
             }
         }
-		if (this.buff(Doom.class) != null && !isImmune(Doom.class)){
-			damage *= 1.67f;
-		}
-		if (alignment != Alignment.ALLY && this.buff(DeathMark.DeathMarkTracker.class) != null){
-			damage *= 1.25f;
-		}
-		if (this.buff(GasterBlaster.Karma.class) != null){
-			damage *= 1.15f;
-		}
-		if (this.buff(Empowered.class) != null){
-			damage *= 0.65f;
-		}
-		if (this.buff(DefenseDebuff.class) != null){
-			damage *= 1.333f;
-		}
-		if (this.buff(AllyDamageTag.class) != null && src instanceof Char && !(src instanceof Hero)){
-			if (alignment == Alignment.ENEMY && ((Char) src).alignment == Alignment.ALLY){
-				damage = this.buff(AllyDamageTag.class).processDamage((int) damage);
-			} else if (alignment == Alignment.ALLY) {
-				damage = this.buff(AllyDamageTag.class).processResistance((int) damage);
+		if (!src.hasProperty(DamageProperty.PURE)) {
+			if (this.buff(Doom.class) != null && !isImmune(Doom.class)) {
+				damage *= 1.67f;
+			}
+			if (alignment != Alignment.ALLY && this.buff(DeathMark.DeathMarkTracker.class) != null) {
+				damage *= 1.25f;
+			}
+			if (this.buff(GasterBlaster.Karma.class) != null) {
+				damage *= 1.15f;
+			}
+			if (this.buff(Empowered.class) != null) {
+				damage *= 0.65f;
+			}
+			if (this.buff(DefenseDebuff.class) != null) {
+				damage *= 1.333f;
+			}
+			if (this.buff(AllyDamageTag.class) != null && src instanceof Char && !(src instanceof Hero)) {
+				if (alignment == Alignment.ENEMY && ((Char) src).alignment == Alignment.ALLY) {
+					damage = this.buff(AllyDamageTag.class).processDamage((int) damage);
+				} else if (alignment == Alignment.ALLY) {
+					damage = this.buff(AllyDamageTag.class).processResistance((int) damage);
+				}
 			}
 		}
 
