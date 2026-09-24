@@ -60,7 +60,7 @@ public class ScrollOfWarp extends WondrousScroll {
 
         Actor.add(new Actor() {
             {
-                actPriority = VFX_PRIO;
+                actPriority = BUFF_PRIO + 2;
             }
             @Override
             protected boolean act() {
