@@ -879,7 +879,7 @@ public class InterlevelScene extends PixelScene {
 		Statistics.deepestFloor = 0;
 		Statistics.floorsExplored.clear();
 		Level level = Dungeon.newLevel();
-		Dungeon.switchLevel( level, level.entrance );
+		Dungeon.switchLevel( level, level.entrance() );
 	}
 
 	@Override
