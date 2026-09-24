@@ -112,6 +112,9 @@ public class ChaliceOfBlood extends Artifact implements DamageSource {
 
 			int totalHeroHP = hero.HP + hero.shielding();
 
+			if (hero.buff(SubtilitasSigil.Recharge.class) != null && hero.buff(SubtilitasSigil.Recharge.class).itemType() == 3)
+				totalHeroHP /= 2;
+
 			float deathChance = 0;
 
 			if (totalHeroHP < maxDmg) {
