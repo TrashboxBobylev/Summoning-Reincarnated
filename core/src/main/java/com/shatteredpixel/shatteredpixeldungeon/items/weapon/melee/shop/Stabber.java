@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.shop;
 
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicalSleep;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Wound;
@@ -56,7 +57,7 @@ public class Stabber extends MeleeWeapon {
         if (owner instanceof Hero) {
             Hero hero = (Hero)owner;
             Char enemy = hero.attackTarget();
-            if (enemy instanceof Mob && ((Mob) enemy).state != ((Mob) enemy).HUNTING && ((Mob) enemy).surprisedBy(owner)) {
+            if (enemy instanceof Mob && (((Mob) enemy).state != ((Mob) enemy).HUNTING || enemy.buff(MagicalSleep.class) != null) && ((Mob) enemy).surprisedBy(owner)) {
                 //grims non-hunting targets
                 Weapon weapon = new Weapon() {
                     @Override
@@ -66,12 +67,12 @@ public class Stabber extends MeleeWeapon {
 
                     @Override
                     public int min(int lvl) {
-                        return 0;
+                        return min(lvl);
                     }
 
                     @Override
                     public int max(int lvl) {
-                        return 0;
+                        return max(lvl);
                     }
                 };
                 weapon.upgrade(90);
