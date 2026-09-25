@@ -77,7 +77,7 @@ public class Stabber extends MeleeWeapon {
                 };
                 weapon.upgrade(90);
                 weapon.enchant(new Grim());
-                weapon.proc(curUser, enemy, enemy.HP - 1);
+                weapon.proc(owner, enemy, enemy.HP - 1);
                 Wound.hit(enemy);
                 return 0;
             }
