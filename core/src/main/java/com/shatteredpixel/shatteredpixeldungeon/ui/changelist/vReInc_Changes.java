@@ -92,6 +92,29 @@ public class vReInc_Changes {
         changes.hardlight(Window.TITLE_COLOR);
         changeInfos.add(changes);
 
+        changes = new ChangeInfo("0.7.4", false, "");
+        changes.hardlight(CharSprite.NEUTRAL);
+        changeInfos.add(changes);
+
+        changes.addButton(new ChangeButton(ChangeIcons.V081_MISC, Messages.get(ChangesScene.class, "misc"),
+                "_-_ Chalice of Blood's pricking now accounts for presence of Subtilitas Sigil III's damage increase.\n" +
+                        "_-_ Added Warrior's slingshot into the journal.\n" +
+                        "_-_ Sandals of Nature can now keep using the seed, that imbued before switching to type II, without crashing."
+        ));
+
+        changes.addButton(new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
+                "_Fixed the following bugs:_\n" +
+                        "_-_ Crash with applying ally tag onto invisible enemies\n" +
+                        "_-_ Goo minion being invincible to \"no staff\" damage\n" +
+                        "_-_ Scroll of Warp never triggering, if something else is on screen\n" +
+                        "_-_ Thief's Stabber no longer working as intended\n" +
+                        "_-_ Dwarf King's damaging mechanic being affected by damage increase or reduction effects\n" +
+                        "_-_ Crash on attempting to descend into Abyss\n" +
+                        "_-_ Power of Triad allies not registering in the bestiary\n" +
+                        "_-_ White particles for Summoning's content looking orange\n" +
+                        "_-_ Bestiary and targeting visual crashes"
+        ));
+
         changes.addButton( new ChangeButton(Icons.get(Icons.BOBYLEV), "Developer Commentary",
                 "_-_ Released September 14th, 2026\n" +
                         "_-_ 12 days after Reincarnated 0.7.2\n" +
