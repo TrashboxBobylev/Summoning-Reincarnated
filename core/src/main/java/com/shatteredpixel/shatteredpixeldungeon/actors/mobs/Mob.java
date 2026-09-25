@@ -1533,7 +1533,8 @@ public abstract class Mob extends Char {
 	}
 
 	public void showCurrentTarget(){
-		if (enemy != null && enemy.sprite != null && sprite != null && sprite.visible && enemy.sprite.visible){
+		//having absolutely no context is so fickin' awesome, guys
+		if (enemy != null && enemy.sprite != null && enemy.sprite.parent != null && sprite != null && sprite.visible && enemy.sprite.visible){
 			MagicMissile m = MagicMissile.boltFromChar(sprite.parent,
 					MagicMissile.TARGET,
 					sprite,
