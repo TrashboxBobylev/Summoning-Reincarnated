@@ -87,6 +87,7 @@ public class MagicMissile extends Emitter {
 	public static final int ABYSS           = 28;
 
 	public static final int TARGET          = 29;
+	public static final int SPIRIT          = 30;
 
 	public static final int MAGIC_MISS_CONE = 100;
 	public static final int FROST_CONE      = 101;
@@ -176,6 +177,9 @@ public class MagicMissile extends Emitter {
 				break;
 			case BEACON:
 				pour( ForceParticle.FACTORY, 0.01f );
+				break;
+			case SPIRIT:
+				pour( ForceParticle.FACTORY_WHITE, 0.01f );
 				break;
 			case SHADOW:
 				size( 4 );
@@ -676,7 +680,7 @@ public class MagicMissile extends Emitter {
 		public static final Emitter.Factory FACTORY = new Factory() {
 			@Override
 			public void emit( Emitter emitter, int index, float x, float y ) {
-				((ForceParticle)emitter.recycle( ForceParticle.class )).reset( index, x, y );
+				((ForceParticle)emitter.recycle( ForceParticle.class )).reset( index, x, y, ColorMath.interpolate(0xFFCC99, 0xBB4411, Random.Float()) );
 			}
 
 			@Override
@@ -685,8 +689,20 @@ public class MagicMissile extends Emitter {
 			}
 		};
 
-		public void reset( int index, float x, float y ) {
-			super.reset( x, y, ColorMath.interpolate(0xFFCC99, 0xBB4411, Random.Float()), 8, 0.5f );
+		public static final Emitter.Factory FACTORY_WHITE = new Factory() {
+			@Override
+			public void emit( Emitter emitter, int index, float x, float y ) {
+				((ForceParticle)emitter.recycle( ForceParticle.class )).reset( index, x, y, 0xFFFFFF );
+			}
+
+			@Override
+			public boolean lightMode() {
+				return false;
+			}
+		};
+
+		public void reset( int index, float x, float y, int color ) {
+			super.reset( x, y, color, 8, 0.5f );
 
 			speed.polar( PointF.PI2 / 8 * index, 12 );
 			this.x -= speed.x * lifespan;

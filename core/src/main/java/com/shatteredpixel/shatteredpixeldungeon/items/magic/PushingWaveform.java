@@ -129,7 +129,7 @@ public class PushingWaveform extends ConjurerSpell {
         //cast to cells at the tip, rather than all cells, better performance.
         for (Ballistica ray : cone.rays){
             ((MagicMissile)curUser.sprite.parent.recycle( MagicMissile.class )).reset(
-                    MagicMissile.BEACON,
+                    MagicMissile.SPIRIT,
                     curUser.sprite,
                     ray.path.get(ray.dist),
                     null

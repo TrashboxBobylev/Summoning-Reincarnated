@@ -123,7 +123,7 @@ public abstract class ShamanSprite extends MobSprite {
 
     public static class Spectral extends ShamanSprite {
         {
-            boltType = MagicMissile.BEACON;
+            boltType = MagicMissile.SPIRIT;
         }
 
         @Override

@@ -117,7 +117,7 @@ public class DragonSprite extends MobSprite {
 
 	protected Emitter createEmitter() {
 		Emitter emitter = emitter();
-		emitter.pour( MagicMissile.ForceParticle.FACTORY, 0.04f );
+		emitter.pour( MagicMissile.ForceParticle.FACTORY_WHITE, 0.04f );
 		return emitter;
 	}
 
@@ -128,7 +128,7 @@ public class DragonSprite extends MobSprite {
 
 	@Override
 	public void die() {
-		emitter().burst( MagicMissile.ForceParticle.FACTORY, 12 );
+		emitter().burst( MagicMissile.ForceParticle.FACTORY_WHITE, 12 );
 		if (particles != null){
 			particles.on = false;
 		}

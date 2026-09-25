@@ -425,7 +425,7 @@ public class Minion extends Mob implements ManaSource {
 
     public enum BehaviorType {
         REACTIVE(ItemSpriteSheet.Icons.BEHAVIOR_REACT, ReactiveTargeting.class){
-            {visual = MagicMissile.ForceParticle.FACTORY;}
+            {visual = MagicMissile.ForceParticle.FACTORY_WHITE;}
         },
         PROTECTIVE(ItemSpriteSheet.Icons.BEHAVIOR_DEFEND, ProtectiveTargeting.class){
             {visual = MagicMissile.EarthParticle.ATTRACT;}

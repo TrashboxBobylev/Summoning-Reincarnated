@@ -81,7 +81,7 @@ public class GonerField extends Blob implements DamageSource {
 	@Override
 	public void use( BlobEmitter emitter ) {
 		super.use( emitter );
-		emitter.pour( MagicMissile.ForceParticle.FACTORY, 0.0085f);
+		emitter.pour( MagicMissile.ForceParticle.FACTORY_WHITE, 0.0085f);
 	}
 	
 	@Override
