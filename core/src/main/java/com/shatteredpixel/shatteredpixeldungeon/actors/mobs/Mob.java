@@ -85,7 +85,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.Honeypot;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
-import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HornOfPlenty;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.MasterThievesArmband;
@@ -1439,13 +1438,7 @@ public abstract class Mob extends Char {
         if (Dungeon.hero.buff(ManaEmpower.class) != null && Dungeon.hero.heroClass != HeroClass.CONJURER){
             ScrollOfRecharging.charge(Dungeon.hero);
             //artifact recharge
-            for (Buff b : Dungeon.hero.buffs()) {
-                if (b instanceof Artifact.ArtifactBuff) {
-                    if (!((Artifact.ArtifactBuff) b).isCursed()) {
-                        ((Artifact.ArtifactBuff) b).charge(Dungeon.hero, 2f);
-                    }
-                }
-            }
+            ArtifactRecharge.chargeArtifacts(hero, 2f);
             //wand recharge
             for (Wand.Charger c : Dungeon.hero.buffs(Wand.Charger.class)) {
                 c.gainCharge(0.5f);

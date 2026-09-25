@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Blindness;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.CounterBuff;
@@ -369,13 +370,7 @@ public class MasterThievesArmband extends Artifact {
 					Dungeon.gold--;
 				} else {
 					Dungeon.hero.belongings.charge(-0.1f);
-					for (Buff b : Dungeon.hero.buffs()) {
-						if (b instanceof Artifact.ArtifactBuff) {
-							if (!((Artifact.ArtifactBuff) b).isCursed()) {
-								((Artifact.ArtifactBuff) b).charge(Dungeon.hero, -0.1f);
-							}
-						}
-					}
+					ArtifactRecharge.chargeArtifacts(Dungeon.hero, -0.1f);
 				}
 				updateQuickslot();
 			}
