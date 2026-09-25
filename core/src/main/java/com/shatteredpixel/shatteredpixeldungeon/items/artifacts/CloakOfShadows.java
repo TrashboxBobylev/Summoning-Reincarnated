@@ -549,7 +549,7 @@ public class CloakOfShadows extends Artifact implements Stylus.Inscribable {
 
 			if (target.invisible > 0)   target.invisible--;
 			if (glyph != null)
-				glyph.onDetaching(CloakOfShadows.this, target);
+				glyph.onUncloaking(CloakOfShadows.this, target);
 			if (type() == 3){
 				Buff.affect(target, CloakT3Cooldown.class, 6 - level()/3);
 			}
