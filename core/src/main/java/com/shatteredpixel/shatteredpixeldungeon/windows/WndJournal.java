@@ -908,6 +908,9 @@ public class WndJournal extends WndTabbed {
 
 				mob = (Mob) Reflection.newInstance(entityCls);
 
+				if (mob == null)
+					continue;
+
 				if (mob instanceof Mimic || mob instanceof Pylon || mob instanceof CrystalSpire) {
 					mob.alignment = Char.Alignment.ENEMY;
 				}
