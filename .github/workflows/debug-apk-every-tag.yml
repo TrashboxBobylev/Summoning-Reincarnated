@@ -87,25 +87,6 @@ jobs:
       - name: Rename APK
         run: mv android/build/outputs/apk/release/android-release-unsigned-signed.apk android/build/outputs/apk/release/android-release.apk
 
-      - name: Upload as Release
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          prerelease: false
-          title: "${{ env.version }}"
-          files: |
-              android/build/outputs/apk/release/android-release.apk
-              desktop/build/libs/*.jar
-      - name: Remove unsigned apk
-        run: rm android/build/outputs/apk/release/android-release-unsigned.apk
-
-      - name: Remove unsigned apk
-        run: rm android/build/outputs/apk/release/android-release-unsigned-aligned.apk
-
-      - name: Remove signing key
-        run: rm android/build/outputs/apk/release/signingKey.jks
-
       - name: Cache Ruby - Bundler
         uses: actions/cache@v3
         with:
@@ -131,4 +112,23 @@ jobs:
 
       - name: Distribute app to Production 🚀
         run: bundle exec fastlane production
+
+      - name: Upload as Release
+        uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: false
+          title: "${{ env.version }}"
+          files: |
+              android/build/outputs/apk/release/android-release.apk
+              desktop/build/libs/*.jar
+      - name: Remove unsigned apk
+        run: rm android/build/outputs/apk/release/android-release-unsigned.apk
+
+      - name: Remove unsigned apk
+        run: rm android/build/outputs/apk/release/android-release-unsigned-aligned.apk
+
+      - name: Remove signing key
+        run: rm android/build/outputs/apk/release/signingKey.jks
 
