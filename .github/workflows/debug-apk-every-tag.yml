@@ -84,9 +84,6 @@ jobs:
         env:
           BUILD_TOOLS_VERSION: ${{ env.BUILD_TOOL_VERSION }}
 
-      - name: Rename APK
-        run: mv android/build/outputs/apk/release/android-release-unsigned-signed.apk android/build/outputs/apk/release/android-release.apk
-
       - name: Cache Ruby - Bundler
         uses: actions/cache@v3
         with:
