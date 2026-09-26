@@ -36,6 +36,7 @@ android {
         minSdkVersion appAndroidMinSDK
         targetSdkVersion appAndroidTargetSDK
         multiDexEnabled true
+        signingConfig signingConfigs.release
     }
 
     buildTypes {
