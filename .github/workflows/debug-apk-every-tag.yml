@@ -120,11 +120,6 @@ jobs:
           files: |
               android/build/outputs/apk/release/android-release.apk
               desktop/build/libs/*.jar
-      - name: Remove unsigned apk
-        run: rm android/build/outputs/apk/release/android-release-unsigned.apk
-
-      - name: Remove unsigned apk
-        run: rm android/build/outputs/apk/release/android-release-unsigned-aligned.apk
 
       - name: Remove signing key
         run: rm android/build/outputs/apk/release/signingKey.jks
