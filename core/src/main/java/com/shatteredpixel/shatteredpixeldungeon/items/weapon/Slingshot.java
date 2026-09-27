@@ -60,7 +60,7 @@ public class Slingshot extends Weapon {
 
     @Override
     public int STRReq() {
-        return Dungeon.hero.STR();
+        return Dungeon.hero != null ? Dungeon.hero.STR() : 10;
     }
 
     @Override
