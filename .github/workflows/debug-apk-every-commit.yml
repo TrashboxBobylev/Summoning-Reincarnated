@@ -28,7 +28,6 @@ jobs:
         run: |
           echo "version="Reincarnated-$(git rev-parse --short "$GITHUB_SHA")"" >> $GITHUB_ENV
           echo "Reincarnated-$(git rev-parse --short "$GITHUB_SHA")" > version
-          
 
       - name: Configure Keystore
         run: |
