@@ -13,6 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+      - name: Checkout code
+        uses: actions/checkout@v7
+
       - name: Set up JDK environment to 17
         uses: actions/setup-java@v6
         with:
@@ -21,8 +24,7 @@ jobs:
           cache: gradle
 
       # 1
-      - name: Checkout code
-        uses: actions/checkout@v7
+
 
       - uses: ruby/setup-ruby@v1
         with:
