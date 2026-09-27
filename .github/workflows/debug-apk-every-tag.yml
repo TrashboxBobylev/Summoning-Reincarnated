@@ -34,7 +34,7 @@ jobs:
         id: vars
         shell: bash
         run: |
-          echo "version="Reincarnated-${{steps.semver_parser.outputs.fullversion}}" >> $GITHUB_ENV
+          echo "version="Reincarnated-${{steps.semver_parser.outputs.fullversion}}"" >> $GITHUB_ENV
           echo "Reincarnated-${{steps.semver_parser.outputs.fullversion}}" > version
 
       - name: Cache Gradle
