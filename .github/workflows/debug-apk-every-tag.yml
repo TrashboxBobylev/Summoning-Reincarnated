@@ -118,8 +118,8 @@ jobs:
           prerelease: false
           title: "${{ env.version }}"
           files: |
-              android/build/outputs/apk/release/android-release.apk
-              desktop/build/libs/*.jar
+            ${{steps.sign_app.outputs.signedReleaseFile}}
+            desktop/build/libs/*.jar
 
       - name: Remove signing key
         run: rm android/build/outputs/apk/release/signingKey.jks
