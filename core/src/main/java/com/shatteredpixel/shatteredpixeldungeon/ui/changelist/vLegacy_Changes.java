@@ -518,10 +518,10 @@ public class vLegacy_Changes {
         changes = createChangeInfo(changeInfos, "Legacy-v1.2.1", true, Window.TITLE_COLOR);
 
         changes = createChangeInfo(changeInfos, "1.2.1b", false, Window.WHITE);
-        changes.addButton(new ChangeButton(SummIcons.V121_ENCHANT_TRANSFER,
+        changes.addButton(new ChangeButton(SummIcons.V121_ENCHANT_TRANSFER, "Enchant Transfer",
                 "Added enchantment parchment from legacy era.\n\n" +
                         "_-_ Allows to transfer enchantments and glyphs between items."));
-        changes.addButton(new ChangeButton(SummIcons.V120_WAND_OF_CONJURATION,
+        changes.addButton(new ChangeButton(SummIcons.V120_WAND_OF_CONJURATION, "Wand of Conjuration",
                 "Changed the Wand of Conjuration:\n" +
                         "\n" +
                         "_-_ Buffed damage from _2-5_ to _4-8_\n" +
@@ -529,7 +529,7 @@ public class vLegacy_Changes {
                         "_-_ Reduced max charges to 3\n" +
                         "_-_ Removed additional damage from enemy's armor\n" +
                         "This should make it more consistent and less broken in endgame."));
-        changes.addButton(new ChangeButton(ChangeIcons.V25_BOMB,
+        changes.addButton(new ChangeButton(ChangeIcons.V25_BOMB, "Bombs",
                 "_-_ Added damage description to every harmful bomb.\n\n" +
                         "_-_ Buffed bomb's damage by _25%_."));
         changes.addButton( new ChangeButton(ChangeIcons.V061_BUGFIX, Messages.get(ChangesScene.class, "bugfixes"),
