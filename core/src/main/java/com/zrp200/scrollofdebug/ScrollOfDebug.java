@@ -1,15 +1,5 @@
 package com.zrp200.scrollofdebug;
 
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.depth;
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.level;
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.loadLevel;
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.newLevel;
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.saveAll;
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.switchLevel;
-import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation.teleportToLocation;
-import static java.util.Arrays.copyOfRange;
-
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -63,6 +53,10 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.*;
+import static com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation.teleportToLocation;
+import static java.util.Arrays.copyOfRange;
 
 /**
  * Scroll of Debug uses ClassLoader to get every class that can be directly created and provides a command interface with which to interact with them.
@@ -588,6 +582,11 @@ public class ScrollOfDebug extends Scroll {
             } catch (Exception e) { valid = false; }
             if (valid) switch (command) {
                 case SPAWN: Mob mob = (Mob)o;
+                    if (Char.hasProp(mob, Char.Property.BOSS)){
+                        // likely breaks the game, do not allow to spawn
+                        GLog.w("You cannot place %s here.", mob.name());
+                        return false;
+                    }
                     // process args
                     int quantity = 1;
                     boolean manualPlace = false;
