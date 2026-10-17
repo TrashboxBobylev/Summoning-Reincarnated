@@ -656,7 +656,7 @@ public class ItemSpriteSheet {
 	static {
 		assignItemRect(ROPES, 16, 16);
 		assignItemRect(RUNIC_SHOT, 13, 13);
-		assignItemRect(CLEAN_WATER, 10, 14);
+		assignItemRect(CLEAN_WATER, 8, 14);
 		assignItemRect(STAFF_PLACEHOLDER, 14, 14);
 		assignItemRect(FACELESS_ITEM, 12, 11);
 		assignItemRect(UPGRADE_CLUMP,   12, 11);
@@ -806,6 +806,7 @@ public class ItemSpriteSheet {
 		assignItemRect(BREW_INFERNAL,   11, 13);
 		assignItemRect(BREW_BLIZZARD,   11, 13);
 		assignItemRect(BREW_UNSTABLE,   11, 13);
+		assignItemRect(BREW_FROSTBURN,  11, 13);
 		assignItemRect(BREW_AQUA,        9, 11);
 	}
 
