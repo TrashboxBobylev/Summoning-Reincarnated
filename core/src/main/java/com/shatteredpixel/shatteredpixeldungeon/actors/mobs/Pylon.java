@@ -216,7 +216,8 @@ public class Pylon extends Mob {
 	@Override
 	public void die(Object cause) {
 		super.die(cause);
-		((CavesBossLevel)Dungeon.level).eliminatePylon();
+		if (Dungeon.level instanceof CavesBossLevel)
+		    ((CavesBossLevel)Dungeon.level).eliminatePylon();
 	}
 
 	private static final String ALIGNMENT = "alignment";
