@@ -53,7 +53,7 @@ public class GrimTrap extends Trap implements DamageSource {
 		shape = LARGE_DOT;
 		
 		canBeHidden = false;
-		avoidsHallways = true;
+		avoidsClosedSpaces = true;
 	}
 
 	@Override

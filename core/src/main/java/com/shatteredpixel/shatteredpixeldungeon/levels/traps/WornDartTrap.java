@@ -53,7 +53,7 @@ public class WornDartTrap extends Trap implements DamageSource {
 		shape = CROSSHAIR;
 		
 		canBeHidden = false;
-		avoidsHallways = true;
+		avoidsClosedSpaces = true;
 	}
 
 	@Override

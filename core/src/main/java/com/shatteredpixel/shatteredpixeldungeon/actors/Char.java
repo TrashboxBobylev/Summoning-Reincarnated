@@ -971,6 +971,10 @@ acuRoll *= accMulti;
 				cachedIncomingDOT += Math.round(resist(b.getClass()) * ((Buff.DOTbuff) b).totalIncomingDMG());
 			}
 		}
+		for (ChampionEnemy buff : buffs(ChampionEnemy.class)){
+			cachedIncomingDOT = (int) Math.ceil(cachedIncomingDOT * buff.damageTakenFactor());
+		}
+
 		needsIncomingDOTUpdate = false;
 		return cachedIncomingDOT;
 	}

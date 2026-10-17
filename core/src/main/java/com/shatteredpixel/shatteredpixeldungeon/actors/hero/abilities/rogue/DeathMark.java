@@ -209,7 +209,7 @@ public class DeathMark extends ArmorAbility {
 			}
 		}
 
-		//if something is already dieing when death mark is attached, need to avoid triggering die() again
+		//if something is already dying when death mark is attached, need to avoid triggering die() again
 		public void detachOnDeath(){
 			super.detach();
 			target.deathRefusal = null;

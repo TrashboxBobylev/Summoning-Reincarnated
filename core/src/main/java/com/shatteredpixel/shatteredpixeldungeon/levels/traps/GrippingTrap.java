@@ -39,7 +39,7 @@ public class GrippingTrap extends Trap {
 		shape = DOTS;
 
 		disarmedByActivation = false;
-		avoidsHallways = true;
+		avoidsClosedSpaces = true;
 	}
 
 	@Override

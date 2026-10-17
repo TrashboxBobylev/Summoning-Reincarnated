@@ -43,7 +43,7 @@ public class FlashingTrap extends Trap {
 		shape = STARS;
 
 		disarmedByActivation = false;
-		avoidsHallways = true;
+		avoidsClosedSpaces = true;
 	}
 
 	@Override

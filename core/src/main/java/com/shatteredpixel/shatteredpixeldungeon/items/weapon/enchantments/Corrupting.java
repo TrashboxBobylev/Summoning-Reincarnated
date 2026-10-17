@@ -44,10 +44,10 @@ public class Corrupting extends Weapon.Enchantment {
 	public int proc(Weapon weapon, Char attacker, Char defender, int damage) {
 		int level = Math.max( 0, weapon.buffedLvl() );
 
-		// lvl 0 - 32%
-		// lvl 1 ~ 34%
-		// lvl 2 ~ 37%
-		float procChance = (level+8f)/(level+25f) * procChanceMultiplier(weapon, attacker);
+		// lvl 0 - 25%
+		// lvl 1 ~ 28.5%
+		// lvl 2 ~ 32%
+		float procChance = (level+5f)/(level+20f) * procChanceMultiplier(weapon, attacker);
 		if (Random.Float() < procChance
 				&& attacker.alignment == Char.Alignment.ALLY //enemies cannot inflict corruption
 				&& !defender.isImmune(Corruption.class)

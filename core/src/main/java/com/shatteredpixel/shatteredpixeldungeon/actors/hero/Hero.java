@@ -946,7 +946,7 @@ public class Hero extends Char {
 		if (heroClass != HeroClass.DUELIST
 				&& hasTalent(Talent.WEAPON_RECHARGING)
 				&& (buff(Recharging.class) != null || buff(ArtifactRecharge.class) != null)){
-			dmg = Math.round(dmg * 1.025f + (.025f*pointsInTalent(Talent.WEAPON_RECHARGING)));
+			dmg = Math.round(dmg * (1.025f + .025f*pointsInTalent(Talent.WEAPON_RECHARGING)));
 		}
 		if (buff(HornOfPlenty.DamageBoost.class) != null){
 			dmg *= 2;

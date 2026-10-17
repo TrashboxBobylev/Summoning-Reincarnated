@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.EffectTarget;
 import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
-import com.shatteredpixel.shatteredpixeldungeon.levels.VaultLevel;
 import com.watabou.noosa.Game;
 import com.watabou.utils.Bundlable;
 import com.watabou.utils.Bundle;
@@ -109,7 +108,7 @@ public abstract class Actor implements Bundlable {
 		time = now;
 	}
 
-	//used when now is being cleared as a part of statix fixTime()
+	//used when now is being cleared as a part of static fixTime()
 	public void fixTime(float decrement){
 		time -= decrement;
 	}

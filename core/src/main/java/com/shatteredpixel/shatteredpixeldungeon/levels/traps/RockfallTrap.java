@@ -57,7 +57,7 @@ public class RockfallTrap extends Trap implements DamageSource {
 		shape = DIAMOND;
 		
 		canBeHidden = false;
-		avoidsHallways = true;
+		avoidsClosedSpaces = true;
 	}
 	
 	@Override

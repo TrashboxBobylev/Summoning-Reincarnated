@@ -55,7 +55,7 @@ public class PoisonDartTrap extends Trap implements DamageSource {
 		shape = CROSSHAIR;
 		
 		canBeHidden = false;
-		avoidsHallways = true;
+		avoidsClosedSpaces = true;
 	}
 	
 	protected int poisonAmount(){
