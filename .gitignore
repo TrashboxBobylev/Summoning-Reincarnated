@@ -19,5 +19,5 @@ local.properties
 *.iml
 *.idea
 
-/play-config.json
+/play_config.json
 /keystore.properties
