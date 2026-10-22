@@ -81,12 +81,14 @@ import com.shatteredpixel.shatteredpixeldungeon.items.magic.RunicShell;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ShockerBreaker;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.StarBlazing;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.SubNullFieldLighter;
+import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfInvisibility;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfMindVision;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfPurity;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.Scroll;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfIdentify;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfLullaby;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfMagicMapping;
@@ -351,6 +353,39 @@ public enum HeroClass {
 		return null;
 	}
 
+	private static void identifyThings(HeroClass heroClass){
+		if (Dungeon.mode == Dungeon.GameMode.RANDOM_HERO){
+			((Potion)Reflection.newInstance(Random.element(Catalog.POTIONS.items()))).identify();
+			((Scroll)Reflection.newInstance(Random.element(Catalog.SCROLLS.items()))).identify();
+			return;
+		}
+		switch (heroClass){
+            case WARRIOR:
+				new PotionOfHealing().identify();
+				new ScrollOfRage().identify();
+				break;
+            case MAGE:
+				new ScrollOfUpgrade().identify();
+				new PotionOfLiquidFlame().identify();
+				break;
+            case ROGUE:
+				new ScrollOfMagicMapping().identify();
+				new PotionOfInvisibility().identify();
+				break;
+            case HUNTRESS:
+				new PotionOfMindVision().identify();
+				new ScrollOfLullaby().identify();
+				break;
+            case DUELIST:
+				new PotionOfStrength().identify();
+				new ScrollOfMirrorImage().identify();
+				break;
+            case CONJURER:
+				new PotionOfStrength().identify();
+				break;
+		}
+	}
+
 	private static void initWarrior( Hero hero ) {
 		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
 			(hero.belongings.weapon = new WornShortsword()).identify();
@@ -366,8 +401,7 @@ public enum HeroClass {
             }
         }
 
-		new PotionOfHealing().identify();
-		new ScrollOfRage().identify();
+		identifyThings(WARRIOR);
 	}
 
 	private static void initMage( Hero hero ) {
@@ -380,8 +414,7 @@ public enum HeroClass {
 			Dungeon.quickslot.setSlot(0, wand);
 		}
 
-		new ScrollOfUpgrade().identify();
-		new PotionOfLiquidFlame().identify();
+		identifyThings(MAGE);
 	}
 
 	private static void initRogue( Hero hero ) {
@@ -399,8 +432,7 @@ public enum HeroClass {
 			Dungeon.quickslot.setSlot(1, knives);
 		}
 
-		new ScrollOfMagicMapping().identify();
-		new PotionOfInvisibility().identify();
+		identifyThings(ROGUE);
 	}
 
 	private static void initHuntress( Hero hero ) {
@@ -415,8 +447,7 @@ public enum HeroClass {
 			Dungeon.quickslot.setSlot(1, hero.belongings.armor);
 		}
 
-		new PotionOfMindVision().identify();
-		new ScrollOfLullaby().identify();
+		identifyThings(HUNTRESS);
 	}
 
 	private static void initDuelist( Hero hero ) {
@@ -432,8 +463,7 @@ public enum HeroClass {
 			Dungeon.quickslot.setSlot(1, spikes);
 		}
 
-		new PotionOfStrength().identify();
-		new ScrollOfMirrorImage().identify();
+		identifyThings(DUELIST);
 	}
 
 	private static void initAdventurer( Hero hero ) {
@@ -456,6 +486,8 @@ public enum HeroClass {
 			new MagicalHolster().collect();
 			Dungeon.LimitedDrops.MAGICAL_HOLSTER.drop();
 		}
+
+		identifyThings(ADVENTURER);
 	}
 
 	private static void initConjurer( Hero hero ) {
@@ -485,7 +517,7 @@ public enum HeroClass {
 			new BeamOfAffection().collect();
 		}
 
-		new PotionOfStrength().identify();
+		identifyThings(CONJURER);
 	}
 
 	private static void initCleric( Hero hero ) {
