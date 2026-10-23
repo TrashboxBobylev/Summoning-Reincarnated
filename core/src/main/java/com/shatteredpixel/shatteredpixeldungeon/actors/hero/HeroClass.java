@@ -175,9 +175,7 @@ public enum HeroClass {
 			(hero.belongings.weapon = staff).identify();
 			hero.belongings.weapon.activate(hero);
 			(hero.belongings.armor = new ScoutArmor()).identify();
-			SpiritBow bow = new SpiritBow();
-			bow.identify().collect();
-			Dungeon.quickslot.setSlot(0, bow);
+			Dungeon.quickslot.setSlot(0, Dungeon.hero.belongings.getItem(SpiritBow.class));
 			Dungeon.quickslot.setSlot(1, hero.belongings.armor);
 			Dungeon.quickslot.setSlot(2, staff);
 			CloakOfShadows cloak = new CloakOfShadows();
@@ -433,10 +431,8 @@ public enum HeroClass {
 
 			(hero.belongings.weapon = new Gloves()).identify();
 			(hero.belongings.armor = new ScoutArmor()).identify();
-			SpiritBow bow = new SpiritBow();
-			bow.identify().collect();
 
-			Dungeon.quickslot.setSlot(0, bow);
+			Dungeon.quickslot.setSlot(0, Dungeon.hero.belongings.getItem(SpiritBow.class));
 			Dungeon.quickslot.setSlot(1, hero.belongings.armor);
 		}
 

@@ -30,6 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.BeamOfAffection;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.EnergizedRenewal;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.StarBlazing;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -59,6 +60,18 @@ public enum HeroPerk {
                 hero.belongings.armor.affixSeal(new BrokenSeal());
                 Catalog.setSeen(BrokenSeal.class); //as it's not added to the inventory
             }
+        }
+    },
+    HUNTRESS_BOW(0x99ffff){
+        @Override
+        public Image icon() {
+            return new ItemSprite(ItemSpriteSheet.SPIRIT_BOW);
+        }
+
+        @Override
+        public void onInitialization(Hero hero) {
+            SpiritBow bow = new SpiritBow();
+            bow.identify().collect();
         }
     },
     CONJURER_MAGIC(0x4c51ad){
@@ -109,6 +122,7 @@ public enum HeroPerk {
         return EnumSet.of(
             WARRIOR_SEAL,
             WEAPON_ABILITIES,
+            HUNTRESS_BOW,
             CONJURER_MAGIC
         );
     }

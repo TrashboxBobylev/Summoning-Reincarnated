@@ -99,7 +99,7 @@ public class TengusMask extends Item {
                 heroSubClasses.remove(NONE);
                 if (curUser.heroClass != HeroClass.MAGE)
                     heroSubClasses.remove(HeroSubClass.BATTLEMAGE);
-                if (curUser.heroClass != HeroClass.HUNTRESS)
+                if (!curUser.perks.contains(HeroPerk.HUNTRESS_BOW))
                     heroSubClasses.remove(HeroSubClass.SNIPER);
                 if (curUser.heroClass != HeroClass.ROGUE)
                     heroSubClasses.remove(HeroSubClass.ASSASSIN);

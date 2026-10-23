@@ -86,7 +86,7 @@ public class KingsCrown extends Item {
                         if (heroClass != HeroClass.CLERIC)
                             Collections.addAll(heroArmorAbilities, heroClass.armorAbilities());
                     }
-                    if (hero.heroClass != HeroClass.HUNTRESS){
+                    if (!hero.perks.contains(HeroPerk.HUNTRESS_BOW)){
                         heroArmorAbilities.removeIf((ability) -> ability instanceof NaturesPower);
                     }
                     if (!hero.perks.contains(HeroPerk.CONJURER_MAGIC)){

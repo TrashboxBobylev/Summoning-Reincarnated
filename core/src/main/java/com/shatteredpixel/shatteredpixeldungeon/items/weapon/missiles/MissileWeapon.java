@@ -38,7 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.PinCushion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RevealedArea;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ThrowieBoost;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.quest.vault.VaultBossElemental;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -368,7 +368,7 @@ abstract public class MissileWeapon extends Weapon implements TypedItem {
 
 			//metamorphed seer shot logic
 			if (curUser.hasTalent(Talent.SEER_SHOT)
-					&& curUser.heroClass != HeroClass.HUNTRESS
+					&& !curUser.perks.contains(HeroPerk.HUNTRESS_BOW)
 					&& curUser.buff(Talent.SeerShotCooldown.class) == null){
 				if (Actor.findChar(cell) == null) {
 					RevealedArea a = Buff.affect(curUser, RevealedArea.class, 5 * curUser.pointsInTalent(Talent.SEER_SHOT));
@@ -435,7 +435,7 @@ abstract public class MissileWeapon extends Weapon implements TypedItem {
 			parent.identify();
 		}
 
-		if (Dungeon.hero.heroClass != HeroClass.HUNTRESS
+		if (!Dungeon.hero.perks.contains(HeroPerk.HUNTRESS_BOW)
 				&& Dungeon.hero.buff(ScoutArmor.ScoutCooldown.class) == null) {
 			boolean super_shot_talent = false;
 			if (Dungeon.hero.hasTalent(Talent.SCOUTS_BARRIER)) {
