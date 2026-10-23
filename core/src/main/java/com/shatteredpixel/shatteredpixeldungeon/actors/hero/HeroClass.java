@@ -119,7 +119,7 @@ import java.util.EnumSet;
 
 public enum HeroClass {
 
-	WARRIOR(EnumSet.of(HeroPerk.WARRIOR_SEAL), HeroSubClass.BERSERKER, HeroSubClass.GLADIATOR ),
+	WARRIOR(EnumSet.of(HeroPerk.WARRIOR_SEAL, HeroPerk.SLINGSHOT), HeroSubClass.BERSERKER, HeroSubClass.GLADIATOR ),
 	MAGE( EnumSet.of(HeroPerk.EQUIPPABLE_WANDS), HeroSubClass.BATTLEMAGE, HeroSubClass.WARLOCK ),
 	ROGUE( HeroSubClass.ASSASSIN, HeroSubClass.FREERUNNER ),
 	HUNTRESS( EnumSet.of(HeroPerk.HUNTRESS_BOW, HeroPerk.FURROWED_GRASS), HeroSubClass.SNIPER, HeroSubClass.WARDEN ),
@@ -185,9 +185,6 @@ public enum HeroClass {
 			FroggitStaff staff1 = new FroggitStaff();
 			staff1.identify().collect();
 			Dungeon.quickslot.setSlot(4, staff1);
-			Slingshot stones = new Slingshot();
-			stones.charge = 1;
-			stones.identify().collect();
 		}
 		switch (this) {
 			case WARRIOR:
@@ -379,11 +376,8 @@ public enum HeroClass {
 	private static void initWarrior( Hero hero ) {
 		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
 			(hero.belongings.weapon = new WornShortsword()).identify();
-			Slingshot stones = new Slingshot();
-			stones.charge = 1;
-			stones.identify().collect();
 
-			Dungeon.quickslot.setSlot(0, stones);
+			Dungeon.quickslot.setSlot(0, hero.belongings.getItem(Slingshot.class));
         }
 
 		identifyThings(WARRIOR);

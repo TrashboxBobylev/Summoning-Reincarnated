@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.BeamOfAffection;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.EnergizedRenewal;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.StarBlazing;
+import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Slingshot;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -64,6 +65,19 @@ public enum HeroPerk {
                 hero.belongings.armor.affixSeal(new BrokenSeal());
                 Catalog.setSeen(BrokenSeal.class); //as it's not added to the inventory
             }
+        }
+    },
+    SLINGSHOT(0x666114){
+        @Override
+        public Image icon() {
+            return new ItemSprite(ItemSpriteSheet.SLINGSHOT);
+        }
+
+        @Override
+        public void onInitialization(Hero hero) {
+            Slingshot stones = new Slingshot();
+            stones.charge = 1;
+            stones.identify().collect();
         }
     },
     EQUIPPABLE_WANDS(0xffff00){
@@ -160,6 +174,7 @@ public enum HeroPerk {
     public static EnumSet<HeroPerk> omniheroPerks(){
         return EnumSet.of(
             WARRIOR_SEAL,
+            SLINGSHOT,
             EQUIPPABLE_WANDS,
             WEAPON_ABILITIES,
             HUNTRESS_BOW,
