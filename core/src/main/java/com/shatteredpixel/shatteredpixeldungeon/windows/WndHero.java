@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.PixelScene;
@@ -65,6 +66,7 @@ public class WndHero extends WndTabbed {
 	private StatsTab stats;
 	private TalentsTab talents;
 	private BuffsTab buffs;
+	private PerksTab perks;
 
 	public static int lastIdx = 0;
 
@@ -85,6 +87,11 @@ public class WndHero extends WndTabbed {
 		add( buffs );
 		buffs.setRect(0, 0, WIDTH, HEIGHT);
 		buffs.setupList();
+
+		perks = new PerksTab();
+		add( perks );
+		perks.setRect(0, 0, WIDTH, HEIGHT);
+		perks.setupList();
 		
 		add( new IconTab( Icons.get(Icons.RANKINGS) ) {
 			protected void select( boolean value ) {
@@ -113,6 +120,15 @@ public class WndHero extends WndTabbed {
 				buffs.visible = buffs.active = selected;
 			}
 		} );
+		if (HeroPerk.menuAvailable()){
+			add( new IconTab( Icons.get(Icons.RANDOM_HERO) ) {
+				protected void select( boolean value ) {
+					super.select( value );
+					if (selected) lastIdx = 3;
+					perks.visible = perks.active = selected;
+				}
+			} );
+		}
 
 		layoutTabs();
 
@@ -138,6 +154,7 @@ public class WndHero extends WndTabbed {
 		super.offset(xOffset, yOffset);
 		talents.layout();
 		buffs.layout();
+		perks.layout();
 	}
 
 	private class StatsTab extends Group {
@@ -372,6 +389,81 @@ public class WndHero extends WndTabbed {
 				} else {
 					return false;
 				}
+			}
+		}
+	}
+
+	private class PerksTab extends Component {
+
+		private static final int GAP = 2;
+
+		private float pos;
+		private ScrollPane perkList;
+		private ArrayList<PerkSlot> slots = new ArrayList<>();
+
+		@Override
+		protected void createChildren() {
+
+			super.createChildren();
+
+			perkList = new ScrollPane( new Component() );
+			add(perkList);
+		}
+
+		@Override
+		protected void layout() {
+			super.layout();
+			perkList.setRect(0, 0, width, height);
+		}
+
+		private void setupList() {
+			Component content = perkList.content();
+			for (HeroPerk perk : Dungeon.hero.perks) {
+                PerkSlot slot = new PerkSlot(perk);
+                slot.setRect(0, pos, WIDTH, Math.max(slot.icon.height(), slot.txt.height()));
+                content.add(slot);
+                slots.add(slot);
+                pos += GAP + slot.height();
+			}
+			content.setSize(perkList.width(), pos);
+			perkList.setSize(perkList.width(), perkList.height());
+		}
+
+		private class PerkSlot extends Component {
+
+			private HeroPerk perk;
+
+			Image icon;
+			RenderedTextBlock txt;
+
+			public PerkSlot(HeroPerk perk ){
+				super();
+				this.perk = perk;
+
+				icon = perk.icon();
+				icon.y = this.y;
+				add( icon );
+
+				txt = PixelScene.renderTextBlock( perk.desc(), 6 );
+				txt.setPos(
+						icon.width + GAP,
+						this.y + (icon.height - txt.height()) / 2
+				);
+				PixelScene.align(txt);
+				add( txt );
+
+			}
+
+			@Override
+			protected void layout() {
+				super.layout();
+				icon.y = this.y;
+				txt.maxWidth((int)(width - icon.width()));
+				txt.setPos(
+						icon.width + GAP,
+						this.y + (icon.height - txt.height()) / 2
+				);
+				PixelScene.align(txt);
 			}
 		}
 	}

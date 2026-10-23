@@ -120,6 +120,7 @@ import com.watabou.utils.Reflection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 
 public enum HeroClass {
 
@@ -127,21 +128,28 @@ public enum HeroClass {
 	MAGE( HeroSubClass.BATTLEMAGE, HeroSubClass.WARLOCK ),
 	ROGUE( HeroSubClass.ASSASSIN, HeroSubClass.FREERUNNER ),
 	HUNTRESS( HeroSubClass.SNIPER, HeroSubClass.WARDEN ),
-	DUELIST( HeroSubClass.CHAMPION, HeroSubClass.MONK ),
+	DUELIST( EnumSet.of(HeroPerk.WEAPON_ABILITIES), HeroSubClass.CHAMPION, HeroSubClass.MONK ),
 	CLERIC( HeroSubClass.PRIEST, HeroSubClass.PALADIN ),
 	ADVENTURER(HeroSubClass.NONE),
 	CONJURER(HeroSubClass.SOUL_WIELDER, HeroSubClass.WILL_SORCERER);
 
 	private HeroSubClass[] subClasses;
+	private EnumSet<HeroPerk> perks;
+
+	HeroClass(EnumSet<HeroPerk> perks, HeroSubClass...subClasses){
+		this.perks = perks;
+		this.subClasses = subClasses;
+	}
 
 	HeroClass( HeroSubClass...subClasses ) {
-		this.subClasses = subClasses;
+		this(EnumSet.noneOf(HeroPerk.class), subClasses);
 	}
 
 	public void initHero( Hero hero ) {
 
 		hero.heroClass = this;
 		Talent.initClassTalents(hero);
+		hero.perks = defaultPerks();
         if (Dungeon.mode == Dungeon.GameMode.RANDOM_HERO){
             Talent.shuffleTalents(hero);
         }
@@ -281,6 +289,10 @@ public enum HeroClass {
 		}
 
         if (Dungeon.mode == Dungeon.GameMode.RANDOM_HERO){
+
+			for (HeroPerk perk : hero.perks){
+				perk.onInitialization(hero);
+			}
 
             boolean wandIsMainWeapon = false;
 
@@ -550,6 +562,10 @@ public enum HeroClass {
     public ArrayList<HeroSubClass> subClasses() {
         return new ArrayList<>(Arrays.asList(subClasses));
     }
+
+	public EnumSet<HeroPerk> defaultPerks(){
+		return EnumSet.copyOf(perks);
+	}
 
 	public ArmorAbility[] armorAbilities(){
 		switch (this) {

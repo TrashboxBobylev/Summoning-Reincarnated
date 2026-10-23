@@ -24,9 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
-import static com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking.arc;
-
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Bones;
@@ -238,9 +235,16 @@ import com.watabou.utils.Point;
 import com.watabou.utils.Random;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
+import static com.shatteredpixel.shatteredpixeldungeon.items.weapon.enchantments.Shocking.arc;
 
 public class Hero extends Char {
 
@@ -266,6 +270,7 @@ public class Hero extends Char {
 	public ArmorAbility armorAbility = null;
 	public ArrayList<LinkedHashMap<Talent, Integer>> talents = new ArrayList<>();
 	public LinkedHashMap<Talent, Talent> metamorphedTalents = new LinkedHashMap<>();
+	public EnumSet<HeroPerk> perks = EnumSet.noneOf(HeroPerk.class);
 	
 	private int attackSkill = 10;
 	private int defenseSkill = 5;
@@ -406,6 +411,7 @@ public class Hero extends Char {
 	private static final String EXPERIENCE	= "exp";
 	private static final String HTBOOST     = "htboost";
 	private static final String MANA	    = "mana";
+	private static final String PERKS       = "perks";
 
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -431,6 +437,8 @@ public class Hero extends Char {
 		bundle.put( MANA, mana );
 
 		belongings.storeInBundle( bundle );
+
+		bundle.put( PERKS, perks.stream().map(Enum::name).toArray(String[]::new));
 	}
 	
 	@Override
@@ -460,6 +468,14 @@ public class Hero extends Char {
 		mana = bundle.getInt( MANA );
 
 		belongings.restoreFromBundle( bundle );
+
+		if (bundle.contains(PERKS)){
+			Set<HeroPerk> perkies = Arrays.stream(bundle.getStringArray(PERKS)).map(HeroPerk::valueOf).collect(Collectors.toSet());
+			if (!perkies.isEmpty())
+				perks = EnumSet.copyOf(perkies);
+		} else {
+			perks = heroClass.defaultPerks();
+		}
 	}
 	
 	public static void preview( GamesInProgress.Info info, Bundle bundle ) {
