@@ -145,6 +145,9 @@ public enum HeroClass {
 		hero.heroClass = this;
 		Talent.initClassTalents(hero);
 		hero.perks = defaultPerks();
+		if (Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
+			hero.perks.addAll(HeroPerk.omniheroPerks());
+		}
         if (Dungeon.mode == Dungeon.GameMode.RANDOM_HERO){
             Talent.shuffleTalents(hero);
         }
@@ -169,8 +172,11 @@ public enum HeroClass {
 			new PotionOfStrength().identify();
 		}
 
+		for (HeroPerk perk : hero.perks){
+			perk.onInitialization(hero);
+		}
+
 		if (Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)){
-			hero.perks.addAll(HeroPerk.omniheroPerks());
 			WandOfMagicMissile staff = new WandOfMagicMissile();
 			(hero.belongings.weapon = staff).identify();
 			hero.belongings.weapon.activate(hero);
@@ -261,10 +267,6 @@ public enum HeroClass {
 
 			new TengusMask().collect();
 			new KingsCrown().collect();
-		}
-
-		for (HeroPerk perk : hero.perks){
-			perk.onInitialization(hero);
 		}
 
         if (Dungeon.mode == Dungeon.GameMode.RANDOM_HERO){
