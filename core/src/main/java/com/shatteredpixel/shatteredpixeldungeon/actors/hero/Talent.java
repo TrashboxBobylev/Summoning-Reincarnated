@@ -647,7 +647,7 @@ public enum Talent {
 
 	public static void onTalentUpgraded( Hero hero, Talent talent ){
 		//for metamorphosis
-		if (talent == IRON_WILL && hero.heroClass != HeroClass.WARRIOR){
+		if (talent == IRON_WILL && !hero.perks.contains(HeroPerk.WARRIOR_SEAL)){
 			Buff.affect(hero, BrokenSeal.WarriorShield.class);
 		}
 
@@ -769,7 +769,7 @@ public enum Talent {
         }
 
         if (isGone){
-            if (talent == IRON_WILL && hero.heroClass != HeroClass.WARRIOR){
+            if (talent == IRON_WILL && !hero.perks.contains(HeroPerk.WARRIOR_SEAL)){
                 Buff.detach(hero, BrokenSeal.WarriorShield.class);
             }
             if (talent == PROTECTIVE_SHADOWS){

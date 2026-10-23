@@ -25,7 +25,11 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
+import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
+import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.TalentIcon;
 import com.watabou.noosa.Image;
@@ -36,7 +40,22 @@ public enum HeroPerk {
         public Image icon() {
             return new TalentIcon(Talent.SWIFT_EQUIP);
         }
-    };
+    },
+    WARRIOR_SEAL(0x9a0000){
+        @Override
+        public Image icon() {
+            return new ItemSprite(ItemSpriteSheet.SEAL);
+        }
+
+        @Override
+        public void onInitialization(Hero hero) {
+            if (hero.belongings.armor != null){
+                hero.belongings.armor.affixSeal(new BrokenSeal());
+                Catalog.setSeen(BrokenSeal.class); //as it's not added to the inventory
+            }
+        }
+    }
+    ;
 
     public int color = -1;
 

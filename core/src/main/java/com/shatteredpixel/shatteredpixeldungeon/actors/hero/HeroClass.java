@@ -53,7 +53,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.rogue.Smok
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Endure;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.HeroicLeap;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.warrior.Shockwave;
-import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.KingsCrown;
@@ -124,7 +123,7 @@ import java.util.EnumSet;
 
 public enum HeroClass {
 
-	WARRIOR( HeroSubClass.BERSERKER, HeroSubClass.GLADIATOR ),
+	WARRIOR(EnumSet.of(HeroPerk.WARRIOR_SEAL), HeroSubClass.BERSERKER, HeroSubClass.GLADIATOR ),
 	MAGE( HeroSubClass.BATTLEMAGE, HeroSubClass.WARLOCK ),
 	ROGUE( HeroSubClass.ASSASSIN, HeroSubClass.FREERUNNER ),
 	HUNTRESS( HeroSubClass.SNIPER, HeroSubClass.WARDEN ),
@@ -176,6 +175,7 @@ public enum HeroClass {
 
 		if (Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)){
 			hero.perks.add(HeroPerk.WEAPON_ABILITIES);
+			hero.perks.add(HeroPerk.WARRIOR_SEAL);
 			WandOfMagicMissile staff = new WandOfMagicMissile();
 			(hero.belongings.weapon = staff).identify();
 			hero.belongings.weapon.activate(hero);
@@ -185,9 +185,6 @@ public enum HeroClass {
 			Dungeon.quickslot.setSlot(0, bow);
 			Dungeon.quickslot.setSlot(1, hero.belongings.armor);
 			Dungeon.quickslot.setSlot(2, staff);
-			if (hero.belongings.armor != null){
-				hero.belongings.armor.affixSeal(new BrokenSeal());
-			}
 			CloakOfShadows cloak = new CloakOfShadows();
 			(hero.belongings.artifact = cloak).identify();
 			hero.belongings.artifact.activate( hero );
@@ -407,11 +404,6 @@ public enum HeroClass {
 			stones.identify().collect();
 
 			Dungeon.quickslot.setSlot(0, stones);
-
-            if (hero.belongings.armor != null){
-                hero.belongings.armor.affixSeal(new BrokenSeal());
-                Catalog.setSeen(BrokenSeal.class); //as it's not added to the inventory
-            }
         }
 
 		identifyThings(WARRIOR);

@@ -27,7 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -57,7 +57,7 @@ public class HoldFast extends Buff {
 	public int armorBonus(){
 		if (pos == target.pos && target instanceof Hero){
 			int max = 0;
-			if (((Hero) target).heroClass == HeroClass.WARRIOR){
+			if (((Hero) target).perks.contains(HeroPerk.WARRIOR_SEAL)){
 				max = 6;
 			} else {
 				Armor armor = ((Hero) target).belongings.armor();
