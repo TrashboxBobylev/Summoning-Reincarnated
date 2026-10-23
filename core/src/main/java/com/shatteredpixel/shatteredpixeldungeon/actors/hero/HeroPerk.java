@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
+import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
@@ -90,6 +91,19 @@ public enum HeroPerk {
         @Override
         public Image icon() {
             return Icons.get(Icons.MAGNIFY);
+        }
+    },
+    CLOAK_OF_SHADOWS(0x090909){
+        @Override
+        public Image icon() {
+            return new ItemSprite(ItemSpriteSheet.ARTIFACT_CLOAK);
+        }
+
+        @Override
+        public void onInitialization(Hero hero) {
+            CloakOfShadows cloak = new CloakOfShadows();
+            (hero.belongings.artifact = cloak).identify();
+            hero.belongings.artifact.activate( hero );
         }
     },
     HUNTRESS_BOW(0x99ffff){
@@ -182,6 +196,7 @@ public enum HeroPerk {
             WARRIOR_SEAL,
             SLINGSHOT,
             EQUIPPABLE_WANDS,
+            CLOAK_OF_SHADOWS,
             WEAPON_ABILITIES,
             HUNTRESS_BOW,
             CONJURER_MAGIC,

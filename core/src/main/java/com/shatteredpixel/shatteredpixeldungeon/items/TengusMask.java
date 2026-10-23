@@ -31,7 +31,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Preparation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -101,7 +100,7 @@ public class TengusMask extends Item {
                     heroSubClasses.remove(HeroSubClass.BATTLEMAGE);
                 if (!curUser.perks.contains(HeroPerk.HUNTRESS_BOW))
                     heroSubClasses.remove(HeroSubClass.SNIPER);
-                if (curUser.heroClass != HeroClass.ROGUE)
+                if (!curUser.perks.contains(HeroPerk.CLOAK_OF_SHADOWS))
                     heroSubClasses.remove(HeroSubClass.ASSASSIN);
                 heroSubClasses.remove(PALADIN);
                 heroSubClasses.remove(PRIEST);

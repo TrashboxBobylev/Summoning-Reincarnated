@@ -121,7 +121,7 @@ public enum HeroClass {
 
 	WARRIOR(EnumSet.of(HeroPerk.WARRIOR_SEAL, HeroPerk.SLINGSHOT), HeroSubClass.BERSERKER, HeroSubClass.GLADIATOR ),
 	MAGE( EnumSet.of(HeroPerk.EQUIPPABLE_WANDS), HeroSubClass.BATTLEMAGE, HeroSubClass.WARLOCK ),
-	ROGUE( EnumSet.of(HeroPerk.SEARCH_RANGE), HeroSubClass.ASSASSIN, HeroSubClass.FREERUNNER ),
+	ROGUE( EnumSet.of(HeroPerk.SEARCH_RANGE, HeroPerk.CLOAK_OF_SHADOWS), HeroSubClass.ASSASSIN, HeroSubClass.FREERUNNER ),
 	HUNTRESS( EnumSet.of(HeroPerk.HUNTRESS_BOW, HeroPerk.FURROWED_GRASS), HeroSubClass.SNIPER, HeroSubClass.WARDEN ),
 	DUELIST( EnumSet.of(HeroPerk.WEAPON_ABILITIES), HeroSubClass.CHAMPION, HeroSubClass.MONK ),
 	CLERIC( HeroSubClass.PRIEST, HeroSubClass.PALADIN ),
@@ -184,10 +184,7 @@ public enum HeroClass {
 			Dungeon.quickslot.setSlot(0, Dungeon.hero.belongings.getItem(SpiritBow.class));
 			Dungeon.quickslot.setSlot(1, hero.belongings.armor);
 			Dungeon.quickslot.setSlot(2, staff);
-			CloakOfShadows cloak = new CloakOfShadows();
-			(hero.belongings.artifact = cloak).identify();
-			hero.belongings.artifact.activate( hero );
-			Dungeon.quickslot.setSlot(3, cloak);
+			Dungeon.quickslot.setSlot(3, Dungeon.hero.belongings.getItem(CloakOfShadows.class));
 			FroggitStaff staff1 = new FroggitStaff();
 			staff1.identify().collect();
 			Dungeon.quickslot.setSlot(4, staff1);
@@ -402,14 +399,10 @@ public enum HeroClass {
 		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
 			(hero.belongings.weapon = new Dagger()).identify();
 
-			CloakOfShadows cloak = new CloakOfShadows();
-			(hero.belongings.artifact = cloak).identify();
-			hero.belongings.artifact.activate(hero);
-
 			ThrowingKnife knives = new ThrowingKnife();
 			knives.identify().collect();
 
-			Dungeon.quickslot.setSlot(0, cloak);
+			Dungeon.quickslot.setSlot(0, hero.belongings.getItem(CloakOfShadows.class));
 			Dungeon.quickslot.setSlot(1, knives);
 		}
 

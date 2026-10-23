@@ -686,7 +686,7 @@ public enum Talent {
 			Buff.affect(hero, Talent.ProtectiveShadowsTracker.class);
 		}
 
-		if (talent == LIGHT_CLOAK && hero.heroClass == HeroClass.ROGUE){
+		if (talent == LIGHT_CLOAK && hero.perks.contains(HeroPerk.CLOAK_OF_SHADOWS)){
 			for (Item item : Dungeon.hero.belongings.backpack){
 				if (item instanceof CloakOfShadows){
 					if (!hero.belongings.lostInventory() || item.keptThroughLostInventory()) {
@@ -793,7 +793,7 @@ public enum Talent {
                     }
                 }
             }
-            if (talent == LIGHT_CLOAK && hero.heroClass == HeroClass.ROGUE){
+            if (talent == LIGHT_CLOAK && hero.perks.contains(HeroPerk.CLOAK_OF_SHADOWS)){
                 for (Item item : Dungeon.hero.belongings.backpack){
                     if (item instanceof CloakOfShadows){
                         ((CloakOfShadows) item).onDetach();
