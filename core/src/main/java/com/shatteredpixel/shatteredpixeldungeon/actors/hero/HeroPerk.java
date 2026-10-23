@@ -74,6 +74,12 @@ public enum HeroPerk {
             bow.identify().collect();
         }
     },
+    FURROWED_GRASS(0x005826){
+        @Override
+        public Image icon() {
+            return Icons.GRASS.get();
+        }
+    },
     CONJURER_MAGIC(0x4c51ad){
         @Override
         public Image icon() {
