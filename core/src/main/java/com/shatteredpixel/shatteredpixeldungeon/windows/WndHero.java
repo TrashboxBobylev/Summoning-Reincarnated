@@ -395,7 +395,7 @@ public class WndHero extends WndTabbed {
 
 	private class PerksTab extends Component {
 
-		private static final int GAP = 2;
+		private static final int GAP = 4;
 
 		private float pos;
 		private ScrollPane perkList;
@@ -420,14 +420,13 @@ public class WndHero extends WndTabbed {
 			Component content = perkList.content();
 			for (HeroPerk perk : Dungeon.hero.perks) {
                 PerkSlot slot = new PerkSlot(perk);
-                slot.setRect(0, pos, WIDTH, Math.max(slot.icon.height(), slot.txt.height()));
-				if (slot.icon.height() < slot.txt.height()) {
-					slot.setPos(0, pos + (slot.txt.height() - slot.icon.height())/2);
-					pos += (slot.txt.height() - slot.icon.height())/2;
+				slot.setRect(0, pos, WIDTH, Math.max(16, slot.txt.height()));
+				if (slot.txt.height() > 16) {
+					slot.setPos(0, pos + (slot.txt.height() - 16)/1.5f);
 				}
                 content.add(slot);
                 slots.add(slot);
-                pos += GAP + slot.height();
+                pos += GAP + slot.txt.height();
 			}
 			content.setSize(perkList.width(), pos);
 			perkList.setSize(perkList.width(), perkList.height());
@@ -450,8 +449,8 @@ public class WndHero extends WndTabbed {
 
 				txt = PixelScene.renderTextBlock( perk.desc(), 6 );
 				txt.setPos(
-						icon.width + GAP,
-						this.y + (icon.height - txt.height()) / 2
+						Math.max(16, icon.width) + GAP-2,
+						this.y + (Math.max(16, icon.height) - txt.height()) / 2
 				);
 				PixelScene.align(txt);
 				add( txt );
@@ -461,11 +460,12 @@ public class WndHero extends WndTabbed {
 			@Override
 			protected void layout() {
 				super.layout();
-				icon.y = this.y;
-				txt.maxWidth((int)(width - icon.width()));
+				icon.x = this.x + (16 - icon.width) / 2;
+				icon.y = this.y + (16 - icon.height) / 2;
+				txt.maxWidth((int)(width - Math.max(16, icon.width)));
 				txt.setPos(
-						icon.width + GAP,
-						this.y + (icon.height - txt.height()) / 2
+						Math.max(16, icon.width) + GAP-2,
+						this.y + (Math.max(16, icon.height) - txt.height()) / 2
 				);
 				PixelScene.align(txt);
 			}
