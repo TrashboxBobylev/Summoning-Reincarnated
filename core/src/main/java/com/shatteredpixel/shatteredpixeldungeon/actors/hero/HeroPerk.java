@@ -102,6 +102,12 @@ public enum HeroPerk {
             energizedRenewal.collect();
             new BeamOfAffection().collect();
         }
+    },
+    EXTRA_LOOT(0x7c7c7c){
+        @Override
+        public Image icon() {
+            return new ItemSprite(ItemSpriteSheet.BAG_GENERIC);
+        }
     }
     ;
 

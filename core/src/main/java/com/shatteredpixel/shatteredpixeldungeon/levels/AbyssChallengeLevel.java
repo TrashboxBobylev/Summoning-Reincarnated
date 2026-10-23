@@ -28,7 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.Stylus;
@@ -114,7 +114,7 @@ public class AbyssChallengeLevel extends RegularLevel {
     protected void createItems() {
         int nItems = 10;
 
-        if (Dungeon.hero.heroClass == HeroClass.ADVENTURER) nItems *= 2;
+        if (Dungeon.hero.perks.contains(HeroPerk.EXTRA_LOOT)) nItems *= 2;
 
         if (Dungeon.mode == Dungeon.GameMode.BIGGER){
             nItems = Math.round(nItems * 1.75f);

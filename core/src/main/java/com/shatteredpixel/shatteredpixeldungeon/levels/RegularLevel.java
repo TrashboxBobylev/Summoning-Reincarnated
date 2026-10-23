@@ -34,7 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.SacrificialFire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.EbonyMimic;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.GoldenMimic;
@@ -430,7 +430,7 @@ public abstract class RegularLevel extends Level {
 			nItems += 2;
 		}
 
-		if (Dungeon.hero.heroClass == HeroClass.ADVENTURER) nItems *= 2;
+		if (Dungeon.hero.perks.contains(HeroPerk.EXTRA_LOOT)) nItems *= 2;
 
 		if (Dungeon.mode == Dungeon.GameMode.BIGGER){
             nItems = Math.round(nItems * 1.75f);

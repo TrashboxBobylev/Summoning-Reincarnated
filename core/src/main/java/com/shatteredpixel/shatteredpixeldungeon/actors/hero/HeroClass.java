@@ -125,7 +125,7 @@ public enum HeroClass {
 	HUNTRESS( EnumSet.of(HeroPerk.HUNTRESS_BOW, HeroPerk.FURROWED_GRASS), HeroSubClass.SNIPER, HeroSubClass.WARDEN ),
 	DUELIST( EnumSet.of(HeroPerk.WEAPON_ABILITIES), HeroSubClass.CHAMPION, HeroSubClass.MONK ),
 	CLERIC( HeroSubClass.PRIEST, HeroSubClass.PALADIN ),
-	ADVENTURER(HeroSubClass.NONE),
+	ADVENTURER( EnumSet.of(HeroPerk.EXTRA_LOOT), HeroSubClass.NONE),
 	CONJURER(EnumSet.of(HeroPerk.CONJURER_MAGIC), HeroSubClass.SOUL_WIELDER, HeroSubClass.WILL_SORCERER);
 
 	private HeroSubClass[] subClasses;
