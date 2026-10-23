@@ -144,7 +144,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 		if (canZap(hero) || !curChargeKnown) {
 			actions.add( AC_ZAP );
 		}
-        if (hero.heroClass != HeroClass.MAGE){
+        if (!hero.perks.contains(HeroPerk.EQUIPPABLE_WANDS)){
             actions.remove(AC_EQUIP);
             actions.remove(AC_UNEQUIP);
         }
@@ -488,7 +488,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 
 		desc += "\n\n" + statsDesc();
 
-        if (Dungeon.hero != null && Dungeon.hero.heroClass == HeroClass.MAGE){
+        if (Dungeon.hero != null && Dungeon.hero.perks.contains(HeroPerk.EQUIPPABLE_WANDS)){
             desc += "\n\n" + Messages.get(Wand.class, "melee", GameMath.printAverage(augment.damageFactor(min()), augment.damageFactor(max())));
         }
 
@@ -1070,14 +1070,14 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 							&& curWand.charger != null && curWand.charger.target == curUser){
 
 						//regular. If hero owns wand but it isn't in belongings it must be in the staff
-						if (curUser.heroClass == HeroClass.MAGE && curUser.belongings.weapon() == curWand){
+						if (curUser.perks.contains(HeroPerk.EQUIPPABLE_WANDS) && curUser.belongings.weapon() == curWand){
 							//grants 3/5 shielding
 							int shieldToGive = 1 + 2 * Dungeon.hero.pointsInTalent(Talent.BACKUP_BARRIER);
 							Buff.affect(Dungeon.hero, Barrier.class).setShield(shieldToGive);
 							Dungeon.hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(shieldToGive), FloatingText.SHIELDING);
 
 						//metamorphed. Triggers if wand is highest level hero has
-						} else if (curUser.heroClass != HeroClass.MAGE) {
+						} else if (!curUser.perks.contains(HeroPerk.EQUIPPABLE_WANDS)) {
 							boolean highest = true;
 							for (Item i : curUser.belongings.getAllItems(Wand.class)){
 								if (i.level() > curWand.level()){

@@ -1237,7 +1237,7 @@ public enum Talent {
 		}
 
         if (hero.hasTalent(FIGHTING_WIZARDRY)){
-            if (hero.heroClass == HeroClass.MAGE){
+            if (hero.perks.contains(HeroPerk.EQUIPPABLE_WANDS)){
                 if (hero.belongings.weapon() instanceof Wand)
                     Buff.prolong(hero, FightingWizardryTracker.class, 5f).counter++;
             } else {

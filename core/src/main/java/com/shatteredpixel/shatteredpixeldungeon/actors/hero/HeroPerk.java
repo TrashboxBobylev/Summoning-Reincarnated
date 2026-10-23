@@ -62,6 +62,12 @@ public enum HeroPerk {
             }
         }
     },
+    EQUIPPABLE_WANDS(0xffff00){
+        @Override
+        public Image icon() {
+            return new ItemSprite(ItemSpriteSheet.MAGES_STAFF);
+        }
+    },
     HUNTRESS_BOW(0x99ffff){
         @Override
         public Image icon() {
@@ -127,6 +133,7 @@ public enum HeroPerk {
     public static EnumSet<HeroPerk> omniheroPerks(){
         return EnumSet.of(
             WARRIOR_SEAL,
+            EQUIPPABLE_WANDS,
             WEAPON_ABILITIES,
             HUNTRESS_BOW,
             CONJURER_MAGIC

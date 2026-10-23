@@ -26,7 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.spells;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.ArcaneResin;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -49,7 +49,7 @@ public class EnchantParchment extends InventorySpell {
     @Override
     protected boolean usableOnItem(Item item) {
         if (glyph == null && enchantment == null){
-            return ((item instanceof Armor && ((Armor) item).glyph != null) || (item instanceof WeaponEnchantable && ((WeaponEnchantable) item).getEnchantment() != null) && (!(item instanceof Wand) || Dungeon.hero.heroClass == HeroClass.MAGE));
+            return ((item instanceof Armor && ((Armor) item).glyph != null) || (item instanceof WeaponEnchantable && ((WeaponEnchantable) item).getEnchantment() != null) && (!(item instanceof Wand) || Dungeon.hero.perks.contains(HeroPerk.EQUIPPABLE_WANDS)));
         } else if (glyph != null && enchantment == null){
             return item instanceof Armor;
         } else if (glyph == null){

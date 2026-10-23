@@ -28,7 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -67,7 +67,7 @@ public class CurseInfusion extends InventorySpell {
 		Sample.INSTANCE.play(Assets.Sounds.CURSED);
 		
 		item.cursed = true;
-		if (item instanceof Weapon && !(item instanceof Wand && Dungeon.hero.heroClass != HeroClass.MAGE)) {
+		if (item instanceof Weapon && !(item instanceof Wand && !Dungeon.hero.perks.contains(HeroPerk.EQUIPPABLE_WANDS))) {
 			Weapon w = (Weapon) item;
 			if (w.enchantment != null) {
 				//if we are freshly applying curse infusion, don't replace an existing curse

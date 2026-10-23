@@ -97,7 +97,7 @@ public class TengusMask extends Item {
                 ArrayList<HeroSubClass> heroSubClasses = new ArrayList<>(Arrays.asList(HeroSubClass.values()));
                 //remove unusable classes
                 heroSubClasses.remove(NONE);
-                if (curUser.heroClass != HeroClass.MAGE)
+                if (!curUser.perks.contains(HeroPerk.EQUIPPABLE_WANDS))
                     heroSubClasses.remove(HeroSubClass.BATTLEMAGE);
                 if (!curUser.perks.contains(HeroPerk.HUNTRESS_BOW))
                     heroSubClasses.remove(HeroSubClass.SNIPER);
