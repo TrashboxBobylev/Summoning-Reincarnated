@@ -31,10 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.TalentIcon;
 import com.watabou.noosa.Image;
 
 public enum HeroPerk {
-    WEAPON_ABILITIES{
-        {
-            color = 0xcc33ff;
-        }
+    WEAPON_ABILITIES(0xcc33ff){
         @Override
         public Image icon() {
             return new TalentIcon(Talent.SWIFT_EQUIP);
@@ -42,6 +39,10 @@ public enum HeroPerk {
     };
 
     public int color = -1;
+
+    HeroPerk(int color){
+        this.color = color;
+    }
 
     public Image icon(){
         Image icon = Icons.get(Icons.TALENT);

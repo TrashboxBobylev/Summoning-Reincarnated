@@ -289,11 +289,11 @@ public enum HeroClass {
 			new KingsCrown().collect();
 		}
 
-        if (Dungeon.mode == Dungeon.GameMode.RANDOM_HERO){
+		for (HeroPerk perk : hero.perks){
+			perk.onInitialization(hero);
+		}
 
-			for (HeroPerk perk : hero.perks){
-				perk.onInitialization(hero);
-			}
+        if (Dungeon.mode == Dungeon.GameMode.RANDOM_HERO){
 
             boolean wandIsMainWeapon = false;
 
