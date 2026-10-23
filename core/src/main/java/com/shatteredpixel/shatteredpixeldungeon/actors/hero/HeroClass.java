@@ -121,7 +121,7 @@ public enum HeroClass {
 
 	WARRIOR(EnumSet.of(HeroPerk.WARRIOR_SEAL, HeroPerk.SLINGSHOT), HeroSubClass.BERSERKER, HeroSubClass.GLADIATOR ),
 	MAGE( EnumSet.of(HeroPerk.EQUIPPABLE_WANDS), HeroSubClass.BATTLEMAGE, HeroSubClass.WARLOCK ),
-	ROGUE( HeroSubClass.ASSASSIN, HeroSubClass.FREERUNNER ),
+	ROGUE( EnumSet.of(HeroPerk.SEARCH_RANGE), HeroSubClass.ASSASSIN, HeroSubClass.FREERUNNER ),
 	HUNTRESS( EnumSet.of(HeroPerk.HUNTRESS_BOW, HeroPerk.FURROWED_GRASS), HeroSubClass.SNIPER, HeroSubClass.WARDEN ),
 	DUELIST( EnumSet.of(HeroPerk.WEAPON_ABILITIES), HeroSubClass.CHAMPION, HeroSubClass.MONK ),
 	CLERIC( HeroSubClass.PRIEST, HeroSubClass.PALADIN ),

@@ -86,6 +86,12 @@ public enum HeroPerk {
             return new ItemSprite(ItemSpriteSheet.MAGES_STAFF);
         }
     },
+    SEARCH_RANGE(0x7fa9d2){
+        @Override
+        public Image icon() {
+            return Icons.get(Icons.MAGNIFY);
+        }
+    },
     HUNTRESS_BOW(0x99ffff){
         @Override
         public Image icon() {
