@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Preparation;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.GoatClone;
@@ -104,7 +105,7 @@ public class TengusMask extends Item {
                     heroSubClasses.remove(HeroSubClass.ASSASSIN);
                 heroSubClasses.remove(PALADIN);
                 heroSubClasses.remove(PRIEST);
-                if (curUser.heroClass != HeroClass.CONJURER) {
+                if (!curUser.perks.contains(HeroPerk.CONJURER_MAGIC)) {
                     heroSubClasses.remove(SOUL_WIELDER);
                     heroSubClasses.remove(WILL_SORCERER);
                 }

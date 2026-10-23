@@ -26,6 +26,10 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.BeamOfAffection;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.EnergizedRenewal;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.StarBlazing;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
@@ -53,6 +57,23 @@ public enum HeroPerk {
                 hero.belongings.armor.affixSeal(new BrokenSeal());
                 Catalog.setSeen(BrokenSeal.class); //as it's not added to the inventory
             }
+        }
+    },
+    CONJURER_MAGIC(0x4c51ad){
+        @Override
+        public Image icon() {
+            return new ItemSprite(ItemSpriteSheet.BEHAVIOR_PASSIVE);
+        }
+
+        @Override
+        public void onInitialization(Hero hero) {
+            ConjurerBook book = new ConjurerBook();
+            book.collect();
+            StarBlazing star = new StarBlazing();
+            star.collect();
+            EnergizedRenewal energizedRenewal = new EnergizedRenewal();
+            energizedRenewal.collect();
+            new BeamOfAffection().collect();
         }
     }
     ;

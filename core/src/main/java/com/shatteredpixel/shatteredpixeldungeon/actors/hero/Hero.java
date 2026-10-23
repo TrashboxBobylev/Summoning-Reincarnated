@@ -1940,7 +1940,7 @@ public class Hero extends Char {
 
 		final boolean isManaburnEmpowered = buff(Ascension.AscendBuff.class) != null && pointsInTalent(Talent.EGOISM) > 1;
 		if (damage > 0 && (hasTalent(Talent.MANABURN) || isManaburnEmpowered) &&
-				(mana >= maxMana() / 2 || (heroClass != HeroClass.CONJURER && HP >= HT / 2) || isManaburnEmpowered)){
+				(mana >= maxMana() / 2 || (!perks.contains(HeroPerk.CONJURER_MAGIC) && HP >= HT / 2) || isManaburnEmpowered)){
 			sprite.parent.add(new Beam.LightRay(sprite.center(), DungeonTilemap.raisedTileCenterToWorld(enemy.pos)));
 			ShieldHalo shield;
 
@@ -1951,7 +1951,7 @@ public class Hero extends Char {
 			Sample.INSTANCE.play( Assets.Sounds.BLAST);
 
 			if (!isManaburnEmpowered) {
-				if (heroClass == HeroClass.CONJURER) {
+				if (perks.contains(HeroPerk.CONJURER_MAGIC)) {
 					changeMana(-maxMana() / 20);
 				} else
 					damage(HT / 20, new StarBlazing());
@@ -1963,7 +1963,7 @@ public class Hero extends Char {
 					float damageMultiplier = i != 0 ?
 							0.25f + 0.75f * pointsInTalent(Talent.MANABURN) :
 							0.50f * pointsInTalent(Talent.MANABURN);
-					if (heroClass != HeroClass.CONJURER)
+					if (!perks.contains(HeroPerk.CONJURER_MAGIC))
 						damageMultiplier *= 1.25f;
 					if (isManaburnEmpowered){
 						damageMultiplier *= 1.33f;
@@ -2604,7 +2604,7 @@ public class Hero extends Char {
 				
 				updateStats();
 
-				if (heroClass == HeroClass.CONJURER) {
+				if (perks.contains(HeroPerk.CONJURER_MAGIC)) {
 					if (lvl == 5) new RunicShell().identify().collectWithAnnouncing();
 					if (lvl == 7) new PushingWaveform().identify().collectWithAnnouncing();
 					if (lvl == 9) new ShockerBreaker().identify().collectWithAnnouncing();

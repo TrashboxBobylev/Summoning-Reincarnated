@@ -24,9 +24,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.ui;
 
-import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -85,7 +84,7 @@ public class ManaIndicator extends Tag {
 
     @Override
     public void update() {
-        if (Dungeon.hero != null && (Dungeon.hero.heroClass == HeroClass.CONJURER || Dungeon.isChallenged(Conducts.Conduct.EVERYTHING))) {
+        if (Dungeon.hero != null && Dungeon.hero.perks.contains(HeroPerk.CONJURER_MAGIC)) {
             if (Dungeon.hero.mana != lastNumber || Dungeon.hero.maxMana() != lastMaxNumber) {
                 lastNumber = Dungeon.hero.mana;
                 lastMaxNumber = Dungeon.hero.maxMana();

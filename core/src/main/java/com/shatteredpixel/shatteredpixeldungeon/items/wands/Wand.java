@@ -46,6 +46,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ScrollEmpower;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SoulMark;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.mage.WildMagic;
@@ -428,7 +429,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 				}
 			}
 
-			if (Dungeon.hero.hasTalent(Talent.ENERGY_BREAK) && Dungeon.hero.heroClass != HeroClass.CONJURER &&
+			if (Dungeon.hero.hasTalent(Talent.ENERGY_BREAK) && !Dungeon.hero.perks.contains(HeroPerk.CONJURER_MAGIC) &&
 				target.alignment == Char.Alignment.ENEMY){
 				Buff.affect(target, Talent.EnergyBreakTracker.class, 5f);
 			}
@@ -828,7 +829,7 @@ public abstract class Wand extends Weapon implements ChargingItem, AttunementIte
 			Buff.prolong(Dungeon.hero, Talent.LingeringMagicTracker.class, 5f);
 		}
 
-		if (Dungeon.hero.hasTalent(Talent.COMBINED_REFILL) && Dungeon.hero.heroClass != HeroClass.CONJURER){
+		if (Dungeon.hero.hasTalent(Talent.COMBINED_REFILL) && !Dungeon.hero.perks.contains(HeroPerk.CONJURER_MAGIC)){
 			Talent.CombinedRefillTracker tracker = Dungeon.hero.buff(Talent.CombinedRefillTracker.class);
 			if (tracker == null || tracker.weapon == getClass() || tracker.weapon == null || (!Wand.class.isAssignableFrom(tracker.weapon))) {
 				Buff.affect(Dungeon.hero, Talent.CombinedRefillTracker.class).weapon = getClass();

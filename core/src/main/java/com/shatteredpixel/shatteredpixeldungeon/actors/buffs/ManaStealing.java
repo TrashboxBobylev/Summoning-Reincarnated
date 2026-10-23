@@ -29,7 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.generic.ManaStealHost;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.ShadowCaster;
@@ -66,7 +66,7 @@ public class ManaStealing extends Buff {
             for (Char ch : affected){
                 if (ch.alignment == Char.Alignment.ENEMY) {
                     target.sprite.parent.add(new Beam.LightRay(target.sprite.center(), DungeonTilemap.raisedTileCenterToWorld(ch.pos)));
-                    if (Dungeon.hero.heroClass == HeroClass.CONJURER) {
+                    if (Dungeon.hero.perks.contains(HeroPerk.CONJURER_MAGIC)) {
                         Dungeon.hero.changeMana(1);
                     } else {
                         int shieldToGive = 1;

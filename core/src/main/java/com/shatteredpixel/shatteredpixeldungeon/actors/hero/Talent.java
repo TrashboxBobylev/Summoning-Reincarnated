@@ -1147,7 +1147,7 @@ public enum Talent {
 	//note that IDing can happen in alchemy scene, so be careful with VFX here
 	public static void onItemIdentified( Hero hero, Item item ){
 		if (hero.hasTalent(EMPOWERING_INTUITION)){
-			if (hero.heroClass == HeroClass.CONJURER){
+			if (hero.perks.contains(HeroPerk.CONJURER_MAGIC)){
 				hero.changeMana(1 + hero.pointsInTalent(EMPOWERING_INTUITION)*2);
 			} else {
 				int gain = 1 + hero.pointsInTalent(EMPOWERING_INTUITION);
@@ -1229,7 +1229,7 @@ public enum Talent {
             Buff.affect(hero, OlympicDedicationTracker.class).addHit();
         }
 
-		if (hero.hasTalent(ENERGY_BREAK) && hero.heroClass != HeroClass.CONJURER){
+		if (hero.hasTalent(ENERGY_BREAK) && !hero.perks.contains(HeroPerk.CONJURER_MAGIC)){
 			if (enemy.buff(EnergyBreakTracker.class) != null){
 				dmg += 1 + hero.pointsInTalent(ENERGY_BREAK);
 				enemy.buff(EnergyBreakTracker.class).detach();

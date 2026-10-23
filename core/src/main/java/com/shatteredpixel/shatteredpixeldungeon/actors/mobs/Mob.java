@@ -60,7 +60,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.SwarmIntelTracker;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.powers.ArmoredShielding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -1323,7 +1322,7 @@ public abstract class Mob extends Char {
 			GLog.i( Messages.get(this, "died") );
 		}
 
-		if (cause instanceof ManaSource && (Dungeon.hero.heroClass == HeroClass.CONJURER || Dungeon.isChallenged(Conducts.Conduct.EVERYTHING))){
+		if (cause instanceof ManaSource && Dungeon.hero.perks.contains(HeroPerk.CONJURER_MAGIC)){
 			gainMana((ManaSource) cause);
 		}
 
@@ -1473,7 +1472,7 @@ public abstract class Mob extends Char {
 			powerTracker.reward();
 		}
 
-        if (Dungeon.hero.buff(ManaEmpower.class) != null && Dungeon.hero.heroClass != HeroClass.CONJURER){
+        if (Dungeon.hero.buff(ManaEmpower.class) != null && !Dungeon.hero.perks.contains(HeroPerk.CONJURER_MAGIC)){
             ScrollOfRecharging.charge(Dungeon.hero);
             //artifact recharge
             ArtifactRecharge.chargeArtifacts(hero, 2f);

@@ -66,19 +66,15 @@ import com.shatteredpixel.shatteredpixeldungeon.items.armor.SyntheticArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
-import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.VelvetPouch;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.BeamOfAffection;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.DreemurrsNecromancy;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.EnergizedRenewal;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.PushingWaveform;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.RunicShell;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ShockerBreaker;
-import com.shatteredpixel.shatteredpixeldungeon.items.magic.StarBlazing;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.SubNullFieldLighter;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
@@ -130,7 +126,7 @@ public enum HeroClass {
 	DUELIST( EnumSet.of(HeroPerk.WEAPON_ABILITIES), HeroSubClass.CHAMPION, HeroSubClass.MONK ),
 	CLERIC( HeroSubClass.PRIEST, HeroSubClass.PALADIN ),
 	ADVENTURER(HeroSubClass.NONE),
-	CONJURER(HeroSubClass.SOUL_WIELDER, HeroSubClass.WILL_SORCERER);
+	CONJURER(EnumSet.of(HeroPerk.CONJURER_MAGIC), HeroSubClass.SOUL_WIELDER, HeroSubClass.WILL_SORCERER);
 
 	private HeroSubClass[] subClasses;
 	private EnumSet<HeroPerk> perks;
@@ -176,6 +172,7 @@ public enum HeroClass {
 		if (Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)){
 			hero.perks.add(HeroPerk.WEAPON_ABILITIES);
 			hero.perks.add(HeroPerk.WARRIOR_SEAL);
+			hero.perks.add(HeroPerk.CONJURER_MAGIC);
 			WandOfMagicMissile staff = new WandOfMagicMissile();
 			(hero.belongings.weapon = staff).identify();
 			hero.belongings.weapon.activate(hero);
@@ -189,15 +186,8 @@ public enum HeroClass {
 			(hero.belongings.artifact = cloak).identify();
 			hero.belongings.artifact.activate( hero );
 			Dungeon.quickslot.setSlot(3, cloak);
-			ConjurerBook book = new ConjurerBook();
-			book.collect();
 			FroggitStaff staff1 = new FroggitStaff();
 			staff1.identify().collect();
-			StarBlazing star = new StarBlazing();
-			star.collect();
-			EnergizedRenewal energizedRenewal = new EnergizedRenewal();
-			energizedRenewal.collect();
-			new BeamOfAffection().collect();
 			Dungeon.quickslot.setSlot(4, staff1);
 			new PotionBandolier().collect();
 			Dungeon.LimitedDrops.POTION_BANDOLIER.drop();
@@ -274,7 +264,7 @@ public enum HeroClass {
 			hero.lvl = 30;
 			hero.updateStats();
 			hero.HP = hero.HT;
-			if (this == HeroClass.CONJURER) {
+			if (hero.perks.contains(HeroPerk.CONJURER_MAGIC)) {
 				new RunicShell().identify().collect();
 				new PushingWaveform().identify().collect();
 				new ShockerBreaker().identify().collect();
@@ -499,9 +489,6 @@ public enum HeroClass {
 		(hero.belongings.weapon = new ToyKnife()).identify();
 
 		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
-			ConjurerBook book = new ConjurerBook();
-			book.collect();
-
 			FroggitStaff staff1 = new FroggitStaff();
 			staff1.identify().collect();
 
@@ -514,13 +501,6 @@ public enum HeroClass {
 		(hero.belongings.armor = new ConjurerArmor()).identify();
 
 		hero.HP = hero.HT = 20;
-		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
-			StarBlazing star = new StarBlazing();
-			star.collect();
-			EnergizedRenewal energizedRenewal = new EnergizedRenewal();
-			energizedRenewal.collect();
-			new BeamOfAffection().collect();
-		}
 
 		identifyThings(CONJURER);
 	}

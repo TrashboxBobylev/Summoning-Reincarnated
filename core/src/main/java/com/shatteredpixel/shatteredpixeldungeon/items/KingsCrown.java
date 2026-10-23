@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.Ratmogrify;
@@ -88,7 +89,7 @@ public class KingsCrown extends Item {
                     if (hero.heroClass != HeroClass.HUNTRESS){
                         heroArmorAbilities.removeIf((ability) -> ability instanceof NaturesPower);
                     }
-                    if (hero.heroClass != HeroClass.CONJURER){
+                    if (!hero.perks.contains(HeroPerk.CONJURER_MAGIC)){
                         heroArmorAbilities.removeIf((ability) -> ability instanceof Ascension);
                     }
 
