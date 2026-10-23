@@ -421,6 +421,10 @@ public class WndHero extends WndTabbed {
 			for (HeroPerk perk : Dungeon.hero.perks) {
                 PerkSlot slot = new PerkSlot(perk);
                 slot.setRect(0, pos, WIDTH, Math.max(slot.icon.height(), slot.txt.height()));
+				if (slot.icon.height() < slot.txt.height()) {
+					slot.setPos(0, pos + (slot.txt.height() - slot.icon.height())/2);
+					pos += (slot.txt.height() - slot.icon.height())/2;
+				}
                 content.add(slot);
                 slots.add(slot);
                 pos += GAP + slot.height();
