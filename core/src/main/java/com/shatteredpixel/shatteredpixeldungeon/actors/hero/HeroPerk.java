@@ -24,9 +24,13 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 
+import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
+import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.BeamOfAffection;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.EnergizedRenewal;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.StarBlazing;
@@ -108,6 +112,23 @@ public enum HeroPerk {
         public Image icon() {
             return new ItemSprite(ItemSpriteSheet.BAG_GENERIC);
         }
+    },
+
+    ALL_BAGS(0xaf775c){
+        @Override
+        public Image icon() {
+            return new Image(Assets.Interfaces.BADGES, 48, 128, 16, 16);
+        }
+
+        @Override
+        public void onInitialization(Hero hero) {
+            new PotionBandolier().collect();
+            Dungeon.LimitedDrops.POTION_BANDOLIER.drop();
+            new ScrollHolder().collect();
+            Dungeon.LimitedDrops.SCROLL_HOLDER.drop();
+            new MagicalHolster().collect();
+            Dungeon.LimitedDrops.MAGICAL_HOLSTER.drop();
+        }
     }
     ;
 
@@ -142,7 +163,8 @@ public enum HeroPerk {
             EQUIPPABLE_WANDS,
             WEAPON_ABILITIES,
             HUNTRESS_BOW,
-            CONJURER_MAGIC
+            CONJURER_MAGIC,
+            ALL_BAGS
         );
     }
 }

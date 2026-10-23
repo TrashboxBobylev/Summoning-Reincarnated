@@ -125,7 +125,7 @@ public enum HeroClass {
 	HUNTRESS( EnumSet.of(HeroPerk.HUNTRESS_BOW, HeroPerk.FURROWED_GRASS), HeroSubClass.SNIPER, HeroSubClass.WARDEN ),
 	DUELIST( EnumSet.of(HeroPerk.WEAPON_ABILITIES), HeroSubClass.CHAMPION, HeroSubClass.MONK ),
 	CLERIC( HeroSubClass.PRIEST, HeroSubClass.PALADIN ),
-	ADVENTURER( EnumSet.of(HeroPerk.EXTRA_LOOT), HeroSubClass.NONE),
+	ADVENTURER( EnumSet.of(HeroPerk.EXTRA_LOOT, HeroPerk.ALL_BAGS), HeroSubClass.NONE),
 	CONJURER(EnumSet.of(HeroPerk.CONJURER_MAGIC), HeroSubClass.SOUL_WIELDER, HeroSubClass.WILL_SORCERER);
 
 	private HeroSubClass[] subClasses;
@@ -185,12 +185,6 @@ public enum HeroClass {
 			FroggitStaff staff1 = new FroggitStaff();
 			staff1.identify().collect();
 			Dungeon.quickslot.setSlot(4, staff1);
-			new PotionBandolier().collect();
-			Dungeon.LimitedDrops.POTION_BANDOLIER.drop();
-			new ScrollHolder().collect();
-			Dungeon.LimitedDrops.SCROLL_HOLDER.drop();
-			new MagicalHolster().collect();
-			Dungeon.LimitedDrops.MAGICAL_HOLSTER.drop();
 			Slingshot stones = new Slingshot();
 			stones.charge = 1;
 			stones.identify().collect();
@@ -468,12 +462,6 @@ public enum HeroClass {
 			ThrowingKnive2 knives = new ThrowingKnive2();
 			knives.quantity(2).identify().collect();
 			Dungeon.quickslot.setSlot(0, knives);
-			new PotionBandolier().collect();
-			Dungeon.LimitedDrops.POTION_BANDOLIER.drop();
-			new ScrollHolder().collect();
-			Dungeon.LimitedDrops.SCROLL_HOLDER.drop();
-			new MagicalHolster().collect();
-			Dungeon.LimitedDrops.MAGICAL_HOLSTER.drop();
 		}
 
 		identifyThings(ADVENTURER);
