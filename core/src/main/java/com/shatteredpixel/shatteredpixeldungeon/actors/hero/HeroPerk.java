@@ -27,10 +27,19 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
+import com.shatteredpixel.shatteredpixeldungeon.ui.TalentIcon;
 import com.watabou.noosa.Image;
 
 public enum HeroPerk {
-    WEAPON_ABILITIES;
+    WEAPON_ABILITIES{
+        {
+            color = 0xcc33ff;
+        }
+        @Override
+        public Image icon() {
+            return new TalentIcon(Talent.SWIFT_EQUIP);
+        }
+    };
 
     public int color = -1;
 

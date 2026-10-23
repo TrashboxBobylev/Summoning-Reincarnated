@@ -175,6 +175,7 @@ public enum HeroClass {
 		}
 
 		if (Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)){
+			hero.perks.add(HeroPerk.WEAPON_ABILITIES);
 			WandOfMagicMissile staff = new WandOfMagicMissile();
 			(hero.belongings.weapon = staff).identify();
 			hero.belongings.weapon.activate(hero);

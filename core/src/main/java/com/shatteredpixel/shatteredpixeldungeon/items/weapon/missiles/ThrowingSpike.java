@@ -25,12 +25,10 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.missiles;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
-import com.shatteredpixel.shatteredpixeldungeon.Conducts;
-import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfRecharging;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
@@ -88,7 +86,7 @@ public class ThrowingSpike extends MissileWeapon {
                 wep = null;
             //do nothing
             if (wep == null || !wep.isEquipped(hero) ||
-                    (hero.heroClass != HeroClass.DUELIST && !Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) ||
+                    !hero.perks.contains(HeroPerk.WEAPON_ABILITIES) ||
                     wep.STRReq() > hero.STR() ||
                     (Buff.affect(hero, MeleeWeapon.Charger.class).charges + Buff.affect(hero, MeleeWeapon.Charger.class).partialCharge) < wep.abilityChargeUse(hero, null)) {
                 //do nothing

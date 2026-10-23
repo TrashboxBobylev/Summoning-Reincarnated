@@ -106,7 +106,6 @@ import com.watabou.utils.GameMath;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
-
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
@@ -872,7 +871,7 @@ public enum Talent {
 			Buff.affect( hero, TieringEmpower.class).set((int) ((1 + hero.pointsInTalent(UPGRADING_MEAL)*2)*foodVal));
 		}
 		if (hero.hasTalent(FOCUSED_MEAL)){
-			if (hero.heroClass == HeroClass.DUELIST){
+			if (hero.perks.contains(HeroPerk.WEAPON_ABILITIES)){
 				//0.67/1 charge for the duelist
 				Buff.affect( hero, MeleeWeapon.Charger.class ).gainCharge(((hero.pointsInTalent(FOCUSED_MEAL)+1)/3f)*foodVal);
 				ScrollOfRecharging.charge( hero );

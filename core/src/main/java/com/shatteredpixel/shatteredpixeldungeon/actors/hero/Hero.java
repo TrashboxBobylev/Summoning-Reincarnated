@@ -475,6 +475,9 @@ public class Hero extends Char {
 				perks = EnumSet.copyOf(perkies);
 		} else {
 			perks = heroClass.defaultPerks();
+			if (Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)){
+				perks.add(HeroPerk.WEAPON_ABILITIES);
+			}
 		}
 	}
 	
@@ -656,7 +659,7 @@ public class Hero extends Char {
 			Buff.affect( this, Combo.class ).hit( enemy );
 		}
 
-		if (hit && (heroClass == HeroClass.DUELIST || Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) && wasEnemy){
+		if (hit && perks.contains(HeroPerk.WEAPON_ABILITIES) && wasEnemy){
 			Buff.affect( this, Sai.ComboStrikeTracker.class).addHit(enemy);
 		}
 
@@ -684,7 +687,7 @@ public class Hero extends Char {
 			Buff.affect( this, Combo.class ).hit( enemy );
 		}
 
-		if (hit && (heroClass == HeroClass.DUELIST || Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) && wasEnemy){
+		if (hit && perks.contains(HeroPerk.WEAPON_ABILITIES) && wasEnemy){
 			Buff.affect( this, Sai.ComboStrikeTracker.class).addHit( attackTarget );
 		}
 
@@ -722,7 +725,7 @@ public class Hero extends Char {
 					&& belongings.abilityWeapon != wep && buff(MonkEnergy.MonkAbility.UnarmedAbilityTracker.class) == null){
 
 				//non-duelist benefit for precise assault, can stack with liquid agility
-				if (heroClass != HeroClass.DUELIST) {
+				if (!perks.contains(HeroPerk.WEAPON_ABILITIES)) {
 					//persistent +10%/20%/30% ACC for other heroes
 					accuracy *= 1f + 0.1f * pointsInTalent(Talent.PRECISE_ASSAULT);
 				}
@@ -959,7 +962,7 @@ public class Hero extends Char {
 			Sample.INSTANCE.play(Assets.Sounds.HIT_STRONG, 0.75f, 1.2f);
 		}
 
-		if (heroClass != HeroClass.DUELIST
+		if (!perks.contains(HeroPerk.WEAPON_ABILITIES)
 				&& hasTalent(Talent.WEAPON_RECHARGING)
 				&& (buff(Recharging.class) != null || buff(ArtifactRecharge.class) != null)){
 			dmg = Math.round(dmg * (1.025f + .025f*pointsInTalent(Talent.WEAPON_RECHARGING)));
@@ -1794,7 +1797,7 @@ public class Hero extends Char {
 
 		if (attackTarget.isAlive() && canAttack(attackTarget) && attackTarget.invisible == 0) {
 
-			if (heroClass != HeroClass.DUELIST
+			if (!perks.contains(HeroPerk.WEAPON_ABILITIES)
 					&& hasTalent(Talent.AGGRESSIVE_BARRIER)
 					&& buff(Talent.AggressiveBarrierCooldown.class) == null
 					&& (HP / (float)HT) <= 0.5f){
@@ -2963,7 +2966,7 @@ public class Hero extends Char {
 			Buff.affect( this, Combo.class ).hit(attackTarget);
 		}
 
-		if (hit && (heroClass == HeroClass.DUELIST || Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) && wasEnemy){
+		if (hit && perks.contains(HeroPerk.WEAPON_ABILITIES) && wasEnemy){
 			Buff.affect( this, Sai.ComboStrikeTracker.class).addHit( attackTarget );
 		}
 

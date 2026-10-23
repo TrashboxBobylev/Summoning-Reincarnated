@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Momentum;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Shrink;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.GuidingLight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.ArmoredStatue;
@@ -405,7 +406,7 @@ public class FloatingText extends RenderedTextBlock {
 		if (attacker.buff(SubtilitasSigil.Recharge.class) != null && attacker.buff(SubtilitasSigil.Recharge.class).itemType() == 3) hitReasons.put(HIT_SIGIL, 2f);
 
 		if (!(wep instanceof MissileWeapon)) {
-			if (attacker instanceof Hero && ((Hero) attacker).hasTalent(Talent.PRECISE_ASSAULT) && ((Hero) attacker).heroClass != HeroClass.DUELIST){
+			if (attacker instanceof Hero && ((Hero) attacker).hasTalent(Talent.PRECISE_ASSAULT) && !((Hero) attacker).perks.contains(HeroPerk.WEAPON_ABILITIES)){
 				hitReasons.put(HIT_PRES, 0.1f * Dungeon.hero.pointsInTalent(Talent.PRECISE_ASSAULT));
 			}
 			if (attacker.buff(Talent.PreciseAssaultTracker.class) != null){
