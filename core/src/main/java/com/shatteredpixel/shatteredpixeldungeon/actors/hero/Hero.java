@@ -476,7 +476,7 @@ public class Hero extends Char {
 		} else {
 			perks = heroClass.defaultPerks();
 			if (Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)){
-				perks.add(HeroPerk.WEAPON_ABILITIES);
+				perks.addAll(HeroPerk.omniheroPerks());
 			}
 		}
 	}

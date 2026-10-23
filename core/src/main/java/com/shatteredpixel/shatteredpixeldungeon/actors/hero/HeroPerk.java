@@ -38,6 +38,8 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.TalentIcon;
 import com.watabou.noosa.Image;
 
+import java.util.EnumSet;
+
 public enum HeroPerk {
     WEAPON_ABILITIES(0xcc33ff){
         @Override
@@ -101,5 +103,13 @@ public enum HeroPerk {
 
     public static boolean menuAvailable(){
         return Dungeon.mode == Dungeon.GameMode.RANDOM_HERO;
+    }
+
+    public static EnumSet<HeroPerk> omniheroPerks(){
+        return EnumSet.of(
+            WARRIOR_SEAL,
+            WEAPON_ABILITIES,
+            CONJURER_MAGIC
+        );
     }
 }

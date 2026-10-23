@@ -170,9 +170,7 @@ public enum HeroClass {
 		}
 
 		if (Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)){
-			hero.perks.add(HeroPerk.WEAPON_ABILITIES);
-			hero.perks.add(HeroPerk.WARRIOR_SEAL);
-			hero.perks.add(HeroPerk.CONJURER_MAGIC);
+			hero.perks.addAll(HeroPerk.omniheroPerks());
 			WandOfMagicMissile staff = new WandOfMagicMissile();
 			(hero.belongings.weapon = staff).identify();
 			hero.belongings.weapon.activate(hero);
