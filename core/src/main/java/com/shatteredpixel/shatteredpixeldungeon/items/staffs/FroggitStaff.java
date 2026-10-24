@@ -24,6 +24,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.staffs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.minions.Froggit;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
@@ -38,6 +40,14 @@ public class FroggitStaff extends Staff {
                 25, 0, 0);
 
         unique = true;
+    }
+
+    @Override
+    public int hp(int lvl) {
+        int hp = super.hp(lvl);
+        if (Dungeon.hero != null && !Dungeon.hero.perks.contains(HeroPerk.CONJURER_MAGIC))
+            hp *= 2;
+        return hp;
     }
 
     @Override

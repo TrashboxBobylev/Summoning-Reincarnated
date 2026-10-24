@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.BeamOfAffection;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.EnergizedRenewal;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.StarBlazing;
+import com.shatteredpixel.shatteredpixeldungeon.items.staffs.FroggitStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Slingshot;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
@@ -141,13 +142,24 @@ public enum HeroPerk {
             new BeamOfAffection().collect();
         }
     },
+    STARTER_SUMMON(0x827b00){
+        @Override
+        public Image icon() {
+            return new ItemSprite(ItemSpriteSheet.FROGGIT_STAFF);
+        }
+
+        @Override
+        public void onInitialization(Hero hero) {
+            FroggitStaff staff = new FroggitStaff();
+            staff.identify().collect();
+        }
+    },
     EXTRA_LOOT(0x7c7c7c){
         @Override
         public Image icon() {
             return new ItemSprite(ItemSpriteSheet.BAG_GENERIC);
         }
     },
-
     ALL_BAGS(0xaf775c){
         @Override
         public Image icon() {
@@ -200,6 +212,7 @@ public enum HeroPerk {
             WEAPON_ABILITIES,
             HUNTRESS_BOW,
             CONJURER_MAGIC,
+            STARTER_SUMMON,
             ALL_BAGS
         );
     }

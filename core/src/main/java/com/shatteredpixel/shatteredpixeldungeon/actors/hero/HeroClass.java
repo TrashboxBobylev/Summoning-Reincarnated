@@ -126,7 +126,7 @@ public enum HeroClass {
 	DUELIST( EnumSet.of(HeroPerk.WEAPON_ABILITIES), HeroSubClass.CHAMPION, HeroSubClass.MONK ),
 	CLERIC( HeroSubClass.PRIEST, HeroSubClass.PALADIN ),
 	ADVENTURER( EnumSet.of(HeroPerk.EXTRA_LOOT, HeroPerk.ALL_BAGS), HeroSubClass.NONE),
-	CONJURER(EnumSet.of(HeroPerk.CONJURER_MAGIC), HeroSubClass.SOUL_WIELDER, HeroSubClass.WILL_SORCERER);
+	CONJURER(EnumSet.of(HeroPerk.CONJURER_MAGIC, HeroPerk.STARTER_SUMMON), HeroSubClass.SOUL_WIELDER, HeroSubClass.WILL_SORCERER);
 
 	private HeroSubClass[] subClasses;
 	private EnumSet<HeroPerk> perks;
@@ -185,9 +185,7 @@ public enum HeroClass {
 			Dungeon.quickslot.setSlot(1, hero.belongings.armor);
 			Dungeon.quickslot.setSlot(2, staff);
 			Dungeon.quickslot.setSlot(3, Dungeon.hero.belongings.getItem(CloakOfShadows.class));
-			FroggitStaff staff1 = new FroggitStaff();
-			staff1.identify().collect();
-			Dungeon.quickslot.setSlot(4, staff1);
+			Dungeon.quickslot.setSlot(4, Dungeon.hero.belongings.getItem(FroggitStaff.class));
 		}
 		switch (this) {
 			case WARRIOR:
@@ -460,13 +458,10 @@ public enum HeroClass {
 		(hero.belongings.weapon = new ToyKnife()).identify();
 
 		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
-			FroggitStaff staff1 = new FroggitStaff();
-			staff1.identify().collect();
-
 			new MagicalHolster().collect();
 			Dungeon.LimitedDrops.MAGICAL_HOLSTER.drop();
 
-			Dungeon.quickslot.setSlot(0, staff1);
+			Dungeon.quickslot.setSlot(0, Dungeon.hero.belongings.getItem(FroggitStaff.class));
 		}
 
 		(hero.belongings.armor = new ConjurerArmor()).identify();
