@@ -128,6 +128,9 @@ public class WndHero extends WndTabbed {
 					perks.visible = perks.active = selected;
 				}
 			} );
+		} else {
+			if (lastIdx > 2) lastIdx = 2;
+			perks.visible = perks.active = false;
 		}
 
 		layoutTabs();
@@ -154,7 +157,8 @@ public class WndHero extends WndTabbed {
 		super.offset(xOffset, yOffset);
 		talents.layout();
 		buffs.layout();
-		perks.layout();
+		if (perks.active)
+			perks.layout();
 	}
 
 	private class StatsTab extends Group {
