@@ -61,7 +61,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScoutArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.SyntheticArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
@@ -122,7 +121,7 @@ public enum HeroClass {
 	WARRIOR(EnumSet.of(HeroPerk.WARRIOR_SEAL, HeroPerk.SLINGSHOT), HeroSubClass.BERSERKER, HeroSubClass.GLADIATOR ),
 	MAGE( EnumSet.of(HeroPerk.EQUIPPABLE_WANDS), HeroSubClass.BATTLEMAGE, HeroSubClass.WARLOCK ),
 	ROGUE( EnumSet.of(HeroPerk.SEARCH_RANGE, HeroPerk.CLOAK_OF_SHADOWS), HeroSubClass.ASSASSIN, HeroSubClass.FREERUNNER ),
-	HUNTRESS( EnumSet.of(HeroPerk.HUNTRESS_BOW, HeroPerk.FURROWED_GRASS), HeroSubClass.SNIPER, HeroSubClass.WARDEN ),
+	HUNTRESS( EnumSet.of(HeroPerk.HUNTRESS_BOW, HeroPerk.SCOUT_ARMOR, HeroPerk.FURROWED_GRASS), HeroSubClass.SNIPER, HeroSubClass.WARDEN ),
 	DUELIST( EnumSet.of(HeroPerk.WEAPON_ABILITIES), HeroSubClass.CHAMPION, HeroSubClass.MONK ),
 	CLERIC( HeroSubClass.PRIEST, HeroSubClass.PALADIN ),
 	ADVENTURER( EnumSet.of(HeroPerk.EXTRA_LOOT, HeroPerk.ALL_BAGS), HeroSubClass.NONE),
@@ -173,6 +172,12 @@ public enum HeroClass {
 		}
 
 		for (HeroPerk perk : hero.perks){
+			if (!perk.parents.isEmpty()){
+				hero.perks.addAll(perk.parents);
+			}
+		}
+
+		for (HeroPerk perk : hero.perks) {
 			perk.onInitialization(hero);
 		}
 
@@ -180,7 +185,6 @@ public enum HeroClass {
 			WandOfMagicMissile staff = new WandOfMagicMissile();
 			(hero.belongings.weapon = staff).identify();
 			hero.belongings.weapon.activate(hero);
-			(hero.belongings.armor = new ScoutArmor()).identify();
 			Dungeon.quickslot.setSlot(0, Dungeon.hero.belongings.getItem(SpiritBow.class));
 			Dungeon.quickslot.setSlot(1, hero.belongings.armor);
 			Dungeon.quickslot.setSlot(2, staff);
@@ -411,7 +415,6 @@ public enum HeroClass {
 		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
 
 			(hero.belongings.weapon = new Gloves()).identify();
-			(hero.belongings.armor = new ScoutArmor()).identify();
 
 			Dungeon.quickslot.setSlot(0, Dungeon.hero.belongings.getItem(SpiritBow.class));
 			Dungeon.quickslot.setSlot(1, hero.belongings.armor);

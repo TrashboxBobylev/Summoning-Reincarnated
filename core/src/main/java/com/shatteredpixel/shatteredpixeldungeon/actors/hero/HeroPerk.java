@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScoutArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
@@ -119,6 +120,17 @@ public enum HeroPerk {
             bow.identify().collect();
         }
     },
+    SCOUT_ARMOR(0x062f4a, HUNTRESS_BOW){
+        @Override
+        public Image icon() {
+            return new ItemSprite(ItemSpriteSheet.ARMOR_SCOUT);
+        }
+
+        @Override
+        public void onInitialization(Hero hero) {
+            (hero.belongings.armor = new ScoutArmor()).identify();
+        }
+    },
     FURROWED_GRASS(0x005826){
         @Override
         public Image icon() {
@@ -179,9 +191,16 @@ public enum HeroPerk {
     ;
 
     public int color = -1;
+    public final EnumSet<HeroPerk> parents;
 
     HeroPerk(int color){
         this.color = color;
+        this.parents = EnumSet.noneOf(HeroPerk.class);
+    }
+
+    HeroPerk(int color, HeroPerk... parentPerks){
+        this.color = color;
+        this.parents = EnumSet.of(parentPerks[0], parentPerks);
     }
 
     public Image icon(){
@@ -211,6 +230,7 @@ public enum HeroPerk {
             CLOAK_OF_SHADOWS,
             WEAPON_ABILITIES,
             HUNTRESS_BOW,
+            SCOUT_ARMOR,
             CONJURER_MAGIC,
             STARTER_SUMMON,
             ALL_BAGS
