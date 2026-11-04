@@ -86,6 +86,15 @@ public class QuickSlot {
 		}
 	}
 
+	public void addItem(Item item){
+		for (int s = 0; s < QuickSlot.SIZE; s++) {
+			if (getItem(s) == null) {
+				setSlot(s, item);
+				break;
+			}
+		}
+	}
+
 	public boolean contains(Item item){
 		return getSlot(item) != -1;
 	}
