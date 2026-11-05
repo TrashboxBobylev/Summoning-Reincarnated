@@ -452,8 +452,6 @@ public enum HeroClass {
 		}
 
 		(hero.belongings.armor = new ConjurerArmor()).identify();
-
-		hero.HP = hero.HT = 20;
 	}
 
 	private static void initCleric( Hero hero ) {
