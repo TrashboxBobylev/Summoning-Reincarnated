@@ -224,6 +224,8 @@ public enum HeroClass {
 				break;
 		}
 
+		this.identifyThings();
+
 		if (SPDSettings.quickslotWaterskin()) {
 			Dungeon.quickslot.addItem(waterskin);
 		}
@@ -335,13 +337,13 @@ public enum HeroClass {
 		return null;
 	}
 
-	private static void identifyThings(HeroClass heroClass){
+	private void identifyThings(){
 		if (Dungeon.mode == Dungeon.GameMode.RANDOM_HERO){
 			((Potion)Reflection.newInstance(Random.element(Catalog.POTIONS.items()))).identify();
 			((Scroll)Reflection.newInstance(Random.element(Catalog.SCROLLS.items()))).identify();
 			return;
 		}
-		switch (heroClass){
+		switch (this){
             case WARRIOR:
 				new PotionOfHealing().identify();
 				new ScrollOfRage().identify();
@@ -374,8 +376,6 @@ public enum HeroClass {
 
 			Dungeon.quickslot.setSlot(0, hero.belongings.getItem(Slingshot.class));
         }
-
-		identifyThings(WARRIOR);
 	}
 
 	private static void initMage( Hero hero ) {
@@ -387,8 +387,6 @@ public enum HeroClass {
 
 			Dungeon.quickslot.setSlot(0, wand);
 		}
-
-		identifyThings(MAGE);
 	}
 
 	private static void initRogue( Hero hero ) {
@@ -401,8 +399,6 @@ public enum HeroClass {
 			Dungeon.quickslot.setSlot(0, hero.belongings.getItem(CloakOfShadows.class));
 			Dungeon.quickslot.setSlot(1, knives);
 		}
-
-		identifyThings(ROGUE);
 	}
 
 	private static void initHuntress( Hero hero ) {
@@ -413,8 +409,6 @@ public enum HeroClass {
 			Dungeon.quickslot.setSlot(0, Dungeon.hero.belongings.getItem(SpiritBow.class));
 			Dungeon.quickslot.setSlot(1, hero.belongings.armor);
 		}
-
-		identifyThings(HUNTRESS);
 	}
 
 	private static void initDuelist( Hero hero ) {
@@ -429,8 +423,6 @@ public enum HeroClass {
 			Dungeon.quickslot.setSlot(0, hero.belongings.weapon);
 			Dungeon.quickslot.setSlot(1, spikes);
 		}
-
-		identifyThings(DUELIST);
 	}
 
 	private static void initAdventurer( Hero hero ) {
@@ -447,8 +439,6 @@ public enum HeroClass {
 			knives.quantity(2).identify().collect();
 			Dungeon.quickslot.setSlot(0, knives);
 		}
-
-		identifyThings(ADVENTURER);
 	}
 
 	private static void initConjurer( Hero hero ) {
@@ -464,8 +454,6 @@ public enum HeroClass {
 		(hero.belongings.armor = new ConjurerArmor()).identify();
 
 		hero.HP = hero.HT = 20;
-
-		identifyThings(CONJURER);
 	}
 
 	private static void initCleric( Hero hero ) {
