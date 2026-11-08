@@ -49,8 +49,10 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.TalentIcon;
 import com.watabou.noosa.Image;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.List;
 
 public enum HeroPerk {
     WEAPON_ABILITIES(0xcc33ff){
@@ -228,16 +230,16 @@ public enum HeroPerk {
     ;
 
     public int color = -1;
-    public final EnumSet<HeroPerk> parents;
+    public final ArrayList<HeroPerk> parents;
 
     HeroPerk(int color){
         this.color = color;
-        this.parents = EnumSet.noneOf(HeroPerk.class);
+        this.parents = new ArrayList<>();
     }
 
     HeroPerk(int color, HeroPerk... parentPerks){
         this.color = color;
-        this.parents = EnumSet.of(parentPerks[0], parentPerks);
+        this.parents = new ArrayList<>(List.of(parentPerks));
     }
 
     public Image icon(){
