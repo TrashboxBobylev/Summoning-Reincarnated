@@ -116,9 +116,10 @@ import com.shatteredpixel.shatteredpixeldungeon.items.KindOfWeapon;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.Armor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerClassArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerSet;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScoutArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.SyntheticArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.glyphs.Stone;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.AlchemistsToolkit;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CapeOfThorns;
@@ -618,34 +619,42 @@ public class Hero extends Char {
 	public int tier(){
 		return tier(belongings.armor(), heroClass, subClass);
 	}
+
+	private static int conjurerTier(HeroSubClass subClass){
+		int base = 0;
+		switch (subClass) {
+			case SOUL_WIELDER:
+				return base + 1;
+			case WILL_SORCERER:
+				return base + 2;
+		}
+		return base;
+	}
 	
 	public static int tier(Armor armor, HeroClass heroClass, HeroSubClass subClass) {
-		if (armor instanceof ConjurerArmor){
+		if (armor instanceof ConjurerSet){
 			int base = 0;
 			if (heroClass != HeroClass.CONJURER){
 				base += 7;
 			} else {
-				switch (subClass) {
-					case SOUL_WIELDER:
-						return base + 1;
-					case WILL_SORCERER:
-						return base + 2;
-				}
+				base = conjurerTier(subClass);
+			}
+			if (armor instanceof ConjurerClassArmor){
+                base += heroClass != HeroClass.CONJURER ? 3 : 1;
 			}
 			return base;
-		} else if (armor instanceof ConjurerClassArmor){
-			int base = 0;
-			if (heroClass != HeroClass.CONJURER){
-				base += 7;
-			} else {
-				switch (subClass) {
-					case SOUL_WIELDER:
-						return 4;
-					case WILL_SORCERER:
-						return 5;
-				}
+		} else if (armor instanceof ScoutArmor) {
+			int base = 9;
+			if (heroClass == HeroClass.CONJURER){
+				base = 6 + conjurerTier(subClass);
 			}
-			return base + 3;
+			return base;
+		} else if (armor instanceof SyntheticArmor) {
+			int base = 10;
+			if (heroClass == HeroClass.CONJURER){
+				base = 9 + conjurerTier(subClass);
+			}
+			return base;
 		} else if (armor instanceof ClassArmor){
 			return 6;
 		} else if (armor != null){
