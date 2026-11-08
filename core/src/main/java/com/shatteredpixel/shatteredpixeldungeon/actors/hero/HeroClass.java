@@ -282,11 +282,7 @@ public enum HeroClass {
 
         if (Dungeon.mode == Dungeon.GameMode.RANDOM_HERO){
 
-            boolean wandIsMainWeapon = false;
-
-            if (hero.belongings.weapon instanceof Wand){
-                wandIsMainWeapon = true;
-            }
+            boolean wandIsMainWeapon = hero.perks.contains(HeroPerk.EQUIPPABLE_WANDS);
 
             MeleeWeapon weapon = (MeleeWeapon) Generator.randomUsingDefaults(Random.oneOf(Generator.Category.WEP_T1, Generator.Category.WEP_T2, Generator.Category.WEP_T3, Generator.Category.WEP_T4, Generator.Category.WEP_T5));
             if (weapon != null){
@@ -304,6 +300,8 @@ public enum HeroClass {
                     wand = (Wand) Reflection.newInstance(Random.element(Generator.Category.WAND.classes));
                 } while (wand instanceof WandOfMagicMissile);
                 wand.identify().collect();
+				wand.type(Random.Int(1, 3));
+				Dungeon.quickslot.setSlot(0, wand);
             }
 
             for (Item item: hero.belongings){
@@ -314,17 +312,19 @@ public enum HeroClass {
                         randomThrowie = (MissileWeapon) Reflection.newInstance(Random.element(Generator.Category.MISSILE.classes));
                     } while (randomThrowie.getClass() == item.getClass());
                     randomThrowie.identify().collect();
-                }
-                if (item instanceof Artifact){
-                    item.detachAll(hero.belongings.backpack);
-                    Random.pushGenerator();
-                    Artifact cloak = (Artifact) Generator.random(Generator.Category.ARTIFACT);
-                    (hero.belongings.artifact = cloak).identify();
-                    hero.belongings.artifact.activate(hero);
-                    Random.popGenerator();
-                    Dungeon.quickslot.setSlot(0, cloak);
+					randomThrowie.type(Random.Int(1, 3));
+					Dungeon.quickslot.addItem(randomThrowie);
                 }
             }
+
+			Artifact cloak = (Artifact) Reflection.newInstance(Random.element(Generator.Category.ARTIFACT.classes));
+			cloak.random();
+			cloak.uncurse();
+			(hero.belongings.artifact = cloak).identify();
+			hero.belongings.artifact.activate(hero);
+			if (hero.belongings.artifact instanceof CloakOfShadows)
+				hero.perks.add(HeroPerk.CLOAK_OF_SHADOWS);
+			Dungeon.quickslot.addItem(cloak);
         }
 
         if (Dungeon.isChallenged(Conducts.Conduct.LEVEL_DOWN)){
