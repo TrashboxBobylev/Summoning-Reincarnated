@@ -141,12 +141,30 @@ public enum HeroClass {
 		hero.heroClass = this;
 		Talent.initClassTalents(hero);
 		hero.perks = defaultPerks();
+        if (Dungeon.mode == Dungeon.GameMode.RANDOM_HERO){
+			Talent.shuffleTalents(hero);
+
+			hero.perks.clear();
+
+			hero.perks.add(Random.element(HeroPerk.essentialAbilities()));
+
+			int i = 0;
+			while (i < 2){
+				HeroPerk perk = Random.element(HeroPerk.helpfulAbilities());
+                if (!hero.perks.contains(perk)) {
+                    i++;
+                    hero.perks.add(perk);
+                }
+            }
+
+			if (Random.Int(3) == 0){
+				hero.perks.add(Random.chances(HeroPerk.armors));
+			}
+        }
+
 		if (Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
 			hero.perks.addAll(HeroPerk.omniheroPerks());
 		}
-        if (Dungeon.mode == Dungeon.GameMode.RANDOM_HERO){
-            Talent.shuffleTalents(hero);
-        }
 
 		Item i = new ClothArmor().identify();
 		if (!Challenges.isItemBlocked(i)) hero.belongings.armor = (ClothArmor)i;

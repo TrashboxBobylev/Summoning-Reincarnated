@@ -50,6 +50,7 @@ import com.shatteredpixel.shatteredpixeldungeon.ui.TalentIcon;
 import com.watabou.noosa.Image;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 
 public enum HeroPerk {
     WEAPON_ABILITIES(0xcc33ff){
@@ -271,5 +272,34 @@ public enum HeroPerk {
             STARTER_SUMMON,
             ALL_BAGS
         );
+    }
+
+    // a primary ability to start with
+    public static EnumSet<HeroPerk> essentialAbilities(){
+        return EnumSet.of(
+                WARRIOR_SEAL,
+                EQUIPPABLE_WANDS,
+                HUNTRESS_BOW,
+                WEAPON_ABILITIES,
+                CONJURER_MAGIC
+        );
+    }
+
+    // secondary things (2 of them)
+    // doesn't include most of the adventurer stuff due to being overpowered without downsides
+    public static EnumSet<HeroPerk> helpfulAbilities(){
+        return EnumSet.of(
+                SLINGSHOT,
+                SEARCH_RANGE,
+                FURROWED_GRASS,
+                STARTER_SUMMON
+        );
+    }
+
+    public static HashMap<HeroPerk, Float> armors = new HashMap<>();
+    static {
+        armors.put(ADVENTURER_ARMOR, 5.0f);
+        armors.put(CONJURER_ARMOR, 2.0f);
+        armors.put(SCOUT_ARMOR, 3.0f);
     }
 }
