@@ -24,6 +24,8 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.armor;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 
 public class SyntheticArmor extends Armor {
@@ -58,6 +60,8 @@ public class SyntheticArmor extends Armor {
 	}
 
 	public int STRReq(int lvl){
+		if (Dungeon.hero != null && !Dungeon.hero.perks.contains(HeroPerk.EASY_TIME))
+			return 10;
 		return 11;
 	}
 

@@ -25,8 +25,10 @@
 package com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.watabou.utils.GameMath;
@@ -53,6 +55,12 @@ public class Dagger2 extends MeleeWeapon {
 		return  9*(tier-1) +    //12 base, down from 15
 				lvl*(tier);   //scaling down to +2
 	}
+
+    public int STRReq(int lvl){
+        if (Dungeon.hero != null && !Dungeon.hero.perks.contains(HeroPerk.EASY_TIME))
+            return 10;
+        return super.STRReq(lvl);
+    }
 
     @Override
     protected int baseChargeUse(Hero hero, Char target){
