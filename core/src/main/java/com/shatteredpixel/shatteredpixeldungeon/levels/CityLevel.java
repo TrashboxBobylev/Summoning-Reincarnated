@@ -30,7 +30,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LostInventory;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
-import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
@@ -176,7 +176,7 @@ public class CityLevel extends RegularLevel {
 									crystal.storeHeroBelongings(Dungeon.hero);
 								}
 								crystal.collect();
-								if (hero.heroClass != HeroClass.CONJURER) {
+								if (!hero.perks.contains(HeroPerk.CONJURER_ARMOR)) {
 									hero.belongings.armor = new ClothArmor();
 									hero.belongings.armor.identify();
 								}

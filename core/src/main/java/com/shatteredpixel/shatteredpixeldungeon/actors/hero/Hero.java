@@ -614,25 +614,38 @@ public class Hero extends Char {
             Buff.affect(this, AmnesiaBuff.class);
 		Buff.affect( this, Hunger.class );
 	}
+
+	public int tier(){
+		return tier(belongings.armor(), heroClass, subClass);
+	}
 	
-	public int tier() {
-		Armor armor = belongings.armor();
+	public static int tier(Armor armor, HeroClass heroClass, HeroSubClass subClass) {
 		if (armor instanceof ConjurerArmor){
-			switch (subClass){
-				case SOUL_WIELDER:
-					return 1;
-				case WILL_SORCERER:
-					return 2;
+			int base = 0;
+			if (heroClass != HeroClass.CONJURER){
+				base += 7;
+			} else {
+				switch (subClass) {
+					case SOUL_WIELDER:
+						return base + 1;
+					case WILL_SORCERER:
+						return base + 2;
+				}
 			}
-			return 0;
+			return base;
 		} else if (armor instanceof ConjurerClassArmor){
-			switch (subClass){
-				case SOUL_WIELDER:
-					return 4;
-				case WILL_SORCERER:
-					return 5;
+			int base = 0;
+			if (heroClass != HeroClass.CONJURER){
+				base += 7;
+			} else {
+				switch (subClass) {
+					case SOUL_WIELDER:
+						return 4;
+					case WILL_SORCERER:
+						return 5;
+				}
 			}
-			return 3;
+			return base + 3;
 		} else if (armor instanceof ClassArmor){
 			return 6;
 		} else if (armor != null){
@@ -1226,7 +1239,7 @@ public class Hero extends Char {
 				actResult = false;
 			}
 		}
-		if (heroClass == HeroClass.CONJURER) {
+		if (perks.contains(HeroPerk.CONJURER_ARMOR)) {
 			if (HP <= HT / 2) {
 				Buff.affect(this, SoulSparking.class);
 			}
@@ -3079,9 +3092,7 @@ public class Hero extends Char {
 			
 		}
 		curAction = null;
-		if (heroClass == HeroClass.CONJURER){
-			((HeroSprite)sprite).updateArmor();
-		}
+		((HeroSprite)sprite).updateArmor();
 
 		if (!ready) {
 			super.onOperateComplete();

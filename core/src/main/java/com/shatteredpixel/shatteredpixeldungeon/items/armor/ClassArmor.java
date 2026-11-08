@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.ArmorAbility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cleric.Trinity;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
@@ -121,12 +122,13 @@ abstract public class ClassArmor extends Armor {
 			case CLERIC:
 				classArmor = new ClericArmor();
 				break;
-			case CONJURER:
-				classArmor = new ConjurerClassArmor();
-				break;
 			case ADVENTURER:
 				classArmor = new ReinforcedArmor();
 				break;
+		}
+
+		if (owner.perks.contains(HeroPerk.CONJURER_ARMOR)){
+			classArmor = new ConjurerClassArmor();
 		}
 		
 		classArmor.level(armor.trueLevel());

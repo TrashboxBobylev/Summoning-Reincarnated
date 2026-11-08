@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScoutArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
@@ -152,6 +153,17 @@ public enum HeroPerk {
             EnergizedRenewal energizedRenewal = new EnergizedRenewal();
             energizedRenewal.collect();
             new BeamOfAffection().collect();
+        }
+    },
+    CONJURER_ARMOR(0x4c51ad){
+        @Override
+        public Image icon() {
+            return new ItemSprite(ItemSpriteSheet.ARMOR_CONJURER);
+        }
+
+        @Override
+        public void onInitialization(Hero hero) {
+            (hero.belongings.armor = new ConjurerArmor()).identify();
         }
     },
     STARTER_SUMMON(0x827b00){

@@ -59,7 +59,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Ropes;
 import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.SyntheticArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
@@ -124,7 +123,7 @@ public enum HeroClass {
 	DUELIST( EnumSet.of(HeroPerk.WEAPON_ABILITIES), HeroSubClass.CHAMPION, HeroSubClass.MONK ),
 	CLERIC( HeroSubClass.PRIEST, HeroSubClass.PALADIN ),
 	ADVENTURER( EnumSet.of(HeroPerk.EXTRA_LOOT, HeroPerk.ALL_BAGS), HeroSubClass.NONE),
-	CONJURER(EnumSet.of(HeroPerk.CONJURER_MAGIC, HeroPerk.STARTER_SUMMON), HeroSubClass.SOUL_WIELDER, HeroSubClass.WILL_SORCERER);
+	CONJURER(EnumSet.of(HeroPerk.CONJURER_MAGIC, HeroPerk.CONJURER_ARMOR, HeroPerk.STARTER_SUMMON), HeroSubClass.SOUL_WIELDER, HeroSubClass.WILL_SORCERER);
 
 	private HeroSubClass[] subClasses;
 	private EnumSet<HeroPerk> perks;
@@ -450,8 +449,6 @@ public enum HeroClass {
 
 			Dungeon.quickslot.setSlot(0, Dungeon.hero.belongings.getItem(FroggitStaff.class));
 		}
-
-		(hero.belongings.armor = new ConjurerArmor()).identify();
 	}
 
 	private static void initCleric( Hero hero ) {

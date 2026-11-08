@@ -187,7 +187,7 @@ public class Armor extends EquipableItem implements StrengthItem, AugmentedItem,
 	@Override
 	public ArrayList<String> actions(Hero hero) {
 		ArrayList<String> actions = super.actions(hero);
-		if (hero.heroClass == HeroClass.CONJURER){
+		if (hero.perks.contains(HeroPerk.CONJURER_ARMOR)){
 			actions.remove(AC_EQUIP);
 			actions.remove(AC_UNEQUIP);
 		}
