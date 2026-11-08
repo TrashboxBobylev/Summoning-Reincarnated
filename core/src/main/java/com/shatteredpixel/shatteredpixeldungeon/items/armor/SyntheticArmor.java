@@ -35,7 +35,7 @@ public class SyntheticArmor extends Armor {
 	}
 
 	public SyntheticArmor() {
-		super( 6 );
+		super( 2 );
 	}
 
 	public int DRMax(int lvl){

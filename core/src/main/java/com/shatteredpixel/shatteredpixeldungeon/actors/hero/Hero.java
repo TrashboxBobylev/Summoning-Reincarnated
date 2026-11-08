@@ -651,9 +651,14 @@ public class Hero extends Char {
 			return base;
 		} else if (armor instanceof SyntheticArmor) {
 			int base = 10;
-			if (heroClass == HeroClass.CONJURER){
-				base = 9 + conjurerTier(subClass);
-			}
+            switch (heroClass) {
+                case ADVENTURER:
+                    base = 6;
+                    break;
+                case CONJURER:
+                    base = 9 + conjurerTier(subClass);
+                    break;
+            }
 			return base;
 		} else if (armor instanceof ClassArmor){
 			return 6;
