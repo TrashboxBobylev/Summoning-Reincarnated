@@ -323,7 +323,7 @@ public class Hero extends Char {
 
 		int baseHP = 20;
 		int adjustScaling = 5;
-		if (heroClass == HeroClass.ADVENTURER){
+		if (perks.contains(HeroPerk.EASY_TIME)){
 			baseHP = 30;
 		}
 

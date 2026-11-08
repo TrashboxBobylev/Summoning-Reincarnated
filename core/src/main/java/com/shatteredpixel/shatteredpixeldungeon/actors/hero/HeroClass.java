@@ -122,7 +122,7 @@ public enum HeroClass {
 	HUNTRESS( EnumSet.of(HeroPerk.HUNTRESS_BOW, HeroPerk.SCOUT_ARMOR, HeroPerk.FURROWED_GRASS), HeroSubClass.SNIPER, HeroSubClass.WARDEN ),
 	DUELIST( EnumSet.of(HeroPerk.WEAPON_ABILITIES), HeroSubClass.CHAMPION, HeroSubClass.MONK ),
 	CLERIC( HeroSubClass.PRIEST, HeroSubClass.PALADIN ),
-	ADVENTURER( EnumSet.of(HeroPerk.EXTRA_LOOT, HeroPerk.ALL_BAGS), HeroSubClass.NONE),
+	ADVENTURER( EnumSet.of(HeroPerk.EASY_TIME, HeroPerk.EXTRA_LOOT, HeroPerk.ALL_BAGS), HeroSubClass.NONE),
 	CONJURER(EnumSet.of(HeroPerk.CONJURER_MAGIC, HeroPerk.CONJURER_ARMOR, HeroPerk.STARTER_SUMMON), HeroSubClass.SOUL_WIELDER, HeroSubClass.WILL_SORCERER);
 
 	private HeroSubClass[] subClasses;
@@ -425,8 +425,6 @@ public enum HeroClass {
 	}
 
 	private static void initAdventurer( Hero hero ) {
-		hero.HP = hero.HT = 30;
-		hero.STR = 12;
 
 		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
 

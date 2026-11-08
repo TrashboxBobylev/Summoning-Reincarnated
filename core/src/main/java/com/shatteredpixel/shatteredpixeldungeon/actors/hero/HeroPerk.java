@@ -178,6 +178,18 @@ public enum HeroPerk {
             staff.identify().collect();
         }
     },
+    EASY_TIME(0xff0000){
+        @Override
+        public Image icon() {
+            return new TalentIcon(Talent.STRONGMAN);
+        }
+
+        @Override
+        public void onInitialization(Hero hero) {
+            hero.HP = hero.HT = 30;
+            hero.STR = 12;
+        }
+    },
     EXTRA_LOOT(0x7c7c7c){
         @Override
         public Image icon() {
