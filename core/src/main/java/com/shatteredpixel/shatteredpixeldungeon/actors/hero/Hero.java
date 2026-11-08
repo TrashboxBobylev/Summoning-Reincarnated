@@ -663,6 +663,9 @@ public class Hero extends Char {
 		} else if (armor instanceof ClassArmor){
 			return 6;
 		} else if (armor != null){
+			if (heroClass == HeroClass.CONJURER){
+				return 0;
+			}
 			return armor.tier;
 		} else {
 			return 0;
