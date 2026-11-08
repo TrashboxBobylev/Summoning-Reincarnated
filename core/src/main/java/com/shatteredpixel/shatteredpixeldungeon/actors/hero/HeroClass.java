@@ -59,7 +59,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Ropes;
 import com.shatteredpixel.shatteredpixeldungeon.items.TengusMask;
 import com.shatteredpixel.shatteredpixeldungeon.items.Waterskin;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ClothArmor;
-import com.shatteredpixel.shatteredpixeldungeon.items.armor.SyntheticArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.Artifact;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.HolyTome;
@@ -122,7 +121,7 @@ public enum HeroClass {
 	HUNTRESS( EnumSet.of(HeroPerk.HUNTRESS_BOW, HeroPerk.SCOUT_ARMOR, HeroPerk.FURROWED_GRASS), HeroSubClass.SNIPER, HeroSubClass.WARDEN ),
 	DUELIST( EnumSet.of(HeroPerk.WEAPON_ABILITIES), HeroSubClass.CHAMPION, HeroSubClass.MONK ),
 	CLERIC( HeroSubClass.PRIEST, HeroSubClass.PALADIN ),
-	ADVENTURER( EnumSet.of(HeroPerk.EASY_TIME, HeroPerk.EXTRA_LOOT, HeroPerk.ALL_BAGS), HeroSubClass.NONE),
+	ADVENTURER( EnumSet.of(HeroPerk.EASY_TIME, HeroPerk.ADVENTURER_ARMOR, HeroPerk.EXTRA_LOOT, HeroPerk.ALL_BAGS), HeroSubClass.NONE),
 	CONJURER(EnumSet.of(HeroPerk.CONJURER_MAGIC, HeroPerk.CONJURER_ARMOR, HeroPerk.STARTER_SUMMON), HeroSubClass.SOUL_WIELDER, HeroSubClass.WILL_SORCERER);
 
 	private HeroSubClass[] subClasses;
@@ -427,8 +426,6 @@ public enum HeroClass {
 	private static void initAdventurer( Hero hero ) {
 
 		if (!Dungeon.isChallenged(Conducts.Conduct.EVERYTHING)) {
-
-			(hero.belongings.armor = new SyntheticArmor()).identify();
 
 			(hero.belongings.weapon = new Dagger2()).identify();
 

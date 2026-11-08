@@ -29,6 +29,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScoutArmor;
+import com.shatteredpixel.shatteredpixeldungeon.items.armor.SyntheticArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.CloakOfShadows;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ConjurerBook;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
@@ -194,6 +195,17 @@ public enum HeroPerk {
         @Override
         public Image icon() {
             return new ItemSprite(ItemSpriteSheet.BAG_GENERIC);
+        }
+    },
+    ADVENTURER_ARMOR(0x858585){
+        @Override
+        public Image icon() {
+            return new ItemSprite(ItemSpriteSheet.ARMOR_ADVENTURER);
+        }
+
+        @Override
+        public void onInitialization(Hero hero) {
+            (hero.belongings.armor = new SyntheticArmor()).identify();
         }
     },
     ALL_BAGS(0xaf775c){
