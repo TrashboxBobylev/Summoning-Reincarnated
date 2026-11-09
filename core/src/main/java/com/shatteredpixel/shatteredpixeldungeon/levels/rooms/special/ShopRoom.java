@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroSubClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
@@ -61,6 +62,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.elixirs.ElixirOfAttunement;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.CleanWater;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.PerkTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.AccessoriesBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.EquipmentBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.GenericBag;
@@ -400,6 +402,10 @@ public class ShopRoom extends SpecialRoom {
 		}
 		itemsToSpawn.add(new StoneOfAugmentation());
 		itemsToSpawn.add(new CleanWater());
+
+		if (Dungeon.mode == Dungeon.GameMode.RANDOM_HERO && !HeroPerk.queue.isEmpty()){
+			itemsToSpawn.add(new PerkTome(HeroPerk.queue.poll()));
+		}
 
 		TimekeepersHourglass hourglass = Dungeon.hero.belongings.getItem(TimekeepersHourglass.class);
 		if (hourglass != null && hourglass.isIdentified() && !hourglass.cursed) {

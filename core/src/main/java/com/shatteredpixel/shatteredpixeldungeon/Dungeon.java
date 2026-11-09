@@ -37,6 +37,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.RevealedArea;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.cleric.PowerOfMany;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.abilities.huntress.SpiritHawk;
@@ -103,7 +104,6 @@ import com.watabou.utils.FileUtils;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 import com.watabou.utils.SparseArray;
-
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.IOException;
@@ -465,6 +465,8 @@ public class Dungeon {
 
 		hero = new Hero();
 		hero.live();
+
+		HeroPerk.initQueue();
 		
 		Badges.reset();
 		
@@ -916,6 +918,7 @@ public class Dungeon {
 			Statistics.storeInBundle( bundle );
 			Notes.storeInBundle( bundle );
 			Generator.storeInBundle( bundle );
+			HeroPerk.storeQueue( bundle );
 
 			int[] bundleArr = new int[generatedLevels.size()];
 			for (int i = 0; i < generatedLevels.size(); i++){
@@ -1083,6 +1086,7 @@ public class Dungeon {
 
 		Statistics.restoreFromBundle( bundle );
 		Generator.restoreFromBundle( bundle );
+		HeroPerk.restoreQueue( bundle );
 
 	}
 	

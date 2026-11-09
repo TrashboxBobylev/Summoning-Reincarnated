@@ -124,6 +124,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.quest.EscapeCrystal;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.ImpStatue;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
+import com.shatteredpixel.shatteredpixeldungeon.items.quest.PerkTome;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.VaultBeacon;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.AccessoriesBag;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.treasurebags.EquipmentBag;
@@ -318,7 +319,7 @@ public enum Catalog {
 				GooBlob.class, TengusMask.class, MetalShard.class, KingsCrown.class,
 				LiquidMetal.class, ArcaneResin.class, Chaosstone.class,
 				SealShard.class, BrokenStaff.class, CloakScrap.class, BowFragment.class, BrokenHilt.class, ArmorRemains.class, SpellPage.class,
-				FacelessThing.class,
+				FacelessThing.class, PerkTome.class,
 				GenericBag.class, SeedsBag.class, PotionsBag.class, StonesBag.class, ScrollsBag.class, EquipmentBag.class, HolsterBag.class, AccessoriesBag.class);
 
 

@@ -48,11 +48,16 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.TalentIcon;
 import com.watabou.noosa.Image;
+import com.watabou.utils.Bundle;
+import com.watabou.utils.Random;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public enum HeroPerk {
     WEAPON_ABILITIES(0xcc33ff){
@@ -249,6 +254,10 @@ public enum HeroPerk {
         return icon;
     }
 
+    public float price(){
+        return 1.0f;
+    }
+
     public String desc(){
         return Messages.get(this, name() + ".desc");
     }
@@ -303,5 +312,33 @@ public enum HeroPerk {
         armors.put(ADVENTURER_ARMOR, 5.0f);
         armors.put(CONJURER_ARMOR, 2.0f);
         armors.put(SCOUT_ARMOR, 3.0f);
+    }
+
+    // perk buying handler
+    public static ArrayDeque<HeroPerk> queue = new ArrayDeque<>();
+
+    public static void initQueue(){
+        ArrayList<HeroPerk> firstQueue = new ArrayList<>(List.of(HeroPerk.values()));
+
+        firstQueue.removeAll(Dungeon.hero.perks);
+
+        Random.pushGenerator(Dungeon.seed+1);
+        Random.shuffle(firstQueue);
+        Random.popGenerator();
+
+        queue.addAll(firstQueue);
+    }
+
+    private static final String QUEUE = "perk_queue";
+
+    public static void storeQueue(Bundle bundle){
+        bundle.put(QUEUE, queue.stream().map(HeroPerk::name).toArray(String[]::new));
+    }
+
+    public static void restoreQueue(Bundle bundle){
+        if (bundle.contains(QUEUE))
+            queue = Arrays.stream(bundle.getStringArray(QUEUE)).map(HeroPerk::valueOf).collect(Collectors.toCollection(ArrayDeque::new));
+        else
+            HeroPerk.initQueue();
     }
 }
