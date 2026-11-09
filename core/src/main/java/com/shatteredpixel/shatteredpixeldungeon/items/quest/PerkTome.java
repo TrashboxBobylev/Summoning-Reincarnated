@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.Bundle;
 
 import java.util.ArrayList;
 
@@ -50,7 +51,7 @@ public class PerkTome extends Item {
         defaultAction = AC_USE;
     }
 
-    public final HeroPerk perk;
+    public HeroPerk perk;
 
     public PerkTome(){
         this(null);
@@ -111,7 +112,26 @@ public class PerkTome extends Item {
     }
 
     @Override
+    public boolean isIdentified() {
+        return true;
+    }
+
+    @Override
     public int value() {
         return Math.round(50*(perk != null ? perk.price() : 1.0f));
+    }
+
+    private static final String PERK = "perk";
+
+    @Override
+    public void storeInBundle(Bundle bundle) {
+        super.storeInBundle(bundle);
+        bundle.put(PERK, perk);
+    }
+
+    @Override
+    public void restoreFromBundle(Bundle bundle) {
+        super.restoreFromBundle(bundle);
+        perk = bundle.getEnum(PERK, HeroPerk.class);
     }
 }
