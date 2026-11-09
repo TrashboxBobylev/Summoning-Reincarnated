@@ -74,7 +74,6 @@ import com.watabou.utils.Callback;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
@@ -177,7 +176,7 @@ public class SkeletonKey extends Artifact {
 						return;
 					}
 					if (Dungeon.level.map[target] == Terrain.LOCKED_DOOR){
-						if (Dungeon.level.locked || Dungeon.branch != 0){
+						if (Dungeon.level.locked || (Dungeon.branch != 0 && Dungeon.branch != 10)){
 							GLog.w(Messages.get(SkeletonKey.class, "wont_open"));
 							return;
 						}
