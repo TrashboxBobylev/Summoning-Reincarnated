@@ -36,8 +36,13 @@ import com.shatteredpixel.shatteredpixeldungeon.items.bags.MagicalHolster;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.PotionBandolier;
 import com.shatteredpixel.shatteredpixeldungeon.items.bags.ScrollHolder;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.BeamOfAffection;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.DreemurrsNecromancy;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.EnergizedRenewal;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.PushingWaveform;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.RunicShell;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.ShockerBreaker;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.StarBlazing;
+import com.shatteredpixel.shatteredpixeldungeon.items.magic.SubNullFieldLighter;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.FroggitStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Slingshot;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
@@ -117,6 +122,11 @@ public enum HeroPerk {
             (hero.belongings.artifact = cloak).identify();
             hero.belongings.artifact.activate( hero );
         }
+
+        @Override
+        public void onAcquiring(Hero hero) {
+            new CloakOfShadows().identify().collect();
+        }
     },
     HUNTRESS_BOW(0x99ffff){
         @Override
@@ -139,6 +149,11 @@ public enum HeroPerk {
         @Override
         public void onInitialization(Hero hero) {
             (hero.belongings.armor = new ScoutArmor()).identify();
+        }
+
+        @Override
+        public void onAcquiring(Hero hero) {
+            new ScoutArmor().identify().collect();
         }
     },
     FURROWED_GRASS(0x005826){
@@ -163,6 +178,16 @@ public enum HeroPerk {
             energizedRenewal.collect();
             new BeamOfAffection().collect();
         }
+
+        @Override
+        public void onAcquiring(Hero hero) {
+            super.onAcquiring(hero);
+            if (hero.lvl >= 5) new RunicShell().identify().collectWithAnnouncing();
+            if (hero.lvl >= 7) new PushingWaveform().identify().collectWithAnnouncing();
+            if (hero.lvl >= 9) new ShockerBreaker().identify().collectWithAnnouncing();
+            if (hero.lvl >= 11) new DreemurrsNecromancy().identify().collectWithAnnouncing();
+            if (hero.lvl >= 15) new SubNullFieldLighter().identify().collectWithAnnouncing();
+        }
     },
     CONJURER_ARMOR(0x4c51ad){
         @Override
@@ -173,6 +198,11 @@ public enum HeroPerk {
         @Override
         public void onInitialization(Hero hero) {
             (hero.belongings.armor = new ConjurerArmor()).identify();
+        }
+
+        @Override
+        public void onAcquiring(Hero hero) {
+            new ConjurerArmor().identify().collect();
         }
     },
     STARTER_SUMMON(0x827b00){
@@ -198,6 +228,12 @@ public enum HeroPerk {
             hero.HP = hero.HT = 30;
             hero.STR = 12;
         }
+
+        @Override
+        public void onAcquiring(Hero hero) {
+            hero.STR += 12;
+            hero.updateHT(false);
+        }
     },
     EXTRA_LOOT(0x7c7c7c){
         @Override
@@ -214,6 +250,11 @@ public enum HeroPerk {
         @Override
         public void onInitialization(Hero hero) {
             (hero.belongings.armor = new SyntheticArmor()).identify();
+        }
+
+        @Override
+        public void onAcquiring(Hero hero) {
+            new SyntheticArmor().identify().collect();
         }
     },
     ALL_BAGS(0xaf775c){
@@ -264,6 +305,10 @@ public enum HeroPerk {
 
     public void onInitialization(Hero hero){
 
+    }
+
+    public void onAcquiring(Hero hero){
+        onInitialization(hero);
     }
 
     public static boolean menuAvailable(){

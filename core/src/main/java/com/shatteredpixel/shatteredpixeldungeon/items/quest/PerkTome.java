@@ -82,6 +82,7 @@ public class PerkTome extends Item {
                 Catalog.countUse( getClass() );
 
                 hero.perks.add(perk);
+                perk.onAcquiring(hero);
 
                 hero.spend( Actor.TICK );
                 hero.busy();
