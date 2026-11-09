@@ -92,6 +92,11 @@ public enum HeroPerk {
         }
 
         @Override
+        public float price() {
+            return 0.75f;
+        }
+
+        @Override
         public void onInitialization(Hero hero) {
             Slingshot stones = new Slingshot();
             stones.charge = 1;
@@ -108,6 +113,11 @@ public enum HeroPerk {
         @Override
         public Image icon() {
             return Icons.get(Icons.MAGNIFY);
+        }
+
+        @Override
+        public float price() {
+            return 2/3f;
         }
     },
     CLOAK_OF_SHADOWS(0x090909){
@@ -126,6 +136,11 @@ public enum HeroPerk {
         @Override
         public void onAcquiring(Hero hero) {
             new CloakOfShadows().identify().collect();
+        }
+
+        @Override
+        public float price() {
+            return 1.66f;
         }
     },
     HUNTRESS_BOW(0x99ffff){
@@ -147,6 +162,11 @@ public enum HeroPerk {
         }
 
         @Override
+        public float price() {
+            return 0.75f;
+        }
+
+        @Override
         public void onInitialization(Hero hero) {
             (hero.belongings.armor = new ScoutArmor()).identify();
         }
@@ -157,6 +177,11 @@ public enum HeroPerk {
         }
     },
     FURROWED_GRASS(0x005826){
+        @Override
+        public float price() {
+            return 0.75f;
+        }
+
         @Override
         public Image icon() {
             return Icons.GRASS.get();
@@ -196,6 +221,11 @@ public enum HeroPerk {
         }
 
         @Override
+        public float price() {
+            return 0.75f;
+        }
+
+        @Override
         public void onInitialization(Hero hero) {
             (hero.belongings.armor = new ConjurerArmor()).identify();
         }
@@ -212,6 +242,11 @@ public enum HeroPerk {
         }
 
         @Override
+        public float price() {
+            return 0.75f;
+        }
+
+        @Override
         public void onInitialization(Hero hero) {
             FroggitStaff staff = new FroggitStaff();
             staff.identify().collect();
@@ -221,6 +256,11 @@ public enum HeroPerk {
         @Override
         public Image icon() {
             return new TalentIcon(Talent.STRONGMAN);
+        }
+
+        @Override
+        public float price() {
+            return 1.33f;
         }
 
         @Override
@@ -240,11 +280,21 @@ public enum HeroPerk {
         public Image icon() {
             return new ItemSprite(ItemSpriteSheet.BAG_GENERIC);
         }
+
+        @Override
+        public float price() {
+            return 2f;
+        }
     },
     ADVENTURER_ARMOR(0x858585){
         @Override
         public Image icon() {
             return new ItemSprite(ItemSpriteSheet.ARMOR_ADVENTURER);
+        }
+
+        @Override
+        public float price() {
+            return 0.5f;
         }
 
         @Override
@@ -261,6 +311,11 @@ public enum HeroPerk {
         @Override
         public Image icon() {
             return new Image(Assets.Interfaces.BADGES, 48, 128, 16, 16);
+        }
+
+        @Override
+        public float price() {
+            return 1.66f;
         }
 
         @Override

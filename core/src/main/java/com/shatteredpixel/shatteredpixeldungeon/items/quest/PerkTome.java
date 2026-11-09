@@ -119,7 +119,7 @@ public class PerkTome extends Item {
 
     @Override
     public int value() {
-        return Math.round(50*(perk != null ? perk.price() : 1.0f));
+        return Math.round(60*(perk != null ? perk.price() : 1.0f));
     }
 
     private static final String PERK = "perk";
