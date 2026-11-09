@@ -188,8 +188,10 @@ public class Armor extends EquipableItem implements StrengthItem, AugmentedItem,
 	public ArrayList<String> actions(Hero hero) {
 		ArrayList<String> actions = super.actions(hero);
 		if (hero.perks.contains(HeroPerk.CONJURER_ARMOR)){
-			actions.remove(AC_EQUIP);
-			actions.remove(AC_UNEQUIP);
+			if (!(this instanceof ConjurerSet) && hero.belongings.armor() instanceof ConjurerSet)
+				actions.remove(AC_EQUIP);
+			if (this instanceof ConjurerSet && isEquipped(hero))
+				actions.remove(AC_UNEQUIP);
 		}
 		if (seal != null) actions.add(AC_DETACH);
 		return actions;
