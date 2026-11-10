@@ -170,6 +170,8 @@ public enum HeroPerk {
         @Override
         public void onInitialization(Hero hero) {
             (hero.belongings.armor = new ScoutArmor()).identify();
+            if (hero.perks.contains(WARRIOR_SEAL))
+                hero.belongings.armor.affixSeal(new BrokenSeal());
         }
 
         @Override
@@ -229,6 +231,8 @@ public enum HeroPerk {
         @Override
         public void onInitialization(Hero hero) {
             (hero.belongings.armor = new ConjurerArmor()).identify();
+            if (hero.perks.contains(WARRIOR_SEAL))
+                hero.belongings.armor.affixSeal(new BrokenSeal());
         }
 
         @Override
@@ -301,6 +305,8 @@ public enum HeroPerk {
         @Override
         public void onInitialization(Hero hero) {
             (hero.belongings.armor = new SyntheticArmor()).identify();
+            if (hero.perks.contains(WARRIOR_SEAL))
+                hero.belongings.armor.affixSeal(new BrokenSeal());
         }
 
         @Override
