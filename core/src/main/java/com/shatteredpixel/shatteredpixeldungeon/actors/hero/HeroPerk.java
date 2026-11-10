@@ -43,6 +43,7 @@ import com.shatteredpixel.shatteredpixeldungeon.items.magic.RunicShell;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.ShockerBreaker;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.StarBlazing;
 import com.shatteredpixel.shatteredpixeldungeon.items.magic.SubNullFieldLighter;
+import com.shatteredpixel.shatteredpixeldungeon.items.spells.TypeManager;
 import com.shatteredpixel.shatteredpixeldungeon.items.staffs.FroggitStaff;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Slingshot;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.SpiritBow;
@@ -338,6 +339,22 @@ public enum HeroPerk {
         public float price() {
             return 0.75f;
         }
+    },
+    EXTRA_TYPE_MANAGER(0x3f61bf){
+        @Override
+        public Image icon() {
+            return new ItemSprite(ItemSpriteSheet.TYPE_MANAGER);
+        }
+
+        @Override
+        public float price() {
+            return 0.8f;
+        }
+
+        @Override
+        public void onInitialization(Hero hero) {
+            new TypeManager().collect();
+        }
     }
     ;
 
@@ -415,7 +432,8 @@ public enum HeroPerk {
                 SEARCH_RANGE,
                 FURROWED_GRASS,
                 STARTER_SUMMON,
-                EXTRA_ALCHEMY
+                EXTRA_ALCHEMY,
+                EXTRA_TYPE_MANAGER
         );
     }
 
