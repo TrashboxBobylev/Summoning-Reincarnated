@@ -24,8 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
-
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -40,7 +38,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.GuidingLight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mimic;
-import com.shatteredpixel.shatteredpixeldungeon.effects.CheckedCell;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Identification;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -63,6 +60,8 @@ import com.watabou.noosa.audio.Sample;
 import com.watabou.utils.Bundle;
 
 import java.util.ArrayList;
+
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
 public class TalismanOfForesight extends Artifact {
 
@@ -177,7 +176,7 @@ public class TalismanOfForesight extends Artifact {
 	}
 
 	private float maxDist(){
-		return Math.min(5 + 2*level(), (charge-3)/1.08f);
+		return Math.min(5 + 2*buffedLvl(), (charge-3)/1.08f);
 	}
 
 	public CellSelector.Listener scry = new CellSelector.Listener(){
@@ -249,7 +248,7 @@ public class TalismanOfForesight extends Artifact {
 							if (ch != null
 									&& (ch.alignment != Char.Alignment.NEUTRAL || ch instanceof Mimic)
 									&& ch.alignment != curUser.alignment) {
-								Buff.append(curUser, CharAwareness.class, 5 + 2 * level()).charID = ch.id();
+								Buff.append(curUser, CharAwareness.class, 5 + 2 * buffedLvl()).charID = ch.id();
 
 								artifactProc(ch, visiblyUpgraded(), (int) (3 + dist * 1.08f));
 
@@ -260,7 +259,7 @@ public class TalismanOfForesight extends Artifact {
 
 							Heap h = Dungeon.level.heaps.get(cell);
 							if (h != null) {
-								Buff.append(curUser, HeapAwareness.class, 5 + 2 * level()).pos = h.pos;
+								Buff.append(curUser, HeapAwareness.class, 5 + 2 * buffedLvl()).pos = h.pos;
 
 								if (!h.seen) {
 									earnedExp += 10;
@@ -358,7 +357,7 @@ public class TalismanOfForesight extends Artifact {
 					&& target.buff(MagicImmune.class) == null
 					&& Regeneration.regenOn()) {
 				//fully charges in 2000 turns at +0, scaling to 1000 turns at +10.
-				float chargeGain = (0.05f+(level()*0.005f));
+				float chargeGain = (0.05f+(buffedLvl()*0.005f));
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
 				chargeGain *= rechargeModifier();
 				partialCharge += chargeGain;

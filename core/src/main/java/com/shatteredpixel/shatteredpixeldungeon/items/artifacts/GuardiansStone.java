@@ -24,8 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
-
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -71,6 +69,8 @@ import com.watabou.utils.PathFinder;
 import com.watabou.utils.PointF;
 
 import java.util.ArrayList;
+
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
 public class GuardiansStone extends Artifact {
     {
@@ -128,11 +128,11 @@ public class GuardiansStone extends Artifact {
             if (!cursed) {
                 Shielding sealBuff = hero.buff(Shielding.class);
                 if (sealBuff != null){
-                    desc += "\n\n" + getTypeBasedString("desc_worn", type(), maxShield(type(), level()), Math.round(sealBuff.rechargeRate()));
+                    desc += "\n\n" + getTypeBasedString("desc_worn", type(), maxShield(type(), buffedLvl()), Math.round(sealBuff.rechargeRate()));
                     if (sealBuff.shielding() > 0 && type() != 2)
                         desc += "\n\n" + getTypeBasedString( "desc_action", type(),
                                 GameMath.printAverage(sealBuff.shielding()*minDamage(), sealBuff.shielding()*maxDamage()),
-                                1+(2+(level()/3)*2)*(type() == 3 ? 2 : 1));
+                                1+(2+(buffedLvl()/3)*2)*(type() == 3 ? 2 : 1));
                 }
                 if (level() < levelCap)
                     desc += "\n\n" + Messages.get(this, "desc_upgrade");
@@ -285,7 +285,7 @@ public class GuardiansStone extends Artifact {
                                 user.spendAndNext(delay);
                                 Dungeon.level.pressCell(cell);
                                 Sample.INSTANCE.play( Assets.Sounds.BLAST );
-                                int distance = 1 + GuardiansStone.this.level()/3;
+                                int distance = 1 + GuardiansStone.this.buffedLvl()/3;
                                 int distanceMod = 1;
                                 if (type() == 3){
                                     distanceMod = 2;
@@ -346,7 +346,7 @@ public class GuardiansStone extends Artifact {
         float partialShield;
 
         public float rechargeRate(){
-            return (30f - source.level()*2f)/source.rechargeModifier();
+            return (30f - source.buffedLvl()*2f)/source.rechargeModifier();
         }
 
         @Override
@@ -386,7 +386,7 @@ public class GuardiansStone extends Artifact {
 
         public synchronized int maxShield() {
             if (source != null && source.isEquipped((Hero)target)) {
-                return GuardiansStone.maxShield(source.type(), source.level());
+                return GuardiansStone.maxShield(source.type(), source.buffedLvl());
             } else {
                 return 0;
             }

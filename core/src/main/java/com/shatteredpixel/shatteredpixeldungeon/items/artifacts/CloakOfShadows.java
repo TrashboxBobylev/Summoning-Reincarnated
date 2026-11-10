@@ -374,7 +374,7 @@ public class CloakOfShadows extends Artifact implements Stylus.Inscribable {
 			if (charge < chargeCap && !cursed && target.buff(MagicImmune.class) == null) {
 				if (activeBuff == null && Regeneration.regenOn()) {
 					float missing = (chargeCap - charge)/maxChargesModifier();
-					if (level() > 7) missing += 5*(level() - 7)/3f;
+					if (buffedLvl() > 7) missing += 5*(buffedLvl() - 7)/3f;
 					float turnsToCharge = (45 - missing);
 					turnsToCharge /= RingOfEnergy.artifactChargeMultiplier(target);
 					turnsToCharge /= rechargeModifier();
@@ -551,7 +551,7 @@ public class CloakOfShadows extends Artifact implements Stylus.Inscribable {
 			if (glyph != null)
 				glyph.onUncloaking(CloakOfShadows.this, target);
 			if (type() == 3){
-				Buff.affect(target, CloakT3Cooldown.class, 6 - level()/3);
+				Buff.affect(target, CloakT3Cooldown.class, 6 - buffedLvl()/3);
 			}
 
 			updateQuickslot();

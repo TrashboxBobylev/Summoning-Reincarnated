@@ -84,7 +84,6 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
-
 import org.apache.commons.lang3.ClassUtils;
 
 import java.util.ArrayList;
@@ -367,7 +366,7 @@ public class SandalsOfNature extends Artifact {
 			if (cursed || target.buff(MagicImmune.class) != null) return;
 			if (charge < chargeCap){
 				//0.5 charge per grass at +0, up to 1.5 at +10
-				float chargeGain = (3f + 2*level())/6f;
+				float chargeGain = (3f + 2*buffedLvl())/6f;
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
 				chargeGain *= rechargeModifier();
 				partialCharge += Math.max(0, chargeGain);

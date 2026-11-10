@@ -90,7 +90,7 @@ public class EmeradicBattery extends Artifact {
                 desc += "\n\n" + getTypeBasedString("desc_cursed", type());
             }
             else {
-                desc += "\n\n" + getTypeBasedString("desc_equipped", type(), Math.round((1 + (2 + level()))/3f)*100);
+                desc += "\n\n" + getTypeBasedString("desc_equipped", type(), Math.round((1 + (2 + buffedLvl()))/3f)*100);
             }
         }
 
@@ -129,7 +129,7 @@ public class EmeradicBattery extends Artifact {
 
     @Override
     public String getTypeMessage(int type) {
-        return Messages.get(this, "type" + type, Math.round((1 + (2 + level()))/3f)*100);
+        return Messages.get(this, "type" + type, Math.round((1 + (2 + buffedLvl()))/3f)*100);
     }
 
     public static void procArcaneEnergy(Char hero){

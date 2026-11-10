@@ -140,7 +140,7 @@ public class SubtilitasSigil extends Artifact {
             if (cursed)
                 desc += getTypeBasedString("desc_cursed", type());
             else {
-                desc += getTypeBasedString("desc_equipped", type(), 4 + level()*2, GameMath.printAverage(4 + level()*2, 24 + level()*8));
+                desc += getTypeBasedString("desc_equipped", type(), 4 + buffedLvl()*2, GameMath.printAverage(4 + buffedLvl()*2, 24 + buffedLvl()*8));
                 if (level() < levelCap){
                     desc += "\n\n" + Messages.get(this, "desc_hint");
                 }
@@ -160,7 +160,7 @@ public class SubtilitasSigil extends Artifact {
 
                 final Ballistica bolt = new Ballistica(curUser.pos, cell, Ballistica.STOP_SOLID | Ballistica.IGNORE_SOFT_SOLID);
 
-                int maxDist = 3 + level();
+                int maxDist = 3 + buffedLvl();
                 int dist = Math.min(bolt.dist, maxDist);
 
                 final ConeAOE cone = new ConeAOE(bolt, dist, 60, Ballistica.STOP_SOLID | Ballistica.STOP_TARGET | Ballistica.IGNORE_SOFT_SOLID);
@@ -174,8 +174,8 @@ public class SubtilitasSigil extends Artifact {
                     Char ch = Actor.findChar(c);
                     if (ch != null) {
 
-                        Buff.affect(ch, EnrageBuff.class, 3 + level());
-                        Buff.affect(ch, Amok.class, 2 + level()*0.75f);
+                        Buff.affect(ch, EnrageBuff.class, 3 + buffedLvl());
+                        Buff.affect(ch, Amok.class, 2 + buffedLvl()*0.75f);
                     }
                 }
 
@@ -241,7 +241,7 @@ public class SubtilitasSigil extends Artifact {
 
             ForceBuff buff = target.buff(ForceBuff.class);
             if (buff != null){
-                return 4 + level()*2;
+                return 4 + buffedLvl()*2;
             }
 
             return 0;
@@ -253,7 +253,7 @@ public class SubtilitasSigil extends Artifact {
 
             ForceBuff buff = target.buff(ForceBuff.class);
             if (buff != null){
-                return Hero.heroDamageIntRange(4 + level()*2, 24 + level()*9);
+                return Hero.heroDamageIntRange(4 + buffedLvl()*2, 24 + buffedLvl()*9);
             }
 
             return 0;

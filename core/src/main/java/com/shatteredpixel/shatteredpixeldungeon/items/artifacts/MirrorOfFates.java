@@ -239,7 +239,7 @@ public class MirrorOfFates extends Artifact {
 
                 if (type() != 3) {
                     Buff.affect(curUser, MirrorShield.class).setPotency(
-                            (int) (curUser.HT * (0.2f + 0.04f * level()) * mirrorDurability())).setType(type());
+                            (int) (curUser.HT * (0.2f + 0.04f * buffedLvl()) * mirrorDurability())).setType(type());
                     curUser.spendAndNext(1f);
                 } else {
                     UsedItemTracker usedItem = hero.buff(UsedItemTracker.class);
@@ -363,7 +363,7 @@ public class MirrorOfFates extends Artifact {
                 if (charge < chargeCap && !cursed && target.buff(MagicImmune.class) == null) {
                     if (Regeneration.regenOn()) {
                         float missing = (chargeCap - charge);
-                        if (level() > 7) missing += 8 * (level() - 7) / 3f;
+                        if (buffedLvl() > 7) missing += 8 * (buffedLvl() - 7) / 3f;
                         float turnsToCharge = (60 - missing);
                         turnsToCharge /= RingOfEnergy.artifactChargeMultiplier(target);
                         float chargeToGain = (1f / turnsToCharge);

@@ -40,7 +40,6 @@ import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
-
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -158,7 +157,7 @@ public class Artifact extends KindofMisc implements TypedItem {
 
 	@Override
 	public int buffedLvl() {
-		//level isn't affected by buffs/debuffs
+		//level isn't affected by most buffs/debuffs
 		return level();
 	}
 

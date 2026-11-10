@@ -197,7 +197,7 @@ public class EtherealChains extends Artifact {
 				new Callback() {
 			public void call() {
 				if (type() == 3){
-					float bleedDmg = 5 + level();
+					float bleedDmg = 5 + buffedLvl();
 					bleedDmg *= Math.pow(1.2f, chargeUse-1);
 					enemy.sprite.flash();
 					enemy.sprite.bloodBurstA(enemy.sprite.center(), (int)bleedDmg);
@@ -462,7 +462,7 @@ public class EtherealChains extends Artifact {
 
 			//past the soft charge cap, gaining  charge from leveling is slowed.
 			if (charge > chargeCap()){
-				levelPortion *= (5+((float)level()*2))/charge;
+				levelPortion *= (5+((float)buffedLvl()*2))/charge;
 			}
 			levelPortion *= expRechargeModifier();
 			partialCharge += levelPortion*6f;

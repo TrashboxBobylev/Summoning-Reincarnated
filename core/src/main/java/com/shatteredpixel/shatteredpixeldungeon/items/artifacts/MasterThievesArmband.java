@@ -144,8 +144,8 @@ public class MasterThievesArmband extends Artifact {
 							Sample.INSTANCE.play(Assets.Sounds.HIT);
 
 							boolean surprised = ((Mob) ch).surprisedBy(curUser, false);
-							float lootMultiplier = 1f + 0.1f*level();
-							int debuffDuration = 3 + level()/2;
+							float lootMultiplier = 1f + 0.1f*buffedLvl();
+							int debuffDuration = 3 + buffedLvl()/2;
 
 							Invisibility.dispel(curUser);
 
@@ -185,10 +185,10 @@ public class MasterThievesArmband extends Artifact {
 										Dungeon.level.drop(loot, curUser.pos).sprite.drop();
 									}
 									if (type() == 2){
-										if (Random.Float() < 0.25f + 0.05f*level()){
+										if (Random.Float() < 0.25f + 0.05f*buffedLvl()){
 											Item bonus;
 											do {
-												bonus = RingOfWealth.genConsumableDrop(level());
+												bonus = RingOfWealth.genConsumableDrop(buffedLvl());
 											} while (Challenges.isItemBlocked(bonus));
 											Dungeon.level.drop(Challenges.process(bonus), target).sprite.drop();
 											RingOfWealth.showFlareForBonusDrop(ch.sprite);
@@ -251,7 +251,7 @@ public class MasterThievesArmband extends Artifact {
 					@Override
 					public void call() {
 						Char ch = Actor.findChar(target);
-						MnemonicPrayer.affectChar(ch, 3 + level()/2f);
+						MnemonicPrayer.affectChar(ch, 3 + buffedLvl()/2f);
 						curUser.next();
 					}
 				});
@@ -384,7 +384,7 @@ public class MasterThievesArmband extends Artifact {
 
 			if (charge < chargeCap){
 				//3 charges per hero lvl at +0, scaling to 4.5 per lvl at +10
-				float chargeGain = (3f + 0.15f*level()) * levelPortion;
+				float chargeGain = (3f + 0.15f*buffedLvl()) * levelPortion;
 				chargeGain *= rechargeModifier();
 				chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
 
@@ -429,7 +429,7 @@ public class MasterThievesArmband extends Artifact {
 
 		public float stealChance(Item item){
 			int chargesUsed = chargesToUse(item);
-			float val = chargesUsed * (10 + level()/2f);
+			float val = chargesUsed * (10 + buffedLvl()/2f);
 			val /= rechargeModifier();
 			return Math.min(1f, val/item.value());
 		}
@@ -446,7 +446,7 @@ public class MasterThievesArmband extends Artifact {
 			float valUsing = 0;
 			int chargesUsed = 0;
 			while (valUsing < value && chargesUsed < charge){
-				valUsing += 10 + level()/2f;
+				valUsing += 10 + buffedLvl()/2f;
 				chargesUsed++;
 			}
 			return chargesUsed;

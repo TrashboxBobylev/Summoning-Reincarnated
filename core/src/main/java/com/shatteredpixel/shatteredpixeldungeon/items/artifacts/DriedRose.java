@@ -258,11 +258,11 @@ public class DriedRose extends Artifact {
 	}
 	
 	public int ghostStrength(){
-		return 13 + level()/2;
+		return 13 + buffedLvl()/2;
 	}
 
 	public int ghostAttunement(){
-		return 2 + level()/2;
+		return 2 + buffedLvl()/2;
 	}
 
 	public int ghostHealth(){
@@ -272,11 +272,11 @@ public class DriedRose extends Artifact {
 	public int ghostHealth(int type){
 		switch (type){
 			case 1:
-				return 40 + 10*level();
+				return 40 + 10*buffedLvl();
 			case 2:
-				return 60 + 15*level();
+				return 60 + 15*buffedLvl();
 			case 3:
-				return 32 + 7*level();
+				return 32 + 7*buffedLvl();
 		}
 		return 1;
 	}
@@ -460,7 +460,7 @@ public class DriedRose extends Artifact {
 				updateQuickslot();
 			}
 		} else if (ghost.HP < ghost.HT) {
-			int heal = Math.round((1 + level()/3f)*amount*rechargeModifier());
+			int heal = Math.round((1 + buffedLvl()/3f)*amount*rechargeModifier());
 			ghost.HP = Math.min( ghost.HT, ghost.HP + heal);
 			if (ghost.sprite != null) {
 				ghost.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(heal), FloatingText.HEALING);
@@ -784,11 +784,11 @@ public class DriedRose extends Artifact {
 						Char ch = Actor.findChar(i);
 						if (ch != null){
 							if (ch.alignment == Dungeon.hero.alignment && ch != Dungeon.hero && ch != this) {
-								Regeneration.regenerate(ch, rose.level()*3/4);
-								Buff.affect(ch, AttunementBoost.class, 10).boost(rose.level()*0.2f);
+								Regeneration.regenerate(ch, rose.buffedLvl()*3/4);
+								Buff.affect(ch, AttunementBoost.class, 10).boost(rose.buffedLvl()*0.2f);
 							}
 							if (ch.alignment == Alignment.ENEMY){
-								ch.damage(rose.level() * 2, new DamageSource() {
+								ch.damage(rose.buffedLvl() * 2, new DamageSource() {
 									@Override
 									public EnumSet<DamageProperty> initDmgProperties() {
 										return EnumSet.of(DamageProperty.MAGICAL, DamageProperty.HOLY);

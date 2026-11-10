@@ -537,12 +537,12 @@ public class AlchemistsToolkit extends Artifact {
 		public boolean act() {
 
 			if (warmUpDelay > 0){
-				if (level() == 10){
+				if (buffedLvl() == 10){
 					warmUpDelay = 0;
 				} else if (warmUpDelay == 101){
 					warmUpDelay = 100f;
 				} else if (!cursed && target.buff(MagicImmune.class) == null) {
-					float turnsToWarmUp = (int) Math.pow(10 - level(), 2);
+					float turnsToWarmUp = (int) Math.pow(10 - buffedLvl(), 2);
 					warmUpDelay -= 100 / turnsToWarmUp;
 				}
 				updateQuickslot();
@@ -580,7 +580,7 @@ public class AlchemistsToolkit extends Artifact {
 			//generates 2 energy every hero level, +1 energy per toolkit level
 			//to a max of 12 energy per hero level
 			//This means that energy absorbed into the kit is recovered in 5 hero levels
-			float chargeGain = (2 + level()) * levelPortion;
+			float chargeGain = (2 + buffedLvl()) * levelPortion;
 			chargeGain *= RingOfEnergy.artifactChargeMultiplier(target);
 			if (type() == 3)
 				chargeGain *= 3;
