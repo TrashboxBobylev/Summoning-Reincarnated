@@ -32,6 +32,7 @@ import com.shatteredpixel.shatteredpixeldungeon.SPDAction;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Belongings;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.EnergyCrystal;
@@ -648,6 +649,8 @@ public class AlchemyScene extends PixelScene {
 			Recipe recipe = recipes.get(i);
 
 			int cost = recipe.cost(ingredients);
+			if (Dungeon.hero != null && Dungeon.hero.perks.contains(HeroPerk.EXTRA_ALCHEMY))
+				cost = Math.max(0, cost-1);
 
 			outputs[i].visible = true;
 			outputs[i].setRect(outputs[0].left(), top, BTN_SIZE, BTN_SIZE);
@@ -696,6 +699,8 @@ public class AlchemyScene extends PixelScene {
 		
 		if (recipe != null){
 			int cost = recipe.cost(ingredients);
+			if (Dungeon.hero != null && Dungeon.hero.perks.contains(HeroPerk.EXTRA_ALCHEMY))
+				cost = Math.max(0, cost-1);
 			if (toolkit != null){
 				cost = toolkit.consumeEnergy(cost);
 			}

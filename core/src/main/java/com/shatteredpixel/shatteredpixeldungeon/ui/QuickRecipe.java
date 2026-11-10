@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.ui;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.items.ArcaneResin;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -105,6 +106,8 @@ public class QuickRecipe extends Component {
 		
 		ingredients = inputs;
 		int cost = r.cost(inputs);
+		if (Dungeon.hero != null && Dungeon.hero.perks.contains(HeroPerk.EXTRA_ALCHEMY))
+			cost = Math.max(0, cost-1);
 		boolean hasInputs = true;
 		this.inputs = new ArrayList<>();
 		for (final Item in : inputs) {

@@ -327,6 +327,17 @@ public enum HeroPerk {
             new MagicalHolster().collect();
             Dungeon.LimitedDrops.MAGICAL_HOLSTER.drop();
         }
+    },
+    EXTRA_ALCHEMY(0xb2f2ff){
+        @Override
+        public Image icon() {
+            return new ItemSprite(ItemSpriteSheet.ENERGY);
+        }
+
+        @Override
+        public float price() {
+            return 0.75f;
+        }
     }
     ;
 
@@ -403,7 +414,8 @@ public enum HeroPerk {
                 SLINGSHOT,
                 SEARCH_RANGE,
                 FURROWED_GRASS,
-                STARTER_SUMMON
+                STARTER_SUMMON,
+                EXTRA_ALCHEMY
         );
     }
 
