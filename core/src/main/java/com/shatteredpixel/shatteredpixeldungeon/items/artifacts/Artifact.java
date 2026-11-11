@@ -31,6 +31,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.MagicImmune;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroPerk;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.GuidingLight;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -152,13 +153,19 @@ public class Artifact extends KindofMisc implements TypedItem {
 
 	@Override
 	public int buffedVisiblyUpgraded() {
-		return visiblyUpgraded();
+		int level = visiblyUpgraded();
+		if (Dungeon.hero != null && Dungeon.hero.buff(HeroPerk.ArtifactBoostBuff.class) != null)
+			level = Math.min(levelCap+1, level+1);
+		return level;
 	}
 
 	@Override
 	public int buffedLvl() {
 		//level isn't affected by most buffs/debuffs
-		return level();
+		int level = level();
+		if (Dungeon.hero != null && Dungeon.hero.buff(HeroPerk.ArtifactBoostBuff.class) != null)
+			level = Math.min(levelCap+1, level+1);
+		return level;
 	}
 
 	//transfers upgrades from another artifact, transfer level will equal the displayed level

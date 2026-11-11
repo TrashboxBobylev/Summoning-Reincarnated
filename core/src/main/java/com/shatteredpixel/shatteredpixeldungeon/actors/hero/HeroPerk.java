@@ -26,6 +26,8 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.hero;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ArtifactRecharge;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.EffectBuff;
 import com.shatteredpixel.shatteredpixeldungeon.items.BrokenSeal;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ConjurerArmor;
 import com.shatteredpixel.shatteredpixeldungeon.items.armor.ScoutArmor;
@@ -51,6 +53,8 @@ import com.shatteredpixel.shatteredpixeldungeon.journal.Catalog;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ItemSpriteSheet;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIcon;
+import com.shatteredpixel.shatteredpixeldungeon.ui.BuffIndicator;
 import com.shatteredpixel.shatteredpixeldungeon.ui.Icons;
 import com.shatteredpixel.shatteredpixeldungeon.ui.TalentIcon;
 import com.watabou.noosa.Image;
@@ -361,6 +365,17 @@ public enum HeroPerk {
         public void onInitialization(Hero hero) {
             new TypeManager().collect();
         }
+    },
+    ARTIFACT_BOOST(0x46f574){
+        @Override
+        public Image icon() {
+            return new BuffIcon(new ArtifactRecharge(), true);
+        }
+
+        @Override
+        public float price() {
+            return 0.75f;
+        }
     }
     ;
 
@@ -398,6 +413,18 @@ public enum HeroPerk {
 
     public void onAcquiring(Hero hero){
         onInitialization(hero);
+    }
+
+    public static class ArtifactBoostBuff extends EffectBuff {
+        @Override
+        public int icon() {
+            return BuffIndicator.RECHARGING;
+        }
+
+        @Override
+        public void tintIcon(Image icon) {
+            icon.hardlight(0x46f574);
+        }
     }
 
     public static boolean menuAvailable(){
@@ -439,7 +466,8 @@ public enum HeroPerk {
                 FURROWED_GRASS,
                 STARTER_SUMMON,
                 EXTRA_ALCHEMY,
-                EXTRA_TYPE_MANAGER
+                EXTRA_TYPE_MANAGER,
+                ARTIFACT_BOOST
         );
     }
 

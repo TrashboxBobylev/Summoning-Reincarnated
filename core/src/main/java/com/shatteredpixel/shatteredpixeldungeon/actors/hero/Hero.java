@@ -2539,6 +2539,10 @@ public class Hero extends Char {
             else
                 this.exp += exp;
 		}
+
+		if (perks.contains(HeroPerk.ARTIFACT_BOOST))
+			Buff.affect(this, HeroPerk.ArtifactBoostBuff.class, 10f);
+
 		float percent = exp/(float)maxExp();
 
 		EtherealChains.chainsRecharge chains = buff(EtherealChains.chainsRecharge.class);
