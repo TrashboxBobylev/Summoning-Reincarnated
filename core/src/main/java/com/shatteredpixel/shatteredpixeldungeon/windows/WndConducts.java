@@ -67,6 +67,8 @@ public class WndConducts extends Window {
 
         WndConducts.editable = editable;
         resize(WIDTH, HEIGHT);
+        infos.clear();
+        boxes.clear();
 
         RenderedTextBlock title = PixelScene.renderTextBlock( Messages.get(this, "title"), 12 );
         title.hardlight( TITLE_COLOR );
