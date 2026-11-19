@@ -122,24 +122,22 @@ public class WandOfTransfusion extends DamageWand {
 			
 			//this wand does different things depending on the target.
 
-            //on rank III, swap health states
+            //on rank III, balance out health states
             if (type() == 3 && !ch.properties().contains(Char.Property.BOSS) && !ch.properties().contains(Char.Property.UNDEAD)) {
                 int myHealth = user.HP;
                 int enemyHealth = ch.HP;
-                float myHP = user.HP * 1f / user.HT;
-                float enemyHP = ch.HP * 1f / ch.HT;
-                if (ch.properties().contains(Char.Property.MINIBOSS)) {
-                    myHP /= 3;
-                    enemyHP /= 1.5f;
-                }
-                user.HP = (int) (user.HT * enemyHP);
+                float equalizedHP = (myHealth + enemyHealth) / 2f;
+                if (myHealth < equalizedHP)
+                    user.HP = (int) (equalizedHP);
+                else
+                    Buff.affect(user, Barrier.class).setShield((int) (equalizedHP - myHealth));
                 if (user.HP - myHealth != 0){
                     if (user.HP - myHealth > 0)
                         user.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(user.HP - myHealth), FloatingText.HEALING);
                     else
                         user.sprite.showStatusWithIcon(CharSprite.NEGATIVE, Integer.toString(-(user.HP - myHealth)), FloatingText.MAGIC_DMG);
                 }
-                ch.HP = (int) (ch.HT * myHP);
+                ch.HP = (int) equalizedHP;
                 if (ch.HP - enemyHealth != 0){
                     if (ch.HP - enemyHealth > 0)
                         ch.sprite.showStatusWithIcon(CharSprite.POSITIVE, Integer.toString(ch.HP - enemyHealth), FloatingText.HEALING);
