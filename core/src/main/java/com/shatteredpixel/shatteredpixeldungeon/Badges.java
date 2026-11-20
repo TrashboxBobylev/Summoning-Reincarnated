@@ -1097,6 +1097,12 @@ public class Badges {
 			badge = Badge.VICTORY_ALL_CLASSES;
 			displayBadge( badge );
 		}
+
+		badge = Dungeon.mode.unlock();
+		if (badge != null && !global.contains( badge )) {
+            global.add( badge );
+            saveNeeded = true;
+        }
 	}
 
 	public static void validateTakingTheMick(Object cause){
