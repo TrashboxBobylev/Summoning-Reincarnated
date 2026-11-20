@@ -352,6 +352,14 @@ public class Dungeon {
         public boolean isCheaty(){
             return false;
         }
+
+		public Badges.Badge unlock(){
+			return null;
+		}
+
+		public GameMode child(){
+			return null;
+		}
 	}
 
 	public static GameMode mode = GameMode.NORMAL;
@@ -413,6 +421,12 @@ public class Dungeon {
 		challenges = SPDSettings.challenges();
 		if (mode != GameMode.RANDOM_CONDUCT)
 			conducts = new Conducts.ConductStorage(SPDSettings.conducts());
+		if (conducts.isConducted(Conducts.Conduct.EXTRA_MODE)){
+			conducts.conducts.remove(Conducts.Conduct.EXTRA_MODE);
+			if (mode.child() != null){
+				mode = mode.child();
+			}
+		}
 		mobsToChampion = 1;
 
 		Actor.clear();

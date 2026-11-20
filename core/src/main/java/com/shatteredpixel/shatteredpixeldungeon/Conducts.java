@@ -52,6 +52,9 @@ public class Conducts {
                 return true;
             }
         },
+        EXTRA_MODE(1.001f, 33){
+
+        },
         EXPLOSIONS(1.5f, 12),
 //        INVISIBLE(2f),
         REGENERATION(1.33f, 14),

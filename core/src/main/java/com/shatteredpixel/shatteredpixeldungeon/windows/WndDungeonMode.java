@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.windows;
 
+import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.GamesInProgress;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
@@ -41,6 +42,9 @@ import com.watabou.noosa.Group;
 import com.watabou.noosa.Image;
 import com.watabou.noosa.PointerArea;
 import com.watabou.noosa.ui.Component;
+import com.watabou.utils.DeviceCompat;
+
+import java.util.Arrays;
 
 public class WndDungeonMode extends Window {
     private static final int WIDTH_P = 120;
@@ -61,7 +65,9 @@ public class WndDungeonMode extends Window {
     private Component descContainer;
 
     public WndDungeonMode( ){
-        this(Dungeon.GameMode.values());
+        this(Arrays.stream(Dungeon.GameMode.values()).filter(
+                mode -> mode.unlock() == null || Badges.isUnlocked(mode.unlock()) || DeviceCompat.isDebug())
+                .toArray(Dungeon.GameMode[]::new));
     }
 
     public WndDungeonMode(Dungeon.GameMode... possibleModes){
@@ -194,6 +200,9 @@ public class WndDungeonMode extends Window {
             hotArea.blockLevel = PointerArea.NEVER_BLOCK;
 
             mode = m;
+
+            if (m.unlock() != null)
+                hardlight(0x001f6e);
         }
 
         @Override

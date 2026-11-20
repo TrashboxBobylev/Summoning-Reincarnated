@@ -116,6 +116,10 @@ public class WndGame extends Window {
 			};
 			mode.icon(ic);
 			mode.multiline = true;
+
+			if (Dungeon.mode.unlock() != null)
+				mode.hardlight(0x001f6e);
+
 			addButton(mode);
 			mode.setSize(WIDTH, mode.reqHeight());
 			pos += mode.reqHeight() - BTN_HEIGHT;
