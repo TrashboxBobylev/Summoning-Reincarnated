@@ -281,7 +281,18 @@ public class Dungeon {
 
 	public enum GameMode {
 		NORMAL("normal", Icons.STAIRS),
-		SMALL("small", Icons.SHRINKING, 1.1f),
+		SMALL("small", Icons.SHRINKING, 1.1f){
+			@Override
+			public GameMode child() {
+				return BLITZ;
+			}
+		},
+		BLITZ("blitz", Icons.BLITZ, 2.5f){
+			@Override
+			public Badges.Badge unlock() {
+				return Badges.Badge.BLITZ_UNLOCKED;
+			}
+		},
 		BIGGER("bigger", Icons.ENLARGEMENT, 1.2f),
 		EXPLORE( "explore", Icons.EXPLORE, 0f){
             @Override
@@ -631,6 +642,8 @@ public class Dungeon {
 	}
 	
 	public static boolean shopOnLevel() {
+		if (Dungeon.mode == GameMode.BLITZ)
+			return depth > 1 && (depth-1) % 2 == 0;
 		if (Dungeon.mode == GameMode.BIGGER)
 			return depth > 1 && depth % 5 == 0 && (depth != 30 || Dungeon.branch == AbyssLevel.BRANCH);
 		return depth > 1 && (depth - 1) % Dungeon.chapterSize() == 0 && (Dungeon.chapterNumber() != 4 || Dungeon.branch == AbyssLevel.BRANCH);
@@ -653,7 +666,11 @@ public class Dungeon {
 		if (Dungeon.hero != null && Dungeon.hero.buff(AscensionChallenge.class) != null){
 			return (Dungeon.chapterSize() * 5 + 1);
 		} else {
-			return depth;
+			int depth1 = depth;
+			if (Dungeon.mode == GameMode.BLITZ){
+                depth1 = Math.round(depth1 * 2.5f);
+			}
+			return depth1;
 		}
 	}
 
@@ -663,6 +680,8 @@ public class Dungeon {
 			size -= 1;
 		else if (mode == GameMode.BIGGER || mode == GameMode.GAUNTLET)
 			size += 1;
+		if (mode == GameMode.BLITZ)
+			size = 2;
 		return size;
 	}
 
@@ -751,6 +770,9 @@ public class Dungeon {
 			return Dungeon.depth == 2 + Dungeon.chapterSize()*(LimitedDrops.STRENGTH_POTIONS.count/2) ||
 					Dungeon.depth == 4 + Dungeon.chapterSize()*(LimitedDrops.STRENGTH_POTIONS.count/2);
 		}
+		if (Dungeon.mode == GameMode.BLITZ){
+			return true;
+		}
 		//2 POS each floor set
 		int posLeftThisSet = 2 - (LimitedDrops.STRENGTH_POTIONS.count - (depth / 5) * 2);
 		if (posLeftThisSet <= 0) return false;
@@ -767,6 +789,9 @@ public class Dungeon {
 	}
 	
 	public static boolean souNeeded() {
+		if (Dungeon.mode == GameMode.BLITZ){
+			return true;
+		}
 		int souLeftThisSet;
 		int souForSet = Dungeon.mode == GameMode.BIGGER ? 4 : 3;
 		//3 SOU each floor set
@@ -779,6 +804,9 @@ public class Dungeon {
 	}
 	
 	public static boolean asNeeded() {
+		if (Dungeon.mode == GameMode.BLITZ){
+			return true;
+		}
 		//1 AS each floor set
 		int asLeftThisSet = 1 - (LimitedDrops.ARCANE_STYLI.count - (depth / Dungeon.chapterSize()));
 		if (asLeftThisSet <= 0) return false;
@@ -812,6 +840,9 @@ public class Dungeon {
 	}
 
 	public static boolean labRoomNeeded(){
+		if (Dungeon.mode == GameMode.BLITZ){
+			return true;
+		}
 		//one laboratory each floor set, in floor 3 or 4, 1/2 chance each floor
 		//no variation on fast adventure
 		int region = 1+depth/Dungeon.chapterSize();
@@ -824,6 +855,9 @@ public class Dungeon {
 	}
 
 	public static boolean atuRoomNeeded(){
+		if (Dungeon.mode == GameMode.BLITZ){
+			return true;
+		}
 		//one attunement each floor set, in floor 2 or 3, 1/2 chance each floor
 		//no variation on fast adventure
 		int region = 1+depth/Dungeon.chapterSize();
@@ -836,6 +870,9 @@ public class Dungeon {
 	}
 
     public static boolean mystMerchNeeded() {
+		if (Dungeon.mode == GameMode.BLITZ){
+			return true;
+		}
         //1 MM each floor set
         int asLeftThisSet = 1 - (LimitedDrops.MYSTMERCH_ROOM.count - (depth / Dungeon.chapterSize()));
         if (asLeftThisSet <= 0) return false;

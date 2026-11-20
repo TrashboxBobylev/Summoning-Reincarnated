@@ -152,6 +152,8 @@ public abstract class RegularLevel extends Level {
 		} else if (Dungeon.mode == Dungeon.GameMode.BIGGER){
 			standards = (int) Math.ceil(standards * 1.5f);
 			standards += 1;
+		} else if (Dungeon.mode == Dungeon.GameMode.BLITZ){
+			standards *= 2;
 		}
 		for (int i = 0; i < standards; i++) {
 			StandardRoom s;
@@ -171,7 +173,7 @@ public abstract class RegularLevel extends Level {
             specials++;
         }
         if (Dungeon.mode == Dungeon.GameMode.CHAOS) specials = Random.Int(specials, specials*2);
-        if (Dungeon.mode == Dungeon.GameMode.BIGGER){
+        if (Dungeon.mode == Dungeon.GameMode.BIGGER || Dungeon.mode == Dungeon.GameMode.BLITZ){
             specials *= 2;
         }
         SpecialRoom.initForFloor();
@@ -185,7 +187,7 @@ public abstract class RegularLevel extends Level {
         int secrets = SecretRoom.secretsForFloor(Dungeon.depth);
         //one additional secret for secret levels
         if (feeling == Feeling.SECRETS) secrets++;
-        if (Dungeon.mode == Dungeon.GameMode.BIGGER) secrets++;
+        if (Dungeon.mode == Dungeon.GameMode.BIGGER || Dungeon.mode == Dungeon.GameMode.BLITZ) secrets++;
         if (Dungeon.mode == Dungeon.GameMode.CHAOS) secrets = Random.Int(1, secrets);
         for (int i = 0; i < secrets; i++) {
             initRooms.add(SecretRoom.createRoom());
@@ -228,6 +230,9 @@ public abstract class RegularLevel extends Level {
 		if (Dungeon.mode == Dungeon.GameMode.BIGGER){
             traps = (int) (traps * 1.5f);
 		}
+		if (Dungeon.mode == Dungeon.GameMode.BLITZ){
+			traps *= 2;
+		}
 		if (Dungeon.mode == Dungeon.GameMode.CHAOS) traps = Random.Int(1, traps);
 		return traps;
 	}
@@ -258,6 +263,9 @@ public abstract class RegularLevel extends Level {
 		if (Dungeon.mode == Dungeon.GameMode.BIGGER) mobs *= 1.5f;
 		if (Dungeon.mode == Dungeon.GameMode.SMALL) mobs /= 2;
 		if (Dungeon.mode == Dungeon.GameMode.CHAOS) mobs = Random.Int(1, mobs);
+		if (Dungeon.mode == Dungeon.GameMode.BLITZ) {
+			mobs *= 2;
+		}
 		return mobs;
 	}
 	
@@ -265,6 +273,8 @@ public abstract class RegularLevel extends Level {
 	protected void createMobs() {
 		//on floor 1, 8 pre-set mobs are created so the player can get level 2.
 		int mobsToSpawn = Dungeon.depth == 1 ? 8 : mobLimit();
+		if (Dungeon.mode == Dungeon.GameMode.BLITZ && Dungeon.depth == 1)
+			mobsToSpawn *= 2;
 
 		ArrayList<Room> stdRooms = new ArrayList<>();
 		for (Room room : rooms) {
@@ -438,6 +448,10 @@ public abstract class RegularLevel extends Level {
 
 		if (Dungeon.mode == Dungeon.GameMode.CHAOS) nItems = Random.Int(1, nItems);
 
+		if (Dungeon.mode == Dungeon.GameMode.BLITZ){
+			nItems *= 2;
+		}
+
 		for (int i=0; i < nItems; i++) {
 
 			Item toDrop = Generator.random();
@@ -514,6 +528,10 @@ public abstract class RegularLevel extends Level {
 
 		if (Random.Int(10) < 2) itemsToSpawn.add(new Ropes().quantity(Random.Int(1, 3)));
 		if (Dungeon.depth % (Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 4 : 2) == 0) itemsToSpawn.add(new TypeManager());
+		if (Dungeon.mode == Dungeon.GameMode.BLITZ){
+			itemsToSpawn.add(new TypeManager());
+			itemsToSpawn.add(new TypeManager());
+		}
 
 		for (Item item : itemsToSpawn) {
 			int cell = randomDropCell();
@@ -584,6 +602,8 @@ public abstract class RegularLevel extends Level {
 			if (rose != null && rose.isIdentified() && !rose.cursed && Ghost.Quest.completed()){
 				//aim to drop 1 petal every 2 floors
 				int petalsNeeded = (int) Math.ceil((float)((Dungeon.depth / 2) - rose.droppedPetals) / 3);
+				if (Dungeon.mode == Dungeon.GameMode.BLITZ)
+					petalsNeeded *= 2;
 
 				for (int i=1; i <= petalsNeeded; i++) {
 					//the player may miss a single petal and still max their rose.

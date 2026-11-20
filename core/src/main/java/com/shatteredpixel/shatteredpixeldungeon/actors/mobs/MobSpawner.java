@@ -80,7 +80,7 @@ public class MobSpawner extends Actor {
 					SpectreRat.class, DarkestElf.class, GhostChicken.class, Phantom.class, BlinkingMan.class, Trappet.class
 			));
 		}
-		if (Dungeon.mode == Dungeon.GameMode.CHAOS){
+		if (Dungeon.mode == Dungeon.GameMode.CHAOS || Dungeon.mode == Dungeon.GameMode.BLITZ){
 			if (Dungeon.depth > 0 && Dungeon.depth < Dungeon.chapterSize()) {
 				return new ArrayList<>(Arrays.asList(Rat.class, Snake.class, Gnoll.class, Swarm.class, Crab.class, Slime.class));
 			}

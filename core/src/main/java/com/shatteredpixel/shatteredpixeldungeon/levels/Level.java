@@ -239,21 +239,28 @@ public abstract class Level implements Bundlable {
 		if (!Dungeon.bossLevel() && Dungeon.branch == 0 && !(this instanceof AbyssChallengeLevel) && !(this instanceof ArenaLevel)) {
 
 			addItemToSpawn(Generator.random(Generator.Category.FOOD));
+			if (Dungeon.mode == Dungeon.GameMode.BLITZ){
+				addItemToSpawn(Generator.random(Generator.Category.FOOD));
+			}
 			if (Dungeon.mode == Dungeon.GameMode.BIGGER && Random.Int(2) == 0) addItemToSpawn(Generator.random(Generator.Category.FOOD));
 
 			if (Dungeon.posNeeded()) {
-				Dungeon.LimitedDrops.STRENGTH_POTIONS.count++;
-				if (Dungeon.branch != AbyssLevel.BRANCH)
-					addItemToSpawn( new PotionOfStrength() );
+				for (int i = 0; i < (Dungeon.mode == Dungeon.GameMode.BLITZ ? 2 : 1); i++) {
+					Dungeon.LimitedDrops.STRENGTH_POTIONS.count++;
+					if (Dungeon.branch != AbyssLevel.BRANCH)
+						addItemToSpawn(new PotionOfStrength());
+				}
 			}
 			if (Dungeon.souNeeded()) {
-				Dungeon.LimitedDrops.UPGRADE_SCROLLS.count++;
-				//every 2nd scroll of upgrade is removed with forbidden runes challenge on
-				//TODO while this does significantly reduce this challenge's levelgen impact, it doesn't quite remove it
-				//for 0 levelgen impact, we need to do something like give the player all SOU, but nerf them
-				//or give a random scroll (from a separate RNG) instead of every 2nd SOU
-				if (Dungeon.branch != AbyssLevel.BRANCH && (Dungeon.mode != Dungeon.GameMode.NINE_CHAL || Dungeon.LimitedDrops.UPGRADE_SCROLLS.count%2 != 0)){
-					addItemToSpawn(new ScrollOfUpgrade());
+				for (int i = 0; i < (Dungeon.mode == Dungeon.GameMode.BLITZ ? 2 : 1); i++) {
+					Dungeon.LimitedDrops.UPGRADE_SCROLLS.count++;
+					//every 2nd scroll of upgrade is removed with forbidden runes challenge on
+					//TODO while this does significantly reduce this challenge's levelgen impact, it doesn't quite remove it
+					//for 0 levelgen impact, we need to do something like give the player all SOU, but nerf them
+					//or give a random scroll (from a separate RNG) instead of every 2nd SOU
+					if (Dungeon.branch != AbyssLevel.BRANCH && (Dungeon.mode != Dungeon.GameMode.NINE_CHAL || Dungeon.LimitedDrops.UPGRADE_SCROLLS.count % 2 != 0)) {
+						addItemToSpawn(new ScrollOfUpgrade());
+					}
 				}
 			}
 			if (Dungeon.asNeeded()) {

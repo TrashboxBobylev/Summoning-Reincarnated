@@ -309,7 +309,8 @@ public class Imp extends NPC {
 		}
 
 		public static ArrayList<Room> spawn( ArrayList<Room> rooms ) {
-			if (!spawned && Dungeon.depth > Dungeon.chapterSize()*3+1 && Random.Int( Dungeon.chapterSize()*4 - Dungeon.depth ) == 0) {
+			if (!spawned && (Dungeon.depth > Dungeon.chapterSize()*3+1 && Random.Int( Dungeon.chapterSize()*4 - Dungeon.depth ) == 0) ||
+					(Dungeon.mode == Dungeon.GameMode.BLITZ && Dungeon.chapterNumber() == 3)) {
 
 				rooms.add(new AmbitiousImpRoom());
 				spawned = true;

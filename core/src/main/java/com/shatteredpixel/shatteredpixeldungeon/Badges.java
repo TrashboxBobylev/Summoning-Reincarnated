@@ -222,7 +222,9 @@ public class Badges {
 		RESEARCHER_5                ( 123, BadgeType.JOURNAL ),
 		GAMES_PLAYED_5              ( 124, BadgeType.GLOBAL ),
 		HIGH_SCORE_5                ( 125 ),
-		CHAMPION_3                  ( 127 );
+		CHAMPION_3                  ( 127 ),
+
+		BLITZ_UNLOCKED;
 
 		public boolean meta;
 

@@ -190,6 +190,8 @@ public abstract class Mob extends Char {
 			float percent = HP / (float) HT;
 			HT = Math.round(HT * AscensionChallenge.statModifier(this));
 			HP = Math.round(HT * percent);
+			if (Dungeon.mode == Dungeon.GameMode.BLITZ)
+				EXP *= 1.5f;
 			firstAdded = false;
 		}
 	}

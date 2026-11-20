@@ -149,6 +149,7 @@ public enum Icons {
     RANDOM_HERO,
 	RANDOM_CONDUCT,
 	DIFFICULTY,
+	BLITZ,
 
 	//icons that appear in the about screen, variable spacing
 	LIBGDX,
@@ -491,6 +492,9 @@ public enum Icons {
 				break;
 			case DIFFICULTY:
 				icon.frame( icon.texture.uvRectBySize( 64, 192, 16, 16 ) );
+				break;
+			case BLITZ:
+				icon.frame( icon.texture.uvRectBySize( 128, 192, 16, 16 ) );
 				break;
 
 			case LIBGDX:
