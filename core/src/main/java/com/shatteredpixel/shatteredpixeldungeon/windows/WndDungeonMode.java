@@ -206,6 +206,21 @@ public class WndDungeonMode extends Window {
         }
 
         @Override
+        protected void onPointerUp() {
+            super.onPointerUp();
+            if (mode.unlock() != null)
+                hardlight(0x001f6e);
+        }
+
+        @Override
+        protected void onPointerDown() {
+            super.onPointerDown();
+            if (mode.unlock() != null){
+                hardlight(0x1727b3);
+            }
+        }
+
+        @Override
         public void onClick(){
             chosenGameMode = mode;
             WndDungeonMode.this.layout();
