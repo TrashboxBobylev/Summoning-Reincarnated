@@ -30,8 +30,10 @@ import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Fire;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.FrostFire;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurn;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Talent;
@@ -454,9 +456,15 @@ public class Potion extends Item {
 			fire.clear(cell);
 		}
 
+		FrostFire ffire = (FrostFire) Dungeon.level.blobs.get( FrostFire.class );
+		if (ffire != null) {
+			ffire.clear(cell);
+		}
+
 		Char ch = Actor.findChar(cell);
 		if (ch != null && ch.alignment == Char.Alignment.ALLY) {
 			Buff.detach(ch, Burning.class);
+			Buff.detach(ch, FrostBurn.class);
 			Buff.detach(ch, Ooze.class);
 		}
 
