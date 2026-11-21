@@ -52,6 +52,9 @@ public class Conducts {
                 return true;
             }
         },
+        NINE_CHAL(7f, 34){
+
+        },
         EXTRA_MODE(1.001f, 33){
 
         },

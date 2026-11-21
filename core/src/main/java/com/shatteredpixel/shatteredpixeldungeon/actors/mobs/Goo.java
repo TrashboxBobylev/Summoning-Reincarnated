@@ -58,7 +58,7 @@ import com.watabou.utils.Random;
 public class Goo extends Mob {
 
 	{
-		HP = HT = Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 120 : 100;
+		HP = HT = Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 120 : 100;
 		EXP = 10;
 		defenseSkill = 8;
 		spriteClass = GooSprite.class;
@@ -119,14 +119,14 @@ public class Goo extends Mob {
 
 			LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 			if (lock != null){
-				if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL)   lock.removeTime(healInc);
+				if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL))   lock.removeTime(healInc);
 				else                                                    lock.removeTime(healInc*1.5f);
 			}
 
 			if (Dungeon.level.heroFOV[pos] ){
 				sprite.showStatusWithIcon( CharSprite.POSITIVE, Integer.toString(healInc), FloatingText.HEALING );
 			}
-			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL && healInc < 3) {
+			if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) && healInc < 3) {
 				healInc++;
 			}
 			if (HP*2 > HT) {
@@ -214,7 +214,7 @@ public class Goo extends Mob {
 
 		} else {
 
-			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL ||
+			if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ||
 					(Dungeon.isChallenged(Conducts.Conduct.CANDI_18) && Dungeon.hero.buff(AscensionChallenge.class) != null)){
 				pumpedUp += 2;
 				//don't want to overly punish players with slow move or attack speed
@@ -282,7 +282,7 @@ public class Goo extends Mob {
 		}
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
-			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL ||
+			if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ||
 				(Dungeon.isChallenged(Conducts.Conduct.CANDI_18) && Dungeon.hero.buff(AscensionChallenge.class) != null))   lock.addTime(dmg);
 			else                                                    lock.addTime(dmg*1.5f);
 		}

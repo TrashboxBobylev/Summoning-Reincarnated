@@ -247,7 +247,7 @@ public class WandOfLivingEarth extends DamageWand {
 
 	@Override
 	public String upgradeStat3(int level) {
-		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+		if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
 			return level + "-" + (2+level);
 		} else {
 			return level + "-" + (3+(3*level));
@@ -611,7 +611,7 @@ public class WandOfLivingEarth extends DamageWand {
         @Override
 		public int drRoll() {
 			int dr = super.drRoll();
-			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+			if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
 				dr += Random.NormalIntRange((int) wandLevel, (int) (2 + wandLevel));
 			} else {
 				dr += Random.NormalIntRange((int) wandLevel, (int) (3 + 3 * wandLevel));
@@ -628,7 +628,7 @@ public class WandOfLivingEarth extends DamageWand {
 
 			if (Actor.chars().contains(this)) {
                 int minDr, maxDr;
-                if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+                if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
                     minDr = (int)wandLevel; maxDr = (int)(2 + wandLevel);
                 } else {
                     minDr = (int) wandLevel; maxDr = (int) (3 + 3 * wandLevel);

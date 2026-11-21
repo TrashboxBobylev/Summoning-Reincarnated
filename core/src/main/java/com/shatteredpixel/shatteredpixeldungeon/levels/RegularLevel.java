@@ -527,7 +527,7 @@ public abstract class RegularLevel extends Level {
 		}
 
 		if (Random.Int(10) < 2) itemsToSpawn.add(new Ropes().quantity(Random.Int(1, 3)));
-		if (Dungeon.depth % (Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 4 : 2) == 0) itemsToSpawn.add(new TypeManager());
+		if (Dungeon.depth % (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 4 : 2) == 0) itemsToSpawn.add(new TypeManager());
 		if (Dungeon.mode == Dungeon.GameMode.BLITZ){
 			itemsToSpawn.add(new TypeManager());
 			itemsToSpawn.add(new TypeManager());
@@ -560,7 +560,7 @@ public abstract class RegularLevel extends Level {
 		//we can use a random long for these as they will be the same longs every time
 
 		Random.pushGenerator( Random.Long() );
-			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+			if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
                 Heap.Type type = Heap.Type.HEAP;
                 if (Dungeon.isChallenged(Conducts.Conduct.CAPITALISM)){
                     type = Heap.Type.FOR_SALE;

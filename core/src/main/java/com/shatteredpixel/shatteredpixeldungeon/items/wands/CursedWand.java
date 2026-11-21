@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.wands;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.ShatteredPixelDungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -456,7 +457,7 @@ public class CursedWand implements DamageSource {
 			if (Dungeon.level.map[pos] != Terrain.ALCHEMY
 					&& !Dungeon.level.pit[pos]
 					&& Dungeon.level.traps.get(pos) == null
-					&& Dungeon.mode != Dungeon.GameMode.NINE_CHAL) {
+					&& !Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)) {
 				return true;
 			} else {
 				return false;

@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.items.artifacts;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.SPDSettings;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
@@ -111,7 +112,7 @@ public class HornOfPlenty extends Artifact {
 			else {
 				//consume as much food as it takes to be full, to a minimum of 1
 				int satietyPerCharge = (int) (Hunger.STARVING/5f);
-				if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+				if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
 					satietyPerCharge /= 3;
 				}
 				if (type() == 3){
@@ -160,7 +161,7 @@ public class HornOfPlenty extends Artifact {
 
 	public void doEatEffect(Hero hero, int chargesToUse){
 		int satietyPerCharge = (int) (Hunger.STARVING/5f);
-		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+		if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
 			satietyPerCharge /= 3;
 		}
 		if (type() == 3){

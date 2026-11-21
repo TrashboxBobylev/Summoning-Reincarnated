@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Bones;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Bat;
@@ -209,7 +210,7 @@ public class MiningLevel extends CavesLevel {
 			drop( Generator.randomUsingDefaults(Generator.Category.FOOD), cell );
 		}
 
-		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+		if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
 			cell = randomDropCell();
 			if (map[cell] == Terrain.HIGH_GRASS || map[cell] == Terrain.FURROWED_GRASS) {
 				map[cell] = Terrain.GRASS;

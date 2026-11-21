@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -85,7 +86,7 @@ public class DM300 extends Mob {
 	{
 		spriteClass = DM300Sprite.class;
 
-		HP = HT = Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 400 : 300;
+		HP = HT = Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 400 : 300;
 		EXP = 30;
 		defenseSkill = 15;
 
@@ -114,7 +115,7 @@ public class DM300 extends Mob {
 	public boolean chargeAnnounced = false;
 
 	private final int MIN_COOLDOWN = 5;
-	private final int MAX_COOLDOWN = Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 7 : 9;
+	private final int MAX_COOLDOWN = Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 7 : 9;
 
 	private int turnsSinceLastAbility = -1;
 	private int abilityCooldown = Random.NormalIntRange(MIN_COOLDOWN, MAX_COOLDOWN);
@@ -379,7 +380,7 @@ public class DM300 extends Mob {
 
 		Ballistica trajectory = new Ballistica(pos, target.pos, Ballistica.STOP_TARGET);
 
-		int gasMulti = Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 2 : 1;
+		int gasMulti = Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 2 : 1;
 
 		//we delay the gas generation to just before the target acts, to prevent cases where partial turns can result in instant gas damage
 		Actor.addDelayed(new Actor() {
@@ -492,13 +493,13 @@ public class DM300 extends Mob {
 		if (dmgTaken > 0) {
 			LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 			if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
-				if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL)   lock.addTime(dmgTaken/2f);
+				if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL))   lock.addTime(dmgTaken/2f);
 				else                                                    lock.addTime(dmgTaken);
 			}
 		}
 
 		int threshold;
-		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+		if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
 			threshold = HT / 4 * (3 - pylonsActivated);
 		} else {
 			threshold = HT / 3 * (2 - pylonsActivated);
@@ -512,7 +513,7 @@ public class DM300 extends Mob {
 	}
 
 	public int totalPylonsToActivate(){
-		return Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 3 : 2;
+		return Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 3 : 2;
 	}
 
 	@Override
@@ -530,7 +531,7 @@ public class DM300 extends Mob {
 			((CavesBossLevel)Dungeon.level).activatePylon();
 		pylonsActivated++;
 
-		spend(Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 2f : 3f);
+		spend(Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 2f : 3f);
 		yell(Messages.get(this, "charging"));
 		sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "invulnerable"));
 		((DM300Sprite)sprite).updateChargeState(true);
@@ -645,7 +646,7 @@ public class DM300 extends Mob {
 				}
 				Dungeon.level.cleanWalls();
 				Dungeon.observe();
-				spend(Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 2f : 3f);
+				spend(Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 2f : 3f);
 
 				bestpos = pos;
 				for (int i : PathFinder.NEIGHBOURS8){
@@ -700,7 +701,7 @@ public class DM300 extends Mob {
 					ch.damage(Random.NormalIntRange(6, 12), this);
 //				}
 				if (ch.isAlive()) {
-					Buff.prolong(ch, Paralysis.class, Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 5 : 3);
+					Buff.prolong(ch, Paralysis.class, Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 5 : 3);
 				} else if (ch == Dungeon.hero){
 					Dungeon.fail( target );
 					GLog.n( Messages.get( GnollGeomancer.class, "rockfall_kill") );

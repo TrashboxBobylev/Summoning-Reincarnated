@@ -421,7 +421,7 @@ public class ElementalBlast extends ArmorAbility {
 
 						//*** Wand of Prismatic Light ***
 						} else if (finalWandCls == WandOfPrismaticLight.class){
-							if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+							if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
 								Buff.prolong(hero, Light.class, effectMulti * 10f);
 							} else {
 								Buff.prolong(hero, Light.class, effectMulti * 50f);

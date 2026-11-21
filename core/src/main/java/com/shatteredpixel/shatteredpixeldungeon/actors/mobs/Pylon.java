@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -54,7 +55,7 @@ public class Pylon extends Mob {
 	{
 		spriteClass = PylonSprite.class;
 
-		HP = HT = Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 80 : 50;
+		HP = HT = Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 80 : 50;
 
 		maxLvl = -2;
 
@@ -99,7 +100,7 @@ public class Pylon extends Mob {
 
 		shockCells.add(pos + PathFinder.CIRCLE8[targetNeighbor]);
 
-		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+		if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
 			shockCells.add(pos + PathFinder.CIRCLE8[(targetNeighbor+3)%8]);
 			shockCells.add(pos + PathFinder.CIRCLE8[(targetNeighbor+5)%8]);
 		} else {
@@ -207,7 +208,7 @@ public class Pylon extends Mob {
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
-			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL)   lock.addTime(dmg/2f);
+			if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL))   lock.addTime(dmg/2f);
 			else                                                    lock.addTime(dmg);
 		}
 		super.damage(dmg, src);

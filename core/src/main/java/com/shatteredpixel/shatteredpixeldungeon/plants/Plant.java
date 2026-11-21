@@ -25,6 +25,7 @@
 package com.shatteredpixel.shatteredpixeldungeon.plants;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -167,7 +168,7 @@ public abstract class Plant implements Bundlable {
 			if (Dungeon.level.map[cell] == Terrain.ALCHEMY
 					|| Dungeon.level.pit[cell]
 					|| Dungeon.level.traps.get(cell) != null
-					|| Dungeon.mode == Dungeon.GameMode.NINE_CHAL) {
+					|| Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)) {
 				super.onThrow( cell );
 			} else {
 				Catalog.countUse(getClass());

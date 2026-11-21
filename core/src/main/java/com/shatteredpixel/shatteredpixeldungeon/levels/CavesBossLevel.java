@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.levels;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Bones;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -130,7 +131,7 @@ public class CavesBossLevel extends Level {
 			if (map[i] == Terrain.EMPTY) {
 				if (patch[i - 14*width()]){
 					map[i] = Terrain.WATER;
-				} else if (Random.Int(Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 4 : 8) == 0){
+				} else if (Random.Int(Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 4 : 8) == 0){
 					map[i] = Terrain.INACTIVE_TRAP;
 				}
 			}
@@ -421,7 +422,7 @@ public class CavesBossLevel extends Level {
 				pylonsRemaining++;
 			}
 		}
-		int finalPylonsRemaining = Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 1 : 2;
+		int finalPylonsRemaining = Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 1 : 2;
 		if (pylonsRemaining > finalPylonsRemaining) {
 			blobs.get(PylonEnergy.class).fullyClear();
 		}

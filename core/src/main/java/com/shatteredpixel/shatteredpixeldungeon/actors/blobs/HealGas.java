@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.blobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -51,7 +52,7 @@ public class HealGas extends Blob implements DamageSource {
 			for (int j = area.top; j < area.bottom; j++){
 				cell = i + j*Dungeon.level.width();
 				if (cur[cell] > 0 && (ch = Actor.findChar( cell )) != null) {
-					if (!ch.isImmune(Healing.class) || (ch instanceof Hero && Dungeon.mode != Dungeon.GameMode.NINE_CHAL)) {
+					if (!ch.isImmune(Healing.class) || (ch instanceof Hero && !Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL))) {
 						int heal = (Dungeon.chapterNumber()+1)*2;
 						Regeneration.regenerate(ch, heal);
 					} else {

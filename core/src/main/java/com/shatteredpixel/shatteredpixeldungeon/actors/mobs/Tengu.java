@@ -26,6 +26,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
@@ -92,7 +93,7 @@ public class Tengu extends Mob {
 	{
 		spriteClass = TenguSprite.class;
 		
-		HP = HT = Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 250 : 200;
+		HP = HT = Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 250 : 200;
 		EXP = 20;
 		defenseSkill = 15;
 		
@@ -159,7 +160,7 @@ public class Tengu extends Mob {
 
 		LockedFloor lock = Dungeon.hero.buff(LockedFloor.class);
 		if (lock != null && !isImmune(src.getClass()) && !isInvulnerable(src.getClass())){
-			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL)   lock.addTime(2*dmg/3f);
+			if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL))   lock.addTime(2*dmg/3f);
 			else                                                    lock.addTime(dmg);
 		}
 
@@ -468,7 +469,7 @@ public class Tengu extends Mob {
 			
 			abilityCooldown--;
 			
-			if (targetAbilityUses() - abilitiesUsed >= 4 && Dungeon.mode != Dungeon.GameMode.NINE_CHAL){
+			if (targetAbilityUses() - abilitiesUsed >= 4 && !Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
 				//Very behind in ability uses, use one right away!
 				//but not on bosses challenge, we already cast quickly then
 				abilityCooldown = 0;
@@ -510,7 +511,7 @@ public class Tengu extends Mob {
 				abilityToUse = BOMB_ABILITY;
 			} else if (abilitiesUsed == 1){
 				abilityToUse = SHOCKER_ABILITY;
-			} else if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL) {
+			} else if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)) {
 				abilityToUse = Random.Int(2)*2; //0 or 2, can't roll fire ability with challenge
 			} else {
 				abilityToUse = Random.Int(3);
@@ -542,7 +543,7 @@ public class Tengu extends Mob {
 						break;
 				}
 				//always use the fire ability with the bosses challenge
-				if (abilityUsed && abilityToUse != FIRE_ABILITY && Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+				if (abilityUsed && abilityToUse != FIRE_ABILITY && Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
 					throwFire(Tengu.this, Dungeon.hero);
 				}
 			}
@@ -550,7 +551,7 @@ public class Tengu extends Mob {
 		}
 		
 		//spend 1 less turn if seriously behind on ability uses
-		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+		if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
 			if (targetAbilityUses() - abilitiesUsed >= 4) {
 				//spend no time
 			} else {

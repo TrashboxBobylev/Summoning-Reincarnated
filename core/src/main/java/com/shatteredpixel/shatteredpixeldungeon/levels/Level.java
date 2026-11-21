@@ -169,7 +169,7 @@ public abstract class Level implements Bundlable {
 	public boolean[] mapped;
 	public boolean[] discoverable;
 
-	public int viewDistance = Dungeon.mode == Dungeon.GameMode.NINE_CHAL ? 2 :
+	public int viewDistance = Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 2 :
             (Dungeon.isChallenged(Conducts.Conduct.SHADOWS) ? 5 : 8);
 	
 	public boolean[] heroFOV;
@@ -258,7 +258,7 @@ public abstract class Level implements Bundlable {
 					//TODO while this does significantly reduce this challenge's levelgen impact, it doesn't quite remove it
 					//for 0 levelgen impact, we need to do something like give the player all SOU, but nerf them
 					//or give a random scroll (from a separate RNG) instead of every 2nd SOU
-					if (Dungeon.branch != AbyssLevel.BRANCH && (Dungeon.mode != Dungeon.GameMode.NINE_CHAL || Dungeon.LimitedDrops.UPGRADE_SCROLLS.count % 2 != 0)) {
+					if (Dungeon.branch != AbyssLevel.BRANCH && (!Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) || Dungeon.LimitedDrops.UPGRADE_SCROLLS.count % 2 != 0)) {
 						addItemToSpawn(new ScrollOfUpgrade());
 					}
 				}
@@ -1122,7 +1122,7 @@ public abstract class Level implements Bundlable {
 		}
 
 		//we have to get this far as grass placement has RNG implications in levelgen
-		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+		if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
 			return null;
 		}
 		

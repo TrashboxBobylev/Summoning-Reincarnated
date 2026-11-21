@@ -116,7 +116,7 @@ public class WandOfPrismaticLight extends DamageWand {
                     modification = 3f;
                     break;
             }
-			if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+			if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
 				Buff.prolong( user, Light.class, (2f + power())*modification);
 			} else {
 				Buff.prolong( user, Light.class, (10f+power()*5)*modification);
@@ -216,7 +216,7 @@ public class WandOfPrismaticLight extends DamageWand {
 
 	@Override
 	public String upgradeStat3(int level) {
-		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+		if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
 			return Integer.toString(2 + level);
 		} else {
 			return Integer.toString(10 + 5*level);

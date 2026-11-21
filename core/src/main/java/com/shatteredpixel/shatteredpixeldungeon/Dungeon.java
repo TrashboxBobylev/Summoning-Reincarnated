@@ -300,7 +300,6 @@ public class Dungeon {
                 return true;
             }
         },
-        NINE_CHAL("9chal", Icons.NINE_CHAL, 7f),
 		ABYSS_START("abyss_start", Icons.ABYSS_START, 2.0f){
             @Override
             public boolean noQuests() {
@@ -1043,9 +1042,14 @@ public class Dungeon {
 		conducts.restoreFromBundle(bundle);
 		Dungeon.mobsToChampion = bundle.getFloat( MOBS_TO_CHAMPION );
 
-		if (bundle.contains(MODE))
-			Dungeon.mode = GameMode.valueOf(bundle.getString(MODE));
-		else
+		if (bundle.contains(MODE)) {
+			if (bundle.getString(MODE).equals("NINE_CHAL")){
+				Dungeon.mode = GameMode.NORMAL;
+				conducts.conducts.add(Conducts.Conduct.NINE_CHAL);
+			} else {
+				Dungeon.mode = GameMode.valueOf(bundle.getString(MODE));
+			}
+		} else
 			Dungeon.mode = GameMode.NORMAL;
 		if (mode == GameMode.RANDOM_CONDUCT){
 			int[] keys = bundle.getIntArray(RNG_CONDUCTS + "keys");
@@ -1184,9 +1188,14 @@ public class Dungeon {
 		info.dailyReplay = bundle.getBoolean( DAILY_REPLAY );
 		info.branch = bundle.getInt( BRANCH );
 		info.lastPlayed = bundle.getLong( LAST_PLAYED );
-		if (bundle.contains(MODE))
-			info.gameMode = bundle.getEnum(MODE, GameMode.class);
-		else
+		if (bundle.contains(MODE)) {
+			if (bundle.getString(MODE).equals("NINE_CHAL")){
+				Dungeon.mode = GameMode.NORMAL;
+				info.conducts.conducts.add(Conducts.Conduct.NINE_CHAL);
+			} else {
+				info.gameMode = bundle.getEnum(MODE, GameMode.class);
+			}
+		} else
 			info.gameMode = GameMode.NORMAL;
 
 		Hero.preview( info, bundle.getBundle( HERO ) );

@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.buffs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
@@ -114,7 +115,7 @@ public abstract class ChampionEnemy extends Buff {
 		//we roll for a champion enemy even if we aren't spawning one to ensure that
 		//mobsToChampion does not affect levelgen RNG (number of calls to Random.Int() is constant)
 
-		if (Dungeon.mobsToChampion <= 0 && Dungeon.mode == Dungeon.GameMode.NINE_CHAL) {
+		if (Dungeon.mobsToChampion <= 0 && Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)) {
 
 			//we block certain standout enemies on floor <10 from becoming champions
 			if (m instanceof Crab  && Dungeon.scalingDepth() <= (int)Math.ceil(Dungeon.chapterSize()/2f)) return;

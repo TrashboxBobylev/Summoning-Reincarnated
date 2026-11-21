@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.items.potions.brews;
 
+import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
@@ -85,7 +86,7 @@ public class UnstableBrew extends Brew {
 	@Override
 	public void apply(Hero hero) {
 		//Don't allow this to roll healing in pharma
-		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+		if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
 			potionChances.put(PotionOfHealing.class, 0f);
 		}
 
@@ -99,7 +100,7 @@ public class UnstableBrew extends Brew {
 		p.anonymize();
 		p.apply(hero);
 
-		if (Dungeon.mode == Dungeon.GameMode.NINE_CHAL){
+		if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)){
 			potionChances.put(PotionOfHealing.class, 3f);
 		}
 	}
