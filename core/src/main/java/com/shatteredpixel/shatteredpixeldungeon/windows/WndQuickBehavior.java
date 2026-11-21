@@ -129,6 +129,11 @@ public class WndQuickBehavior extends Window {
 							Messages.get(Minion.class, "behavior_" + Messages.lowerCase(behaviorName) + "_desc")));
 					return false;
 				}
+
+				@Override
+				protected String hoverText() {
+					return null; //no tooltips here
+				}
 			};
 			slot.showExtraInfo(false);
 			slot.setRect(left, top, btnWidth, btnHeight);
