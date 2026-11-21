@@ -203,7 +203,7 @@ public class EmeradicBattery extends Artifact {
         @Override
         public boolean itemSelectable(Item item) {
             return (item instanceof Wand && ((Wand) item).curCharges > 0) ||
-                    (item instanceof Staff && ((Staff) item).minion() == null && (((Staff) item).partialCharge > 0 || ((Staff) item).curCharges == 1));
+                    (item instanceof Staff && ((Staff) item).minion() == null && ((Staff) item).curCharges > 0);
         }
 
         @Override
@@ -225,7 +225,7 @@ public class EmeradicBattery extends Artifact {
                 if (wand != null)
                     chargeGain = Math.round(wand.curCharges * 10 * wand.rechargeModifier());
                 else if (staff != null)
-                    chargeGain = Math.round(staff.getChargeTurns() / (staff.curCharges == 1 ? 5.33f : staff.partialCharge * 5.33f));
+                    chargeGain = Math.round(staff.getChargeTurns() / staff.curCharges * 5.33f);
 
                 charge = Math.min(chargeCap, charge + chargeGain);
                 hero.sprite.showStatusWithIcon(CharSprite.POSITIVE, String.valueOf(charge - previousCharge), FloatingText.EMERADIC);
@@ -233,7 +233,6 @@ public class EmeradicBattery extends Artifact {
                     wand.curCharges = 0;
                 else if (staff != null) {
                     staff.curCharges = 0;
-                    staff.partialCharge = 0;
                 }
 
                 Sample.INSTANCE.play(Assets.Sounds.BURNING);

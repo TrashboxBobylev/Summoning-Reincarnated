@@ -189,7 +189,7 @@ public class StationaryStaff extends Staff {
             return false;
         }
 
-        if ( curCharges > 0 || (minion != null && minion.isAlive() && target != minion.pos)){
+        if ( curCharges >= 1f || (minion != null && minion.isAlive() && target != minion.pos)){
             if (minion != null && minion.isAlive() && minion.buff(DecayTracker.class).amount() <= 1) {
                 GLog.warning(Messages.get(StationaryStaff.class, "cannot_move"));
                 return false;

@@ -400,7 +400,6 @@ public class ScrollOfTransmutation extends InventoryScroll {
         n.cursed = w.cursed;
         n.augment = w.augment;
         n.curCharges = w.curCharges;
-        n.partialCharge = w.partialCharge;
 
         return n;
     }

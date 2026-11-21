@@ -90,8 +90,7 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
     public boolean masteryPotionBonus = false;
     public boolean curseInfusionBonus = false;
 
-    public int curCharges = 1;
-    public float partialCharge = 0f;
+    public float curCharges = 1f;
 
     public Charger charger;
 
@@ -132,7 +131,7 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
         updateOnMinion();
         if (minion == null || !minion.isAlive()){
             if (charger != null){
-                return Messages.format( "%d%%", curCharges < 1 ? Math.round(partialCharge*100) : 100 );
+                return Messages.format( "%d%%", Math.round(curCharges *100));
             }
             return super.status();
         } else {
@@ -141,7 +140,7 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
     }
 
     public String currentMinionStatus(){
-        return ((minion.HP*100) / minion.HT) + "%";
+        return ((minion.HP*100 + Math.round(curCharges*100)) / minion.HT) + "%";
     }
 
     public Minion.BehaviorType defaultBehaviorType(){
@@ -317,7 +316,7 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
     @Override
     public ArrayList<String> actions(Hero hero) {
         ArrayList<String> actions = super.actions( hero );
-        if (curCharges > 0) {
+        if (curCharges >= 1) {
             actions.add( AC_SUMMON );
         } else if (minion != null && minion.isAlive()){
             actions.add( AC_BEHAVIOR );
@@ -349,7 +348,7 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
             try {
                 updateOnMinion();
                 if (minion == null || !minion.isAlive()) {
-                    if (curCharges > 0) summon(hero);
+                    if (curCharges >= 1) summon(hero);
                     else {
                         GLog.warning(Messages.get(Staff.class, "fizzles"));
                     }
@@ -427,7 +426,7 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
             Badges.validateItemLevelAquired( this );
         }
 
-        curCharges -= 1;
+        curCharges -= 1f;
 
         updateQuickslot();
 
@@ -585,8 +584,7 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
     @Override
     public void storeInBundle(Bundle bundle) {
         super.storeInBundle(bundle);
-        bundle.put(CUR_CHARGES, curCharges);
-        bundle.put(PARTIAL_CHARGE, partialCharge);
+        bundle.put(PARTIAL_CHARGE, curCharges);
         bundle.put(MINION_ID, minionID);
         bundle.put(TYPE, type);
         bundle.put(ENCHANTMENT, enchantment );
@@ -598,8 +596,9 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
     @Override
     public void restoreFromBundle(Bundle bundle) {
         super.restoreFromBundle(bundle);
-        curCharges = bundle.getInt(CUR_CHARGES);
-        partialCharge = bundle.getFloat(PARTIAL_CHARGE);
+        curCharges = bundle.getFloat(PARTIAL_CHARGE);
+        if (bundle.getInt(CUR_CHARGES) > 0)
+            curCharges = 1f;
         minionID = bundle.getInt(MINION_ID);
         type = bundle.getInt(TYPE);
         augment = bundle.getEnum(AUGMENT, Weapon.Augment.class);
@@ -641,16 +640,15 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
                         else
                             healing *= 2;
                     }
-                    partialCharge += healing;
-                    updateQuickslot();
+                    curCharges += healing;
 
-                    if (partialCharge > 1) {
+                    while (curCharges >= 1) {
                         minion.HP++;
-                        partialCharge--;
+                        curCharges--;
                         updateQuickslot();
                     }
                 } else {
-                    partialCharge = 0;
+                    curCharges = 0;
                 }
 
                 spend( TICK );
@@ -658,14 +656,7 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
                 return true;
             }
 
-            while (partialCharge >= 1 && curCharges < 1) {
-                partialCharge--;
-                curCharges++;
-            }
-
-            if (curCharges == 1){
-                partialCharge = 0;
-            }
+            curCharges = Math.min(curCharges, 1f);
 
             spend( TICK );
 
@@ -677,12 +668,12 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
             float mod = 1f;
 
             if (Regeneration.regenOn())
-                partialCharge += (1f / getChargeTurns()) * mod;
+                curCharges += (1f / getChargeTurns()) * mod;
             updateQuickslot();
 
             for (Recharging bonus : target.buffs(Recharging.class)){
                 if (bonus != null && bonus.remainder() > 0f) {
-                    partialCharge += CHARGE_BUFF_BONUS * bonus.remainder();
+                    curCharges += CHARGE_BUFF_BONUS * bonus.remainder();
                 }
             }
         }
@@ -692,12 +683,8 @@ public abstract class Staff extends Item implements AttunementItem, AugmentedIte
         }
 
         public void gainCharge(float charge) {
-            partialCharge += charge/5f;
-            while (partialCharge >= 1f) {
-                curCharges++;
-                partialCharge--;
-            }
-            curCharges = Math.min(curCharges, 1);
+            curCharges += charge/5f;
+            curCharges = Math.min(curCharges, 1f);
             updateQuickslot();
         }
     }

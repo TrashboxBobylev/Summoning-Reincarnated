@@ -361,7 +361,7 @@ public class Imp extends NPC {
 				}
 				staff.enchant();
 				staff.identify(false);
-				staff.curCharges = 1;
+				staff.curCharges = 1f;
 				staff.isTypeReinforced = true;
 				rewardOptions.add(staff);
 
