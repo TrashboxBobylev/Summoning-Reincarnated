@@ -36,6 +36,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.YogWall;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
@@ -505,6 +506,25 @@ public class YogDzewa extends Mob {
             for (int i = 0; i < Dungeon.level.map.length; i++){
                 if (Dungeon.level.trueDistance(pos, i) > 16 - phase*2){
                     Level.set(i, Terrain.WALL);
+					Char ch;
+					if ((ch = Actor.findChar(i)) != null){
+						for (int k = 0; k < PathFinder.NEIGHBOURS8.length; k++){
+							if (Dungeon.level.passable[i + PathFinder.NEIGHBOURS8[k]]){
+								int finalK = i + PathFinder.NEIGHBOURS8[k];
+								Actor.add(new Pushing(ch, ch.pos, finalK, new Callback() {
+									public void call() {
+										ch.pos = finalK;
+										Dungeon.level.occupyCell(ch);
+										ch.next();
+										if (ch instanceof Hero) {
+											Dungeon.observe();
+											GameScene.updateFog();
+										}
+									}
+								}));
+							}
+						}
+					}
                 }
             }
             GameScene.updateMap();
