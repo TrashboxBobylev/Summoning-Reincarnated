@@ -38,6 +38,9 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.yapdvariants.StrongerDM200;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.yapdvariants.StrongerGhoul;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.yapdvariants.StrongerGuard;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
@@ -78,6 +81,8 @@ public class YogDzewa extends Mob {
 		spriteClass = YogSprite.class;
 
 		HP = HT = 1000;
+		if (Dungeon.mode == Dungeon.GameMode.IMPOSSIBLE)
+			HP = HT = HT * 2;
 
 		EXP = 50;
 
@@ -167,6 +172,17 @@ public class YogDzewa extends Mob {
 					    regularSummons.add(YogRipper.class);
 				}
 			}
+		}
+		if (Dungeon.mode == Dungeon.GameMode.IMPOSSIBLE){
+			regularSummons.replaceAll(summon -> {
+				if (summon == YogRipper.class)
+					return YogGhoul.class;
+				if (summon == YogEye.class)
+					return YogGuard.class;
+				if (summon == YogScorpio.class)
+					return YogDM.class;
+				return summon;
+			});
 		}
 		Random.shuffle(regularSummons);
 	}
@@ -471,9 +487,9 @@ public class YogDzewa extends Mob {
 		if (phase == 0 || findFist() != null) return;
 
 		if (phase < 4) {
-			HP = Math.max(HP, HT - 300 * phase);
+			HP = Math.max(HP, HT - (HT*3/10) * phase);
 		} else if (phase == 4) {
-			HP = Math.max(HP, 100);
+			HP = Math.max(HP, HT/10);
 		}
 		int dmgTaken = preHP - HP;
 
@@ -482,7 +498,7 @@ public class YogDzewa extends Mob {
 			summonCooldown -= dmgTaken / 10f;
 		}
 
-		if (phase < 4 && HP <= HT - 300*phase){
+		if (phase < 4 && HP <= HT - (HT*3/10)*phase){
 
 			phase++;
 
@@ -799,4 +815,22 @@ public class YogDzewa extends Mob {
             properties.add(Property.BOSS_MINION);
         }
     }
+	public static class YogGhoul extends StrongerGhoul {
+		{
+			maxLvl = -2;
+			properties.add(Property.BOSS_MINION);
+		}
+	}
+	public static class YogGuard extends StrongerGuard {
+		{
+			maxLvl = -2;
+			properties.add(Property.BOSS_MINION);
+		}
+	}
+	public static class YogDM extends StrongerDM200 {
+		{
+			maxLvl = -2;
+			properties.add(Property.BOSS_MINION);
+		}
+	}
 }

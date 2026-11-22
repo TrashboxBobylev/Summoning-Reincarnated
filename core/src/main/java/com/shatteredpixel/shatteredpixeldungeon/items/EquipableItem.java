@@ -131,7 +131,14 @@ public abstract class EquipableItem extends Item {
 		return 1f;
 	}
 
-	public abstract boolean doEquip( Hero hero );
+	@Override
+	public boolean isUpgradable() {
+		if (Dungeon.mode == Dungeon.GameMode.IMPOSSIBLE)
+			return trueLevel() < 3;
+		return super.isUpgradable();
+	}
+
+	public abstract boolean doEquip(Hero hero );
 
 	public boolean doUnequip( Hero hero, boolean collect, boolean single ) {
 

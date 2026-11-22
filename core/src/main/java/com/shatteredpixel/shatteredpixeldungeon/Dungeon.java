@@ -293,7 +293,18 @@ public class Dungeon {
 				return Badges.Badge.BLITZ_UNLOCKED;
 			}
 		},
-		BIGGER("bigger", Icons.ENLARGEMENT, 1.2f),
+		BIGGER("bigger", Icons.ENLARGEMENT, 1.2f){
+			@Override
+			public GameMode child() {
+				return IMPOSSIBLE;
+			}
+		},
+		IMPOSSIBLE("impossible", Icons.YAPD, 1.8f){
+			@Override
+			public Badges.Badge unlock() {
+				return Badges.Badge.YAPD_UNLOCKED;
+			}
+		},
 		EXPLORE( "explore", Icons.EXPLORE, 0f){
             @Override
             public boolean isCheaty() {
@@ -643,7 +654,7 @@ public class Dungeon {
 	public static boolean shopOnLevel() {
 		if (Dungeon.mode == GameMode.BLITZ)
 			return depth > 1 && (depth-1) % 2 == 0;
-		if (Dungeon.mode == GameMode.BIGGER)
+		if (Dungeon.mode == GameMode.BIGGER || Dungeon.mode == GameMode.IMPOSSIBLE)
 			return depth > 1 && depth % 5 == 0 && (depth != 30 || Dungeon.branch == AbyssLevel.BRANCH);
 		return depth > 1 && (depth - 1) % Dungeon.chapterSize() == 0 && (Dungeon.chapterNumber() != 4 || Dungeon.branch == AbyssLevel.BRANCH);
 	}
@@ -677,7 +688,7 @@ public class Dungeon {
 		int size = 5;
 		if (mode == GameMode.SMALL)
 			size -= 1;
-		else if (mode == GameMode.BIGGER || mode == GameMode.GAUNTLET)
+		else if (mode == GameMode.BIGGER || mode == GameMode.IMPOSSIBLE || mode == GameMode.GAUNTLET)
 			size += 1;
 		if (mode == GameMode.BLITZ)
 			size = 2;
@@ -765,7 +776,7 @@ public class Dungeon {
 	}
 
 	public static boolean posNeeded() {
-		if (Dungeon.mode == GameMode.BIGGER){
+		if (Dungeon.mode == GameMode.BIGGER || Dungeon.mode == GameMode.IMPOSSIBLE){
 			return Dungeon.depth == 2 + Dungeon.chapterSize()*(LimitedDrops.STRENGTH_POTIONS.count/2) ||
 					Dungeon.depth == 4 + Dungeon.chapterSize()*(LimitedDrops.STRENGTH_POTIONS.count/2);
 		}
@@ -792,7 +803,7 @@ public class Dungeon {
 			return true;
 		}
 		int souLeftThisSet;
-		int souForSet = Dungeon.mode == GameMode.BIGGER ? 4 : 3;
+		int souForSet = Dungeon.mode == GameMode.BIGGER || Dungeon.mode == GameMode.IMPOSSIBLE ? 4 : 3;
 		//3 SOU each floor set
 		souLeftThisSet = souForSet - (LimitedDrops.UPGRADE_SCROLLS.count - (depth / Dungeon.chapterSize()) * souForSet);
 		if (souLeftThisSet <= 0) return false;

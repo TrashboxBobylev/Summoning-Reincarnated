@@ -87,6 +87,8 @@ public class DM300 extends Mob {
 		spriteClass = DM300Sprite.class;
 
 		HP = HT = Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 400 : 300;
+		if (Dungeon.mode == Dungeon.GameMode.IMPOSSIBLE)
+			HP = HT = (int) (HT * 1.75f);
 		EXP = 30;
 		defenseSkill = 15;
 

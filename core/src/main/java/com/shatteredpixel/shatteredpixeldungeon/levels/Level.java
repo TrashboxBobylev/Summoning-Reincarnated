@@ -242,7 +242,7 @@ public abstract class Level implements Bundlable {
 			if (Dungeon.mode == Dungeon.GameMode.BLITZ){
 				addItemToSpawn(Generator.random(Generator.Category.FOOD));
 			}
-			if (Dungeon.mode == Dungeon.GameMode.BIGGER && Random.Int(2) == 0) addItemToSpawn(Generator.random(Generator.Category.FOOD));
+			if ((Dungeon.mode == Dungeon.GameMode.BIGGER || Dungeon.mode == Dungeon.GameMode.IMPOSSIBLE) && Random.Int(2) == 0) addItemToSpawn(Generator.random(Generator.Category.FOOD));
 
 			if (Dungeon.posNeeded()) {
 				for (int i = 0; i < (Dungeon.mode == Dungeon.GameMode.BLITZ ? 2 : 1); i++) {

@@ -271,7 +271,7 @@ public class ShopRoom extends SpecialRoom {
 	}
 
 	protected static int shopLevel() {
-		if (Dungeon.mode == Dungeon.GameMode.BIGGER)
+		if (Dungeon.mode == Dungeon.GameMode.BIGGER || Dungeon.mode == Dungeon.GameMode.IMPOSSIBLE)
 			return Dungeon.scalingDepth() / 5;
 		else
 			return Dungeon.chapterNumber()-1;

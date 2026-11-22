@@ -27,6 +27,15 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.Conducts;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.yapdvariants.StrongerDM200;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.yapdvariants.StrongerDog;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.yapdvariants.StrongerGuard;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.yapdvariants.StrongerSwarm;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.yapdvariants.WeakerEvilEye;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.yapdvariants.WeakerRipper;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.yapdvariants.WeakerScorpio;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.yapdvariants.WeakerSpinner;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.yapdvariants.WeakerThief;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.RatSkull;
 import com.shatteredpixel.shatteredpixeldungeon.levels.AbyssLevel;
 import com.watabou.utils.Random;
@@ -383,6 +392,175 @@ public class MobSpawner extends Actor {
 							Scorpio.class, Scorpio.class));
 			}
 		}
+		if (Dungeon.mode == Dungeon.GameMode.IMPOSSIBLE){
+			switch(depth){
+				// Sewers
+				case 1: default:
+					//3x rat, 1x snake
+					return new ArrayList<>(Arrays.asList(
+							Rat.class, Rat.class, Rat.class,
+							Snake.class));
+				case 2:
+					//2x rat, 1x snake, 2x gnoll
+					return new ArrayList<>(Arrays.asList(Rat.class, Rat.class,
+							Snake.class,
+							TribeGnoll.class, TribeGnoll.class));
+				case 3:
+					//1x rat, 1x snake, 3x gnoll, 1x mugger, 1x crab
+					return new ArrayList<>(Arrays.asList(Rat.class,
+							Snake.class,
+							TribeGnoll.class, TribeGnoll.class, TribeGnoll.class,
+							WeakerThief.class,
+							Crab.class));
+				case 4:
+					//1x gnoll, 1x mugger, 2x crab, 2x slime
+					return new ArrayList<>(Arrays.asList(TribeGnoll.class,
+							WeakerThief.class,
+							Crab.class, Crab.class,
+							Slime.class, Slime.class));
+				case 5: case 6:
+					//1x mugger, 3x crab, 2x slime
+					return new ArrayList<>(Arrays.asList(TribeGnoll.class,
+							WeakerThief.class,
+							Crab.class, Crab.class, Crab.class,
+							Slime.class, Slime.class));
+
+				// Prison
+				case 7:
+					//3x skeleton, 1x hound, 1x mugger
+					return new ArrayList<>(Arrays.asList(Skeleton.class, Skeleton.class, Skeleton.class,
+							StrongerDog.class, WeakerThief.class));
+				case 8:
+					//3x skeleton, 1x eater, 1x DM-100, 1x spider
+					return new ArrayList<>(Arrays.asList(Skeleton.class, Skeleton.class, Skeleton.class,
+							StrongerSwarm.class,
+							DM100.class,
+							WeakerSpinner.class));
+				case 9:
+					//2x skeleton, 1x eater, 2x DM-100, 2x spider, 1x necromancer
+					return new ArrayList<>(Arrays.asList(Skeleton.class, Skeleton.class,
+							StrongerSwarm.class,
+							DM100.class, DM100.class,
+							WeakerSpinner.class, WeakerSpinner.class,
+							Necromancer.class));
+				case 10:
+					//1x skeleton, 1x eater, 2x DM-100, 2x spider, 2x necromancer
+					return new ArrayList<>(Arrays.asList(Skeleton.class,
+							StrongerSwarm.class,
+							DM100.class, DM100.class,
+							WeakerSpinner.class, WeakerSpinner.class,
+							Necromancer.class, Necromancer.class));
+				case 11: case 12:
+					//1x skeleton, 2x DM-100, 3x spider, 3x necromancer
+					return new ArrayList<>(Arrays.asList(Skeleton.class,
+							DM100.class, DM100.class,
+							WeakerSpinner.class, WeakerSpinner.class, WeakerSpinner.class,
+							Necromancer.class, Necromancer.class, Necromancer.class));
+
+				// Caves
+				case 13:
+					//3x bat, 1x brute, 1x shaman
+					return new ArrayList<>(Arrays.asList(
+							Bat.class, Bat.class, Bat.class,
+							Brute.class,
+							Shaman.random()));
+				case 14:
+					//2x bat, 2x brute, 1x shaman, 1x scorpio
+					return new ArrayList<>(Arrays.asList(
+							Bat.class, Bat.class,
+							Brute.class, Brute.class,
+							Shaman.random(),
+							WeakerScorpio.class));
+				case 15:
+					//1x bat, 2x brute, 2x shaman, 2x scorpio, 1x eye
+					return new ArrayList<>(Arrays.asList(
+							Bat.class,
+							Brute.class, Brute.class,
+							Shaman.random(), Shaman.random(),
+							WeakerScorpio.class, WeakerScorpio.class,
+							WeakerEvilEye.class));
+				case 16:
+					//1x bat, 1x brute, 2x shaman, 2x spinner, 2x eye
+					return new ArrayList<>(Arrays.asList(
+							Bat.class,
+							Brute.class,
+							Shaman.random(), Shaman.random(),
+							WeakerScorpio.class, WeakerScorpio.class,
+							WeakerEvilEye.class, WeakerEvilEye.class));
+				case 17: case 18:
+					//1x brute, 2x shaman, 3x spinner, 3x eye
+					return new ArrayList<>(Arrays.asList(
+							Brute.class,
+							Shaman.random(), Shaman.random(),
+							WeakerScorpio.class, WeakerScorpio.class, WeakerScorpio.class,
+							WeakerEvilEye.class, WeakerEvilEye.class, WeakerEvilEye.class));
+
+				// City
+				case 19:
+					//3x ripper, 1x elemental, 1x warlock
+					return new ArrayList<>(Arrays.asList(
+							WeakerRipper.class, WeakerRipper.class, WeakerRipper.class,
+							Elemental.random(),
+							Warlock.class));
+				case 20:
+					//1x ripper, 2x elemental, 1x warlock, 1x monk
+					return new ArrayList<>(Arrays.asList(
+							WeakerRipper.class,
+							Elemental.random(), Elemental.random(),
+							Warlock.class,
+							Monk.class));
+				case 21:
+					//1x ripper, 1x elemental, 2x warlock, 2x monk, 1x golem
+					return new ArrayList<>(Arrays.asList(
+							WeakerRipper.class,
+							Elemental.random(),
+							Warlock.class, Warlock.class,
+							Monk.class, Monk.class,
+							Golem.class));
+				case 22:
+					//1x elemental, 2x warlock, 2x monk, 3x golem
+					return new ArrayList<>(Arrays.asList(
+							Elemental.random(),
+							Warlock.class, Warlock.class,
+							Monk.class, Monk.class,
+							Golem.class, Golem.class, Golem.class));
+				case 23: case 24:
+					//1x warlock, 1x monk, 3x golem
+					return new ArrayList<>(Arrays.asList(
+							Warlock.class,
+							Monk.class,
+							Golem.class, Golem.class, Golem.class));
+
+				// Halls
+				case 25:
+					//2x succubus, 1x blackguard
+					return new ArrayList<>(Arrays.asList(
+							Succubus.class, Succubus.class,
+							StrongerGuard.class));
+				case 26:
+					//1x succubus, 1x blackguard
+					return new ArrayList<>(Arrays.asList(
+							Succubus.class,
+							StrongerGuard.class));
+				case 27:
+					//1x succubus, 2x blackguard, 1x dm200
+					return new ArrayList<>(Arrays.asList(
+							Succubus.class,
+							StrongerGuard.class, StrongerGuard.class,
+							StrongerDM200.class));
+				case 28:
+					//1x succubus, 2x blackguard, 3x dm200
+					return new ArrayList<>(Arrays.asList(
+							Succubus.class,
+							StrongerGuard.class, StrongerGuard.class,
+							StrongerDM200.class, StrongerDM200.class, StrongerDM200.class));
+				case 29: case 30: case 31:
+					//1x blackguard, 2x dm200
+					return new ArrayList<>(Arrays.asList(
+							StrongerGuard.class,
+							StrongerDM200.class, StrongerDM200.class));
+			}
+		}
 		switch(depth){
 
 			// Sewers
@@ -530,7 +708,8 @@ public class MobSpawner extends Actor {
 
         ArrayList<Class<? extends Mob>> rareMobs = new ArrayList<>(Arrays.asList(Thief.class, Bat.class, Ghoul.class, Succubus.class));
 		for (int i = 0; i < rareMobs.size(); i++){
-			if (depth == Dungeon.chapterSize()*(i+1)-1 && Random.Float() < (Dungeon.mode == Dungeon.GameMode.BIGGER ? 0.05f : 0.025f))
+			if (depth == Dungeon.chapterSize()*(i+1)-1 &&
+					Random.Float() < ((Dungeon.mode == Dungeon.GameMode.BIGGER || Dungeon.mode == Dungeon.GameMode.IMPOSSIBLE) ? 0.05f : 0.025f))
 				rotation.add(rareMobs.get(i));
 		}
 	}

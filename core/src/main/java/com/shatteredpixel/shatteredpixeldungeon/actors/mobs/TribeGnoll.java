@@ -46,6 +46,8 @@ public class TribeGnoll extends Mob {
 
         loot = RingOfWealth.genConsumableDrop(-3);
         lootChance = 1f;
+        if (Dungeon.mode == Dungeon.GameMode.IMPOSSIBLE)
+            lootChance = 0.3f;
         properties.add(Property.ANIMAL);
     }
 

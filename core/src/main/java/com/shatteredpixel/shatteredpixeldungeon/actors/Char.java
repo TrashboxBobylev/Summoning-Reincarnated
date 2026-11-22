@@ -24,8 +24,6 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors;
 
-import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
-
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
 import com.shatteredpixel.shatteredpixeldungeon.Badges;
 import com.shatteredpixel.shatteredpixeldungeon.Conducts;
@@ -186,7 +184,6 @@ import com.watabou.utils.Bundle;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.PointF;
 import com.watabou.utils.Random;
-
 import org.apache.commons.lang3.ClassUtils;
 
 import java.util.ArrayList;
@@ -195,6 +192,8 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.hero;
 
 public abstract class Char extends Actor implements ManaSource, DamageSource {
 	
@@ -475,6 +474,11 @@ public abstract class Char extends Actor implements ManaSource, DamageSource {
 				}
 			} else {
 				dmg = damageRoll();
+				if (Dungeon.mode == Dungeon.GameMode.IMPOSSIBLE && this instanceof Mob){
+					float betterDmg = damageRoll();
+					if (betterDmg > dmg)
+						dmg = betterDmg;
+				}
 			}
 
 			dmg = dmg*dmgMulti;
@@ -775,13 +779,13 @@ public abstract class Char extends Actor implements ManaSource, DamageSource {
 			acuRoll *= buff.evasionAndAccuracyFactor();
 		}
 		acuRoll *= AscensionChallenge.statModifier(attacker);
-if (Dungeon.hero.heroClass != HeroClass.CLERIC
+		if (Dungeon.hero.heroClass != HeroClass.CLERIC
 				&& Dungeon.hero.hasTalent(Talent.BLESS)
 				&& attacker.alignment == Alignment.ALLY){
 			// + 3%/5%
 			acuRoll *= 1.01f + 0.02f*Dungeon.hero.pointsInTalent(Talent.BLESS);
 		}
-acuRoll *= accMulti;
+		acuRoll *= accMulti;
 
 		float defRoll = 0;
 		for (int i = 0; i < defender.defenseRolls(); i++) {
@@ -806,6 +810,15 @@ acuRoll *= accMulti;
 			defRoll *= 1.01f + 0.02f*Dungeon.hero.pointsInTalent(Talent.BLESS);
 		}
 		defRoll *= FerretTuft.evasionMultiplier();
+		if (Dungeon.mode == Dungeon.GameMode.IMPOSSIBLE){
+			float deboost = 0f;
+			for (int i : PathFinder.NEIGHBOURS8){
+				if (Actor.findChar(defender.pos + i) != null || !defender.cellIsPathable(defender.pos + i)){
+					deboost += 0.075f;
+				}
+			}
+			defRoll *= 1f - deboost;
+		}
 
 		if (acuRoll >= defRoll){
 			hitMissIcon = FloatingText.getHitReasonIcon(attacker, acuRoll, defender, defRoll);
@@ -937,6 +950,26 @@ acuRoll *= accMulti;
 
 	public boolean isFlying() {
 		return flying;
+	}
+
+	public boolean cellIsPathable( int cell ){
+		if (!Dungeon.level.passable[cell]){
+			if (isFlying() || buff(Amok.class) != null){
+				if (!Dungeon.level.avoid[cell]){
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+		if (Char.hasProp(this, Char.Property.LARGE) && !Dungeon.level.openSpace[cell]){
+			return false;
+		}
+		if (Actor.findChar(cell) != null){
+			return false;
+		}
+
+		return true;
 	}
 
 	//used so that buffs(Shieldbuff.class) isn't called every time unnecessarily

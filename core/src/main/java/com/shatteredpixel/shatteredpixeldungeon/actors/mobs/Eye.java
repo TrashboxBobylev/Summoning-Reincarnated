@@ -38,7 +38,6 @@ import com.shatteredpixel.shatteredpixeldungeon.items.Dewdrop;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.exotic.ScrollOfAntiMagic;
-import com.shatteredpixel.shatteredpixeldungeon.items.stones.StoneOfAggression;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfDisintegration;
 import com.shatteredpixel.shatteredpixeldungeon.levels.traps.DisintegrationTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
@@ -185,6 +184,10 @@ public class Eye extends Mob {
 		}
     }
 
+	protected int gazeDamage(){
+		return Random.NormalIntRange( 30, 50 );
+	}
+
 	public void deathGaze(){
 		if (!beamCharged || beamCooldown > 0 || beam == null)
 			return;
@@ -211,7 +214,7 @@ public class Eye extends Mob {
 			}
 
 			if (hit( this, ch, true )) {
-				int dmg = Random.NormalIntRange( 30, 50 );
+				int dmg = gazeDamage();
 				if (buff(Shrunken.class) != null) dmg = Math.round(dmg*0.6f);
 				dmg = Math.round(dmg * AscensionChallenge.statModifier(this));
 

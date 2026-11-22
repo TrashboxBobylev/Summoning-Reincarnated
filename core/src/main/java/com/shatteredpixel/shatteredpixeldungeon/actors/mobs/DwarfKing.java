@@ -41,6 +41,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.ClericSpell;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Sheep;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.yapdvariants.WeakerRipper;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
@@ -90,6 +91,8 @@ public class DwarfKing extends Mob {
 		spriteClass = KingSprite.class;
 
 		HP = HT = Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 450 : 300;
+		if (Dungeon.mode == Dungeon.GameMode.IMPOSSIBLE)
+			HP = HT = HT * 2;
 		EXP = 40;
 		defenseSkill = 22;
 
@@ -157,6 +160,14 @@ public class DwarfKing extends Mob {
 		if (phase == 3) BossHealthBar.bleed(true);
 	}
 
+	private Class<? extends Mob> weakSummon(){
+		if (Dungeon.mode == Dungeon.GameMode.IMPOSSIBLE){
+			return DKRipper.class;
+		} else {
+			return DKGhoul.class;
+		}
+	}
+
 	@Override
 	protected boolean act() {
 		if (pos == CityBossLevel.throne){
@@ -215,19 +226,19 @@ public class DwarfKing extends Mob {
 						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
 						yell(Messages.get(this, "wave_1"));
 					}
-					summonSubject(3, DKGhoul.class);
-					summonSubject(3, DKGhoul.class);
+					summonSubject(3, weakSummon());
+					summonSubject(3, weakSummon());
 					spend(3 * TICK);
 					summonsMade += 2;
 					return true;
-				} else if (shielding() <= 300 && summonsMade < 12){
+				} else if (shielding() <= HT*2/3 && summonsMade < 12){
 					if (summonsMade == 6) {
 						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
 						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
 						yell(Messages.get(this, "wave_2"));
 					}
-					summonSubject(3, DKGhoul.class);
-					summonSubject(3, DKGhoul.class);
+					summonSubject(3, weakSummon());
+					summonSubject(3, weakSummon());
 					if (summonsMade == 6) {
 						summonSubject(3, DKMonk.class);
 					} else {
@@ -236,15 +247,15 @@ public class DwarfKing extends Mob {
 					summonsMade += 3;
 					spend(3*TICK);
 					return true;
-				} else if (shielding() <= 150 && summonsMade < 18) {
+				} else if (shielding() <= HT/3 && summonsMade < 18) {
 					if (summonsMade == 12) {
 						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
 						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
 						yell(Messages.get(this, "wave_3"));
 						summonSubject(3, DKWarlock.class);
 						summonSubject(3, DKMonk.class);
-						summonSubject(3, DKGhoul.class);
-						summonSubject(3, DKGhoul.class);
+						summonSubject(3, weakSummon());
+						summonSubject(3, weakSummon());
 						summonsMade += 4;
 						spend(3*TICK);
 					} else {
@@ -266,11 +277,11 @@ public class DwarfKing extends Mob {
 						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
 						yell(Messages.get(this, "wave_1"));
 					}
-					summonSubject(3, DKGhoul.class);
+					summonSubject(3, weakSummon());
 					spend(3 * TICK);
 					summonsMade++;
 					return true;
-				} else if (shielding() <= 200 && summonsMade < 8) {
+				} else if (shielding() <= HT*2/3 && summonsMade < 8) {
 					if (summonsMade == 4) {
 						sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
 						Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
@@ -279,19 +290,19 @@ public class DwarfKing extends Mob {
 					if (summonsMade == 7) {
 						summonSubject(3, Random.Int(2) == 0 ? DKMonk.class : DKWarlock.class);
 					} else {
-						summonSubject(3, DKGhoul.class);
+						summonSubject(3, weakSummon());
 					}
 					summonsMade++;
 					spend(TICK);
 					return true;
-				} else if (shielding() <= 100 && summonsMade < 12) {
+				} else if (shielding() <= HT/3 && summonsMade < 12) {
 					sprite.centerEmitter().start(Speck.factory(Speck.SCREAM), 0.4f, 2);
 					Sample.INSTANCE.play(Assets.Sounds.CHALLENGE);
 					yell(Messages.get(this, "wave_3"));
 					summonSubject(4, DKWarlock.class);
 					summonSubject(4, DKMonk.class);
-					summonSubject(4, DKGhoul.class);
-					summonSubject(4, DKGhoul.class);
+					summonSubject(4, weakSummon());
+					summonSubject(4, weakSummon());
 					summonsMade = 12;
 					spend(TICK);
 					return true;
@@ -318,7 +329,7 @@ public class DwarfKing extends Mob {
 					return summonSubject(delay, Random.Int(2) == 0 ? DKMonk.class : DKWarlock.class);
 				}
 			} else {
-				return summonSubject(delay, DKGhoul.class);
+				return summonSubject(delay, weakSummon());
 			}
 
 		} else {
@@ -326,7 +337,7 @@ public class DwarfKing extends Mob {
 			if (summonsMade % 4 == 3) {
 				return summonSubject(delay, Random.Int(2) == 0 ? DKMonk.class : DKWarlock.class);
 			} else {
-				return summonSubject(delay, DKGhoul.class);
+				return summonSubject(delay, weakSummon());
 			}
 		}
 	}
@@ -344,7 +355,7 @@ public class DwarfKing extends Mob {
 	private HashSet<Mob> getSubjects(){
 		HashSet<Mob> subjects = new HashSet<>();
 		for (Mob m : Dungeon.level.mobs){
-			if (m.alignment == alignment && (m instanceof Ghoul || m instanceof Monk || m instanceof Warlock || m instanceof Golem)){
+			if (m.alignment == alignment && (m instanceof Ghoul || m instanceof Monk || m instanceof Warlock || m instanceof Golem || m instanceof WeakerRipper)){
 				subjects.add(m);
 			}
 		}
@@ -499,8 +510,8 @@ public class DwarfKing extends Mob {
 			int dmgTaken = preHP - HP;
 			abilityCooldown -= dmgTaken/8f;
 			summonCooldown -= dmgTaken/8f;
-			if (HP <= (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 100 : 50)) {
-				HP = (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 100 : 50);
+			if (HP <= (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? HT*2/9 : HT/6)) {
+				HP = (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? HT*2/9 : HT/6);
 				sprite.showStatus(CharSprite.POSITIVE, Messages.get(this, "invulnerable"));
 				ScrollOfTeleportation.appear(this, CityBossLevel.throne);
 				properties.add(Property.IMMOVABLE);
@@ -541,7 +552,7 @@ public class DwarfKing extends Mob {
 					});
 				}
 			});
-		} else if (phase == 3 && preHP > 20 && HP < 20 && isAlive()){
+		} else if (phase == 3 && preHP > HT/15 && HP < HT/15 && isAlive()){
 			yell( Messages.get(this, "losing") );
 		}
 	}
@@ -625,6 +636,13 @@ public class DwarfKing extends Mob {
 	}
 
 	public static class DKMonk extends Monk {
+		{
+			properties.add(Property.BOSS_MINION);
+			state = HUNTING;
+		}
+	}
+
+	public static class DKRipper extends WeakerRipper {
 		{
 			properties.add(Property.BOSS_MINION);
 			state = HUNTING;

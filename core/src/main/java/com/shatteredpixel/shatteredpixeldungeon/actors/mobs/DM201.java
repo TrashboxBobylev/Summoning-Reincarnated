@@ -71,7 +71,7 @@ public class DM201 extends DM200 {
 		next();
 	}
 
-	private void zap( ){
+	protected void zap(){
 		threatened = false;
 		spend(TICK);
 

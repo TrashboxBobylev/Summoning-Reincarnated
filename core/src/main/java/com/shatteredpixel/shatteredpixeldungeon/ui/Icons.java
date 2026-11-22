@@ -150,6 +150,7 @@ public enum Icons {
 	RANDOM_CONDUCT,
 	DIFFICULTY,
 	BLITZ,
+	YAPD,
 
 	//icons that appear in the about screen, variable spacing
 	LIBGDX,
@@ -495,6 +496,9 @@ public enum Icons {
 				break;
 			case BLITZ:
 				icon.frame( icon.texture.uvRectBySize( 128, 192, 16, 16 ) );
+				break;
+            case YAPD:
+				icon.frame( icon.texture.uvRectBySize( 144, 193, 18, 15 ) );
 				break;
 
 			case LIBGDX:

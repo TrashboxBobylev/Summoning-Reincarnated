@@ -224,7 +224,8 @@ public class Badges {
 		HIGH_SCORE_5                ( 125 ),
 		CHAMPION_3                  ( 127 ),
 
-		BLITZ_UNLOCKED;
+		BLITZ_UNLOCKED,
+		YAPD_UNLOCKED;
 
 		public boolean meta;
 

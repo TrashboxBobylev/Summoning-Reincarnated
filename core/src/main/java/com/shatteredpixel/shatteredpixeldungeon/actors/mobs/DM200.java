@@ -90,7 +90,7 @@ public class DM200 extends Mob {
 		}
 	}
 
-	private int ventCooldown = 0;
+	protected int ventCooldown = 0;
 
 	private static final String VENT_COOLDOWN = "vent_cooldown";
 
@@ -117,7 +117,7 @@ public class DM200 extends Mob {
 		next();
 	}
 
-	private void zap( ){
+	protected void zap( ){
 		spend( TICK );
 		ventCooldown = 30;
 

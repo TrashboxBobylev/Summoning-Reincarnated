@@ -59,6 +59,8 @@ public class Goo extends Mob {
 
 	{
 		HP = HT = Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 120 : 100;
+		if (Dungeon.mode == Dungeon.GameMode.IMPOSSIBLE)
+			HP = HT = (int) (HT * 1.3f);
 		EXP = 10;
 		defenseSkill = 8;
 		spriteClass = GooSprite.class;

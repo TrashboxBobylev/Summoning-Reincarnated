@@ -58,6 +58,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Spinner;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Succubus;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Swarm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Thief;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.TribeGnoll;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Warlock;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Shopkeeper;
 import com.shatteredpixel.shatteredpixeldungeon.items.Amulet;
@@ -85,6 +86,7 @@ public class AscensionChallenge extends Buff implements DamageSource {
 		modifiers.put(Rat.class,            10f);
 		modifiers.put(Snake.class,          9f);
 		modifiers.put(Gnoll.class,          9f);
+		modifiers.put(TribeGnoll.class,     9f);
 		modifiers.put(Swarm.class,          8.5f);
 		modifiers.put(Crab.class,           8f);
 		modifiers.put(Slime.class,          8f);

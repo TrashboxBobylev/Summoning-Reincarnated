@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.yapdvariants.StrongerGhoul;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Notes;
@@ -111,7 +112,11 @@ public class DemonSpawner extends Mob {
 			}
 
 			if (!candidates.isEmpty()) {
-				RipperDemon spawn = new RipperDemon();
+				Mob spawn;
+				if (Dungeon.mode == Dungeon.GameMode.IMPOSSIBLE)
+				    spawn = new StrongerGhoul();
+				else
+					spawn = new RipperDemon();
 
 				spawn.pos = Random.element( candidates );
 				spawn.state = spawn.HUNTING;

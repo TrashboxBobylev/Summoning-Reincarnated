@@ -94,6 +94,8 @@ public class Tengu extends Mob {
 		spriteClass = TenguSprite.class;
 		
 		HP = HT = Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 250 : 200;
+		if (Dungeon.mode == Dungeon.GameMode.IMPOSSIBLE)
+			HP = HT = (int) (HT * 1.5f);
 		EXP = 20;
 		defenseSkill = 15;
 		
