@@ -287,7 +287,11 @@ public class SPDSettings extends GameSettings {
 	}
 
 	public static Dungeon.GameMode mode(){
-		return Enum.valueOf(Dungeon.GameMode.class, getString(KEY_GAMEMODE, "NORMAL"));
+		try {
+			return Enum.valueOf(Dungeon.GameMode.class, getString(KEY_GAMEMODE, "NORMAL"));
+        } catch (IllegalArgumentException e){
+			return Dungeon.GameMode.NORMAL;
+		}
 	}
 
 	public static boolean oneConduct() {return getBoolean(KEY_ONE_CONDUCT, true);}
