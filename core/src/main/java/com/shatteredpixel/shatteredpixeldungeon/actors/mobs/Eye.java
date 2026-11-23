@@ -127,7 +127,7 @@ public class Eye extends Mob {
 			sprite.idle();
 		}
 		if (beam == null && beamTarget != -1) {
-			beam = new Ballistica(pos, beamTarget, Ballistica.STOP_SOLID);
+			beam = new Ballistica(pos, beamTarget, Dungeon.mode == Dungeon.GameMode.DIFFICULT ? Ballistica.WONT_STOP : Ballistica.STOP_SOLID);
 			sprite.turnTo(pos, beamTarget);
 		}
 		if (beamCooldown > 0)
@@ -141,7 +141,7 @@ public class Eye extends Mob {
 			return super.doAttack(enemy);
 		}
 
-		beam = new Ballistica(pos, beamTarget, Ballistica.STOP_SOLID);
+		beam = new Ballistica(pos, beamTarget, Dungeon.mode == Dungeon.GameMode.DIFFICULT ? Ballistica.WONT_STOP : Ballistica.STOP_SOLID);
 		if (beamCooldown > 0 || (!beamCharged && !beam.subPath(1, beam.dist).contains(enemy.pos))) {
 			return super.doAttack(enemy);
 		} else if (!beamCharged){
@@ -185,6 +185,9 @@ public class Eye extends Mob {
     }
 
 	protected int gazeDamage(){
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			return Random.NormalIntRange( 64, 89 );
+		}
 		return Random.NormalIntRange( 30, 50 );
 	}
 
@@ -194,6 +197,9 @@ public class Eye extends Mob {
 
 		beamCharged = false;
 		beamCooldown = Random.IntRange(4, 6);
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			beamCooldown = Random.IntRange(5, 8);
+		}
 
 		boolean terrainAffected = false;
 

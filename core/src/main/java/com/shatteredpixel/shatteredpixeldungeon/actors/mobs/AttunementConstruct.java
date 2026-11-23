@@ -138,7 +138,7 @@ public class AttunementConstruct extends Mob implements Callback {
 	}
 	
 	private void zap() {
-		spend( TIME_TO_ZAP );
+		spend( Dungeon.mode == Dungeon.GameMode.DIFFICULT ? 0.5f : 1f );
 		
 		if (hit( this, enemy, true )) {
 

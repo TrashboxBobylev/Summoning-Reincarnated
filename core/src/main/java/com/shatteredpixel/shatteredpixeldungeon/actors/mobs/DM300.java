@@ -32,9 +32,12 @@ import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Inferno;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.ToxicGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Chill;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Cripple;
@@ -48,9 +51,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.spells.WallOfLight;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.LloydsBeacon;
+import com.shatteredpixel.shatteredpixeldungeon.items.bombs.Bomb;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
 import com.shatteredpixel.shatteredpixeldungeon.items.wands.WandOfBlastWave;
 import com.shatteredpixel.shatteredpixeldungeon.levels.CavesBossLevel;
@@ -295,6 +300,19 @@ public class DM300 extends Mob {
 			if (!chargeAnnounced){
 				yell(Messages.get(this, "supercharged"));
 				chargeAnnounced = true;
+				ArrayList<Integer> points = Level.getSpawningPoints(pos);
+				if (!points.isEmpty() && Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+					DM200 clone = new DM200();
+					clone.HP = clone.HT = HP / 2;
+					clone.pos = Random.element(points);
+					clone.state = clone.HUNTING;
+					ChampionEnemy.rollForChampionInstantly(clone);
+
+					Dungeon.level.occupyCell(clone);
+
+					GameScene.add(clone, 0f);
+					Actor.addDelayed(new Pushing(clone, pos, clone.pos), -1);
+				}
 			}
 
 			if (Dungeon.hero.invisible <= 0){
@@ -383,22 +401,31 @@ public class DM300 extends Mob {
 		Ballistica trajectory = new Ballistica(pos, target.pos, Ballistica.STOP_TARGET);
 
 		int gasMulti = Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 2 : 1;
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT)
+			gasMulti = 1;
 
 		//we delay the gas generation to just before the target acts, to prevent cases where partial turns can result in instant gas damage
+		int finalGasMulti = gasMulti;
 		Actor.addDelayed(new Actor() {
 			{ actPriority = VFX_PRIO; } //add the gas before any other actor at that time
 			@Override
 			protected boolean act() {
 				int gasVented = 0;
-				GameScene.add(Blob.seed(trajectory.collisionPos, 100*gasMulti, ToxicGas.class));
-				for (int i : trajectory.subPath(0, trajectory.dist)){
-					GameScene.add(Blob.seed(i, 20*gasMulti, ToxicGas.class));
-					gasVented += 20*gasMulti;
+
+				Class<? extends Blob> usedGas = ToxicGas.class;
+				if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+					usedGas = Inferno.class;
 				}
-				if (gasVented < 250*gasMulti){
-					int toVentAround = (int)Math.ceil(((250*gasMulti) - gasVented)/8f);
+
+				GameScene.add(Blob.seed(trajectory.collisionPos, 100* finalGasMulti, usedGas));
+				for (int i : trajectory.subPath(0, trajectory.dist)){
+					GameScene.add(Blob.seed(i, 20* finalGasMulti, usedGas));
+					gasVented += 20* finalGasMulti;
+				}
+				if (gasVented < 250* finalGasMulti){
+					int toVentAround = (int)Math.ceil(((250* finalGasMulti) - gasVented)/8f);
 					for (int i : PathFinder.NEIGHBOURS8){
-						GameScene.add(Blob.seed(pos+i, toVentAround, ToxicGas.class));
+						GameScene.add(Blob.seed(pos+i, toVentAround, usedGas));
 					}
 				}
 				Actor.remove(this);
@@ -648,6 +675,9 @@ public class DM300 extends Mob {
 				}
 				Dungeon.level.cleanWalls();
 				Dungeon.observe();
+				if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+					new Bomb().explode(pos);
+				}
 				spend(Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) ? 2f : 3f);
 
 				bestpos = pos;
@@ -690,6 +720,10 @@ public class DM300 extends Mob {
 		resistances.add(Frost.class);
 		resistances.add(Roots.class);
 		resistances.add(Slow.class);
+
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			immunities.add(Burning.class);
+		}
 	}
 
 	public static class FallingRockBuff extends DelayedRockFall implements DamageSource {

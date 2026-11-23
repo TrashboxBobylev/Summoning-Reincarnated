@@ -32,7 +32,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
-import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -145,7 +144,8 @@ public class RipperDemon extends Mob {
 
 			if (leapPos != -1 && !isSuppressed()){
 
-				leapCooldown = Random.NormalIntRange(2, 4);
+				if (Dungeon.mode != Dungeon.GameMode.DIFFICULT)
+					leapCooldown = Random.NormalIntRange(2, 4);
 
 				if (rooted){
 					leapPos = -1;

@@ -1,3 +1,4 @@
+
 /*
  * Pixel Dungeon
  * Copyright (C) 2012-2015 Oleg Dolya
@@ -26,7 +27,11 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Bleeding;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BatSprite;
@@ -72,6 +77,18 @@ public class Bat extends Mob {
 	public void die(Object cause) {
 		flying = false;
 		super.die(cause);
+	}
+
+	@Override
+	protected boolean act() {
+		boolean act = super.act();
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT && !isSuppressed()) {
+			if (Dungeon.level.distance(pos, Dungeon.hero.pos) < 3){
+				Buff.affect(Dungeon.hero, Bleeding.class).set(2f);
+				Hero.arrangeBlast(pos, sprite, MagicMissile.BLOOD_CONE, 2f);
+			}
+		}
+		return act;
 	}
 
 	@Override

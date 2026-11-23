@@ -28,6 +28,7 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.CorrosiveGas;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.MetalShard;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
@@ -35,6 +36,8 @@ import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.DM201Sprite;
 import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
+
+import java.util.ArrayList;
 
 public class DM201 extends DM200 {
 
@@ -80,6 +83,39 @@ public class DM201 extends DM200 {
 			if (!Dungeon.level.solid[enemy.pos+i]) {
 				GameScene.add(Blob.seed(enemy.pos + i, 5, CorrosiveGas.class).setStrength(8));
 			}
+		}
+
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT && !isSuppressed()){
+			Dungeon.hero.interrupt();
+
+			final int rockCenter = enemy.pos;
+
+			int safeCell;
+			do {
+				safeCell = rockCenter + PathFinder.NEIGHBOURS8[Random.Int(8)];
+			} while (safeCell == pos
+					|| (Dungeon.level.solid[safeCell] && Random.Int(2) == 0));
+
+			ArrayList<Integer> rockCells = new ArrayList<>();
+
+			int start = rockCenter - Dungeon.level.width() * 3 - 3;
+			int pos;
+			for (int y = 0; y < 7; y++) {
+				pos = start + Dungeon.level.width() * y;
+				for (int x = 0; x < 7; x++) {
+					if (!Dungeon.level.insideMap(pos)) {
+						pos++;
+						continue;
+					}
+					//add rock cell to pos, if it is not solid, and isn't the safecell
+					if (!Dungeon.level.solid[pos] && pos != safeCell && Random.Int(Dungeon.level.distance(rockCenter, pos)) == 0) {
+						//don't want to overly punish players with slow move or attack speed
+						rockCells.add(pos);
+					}
+					pos++;
+				}
+			}
+			Buff.append(this, DM300.FallingRockBuff.class, Math.min(enemy.cooldown(), 3*TICK)).setRockPositions(rockCells);
 		}
 
 	}

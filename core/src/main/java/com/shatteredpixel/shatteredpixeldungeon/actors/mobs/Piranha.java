@@ -67,6 +67,9 @@ public class Piranha extends Mob {
 		super();
 		
 		HP = HT = 10 + Dungeon.scalingDepth() * 5;
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			HP = HT = HT * 5;
+		}
 		defenseSkill = 10 + Dungeon.scalingDepth() * 2;
 	}
 	
@@ -86,7 +89,11 @@ public class Piranha extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( Dungeon.depth, 4 + Dungeon.depth * 2 );
+		int damage = Random.NormalIntRange(Dungeon.depth, 4 + Dungeon.depth * 2);
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			damage *= 2;
+		}
+		return damage;
 	}
 	
 	@Override

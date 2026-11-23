@@ -116,6 +116,17 @@ public abstract class YogFist extends Mob {
 		}
 	}
 
+	@Override
+	protected boolean getCloser(int target) {
+		boolean closer = super.getCloser(target);
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			if (Dungeon.level.adjacent(Dungeon.hero.pos, pos)){
+				closer = super.getCloser(target);
+			}
+		}
+		return closer;
+	}
+
 	private boolean invulnWarned = false;
 
 	protected boolean isNearYog(){

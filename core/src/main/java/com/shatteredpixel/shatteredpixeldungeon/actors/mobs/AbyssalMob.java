@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.watabou.utils.Bundle;
 
 public abstract class AbyssalMob extends Mob {
@@ -61,7 +62,8 @@ public abstract class AbyssalMob extends Mob {
     }
 
     public int abyssLevel(){
-//        return Math.max(0, (Dungeon.depth-1) / 5);
+        if (Dungeon.mode == Dungeon.GameMode.DIFFICULT)
+            return Math.max(0, Dungeon.chapterNumber()-4);
         return 0;
     }
 }

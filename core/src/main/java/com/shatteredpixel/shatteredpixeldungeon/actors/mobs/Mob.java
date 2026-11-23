@@ -1539,6 +1539,12 @@ public abstract class Mob extends Char {
 			desc += "\n\n_" + Messages.titleCase(b.name()) + "_\n" + b.desc();
 		}
 
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			String harderDesc = Messages.get(this, "harder");
+			if (!harderDesc.isEmpty())
+				desc += "\n\n" + harderDesc;
+		}
+
 		if (hasHordeHead()){
 			desc += "\n\n" + Messages.get(Mob.class, "horde");
 		}

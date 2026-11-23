@@ -24,9 +24,15 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
+import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
+import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.ChaosSaber;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.MysteryMeat;
+import com.shatteredpixel.shatteredpixeldungeon.items.scrolls.ScrollOfTeleportation;
+import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CrabSprite;
+import com.watabou.utils.PathFinder;
 import com.watabou.utils.Random;
 
 public class Crab extends Mob {
@@ -35,6 +41,9 @@ public class Crab extends Mob {
 		spriteClass = CrabSprite.class;
 		
 		HP = HT = 15;
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			HP = HT = 9;
+		}
 		defenseSkill = 5;
 		baseSpeed = 2f;
 		
@@ -55,6 +64,40 @@ public class Crab extends Mob {
 	@Override
 	public int attackSkill( Char target ) {
 		return 12;
+	}
+
+	@Override
+	protected boolean act() {
+		boolean act = super.act();
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT && !isSuppressed()) {
+			if (canSee(Dungeon.hero.pos) && Dungeon.hero == enemy){
+				int bestPos = -1;
+				for (int i = 0; i < PathFinder.NEIGHBOURS8.length; i++) {
+					int p = pos + PathFinder.NEIGHBOURS8[i];
+					if (Actor.findChar( p ) == null && Dungeon.level.passable[p]) {
+						if (bestPos == -1 || Dungeon.level.trueDistance(p, pos) < Dungeon.level.trueDistance(bestPos, pos)){
+							bestPos = p;
+						}
+					}
+				}
+				int count = 0;
+				for (Char ch : Actor.chars()){
+					if (ch instanceof ChaosSaber && ch.alignment == Alignment.ENEMY){
+						count++;
+					}
+				}
+				if (bestPos != -1 && count < 2) {
+					ChaosSaber sword = new ChaosSaber();
+					sword.level = 0;
+					sword.alignment = Alignment.ENEMY;
+					sword.state = sword.HUNTING;
+					GameScene.add(sword, 1);
+					ScrollOfTeleportation.appear(sword, bestPos);
+				}
+				spend(1f);
+			}
+		}
+		return act;
 	}
 	
 	@Override

@@ -33,6 +33,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.YogWall;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HPDebuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
@@ -45,12 +47,14 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BloodParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.PurpleParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ShadowParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.journal.Bestiary;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Level;
 import com.shatteredpixel.shatteredpixeldungeon.levels.Terrain;
+import com.shatteredpixel.shatteredpixeldungeon.levels.traps.DistortionTrap;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
@@ -64,6 +68,7 @@ import com.shatteredpixel.shatteredpixeldungeon.utils.GLog;
 import com.watabou.noosa.Game;
 import com.watabou.noosa.audio.Music;
 import com.watabou.noosa.audio.Sample;
+import com.watabou.utils.BArray;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Callback;
 import com.watabou.utils.GameMath;
@@ -288,6 +293,11 @@ public class YogDzewa extends Mob {
 								laserDmg = Random.NormalIntRange(20, 30);
 							}
 							ch.damage(laserDmg, new Eye.DeathGaze(this, laserDmg));
+							if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+								ch.sprite.emitter().burst(BloodParticle.FACTORY, 14);
+								Sample.INSTANCE.play(Assets.Sounds.BLAST, 1f, 1.5f);
+								Buff.count(ch, HPDebuff.class, ch.HT * 0.33f);
+							}
 							if (Dungeon.level.heroFOV[pos]) {
 								ch.sprite.flash();
 								CellEmitter.center(pos).burst(PurpleParticle.BURST, Random.IntRange(1, 2));
@@ -309,6 +319,8 @@ public class YogDzewa extends Mob {
 		if (abilityCooldown <= 0){
 
 			HashSet<Integer> affectedCells = new HashSet<>();
+			PathFinder.buildDistanceMap( Dungeon.hero.pos, BArray.or(Dungeon.level.passable, Dungeon.level.solid, null),
+					Dungeon.mode == Dungeon.GameMode.DIFFICULT ? 2 : 1 );
 
 			if (needCrossBeam){
 				targetedCells.clear();
@@ -321,15 +333,21 @@ public class YogDzewa extends Mob {
 			} else {
 
 				int beams = 1 + (HT - HP) / 400;
+				if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+					beams *= 2;
+				}
 
 				for (int i = 0; i < beams; i++) {
 
 					int targetPos = Dungeon.hero.pos;
-					if (i != 0) {
+					if (i != 0){
 						do {
-							targetPos = Dungeon.hero.pos + PathFinder.NEIGHBOURS8[Random.Int(8)];
-						} while (Dungeon.level.trueDistance(pos, Dungeon.hero.pos)
-								> Dungeon.level.trueDistance(pos, targetPos));
+							do {
+								targetPos = Random.Int(PathFinder.distance.length);
+							} while (PathFinder.distance[targetPos] == Integer.MAX_VALUE);
+						} while (
+								Dungeon.level.trueDistance(pos, Dungeon.hero.pos)
+										> Dungeon.level.trueDistance(pos, targetPos));
 					}
 					targetedCells.add(targetPos);
 					Ballistica b = new Ballistica(pos, targetPos, Ballistica.WONT_STOP);
@@ -417,6 +435,9 @@ public class YogDzewa extends Mob {
 
 			if (spawnPos != -1) {
 				summon.pos = spawnPos;
+				if (Dungeon.mode == Dungeon.GameMode.DIFFICULT && Random.Int(3) == 0){
+					new DistortionTrap().set(pos).activate();
+				}
 				GameScene.add( summon );
 				Actor.add( new Pushing( summon, pos, summon.pos ) );
 				summon.beckon(Dungeon.hero.pos);
@@ -482,6 +503,9 @@ public class YogDzewa extends Mob {
 	public void damage(int dmg, DamageSource src ) {
 
 		int preHP = HP;
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			dmg /= Math.min(3, Math.max(1, phase));
+		}
 		super.damage( dmg, src );
 
 		if (phase == 0 || findFist() != null) return;
@@ -763,6 +787,9 @@ public class YogDzewa extends Mob {
 			spriteClass = LarvaSprite.class;
 
 			HP = HT = 20;
+			if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+				HP = HT = 60;
+			}
 			defenseSkill = 12;
 			viewDistance = Light.DISTANCE;
 
@@ -786,6 +813,14 @@ public class YogDzewa extends Mob {
 		@Override
 		public int drRoll() {
 			return super.drRoll() + Random.NormalIntRange(0, 4);
+		}
+
+		@Override
+		public float attackDelay() {
+			if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+				return super.attackDelay()*0.5f;
+			}
+			return super.attackDelay();
 		}
 
 	}

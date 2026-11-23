@@ -33,9 +33,12 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AllyBuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.Mob;
 import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ChaosSaberSprite;
 import com.watabou.utils.Bundle;
 import com.watabou.utils.Random;
+
+import java.util.EnumSet;
 
 public class ChaosSaber extends NPC {
     {
@@ -111,6 +114,14 @@ public class ChaosSaber extends NPC {
         super.restoreFromBundle( bundle );
         level = bundle.getInt( LEVEL );
         alignment = bundle.getEnum("align", Alignment.class);
+    }
+
+    @Override
+    public EnumSet<DamageProperty> initDmgProperties() {
+        EnumSet<DamageProperty> damageProperties = super.initDmgProperties();
+        if (Dungeon.mode == Dungeon.GameMode.DIFFICULT)
+            damageProperties.add(DamageProperty.IGNORES_ARMOR);
+        return damageProperties;
     }
 
     private class Wandering extends Mob.Wandering{

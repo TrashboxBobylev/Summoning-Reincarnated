@@ -31,6 +31,8 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Adrenaline;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurn;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Beam;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
@@ -131,6 +133,21 @@ public class Necromancer extends Mob {
 		}
 		
 		super.die(cause);
+	}
+
+	@Override
+	public void damage(int dmg, DamageSource src) {
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT && !isSuppressed()){
+			if (HP - dmg <= 0) {
+				if (src instanceof Burning || src instanceof FrostBurn) {
+					super.damage(dmg, src);
+				} else {
+
+				}
+			}
+		} else {
+			super.damage(dmg, src);
+		}
 	}
 
 	@Override

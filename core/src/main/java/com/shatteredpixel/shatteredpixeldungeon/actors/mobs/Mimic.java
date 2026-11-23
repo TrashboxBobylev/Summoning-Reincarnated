@@ -200,6 +200,9 @@ public class Mimic extends Mob {
 		if (state == PASSIVE){
 			alignment = Alignment.ENEMY;
 			stopHiding();
+			if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+				dmg /= 5;
+			}
 		}
 		super.damage(dmg, src);
 	}

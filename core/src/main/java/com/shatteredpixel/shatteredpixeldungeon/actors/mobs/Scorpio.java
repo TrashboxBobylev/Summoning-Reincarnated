@@ -35,9 +35,12 @@ import com.shatteredpixel.shatteredpixeldungeon.items.potions.Potion;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfHealing;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfStrength;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageProperty;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.ScorpioSprite;
 import com.watabou.utils.Random;
 import com.watabou.utils.Reflection;
+
+import java.util.EnumSet;
 
 public class Scorpio extends Mob {
 	
@@ -120,5 +123,12 @@ public class Scorpio extends Mob {
 
 		return Reflection.newInstance(loot);
 	}
-	
+
+	@Override
+	public EnumSet<DamageProperty> initDmgProperties() {
+		EnumSet<DamageProperty> damageProperties = super.initDmgProperties();
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT)
+			damageProperties.add(DamageProperty.IGNORES_ARMOR);
+		return damageProperties;
+	}
 }

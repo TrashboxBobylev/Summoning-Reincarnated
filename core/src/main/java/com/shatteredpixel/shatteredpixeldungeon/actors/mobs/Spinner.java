@@ -48,6 +48,9 @@ public class Spinner extends Mob {
 
 		HP = HT = 50;
 		defenseSkill = 17;
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			baseSpeed = 3f;
+		}
 
 		EXP = 9;
 		maxLvl = 17;
@@ -209,6 +212,9 @@ public class Spinner extends Mob {
 			if (Dungeon.level.heroFOV[enemy.pos]){
 				Dungeon.hero.interrupt();
 			}
+		}
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT && !isSuppressed()){
+			spend(-cooldown());
 		}
 		next();
 	}

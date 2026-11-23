@@ -27,6 +27,7 @@ package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.AscensionChallenge;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Regeneration;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.MeleeWeapon;
@@ -68,6 +69,8 @@ public class Slime extends Mob {
 		}
 		dmg = (int)(scaledDmg*AscensionChallenge.statModifier(this));
 		super.damage(dmg, src);
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT && !isSuppressed())
+			Regeneration.regenerate(this, 1);
 	}
 
 	@Override

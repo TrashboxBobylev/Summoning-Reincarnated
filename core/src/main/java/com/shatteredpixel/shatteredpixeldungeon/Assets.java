@@ -388,5 +388,6 @@ public class Assets {
 		public static final String RATTLESNAKE       = "sprites/rattlesnake.png";
 		public static final String CROW              = "sprites/crow.png";
         public static final String MYSTERY_MERCHANT  = "sprites/mystery_merchant.png";
+		public static final String CHAOS_SABER       = "sprites/chaossaber.png";
 	}
 }

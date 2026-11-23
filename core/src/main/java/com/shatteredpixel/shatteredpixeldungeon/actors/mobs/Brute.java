@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.SpellSprite;
 import com.shatteredpixel.shatteredpixeldungeon.items.Gold;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.melee.ToyKnife;
 import com.shatteredpixel.shatteredpixeldungeon.levels.features.Chasm;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.BruteSprite;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.CharSprite;
@@ -49,6 +50,9 @@ public class Brute extends Mob {
 		
 		HP = HT = 40;
 		defenseSkill = 15;
+
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT)
+			baseSpeed = 1.2f;
 		
 		EXP = 8;
 		maxLvl = 16;
@@ -76,6 +80,14 @@ public class Brute extends Mob {
 	@Override
 	public int drRoll() {
 		return super.drRoll() + Random.NormalIntRange(0, 8);
+	}
+
+	@Override
+	public void damage(int dmg, DamageSource src) {
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT && buff(BruteRage.class) != null && !isSuppressed()){
+			buff(BruteRage.class).incShield(dmg);
+		}
+		super.damage(dmg, src);
 	}
 
 	@Override

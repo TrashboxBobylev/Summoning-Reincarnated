@@ -34,6 +34,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.Actor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Degrade;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LifeLink;
@@ -113,6 +114,14 @@ public class DwarfKing extends Mob {
 	@Override
 	public int drRoll() {
 		return super.drRoll() + Random.NormalIntRange(0, 10);
+	}
+
+	@Override
+	public void spend(float time) {
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT)
+			super.spend(time/1.25f);
+		else
+			super.spend(time);
 	}
 
 	private int phase = 1;
@@ -319,7 +328,7 @@ public class DwarfKing extends Mob {
 	}
 
 	private boolean summonSubject( int delay ){
-		if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL)) {
+		if (Dungeon.isChallenged(Conducts.Conduct.NINE_CHAL) || Dungeon.mode == Dungeon.GameMode.DIFFICULT) {
 			//every 3rd summon is always a monk or warlock, otherwise ghoul
 			//except every 9th summon, which is a golem!
 			if (summonsMade % 3 == 2) {
@@ -725,6 +734,8 @@ public class DwarfKing extends Mob {
 					Mob m = Reflection.newInstance(summon);
 					m.pos = pos;
 					m.maxLvl = -2;
+					if (Dungeon.mode == Dungeon.GameMode.DIFFICULT)
+						ChampionEnemy.rollForChampionInstantly(m);
 					GameScene.add(m);
 					Dungeon.level.occupyCell(m);
 					m.state = m.HUNTING;

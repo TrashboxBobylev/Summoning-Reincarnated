@@ -158,7 +158,9 @@ public class Ghoul extends Mob {
 			Ghoul nearby = GhoulLifeLink.searchForHost(this);
 			if (nearby != null){
 				beingLifeLinked = true;
-				timesDowned++;
+				if (Dungeon.mode != Dungeon.GameMode.DIFFICULT)
+					timesDowned++;
+				else timesDowned = 1;
 				Actor.remove(this);
 				Dungeon.level.mobs.remove( this );
 				Buff.append(nearby, GhoulLifeLink.class).set(timesDowned*5, this);
@@ -290,6 +292,9 @@ public class Ghoul extends Mob {
 					}
 				}
 				ghoul.HP = Math.round(ghoul.HT/10f);
+				if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+					ghoul.HP = Math.round(ghoul.HT/4f);
+				}
 				ghoul.beingLifeLinked = false;
 				Actor.add(ghoul);
 				ghoul.timeToNow();

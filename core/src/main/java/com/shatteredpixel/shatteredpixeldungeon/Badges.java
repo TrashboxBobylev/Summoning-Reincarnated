@@ -225,7 +225,8 @@ public class Badges {
 		CHAMPION_3                  ( 127 ),
 
 		BLITZ_UNLOCKED,
-		YAPD_UNLOCKED;
+		YAPD_UNLOCKED,
+		DIFFICULT_UNLOCKED;
 
 		public boolean meta;
 

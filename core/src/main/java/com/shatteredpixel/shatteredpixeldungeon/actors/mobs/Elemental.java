@@ -42,7 +42,6 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.effects.CellEmitter;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
-import com.shatteredpixel.shatteredpixeldungeon.effects.TargetedCell;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.ElmoParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfFrost;
 import com.shatteredpixel.shatteredpixeldungeon.items.potions.PotionOfLiquidFlame;
@@ -187,8 +186,8 @@ public abstract class Elemental extends Mob {
 		} else {
 			enemy.sprite.showStatus( CharSprite.NEUTRAL,  enemy.defenseVerb() );
 		}
-
-		rangedCooldown = Random.NormalIntRange( 3, 5 );
+		if (Dungeon.mode != Dungeon.GameMode.DIFFICULT)
+			rangedCooldown = Random.NormalIntRange( 3, 5 );
 	}
 	
 	public void onZapComplete() {
@@ -199,7 +198,11 @@ public abstract class Elemental extends Mob {
 	@Override
 	public boolean add( Buff buff ) {
 		if (harmfulBuffs.contains( buff.getClass() ) && !isSuppressed()) {
-			damage( Random.NormalIntRange( HT/2, HT * 3/5 ), (DamageSource) buff);
+			if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+				damage(Random.NormalIntRange( HT/10, HT * 3/10 ), (DamageSource) buff);
+			} else {
+                damage( Random.NormalIntRange( HT/2, HT * 3/5 ), (DamageSource) buff);
+            }
 			return false;
 		} else {
 			return super.add( buff );

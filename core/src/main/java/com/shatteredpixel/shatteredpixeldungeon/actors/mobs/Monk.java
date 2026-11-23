@@ -25,9 +25,13 @@
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
 import com.shatteredpixel.shatteredpixeldungeon.Assets;
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Imp;
+import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.items.food.Food;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.MonkSprite;
@@ -91,6 +95,14 @@ public class Monk extends Mob {
 		}
 		if (isSuppressed()){
 			Buff.detach(this, Focus.class);
+		} else {
+			if (Dungeon.mode == Dungeon.GameMode.DIFFICULT && !isSuppressed()) {
+				if (Dungeon.level.distance(pos, Dungeon.hero.pos) < 2){
+					Hero.arrangeBlast(pos, sprite, MagicMissile.EARTH_CONE);
+					Hunger.adjustHunger(-18f);
+					HP = Math.min(HT, HP+2);
+				}
+			}
 		}
 		return result;
 	}

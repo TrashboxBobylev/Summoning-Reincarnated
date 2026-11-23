@@ -39,8 +39,11 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Burning;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Doom;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Dread;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.FrostBurn;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Paralysis;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Roots;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Slow;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Terror;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.actors.hero.HeroClass;
@@ -53,6 +56,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Lightning;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.BlastParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FlameParticle;
+import com.shatteredpixel.shatteredpixeldungeon.effects.particles.FrostfireParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SmokeParticle;
 import com.shatteredpixel.shatteredpixeldungeon.effects.particles.SparkParticle;
 import com.shatteredpixel.shatteredpixeldungeon.items.Heap;
@@ -88,6 +92,8 @@ import com.watabou.utils.Random;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import static com.shatteredpixel.shatteredpixeldungeon.Dungeon.GameMode.DIFFICULT;
+
 public class Tengu extends Mob {
 	
 	{
@@ -109,6 +115,9 @@ public class Tengu extends Mob {
 	
 	@Override
 	public int damageRoll() {
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			return Random.NormalIntRange( 11, 14 );
+		}
 		return Random.NormalIntRange( 6, 12 );
 	}
 	
@@ -119,6 +128,14 @@ public class Tengu extends Mob {
 		} else {
 			return 20;
 		}
+	}
+
+	@Override
+	public int attackProc(Char enemy, int damage) {
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			if (Random.Int(2) == 0) Buff.affect(enemy, Slow.class, 1.5f);
+		}
+		return super.attackProc(enemy, damage);
 	}
 	
 	@Override
@@ -651,6 +668,9 @@ public class Tengu extends Mob {
 
 							if (dmg > 0) {
 								ch.damage(dmg, new Bomb());
+								if (Dungeon.mode == Dungeon.GameMode.DIFFICULT && Random.Int(3) == 0){
+									Buff.affect(ch, Paralysis.class, 2f);
+								}
 							}
 
 							if (ch == Dungeon.hero){
@@ -885,7 +905,10 @@ public class Tengu extends Mob {
 							//similar to fire.burn(), but Tengu is immune, and hero loses score
 							Char ch = Actor.findChar( cell );
 							if (ch != null && !ch.isImmune(Fire.class) && !(ch instanceof Tengu)) {
-								Buff.affect( ch, Burning.class ).reignite( ch );
+								if (Dungeon.mode == DIFFICULT){
+									Buff.affect(ch, FrostBurn.class).reignite(ch);
+								}
+								else Buff.affect( ch, Burning.class ).reignite( ch );
 							}
 							if (ch == Dungeon.hero){
 								Statistics.qualifiedForBossChallengeBadge = false;
@@ -910,7 +933,10 @@ public class Tengu extends Mob {
 							}
 							
 							burned = true;
-							CellEmitter.get(cell).start(FlameParticle.FACTORY, 0.03f, 10);
+							if (Dungeon.mode == DIFFICULT){
+								CellEmitter.get(cell).start(FrostfireParticle.FACTORY, 0.05f, 10);
+							}
+							else CellEmitter.get(cell).start(FlameParticle.FACTORY, 0.03f, 10);
 						}
 					}
 				}
@@ -1081,6 +1107,9 @@ public class Tengu extends Mob {
 							Char ch = Actor.findChar(cell);
 							if (ch != null && !(ch instanceof Tengu)){
 								ch.damage(2 + Dungeon.scalingDepth(), new Electricity());
+								if (Dungeon.mode == Dungeon.GameMode.DIFFICULT && Random.Int(3) == 0){
+									Buff.affect(ch, Paralysis.class, 2f);
+								}
 								
 								if (ch == Dungeon.hero){
 									Statistics.qualifiedForBossChallengeBadge = false;

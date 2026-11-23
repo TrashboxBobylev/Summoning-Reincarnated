@@ -38,6 +38,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Invisibility;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.LockedFloor;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.effects.Splash;
 import com.shatteredpixel.shatteredpixeldungeon.items.artifacts.DriedRose;
 import com.shatteredpixel.shatteredpixeldungeon.items.keys.WornKey;
 import com.shatteredpixel.shatteredpixeldungeon.items.quest.GooBlob;
@@ -68,6 +69,9 @@ public class Goo extends Mob {
 		properties.add(Property.BOSS);
 		properties.add(Property.DEMONIC);
 		properties.add(Property.ACIDIC);
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			flying = true;
+		}
 	}
 
 	private int pumpedUp = 0;
@@ -77,6 +81,11 @@ public class Goo extends Mob {
 	public int damageRoll() {
 		int min = 1;
 		int max = (HP*2 <= HT) ? 12 : 8;
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			min = 4;
+			max = (HP*2 <= HT) ? 26 : 18;
+			return Random.NormalIntRange( min, max );
+		}
 		if (pumpedUp > 0) {
 			pumpedUp = 0;
 			if (enemy == Dungeon.hero) {
@@ -193,7 +202,7 @@ public class Goo extends Mob {
 			spend( attackDelay() );
 
 			return true;
-		} else if (pumpedUp >= 2 || Random.Int( (HP*2 <= HT) ? 2 : 5 ) > 0) {
+		} else if (Dungeon.mode == Dungeon.GameMode.DIFFICULT || pumpedUp >= 2 || Random.Int( (HP*2 <= HT) ? 2 : 5 ) > 0) {
 
 			boolean visible = Dungeon.level.heroFOV[pos];
 
@@ -288,6 +297,18 @@ public class Goo extends Mob {
 				(Dungeon.isChallenged(Conducts.Conduct.CANDI_18) && Dungeon.hero.buff(AscensionChallenge.class) != null))   lock.addTime(dmg);
 			else                                                    lock.addTime(dmg*1.5f);
 		}
+	}
+
+	@Override
+	public int defenseProc(Char enemy, int damage) {
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			for (int i : PathFinder.NEIGHBOURS9){
+				Splash.at(pos+i, 0x000000, 5);
+				if (Actor.findChar(pos+i) != null)
+					Buff.affect(Actor.findChar(pos+i), Ooze.class).set( Ooze.DURATION );
+			}
+		}
+		return super.defenseProc(enemy, damage);
 	}
 
 	@Override

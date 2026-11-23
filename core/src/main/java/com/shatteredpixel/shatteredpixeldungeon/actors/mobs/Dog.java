@@ -24,6 +24,7 @@
 
 package com.shatteredpixel.shatteredpixeldungeon.actors.mobs;
 
+import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.ChampionEnemy;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
@@ -65,9 +66,9 @@ public class Dog extends Mob {
 
 	@Override
 	public float attackDelay() {
-//		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
-//			return 0.7f*super.attackDelay();
-//		}
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			return 1/3f*super.attackDelay();
+		}
 		return super.attackDelay()*0.5f;
 	}
 

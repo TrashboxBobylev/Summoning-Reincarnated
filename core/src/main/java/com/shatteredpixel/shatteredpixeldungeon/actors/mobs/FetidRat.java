@@ -28,8 +28,10 @@ import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.Statistics;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.Blob;
+import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.CorrosiveGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.blobs.StenchGas;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Corrosion;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Ooze;
 import com.shatteredpixel.shatteredpixeldungeon.actors.mobs.npcs.Ghost;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
@@ -52,6 +54,10 @@ public class FetidRat extends Rat {
 
 		properties.add(Property.MINIBOSS);
 		properties.add(Property.DEMONIC);
+
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			immunities.add(Corrosion.class);
+		}
 	}
 
 	@Override
@@ -80,8 +86,15 @@ public class FetidRat extends Rat {
 
 	@Override
 	public int defenseProc( Char enemy, int damage ) {
-		if (!isSuppressed())
+		if (!isSuppressed()) {
 			GameScene.add(Blob.seed(pos, 20, StenchGas.class));
+
+			if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+				CorrosiveGas seed = Blob.seed(pos, 20, CorrosiveGas.class);
+				seed.setStrength(2);
+				GameScene.add(seed);
+			}
+		}
 
 		return super.defenseProc(enemy, damage);
 	}

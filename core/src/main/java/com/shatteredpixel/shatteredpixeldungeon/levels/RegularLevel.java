@@ -452,6 +452,8 @@ public abstract class RegularLevel extends Level {
 			nItems *= 2;
 		}
 
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT) nItems *= 1.5f;
+
 		for (int i=0; i < nItems; i++) {
 
 			Item toDrop = Generator.random();

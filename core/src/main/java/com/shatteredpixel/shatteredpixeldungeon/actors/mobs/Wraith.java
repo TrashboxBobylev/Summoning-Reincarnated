@@ -109,6 +109,14 @@ public class Wraith extends Mob {
 		return true;
 	}
 
+	@Override
+	public void spend(float time) {
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT && !isSuppressed()){
+			super.spend(time*0.75f);
+		}
+		else super.spend(time);
+	}
+
 	public static void spawnAround( int pos ) {
 		spawnAround( pos, null );
 	}

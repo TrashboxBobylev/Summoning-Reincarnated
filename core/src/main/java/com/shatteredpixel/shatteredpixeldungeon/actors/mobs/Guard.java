@@ -35,6 +35,7 @@ import com.shatteredpixel.shatteredpixeldungeon.effects.Pushing;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
 import com.shatteredpixel.shatteredpixeldungeon.mechanics.Ballistica;
+import com.shatteredpixel.shatteredpixeldungeon.mechanics.damagesource.DamageSource;
 import com.shatteredpixel.shatteredpixeldungeon.messages.Messages;
 import com.shatteredpixel.shatteredpixeldungeon.scenes.GameScene;
 import com.shatteredpixel.shatteredpixeldungeon.sprites.GuardSprite;
@@ -68,6 +69,14 @@ public class Guard extends Mob {
 	@Override
 	public int damageRoll() {
 		return Random.NormalIntRange(4, 12);
+	}
+
+	@Override
+	public void damage(int dmg, DamageSource src) {
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT && !isSuppressed()){
+			dmg *= 0.75;
+		}
+		super.damage(dmg, src);
 	}
 
 	private boolean chain(int target){
@@ -119,7 +128,8 @@ public class Guard extends Mob {
 				}
 			}
 		}
-		chainsUsed = true;
+		if (Dungeon.mode != Dungeon.GameMode.DIFFICULT)
+			chainsUsed = true;
 		return true;
 	}
 

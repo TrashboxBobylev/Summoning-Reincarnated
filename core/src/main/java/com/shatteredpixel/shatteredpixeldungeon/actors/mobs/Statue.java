@@ -28,6 +28,8 @@ import com.shatteredpixel.shatteredpixeldungeon.Challenges;
 import com.shatteredpixel.shatteredpixeldungeon.Dungeon;
 import com.shatteredpixel.shatteredpixeldungeon.actors.Char;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Sleep;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Vertigo;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.trinkets.RatSkull;
 import com.shatteredpixel.shatteredpixeldungeon.items.weapon.Weapon;
@@ -52,6 +54,11 @@ public class Statue extends Mob {
 		state = PASSIVE;
 		
 		properties.add(Property.INORGANIC);
+
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			immunities.add(Vertigo.class);
+			immunities.add(Sleep.class);
+		}
 	}
 	
 	protected Weapon weapon;

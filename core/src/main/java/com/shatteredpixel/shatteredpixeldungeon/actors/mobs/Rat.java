@@ -71,6 +71,25 @@ public class Rat extends Mob {
 		return super.drRoll() + Random.NormalIntRange(0, 1);
 	}
 
+	@Override
+	public float spawningWeight() {
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT) return 0f;
+		return super.spawningWeight();
+	}
+
+	@Override
+	public int attackProc(Char enemy, int damage) {
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT && !isSuppressed()) {
+			for (Char ch : Dungeon.level.mobs.toArray(new Mob[0])) {
+				if (ch instanceof Rat) {
+					((Rat) ch).aggro(enemy);
+					((Rat) ch).beckon(enemy.pos);
+				}
+			}
+		}
+		return super.attackProc(enemy, damage);
+	}
+
 	private static final String RAT_ALLY = "rat_ally";
 
 	@Override

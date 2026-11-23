@@ -32,7 +32,10 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Barrier;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Buff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Charm;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Light;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.TimedShrink;
+import com.shatteredpixel.shatteredpixeldungeon.actors.hero.Hero;
 import com.shatteredpixel.shatteredpixeldungeon.effects.FloatingText;
+import com.shatteredpixel.shatteredpixeldungeon.effects.MagicMissile;
 import com.shatteredpixel.shatteredpixeldungeon.effects.Speck;
 import com.shatteredpixel.shatteredpixeldungeon.items.Generator;
 import com.shatteredpixel.shatteredpixeldungeon.items.Item;
@@ -109,6 +112,18 @@ public class Succubus extends Mob {
 		}
 		
 		return damage;
+	}
+
+	@Override
+	protected boolean act() {
+		boolean act = super.act();
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT && !isSuppressed()) {
+			if (Dungeon.level.distance(pos, Dungeon.hero.pos) < 5 && enemy == Dungeon.hero){
+				Buff.affect(enemy, TimedShrink.class, 2f);
+				Hero.arrangeBlast(pos, sprite, MagicMissile.SHADOW_CONE, 5f);
+			}
+		}
+		return act;
 	}
 	
 	@Override

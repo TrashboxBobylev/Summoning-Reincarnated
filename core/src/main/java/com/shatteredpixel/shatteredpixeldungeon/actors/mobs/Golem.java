@@ -125,6 +125,14 @@ public class Golem extends Mob {
 	}
 
 	@Override
+	protected boolean canAttack(Char enemy) {
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			return Dungeon.level.distance(pos, enemy.pos) < 3;
+		}
+		return super.canAttack(enemy);
+	}
+
+	@Override
 	protected boolean act() {
 		selfTeleCooldown--;
 		enemyTeleCooldown--;
@@ -133,6 +141,9 @@ public class Golem extends Mob {
 			if (Actor.findChar(target) == null && target < Dungeon.level.openSpace.length && Dungeon.level.openSpace[target]) {
 				ScrollOfTeleportation.appear(this, target);
 				selfTeleCooldown = 30;
+				if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+					selfTeleCooldown = 20;
+				}
 			} else {
 				target = Dungeon.level.randomDestination(this);
 			}
@@ -174,6 +185,9 @@ public class Golem extends Mob {
 		}
 
 		enemyTeleCooldown = 20;
+		if (Dungeon.mode == Dungeon.GameMode.DIFFICULT){
+			enemyTeleCooldown = 13;
+		}
 	}
 
 	private boolean canTele(int target){

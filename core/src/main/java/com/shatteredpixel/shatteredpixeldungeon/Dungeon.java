@@ -280,7 +280,18 @@ public class Dungeon {
 	}
 
 	public enum GameMode {
-		NORMAL("normal", Icons.STAIRS),
+		NORMAL("normal", Icons.STAIRS){
+			@Override
+			public GameMode child() {
+				return DIFFICULT;
+			}
+		},
+		DIFFICULT("oh_my_is_this_eternity_mode", Icons.DARK_AMU, 1.8f){
+			@Override
+			public Badges.Badge unlock() {
+				return Badges.Badge.DIFFICULT_UNLOCKED;
+			}
+		},
 		SMALL("small", Icons.SHRINKING, 1.1f){
 			@Override
 			public GameMode child() {
