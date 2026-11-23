@@ -52,6 +52,7 @@ import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Combo;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Drowsy;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Foresight;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.GreaterHaste;
+import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HPDebuff;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HeroDisguise;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.HoldFast;
 import com.shatteredpixel.shatteredpixeldungeon.actors.buffs.Hunger;
@@ -341,6 +342,10 @@ public class Hero extends Char {
 		}
 
 		if (Dungeon.isChallenged(Conducts.Conduct.WRAITH)) HT = 1;
+
+		if (buff(HPDebuff.class) != null){
+			HT = Math.max(1, HT - (int) buff(HPDebuff.class).count());
+		}
 
 		HP = Math.min(HP, HT);
 	}
