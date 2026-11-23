@@ -56,7 +56,12 @@ public class Conducts {
 
         },
         EXTRA_MODE(1.001f, 33){
-
+            @Override
+            public String desc() {
+                return Messages.get(Conducts.class, name() + "_desc", SPDSettings.mode(),
+                        SPDSettings.mode().child() == null ? Messages.get(Conducts.class, name() + "_no_child") : SPDSettings.mode().child()) +
+                            "\n\n" + Messages.get(Dungeon.class, "score", new DecimalFormat("#.##").format(scoreMod()));
+            }
         },
         EXPLOSIONS(1.5f, 12),
 //        INVISIBLE(2f),
