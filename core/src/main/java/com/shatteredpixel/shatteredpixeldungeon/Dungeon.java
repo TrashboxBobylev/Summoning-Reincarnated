@@ -286,7 +286,7 @@ public class Dungeon {
 				return DIFFICULT;
 			}
 		},
-		DIFFICULT("oh_my_is_this_eternity_mode", Icons.DARK_AMU, 1.8f){
+		DIFFICULT("oh_my_is_this_eternity_mode", Icons.DARK_AMU, 2f){
 			@Override
 			public Badges.Badge unlock() {
 				return Badges.Badge.DIFFICULT_UNLOCKED;
