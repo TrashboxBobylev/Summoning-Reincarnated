@@ -225,6 +225,7 @@ import com.shatteredpixel.shatteredpixeldungeon.windows.WndOptions;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndResurrect;
 import com.shatteredpixel.shatteredpixeldungeon.windows.WndTradeItem;
 import com.watabou.noosa.Game;
+import com.watabou.noosa.Visual;
 import com.watabou.noosa.audio.Sample;
 import com.watabou.noosa.tweeners.Delayer;
 import com.watabou.utils.BArray;
@@ -3118,6 +3119,31 @@ public class Hero extends Char {
 		if (!ready) {
 			super.onOperateComplete();
 		}
+	}
+
+	public static ConeAOE arrangeBlast(int pos, Visual sprite, int type){
+		return arrangeBlast(pos, sprite, type, 1.5f);
+	}
+
+	public static ConeAOE arrangeBlast(int pos, Visual sprite, int type, float range) {
+		Ballistica aim;
+		if (pos % Dungeon.level.width() > 10){
+			aim = new Ballistica(pos, pos - 1, Ballistica.WONT_STOP);
+		} else {
+			aim = new Ballistica(pos, pos + 1, Ballistica.WONT_STOP);
+		}
+		ConeAOE aoe = new ConeAOE(aim, range, 360, Ballistica.FRIENDLY_PROJECTILE);
+		if (sprite.visible) {
+			for (Ballistica ray : aoe.rays) {
+				((MagicMissile) sprite.parent.recycle(MagicMissile.class)).reset(
+						type,
+						sprite,
+						ray.path.get(ray.dist),
+						null
+				);
+			}
+		}
+		return aoe;
 	}
 
     private static final int LEADER_MIRROR_COST = 18;
